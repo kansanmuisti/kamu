@@ -25,6 +25,7 @@ my_path = os.path.dirname(__file__)
 app_base = my_path + '/../'
 
 sys.path.append(my_path + '/../..')
+sys.path.append(my_path + '/..')
 
 from kamu import settings
 setup_environ(settings)
