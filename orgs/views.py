@@ -99,16 +99,16 @@ def modify_score(request, org, sess, plsess):
     if request.method == 'POST':
         form = ModifyScoreForm(request.POST)
         if form.is_valid():
-           score = SessionScore()
-           score.session = sess
-           score.org = org
-           score.rationale = form.cleaned_data['rationale']
-           score.score = form.cleaned_data['score']
-           score.save()
+            score = SessionScore()
+            score.session = sess
+            score.org = org
+            score.rationale = form.cleaned_data['rationale']
+            score.score = form.cleaned_data['score']
+            score.save()
 
-           kwargs = { 'plsess': plsess.url_name, 'sess': sess.number }
-           path = reverse('votes.views.show_session', kwargs=kwargs)
-           return HttpResponseRedirect(path)
+            kwargs = { 'plsess': plsess.url_name, 'sess': sess.number }
+            path = reverse('votes.views.show_session', kwargs=kwargs)
+            return HttpResponseRedirect(path)
 
     if score:
         form = ModifyScoreForm(score)
