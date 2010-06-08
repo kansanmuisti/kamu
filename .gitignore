@@ -5,4 +5,6 @@ settings_local.py
 utils/cache
 static/images/parties
 static/images/members
+static/images/orgs
 static/tmp
+djapian/
