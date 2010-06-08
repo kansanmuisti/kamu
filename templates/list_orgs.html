@@ -12,7 +12,7 @@
 {{ count }} organizations
 {% endblocktrans %}</h1>
 
-  <table>
+  <table style="margin-bottom: 16px;">
 {% for org in org_list %}
     <tr>
       <td style="height: 40px; padding-right: 16px;"><img src='/static/{% thumbnail org.logo 40x40 %}' /></td>
@@ -21,4 +21,6 @@
     </tr>
 {% endfor %}
   </table>
+
+  <a href="{% url orgs.views.add_org %}"><h3>{% trans "Add an organization" %}</h3></a>
 {% endblock %}
