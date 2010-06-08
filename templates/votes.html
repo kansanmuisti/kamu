@@ -4,16 +4,29 @@
 {% block content %}
 {% load basic %}
 {% load thumbnail %}
+{% load tagging_tags %}
 
   <h1>{% trans "Plenary session" %} <a href='{{ psession.info_link }}'>
     {{ psession.name }}</a>, {% trans "vote" %} {{ session.number }},
-    {% trans "time" %} {{ session.time|time }}
+    {{ psession.date|date }}, {% trans "time" %} {{ session.time|time }}
   </h1>
   <div class='session_info h2_section'>
     {{ session.info|linebreaks }}
   {% if session.subject %}
     <p><i>{{ session.subject }}</i></p>
   {% endif %}
+  </div>
+
+  <div class="h2_section">
+  <h2>{% trans "Tags" %}</h2>
+{% tags_for_object session as tags %}
+{% for tag in tags %}
+  <a href="/tag/{{ tag.name|urlencode }}">{{ tag.name }}</a>
+{% endfor %}
+  <h3>{% trans "Add tag" %}</h3>
+  <form action="tag/" method="post">
+    <input type="text" maxlength="50" name="tag" />
+  </form>
   </div>
 
 {% if score_table %}

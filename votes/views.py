@@ -1,10 +1,14 @@
 from django.http import Http404, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render_to_response, get_list_or_404, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.db.models import Q, Count
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
+from django.contrib.auth.decorators import login_required
+from tagging.models import Tag
+from tagging.utils import parse_tag_input
 from kamu.votes.models import Session, Member, Vote, MemberStats, PlenarySession
 from kamu.votes.models import PartyAssociation, DistrictAssociation, SessionDocument
 from kamu.votes.models import Statement, Party
@@ -220,11 +224,11 @@ def show_session(request, plsess, sess):
         order = '-' + order
 
     try:
-        psess = PlenarySession.objects.get(url_name = plsess)
+        psess = PlenarySession.objects.get(url_name=plsess)
     except PlenarySession.DoesNotExist:
         raise Http404
 
-    session = Session.objects.get(plenary_session = psess, number = number)
+    session = Session.objects.get(plenary_session=psess, number=number)
     session.info = session.info.replace('\n', '\n\n')
 
     district = find_district(request, psess.date, psess.date)
@@ -291,8 +295,30 @@ def show_session(request, plsess, sess):
     args['tables'] = tables
     args['switch_district'] = True
     args['score_table'] = score_table
+    args['tags'] = Tag.objects.get_for_object(session)
 
     return render_to_response('votes.html', args, context_instance = RequestContext(request))
+
+@login_required
+def tag_session(request, plsess, sess):
+    psess = get_object_or_404(PlenarySession, url_name=plsess)
+    try:
+        number = int(sess)
+    except ValueError:
+        raise Http404
+    sess = get_object_or_404(Session, plenary_session=psess, number=number)
+
+    if request.method != 'POST' or not 'tag' in request.POST:
+        return HttpResponseBadRequest()
+
+    tag = request.POST['tag']
+    if not tag.isalnum():
+        return HttpResponseBadRequest()
+    Tag.objects.add_tag(sess, tag)
+
+    kwargs = { 'plsess': plsess, 'sess': str(number) }
+    path = reverse('votes.views.show_session', kwargs=kwargs)
+    return HttpResponseRedirect(path)
 
 def format_stat_col(request, val, class_name):
     if val:

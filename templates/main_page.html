@@ -27,7 +27,7 @@ Kansan muisti -palveluun on kerätty yhteen tietoa kansanedustajien vaalirahoitu
 <div id="news_col">
 
 <div class="news_items">
-  <h1>Uutiset</h1>
+  <h1>{% trans "News" %}</h1>
   <h2>Kamu Maailma kyl&auml;ss&auml; -festareilla</h2>
   <p>Kamu on viikonloppuna 28.-30.5. festareilla. Tuu tsekkaan!
 Quisque gravida condimentum erat, scelerisque pellentesque nisi auctor ut. Nam nunc...</p>
@@ -39,7 +39,7 @@ Quisque gravida condimentum erat, scelerisque pellentesque nisi auctor ut. Nam n
 </div>
 
 <div class="news_items">
-  <h1>Kuumimmat</h1>
+  <h1>{% trans "Hottest" %}</h1>
   <h2>Marja Tiura</h2>
   <h2>5/2010, 6.</h2>
   <p>Hallituksen esitys valmiuslaiksi ja eriksi siihen liittyviksi laeiksi<br />
@@ -49,12 +49,12 @@ Ensimmäinen käsittely.
 </div>
 
 <div class="news_items">
-  <h1>Uusimmat &auml;&auml;nestykset</h1>
+  <h1>{% trans "Latest votes" %}</h1>
   <span class="news_item_date">12.12.2010</span>
 {% for session in sess_list %}
 {% with session.plenary_session as ps %}
-  <h2>{{ ps.name }}, {{ session.number }}.</h2>
-  <p>{{ session.info }}</p>
+  <a href='{% url votes.views.show_session plsess=ps.url_name,sess=session.number %}'><h2>{{ ps.name }}, {{ session.number }}.</h2></a>
+  <a href='{% url votes.views.show_session plsess=ps.url_name,sess=session.number %}'><p>{{ session.info }}</p></a>
 {% endwith %}
 {% endfor %}
 </div>
@@ -63,7 +63,7 @@ Ensimmäinen käsittely.
 
 {% if 0 %}
 {% if sess_list %}
-<h2 style="cursor: pointer;" class="toggle"><span>&#x25b8;</span> {% trans "Latest sessions" %}</h2>
+<h2 style="cursor: pointer;" class="toggle"><span>&#x25b8;</span> Latest sessions</h2>
 <div style="display: none;"><table class="sessions" style="">
 <tr><th /><th /><th />
         <th class="yes_vote" title='{% trans "Number of Yay votes" %}' />

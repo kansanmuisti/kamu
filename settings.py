@@ -115,6 +115,7 @@ INSTALLED_APPS = (
     'kamu.users',
     'kamu.orgs',
     'kamu.beta',
+    'tagging',
     'djapian',
 #    'debug_toolbar'
 )
