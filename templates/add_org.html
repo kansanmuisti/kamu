@@ -4,23 +4,9 @@
 {% block title %}{% trans "Add organization" %}{% endblock %}
 {% block content %}
   <div id="org_add_content">
-  <h1>{% trans "Add a new organization" %}</h1>
+{% if modify %}  <h1>{% trans "Modify an organization" %}</h1>
+{% else %}<h1>{% trans "Add a new organization" %}</h1>{% endif %}
 
-{% if org %}
-  <h2>{% trans "Preview" %}</h2>
-  <table id="org_add_preview">
-    <tr><th><label>{% trans "Name" %}:</label></th><td>{{ org.name }}</td>
-    <tr><th><label>{% trans "Name in service links" %}:</label></th><td>{{ org.url_name }}</td>
-    <tr><th><label>{% trans "Description" %}:</label></th><td>{{ org.description|linebreaks }}</td>
-    <tr><th><label>{% trans "Info link" %}:</label></th><td><a class="action_link" href="{{ org.info_link }}">{{ org.name }}</a></td>
-    <tr><th><label>{% trans "Logo" %}:</label></th><td>
-      <img id="org_add_big_logo" src="/static/{% thumbnail org.logo 128x128 %}" />
-      <img id="org_add_logo" src="/static/{% thumbnail org.logo 32x32 %}" />
-      <img id="org_add_logo_bg" src="/static/{% thumbnail org.logo 32x32 %}" />
-    </td>
-  </table>
-  <h2>{% trans "Modify" %}</h2>
-{% endif %}
 {% if form.errors %}
   <p style="color: red;">
     Please correct the error{{ form.errors|pluralize }} below.
@@ -30,11 +16,8 @@
     <table id="org_add_form">
       {{ form.as_table }}
     </table>
+{% if org.logo %}    <input type="hidden" name="stored_logo" value="{{ org.logo }}">{% endif %}
     <input type="submit" name="preview" value="{% trans 'Preview' %}">
-{% if org %}
-    <input type="hidden" name="stored_logo" value="{{ org.logo }}">
-    <input type="submit" name="submit" value="{% trans 'Submit' %}">
-{% endif %}
   </form>
   </div>
 {% endblock %}

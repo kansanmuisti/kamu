@@ -5,9 +5,9 @@ from django.template.defaultfilters import slugify
 from kamu.votes.models import Session
 
 class Organization(models.Model):
-    name = models.CharField(max_length = 50, unique = True)
-    url_name = models.SlugField(max_length = 50, unique = True)
-    logo = models.ImageField(upload_to = 'images/orgs')
+    name = models.CharField(max_length=50, unique=True)
+    url_name = models.SlugField(max_length=50, unique=True)
+    logo = models.ImageField(upload_to='images/orgs', null=True, blank=True)
     description = models.TextField()
     info_link = models.URLField()
 
@@ -15,7 +15,7 @@ class Organization(models.Model):
         return slugify(self.name)
 
     def get_group_name(self):
-        return 'org-' + self.url_name
+        return 'org-' + str(self.pk)
     def get_group(self):
         return Group.objects.get(name = self.get_group_name())
     def is_admin(self, user):

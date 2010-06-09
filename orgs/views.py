@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
 from kamu.orgs.models import Organization, SessionScore
-from kamu.orgs.forms import AddOrgForm, ModifyScoreForm
+from kamu.orgs.forms import AddOrgForm, ModifyOrgForm, ModifyScoreForm
 
 from kamu.votes.models import PlenarySession, Session
 
@@ -21,37 +21,81 @@ def list_orgs(request):
     return render_to_response('list_orgs.html', arg_dict, ctx)
 
 def add_organization(org, admin, tmpf):
-    logof = os.path.join('images/orgs', org.url_name + '.png')
-    full_path = os.path.join(settings.MEDIA_ROOT, logof)
-    os.rename(os.path.join(settings.MEDIA_ROOT, tmpf), full_path)
-    org.logo = logof
-    org.save()
+    modify_organization(org, admin, tmpf)
 
     group = org.get_group()
     admin.groups.add(group)
 
+def modify_organization(org, admin, tmpf):
+    if tmpf:
+        #New logo passed in
+        logof = os.path.join('images/orgs', org.url_name + '.png')
+        full_path = os.path.join(settings.MEDIA_ROOT, logof)
+        os.rename(os.path.join(settings.MEDIA_ROOT, tmpf), full_path)
+        org.logo = logof
+
+    org.save()
+    # Admin might be changed here too?
+
+# Simple helper to build an Organization based on form data both in
+# AddOrgForm and ModifyOrgForm
+def build_org(form, org = Organization()):
+    cd = form.cleaned_data
+    org.name = cd['name']
+    org.info_link = cd['info_link']
+    org.description = cd['description']
+    org.logo = form.logo_path
+
+    return org
+
 @login_required
 def add_org(request):
     arg_dict = {}
+
+    # Preview clicked (or another submit button if such is later added)
     if request.method == 'POST':
         form = AddOrgForm(request.POST, request.FILES)
+
         if form.is_valid():
-            cd = form.cleaned_data
-            org = Organization()
-            org.name = cd['name']
-            org.info_link = cd['info_link']
-            org.description = cd['description']
-            org.logo = form.logo_path
+            org = build_org(form)
             org.url_name = org.generate_url_name()
-            arg_dict['org'] = org
-            if 'submit' in request.POST:
-                add_organization(org, request.user, form.logo_path)
-                path = reverse('orgs.views.show_org', kwargs={ 'org': org.url_name })
+
+            if 'preview' in request.POST:
+                request.session['org_new'] = org
+                path = reverse('orgs.views.preview_add_org')
                 return HttpResponseRedirect(path)
+    # Either returning through preview of beginning of addition
     else:
-        form = AddOrgForm()
+        # This means that someone interrupting modifying an organization
+        # will get the its info for initial data while adding
+        if 'org_new' in request.session:
+            org = request.session['org_new']
+            arg_dict['org'] = org
+            initial = {}
+            initial['name'] = org.name
+            initial['description'] = org.description
+            initial['info_link'] = org.info_link
+            form = AddOrgForm(initial=initial)
+        else:
+            form = AddOrgForm()
     arg_dict['form'] = form
     return render_to_response('add_org.html', arg_dict, RequestContext(request))
+
+@login_required
+def preview_add_org(request):
+    # Only allow preview if add_org has added the contents to preview
+    if 'org_new' in request.session:
+        org = request.session['org_new']
+    else:
+        raise Http404
+    # Preview confirmed with submit button in form
+    if request.method == 'POST':
+        add_organization(org, request.user, str(org.logo))
+        del request.session['org_new']
+        kwargs = { 'org': org.url_name }
+        path = reverse('orgs.views.show_org', kwargs=kwargs)
+        return HttpResponseRedirect(path)
+    return render_to_response('preview_org.html', {'org': org})
 
 @login_required
 def modify_org(request, org):
@@ -61,12 +105,64 @@ def modify_org(request, org):
         raise Http404
     if not org.is_admin(request.user):
         return HttpResponseForbidden()
-    initial = {}
-    initial['name'] = org.name
-    initial['description'] = org.description
-    initial['info_link'] = org.info_link
-    form = AddOrgForm(initial=initial)
-    return render_to_response('add_org.html', {'form': form}, RequestContext(request))
+    if request.method == "POST":
+        form = ModifyOrgForm(org, request.POST, request.FILES)
+        if form.is_valid():
+            build_org(form, org)
+            # We allow changing the link string for org for now
+            org.new_url_name = org.generate_url_name()
+
+            # Is there any other case for POST than preview?
+            # ie. is this 'if' redundant?
+            if 'preview' in request.POST:
+                request.session['org_new'] = org
+                kwargs = { 'org': org.url_name }
+                path = reverse('orgs.views.preview_modify_org', kwargs=kwargs)
+                return HttpResponseRedirect(path)
+    # This is either new request for modification
+    # or a user returning from preview
+    else:
+        if 'org_new' in request.session:
+            # User is returning from some preview
+            org_new = request.session['org_new']
+            # Only use the org_new if we are still
+            # editing the same org
+            if org_new.url_name == org.url_name:
+                org = org_new
+            else:
+                del request.session['org_new']
+
+        initial = {}
+        initial['name'] = org.name
+        initial['description'] = org.description
+        initial['info_link'] = org.info_link
+        form = ModifyOrgForm(org, initial=initial)
+
+    args_dict = { 'form': form, 'org': org, 'modify': True }
+    return render_to_response('add_org.html', args_dict, RequestContext(request))
+
+@login_required
+# org (containing the slug string) is here just to get consistent urls
+def preview_modify_org(request, org):
+    org_slug = org
+    # Only allow preview if add_org has added the contents to preview
+    if 'org_new' in request.session:
+        org = request.session['org_new']
+    else:
+        raise Http404
+    # Let's check the URL is correct, although it really does not matter?
+    if org.url_name != org_slug:
+        return HttpResponseForbidden()
+
+    if request.method == 'POST':
+        # User confirmed preview
+        org.url_name = org.new_url_name
+        modify_organization(org, request.user, str(org.logo))
+        del request.session['org_new']
+        kwargs = { 'org': org.url_name }
+        path = reverse('orgs.views.show_org', kwargs=kwargs)
+        return HttpResponseRedirect(path)
+    return render_to_response('preview_org.html', {'org': org, 'modify': True})
 
 def show_org(request, org):
     try:
