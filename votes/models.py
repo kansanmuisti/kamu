@@ -292,7 +292,7 @@ class Vote(models.Model):
         ('S', u'Speaker')
     ]
     session = models.ForeignKey(Session)
-    vote = models.CharField(max_length=1, choices=VOTE_CHOICES)
+    vote = models.CharField(max_length=1, choices=VOTE_CHOICES, db_index=True)
     member = models.ForeignKey(Member, db_index=True)
     party = models.CharField(max_length=10)
 
