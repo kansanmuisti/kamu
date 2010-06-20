@@ -50,9 +50,9 @@ Ensimmäinen käsittely.
 
 <div class="news_items">
   <h1>{% trans "Latest votes" %}</h1>
-  <span class="news_item_date">12.12.2010</span>
 {% for session in sess_list %}
 {% with session.plenary_session as ps %}
+  {% ifchanged %}<span class="news_item_date">{{ ps.date|date:"j.n.Y" }}</span>{% endifchanged %}
   <a href='{% url votes.views.show_session plsess=ps.url_name,sess=session.number %}'><h2>{{ ps.name }}, {{ session.number }}.</h2></a>
   <a href='{% url votes.views.show_session plsess=ps.url_name,sess=session.number %}'><p>{{ session.info }}</p></a>
 {% endwith %}
