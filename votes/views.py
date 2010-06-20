@@ -585,7 +585,8 @@ def about(request):
                               context_instance = RequestContext(request))
 
 def main_page(request):
-    sess_list = Session.objects.all().order_by('-plenary_session__date', '-number')[:5]
+    sess_list = Session.objects.all().order_by('-plenary_session__date', '-number')
+    sess_list = sess_list.select_related('plenary_session')[:5]
     for ses in sess_list:
         ses.count_votes()
 #        ses.info = ses.info.replace('\n', '\n\n')
