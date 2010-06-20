@@ -489,8 +489,7 @@ def show_member(request, url_name):
     da_list = DistrictAssociation.objects.filter(member = member).order_by('begin')
     query = Q(member = member)
     query &= Q(vote__in=['Y', 'N', 'E'])
-    vote_list = Vote.objects.filter(query).order_by(order).select_related('session__number')
-    vote_list = vote_list.select_related('session__plenary_session__name')
+    vote_list = Vote.objects.filter(query).order_by(order)
     if vote_list.count():
         paginator = Paginator(vote_list, 30)
         try:
