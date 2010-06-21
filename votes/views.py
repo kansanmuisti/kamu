@@ -390,7 +390,7 @@ def list_members(request):
         'title': _('Agreement with session majority'), 'img': 'images/icons/session_agr.png', 'no_tn': True})
     col_hdr.append({ 'name': _('St'), 'sort_key': 'st_cnt', 'class': 'member_list_stat',
         'title': _('Number of statements'), 'img': 'images/icons/nr_statements.png', 'no_tn': True})
-    col_hdr.append({ 'title': 'Amnesty', 'img': 'images/orgs/amnesty.gif', 'class': 'member_list_stat' })
+#    col_hdr.append({ 'title': 'Amnesty', 'img': 'images/orgs/amnesty.gif', 'class': 'member_list_stat' })
 
     for mem in member_page.object_list:
         col_vals = []
@@ -412,8 +412,8 @@ def list_members(request):
             col_vals.append(None)
             col_vals.append(None)
             col_vals.append(None)
-        for x in range(1):
-                col_vals.append(format_stat_col(request, 0.5, CLASS_NAME))
+#        for x in range(0):
+#                col_vals.append(format_stat_col(request, 0.5, CLASS_NAME))
         mem.col_vals = col_vals
 
     return render_to_response('members.html',
