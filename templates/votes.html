@@ -74,10 +74,10 @@
 {% if col.sort_key %}
     </a>
 {% ifequal request.GET.sort col.sort_key %}
-    &#x25bc
+    &#x25bc;
 {% else %}
 {% ifequal request.GET.sort|cut:"-" col.sort_key %}
-    &#x25b2
+    &#x25b2;
 {% endifequal %}
 {% endifequal %}
 {% endif %}
