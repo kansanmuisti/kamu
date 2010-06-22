@@ -126,7 +126,7 @@ h3 {
 }
 
 div#navbar {
-	height: 36px;
+	height: 34px;
 	width: 960px;
 	margin: 0px auto;
 	background: url("/static/images/navbar-grad.png") top left repeat-x;
@@ -158,8 +158,8 @@ div#navbar {
 	float: left;
 	padding-right: 15px;
 	padding-left: 15px;
-	padding-top: 10px;
-	padding-bottom: 10px;
+	padding-top: 9px;
+	padding-bottom: 9px;
 }
 
 #logged_user {
