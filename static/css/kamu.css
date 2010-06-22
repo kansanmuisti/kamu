@@ -129,6 +129,7 @@ div#navbar {
 	height: 36px;
 	width: 960px;
 	margin: 0px auto;
+	background: url("/static/images/navbar-grad.png") top left repeat-x;
 	background-color: #addeda;
 }
 
