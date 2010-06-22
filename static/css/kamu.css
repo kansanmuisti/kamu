@@ -126,7 +126,7 @@ h3 {
 }
 
 div#navbar {
-	height: 30px;
+	height: 36px;
 	width: 960px;
 	margin: 0px auto;
 	background-color: #addeda;
@@ -157,8 +157,8 @@ div#navbar {
 	float: left;
 	padding-right: 15px;
 	padding-left: 15px;
-	padding-top: 7px;
-	padding-bottom: 7px;
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
 
 #logged_user {
