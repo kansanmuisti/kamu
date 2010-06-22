@@ -41,9 +41,10 @@ def tally_votes(party_list, member_list, begin, end):
             member.vote_count[v[0]] = 0
 
     idx = 0
-    for sess in session_list:
+    while len(session_list):
+        sess = session_list[0]
         if idx % 50 == 0:
-            print "%4d of %d" % (idx, len(session_list))
+            print "%4d (left %d)" % (idx, len(session_list))
             db.reset_queries()
 
         pl_sess = sess.plenary_session
@@ -98,6 +99,7 @@ def tally_votes(party_list, member_list, begin, end):
             else:
                 member.session_agree[False] += 1
         idx += 1
+        session_list = session_list[1:]
 
 def update_stats(party_list, member_list, begin, end):
     MemberStats.objects.for_period(begin, end).delete()
@@ -112,7 +114,8 @@ def update_stats(party_list, member_list, begin, end):
                 ms.vote_counts = ','.join(vcnt)
                 ms.party_agreement = "%d,%d" % (m.party_agree[True], m.party_agree[False])
                 ms.session_agreement = "%d,%d" % (m.session_agree[True], m.session_agree[False])
-        ms.statement_count = Statement.objects.between(begin, end).filter(member = m).count()
+        query = Statement.objects.between(begin, end).filter(member = m)
+        ms.statement_count = query.count()
         ms.save()
 
 for per in PERIODS:
