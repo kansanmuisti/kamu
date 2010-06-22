@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n markup %}
 {% block title %}{% trans "Home" %}{% endblock %}
 {% block head %}
 {% endblock %}
@@ -7,10 +7,8 @@
 {% block content %}
 
 <div id="main_col">
-
-{% load markup %}
-
-<!-- ###Seuraa miten oma kansanedustajasi äänestää. Katso mitä mieltä kansalaisjärjestöt ovat edustajasi äänestämisestä. -->
+{% comment %}<!-- Seuraa miten oma kansanedustajasi äänestää. Katso mitä mieltä kansalaisjärjestöt ovat edustajasi äänestämisestä. -->
+{% endcomment %}
 {% filter markdown %}
 
 ![Testikuva](/static/images/main.jpg "Testikuva")
@@ -28,16 +26,11 @@ Kansan muisti -palveluun on kerätty yhteen tietoa kansanedustajien vaalirahoitu
 
 <div class="news_items">
   <h1>{% trans "News" %}</h1>
-  <h2>Kamu Maailma kyl&auml;ss&auml; -festareilla</h2>
-  <p>Kamu on viikonloppuna 28.-30.5. festareilla. Tuu tsekkaan!
-Quisque gravida condimentum erat, scelerisque pellentesque nisi auctor ut. Nam nunc...</p>
-  <h2>Ydinvoima&auml;&auml;nestystiedot julkaistu</h2>
-  <p>Ydinvoimasta on nyt paatetty. Katso syylliset.</p>
-  <h2>Kamu Maailma kyl&auml;ss&auml; -festareilla</h2>
-  <p>Kamu on viikonloppuna 28.-30.5. festareilla. Tuu tsekkaan!
-Quisque gravida condimentum erat, scelerisque pellentesque nisi auctor ut. Nam nunc...</p>
+  <h2>Kamu avattu testikäyttöön</h2>
+  <p>Kamun rajoitettu testiversio on avattu. Tervetuloa!</p>
 </div>
 
+{% comment %}
 <div class="news_items">
   <h1>{% trans "Hottest" %}</h1>
   <h2>Marja Tiura</h2>
@@ -47,9 +40,10 @@ Ensimmäinen käsittely.
   </p>
   <h2>Aku Ankka</h2>
 </div>
+{% endcomment %}
 
 <div class="news_items">
-  <h1>{% trans "Latest votes" %}</h1>
+  <a href='{% url votes.views.list_sessions %}'><h1>{% trans "Latest votes" %}</h1></a>
 {% for session in sess_list %}
 {% with session.plenary_session as ps %}
   {% ifchanged %}<span class="news_item_date">{{ ps.date|date:"j.n.Y" }}</span>{% endifchanged %}
