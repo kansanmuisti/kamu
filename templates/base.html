@@ -60,6 +60,7 @@
 
 <div id="header">
     <h1><a href="/">Kansan muisti</a></h1>
+    <img id="beta_image" src="/static/images/beta.png" />
 <div id="inputbar">
     <form action="/search" method="get" id="head-search">
       <input id="head-search-text" name="query" type="text" maxlength="150" />
@@ -89,7 +90,7 @@
 <div id="wrap">
 
 <div id="sidebar">
-
+{% block sidebar %}{% endblock %}
 {% if switch_period %}
 <p id="period_opener" class="opener action_link">{% trans "period" %}</p>
 <div id="period_list" style="display: none;">
