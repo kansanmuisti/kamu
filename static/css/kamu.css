@@ -125,6 +125,12 @@ h3 {
 	border-bottom: none;
 }
 
+img#beta_image {
+	margin-top: 55px;
+	margin-left: -172px;
+	float: left;
+}
+
 div#navbar {
 	height: 34px;
 	width: 960px;
