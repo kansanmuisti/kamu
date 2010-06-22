@@ -313,7 +313,7 @@ div.news_items {
 
 .news_items h2 {
 	/* copied from '#content h3' */
-	font-size: 100%;
+	font-size: 90%;
 	font-weight: bold;
 	color: #2f7670;
 	margin-bottom: 4px;
