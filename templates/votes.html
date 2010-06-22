@@ -17,6 +17,7 @@
   {% endif %}
   </div>
 
+{% comment %}
   <div class="h2_section">
   <h2>{% trans "Tags" %}</h2>
 {% tags_for_object session as tags %}
@@ -28,6 +29,7 @@
     <input type="text" maxlength="50" name="tag" />
   </form>
   </div>
+{% endcomment %}
 
 {% if score_table %}
   <div class="h2_section">
