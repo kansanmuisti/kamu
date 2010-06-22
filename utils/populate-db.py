@@ -268,7 +268,7 @@ def process_mops(party_list, update = False, db_insert = False):
 VOTE_URL = "/triphome/bin/aax3000.sh?VAPAAHAKU=aanestysvpvuosi>=1999"
 MINUTES_URL = "/triphome/bin/akx3000.sh?kanta=utaptk&uusimmat=k&lajittelu=PAIVAMAARA+desc,tstamp+desc&VAPAAHAKU2=vpvuosi%3E2002&paluuhaku=/triphome/bin/akxhaku.sh%3Flyh=PTKSUP%3Flomake=akirjat/akx3100&haku=PTKSUP"
 
-def read_links(is_minutes, link = None, new_only = False):
+def read_links(is_minutes, link=None, new_only=False):
         if is_minutes:
                 link_type = 'minutes'
                 url = MINUTES_URL
@@ -304,6 +304,7 @@ def read_links(is_minutes, link = None, new_only = False):
                 # Check if last page of links
                 if len(l) >= 50:
                         fwd_link = parser.get_forward_link()
+                        url = url_base + fwd_link
                 else:
                         fwd_link = None
                         break
@@ -406,6 +407,7 @@ def process_session_votes(link, nr, only_new=False, noop=False):
                         mem_name_list[vote.member_name] = member
                 vote.member = mem_name_list[vote.member_name]
                 vote.save()
+        sess.count_votes()
 
         transaction.commit()
         db.reset_queries()
@@ -425,12 +427,16 @@ def process_votes(full_update=False, noop=False):
                 if not next_link:
                         break
 
-def insert_minutes(update, minutes):
+def insert_minutes(full_update, minutes):
+        if until_pl and minutes['id'] == until_pl:
+                return False
         print minutes['id']
         try:
-                pl_sess = PlenarySession.objects.get(name = minutes['id'])
-                if not update:
-                        return
+                pl_sess = PlenarySession.objects.get(name=minutes['id'])
+                # If the plsession exists and has the minutes field set
+                # already, but we're not doing a full update, bail out.
+                if not full_update and pl_sess.minutes:
+                        return None
         except PlenarySession.DoesNotExist:
                 pl_sess = PlenarySession()
                 pl_sess.name = minutes['id']
@@ -444,7 +450,7 @@ def insert_minutes(update, minutes):
 OK_UNKNOWNS = [ 'Alexander Stubb', u'Petri J\u00e4\u00e4skel\u00e4inen',
         'Jaakko Jonkka', 'Riitta-Leena Paunio' ]
 
-def insert_discussion(update, pl_sess, disc, dsc_nr, members):
+def insert_discussion(full_update, pl_sess, disc, dsc_nr, members):
         idx = 0
         for spkr in disc:
                 if not spkr['name'] in members:
@@ -458,8 +464,8 @@ def insert_discussion(update, pl_sess, disc, dsc_nr, members):
                 try:
                         st = Statement.objects.get(plenary_session = pl_sess,
                                 dsc_number = dsc_nr, index = idx)
-                        if not update:
-                                continue
+                        if not full_update:
+                                return False
                 except Statement.DoesNotExist:
                         st = Statement()
                         st.plenary_session = pl_sess
@@ -476,10 +482,10 @@ def insert_discussion(update, pl_sess, disc, dsc_nr, members):
                                 match = True
                 st.html = spkr['html']
                 st.save()
-
+        return True
 
 @transaction.commit_manually
-def process_minutes(update):
+def process_minutes(full_update):
         member_list = Member.objects.all()
         member_dict = {}
         for mem in member_list:
@@ -489,27 +495,34 @@ def process_minutes(update):
                         raise Exception()
                 member_dict[name] = mem
 
-        links = read_links(True)
-        print "Got links for total of %d minutes" % len(links)
-        for link in links:
-                url = url_base + link
-                print "%4d. %s" % (links.index(link), url)
-                s = open_url_with_cache(url, 'minutes')
-                tmp_url = 'http://www.eduskunta.fi/faktatmp/utatmp/akxtmp/'
-                minutes = minutes_parser.parse_minutes(s, tmp_url)
-                if not minutes:
-                        continue
-                s = open_url_with_cache(minutes['sgml_url'], 'minutes')
-                minutes['url'] = url
-                pl_sess = insert_minutes(update, minutes)
-                for l in minutes['cnv_links']:
-                        print l
-                        s = open_url_with_cache(l, 'minutes')
-                        disc = minutes_parser.parse_discussion(s, l)
-                        insert_discussion(update, pl_sess, disc,
-                                minutes['cnv_links'].index(l), member_dict)
-                transaction.commit()
-                db.reset_queries()
+        next_link = None
+        while True:
+                (links, next_link) = read_links(True, next_link, new_only=not full_update)
+                print "Got links for total of %d minutes" % len(links)
+                for link in links:
+                        url = url_base + link
+                        print "%4d. %s" % (links.index(link), url)
+                        s = open_url_with_cache(url, 'minutes')
+                        tmp_url = 'http://www.eduskunta.fi/faktatmp/utatmp/akxtmp/'
+                        minutes = minutes_parser.parse_minutes(s, tmp_url)
+                        if not minutes:
+                                continue
+                        s = open_url_with_cache(minutes['sgml_url'], 'minutes')
+                        minutes['url'] = url
+                        pl_sess = insert_minutes(full_update, minutes)
+                        if not pl_sess:
+                                next_link = None
+                                break
+                        for l in minutes['cnv_links']:
+                                print l
+                                s = open_url_with_cache(l, 'minutes')
+                                disc = minutes_parser.parse_discussion(s, l)
+                                insert_discussion(full_update, pl_sess, disc,
+                                        minutes['cnv_links'].index(l), member_dict)
+                        transaction.commit()
+                        db.reset_queries()
+                if not next_link:
+                        break
 
 parser = OptionParser()
 parser.add_option('-p', '--parties', action="store_true", dest="parties",
@@ -541,4 +554,4 @@ if opts.members:
 if opts.votes:
         process_votes(opts.full_update)
 if opts.minutes:
-        process_minutes(True)
+        process_minutes(opts.full_update)

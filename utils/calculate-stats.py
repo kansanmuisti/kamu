@@ -12,6 +12,7 @@ from kamu import settings
 
 setup_environ(settings)
 
+from django import db
 from django.db import connection
 from kamu.votes.models import *
 from kamu.votes.views import PERIODS
@@ -43,6 +44,8 @@ def tally_votes(party_list, member_list, begin, end):
     for sess in session_list:
         if idx % 50 == 0:
             print "%4d of %d" % (idx, len(session_list))
+            db.reset_queries()
+
         pl_sess = sess.plenary_session
 
         total_count = {}

@@ -51,7 +51,10 @@ def parse_minutes(html_str, url):
                 return None
         print text
         text = text.replace(u'p\u00e4iv\u00e4n\u00e4', '')
-        (d, m, y) = re.search(r'(?u)\d+\s*\. .+na (\d{1,2})[. ]{1,3}(\w+)kuuta\s+(\d{4})', text).groups()
+        grps = re.search(r'(?u)\d+\s*\. .+na\s+(\d{1,2})[. ]{1,3}(\w+)kuuta\s+(\d{4})', text)
+        if not grps:
+                raise Exception("Invalid date: " + text)
+        (d, m, y) = grps.groups()
         if not m in MONTHS:
                 raise Exception("Invalid date: " + text)
         m = MONTHS.index(m) + 1
