@@ -6,5 +6,6 @@ utils/cache
 static/images/parties
 static/images/members
 static/images/orgs
+static/images/*/*q85.png
 static/tmp
 djapian/
