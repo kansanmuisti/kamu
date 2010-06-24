@@ -140,7 +140,7 @@ div#navbar {
 }
 
 #navbar ul {
-	margin-left: 195px;
+	margin-left: 165px;
 	float: left;
 	list-style: none;
 	min-width: 210px;
@@ -249,7 +249,7 @@ div#wrap {
  * Sidebar
  */
 div#sidebar {
-	width: 165px;
+	width: 135px;
 	min-height: 1px;
 	margin-right: 15px;
 	float: left;
@@ -270,11 +270,11 @@ div#sidebar {
  * Content styles
  */
 div#content {
-	width: 750px;
-        float: left;
-        border-bottom: solid 1px;
+	width: 780px;
+	float: left;
+	border-bottom: solid 1px;
 	padding-bottom: 16px;
-        margin-bottom: 16px;
+	margin-bottom: 16px;
 }
 
 #content p + p {
@@ -287,12 +287,43 @@ div#content {
 
 label {
 	display: block;
-        float: left;
-        min-width: 150px;
+	float: left;
+	min-width: 150px;
 }
 
 .errorlist li {
 	color: red;
+}
+
+/*
+ * Comments
+ */
+div.comment {
+	border-bottom: 1px dotted;
+	padding: 8px;
+}
+
+div.user_portrait {
+	float: left;
+	width: 48px;
+}
+
+div.comment_body {
+	margin-left: 56px;
+	margin-bottom: 16px;
+}
+
+div.comment_meta {
+	margin-left: 56px;
+}
+
+div.comment_author {
+	font-weight: bold;
+        font-size: 90%;
+}
+
+div.comment_date {
+	font-size: 80%;
 }
 
 /*
@@ -354,6 +385,10 @@ table.sessions {
 	border: none;
 	width: 100%;
 }
+.sessions th {
+	padding-bottom: 8px;
+}
+
 .yes_vote {
 	height: 18px;
 	background: url("/static/images/icons/vote_yes.png") center right no-repeat;
@@ -488,6 +523,10 @@ table#member_vote_list {
 	margin-bottom: 1em;
 }
 
+#member_vote_list th {
+	padding-bottom: 8px;
+}
+
 td.member_info_session {
 	width: 12em;
         text-align: right;
@@ -504,6 +543,10 @@ td.member_info_vote_no {
 td.member_info_vote_empty {
 	width: 1em;
         background-color: yellow;
+}
+
+#basic_info li {
+	list-style: none;
 }
 
 /*

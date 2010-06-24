@@ -74,9 +74,6 @@
     </div>
   </div>
 
-  <div id="funding">
-  </div>
-
   <div id="votes">
 {% if vote_page %}
     <table id="member_vote_list">
@@ -88,17 +85,18 @@
     {% with vote.session as sess %}
        <tr>
           <td class="member_info_session"><a href="{% url votes.views.show_session plsess=sess.plenary_session.url_name,sess=sess.number %}">{{ vote.session.plenary_session.name }}/{{ vote.session.number }}</a></td>
-    {% endwith %}
     {% ifequal vote.vote 'Y' %}
-          <td class="member_info_vote_yes" title='Y'></td>
+          <td class="yes_vote member_info_vote" title='{% trans "Yay" %}'></td>
     {% endifequal %}
     {% ifequal vote.vote 'N' %}
-          <td class="member_info_vote_no" title='N'></td>
+          <td class="no_vote member_info_vote" title='{% trans "Nay" %}'></td>
     {% endifequal %}
     {% ifequal vote.vote 'E' %}
-          <td class="member_info_vote_empty" title='E'></td>
+          <td class="empty_vote member_info_vote" title='{% trans "Empty" %}'></td>
     {% endifequal %}
+          <td style="padding-left: 8px; font-size: 80%">{{ sess.info|truncatewords:8 }}</td>
         </tr>
+    {% endwith %}
     {% endfor %}
     </table>
 {% load pagination_nav %}
@@ -114,8 +112,17 @@
   <div id="comments">
 {% get_comment_list for member as comment_list %}
 {% for comment in comment_list %}
-<p>Posted by: {{ comment.user_name }} {{ comment.submit_date|timesince }} {% trans "ago" %}</p>
-<p>Comment: {{ comment.comment }}</p>
+<div class="comment">
+  <div class="user_portrait">
+    <img src="/static/images/icons/anon.png" />
+  </div>
+  <div class="comment_body">{{ comment.comment }}</div>
+  <div class="comment_meta">
+    <div class="comment_author">{{ comment.user_name }}</div>
+    <div class="comment_date">{{ comment.submit_date|timesince }} {% trans "ago" %}</div>
+  </div>
+  <div class="clear"></div>
+</div>
 {% endfor %}
     <br />
     <div id="new_comment">

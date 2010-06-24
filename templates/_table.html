@@ -13,11 +13,13 @@
     	  <img src='/static/{% thumbnail col.img 32x32 %}' />
 {% endif %}
 {% else %}
-      	  {{ col.name }}
+{{ col.name }}
 {% endif %}
-	</th>
+</th>
 {% endfor %}
       </tr>
+
+{% comment %}
       <tr{% if table.sort_id %} id="{{ table.sort_id }}"{% endif %}>
 {% for col in table.header %}
 {% if col.sort_key %}
@@ -40,6 +42,8 @@
 {% endif %}
 {% endfor %}
       </tr>
+{% endcomment %}
+
 {% for row in table.body %}
     <tr>
 {% for val in row %}

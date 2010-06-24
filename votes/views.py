@@ -424,17 +424,19 @@ def list_members(request):
 
 def generate_member_stat_table(request, member, stats):
     table = {}
+
     hdr = []
     hdr.append({ 'name': _('Period'), 'class': 'member_list_name' })
-    hdr.append({ 'name': _('ATT'), 'class': 'member_list_stat',
-        'title': _('Attendance in voting sessions'), 'img': 'images/attendance.png', 'no_tn': True})
-    hdr.append({ 'name': _('PA'), 'class': 'member_list_stat',
-        'title': _('Agreement with party majority')})
-    hdr.append({ 'name': _('SA'), 'class': 'member_list_stat',
-        'title': _('Agreement with session majority')})
-    hdr.append({ 'name': _('St'), 'class': 'member_list_stat',
-        'title': _('Number of statements')})
+    hdr.append({ 'name': _('ATT'), 'sort_key': 'att', 'class': 'member_list_stat',
+        'title': _('Attendance in voting sessions'), 'img': 'images/icons/attendance.png', 'no_tn': True})
+    hdr.append({ 'name': _('PA'), 'sort_key': 'pagree', 'class': 'member_list_stat',
+        'title': _('Agreement with party majority'), 'img': 'images/icons/party_agr.png', 'no_tn': True})
+    hdr.append({ 'name': _('SA'), 'sort_key': 'sagree', 'class': 'member_list_stat',
+        'title': _('Agreement with session majority'), 'img': 'images/icons/session_agr.png', 'no_tn': True})
+    hdr.append({ 'name': _('St'), 'sort_key': 'st_cnt', 'class': 'member_list_stat',
+        'title': _('Number of statements'), 'img': 'images/icons/nr_statements.png', 'no_tn': True})
     table['header'] = hdr
+
     vals = []
     CLASS_NAME = 'member_list_stat'
     for s in stats:
@@ -489,7 +491,7 @@ def show_member(request, url_name):
     da_list = DistrictAssociation.objects.filter(member = member).order_by('begin')
     query = Q(member = member)
     query &= Q(vote__in=['Y', 'N', 'E'])
-    vote_list = Vote.objects.filter(query).order_by(order)
+    vote_list = Vote.objects.filter(query).order_by(order, '-session__number')
     if vote_list.count():
         paginator = Paginator(vote_list, 30)
         try:
