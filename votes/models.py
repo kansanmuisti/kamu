@@ -195,8 +195,12 @@ class Statement(models.Model):
     objects = StatementManager()
 
     def __unicode__(self):
-        name = "%s %d / %d / %s - %s" % (_("Statement "), self.index+1,
-                self.dsc_number+1, self.plenary_session.name, self.member.name)
+        if self.member:
+            name = "%s %d / %d / %s - %s" % (_("Statement "), self.index+1,
+                   self.dsc_number+1, self.plenary_session.name, self.member.name)
+        else:
+            name = "%s %d / %d / %s" % (_("Statement "), self.index+1,
+                   self.dsc_number+1, self.plenary_session.name)
         return name
 
 
