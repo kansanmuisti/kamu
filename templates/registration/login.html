@@ -18,4 +18,5 @@
     <input type="submit" value="login" />
     <input type="hidden" name="next" value="{{ next|escape }}" />
   </form>
+  {% trans "Forgot your username or password?" %} <a href="{% url auth_password_reset %}">{% trans "Reset them" %}</a>
 {% endblock %}

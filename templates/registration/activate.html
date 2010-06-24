@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Activation" %}{% endblock %}
+
+{% block content %}
+  <h1>{% trans "Kamu account activation" %}</h1>
+  {% if account %}
+    <p>Hello, {{ account.username }}. Your account is now active.</p>
+  {% else %}
+    <p>Sorry, but you have provided an invalid activation key.</p>
+  {% endif %}
+{% endblock %}

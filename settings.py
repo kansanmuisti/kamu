@@ -117,9 +117,16 @@ INSTALLED_APPS = (
     'kamu.beta',
     'tagging',
     'djapian',
+    'registration',
 #    'debug_toolbar'
 )
 
+# Activation window from the sending of the activation e-mail
+ACCOUNT_ACTIVATION_DAYS = 3
+# URL for redirection when the user needs to login and nothing
+# else is specified in the code, like when using pre-canned
+# functionality in django-register
+LOGIN_URL = '/account/login/'
 try:
     from settings_local import *
 except ImportError:

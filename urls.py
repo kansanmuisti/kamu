@@ -32,9 +32,9 @@ urlpatterns += patterns('votes.views',
     (r'^$', 'main_page'),
 )
 
-urlpatterns += patterns('users.views',
-    (r'account/register/$', 'register'),
-)
+#urlpatterns += patterns('users.views',
+#    (r'account/register/$', 'register'),
+#)
 
 urlpatterns += patterns('orgs.views',
     (r'org/add/$', 'add_org'),
@@ -48,8 +48,10 @@ urlpatterns += patterns('orgs.views',
 
 urlpatterns += patterns('',
     (r'^comments/', include('django.contrib.comments.urls')),
-    (r'^account/login/$', login, {'template_name': 'login.html'}),
+#    (r'^account/login/$', login, {'template_name': 'login.html'}),
+# Switching to django-register
     (r'^account/logout/$', logout, {'next_page': '/'}),
+    (r'^account/', include('registration.urls')),
     (r'^beta/$', 'kamu.beta.views.register'),
     (r'^beta/thankyou/$', 'kamu.beta.views.thankyou'),
 )
