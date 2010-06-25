@@ -127,6 +127,8 @@ ACCOUNT_ACTIVATION_DAYS = 3
 # else is specified in the code, like when using pre-canned
 # functionality in django-register
 LOGIN_URL = '/account/login/'
+DEFAULT_FROM_EMAIL = 'noreply@kansanmuisti.fi'
+
 try:
     from settings_local import *
 except ImportError:

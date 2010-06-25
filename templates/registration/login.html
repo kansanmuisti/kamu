@@ -15,8 +15,12 @@
     <label for="password">{% trans "Password:" %}</label>
     <input type="password" name="password" value="" id="password">
     <br />
-    <input type="submit" value="login" />
+    <input type="submit" name="login" value="{% trans "Login" %}"/>
     <input type="hidden" name="next" value="{{ next|escape }}" />
   </form>
-  {% trans "Forgot your username or password?" %} <a href="{% url auth_password_reset %}">{% trans "Reset them" %}</a>
+  <br />
+  <a href="{% url auth_password_reset %}"><h3>{% trans "Forgot your username or password?" %}</h3></a>
+  <a href="{% url registration_register %}"><h3>{% trans "Create a new account." %}</h3></a>
+
 {% endblock %}
+

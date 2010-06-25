@@ -542,8 +542,8 @@ msgid "Kamu account activation"
 msgstr "Kamu-käyttäjätunnuksen aktivointi"
 
 #: templates/registration/activation_email.txt:1
-msgid "Please use the following link to activate your KAMU account:"
-msgstr "Käytä seuraavaa linkkiä aktivoidaksesi KAMU-käyttäjätunnuksesi:"
+msgid "Please use the following link to activate your Kamu account:"
+msgstr "Käytä seuraavaa linkkiä aktivoidaksesi Kamu-käyttäjätunnuksesi:"
 
 #: templates/registration/activation_email.txt:3
 #, python-format
@@ -571,13 +571,13 @@ msgstr "Käyttäjätunnus:"
 msgid "Password:"
 msgstr "Salasana:"
 
+#: templates/registration/login.html:23
+msgid "Create a new account."
+msgstr "Luo uusi tunnus."
+
 #: templates/registration/login.html:21
 msgid "Forgot your username or password?"
 msgstr "Unohditko käyttäjätunnuksesi tai salasanasi?"
-
-#: templates/registration/login.html:21
-msgid "Reset them"
-msgstr "Nollaa ne"
 
 #: templates/registration/password_change_done.html:4
 #: templates/registration/password_change_done.html:8
@@ -724,9 +724,8 @@ msgid "Register"
 msgstr "Rekisteröidy"
 
 #: templates/registration/registration_form.html:6
-#, fuzzy
 msgid "Create an account"
-msgstr "Luo tunnus"
+msgstr "Luo uusi tunnus"
 
 #: templates/registration/registration_form.html:10
 msgid "Create the account"

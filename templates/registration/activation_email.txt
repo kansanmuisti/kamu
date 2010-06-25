@@ -1,3 +1,6 @@
-{% load i18n %}{% blocktrans %}Please use the following link to activate your KAMU account:{% endblocktrans %}
-http://{{ site.domain }}{% url registration_activate activation_key=activation_key %}
+{% load i18n %}{% blocktrans %}Please use the following link to activate your Kamu account:{% endblocktrans %}
+
+http://www.kansanmuisti.fi{% url registration_activate activation_key=activation_key %}
+
 {% blocktrans %}Please note that this link will only be valid for {{ expiration_days }} days.{% endblocktrans %}
+
