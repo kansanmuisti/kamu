@@ -158,7 +158,6 @@ class PlenarySession(models.Model):
     name = models.CharField(max_length = 20, primary_key = True)
     date = models.DateField(db_index = True)
     info_link = models.URLField()
-    minutes = models.TextField()
     url_name = models.SlugField(max_length = 20, unique = True, db_index = True)
 
     objects = PlenarySessionManager()
@@ -172,6 +171,12 @@ class PlenarySession(models.Model):
     def __unicode__(self):
         return self.name
 
+class Minutes(models.Model):
+    plenary_session = models.ForeignKey(PlenarySession)
+    html = models.TextField()
+
+    def __unicode__(self):
+        return str(self.plenary_session) + " minutes"
 
 class StatementManager(models.Manager):
     def between(self, begin = None, end = None):

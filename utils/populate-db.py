@@ -431,20 +431,30 @@ def insert_minutes(full_update, minutes):
         if until_pl and minutes['id'] == until_pl:
                 return False
         print minutes['id']
+        mins = None
         try:
                 pl_sess = PlenarySession.objects.get(name=minutes['id'])
                 # If the plsession exists and has the minutes field set
                 # already, but we're not doing a full update, bail out.
-                if not full_update and pl_sess.minutes:
+                minutes = Minutes.objects.get(plenary_session=pl_sess)
+                if not full_update and minutes:
                         return None
         except PlenarySession.DoesNotExist:
                 pl_sess = PlenarySession()
                 pl_sess.name = minutes['id']
                 pl_sess.date = minutes['date']
                 pl_sess.info_link = minutes['url']
-        pl_sess.minutes = minutes['html']
+                pl_sess.save()
+        except Minutes.DoesNotExist:
+                mins = None
 
-        pl_sess.save()
+        if not mins:
+                mins = Minutes()
+                mins.plenary_session = pl_sess
+
+        mins.html = minutes['html']
+        mins.save()
+
         return pl_sess
 
 OK_UNKNOWNS = [ 'Alexander Stubb', u'Petri J\u00e4\u00e4skel\u00e4inen',

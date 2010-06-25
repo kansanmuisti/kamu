@@ -9,9 +9,7 @@ from django.utils.translation import ugettext as _
 from django.contrib.auth.decorators import login_required
 from tagging.models import Tag
 from tagging.utils import parse_tag_input
-from kamu.votes.models import Session, Member, Vote, MemberStats, PlenarySession
-from kamu.votes.models import PartyAssociation, DistrictAssociation, SessionDocument
-from kamu.votes.models import Statement, Party
+from kamu.votes.models import *
 from kamu.orgs.models import Organization, SessionScore
 from kamu.votes.index import complete_indexer
 
@@ -296,6 +294,7 @@ def show_session(request, plsess, sess):
     args['switch_district'] = True
     args['score_table'] = score_table
     args['tags'] = Tag.objects.get_for_object(session)
+    args['active_page'] = 'sessions'
 
     return render_to_response('votes.html', args, context_instance = RequestContext(request))
 
@@ -543,7 +542,11 @@ def list_member_statements(request, url_name):
 
 def show_plsession(request, plsess):
     psess = get_object_or_404(PlenarySession, url_name=plsess)
-    args = { 'psession': psess }
+    try:
+        minutes = Minutes.objects.get(plenary_session=psess)
+    except Minutes.DoesNotExist:
+        minutes = None
+    args = { 'psession': psess, 'minutes': minutes }
     return render_to_response('show_session.html', args,
                               context_instance=RequestContext(request))
 
