@@ -9,6 +9,7 @@
       delay: 50,
       fade: 100,
       track: true,
+      showURL: false,
     });
   });
 </script>
@@ -23,14 +24,15 @@
 	<tr id="member_list_head">
 {% load basic %}
 {% for col in col_hdr %}
-            <th class="{{ col.class }}" title="{{ col.title }}">
 {% if col.img %}
+            <th class="{{ col.class }}">
 {% if col.no_tn %}
-    	        <img src='/static/{{ col.img }}' />
+		<img title="{{ col.title }}" src='/static/{{ col.img }}' />
 {% else %}
-    	        <img src='/static/{% thumbnail col.img 32x32 %}' />
+		<img title="{{ col.title }}" src='/static/{% thumbnail col.img 32x32 %}' />
 {% endif %}
 {% else %}
+            <th class="{{ col.class }}" title="{{ col.title }}">
       		{{ col.name }}
 {% endif %}
 	    </th>
