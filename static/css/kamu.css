@@ -70,6 +70,7 @@ h3 {
 	opacity: 0.85;
 }
 #tooltip h3 {
+	color: black;
 	font-weight: normal;
 	font-size: 80%;
 	margin: 0px;
