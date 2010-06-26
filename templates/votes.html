@@ -8,7 +8,7 @@
 
   <h1>{% trans "Plenary session" %} <a href='{{ psession.info_link }}'>
     {{ psession.name }}</a>, {% trans "vote" %} {{ session.number }},
-    {{ psession.date|date }}, {% trans "time" %} {{ session.time|time }}
+    {{ psession.date|date:"j. F" }}ta, {% trans "time" %} {{ session.time|time }}
   </h1>
   <div class='session_info h2_section'>
     {{ session.info|linebreaks }}
