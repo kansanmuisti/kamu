@@ -114,11 +114,10 @@ INSTALLED_APPS = (
     'kamu.votes',
     'kamu.users',
     'kamu.orgs',
-    'kamu.beta',
+    'kamu.comments',
     'tagging',
     'djapian',
     'registration',
-#    'debug_toolbar'
 )
 
 # Activation window from the sending of the activation e-mail
@@ -128,6 +127,8 @@ ACCOUNT_ACTIVATION_DAYS = 3
 # functionality in django-register
 LOGIN_URL = '/account/login/'
 DEFAULT_FROM_EMAIL = 'noreply@kansanmuisti.fi'
+
+COMMENTS_APP = 'kamu.comments'
 
 try:
     from settings_local import *
