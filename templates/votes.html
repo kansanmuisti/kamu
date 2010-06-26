@@ -59,7 +59,6 @@
   <table class='vote_list {{ table.class }}'>
   <tr>
 {% for col in table.col_hdr %}
-{% spaceless %}
   <th class="{{ col.class }}" title="{{ col.title }}">
 {% if col.sort_key %}
 {% ifequal request.GET.sort col.sort_key %}
@@ -84,30 +83,9 @@
 {% endifequal %}
 {% endif %}
   </th>
-{% endspaceless %}
 {% endfor %}
   </tr>
-
-{% for row in table.col_vals %}
-{% spaceless %}
-  <tr>
-{% for val in row %}
-  <td class="{{ val.class }}" title='{{ val.title }}'>
-{% if val.link %}
-    <a href='{{ val.link }}'>
-{% endif %}
-{% if val.img %}
-    <img src='/static/{% thumbnail val.img val.img_dim %}' />
-{% else %}
-    {{ val.value }}
-{% endif %}
-{% if val.link %}
-    </a>
-{% endif %}
-{% endfor %}
-  </tr>
-{% endspaceless %}
-{% endfor %}
+{{ table.html|safe }}
   </table>
 {% endfor %}
   </div>

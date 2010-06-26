@@ -63,26 +63,8 @@
 {% endcomment %}
 {% endspaceless %}
 
-{% for member in member_page.object_list %}
-{% spaceless %}
-  <tr>
-{% for val in member.col_vals %}
-    <td class="{{ val.class }}" title='{{ val.title }}'>
-{% if val.link %}
-      <a href='{{ val.link }}'>
-{% endif %}
-{% if val.img %}
-      <img src='/static/{% thumbnail val.img val.img_dim %}' />
-{% else %}
-      {{ val.value }}
-{% endif %}
-{% if val.link %}
-      </a>
-{% endif %}
-{% endfor %}
-  </tr>
-{% endspaceless %}
-{% endfor %}
+{{ rows|safe }}
+
   </table>
 
 {% load pagination_nav %}

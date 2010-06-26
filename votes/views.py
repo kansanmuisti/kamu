@@ -12,6 +12,7 @@ from tagging.utils import parse_tag_input
 from kamu.votes.models import *
 from kamu.orgs.models import Organization, SessionScore
 from kamu.votes.index import complete_indexer
+from sorl.thumbnail.main import DjangoThumbnail
 
 import djapian
 import operator
@@ -77,6 +78,31 @@ def find_district(request, begin, end):
         district = request.session[DISTRICT_KEY]
         if district in da_list:
             return district
+
+def generate_row_html(row):
+    html = '\t<tr>'
+    for val in row:
+        if not val:
+            html += '<td></td>'
+            continue
+        html += '<td class="%s"' % (val['class'])
+        if 'title' in val:
+            html += ' title="%s">' % (val['title'])
+        else:
+            html += '>'
+        if 'link' in val:
+            html += '<a href="%s">' % (val['link'])
+        if 'img' in val:
+            tn = DjangoThumbnail(val['img'], val['img_dim'].split('x'))
+            html += '<img src="/static/%s" />' % (unicode(tn))
+        elif 'value' in val:
+            html += val['value']
+        if 'link' in val:
+            html += '</a>'
+        html += '</td>'
+    html += '</tr>\n'
+    return html
+
 
 def list_plsessions(request):
     (date_begin, date_end) = find_period(request)
@@ -277,16 +303,15 @@ def show_session(request, plsess, sess):
         row.append({'title': t, 'class': c})
         return row
 
-    col_vals = []
     middle = (len(votes) + 2) / 2
-    for vote in votes[0:middle]:
-        col_vals.append(fill_cols(vote))
-    tables[0]['col_vals'] = col_vals
+    html_list = [generate_row_html(fill_cols(vote)) for vote in votes[0:middle]]
+    html = "".join(html_list)
+    tables[0]['html'] = html
     tables[0]['class'] = 'vote_list_left'
-    col_vals = []
-    for vote in votes[middle:]:
-        col_vals.append(fill_cols(vote))
-    tables[1]['col_vals'] = col_vals
+
+    html_list = [generate_row_html(fill_cols(vote)) for vote in votes[middle:]]
+    html = "".join(html_list)
+    tables[1]['html'] = html
     tables[1]['class'] = 'vote_list_right'
 
     args = { 'psession': psess, 'session': session, 'vote_list': votes }
@@ -296,7 +321,7 @@ def show_session(request, plsess, sess):
     args['tags'] = Tag.objects.get_for_object(session)
     args['active_page'] = 'sessions'
 
-    return render_to_response('votes.html', args, context_instance = RequestContext(request))
+    return render_to_response('votes.html', args, context_instance=RequestContext(request))
 
 @login_required
 def tag_session(request, plsess, sess):
@@ -389,8 +414,8 @@ def list_members(request):
         'title': _('Agreement with session majority'), 'img': 'images/icons/session_agr.png', 'no_tn': True})
     col_hdr.append({ 'name': _('St'), 'sort_key': 'st_cnt', 'class': 'member_list_stat',
         'title': _('Number of statements'), 'img': 'images/icons/nr_statements.png', 'no_tn': True})
-#    col_hdr.append({ 'title': 'Amnesty', 'img': 'images/orgs/amnesty.gif', 'class': 'member_list_stat' })
 
+    row_list = []
     for mem in member_page.object_list:
         col_vals = []
         col_vals.append({'img': mem.party.logo, 'img_dim': '36x36',
@@ -411,14 +436,13 @@ def list_members(request):
             col_vals.append(None)
             col_vals.append(None)
             col_vals.append(None)
-#        for x in range(0):
-#                col_vals.append(format_stat_col(request, 0.5, CLASS_NAME))
-        mem.col_vals = col_vals
+        row_list.append(generate_row_html(col_vals))
+    table_html = "".join(row_list)
 
     return render_to_response('members.html',
                              {'member_page': member_page, 'switch_period': True,
                               'switch_district': True, 'col_hdr': col_hdr,
-                              'active_page': 'members'},
+                              'rows': table_html, 'active_page': 'members'},
                               context_instance = RequestContext(request))
 
 def generate_member_stat_table(request, member, stats):
