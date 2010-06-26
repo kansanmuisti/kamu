@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-24 22:19+0300\n"
+"POT-Creation-Date: 2010-06-26 23:28+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -108,8 +108,8 @@ msgstr "Tiedosto on liian iso."
 msgid "Image dimensions too big."
 msgstr "Kuvan dimensiot ovat liian suuret."
 
-#: orgs/forms.py:50 templates/preview_org.html:11 votes/views.py:251
-#: votes/views.py:383
+#: orgs/forms.py:50 templates/preview_org.html:11 votes/views.py:275
+#: votes/views.py:407
 msgid "Name"
 msgstr "Nimi"
 
@@ -137,11 +137,19 @@ msgstr "Järjestö on jo luotu."
 msgid "Invalid logo."
 msgstr "Logo on väärässä formaatissa."
 
-#: templates/_table.html:31 templates/members.html:47
+#: templates/404.html:3 templates/404.html.py:8
+msgid "Page not found"
+msgstr "Sivua ei löydy"
+
+#: templates/500.html:3 templates/500.html.py:8
+msgid "Internal server error"
+msgstr "Sisäinen virhe"
+
+#: templates/_table.html:31 templates/members.html:49
 msgid "Sort ascending"
 msgstr "Lajittele nousevassa järjestyksessa"
 
-#: templates/_table.html:38 templates/members.html:54
+#: templates/_table.html:38 templates/members.html:56
 msgid "Sort descending"
 msgstr "Lajittele laskevassa järjestyksessä"
 
@@ -249,7 +257,7 @@ msgstr ""
 "  <p>Kiitos, että olet kiinnostunut KAMUsta. Otamme pian yhteyttä.</p>\n"
 "  "
 
-#: templates/list_member_statements.html:16
+#: templates/list_member_statements.html:16 templates/show_member.html:133
 msgid "No statements found"
 msgstr "Ei puheenvuoroja"
 
@@ -370,7 +378,7 @@ msgstr "Nimi palvelussa"
 msgid "Info link"
 msgstr "Linkki kotisivulle"
 
-#: templates/preview_org.html:24 templates/show_org.html:30 votes/views.py:181
+#: templates/preview_org.html:24 templates/show_org.html:30 votes/views.py:205
 msgid "Modify"
 msgstr "Muokkaa"
 
@@ -401,84 +409,84 @@ msgstr[1] ""
 "\n"
 "%(count)s äänestystä\n"
 
-#: templates/show_member.html:27
-msgid "Basic"
-msgstr "Perus"
+#: templates/show_member.html:8
+msgid "General"
+msgstr "Yleistiedot"
 
-#: templates/show_member.html:28
-msgid "Register of interest"
-msgstr "Sidonnaisuudet"
-
-#: templates/show_member.html:29 templates/votes.html:3
+#: templates/show_member.html:9 templates/votes.html:3
 #: templates/votes.html.py:57
 msgid "Votes"
 msgstr "Äänet"
 
-#: templates/show_member.html:30
+#: templates/show_member.html:10
+msgid "Register of interest"
+msgstr "Sidonnaisuudet"
+
+#: templates/show_member.html:11
 msgid "Statements"
 msgstr "Puheenvuorot"
 
-#: templates/show_member.html:31
+#: templates/show_member.html:12
 msgid "Comments"
 msgstr "Kommentit"
 
-#: templates/show_member.html:39
+#: templates/show_member.html:25
 msgid "Surname"
 msgstr "Sukunimi"
 
-#: templates/show_member.html:40
+#: templates/show_member.html:26
 msgid "Given names"
 msgstr "Etunimet"
 
-#: templates/show_member.html:41
+#: templates/show_member.html:27
 msgid "Birthdate"
 msgstr "Syntymäaika"
 
-#: templates/show_member.html:44
+#: templates/show_member.html:30
 msgid "Email address"
 msgstr "Sähköpostiosoite"
 
-#: templates/show_member.html:47
+#: templates/show_member.html:33
 msgid "Telephone"
 msgstr "Puhelinnumero"
 
-#: templates/show_member.html:51
+#: templates/show_member.html:36
 msgid "Electoral districts"
 msgstr "Vaalipiirit"
 
-#: templates/show_member.html:59
+#: templates/show_member.html:44
 msgid "Party associations"
 msgstr "Eduskuntaryhmät"
 
-#: templates/show_member.html:81
+#: templates/show_member.html:66
 msgid "Session"
 msgstr "Äänestys"
 
-#: templates/show_member.html:82 votes/views.py:252
+#: templates/show_member.html:67 votes/views.py:276
 msgid "Vote"
 msgstr "Ääni"
 
-#: templates/show_member.html:89 votes/views.py:266
+#: templates/show_member.html:74 votes/views.py:290
 msgid "Yay"
 msgstr "Kyllä"
 
-#: templates/show_member.html:92 votes/views.py:269
+#: templates/show_member.html:77 votes/views.py:293
 msgid "Nay"
 msgstr "Ei"
 
-#: templates/show_member.html:95 votes/views.py:272
+#: templates/show_member.html:80 votes/views.py:296
 msgid "Empty"
 msgstr "Tyhjä"
 
-#: templates/show_member.html:105
+#: templates/show_member.html:90
 msgid "No votes in database"
 msgstr "Ei ääniä tietokannassa"
 
-#: templates/show_member.html:122
+#: templates/show_member.html:105
 msgid "ago"
 msgstr "sitten"
 
-#: templates/show_member.html:129
+#: templates/show_member.html:112
 msgid "Leave a new comment"
 msgstr "Jätä uusi kommentti"
 
@@ -545,7 +553,7 @@ msgstr "Kamu-käyttäjätunnuksen aktivointi"
 msgid "Please use the following link to activate your Kamu account:"
 msgstr "Käytä seuraavaa linkkiä aktivoidaksesi Kamu-käyttäjätunnuksesi:"
 
-#: templates/registration/activation_email.txt:3
+#: templates/registration/activation_email.txt:5
 #, python-format
 msgid ""
 "Please note that this link will only be valid for %(expiration_days)s days."
@@ -555,7 +563,7 @@ msgstr "Linkki toimii vain %(expiration_days)s päivän ajan."
 msgid "Activate your account"
 msgstr "Aktivoi KAMU-tunnuksesi"
 
-#: templates/registration/login.html:3
+#: templates/registration/login.html:3 templates/registration/login.html:18
 msgid "Login"
 msgstr "Kirjaudu sisään"
 
@@ -571,13 +579,13 @@ msgstr "Käyttäjätunnus:"
 msgid "Password:"
 msgstr "Salasana:"
 
+#: templates/registration/login.html:22
+msgid "Forgot your username or password?"
+msgstr "Unohditko käyttäjätunnuksesi tai salasanasi?"
+
 #: templates/registration/login.html:23
 msgid "Create a new account."
 msgstr "Luo uusi tunnus."
-
-#: templates/registration/login.html:21
-msgid "Forgot your username or password?"
-msgstr "Unohditko käyttäjätunnuksesi tai salasanasi?"
 
 #: templates/registration/password_change_done.html:4
 #: templates/registration/password_change_done.html:8
@@ -645,7 +653,8 @@ msgstr "Syötä uusi salasana"
 msgid ""
 "Please enter your new password twice so we can verify you typed it in "
 "correctly."
-msgstr "Syötä uusi salasanasi kaksi kertaa, jotta voimme varmistaa että syötit sen "
+msgstr ""
+"Syötä uusi salasanasi kaksi kertaa, jotta voimme varmistaa että syötit sen "
 "oikein."
 
 #: templates/registration/password_reset_confirm.html:16
@@ -664,7 +673,8 @@ msgstr "Salasanan nollaus ei onnistunut"
 msgid ""
 "The password reset link was invalid, possibly because it has already been "
 "used.  Please request a new password reset."
-msgstr "Salasanan nollauslinkki oli virheellinen, mahdollisesti siksi että se on jo "
+msgstr ""
+"Salasanan nollauslinkki oli virheellinen, mahdollisesti siksi että se on jo "
 "käytetty. Ole hyvä ja pyydä uusi salasanan nollaus."
 
 #: templates/registration/password_reset_done.html:4
@@ -676,7 +686,8 @@ msgstr "Salasanan nollaus onnistui"
 msgid ""
 "We've e-mailed you instructions for setting your password to the e-mail "
 "address you submitted. You should be receiving it shortly."
-msgstr "Uusi salasanasi on lähetetty antamaasi sähköpostiosoitteeseen. Se saapuu "
+msgstr ""
+"Uusi salasanasi on lähetetty antamaasi sähköpostiosoitteeseen. Se saapuu "
 "tuota pikaa."
 
 #: templates/registration/password_reset_email.html:2
@@ -704,7 +715,8 @@ msgstr "Kiitos tuestasi KAMUlle."
 msgid ""
 "Forgotten your password? Enter your e-mail address below, and we'll e-mail "
 "instructions for setting a new one."
-msgstr "Unohditko salasanasi? Syötä alle sähköpostiosoitteesi, niin \n"
+msgstr ""
+"Unohditko salasanasi? Syötä alle sähköpostiosoitteesi, niin \n"
 "lähetämme sinulle ohjeet sen vaihtamiseksi."
 
 #: templates/registration/password_reset_form.html:14
@@ -716,8 +728,13 @@ msgid "Reset my password"
 msgstr "Nollaa salasana"
 
 #: templates/registration/registration_complete.html:3
+#: templates/registration/registration_complete.html:8
 msgid "Registration complete"
 msgstr "Rekisteröinti vastaanotettu"
+
+#: templates/registration/registration_complete.html:9
+msgid "Your registration e-mail has been sent to the address you provided."
+msgstr "Sähköposti rekisteröitymisestäsi on lähetetty antamaasi osoitteeseen."
 
 #: templates/registration/registration_form.html:3
 msgid "Register"
@@ -731,59 +748,59 @@ msgstr "Luo uusi tunnus"
 msgid "Create the account"
 msgstr "Luo tunnus"
 
-#: votes/models.py:199 votes/models.py:202
+#: votes/models.py:204 votes/models.py:207
 msgid "Statement "
 msgstr "Puheenvuoro"
 
-#: votes/views.py:160
+#: votes/views.py:184
 msgid "Organization"
 msgstr "Järjestö"
 
-#: votes/views.py:161
+#: votes/views.py:185
 msgid "Score"
 msgstr "Pisteet"
 
-#: votes/views.py:249 votes/views.py:381
+#: votes/views.py:273 votes/views.py:405
 msgid "Party"
 msgstr "Puolue"
 
-#: votes/views.py:275
+#: votes/views.py:299
 msgid "Absent"
 msgstr "Poissa"
 
-#: votes/views.py:385 votes/views.py:430
+#: votes/views.py:409 votes/views.py:453
 msgid "ATT"
 msgstr "L.o."
 
-#: votes/views.py:386 votes/views.py:431
+#: votes/views.py:410 votes/views.py:454
 msgid "Attendance in voting sessions"
 msgstr "Läsnäoloprosentti äänestyksissä"
 
-#: votes/views.py:387 votes/views.py:432
+#: votes/views.py:411 votes/views.py:455
 msgid "PA"
 msgstr "SP"
 
-#: votes/views.py:388 votes/views.py:433
+#: votes/views.py:412 votes/views.py:456
 msgid "Agreement with party majority"
 msgstr "Samanmielisyys puolueen enemmistön kanssa"
 
-#: votes/views.py:389 votes/views.py:434
+#: votes/views.py:413 votes/views.py:457
 msgid "SA"
 msgstr "SI"
 
-#: votes/views.py:390 votes/views.py:435
+#: votes/views.py:414 votes/views.py:458
 msgid "Agreement with session majority"
 msgstr "Samanmielisyys äänestyksen lopputuloksen kanssa"
 
-#: votes/views.py:391 votes/views.py:436
+#: votes/views.py:415 votes/views.py:459
 msgid "St"
 msgstr "Pv"
 
-#: votes/views.py:392 votes/views.py:437
+#: votes/views.py:416 votes/views.py:460
 msgid "Number of statements"
 msgstr "Puheenvuorojen lukumäärä"
 
-#: votes/views.py:429
+#: votes/views.py:452
 msgid "Period"
 msgstr "Aikaväli"
 
@@ -791,5 +808,3 @@ msgstr "Aikaväli"
 msgid "All districts"
 msgstr "Kaikki"
 
-#~ msgid "Logo required."
-#~ msgstr "Logo tarvitaan."

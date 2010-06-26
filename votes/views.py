@@ -485,12 +485,12 @@ def generate_member_stat_table(request, member, stats):
     table['body'] = vals
     return table
 
-def show_member(request, url_name):
+
+def show_member_votes(request, member):
     try:
         page = int(request.GET.get('page', '1'))
     except ValueError:
         page = 1
-
     sort_key = request.GET.get('sort')
     if sort_key and sort_key[0] == '-':
         sort_key = sort_key[1:]
@@ -507,11 +507,6 @@ def show_member(request, url_name):
         order = 'session__plenary_session__date'
     if sort_reverse:
         order = '-' + order
-
-    member = Member.objects.get(url_name = url_name)
-    pa_list = PartyAssociation.objects.filter(member = member).order_by('begin')
-    pa_list = pa_list.select_related('party__full_name')
-    da_list = DistrictAssociation.objects.filter(member = member).order_by('begin')
     query = Q(member = member)
     query &= Q(vote__in=['Y', 'N', 'E'])
     vote_list = Vote.objects.filter(query).order_by(order, '-session__number')
@@ -524,6 +519,12 @@ def show_member(request, url_name):
     else:
         vote_page = None
 
+    return {'vote_page': vote_page}
+
+def show_member_basic(request, member):
+    pa_list = PartyAssociation.objects.filter(member=member).order_by('begin')
+    pa_list = pa_list.select_related('party__full_name')
+    da_list = DistrictAssociation.objects.filter(member=member).order_by('begin')
     member.pa_list = pa_list
     member.da_list = da_list
 
@@ -539,15 +540,9 @@ def show_member(request, url_name):
     else:
         table = None
 
-    args = {'member': member, 'stats_table': table, 'vote_page': vote_page}
-    return render_to_response('show_member.html', args, context_instance = RequestContext(request))
+    return {'stats_table': table }
 
-def list_member_statements(request, url_name):
-    try:
-        member = Member.objects.get(url_name = url_name)
-    except Member.DoesNotExist:
-        raise Http404
-
+def show_member_statements(request, member):
     try:
         page = int(request.GET.get('page', '1'))
     except ValueError:
@@ -560,9 +555,28 @@ def list_member_statements(request, url_name):
         statement_page = paginator.page(page)
     except (EmptyPage, InvalidPage):
         statement_page = paginator.page(paginator.num_pages)
-    args = {'statement_page': statement_page}
-    return render_to_response('list_member_statements.html', args,
-                              context_instance = RequestContext(request))
+
+    return {'statement_page': statement_page}
+
+def show_member(request, member, section=None):
+    member = get_object_or_404(Member, url_name=member)
+    if not section:
+        section = 'basic'
+    if section == 'basic':
+        args = show_member_basic(request, member)
+    elif section == 'votes':
+        args = show_member_votes(request, member)
+    elif section == 'comments':
+        args = {'next': request.path}
+    elif section == 'statements':
+        args = show_member_statements(request, member)
+    else:
+        raise Http404
+
+    args['member'] = member
+    args['section'] = section
+
+    return render_to_response('show_member.html', args, context_instance=RequestContext(request))
 
 def show_plsession(request, plsess):
     psess = get_object_or_404(PlenarySession, url_name=plsess)

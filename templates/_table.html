@@ -5,15 +5,16 @@
       <tr{% if table.header_id %} id="{{ table.header_id }}"{% endif %}>
 {% load basic %}
 {% for col in table.header %}
-        <th class="{{ col.class }}" title="{{ col.title }}">
 {% if col.img %}
+<th class="{{ col.class }}">
 {% if col.no_tn %}
-    	  <img src='/static/{{ col.img }}' />
+  <img title="{{ col.title }}" src='/static/{{ col.img }}' />
 {% else %}
-    	  <img src='/static/{% thumbnail col.img 32x32 %}' />
+  <img title="{{ col.title }}" src='/static/{% thumbnail col.img 32x32 %}' />
 {% endif %}
 {% else %}
-{{ col.name }}
+<th class="{{ col.class }}" title="{{ col.title }}">
+  {{ col.name }}
 {% endif %}
 </th>
 {% endfor %}

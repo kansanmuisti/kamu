@@ -1,37 +1,33 @@
 {% extends "base.html" %}
+{% load i18n thumbnail comments %}
 {% block title %}{{ member.name }}{% endblock %}
 {% block head %}
-<script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
-
 <script type="text/javascript">
   $(document).ready(function() {
-    $("#tabs").tabs({
-  	load: function(event, ui) {
-	    $('a', ui.panel).click(function() {
-            	$(ui.panel).load(this.href);
-            	return false;
-            });
-        }, disabled: [1], cookie: { expires: 30, path: '/member' }
+    $('[title]').tooltip({
+      delay: 50,
+      fade: 100,
+      track: true,
+      showURL: false,
     });
   });
 </script>
 {% endblock %}
+
+{% block sidebar %}
+<p><a class="action_link{% ifequal section 'basic' %} action_link_active{% endifequal %}" href="{% url votes.views.show_member member=member.url_name %}">{% trans "General" %}</a></p>
+<p><a class="action_link{% ifequal section 'votes' %} action_link_active{% endifequal %}" href="{% url votes.views.show_member member=member.url_name section='votes' %}">{% trans "Votes" %}</a></p>
+<p class="action_link_disabled">{% trans "Register of interest" %}</p>
+<p><a class="action_link{% ifequal section 'statements' %} action_link_active{% endifequal %}" href="{% url votes.views.show_member member=member.url_name section='statements' %}">{% trans "Statements" %}</a></p>
+<p><a class="action_link{% ifequal section 'comments' %} action_link_active{% endifequal %}" href="{% url votes.views.show_member member=member.url_name section='comments' %}">{% trans "Comments" %}</a></p>
+
+{% endblock %}
+
 {% block content %}
-{% load i18n %}
-{% load thumbnail %}
-{% load comments %}
     <h1>{{ member.name }}</h1>
 
-<div id="tabs">
-  <ul>
-    <li><a href="#basic_info"><span>{% trans "Basic" %}</span></a></li>
-    <li><a href="#interest"><span>{% trans "Register of interest" %}</span></a></li>
-    <li><a href="#votes"><span>{% trans "Votes" %}</span></a></li>
-    <li><a href="statement/"><span>{% trans "Statements" %}</span></a></li>
-    <li><a href="#comments"><span>{% trans "Comments" %}</span></a></li>
-  </ul>
-
-  <div id="basic_info">
+{% comment %}---------------- BASIC ----------------{% endcomment %}
+{% ifequal section "basic" %}
     <div id="member_info">
     <a href="{{ member.info_link }}"><img class="member_portrait" src="/static/{% thumbnail member.photo 128x192 %}" /></a>
         <img class="member_party_logo" src="/static/{% thumbnail member.party.logo 96x96 %}" />
@@ -46,9 +42,8 @@
 {% if member.phone %}
     <tr><td class='member_info_field_name'>{% trans "Telephone" %}</td><td>{{ member.phone }}</td></tr>
 {% endif %}
-    <tr>
 {% if member.da_list.count %}
-      <td class='member_info_field_name'>{% trans "Electoral districts" %}</td>
+      <tr><td class='member_info_field_name'>{% trans "Electoral districts" %}</td>
       <td><ul>
 {% for da in member.da_list %}
 	<li>{{ da.name }} {{ da.begin|date }}&#8211;{% if da.end %}{{ da.end|date }}{% endif %}</li>
@@ -56,7 +51,7 @@
       </ul></td></tr>
 {% endif %}
 {% if member.pa_list.count %}
-      <td class='member_info_field_name'>{% trans "Party associations" %}</td>
+      <tr><td class='member_info_field_name'>{% trans "Party associations" %}</td>
       <td><ul>
 {% for pa in member.pa_list %}
 	<li>{{ pa.party.full_name }} {{ pa.begin|date }}&#8211;{% if pa.end %}{{ pa.end|date }}{% endif %}</li>
@@ -65,16 +60,16 @@
 {% endif %}
     </table>
     </div>
-    <div id="interest">
-    </div>
+
     <div id="stats">
 {% with stats_table as table %}
 {% include "_table.html" %}
 {% endwith %}
     </div>
-  </div>
+{% endifequal %}
 
-  <div id="votes">
+{% comment %}---------------- VOTES ----------------{% endcomment %}
+{% ifequal section "votes" %}
 {% if vote_page %}
     <table id="member_vote_list">
       <tr>
@@ -104,12 +99,10 @@
 {% else %}
     <h2>{% trans "No votes in database" %}</h2>
 {% endif %}
-  </div>
+{% endifequal %}
 
-  <div id="statements">
-  </div>
-
-  <div id="comments">
+{% comment %}---------------- COMMENTS ----------------{% endcomment %}
+{% ifequal section "comments" %}
 {% get_comment_list for member as comment_list %}
 {% for comment in comment_list %}
 <div class="comment">
@@ -124,12 +117,32 @@
   <div class="clear"></div>
 </div>
 {% endfor %}
-    <br />
-    <div id="new_comment">
-      <h3>{% trans "Leave a new comment" %}</h3>
-      {% render_comment_form for member %}
-    </div>
-  </div>
+<br />
+<div id="new_comment">
+  <h3>{% trans "Leave a new comment" %}</h3>
+  {% render_comment_form for member %}
+</div>
+{% endifequal %}
 
-  </div>
+{% comment %}---------------- STATEMENTS ----------------{% endcomment %}
+{% ifequal section "statements" %}
+{% if statement_page %}
+{% load pagination_nav %}
+
+{% for st in statement_page.object_list %}
+<h3>{{ st.plenary_session }}</h3>
+<p>{{ st.plenary_session.date|date }}</p>
+<p>
+{{ st.html|safe }}
+</p>
+{% endfor %}
+
+{% pagination_nav_qs statement_page "" request.GET %}
+
+{% else %}
+  <h2>{% trans "No statements found" %}</h2>
+{% endif %}
+{% endifequal %}
+
 {% endblock %}
+

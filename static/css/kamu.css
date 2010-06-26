@@ -53,6 +53,12 @@ h3 {
 	cursor: pointer;
 }
 
+.action_link_disabled {
+	padding-left: 2px;
+	padding-right: 2px;
+	color: #bbb;
+}
+
 .action_link_active {
 	font-weight: bold;
 }
@@ -546,7 +552,7 @@ td.member_info_vote_empty {
         background-color: yellow;
 }
 
-#basic_info li {
+#member_info li {
 	list-style: none;
 }
 
