@@ -561,7 +561,7 @@ msgstr "Linkki toimii vain %(expiration_days)s päivän ajan."
 
 #: templates/registration/activation_email_subject.txt:1
 msgid "Activate your account"
-msgstr "Aktivoi KAMU-tunnuksesi"
+msgstr "Aktivoi tunnuksesi"
 
 #: templates/registration/login.html:3 templates/registration/login.html:18
 msgid "Login"
