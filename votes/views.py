@@ -527,15 +527,17 @@ def generate_member_stat_table(request, member, stats):
                 name = per['name']
                 break
         if not name:
-                name = str(s.begin) + PERIOD_DASH
-                if s.end:
-                        name += str(s.end)
+            name = str(s.begin) + PERIOD_DASH
+            if s.end:
+                name += str(s.end)
         row.append({ 'value': name })
         s.calc()
         row.append(format_stat_col(request, s.attendance, CLASS_NAME))
         row.append(format_stat_col(request, s.party_agree, CLASS_NAME))
         row.append(format_stat_col(request, s.session_agree, CLASS_NAME))
         row.append({ 'value': str(s.statement_count), 'class': CLASS_NAME })
+        if not s.attendance and not s.statement_count:
+            continue;
         vals.append(row)
     table['body'] = vals
     return table
