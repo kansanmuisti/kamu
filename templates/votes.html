@@ -1,15 +1,16 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n thumbnail tagging_tags basic comments %}
 {% block title %}{% trans "Votes" %} - {{ psession.name }}/{{ session.number }}{% endblock %}
+{% block sidebar %}
+<div style='margin-bottom: 32px'><p><a class="action_link{% ifequal section 'basic' %} action_link_active{% endifequal %}" href="{% url votes.views.show_session plsess=psession.url_name,sess=session.number %}">{% trans "General" %}</a></p>
+<p><a class="action_link{% ifequal section 'comments' %} action_link_active{% endifequal %}" href="{% url votes.views.show_session plsess=psession.url_name,sess=session.number,section='comments' %}">{% trans "Comments" %}</a></p></div>
+{% endblock %}
 {% block content %}
-{% load basic %}
-{% load thumbnail %}
-{% load tagging_tags %}
-
   <h1>{% trans "Plenary session" %} <a href='{{ psession.info_link }}'>
     {{ psession.name }}</a>, {% trans "vote" %} {{ session.number }},
     {{ psession.date|date:"j. F" }}ta, {% trans "time" %} {{ session.time|time }}
   </h1>
+{% ifequal section "basic" %}
   <div class='session_info h2_section'>
     {{ session.info|linebreaks }}
   {% if session.subject %}
@@ -89,4 +90,29 @@
   </table>
 {% endfor %}
   </div>
+{% endifequal %}
+
+{% comment %}---------------- COMMENTS ----------------{% endcomment %}
+{% ifequal section "comments" %}
+{% get_comment_list for session as comment_list %}
+{% for comment in comment_list %}
+<div class="comment">
+  <div class="user_portrait">
+    <img src="/static/images/icons/anon.png" />
+  </div>
+  <div class="comment_body">{{ comment.comment|linebreaks }}</div>
+  <div class="comment_meta">
+    <div class="comment_author">{{ comment.user_name }}</div>
+    <div class="comment_date">{{ comment.submit_date|timesince }} {% trans "ago" %}</div>
+  </div>
+  <div class="clear"></div>
+</div>
+{% endfor %}
+<br />
+<div id="new_comment">
+  <h3>{% trans "Leave a new comment" %}</h3>
+  {% render_comment_form for session %}
+</div>
+{% endifequal %}
 {% endblock %}
+

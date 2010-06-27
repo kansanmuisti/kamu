@@ -264,12 +264,7 @@ def generate_score_table(request, session):
     tbl['body'] = rows
     return tbl
 
-def show_session(request, plsess, sess):
-    try:
-        number = int(sess)
-    except ValueError:
-        raise Http404
-
+def show_session_basic(request, session, psess):
     sort_key = request.GET.get('sort')
     if sort_key and sort_key[0] == '-':
         sort_key = sort_key[1:]
@@ -290,12 +285,6 @@ def show_session(request, plsess, sess):
     if sort_reverse:
         order = '-' + order
 
-    try:
-        psess = PlenarySession.objects.get(url_name=plsess)
-    except PlenarySession.DoesNotExist:
-        raise Http404
-
-    session = Session.objects.get(plenary_session=psess, number=number)
     session.info = session.info.replace('\n', '\n\n')
 
     district = find_district(request, psess.date, psess.date)
@@ -357,12 +346,33 @@ def show_session(request, plsess, sess):
     tables[1]['html'] = html
     tables[1]['class'] = 'vote_list_right'
 
-    args = { 'psession': psess, 'session': session, 'vote_list': votes }
-    args['tables'] = tables
-    args['switch_district'] = True
-    args['score_table'] = score_table
-    args['tags'] = Tag.objects.get_for_object(session)
+    args = {'vote_list': votes, 'tables': tables, 'score_table': score_table,
+            'tags': Tag.objects.get_for_object(session), 'switch_district': True}
+
+    return args
+
+def show_session(request, plsess, sess, section=None):
+    try:
+        number = int(sess)
+    except ValueError:
+        raise Http404
+
+    psess = get_object_or_404(PlenarySession, url_name=plsess)
+    session = get_object_or_404(Session, plenary_session=psess, number=number)
+
+    if not section:
+        section = 'basic'
+    if section == 'basic':
+        args = show_session_basic(request, session, psess)
+    elif section == 'comments':
+        args = {'next': request.path}
+    else:
+        raise Http404
+
+    args['psession'] = psess
+    args['session'] = session
     args['active_page'] = 'sessions'
+    args['section'] = section
 
     return render_to_response('votes.html', args, context_instance=RequestContext(request))
 
