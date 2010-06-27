@@ -96,7 +96,7 @@ def generate_row_html(row):
             html += '<a href="%s">' % (val['link'])
         if 'img' in val:
             tn = DjangoThumbnail(val['img'], val['img_dim'].split('x'))
-            html += '<img src="/static/%s" />' % (unicode(tn))
+            html += '<img src="/static/%s" alt="%s" />' % (unicode(tn), val['img_alt'])
         elif 'value' in val:
             html += val['value']
         if 'link' in val:
@@ -233,7 +233,7 @@ def generate_score_table(request, session):
         row = []
         kwargs = { 'org': org.url_name }
         org_link = reverse('orgs.views.show_org', kwargs=kwargs)
-        row.append({ 'img': org.logo, 'img_dim': '32x32',
+        row.append({ 'img': org.logo, 'img_alt': 'logo', 'img_dim': '32x32',
             'title': org.name, 'link': org_link })
         row.append({ 'value': org.name, 'link': org_link, 'class': 'td_text' })
         if score:
@@ -322,9 +322,9 @@ def show_session(request, plsess, sess):
     def fill_cols(vote):
         row = []
         mem = vote.member
-        row.append({'img': mem.party.logo, 'img_dim': '24x24',
+        row.append({'img': mem.party.logo, 'img_alt': 'logo', 'img_dim': '24x24',
                     'title': mem.party.full_name, 'class': 'vote_list_party' })
-        row.append({'img': mem.photo, 'img_dim': '24x36',
+        row.append({'img': mem.photo, 'img_alt': 'portrait', 'img_dim': '24x36',
                 'class': 'vote_list_portrait'})
         row.append({'value': mem.name, 'link': '/member/' + mem.url_name + '/',
                 'class': 'vote_list_name'})
@@ -434,7 +434,7 @@ def list_members(request):
             sort_key = '-' + sort_key
         members = query.select_related('party').order_by(sort_key, 'name')
 
-    paginator = Paginator(members, 25)
+    paginator = Paginator(members, 15)
     try:
         page = int(request.GET.get('page', '1'))
     except ValueError:
@@ -458,6 +458,8 @@ def list_members(request):
     hdr_cols.append({ 'name': _('St'), 'sort_key': 'st_cnt', 'class': 'member_list_stat',
         'title': _('Number of statements'), 'img': 'images/icons/nr_statements.png', 'no_tn': True})
     for col in hdr_cols:
+        if 'img' in col:
+            col['img_alt'] = col['title']
         if not 'sort_key' in col:
             continue
         if sort_key == col['sort_key'] and not sort_reverse:
@@ -470,9 +472,10 @@ def list_members(request):
     row_list = []
     for mem in member_page.object_list:
         col_vals = []
-        col_vals.append({'img': mem.party.logo, 'img_dim': '36x36',
+        col_vals.append({'img': mem.party.logo, 'img_alt': 'logo', 'img_dim': '36x36',
                 'title': mem.party.full_name, 'class': 'member_list_party' })
-        col_vals.append({'img': mem.photo, 'link': mem.url_name, 'img_dim': '28x42', 'class': 'member_list_portrait'})
+        col_vals.append({'img': mem.photo, 'img_alt': 'portrait', 'link': mem.url_name,
+                         'img_dim': '28x42', 'class': 'member_list_portrait'})
         col_vals.append({'value': mem.name, 'link': mem.url_name, 'class': 'member_list_name'})
 
         if not hasattr(mem, 'stats'):
@@ -627,6 +630,7 @@ def show_member(request, member, section=None):
 
     args['member'] = member
     args['section'] = section
+    args['active_page'] = 'members'
 
     return render_to_response('show_member.html', args, context_instance=RequestContext(request))
 
