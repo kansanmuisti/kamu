@@ -6,6 +6,8 @@ from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.db.models import Q, Count
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
+from django.utils.safestring import mark_safe
+from django.utils.http import urlencode
 from django.contrib.auth.decorators import login_required
 from tagging.models import Tag
 from tagging.utils import parse_tag_input
@@ -101,8 +103,49 @@ def generate_row_html(row):
             html += '</a>'
         html += '</td>'
     html += '</tr>\n'
-    return html
+    return mark_safe(html)
 
+def generate_header_html(hdr):
+    def gen_attrs(item, add_title=True):
+        s = ''
+        if 'class' in item:
+            s += ' class="%s"' % (item['class'])
+        if 'id' in item:
+            s += ' id="%s"' % (item['id'])
+        if 'title' in item and add_title:
+            s += ' title="%s"' % (item['title'])
+        return s
+    html = '\t<tr'
+    html += gen_attrs(hdr) + '>'
+    for col in hdr['cols']:
+        is_image = 'img' in col
+        # If the header has an image, set the title on the image
+        # component itself.
+        html += '<th%s>' % (gen_attrs(col, add_title=not is_image))
+        if 'link' in col:
+            html += '<a href="%s">' % (col['link'])
+        if 'img' in col:
+            if 'no_tn' in col and col['no_tn']:
+                img_src = col['img']
+            else:
+                img_src = DjangoThumbnail(col['img'], col['img_dim'].split('x'))
+                img_src = unicode(img_src)
+            html += '<img src="/static/%s" />' % (img_src)
+        else:
+            html += col['name']
+        if 'link' in col:
+            html += '</a>'
+        html += '</th>'
+    html += '</tr>\n'
+    return mark_safe(html)
+
+def generate_modified_query(request, mod_key, mod_val, remove=[]):
+    params = dict(request.GET.items())
+    for k in remove:
+        if k in params:
+            del params[k]
+    params[mod_key] = mod_val
+    return request.path + '?%s' % urlencode(params)
 
 def list_plsessions(request):
     (date_begin, date_end) = find_period(request)
@@ -401,19 +444,28 @@ def list_members(request):
     except (EmptyPage, InvalidPage):
         member_page = paginator.page(paginator.num_pages)
 
-    col_hdr = []
-    col_hdr.append({ 'name': _('Party'), 'sort_key': 'party' })
-    col_hdr.append({ 'name': '' })
-    col_hdr.append({ 'name': _('Name'), 'sort_key': 'name', 'class': 'member_list_name' })
+    hdr_cols = []
+    hdr_cols.append({ 'name': _('Party'), 'sort_key': 'party' })
+    hdr_cols.append({ 'name': '' })
+    hdr_cols.append({ 'name': _('Name'), 'sort_key': 'name', 'class': 'member_list_name' })
 
-    col_hdr.append({ 'name': _('ATT'), 'sort_key': 'att', 'class': 'member_list_stat',
+    hdr_cols.append({ 'name': _('ATT'), 'sort_key': 'att', 'class': 'member_list_stat',
         'title': _('Attendance in voting sessions'), 'img': 'images/icons/attendance.png', 'no_tn': True})
-    col_hdr.append({ 'name': _('PA'), 'sort_key': 'pagree', 'class': 'member_list_stat',
+    hdr_cols.append({ 'name': _('PA'), 'sort_key': 'pagree', 'class': 'member_list_stat',
         'title': _('Agreement with party majority'), 'img': 'images/icons/party_agr.png', 'no_tn': True})
-    col_hdr.append({ 'name': _('SA'), 'sort_key': 'sagree', 'class': 'member_list_stat',
+    hdr_cols.append({ 'name': _('SA'), 'sort_key': 'sagree', 'class': 'member_list_stat',
         'title': _('Agreement with session majority'), 'img': 'images/icons/session_agr.png', 'no_tn': True})
-    col_hdr.append({ 'name': _('St'), 'sort_key': 'st_cnt', 'class': 'member_list_stat',
+    hdr_cols.append({ 'name': _('St'), 'sort_key': 'st_cnt', 'class': 'member_list_stat',
         'title': _('Number of statements'), 'img': 'images/icons/nr_statements.png', 'no_tn': True})
+    for col in hdr_cols:
+        if not 'sort_key' in col:
+            continue
+        if sort_key == col['sort_key'] and not sort_reverse:
+            val = '-' + col['sort_key']
+        else:
+            val = col['sort_key']
+        col['link'] = generate_modified_query(request, 'sort', val, remove=['page'])
+    hdr_html = generate_header_html({'cols': hdr_cols, 'id': 'member_list_head'})
 
     row_list = []
     for mem in member_page.object_list:
@@ -441,7 +493,7 @@ def list_members(request):
 
     return render_to_response('members.html',
                              {'member_page': member_page, 'switch_period': True,
-                              'switch_district': True, 'col_hdr': col_hdr,
+                              'switch_district': True, 'hdr': hdr_html,
                               'rows': table_html, 'active_page': 'members'},
                               context_instance = RequestContext(request))
 

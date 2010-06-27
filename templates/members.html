@@ -20,52 +20,9 @@
 
 {% load thumbnail %}
     <table class="member_list">
-{% spaceless %}
-	<tr id="member_list_head">
-{% load basic %}
-{% for col in col_hdr %}
-{% if col.img %}
-            <th class="{{ col.class }}">
-{% if col.no_tn %}
-		<img title="{{ col.title }}" src='/static/{{ col.img }}' />
-{% else %}
-		<img title="{{ col.title }}" src='/static/{% thumbnail col.img 32x32 %}' />
-{% endif %}
-{% else %}
-            <th class="{{ col.class }}" title="{{ col.title }}">
-      		{{ col.name }}
-{% endif %}
-	    </th>
-{% endfor %}
-{% comment %}
-	<tr id="member_list_sort">
-{% for col in col_hdr %}
-{% if col.sort_key %}
-          <th class="{{ col.class }}">
-            <a
-{% ifequal request.GET.sort col.sort_key %}
-              class="sort_active"
-{% endifequal %}
-              title="{% trans "Sort ascending" %}" href="{% query_string "" "sort" %}&sort={{ col.sort_key }}">&#x25bc</a>
-            <a
-{% ifnotequal request.GET.sort col.sort_key %}
-{% ifequal request.GET.sort|cut:"-" col.sort_key %}
-              class="sort_active"
-{% endifequal %}
-{% endifnotequal %}
-              title="{% trans "Sort descending" %}" href="{% query_string "" "sort" %}&sort=-{{ col.sort_key }}">&#x25b2</a>
-          </th>
-{% else %}
-	  <th></th>
-{% endif %}
-{% endfor %}
-        </tr>
-{% endcomment %}
-{% endspaceless %}
-
+{{ hdr|safe }}
 {{ rows|safe }}
-
-  </table>
+    </table>
 
 {% load pagination_nav %}
 {% pagination_nav_qs member_page "" request.GET %}

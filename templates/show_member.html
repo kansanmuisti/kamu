@@ -129,8 +129,8 @@
 {% load pagination_nav %}
 
 {% for st in statement_page.object_list %}
-<h3>{{ st.plenary_session }}</h3>
-<p>{{ st.plenary_session.date|date }}</p>
+{% ifchanged %}<h3>{{ st.plenary_session }}</h3>
+<p>{{ st.plenary_session.date|date }}</p>{% endifchanged %}
 <p>
 {{ st.html|safe }}
 </p>
