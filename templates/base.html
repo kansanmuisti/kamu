@@ -64,7 +64,8 @@
 <div id="inputbar">
     <form action="/search" method="get" id="head-search">
       <input id="head-search-text" name="query" type="text" maxlength="150" />
-      <button type="submit" id="head-search-button" value="Go">{% trans "Search" %}</button>
+      <button type="submit" id="head-search-button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" value="Go">{% trans "Search" %}
+      </button>
     </form>
     <p id="logged_user">
 {% if user.is_authenticated %}
@@ -91,14 +92,14 @@
 <div id="sidebar">
 {% block sidebar %}{% endblock %}
 {% if switch_period %}
-<div id="period_opener" class="opener action_link">{% trans "Period" %}</div>
+<a href="#" id="period_opener" class="opener action_link">{% trans "Period" %}</a>
 <div class="filter" id="period_list">
 {% generate_option_list "period" %}
 </div>
 {% endif %}
 
 {% if switch_district %}
-<div id="district_opener" class="opener action_link">{% trans "District" %}</div>
+<a href="#" id="district_opener" class="opener action_link">{% trans "District" %}</a>
 <div class="filter" id="district_list">
 {% generate_option_list "district" %}
 </div>
