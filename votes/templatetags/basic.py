@@ -98,20 +98,20 @@ def generate_option_list(context, option):
             if chosen_period and opt['value'] == chosen_period:
                 opt['selected'] = True
             opt_list.append(opt)
+        if 'selected' in opt_list[0]:
+            opt_list[0]['selected'] = False
         list_type = 'link'
     elif option == 'district':
         (begin, end) = find_period(context['request'])
         chosen_district = find_district(context['request'], begin, end)
 
         opt = { 'name': _('All districts'), 'value': 'all' }
-        if not chosen_district:
-            opt['selected'] = True
+#        if not chosen_district:
+#            opt['selected'] = True
         opt_list.append(opt)
         d_list = DistrictAssociation.objects.list_between(begin, end)
         for d in d_list:
-            #
             # Finnish mods
-            #
             short = d.replace(" vaalipiiri", "").replace(" maakunnan", "")
             opt = { 'name': short, 'value': d }
             if chosen_district and chosen_district == d:

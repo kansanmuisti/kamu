@@ -47,15 +47,11 @@ h3 {
 }
 
 .action_link {
-	padding-left: 2px;
-	padding-right: 2px;
 	color: black;
 	cursor: pointer;
 }
 
 .action_link_disabled {
-	padding-left: 2px;
-	padding-right: 2px;
 	color: #bbb;
 }
 
@@ -263,10 +259,18 @@ div#sidebar {
 }
 
 #sidebar p {
-	margin-bottom: 8px;
+	padding-bottom: 8px;
 }
 
-#sidebar form {
+div.filter_options {
+	display: none;
+}
+
+div.selected_filter {
+	font-weight: bold;
+}
+
+div.filter {
 	margin-bottom: 8px;
 }
 

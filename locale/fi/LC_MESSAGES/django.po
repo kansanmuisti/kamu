@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-26 23:28+0300\n"
+"POT-Creation-Date: 2010-06-27 21:22+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -145,11 +145,11 @@ msgstr "Sivua ei löydy"
 msgid "Internal server error"
 msgstr "Sisäinen virhe"
 
-#: templates/_table.html:31 templates/members.html:49
+#: templates/_table.html:32 templates/members.html:49
 msgid "Sort ascending"
 msgstr "Lajittele nousevassa järjestyksessa"
 
-#: templates/_table.html:38 templates/members.html:56
+#: templates/_table.html:39 templates/members.html:56
 msgid "Sort descending"
 msgstr "Lajittele laskevassa järjestyksessä"
 
@@ -190,7 +190,7 @@ msgid "Add a new organization"
 msgstr "Lisää uusi järjestö"
 
 #: templates/add_org.html:20 templates/preview_org.html:9
-#: templates/comments/form.html:18
+#: templates/comments/form.html:18 templates/comments/preview.html:31
 msgid "Preview"
 msgstr "Esikatsele"
 
@@ -231,16 +231,12 @@ msgstr "Puolueet"
 msgid "Orgs"
 msgstr "Järjestöt"
 
-#: templates/base.html:95
-msgid "period"
+#: templates/base.html:95 votes/views.py:452
+msgid "Period"
 msgstr "Aikaväli"
 
-#: templates/base.html:99 templates/base.html.py:109
-msgid "Submit"
-msgstr "Lähetä"
-
-#: templates/base.html:105
-msgid "district"
+#: templates/base.html:102
+msgid "District"
 msgstr "Vaalipiiri"
 
 #: templates/confirm_beta.html:3 templates/confirm_beta.html.py:6
@@ -256,10 +252,6 @@ msgstr ""
 "\n"
 "  <p>Kiitos, että olet kiinnostunut KAMUsta. Otamme pian yhteyttä.</p>\n"
 "  "
-
-#: templates/list_member_statements.html:16 templates/show_member.html:133
-msgid "No statements found"
-msgstr "Ei puheenvuoroja"
 
 #: templates/list_orgs.html:3
 msgid "Organizations"
@@ -409,86 +401,90 @@ msgstr[1] ""
 "\n"
 "%(count)s äänestystä\n"
 
-#: templates/show_member.html:8
+#: templates/show_member.html:18
 msgid "General"
 msgstr "Yleistiedot"
 
-#: templates/show_member.html:9 templates/votes.html:3
+#: templates/show_member.html:19 templates/votes.html:3
 #: templates/votes.html.py:57
 msgid "Votes"
 msgstr "Äänet"
 
-#: templates/show_member.html:10
+#: templates/show_member.html:20
 msgid "Register of interest"
 msgstr "Sidonnaisuudet"
 
-#: templates/show_member.html:11
+#: templates/show_member.html:21
 msgid "Statements"
 msgstr "Puheenvuorot"
 
-#: templates/show_member.html:12
+#: templates/show_member.html:22
 msgid "Comments"
 msgstr "Kommentit"
 
-#: templates/show_member.html:25
+#: templates/show_member.html:34
 msgid "Surname"
 msgstr "Sukunimi"
 
-#: templates/show_member.html:26
+#: templates/show_member.html:35
 msgid "Given names"
 msgstr "Etunimet"
 
-#: templates/show_member.html:27
+#: templates/show_member.html:36
 msgid "Birthdate"
 msgstr "Syntymäaika"
 
-#: templates/show_member.html:30
+#: templates/show_member.html:39
 msgid "Email address"
 msgstr "Sähköpostiosoite"
 
-#: templates/show_member.html:33
+#: templates/show_member.html:42
 msgid "Telephone"
 msgstr "Puhelinnumero"
 
-#: templates/show_member.html:36
+#: templates/show_member.html:45
 msgid "Electoral districts"
 msgstr "Vaalipiirit"
 
-#: templates/show_member.html:44
+#: templates/show_member.html:53
 msgid "Party associations"
 msgstr "Eduskuntaryhmät"
 
-#: templates/show_member.html:66
+#: templates/show_member.html:75
 msgid "Session"
 msgstr "Äänestys"
 
-#: templates/show_member.html:67 votes/views.py:276
+#: templates/show_member.html:76 votes/views.py:276
 msgid "Vote"
 msgstr "Ääni"
 
-#: templates/show_member.html:74 votes/views.py:290
+#: templates/show_member.html:83 votes/views.py:290
 msgid "Yay"
 msgstr "Kyllä"
 
-#: templates/show_member.html:77 votes/views.py:293
+#: templates/show_member.html:86 votes/views.py:293
 msgid "Nay"
 msgstr "Ei"
 
-#: templates/show_member.html:80 votes/views.py:296
+#: templates/show_member.html:89 votes/views.py:296
 msgid "Empty"
 msgstr "Tyhjä"
 
-#: templates/show_member.html:90
+#: templates/show_member.html:99
 msgid "No votes in database"
 msgstr "Ei ääniä tietokannassa"
 
-#: templates/show_member.html:105
+#: templates/show_member.html:114
 msgid "ago"
 msgstr "sitten"
 
-#: templates/show_member.html:112
+#: templates/show_member.html:121
 msgid "Leave a new comment"
 msgstr "Jätä uusi kommentti"
+
+#: templates/show_member.html:142
+msgid "No statements found"
+msgstr "Ei puheenvuoroja"
 
 #: templates/show_org.html:17
 msgid "Session scores"
@@ -537,9 +533,31 @@ msgstr "Pisteytykset"
 msgid "Session documents"
 msgstr "Asiakirjat"
 
-#: templates/comments/form.html:17
+#: templates/comments/form.html:17 templates/comments/preview.html:30
 msgid "Post"
 msgstr "Julkaise"
+
+#: templates/comments/preview.html:3 templates/comments/preview.html.py:11
+msgid "Preview your comment"
+msgstr "Esikatsele kommenttiasi"
+
+#: templates/comments/preview.html:9
+msgid "Please correct the error below"
+msgid_plural "Please correct the errors below"
+msgstr[0] "Korjaa alla oleva virhe."
+msgstr[1] "Korjaa alla olevat virheet."
+
+#: templates/comments/preview.html:14
+msgid "and"
+msgstr ""
+
+#: templates/comments/preview.html:14
+msgid "Post your comment"
+msgstr "Lähetä kommenttisi"
+
+#: templates/comments/preview.html:14
+msgid "or make changes"
+msgstr "tai tee vielä muutoksia"
 
 #: templates/registration/activate.html:3
 msgid "Activation"
@@ -799,10 +817,6 @@ msgstr "Pv"
 #: votes/views.py:416 votes/views.py:460
 msgid "Number of statements"
 msgstr "Puheenvuorojen lukumäärä"
-
-#: votes/views.py:452
-msgid "Period"
-msgstr "Aikaväli"
 
 #: votes/templatetags/basic.py:106
 msgid "All districts"

@@ -1,8 +1,18 @@
 {% ifequal type "link" %}
 {% for opt in options %}
-<a style="display: block;" href="?{{ name }}={{ opt.value }}">{{ opt.name }}</a>
+{% if opt.selected %}
+<div class="selected_filter">{{ opt.name }}</div>
+{% endif %}
 {% endfor %}
+<div class="filter_options">
+{% for opt in options %}
+{% if not opt.selected %}
+<a style="display: block;" href="?{{ name }}={{ opt.value }}">{{ opt.name }}</a>
+{% endif %}
+{% endfor %}
+</div>
 {% else %}
+
 {% for opt in options %}
 <input type="radio" name="{{ name }}" value='{{ opt.value }}'
 {% if opt.selected %} checked="true" {% endif %}

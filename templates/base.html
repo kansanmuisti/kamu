@@ -27,10 +27,10 @@
 
       $('#district_opener').click(function() {
         if (open) {
-          $('#district_list').hide("blind");
+          $('#district_list .filter_options').hide("blind");
           open = false;
         } else {
-          $('#district_list').show("blind");
+          $('#district_list .filter_options').show("blind");
           open = true;
         }
       });
@@ -42,10 +42,10 @@
 
       $('#period_opener').click(function() {
         if (open) {
-          $('#period_list').hide("blind");
+          $('#period_list .filter_options').hide("blind");
           open = false;
         } else {
-          $('#period_list').show("blind");
+          $('#period_list .filter_options').show("blind");
           open = true;
         }
       });
@@ -92,22 +92,16 @@
 <div id="sidebar">
 {% block sidebar %}{% endblock %}
 {% if switch_period %}
-<p id="period_opener" class="opener action_link">{% trans "period" %}</p>
-<div id="period_list" style="display: none;">
-<form method="get">
+<div id="period_opener" class="opener action_link">{% trans "Period" %}</div>
+<div class="filter" id="period_list"
 {% generate_option_list "period" %}
-  <noscript><input type='submit' value='{% trans "Submit" %}'></noscript>
-</form>
 </div>
 {% endif %}
 
 {% if switch_district %}
-<p id="district_opener" class="opener action_link">{% trans "district" %}</p>
-<div id="district_list" style="display: none;">
-<form method="get">
+<div id="district_opener" class="opener action_link">{% trans "District" %}</div>
+<div class="filter" id="district_list">
 {% generate_option_list "district" %}
-  <noscript><input type='submit' value='{% trans "Submit" %}'></noscript>
-</form>
 </div>
 {% endif %}
 
