@@ -9,7 +9,7 @@ body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, 
 }
 
 a:hover {
-	color: #969696;
+	color: #999;
 }
 
 a {
@@ -26,7 +26,7 @@ h1 {
 	font-weight: normal;
 	margin-bottom: 15px;
 	padding-bottom: 4px;
-	border-bottom: 1px solid #969696;
+	border-bottom: 1px solid #999;
 }
 
 h2 {
@@ -60,7 +60,7 @@ h3 {
 }
 
 .action_link:hover {
-	color: #969696;
+	color: #999;
 }
 
 #tooltip {
@@ -79,7 +79,7 @@ h3 {
 }
 
 .h2_section {
-	border-bottom: 1px solid;
+	border-bottom: 1px solid #999;
 	padding-bottom: 16px;
 	margin-bottom: 16px;
 }
@@ -283,7 +283,7 @@ div.filter {
 div#content {
 	width: 780px;
 	float: left;
-	border-bottom: solid 1px;
+	border-bottom: solid 1px #999;
 	padding-bottom: 16px;
 	margin-bottom: 16px;
 }
@@ -310,7 +310,7 @@ label {
  * Comments
  */
 div.comment {
-	border-bottom: 1px dotted;
+	border-bottom: 1px dotted #999;
 	padding: 8px;
 }
 
@@ -505,7 +505,7 @@ div#member_info {
 	clear: both;
 	min-height: 220px;
         width: 100%;
-        border-bottom: 1px solid;
+        border-bottom: 1px solid #999;
         margin-bottom: 16px;
 }
 
@@ -659,7 +659,7 @@ ol.search_results a {
  */
 div#show_org_info {
         min-height: 128px;
-        border-bottom: 1px solid;
+        border-bottom: 1px solid #999;
 	padding-bottom: 16px;
         margin-bottom: 16px;
 }
@@ -671,7 +671,7 @@ div#show_org_info {
 }
 
 div#show_org_scores {
-        border-bottom: 1px solid;
+        border-bottom: 1px solid #999;
 	padding-bottom: 16px;
         margin-bottom: 16px;
 }
