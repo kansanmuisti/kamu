@@ -130,7 +130,11 @@ def generate_header_html(hdr):
             else:
                 img_src = DjangoThumbnail(col['img'], col['img_dim'].split('x'))
                 img_src = unicode(img_src)
-            html += '<img src="/static/%s" />' % (img_src)
+            if 'title' in col:
+                title = 'title="%s" ' % (col['title'])
+            else:
+                title = ''
+            html += '<img src="/static/%s" %s/>' % (img_src, title)
         else:
             html += col['name']
         if 'link' in col:
