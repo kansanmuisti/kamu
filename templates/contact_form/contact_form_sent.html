@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Feedback sent" %}{% endblock %}
+{% block content %}
+  <h1>{% trans "Feedback sent" %}</h1>
+  {% blocktrans %}
+  <p>Thank you for your valuable feedback.</p>
+  {% endblocktrans %}
+{% endblock %}

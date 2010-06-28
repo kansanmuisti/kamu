@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Contact us" %}{% endblock %}
+{% block content %}
+  <div id="contact_form">
+  <h1>{% trans "Leave us feedback" %}</h1>
+  <p>{% blocktrans %}Please report any errors you find, send us your ideas for improvement, volunteer for work, or just say hi.{% endblocktrans %}</p>
+  <form action="" method="post">
+    <table id="contact_form_table">
+      {{ form.as_table }}
+    </table>
+    <input type="submit" name="contact_form" value="{% trans 'Send' %}">
+  </form>
+  </div>
+{% endblock %}

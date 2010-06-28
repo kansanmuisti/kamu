@@ -51,13 +51,11 @@ urlpatterns += patterns('orgs.views',
 
 urlpatterns += patterns('',
     (r'^comments/', include('django.contrib.comments.urls')),
-#    (r'^account/login/$', login, {'template_name': 'login.html'}),
-# Switching to django-register
     (r'^account/logout/$', logout, {'next_page': '/'}),
     (r'^account/', include('registration.urls')),
-    (r'^beta/$', 'kamu.beta.views.register'),
-    (r'^beta/thankyou/$', 'kamu.beta.views.thankyou'),
+    (r'^contact/', include('contact_form.urls')),
 )
+
 
 if settings.DEBUG:
     urlpatterns += patterns('',

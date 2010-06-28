@@ -705,3 +705,23 @@ div.statement {
 	color: black;
 }
 
+/*
+ * Feedback form
+ */
+div#contact_form p {
+}
+#contact_form_table {
+	margin-top: 16px;
+}
+#contact_form_table th {
+	width: 200px;
+	text-align: left;
+	vertical-align: top;
+}
+#contact_form_table input {
+	width: 280px;
+}
+#contact_form_table textarea {
+	width: 280px;
+}
+
