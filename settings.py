@@ -126,7 +126,7 @@ ACCOUNT_ACTIVATION_DAYS = 3
 # else is specified in the code, like when using pre-canned
 # functionality in django-register
 LOGIN_URL = '/account/login/'
-DEFAULT_FROM_EMAIL = 'noreply@kansanmuisti.fi'
+DEFAULT_FROM_EMAIL = 'Kansan muisti <noreply@kansanmuisti.fi>'
 SERVER_EMAIL = 'noreply@kansanmuisti.fi'
 
 COMMENTS_APP = 'kamu.comments'
