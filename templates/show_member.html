@@ -130,10 +130,10 @@
 
 {% for st in statement_page.object_list %}
 {% ifchanged %}<h3>{{ st.plenary_session }}</h3>
-<p>{{ st.plenary_session.date|date }}</p>{% endifchanged %}
-<p>
-{{ st.html|safe }}
-</p>
+<span class="news_item_date">{{ st.plenary_session.date|date }}</span>{% endifchanged %}
+<div class="statement">
+<a href="{% url votes.views.show_plsession plsess=st.plenary_session.url_name,dsc=st.dsc_number %}#statement-{{ st.index }}">{{ st.html|safe }}</a>
+</div>
 {% endfor %}
 
 {% pagination_nav_qs statement_page "" request.GET %}

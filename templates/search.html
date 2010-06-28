@@ -9,7 +9,7 @@
 
 <ol class="search_results" start={{ result_page.start_index }}>
 {% for hit in result_page.object_list %}
-  <li style="margin-bottom: 8px;">{% if hit.url %}<a href='{{ hit.url }}'>{% endif %}
+  <li style="margin-bottom: 8px;">{% if hit.url %}<a {% if hit.underline %}class="underline" {% endif %}href='{{ hit.url }}'>{% endif %}
     <h3 style="display: inline;">{{ hit.instance }}</h3>{% if hit.url %}</a>{% endif %}{% comment %} - {{ hit.percent }} % {% trans "match" %}{% endcomment %}
 {% if hit.info %}
     <div style="font-size: 80%; width: 480px;">{{ hit.info|linebreaks }}</div>

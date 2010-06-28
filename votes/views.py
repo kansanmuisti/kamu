@@ -650,13 +650,32 @@ def show_member(request, member, section=None):
 
     return render_to_response('show_member.html', args, context_instance=RequestContext(request))
 
-def show_plsession(request, plsess):
+def show_plsession(request, plsess, section=None, dsc=None):
     psess = get_object_or_404(PlenarySession, url_name=plsess)
-    try:
-        minutes = Minutes.objects.get(plenary_session=psess)
-    except Minutes.DoesNotExist:
-        minutes = None
-    args = { 'psession': psess, 'minutes': minutes }
+    if not 'section':
+        section = 'basic'
+    if section == 'basic':
+        try:
+            minutes = Minutes.objects.get(plenary_session=psess)
+        except Minutes.DoesNotExist:
+            minutes = None
+        args = {'minutes': minutes}
+    elif section == 'statements':
+        try:
+            dsc = int(dsc)
+        except ValueError:
+            raise Http404
+        statements = Statement.objects.filter(plenary_session=psess,
+                                              dsc_number=dsc)
+        statements = list(statements.order_by('index'))
+        if not statements:
+            raise Http404
+        args = {'st_list': statements}
+    else:
+        raise Http404
+    args['psession'] = psess
+    args['section'] = section
+    args['active_page'] = 'sessions'
     return render_to_response('show_session.html', args,
                               context_instance=RequestContext(request))
 
@@ -681,14 +700,16 @@ def search(request):
     result_page = paginator.page(page)
     for hit in result_page.object_list:
         if type(hit.instance) == Member:
-            hit.url = '/member/' + hit.instance.url_name
+            hit.url = '/member/%s/' % (hit.instance.url_name)
+            hit.underline = True
         elif type(hit.instance) == Session:
             s = hit.instance
-            hit.url = '/session/' + s.plenary_session.name + '/' + str(s.number)
+            hit.url = '/session/' + s.plenary_session.url_name + '/' + str(s.number)
             hit.info = s.info
             s.info = s.info.replace('\n', '\n\n')
         elif type(hit.instance) == Statement:
             s = hit.instance
+            hit.url = '/session/%s/statements/%d/#statement-%d' % (s.plenary_session.url_name, s.dsc_number, s.index)
             hit.info = s.text[0:200].replace('\n', '\n\n') + "..."
 
     return render_to_response('search.html', {'result_page': result_page},

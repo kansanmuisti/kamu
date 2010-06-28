@@ -623,6 +623,8 @@ td.vote_list_name {
  * Search
  */
 ol.search_results a {
+}
+.search_results .underline {
 	border-bottom: 1px dashed;
 }
 
@@ -683,3 +685,23 @@ div#show_org_scores {
 .ui-tabs-panel {
 	margin-top: 15px;
 }
+
+/*
+ * Statements
+ */
+div.statement {
+	margin-bottom: 16px;
+}
+
+.statement strong {
+	color: #2f7670;
+}
+
+.statement strong + p {
+	margin-top: 8px;
+}
+
+.statement a:hover {
+	color: black;
+}
+
