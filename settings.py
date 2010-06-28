@@ -127,6 +127,7 @@ ACCOUNT_ACTIVATION_DAYS = 3
 # functionality in django-register
 LOGIN_URL = '/account/login/'
 DEFAULT_FROM_EMAIL = 'noreply@kansanmuisti.fi'
+SERVER_EMAIL = 'noreply@kansanmuisti.fi'
 
 COMMENTS_APP = 'kamu.comments'
 
