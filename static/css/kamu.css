@@ -67,6 +67,10 @@ h3 {
 	border-bottom: 1px dashed;
 }
 
+.link {
+	color: #2f7670;
+}
+
 #tooltip {
 	position: absolute;
 	z-index: 3000;

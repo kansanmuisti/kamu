@@ -19,8 +19,8 @@
     <input type="hidden" name="next" value="{{ next|escape }}" />
   </form>
   <br />
-  <a href="{% url auth_password_reset %}"><h3>{% trans "Forgot your username or password?" %}</h3></a>
-  <a href="{% url registration_register %}"><h3>{% trans "Create a new account." %}</h3></a>
+  <p><a class="link" href="{% url auth_password_reset %}">{% trans "Forgot your username or password?" %}</a></p>
+  <p><a class="link" href="{% url registration_register %}">{% trans "Create a new account." %}</a></p>
 
 {% endblock %}
 
