@@ -3,12 +3,16 @@
 {% block title %}{% trans "Home" %}{% endblock %}
 {% block head %}
 {% endblock %}
+{% block sidebar %}
+<p><a class="action_link{% ifequal section 'main' %} action_link_active{% endifequal %}" href="{% url votes.views.about section='main' %}">{% trans "Main page" %}</a></p>
+<p><a class="action_link{% ifequal section 'background' %} action_link_active{% endifequal %}" href="{% url votes.views.about section='background' %}">{% trans "Background" %}</a></p>
+<p><a class="action_link{% ifequal section 'contact' %} action_link_active{% endifequal %}" href="{% url votes.views.about section='contact' %}">{% trans "Contact" %}</a></p>
+{% endblock %}
 
 {% block content %}
-
 <div id="main_col">
-{% comment %}<!-- Seuraa miten oma kansanedustajasi äänestää. Katso mitä mieltä kansalaisjärjestöt ovat edustajasi äänestämisestä. -->
-{% endcomment %}
+{% ifequal section 'main' %}
+{% comment %}<!-- Seuraa miten oma kansanedustajasi äänestää. Katso mitä mieltä kansalaisjärjestöt ovat edustajasi äänestämisestä. -->{% endcomment %}
 {% filter markdown %}
 
 ![Testikuva](/static/images/main.jpg "Testikuva")
@@ -16,9 +20,20 @@
 Mikä Kamu on?
 -------------
 
-Kansan muisti -palveluun on kerätty yhteen tietoa kansanedustajien vaalirahoituksesta, äänestyskäyttäytymisestä, palkkioista ja kulukorvauksista sekä täysistuntojen puheenvuoroista. Koska eduskunnassa äänestetään paljon ja monenlaisista eri asioista, tarjoamme yhdessä erilaisten järjestöjen kanssa työkalut edustajan toiminnan helpompaan seuraamiseen. Järjestöt voivat pisteyttää heille tärkeitä äänestyksiä muodostaen profiilin, jota vasten käyttäjä voi verrata edustajien äänestämistä.
+Kansan muisti -palveluun kerätään yhteen tietoa kansanedustajien äänestyskäyttäytymisestä, täysistuntojen puheenvuoroista, vaalirahoituksesta sekä palkkioista ja kulukorvauksista. Koska eduskunnassa äänestetään paljon ja monenlaisista eri asioista, tarjoamme yhdessä erilaisten järjestöjen kanssa työkalut edustajan toiminnan helpompaan seuraamiseen. Järjestöt voivat pisteyttää heille tärkeitä äänestyksiä muodostaen profiilin, jota vasten käyttäjä voi verrata edustajien äänestämistä.
 
 {% endfilter %}
+{% endifequal %}
+{% ifequal section 'contact' %}
+  <h1>{% trans "Leave us feedback" %}</h1>
+  <p>{% blocktrans %}Please report any errors you find, send us your ideas for improvement, volunteer for work, or just say hi.{% endblocktrans %}</p>
+  <form action="" method="post">
+    <table id="contact_form_table">
+      {{ form.as_table }}
+    </table>
+    <input type="submit" name="contact_form" value="{% trans 'Send' %}">
+  </form>
+{% endifequal %}
 
 </div>
 

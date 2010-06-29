@@ -15,6 +15,7 @@ from kamu.votes.models import *
 from kamu.orgs.models import Organization, SessionScore
 from kamu.votes.index import complete_indexer
 from sorl.thumbnail.main import DjangoThumbnail
+from kamu.contact_form.views import contact_form
 
 import djapian
 import operator
@@ -718,16 +719,17 @@ def search(request):
     return render_to_response('search.html', {'result_page': result_page},
                               context_instance = RequestContext(request))
 
-def about(request):
-    return render_to_response('about.html', {'active_page': 'info'},
-                              context_instance = RequestContext(request))
-
-def main_page(request):
+def about(request, section):
     sess_list = Session.objects.all().order_by('-plenary_session__date', '-number')
     sess_list = sess_list.select_related('plenary_session')[:5]
     for ses in sess_list:
         ses.count_votes()
 #        ses.info = ses.info.replace('\n', '\n\n')
 
-    return render_to_response('main_page.html', {'active_page': 'info', 'sess_list': sess_list },
-                              context_instance = RequestContext(request))
+    args = {'active_page': 'info', 'section': section}
+    args['sess_list'] = sess_list
+    if section == 'contact':
+        return contact_form(request, template_name='main_page.html',
+                            extra_context=args)
+    return render_to_response('main_page.html', args,
+                              context_instance=RequestContext(request))

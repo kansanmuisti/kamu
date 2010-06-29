@@ -31,8 +31,9 @@ urlpatterns += patterns('votes.views',
     (r'^member/(?P<member>[-\w]+)/(?P<section>[\w]+)/$', 'show_member'),
     (r'^member/(?P<member>[-\w]+)/$', 'show_member'),
     (r'^search/$', 'search'),
-    (r'^about/$', 'about'),
-    (r'^$', 'main_page'),
+    (r'^about/(?P<section>[\w-]+)/$', 'about'),
+    (r'^contact/', 'about', {'section': 'contact'}),
+    (r'^$', 'about', {'section': 'main'}),
 )
 
 #urlpatterns += patterns('users.views',
