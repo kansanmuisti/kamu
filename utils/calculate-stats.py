@@ -102,7 +102,7 @@ def tally_votes(party_list, member_list, begin, end):
         session_list = session_list[1:]
 
 def update_stats(party_list, member_list, begin, end):
-    MemberStats.objects.for_period(begin, end).delete()
+    ms_list = []
     for m in member_list:
         ms = MemberStats(member = m)
         ms.begin = begin
@@ -116,6 +116,9 @@ def update_stats(party_list, member_list, begin, end):
                 ms.session_agreement = "%d,%d" % (m.session_agree[True], m.session_agree[False])
         query = Statement.objects.between(begin, end).filter(member = m)
         ms.statement_count = query.count()
+        ms_list.append(ms)
+    MemberStats.objects.for_period(begin, end).delete()
+    for ms in ms_list:
         ms.save()
 
 for per in PERIODS:

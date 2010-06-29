@@ -252,9 +252,9 @@ class Session(models.Model):
         return vdict
 
     def save(self, *args, **kwargs):
-        query = Q(begin__lte=self.plenary_session.date)
-        query &= Q(end__isnull=True) | Q(end__gte=self.plenary_session.date)
-        MemberStats.objects.filter(query).delete()
+#        query = Q(begin__lte=self.plenary_session.date)
+#        query &= Q(end__isnull=True) | Q(end__gte=self.plenary_session.date)
+#        MemberStats.objects.filter(query).delete()
         super(Session, self).save(args, kwargs)
 
     def __unicode__(self):
