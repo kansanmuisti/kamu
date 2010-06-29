@@ -6,8 +6,7 @@
 <p><a class="action_link{% ifequal section 'comments' %} action_link_active{% endifequal %}" href="{% url votes.views.show_session plsess=psession.url_name,sess=session.number,section='comments' %}">{% trans "Comments" %}</a></p></div>
 {% endblock %}
 {% block content %}
-  <h1>{% trans "Plenary session" %} <a href='{{ psession.info_link }}'>
-    {{ psession.name }}</a>, {% trans "vote" %} {{ session.number }},
+  <h1>{% trans "Plenary session" %} {{ psession.name }}, {% trans "vote" %} {{ session.number }},
     {{ psession.date|date:"j. F" }}ta, {% trans "time" %} {{ session.time|time }}
   </h1>
 {% ifequal section "basic" %}
@@ -41,11 +40,12 @@
   </div>
 {% endif %}
 
-{% if session.docs %}
+{% if 1 %}
   <div class="h2_section">
   <h2>{% trans "Session documents" %}</h2>
   <div id='session_doc_list'>
   <ul>
+    <li><a class="action_link" href="{{ psession.info_link }}">{% trans "Plenary session minutes" %}</a>
 {% for doc in session.docs %}
     <li><a class='action_link' href='{{ doc.info_link }}'>{{ doc.name }}</a></li>
 {% endfor %}

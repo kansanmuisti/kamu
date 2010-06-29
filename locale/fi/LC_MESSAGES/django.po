@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-29 15:00+0300\n"
+"POT-Creation-Date: 2010-06-29 20:09+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -227,13 +227,13 @@ msgstr "Kirjaudu sisään"
 msgid "What is Kamu?"
 msgstr "Kansan muisti"
 
-#: templates/base.html:83 templates/members.html:3
-msgid "Members"
-msgstr "Kansanedustajat"
-
-#: templates/base.html:84
+#: templates/base.html:83
 msgid "Plenary Sessions"
 msgstr "Täysistunnot"
+
+#: templates/base.html:84 templates/members.html:3
+msgid "Members"
+msgstr "Kansanedustajat"
 
 #: templates/base.html:85 templates/list_parties.html:3
 msgid "Parties"
@@ -269,7 +269,7 @@ msgstr ""
 msgid "Organizations"
 msgstr "Järjestöt"
 
-#: templates/list_orgs.html:16
+#: templates/list_orgs.html:17
 #, python-format
 msgid ""
 "\n"
@@ -284,7 +284,7 @@ msgstr[1] ""
 "\n"
 "%(count)s järjestöä\n"
 
-#: templates/list_orgs.html:32
+#: templates/list_orgs.html:33
 msgid "Add an organization"
 msgstr "Lisää uusi järjestö"
 
@@ -319,11 +319,11 @@ msgstr "Taustaa"
 msgid "Contact"
 msgstr "Palaute"
 
-#: templates/main_page.html:28 templates/contact_form/contact_form.html:6
+#: templates/main_page.html:47
 msgid "Leave us feedback"
 msgstr "Jätä palautetta"
 
-#: templates/main_page.html:29 templates/contact_form/contact_form.html:7
+#: templates/main_page.html:48
 msgid ""
 "Please report any errors you find, send us your ideas for improvement, "
 "volunteer for work, or just say hi."
@@ -331,35 +331,35 @@ msgstr ""
 "Raportoi meille löytämistäsi virheistä sivustolla, lähetä ideoitasi "
 "jatkokehitystä varten, tarjoa apuasi tai jätä muuta palautetta."
 
-#: templates/main_page.html:34 templates/contact_form/contact_form.html:12
+#: templates/main_page.html:53
 msgid "Send"
 msgstr "Lähetä"
 
-#: templates/main_page.html:43
+#: templates/main_page.html:62
 msgid "News"
 msgstr "Uutiset"
 
-#: templates/main_page.html:50
+#: templates/main_page.html:69
 msgid "Hottest"
 msgstr "Kuumimmat"
 
-#: templates/main_page.html:61
+#: templates/main_page.html:80
 msgid "Latest votes"
 msgstr "Uusimmat äänestykset"
 
-#: templates/main_page.html:78 templates/sessions.html:38
+#: templates/main_page.html:97 templates/sessions.html:38
 msgid "Number of Yay votes"
 msgstr "Jaa-äänien lukumäärä"
 
-#: templates/main_page.html:79 templates/sessions.html:39
+#: templates/main_page.html:98 templates/sessions.html:39
 msgid "Number of Nay votes"
 msgstr "Ei-äänien lukumäärä"
 
-#: templates/main_page.html:80 templates/sessions.html:40
+#: templates/main_page.html:99 templates/sessions.html:40
 msgid "Number of Empty votes"
 msgstr "Tyhjä-äänien lukumäärä"
 
-#: templates/main_page.html:81 templates/sessions.html:41
+#: templates/main_page.html:100 templates/sessions.html:41
 msgid "Number of absentees"
 msgstr "Poissaolevien lukumäärä"
 
@@ -446,7 +446,7 @@ msgid "General"
 msgstr "Yleistiedot"
 
 #: templates/show_member.html:19 templates/votes.html:3
-#: templates/votes.html.py:58
+#: templates/votes.html.py:59
 msgid "Votes"
 msgstr "Äänet"
 
@@ -514,11 +514,11 @@ msgstr "Tyhjä"
 msgid "No votes in database"
 msgstr "Ei ääniä tietokannassa"
 
-#: templates/show_member.html:114 templates/votes.html:106
+#: templates/show_member.html:114 templates/votes.html:107
 msgid "ago"
 msgstr "sitten"
 
-#: templates/show_member.html:121 templates/votes.html:113
+#: templates/show_member.html:121 templates/votes.html:114
 msgid "Leave a new comment"
 msgstr "Jätä uusi kommentti"
 
@@ -549,29 +549,33 @@ msgstr ""
 msgid "Plenary session"
 msgstr "Täysistunto"
 
-#: templates/votes.html:10
+#: templates/votes.html:9
 msgid "vote"
 msgstr "äänestys"
 
-#: templates/votes.html:11
+#: templates/votes.html:10
 msgid "time"
 msgstr "klo. "
 
-#: templates/votes.html:23
+#: templates/votes.html:22
 msgid "Tags"
 msgstr "Tunnisteet"
 
-#: templates/votes.html:28
+#: templates/votes.html:27
 msgid "Add tag"
 msgstr "Lisää tunniste"
 
-#: templates/votes.html:37
+#: templates/votes.html:36
 msgid "Scoring"
 msgstr "Pisteytykset"
 
-#: templates/votes.html:46
+#: templates/votes.html:45
 msgid "Session documents"
 msgstr "Asiakirjat"
+
+#: templates/votes.html:48
+msgid "Plenary session minutes"
+msgstr "Istuntopöytäkirja"
 
 #: templates/comments/form.html:17 templates/comments/preview.html:30
 msgid "Post"
@@ -598,10 +602,6 @@ msgstr "Lähetä kommenttisi"
 #: templates/comments/preview.html:14
 msgid "or make changes"
 msgstr "tai tee vielä muutoksia"
-
-#: templates/contact_form/contact_form.html:3
-msgid "Contact us"
-msgstr "Kontakti"
 
 #: templates/contact_form/contact_form_sent.html:3
 #: templates/contact_form/contact_form_sent.html:5
@@ -880,3 +880,6 @@ msgstr "Puheenvuorojen lukumäärä"
 #: votes/templatetags/basic.py:108
 msgid "All districts"
 msgstr "Kaikki"
+
+#~ msgid "Contact us"
+#~ msgstr "Kontakti"
