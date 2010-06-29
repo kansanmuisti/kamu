@@ -11,8 +11,7 @@
 
 {% block content %}
 <div id="main_col">
-{% ifequal section 'main' %}
-{% filter markdown %}
+{% ifequal section 'main' %}{% filter markdown %}
 
 Kansan muisti tuo demokratian 2010-luvulle
 ==========================================
@@ -25,15 +24,13 @@ Tulevaisuudessa voit äänestää myös itse ja vertailla mielipiteitäsi kansan
 
 Seuraa palvelun kehitystä [Facebookissa](http://www.facebook.com/pages/Kansan-muisti/106166239434745).
 
-{% endfilter %}
-{% endifequal %}
+{% endfilter %}{% endifequal %}
 
-{% ifequal section 'background' %}
-{% filter markdown %}
+{% ifequal section 'background' %}{% filter markdown %}
 Mikä Kamu on?
 =============
 
-Ainakaan Suomessa ei ole tarjolla työkalua, jonka avulla kuka tahansa voi seurata kansanedustajien toimia helposti ja ymmärrettävästi. Ehdokkaiden mielipiteitä voi teoriassa seurata vaalikoneiden avulla, mutta vastaukset eivät välttämättä vastaa todellista äänestyskäyttäytymistä. Sitä voi puolestaan seurata eduskunta.fi-sivustolla, mutta yleiskatsauksen saaminen sitä kautta on käytännössä mahdotonta.
+Suomessa ei ole tarjolla työkalua, jonka avulla kuka tahansa voi seurata kansanedustajien toimia helposti ja ymmärrettävästi. Ehdokkaiden mielipiteitä voi teoriassa seurata vaalikoneiden avulla, mutta vastaukset eivät välttämättä vastaa todellista äänestyskäyttäytymistä. Sitä voi puolestaan seurata eduskunta.fi-sivustolla, mutta yleiskatsauksen saaminen sitä kautta on käytännössä mahdotonta.
 
 Kansan muisti ry:n tavoitteena on uutta teknologiaa hyödyntäen tarjota kansalaisille mahdollisuus seurata kansanedustajien toimintaa helposti, ymmärrettävästi ja tasa-arvoisesti. Keräämme palveluun tietoa mm. edustajien äänestyskäyttäytymisestä, puheenvuoroista, vaalirahoituksesta ja aloitteista. Palvelu mahdollistaa tulevaisuudessa myös kansalaisjärjestöjen ja muiden vaikuttajien näkemysten vertailun kansanedustajien ja käyttäjien omien mielipiteiden välillä.
 
@@ -41,8 +38,7 @@ Kansan muisti ry:n tavoitteena on uutta teknologiaa hyödyntäen tarjota kansala
 
 *Esimerkki 2*. Ympäristöjärjestö on valinnut ja pisteyttänyt luonnonsuojelun kannalta kiinnostavat lakiesitykset. Kalle Kansalainen haluaa luontoihmisenä selvittää kansanedustajat, jotka ovat eniten äänestäneet ympäristöjärjestön arvotusten mukaisesti. Palvelu tuottaa muutaman hiirennäpäytyksen jälkeen Kallelle järjestetyn listan edustajista pisteytyksineen. Jos Kalle haluaa lisätietoa yksittäisestä edustajasta, se onnistuu yhdellä lisänäpäytyksellä.
 
-{% endfilter %}
-{% endifequal %}
+{% endfilter %}{% endifequal %}
 
 {% ifequal section 'contact' %}
   <h1>{% trans "Leave us feedback" %}</h1>
@@ -65,18 +61,6 @@ Kansan muisti ry:n tavoitteena on uutta teknologiaa hyödyntäen tarjota kansala
   <p>Kamun rajoitettu testiversio on avattu. Tervetuloa!</p>
 </div>
 
-{% comment %}
-<div class="news_items">
-  <h1>{% trans "Hottest" %}</h1>
-  <h2>Marja Tiura</h2>
-  <h2>5/2010, 6.</h2>
-  <p>Hallituksen esitys valmiuslaiksi ja eriksi siihen liittyviksi laeiksi<br />
-Ensimmäinen käsittely.
-  </p>
-  <h2>Aku Ankka</h2>
-</div>
-{% endcomment %}
-
 <div class="news_items">
   <h1><a href='{% url votes.views.list_sessions %}'>{% trans "Latest votes" %}</a></h1>
 {% for session in sess_list %}
@@ -89,44 +73,6 @@ Ensimmäinen käsittely.
 </div>
 
 </div>
-
-{% if 0 %}
-{% if sess_list %}
-<h2 style="cursor: pointer;" class="toggle"><span>&#x25b8;</span> Latest sessions</h2>
-<div style="display: none;"><table class="sessions" style="">
-<tr><th /><th /><th />
-        <th class="yes_vote" title='{% trans "Number of Yay votes" %}' />
-        <th class="no_vote" title='{% trans "Number of Nay votes" %}' />
-        <th class="empty_vote" title='{% trans "Number of Empty votes" %}' />
-        <th class="absent_vote" title='{% trans "Number of absentees" %}' />
-      </tr>
-{% for session in sess_list %}
-{% with session.plenary_session as ps %}
-      <tr class="session">
-      	<td class="session_name">
-          <a href='{% url votes.views.show_session plsess=ps.url_name,sess=session.number %}'>{{ ps.name }}/{{ session.number }}</a>
-      	</td>
-      	<td class="session_desc">
-          <a href='{% url votes.views.show_session plsess=ps.url_name,sess=session.number %}'>
-            {{ session.info|linebreaks }}
-          </a>
-      	</td>
-        <td class="session_subj">
-{% if session.subject %}
-            <p><i>{{ session.subject }}</i></p>
-{% endif %}
-	</td>
-
-      	<td class="session_votes">{{ session.get_vote_counts.Y }}</td>
-      	<td class="session_votes">{{ session.get_vote_counts.N }}</td>
-      	<td class="session_votes">{{ session.get_vote_counts.E }}</td>
-      	<td class="session_votes">{{ session.get_vote_counts.A }}</td>
-      </tr>
-{% endwith %}
-{% endfor %}
-</table></div>
-{% endif %}
-{% endif %}
 
 {% endblock %}
 
