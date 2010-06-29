@@ -80,8 +80,8 @@
 <div id="navbar">
     <ul>
       <li class="navbar_link{% ifequal active_page "info" %} navbar_link_active{% endifequal %}"><a href="/">{% trans "What is Kamu?" %}</a></li>
-      <li class="navbar_link{% ifequal active_page "members" %} navbar_link_active{% endifequal %}"><a href="/member/">{% trans "Members" %}</a></li>
       <li class="navbar_link{% ifequal active_page "sessions" %} navbar_link_active{% endifequal %}"><a href="/session/">{% trans "Plenary Sessions" %}</a></li>
+      <li class="navbar_link{% ifequal active_page "members" %} navbar_link_active{% endifequal %}"><a href="/member/">{% trans "Members" %}</a></li>
       <li class="navbar_link{% ifequal active_page "parties" %} navbar_link_active{% endifequal %}"><a href="/party/">{% trans "Parties" %}</a></li>
       <li class="navbar_link{% ifequal active_page "orgs" %} navbar_link_active{% endifequal %}"><a href="/org/">{% trans "Orgs" %}</a></li>
     </ul>
@@ -109,14 +109,20 @@
 
 <div id="content">
 {% block content %}{% endblock %}
+
 </div>
 
+<div id="footer">
+© 2010 Kansan muisti ry
+</div>
+
+</div>
+
+</div>
 {% if 1 %}
 {% include "debug.html" %}
 {% endif %}
 
-</div>
 
-</div>
 </body>
 </html>

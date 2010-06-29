@@ -288,8 +288,8 @@ div#content {
 	width: 780px;
 	float: left;
 	border-bottom: solid 1px #999;
-	padding-bottom: 16px;
-	margin-bottom: 16px;
+	padding-bottom: 50px;
+	margin-bottom: 8px;
 }
 
 #content p + p {
@@ -298,6 +298,11 @@ div#content {
 
 #content p {
 	margin-bottom: 8px;
+}
+
+div#footer {
+	font-size: 80%;
+	margin-left: 150px;
 }
 
 label {
@@ -350,7 +355,12 @@ div.comment_date {
 }
 
 #main_col img {
-	margin-bottom: 30px;
+	margin-top: 16px;
+	margin-bottom: 16px;
+}
+
+#main_col a {
+	color: #2f7670;
 }
 
 #news_col {
@@ -726,3 +736,12 @@ div#contact_form p {
 	width: 280px;
 }
 
+
+div#list_orgs {
+	width: 600px;
+        margin-bottom: 20px;
+}
+
+#list_orgs a {
+	color: #2f7670;
+}

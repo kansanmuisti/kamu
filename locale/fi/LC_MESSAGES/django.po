@@ -225,7 +225,7 @@ msgstr "Kirjaudu sisään"
 
 #: templates/base.html:82
 msgid "What is Kamu?"
-msgstr "Mikä Kamu on?"
+msgstr "Kansan muisti"
 
 #: templates/base.html:83 templates/members.html:3
 msgid "Members"
