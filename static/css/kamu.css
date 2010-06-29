@@ -307,6 +307,7 @@ div#content {
 div#footer {
 	font-size: 80%;
 	margin-left: 150px;
+	margin-bottom: 16px;
 }
 
 label {
