@@ -217,6 +217,9 @@ def get_admin_orgs(user, org_name=None):
     return orgs
 
 def generate_score_table(request, session):
+    # FIXME
+    return None
+
     scores = SessionScore.objects.filter(session=session).select_related('org')
     user = request.user
     admin_orgs = []
