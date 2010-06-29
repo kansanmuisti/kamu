@@ -328,7 +328,7 @@ msgid ""
 "Please report any errors you find, send us your ideas for improvement, "
 "volunteer for work, or just say hi."
 msgstr ""
-"Raportoi meille löytämistäsi virheistä sivustolla, lähetä ideoitaisi "
+"Raportoi meille löytämistäsi virheistä sivustolla, lähetä ideoitasi "
 "jatkokehitystä varten, tarjoa apuasi tai jätä muuta palautetta."
 
 #: templates/main_page.html:34 templates/contact_form/contact_form.html:12
