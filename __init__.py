@@ -17,6 +17,8 @@ def comment_notification(sender, comment, request, **kwargs):
 comment_was_posted.connect(comment_notification, sender=KamuComment)
 
 def user_notification(sender, instance, **kwargs):
+    if (not 'created' in kwargs) or (not kwargs['created']):
+        return
     user = instance
     subject = u"New user '%s' created" % (user.username)
 
