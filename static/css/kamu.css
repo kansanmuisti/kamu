@@ -63,6 +63,10 @@ h3 {
 	color: #999;
 }
 
+.underline {
+	border-bottom: 1px dashed;
+}
+
 #tooltip {
 	position: absolute;
 	z-index: 3000;
@@ -623,9 +627,6 @@ td.vote_list_name {
  * Search
  */
 ol.search_results a {
-}
-.search_results .underline {
-	border-bottom: 1px dashed;
 }
 
 /*

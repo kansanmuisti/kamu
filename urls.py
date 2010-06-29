@@ -39,14 +39,15 @@ urlpatterns += patterns('votes.views',
 #    (r'account/register/$', 'register'),
 #)
 
+# Disable organization support for now.
 urlpatterns += patterns('orgs.views',
-    (r'org/add/$', 'add_org'),
-    (r'org/add/preview$', 'preview_add_org'),
+#    (r'org/add/$', 'add_org'),
+#    (r'org/add/preview$', 'preview_add_org'),
     (r'org/$', 'list_orgs'),
-    (r'org/(?P<org>[-\w]+)/$', 'show_org'),
-    (r'org/(?P<org>[-\w]+)/modify/$', 'modify_org'),
-    (r'org/(?P<org>[-\w]+)/modify/preview$', 'preview_modify_org'),
-    (r'org/(?P<org>[-\w]+)/modify-score/(?P<plsess>[\w-]+)/(?P<sess>\d+)/$', 'modify_score'),
+#    (r'org/(?P<org>[-\w]+)/$', 'show_org'),
+#    (r'org/(?P<org>[-\w]+)/modify/$', 'modify_org'),
+#    (r'org/(?P<org>[-\w]+)/modify/preview$', 'preview_modify_org'),
+#    (r'org/(?P<org>[-\w]+)/modify-score/(?P<plsess>[\w-]+)/(?P<sess>\d+)/$', 'modify_score'),
 )
 
 urlpatterns += patterns('',
