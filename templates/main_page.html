@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% load i18n markup %}
-{% block title %}{% trans "Home" %}{% endblock %}
-{% block head %}
-{% endblock %}
+
+{% block title %}{{ section_name }}{% endblock %}
+
 {% block sidebar %}
 <p><a class="action_link{% ifequal section 'main' %} action_link_active{% endifequal %}" href="{% url votes.views.about section='main' %}">{% trans "Main page" %}</a></p>
 <p><a class="action_link{% ifequal section 'background' %} action_link_active{% endifequal %}" href="{% url votes.views.about section='background' %}">{% trans "Background" %}</a></p>
@@ -17,11 +17,11 @@
 Kansan muisti tuo demokratian 2010-luvulle
 ==========================================
 
-Kansan muisti -verkkopalvelun pilottiversiossa voit seurata kansanedustajien puheenvuoroja ja äänestyksiä — siis vaalilupausten toteutumista käytännössä. Voit myös kommentoida sinua kiinnostavia aiheita.
+Kansan muisti -verkkopalvelun pilottiversiossa voit seurata kansanedustajien puheenvuoroja ja äänestyksiä – siis vaalilupausten toteutumista käytännössä. Voit samalla kommentoida sinua kiinnostavia aiheita.
 
 ![Eduskuntatalo](/static/images/main.jpg "Eduskuntatalo")
 
-Tulevaisuudessa voit äänestää myös itse ja vertailla mielipiteitäsi kansanedustajien ja kansalaisjärjestöjen kanssa vaalikoneiden tapaan. Saat jatkossa myös vaalirahoitustiedot kootusti yhdestä paikasta.
+Tulevaisuudessa voit äänestää myös itse ja vertailla mielipiteitäsi kansanedustajien ja kansalaisjärjestöjen kanssa vaalikoneiden tapaan. Jatkossa saat lisäksi vaalirahoitustiedot kootusti yhdestä paikasta.
 
 Seuraa palvelun kehitystä [Facebookissa](http://www.facebook.com/pages/Kansan-muisti/106166239434745).
 
@@ -33,13 +33,13 @@ Seuraa palvelun kehitystä [Facebookissa](http://www.facebook.com/pages/Kansan-m
 Mikä Kamu on?
 =============
 
-Ainakaan Suomessa ei ole tarjolla työkalua, jonka avulla kuka tahansa voi seurata kansanedustajien toimia helposti ja ymmärrettävästi. Ehdokkaiden mielipiteitä voi teoriassa seurata vaalikoneiden avulla, mutta vastaukset eivät välttämättä vastaa todellista äänestyskäyttäytymistä. Sitä voi puolestaan seurata eduskunta.fi-sivuston kautta, mutta yleiskatsauksen saaminen sitä kautta on käytännössä mahdotonta.
+Ainakaan Suomessa ei ole tarjolla työkalua, jonka avulla kuka tahansa voi seurata kansanedustajien toimia helposti ja ymmärrettävästi. Ehdokkaiden mielipiteitä voi teoriassa seurata vaalikoneiden avulla, mutta vastaukset eivät välttämättä vastaa todellista äänestyskäyttäytymistä. Sitä voi puolestaan seurata eduskunta.fi-sivustolla, mutta yleiskatsauksen saaminen sitä kautta on käytännössä mahdotonta.
 
-Kansan muisti ry:n tavoitteena on uutta teknologiaa hyödyntäen tarjota kansalaisille mahdollisuus seurata kansanedustajien toimintaa helposti, ymmärrettävästi ja tasa-arvoisesti. Keräämme palveluun tietoa edustajien äänestyskäyttäytymisestä, puheenvuoroista, vaalirahoituksesta, aloitteista ja niin edelleen. Palvelu mahdollistaa tulevaisuudessa myös kansalaisjärjestöjen ja muiden vaikuttajien näkemysten vertailun kansanedustajien ja käyttäjien omien mielipiteiden välillä.
+Kansan muisti ry:n tavoitteena on uutta teknologiaa hyödyntäen tarjota kansalaisille mahdollisuus seurata kansanedustajien toimintaa helposti, ymmärrettävästi ja tasa-arvoisesti. Keräämme palveluun tietoa mm. edustajien äänestyskäyttäytymisestä, puheenvuoroista, vaalirahoituksesta ja aloitteista. Palvelu mahdollistaa tulevaisuudessa myös kansalaisjärjestöjen ja muiden vaikuttajien näkemysten vertailun kansanedustajien ja käyttäjien omien mielipiteiden välillä.
 
-*Esimerkki 1*. Maija Miettisen oma kansanedustaja on jälleen ehdolla eduskuntavaaleissa. Ennen vaalipäivää Maija haluaa varmistua siitä, että edustaja on lunastanut vaalilupauksensa. Edustajan toimintaa voi vertailla esimerkiksi Maijan näkemyksiä edustavien kansalaisjärjestöjen kantaan. Jos Maijalla on kiire, hän voi myös klikata omaa edustajaansa, ja saada yhdellä sivulla näkymään suosituimpien järjestöjen pisteytykset edustajalleen.
+*Esimerkki 1*. Maija Miettisen oma kansanedustaja on jälleen ehdolla eduskuntavaaleissa. Ennen vaalipäivää Maija haluaa varmistua siitä, että edustaja on lunastanut vaalilupauksensa. Edustajan toimintaa voi vertailla esimerkiksi Maijan näkemyksiä edustavien kansalaisjärjestöjen kantaan. Jos Maijalla on kiire, hän voi myös klikata oman edustajansa profiilia, ja saada yhdellä sivulla näkymään palvelun suosituimpien järjestöjen pisteytykset edustajalleen.
 
-*Esimerkki 2*. Ympäristöjärjestö on valinnut ja pisteyttänyt luonnonsuojelun kannalta kiinnostavat lakiesitykset. Kalle Kansalainen haluaa luontoihmisenä selvittää kansanedustajat, jotka ovat keskimäärin äänestäneet ympäristöjärjestön arvotusten mukaisesti. Palvelu tuottaa muutaman hiirennäpäytyksen jälkeen Kallelle järjestetyn listan edustajista pisteytyksineen. Jos Kalle haluaa lisätietoa yksittäisestä edustajasta, se onnistuu yhdellä lisänäpäytyksellä.
+*Esimerkki 2*. Ympäristöjärjestö on valinnut ja pisteyttänyt luonnonsuojelun kannalta kiinnostavat lakiesitykset. Kalle Kansalainen haluaa luontoihmisenä selvittää kansanedustajat, jotka ovat eniten äänestäneet ympäristöjärjestön arvotusten mukaisesti. Palvelu tuottaa muutaman hiirennäpäytyksen jälkeen Kallelle järjestetyn listan edustajista pisteytyksineen. Jos Kalle haluaa lisätietoa yksittäisestä edustajasta, se onnistuu yhdellä lisänäpäytyksellä.
 
 {% endfilter %}
 {% endifequal %}

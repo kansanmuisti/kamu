@@ -720,6 +720,14 @@ def search(request):
                               context_instance = RequestContext(request))
 
 def about(request, section):
+    if section == 'main':
+        section_name = _('Home')
+    elif section == 'background':
+        section_name = _('Background')
+    elif section == 'contact':
+        section_name = _('Contact')
+    else:
+        raise Http404
     sess_list = Session.objects.all().order_by('-plenary_session__date', '-number')
     sess_list = sess_list.select_related('plenary_session')[:5]
     for ses in sess_list:
@@ -728,6 +736,7 @@ def about(request, section):
 
     args = {'active_page': 'info', 'section': section}
     args['sess_list'] = sess_list
+    args['section_name'] = section_name
     if section == 'contact':
         return contact_form(request, template_name='main_page.html',
                             extra_context=args)
