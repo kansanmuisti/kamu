@@ -685,7 +685,7 @@ def show_plsession(request, plsess, section=None, dsc=None):
 
 def list_parties(request):
     party_list = get_list_or_404(Party)
-    args = { 'party_list': party_list }
+    args = { 'party_list': party_list, 'active_page': 'parties' }
     return render_to_response('list_parties.html', args,
                               context_instance=RequestContext(request))
 
