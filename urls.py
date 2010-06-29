@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
 from django.contrib.auth.views import login, logout
+from django.views.generic.simple import direct_to_template
 
 from django.contrib import admin
 admin.autodiscover()
@@ -32,7 +33,9 @@ urlpatterns += patterns('votes.views',
     (r'^member/(?P<member>[-\w]+)/$', 'show_member'),
     (r'^search/$', 'search'),
     (r'^about/(?P<section>[\w-]+)/$', 'about'),
-    (r'^contact/', 'about', {'section': 'contact'}),
+    url(r'^contact/$', 'about', {'section': 'contact'}),
+    url(r'^contact/sent/$', direct_to_template, {'template': 'contact_form/contact_form_sent.html'},
+        name='contact_form_sent'),
     (r'^$', 'about', {'section': 'main'}),
 )
 
@@ -55,7 +58,6 @@ urlpatterns += patterns('',
     (r'^comments/', include('django.contrib.comments.urls')),
     (r'^account/logout/$', logout, {'next_page': '/'}),
     (r'^account/', include('registration.urls')),
-    (r'^contact/', include('contact_form.urls')),
 )
 
 
