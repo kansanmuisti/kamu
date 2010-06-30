@@ -16,10 +16,11 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ member_page.paginator.count }} kansanedustajaa</h1>
+    <h1 style="margin-bottom: 4px;">{{ member_page.paginator.count }} kansanedustajaa</h1>
+<small class="legend">{% trans "Includes all the members that have been active during the chosen time period." %}</small>
 
 {% load thumbnail %}
-    <table class="member_list">
+    <table style="margin-top: 15px;" class="member_list">
 {{ hdr|safe }}
 {{ rows|safe }}
     </table>
@@ -27,6 +28,5 @@
 {% load pagination_nav %}
 {% pagination_nav_qs member_page "" request.GET %}
 
-<small>{% trans "Includes all the members that have been active during the chosen time period." %}</small>
 
 {% endblock %}

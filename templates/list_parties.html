@@ -5,13 +5,14 @@
 {% endblock %}
 
 {% block content %}
-  <h1>
+  <h1 style="margin-bottom: 4px;">
 {% blocktrans count party_list|length as count %}
 {{ count }} party
 {% plural %}
 {{ count }} parties
 {% endblocktrans %}</h1>
-  <table>
+<small>{% trans "Includes all parties that presently have members in the parliament." %}</small>
+  <table style="margin-top: 15px;">
 {% for party in party_list %}
     <tr>
       <td style="height: 40px; padding-right: 16px;"><img src='/static/{% thumbnail party.logo 40x40 %}' /></td>
@@ -19,5 +20,4 @@
     </tr>
 {% endfor %}
   </table>
-<small>{% trans "Includes all parties that presently have members in the parliament." %}</small>
 {% endblock %}
