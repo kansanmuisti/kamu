@@ -32,10 +32,10 @@ urlpatterns += patterns('votes.views',
     (r'^member/(?P<member>[-\w]+)/(?P<section>[\w]+)/$', 'show_member'),
     (r'^member/(?P<member>[-\w]+)/$', 'show_member'),
     (r'^search/$', 'search'),
-    (r'^about/(?P<section>[\w-]+)/$', 'about'),
-    url(r'^contact/$', 'about', {'section': 'contact'}),
+    url(r'^contact/$', 'about', {'section': 'feedback'}),
     url(r'^contact/sent/$', direct_to_template, {'template': 'contact_form/contact_form_sent.html'},
         name='contact_form_sent'),
+    (r'^about/(?P<section>[\w-]+)/$', 'about'),
     (r'^$', 'about', {'section': 'main'}),
 )
 

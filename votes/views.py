@@ -725,7 +725,9 @@ def about(request, section):
     elif section == 'background':
         section_name = _('Background')
     elif section == 'contact':
-        section_name = _('Contact')
+        section_name = _('Contact information')
+    elif section == 'feedback':
+	section_name = _('Feedback')
     else:
         raise Http404
     sess_list = Session.objects.all().order_by('-plenary_session__date', '-number')
@@ -737,7 +739,7 @@ def about(request, section):
     args = {'active_page': 'info', 'section': section}
     args['sess_list'] = sess_list
     args['section_name'] = section_name
-    if section == 'contact':
+    if section == 'feedback':
         return contact_form(request, template_name='main_page.html',
                             extra_context=args)
     return render_to_response('main_page.html', args,

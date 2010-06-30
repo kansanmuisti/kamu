@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-30 12:10+0300\n"
+"POT-Creation-Date: 2010-06-30 12:42+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -384,15 +384,20 @@ msgstr "Etusivu"
 msgid "Background"
 msgstr "Taustaa"
 
-#: templates/main_page.html:9 votes/views.py:728
-msgid "Contact"
+#: templates/main_page.html:9 votes/views.py:730
+msgid "Feedback"
 msgstr "Palaute"
 
-#: templates/main_page.html:44
+#: templates/main_page.html:10 templates/main_page.html.py:56
+#: votes/views.py:728
+msgid "Contact information"
+msgstr "Yhteystiedot"
+
+#: templates/main_page.html:45
 msgid "Leave us feedback"
 msgstr "Jätä palautetta"
 
-#: templates/main_page.html:45
+#: templates/main_page.html:46
 msgid ""
 "Please report any errors you find, send us your ideas for improvement, "
 "volunteer for work, or just say hi."
@@ -400,15 +405,15 @@ msgstr ""
 "Raportoi meille löytämistäsi virheistä sivustolla, lähetä ideoitasi "
 "jatkokehitystä varten, tarjoa apuasi tai jätä muuta palautetta."
 
-#: templates/main_page.html:50
+#: templates/main_page.html:51
 msgid "Send"
 msgstr "Lähetä"
 
-#: templates/main_page.html:59
+#: templates/main_page.html:65
 msgid "News"
 msgstr "Uutiset"
 
-#: templates/main_page.html:65
+#: templates/main_page.html:71
 msgid "Latest votes"
 msgstr "Uusimmat äänestykset"
 
@@ -943,3 +948,5 @@ msgstr "Etusivu"
 msgid "All districts"
 msgstr "Kaikki"
 
+#~ msgid "Contact"
+#~ msgstr "Palaute"
