@@ -11,7 +11,6 @@
 {% plural %}
 {{ count }} parties
 {% endblocktrans %}</h1>
-
   <table>
 {% for party in party_list %}
     <tr>
@@ -20,4 +19,5 @@
     </tr>
 {% endfor %}
   </table>
+<small>{% trans "Includes all parties that presently have members in the parliament." %}</small>
 {% endblock %}

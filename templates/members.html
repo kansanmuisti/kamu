@@ -27,4 +27,6 @@
 {% load pagination_nav %}
 {% pagination_nav_qs member_page "" request.GET %}
 
+<small>{% trans "Includes all the members that have been active during the chosen time period." %}</small>
+
 {% endblock %}

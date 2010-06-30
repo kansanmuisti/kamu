@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-30 12:42+0300\n"
+"POT-Creation-Date: 2010-06-30 13:06+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -376,6 +376,10 @@ msgstr[1] ""
 "\n"
 "%(count)s puoluetta\n"
 
+#: templates/list_parties.html:22
+msgid "Includes all parties that presently have members in the parliament."
+msgstr "Mukana kaikki puolueet, joilla on tällä hetkellä kansanedustajia eduskunnassa."
+
 #: templates/main_page.html:7
 msgid "Main page"
 msgstr "Etusivu"
@@ -409,13 +413,19 @@ msgstr ""
 msgid "Send"
 msgstr "Lähetä"
 
-#: templates/main_page.html:65
+#: templates/main_page.html:76
 msgid "News"
 msgstr "Uutiset"
 
-#: templates/main_page.html:71
+#: templates/main_page.html:82
 msgid "Latest votes"
 msgstr "Uusimmat äänestykset"
+
+#: templates/members.html:27
+msgid ""
+"Includes all the members that have been active during the chosen time period."
+msgstr ""
+"Mukana kaikki kansanedustajat, jotka ovat olleet aktiivisena valitulla aikavälillä."
 
 #: templates/modify_score.html:4
 msgid "Score a session"
