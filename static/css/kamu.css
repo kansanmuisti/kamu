@@ -71,6 +71,10 @@ h3 {
 	color: #2f7670;
 }
 
+.error {
+	color: red;
+}
+
 #tooltip {
 	position: absolute;
 	z-index: 3000;

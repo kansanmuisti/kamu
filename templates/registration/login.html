@@ -5,7 +5,7 @@
 {% block content %}
   <h1>{% trans "Kamu login" %}</h1>
   {% if form.errors %}
-    <p class="error">Sorry, that's not a valid username or password</p>
+    <p class="error">{% trans "Sorry, that's not a valid username or password" %}</p>
   {% endif %}
 
   <form action="" method="post">
