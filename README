@@ -1,0 +1,32 @@
+Dependencies
+============
+- python-lxml
+- python-django-djapian
+- python-mysqldb
+- python-imaging
+- gettext
+- django-tagging
+- python-markdown
+
+mkdir
+=====
+static/images/parties
+static/images/orgs
+static/tmp
+
+Commands
+========
+$ ./manage.py compilemessages
+$ ./manage.py index --rebuild
+$ utils/populate-db -p
+$ utils/populate-db -m
+$ utils/populate-db -v --full-update
+$ utils/populate-db -M --full-update
+
+SQL
+===
+
+$ mysqladmin create kamu
+
+CREATE USER 'kamu'@'localhost' IDENTIFIED BY 'kamu';
+GRANT ALL PRIVILEGES ON kamu.* TO 'kamu'@'localhost';
