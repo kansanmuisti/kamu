@@ -3,4 +3,3 @@
 http://www.kansanmuisti.fi{% url registration_activate activation_key=activation_key %}
 
 {% blocktrans %}Please note that this link will only be valid for {{ expiration_days }} days.{% endblocktrans %}
-

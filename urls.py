@@ -57,7 +57,7 @@ urlpatterns += patterns('orgs.views',
 urlpatterns += patterns('',
     (r'^comments/', include('django.contrib.comments.urls')),
     (r'^account/logout/$', logout, {'next_page': '/'}),
-    (r'^account/', include('registration.urls')),
+    (r'^account/', include('registration.backends.default.urls')),
 )
 
 

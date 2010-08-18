@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-30 13:06+0300\n"
+"POT-Creation-Date: 2010-08-18 16:09+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -244,7 +244,7 @@ msgstr "tietoa"
 
 #: templates/about.html:7
 msgid "About the site"
-msgstr "Tietoa kamusta"
+msgstr "Tietoa Kamusta"
 
 #: templates/add_beta.html:3
 msgid "Register as beta tester"
@@ -252,7 +252,7 @@ msgstr "Rekisteröidy beta-testaajaksi"
 
 #: templates/add_beta.html:6
 msgid "Register as beta tester for KAMU"
-msgstr "Registeröidy KAMUn beetatestaajaksi"
+msgstr "Registeröidy Kamun beetatestaajaksi"
 
 #: templates/add_beta.html:7
 msgid "Only e-mail is mandatory. Fill as many as you wish."
@@ -335,7 +335,7 @@ msgid ""
 "  "
 msgstr ""
 "\n"
-"  <p>Kiitos, että olet kiinnostunut KAMUsta. Otamme pian yhteyttä.</p>\n"
+"  <p>Kiitos, että olet kiinnostunut Kamusta. Otamme pian yhteyttä.</p>\n"
 "  "
 
 #: templates/list_orgs.html:3
@@ -376,9 +376,11 @@ msgstr[1] ""
 "\n"
 "%(count)s puoluetta\n"
 
-#: templates/list_parties.html:22
+#: templates/list_parties.html:14
 msgid "Includes all parties that presently have members in the parliament."
-msgstr "Mukana kaikki puolueet, joilla on tällä hetkellä kansanedustajia eduskunnassa."
+msgstr ""
+"Mukana kaikki puolueet, joilla on tällä hetkellä kansanedustajia "
+"eduskunnassa."
 
 #: templates/main_page.html:7
 msgid "Main page"
@@ -417,15 +419,16 @@ msgstr "Lähetä"
 msgid "News"
 msgstr "Uutiset"
 
-#: templates/main_page.html:82
+#: templates/main_page.html:89
 msgid "Latest votes"
 msgstr "Uusimmat äänestykset"
 
-#: templates/members.html:27
+#: templates/members.html:20
 msgid ""
 "Includes all the members that have been active during the chosen time period."
 msgstr ""
-"Mukana kaikki kansanedustajat, jotka ovat olleet aktiivisena valitulla aikavälillä."
+"Mukana kaikki kansanedustajat, jotka ovat olleet aktiivisena valitulla "
+"aikavälillä."
 
 #: templates/modify_score.html:4
 msgid "Score a session"
@@ -704,19 +707,17 @@ msgstr "Aktivointi"
 msgid "Kamu account activation"
 msgstr "Kamu-käyttäjätunnuksen aktivointi"
 
-#: templates/registration/activation_email.txt:1
-msgid "Please use the following link to activate your Kamu account:"
-msgstr "Käytä seuraavaa linkkiä aktivoidaksesi Kamu-käyttäjätunnuksesi:"
-
-#: templates/registration/activation_email.txt:5
-#, python-format
+#: templates/registration/activate.html:7
 msgid ""
-"Please note that this link will only be valid for %(expiration_days)s days."
-msgstr "Linkki toimii vain %(expiration_days)s päivän ajan."
+"The activation link you used is not valid.\n"
+"  Please check your link or register again."
+msgstr ""
+"Käyttämäsi aktivointtilinkki ei ole toiminnassa.\n"
+"Tarkista linkki sähköpostista tai rekisteröidy uudestaan."
 
-#: templates/registration/activation_email_subject.txt:1
-msgid "Activate your account"
-msgstr "Aktivoi tunnuksesi"
+#: templates/registration/activation_complete.html:7
+msgid "Your account is now active and logged in."
+msgstr "Tunnuksesi on nyt käytössä ja kirjautunut Kamuun."
 
 #: templates/registration/login.html:3 templates/registration/login.html:18
 msgid "Login"
@@ -957,6 +958,17 @@ msgstr "Etusivu"
 #: votes/templatetags/basic.py:108
 msgid "All districts"
 msgstr "Kaikki"
+
+#~ msgid "Please use the following link to activate your Kamu account:"
+#~ msgstr "Käytä seuraavaa linkkiä aktivoidaksesi Kamu-käyttäjätunnuksesi:"
+
+#~ msgid ""
+#~ "Please note that this link will only be valid for %(expiration_days)s "
+#~ "days."
+#~ msgstr "Linkki toimii vain %(expiration_days)s päivän ajan."
+
+#~ msgid "Activate your account"
+#~ msgstr "Aktivoi tunnuksesi"
 
 #~ msgid "Contact"
 #~ msgstr "Palaute"

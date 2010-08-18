@@ -4,9 +4,6 @@
 
 {% block content %}
   <h1>{% trans "Kamu account activation" %}</h1>
-  {% if account %}
-    <p>Tervetuloa, {{ account.username }}. Tunnuksesi on nyt aktivoitu.</p>
-  {% else %}
-    <p>Antamasi aktivaatioavain ei ole toiminnassa.</p>
-  {% endif %}
+  <p>{% blocktrans %}The activation link you used is not valid.
+  Please check your link or register again.{% endblocktrans %}</p>
 {% endblock %}
