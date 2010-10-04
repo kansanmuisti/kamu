@@ -138,6 +138,9 @@ class County(models.Model):
     class Meta:
         verbose_name_plural = "Counties"
 
+    def __unicode__(self):
+        return self.name
+
 class PartyAssociation(models.Model):
     member = models.ForeignKey(Member)
     party = models.ForeignKey(Party)
