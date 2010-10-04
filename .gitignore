@@ -2,6 +2,9 @@
 *.pyc
 *.pyo
 *.mo
+*.swp
+files
+tags
 settings_local.py
 utils/cache
 static/images/parties
