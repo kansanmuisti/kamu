@@ -38,6 +38,11 @@ from kamu.votes.models import *
 cache_dir = None
 until_pl = None
 
+def create_path_for_file(fname):
+        dirname = os.path.dirname(fname)
+        if not os.path.exists(dirname):
+                os.makedirs(dirname)
+
 def open_url_with_cache(url, prefix, skip_cache = False):
         fname = None
         if cache_dir and not skip_cache:
@@ -47,6 +52,7 @@ def open_url_with_cache(url, prefix, skip_cache = False):
                 f = opener.open(url)
                 s = f.read()
                 if fname:
+                        create_path_for_file(fname)
                         outf = open(fname, 'w')
                         outf.write(s)
                         outf.close()
@@ -71,10 +77,6 @@ mp_list_url = "/triphome/bin/thw/trip/?${base}=hetekaue&${maxpage}=10001&${snhtm
         "$+and+vpr_alkutepvm%3E=22.03.1991"
 heti_url = "/triphome/bin/hex5000.sh?hnro=%s&kieli=su"
 
-def create_path_for_file(fname):
-        dirname = os.path.dirname(fname)
-        if not os.path.exists(dirname):
-                os.makedirs(dirname)
 
 def process_parties(db_insert):
         s = open_url_with_cache(party_url_base + party_list_url, 'party')
