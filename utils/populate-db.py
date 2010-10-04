@@ -77,6 +77,8 @@ mp_list_url = "/triphome/bin/thw/trip/?${base}=hetekaue&${maxpage}=10001&${snhtm
         "$+and+vpr_alkutepvm%3E=22.03.1991"
 heti_url = "/triphome/bin/hex5000.sh?hnro=%s&kieli=su"
 
+STAT_URL_BASE = "http://www.stat.fi"
+STAT_COUNTY_URL = "/meta/luokitukset/vaalipiiri/001-2007/luokitusavain_teksti.txt"
 
 def process_parties(db_insert):
         s = open_url_with_cache(party_url_base + party_list_url, 'party')
@@ -261,6 +263,26 @@ def process_mops(party_list, update = False, db_insert = False):
                         da.save()
 
         return mop_list
+
+def process_counties(db_insert):
+        s = open_url_with_cache(STAT_URL_BASE + STAT_COUNTY_URL, 'county')
+        # strip first 4 lines of header and any blank/empty lines at EOF
+        for line in s.rstrip().split("\n")[4:]:
+                dec_line = line.decode("iso8859-1").rstrip().split("\t")
+                (district_id, district_name, county_id, county_name) = dec_line
+
+                if not db_insert:
+                        continue
+
+                try:
+                        c = County.objects.get(name=county_name)
+                except:
+                        c = None
+                if not c:
+                        c = County()
+                        c.name = county_name
+                c.district = district_name
+                c.save()
 
 #VOTE_URL = "/triphome/bin/aax3000.sh?kanta=&PALUUHAKU=%2Fthwfakta%2Faanestys%2Faax%2Faax.htm&" +\
 #           "haku=suppea&VAPAAHAKU=&OTSIKKO=&ISTUNTO=&AANVPVUOSI=(2007%2Bor%2B2008%2Bor%2B2009%2Bor%2B2010)&PVM1=&PVM2=&TUNNISTE="
@@ -541,6 +563,8 @@ parser.add_option('-p', '--parties', action="store_true", dest="parties",
                   help="populate party database")
 parser.add_option('-m', '--members', action="store_true", dest="members",
                   help="populate member database")
+parser.add_option('-c', '--counties', action="store_true", dest="counties",
+                  help="populate counties database")
 parser.add_option('-v', '--votes', action="store_true", dest="votes",
                   help="populate vote database")
 parser.add_option('-M', '--minutes', action="store_true", dest="minutes",
@@ -563,6 +587,8 @@ if opts.parties or opts.members:
         party_list = process_parties(True)
 if opts.members:
         mp_list = process_mops(party_list, True, True)
+if opts.counties:
+        counties = process_counties(True)
 if opts.votes:
         process_votes(opts.full_update)
 if opts.minutes:
