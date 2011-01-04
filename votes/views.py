@@ -44,6 +44,8 @@ PERIOD_KEY = 'period'
 
 DISTRICT_KEY = 'district'
 
+COUNTY_KEY = 'county'
+
 def find_period(request):
     chosen_period = None
     if PERIOD_KEY in request.GET:
@@ -67,8 +69,18 @@ def find_period(request):
 def find_district(request, begin, end):
     da_list = DistrictAssociation.objects.list_between(begin, end)
 
-    if DISTRICT_KEY in request.GET:
+    district = None
+    if COUNTY_KEY in request.GET:
+        if DISTRICT_KEY in request.session:
+            del request.session[DISTRICT_KEY]
+        county_name = request.GET[COUNTY_KEY];
+        if county_name != u'All counties':
+            county = County.objects.get(name=county_name)
+            district = county.get_district_name()
+    elif DISTRICT_KEY in request.GET:
         district = request.GET[DISTRICT_KEY]
+
+    if district:
         if district == 'all':
             if DISTRICT_KEY in request.session:
                 del request.session[DISTRICT_KEY]
@@ -514,7 +526,8 @@ def list_members(request):
 
     return render_to_response('members.html',
                              {'member_page': member_page, 'switch_period': True,
-                              'switch_district': True, 'hdr': hdr_html,
+                              'switch_district': True, 'switch_county': True,
+                              'hdr': hdr_html,
                               'rows': table_html, 'active_page': 'members'},
                               context_instance = RequestContext(request))
 

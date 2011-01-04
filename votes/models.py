@@ -147,6 +147,8 @@ class County(models.Model):
     class Meta:
         verbose_name_plural = "Counties"
 
+    def get_district_name(self):
+        return self.district + " vaalipiiri"
     def __unicode__(self):
         return self.name
 

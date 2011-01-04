@@ -3,6 +3,7 @@ from django.utils.encoding import smart_unicode
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
 
+COUNTY_SEARCH_URL="/search/county/"
 
 def get_query_string(p, new_params=None, remove=None):
     """
@@ -82,11 +83,12 @@ def query_string(context, add=None, remove=None):
     return {'response': response }
 
 from votes.views import PERIODS, find_period, find_district
-from votes.models import DistrictAssociation
+from votes.models import DistrictAssociation, County
 
 @register.inclusion_tag('opt_list.html', takes_context=True)
 def generate_option_list(context, option):
     opt_list = []
+    source_url = None
     session = context['request'].session
     if option == 'period':
         if 'period' in session:
@@ -118,8 +120,14 @@ def generate_option_list(context, option):
                 opt['selected'] = True
             opt_list.append(opt)
         list_type = 'link'
+    elif option == 'county':
+        (begin, end) = find_period(context['request'])
+        chosen_district = find_district(context['request'], begin, end)
+        list_type = 'combobox'
+        source_url = COUNTY_SEARCH_URL
 
-    return {'options': opt_list, 'type': list_type, 'name': option }
+    return {'options': opt_list, 'type': list_type, 'name': option, \
+            'source_url': source_url}
 
 @register.filter("truncate_chars")
 def truncate_chars(value, max_length):
