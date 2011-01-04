@@ -286,6 +286,10 @@ div.filter {
 	margin-bottom: 8px;
 }
 
+div.sub_filter {
+	margin-top: 8px;
+}
+
 .opener {
 }
 
@@ -780,6 +784,13 @@ div#list_orgs {
 .fb_like {
 	height: 23px;
 	margin-bottom: 8px;
+}
+
+/*
+ * County selector field
+ */
+#county_selector input {
+	width: 95px;
 }
 
 /*

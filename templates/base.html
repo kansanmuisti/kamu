@@ -107,10 +107,16 @@
 <a href="#" id="district_opener" class="opener action_link">{% trans "District" %}</a>
 <div class="filter" id="district_list">
 {% generate_option_list "district" %}
+
+<div id="county_selector" class="sub_filter filter_options">
+{% trans "or choose your county" %}
+{% generate_option_list "county" %}
+</div>
+
 </div>
 {% endif %}
 
-</div>
+</div>  {% comment %} id="wrap" {% endcomment %}
 
 <div id="content">
 {% block content %}{% endblock %}
