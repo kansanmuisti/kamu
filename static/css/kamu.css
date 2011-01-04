@@ -782,3 +782,26 @@ div#list_orgs {
 	margin-bottom: 8px;
 }
 
+/*
+ * Combobox stuff
+ */
+.ui-autocomplete {
+	max-height: 200px;
+	overflow-y: auto;
+}
+
+.combobox_container {
+	padding : 2px;
+}
+
+.combobox_container > input {
+	height : 18px;
+	vertical-align : top;
+}
+
+.combobox_container > button {
+	width: 25px;
+	height: 20px;
+	vertical-align : top;
+	left : -1px;
+}
