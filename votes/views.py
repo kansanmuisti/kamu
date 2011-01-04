@@ -63,8 +63,6 @@ def find_period(request):
     return (chosen_period['begin'], chosen_period['end'])
 
 def find_district(request, begin, end):
-    if not DISTRICT_KEY in request.GET and not PERIOD_KEY in request.session:
-        return None
     da_list = DistrictAssociation.objects.list_between(begin, end)
 
     if DISTRICT_KEY in request.GET:
