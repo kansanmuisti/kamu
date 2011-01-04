@@ -11,6 +11,16 @@
 {% endif %}
 {% endfor %}
 </div>
+{% else %}{%ifequal type "combobox" %}
+<input type="text" class="combosel" name="{{ name }}">
+<script>
+        $( ".combosel[name={{ name }}]" ).
+            combobox({ source_url: "{{ source_url }}"} ).
+            bind("comboboxselected", function() {
+                        location.href='?{{ name }}=' + this.value;
+                });
+</script>
+
 {% else %}
 
 {% for opt in options %}
@@ -20,4 +30,4 @@ onchange='this.form.submit()'>
 {{ opt.name }}<br />
 </input>
 {% endfor %}
-{% endifequal %}
+{% endifequal %}{% endifequal %}
