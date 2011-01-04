@@ -29,6 +29,7 @@ DJAPIAN_DATABASE_PATH = os.path.dirname(__file__) + '/djapian/'
 # system time zone.
 TIME_ZONE = 'Europe/Helsinki'
 
+LANGUAGES=(('en', 'English'), ('fi', 'Finnish'))
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 #LANGUAGE_CODE = 'en-us'
@@ -75,9 +76,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.auth',
     'django.core.context_processors.debug',
     'django.core.context_processors.i18n',
-#    'django.core.context_processors.media',
     'django.core.context_processors.request',
-#    'django.contrib.messages.context_processors.messages',
+    'django.contrib.messages.context_processors.messages',
+    'facebook.context_processors.facebook',
 )
 
 
@@ -87,6 +88,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.csrf.middleware.CsrfMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
 #    'django.middleware.locale.LocaleMiddleware',
 
 #    'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -110,6 +112,7 @@ INSTALLED_APPS = (
     'django.contrib.comments',
     'django.contrib.webdesign',
     'django.contrib.markup',
+    'django.contrib.messages',
     'sorl.thumbnail',
     'kamu.votes',
     'kamu.users',
@@ -117,7 +120,14 @@ INSTALLED_APPS = (
     'kamu.comments',
     'tagging',
     'djapian',
+    'facebook',
     'registration',
+)
+
+AUTH_PROFILE_MODULE="kamu.users.KamuProfile"
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'kamu.facebook.auth_backends.FacebookBackend',
 )
 
 # Activation window from the sending of the activation e-mail
@@ -130,6 +140,12 @@ DEFAULT_FROM_EMAIL = 'Kansan muisti <noreply@kansanmuisti.fi>'
 SERVER_EMAIL = 'noreply@kansanmuisti.fi'
 
 COMMENTS_APP = 'kamu.comments'
+
+FACEBOOK_ENABLED = False
+FACEBOOK_APP_ID = "Set this in settings_local"
+FACEBOOK_APP_SECRET = "Set this in settings_local"
+# Optional
+FACEBOOK_DOMAIN = None
 
 try:
     from settings_local import *

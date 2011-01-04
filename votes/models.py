@@ -59,6 +59,15 @@ class Member(models.Model):
             self.url_name = slugify(self.name)
         super(Member, self).save(*args, **kwargs)
 
+    def get_print_name(self):
+        names = self.name.split()
+        (last, first) = (names[0], names[1])
+        return "%s %s" % (first, last)
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('votes.views.show_member', (), {'member': self.url_name})
+
     def __unicode__(self):
         return self.name
 

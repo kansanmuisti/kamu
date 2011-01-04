@@ -1,11 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:og="http://opengraphprotocol.org/schema/"
+      xmlns:fb="http://www.facebook.com/2008/fbml">
 <head>
 {% load i18n %}
 {% load basic %}
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>{% block title %}{% endblock %} - KAMU</title>
+  <meta property="og:site_name" content="Kansan muisti" />
+  <meta property="fb:app_id" content="107387482616243" />
   <link type="text/css" href="/static/css/jquery-ui-1.8.1.custom.css" rel="stylesheet" />
   <script type="text/javascript" src="/static/js/jquery-1.4.2.min.js"></script>
   <script type="text/javascript" src="/static/js/jquery-ui-1.8.1.custom.js"></script>
@@ -109,7 +113,6 @@
 
 <div id="content">
 {% block content %}{% endblock %}
-
 </div>
 
 <div id="footer">

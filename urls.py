@@ -1,20 +1,15 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
-from django.contrib.auth.views import login, logout
+from kamu.users.views import login, logout
 from django.views.generic.simple import direct_to_template
 
 from django.contrib import admin
 admin.autodiscover()
 
+import djapian
+djapian.load_indexes()
+
 urlpatterns = patterns('',
-    # Example:
-    # (r'^kamu/', include('kamu.foo.urls')),
-
-    # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
-    # to INSTALLED_APPS to enable admin documentation:
-    # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
 )
 
@@ -55,8 +50,13 @@ urlpatterns += patterns('orgs.views',
 )
 
 urlpatterns += patterns('',
-    (r'^comments/', include('django.contrib.comments.urls')),
-    (r'^account/logout/$', logout, {'next_page': '/'}),
+    (r'^facebook/', include('facebook.urls')),
+)
+
+urlpatterns += patterns('',
+    url(r'^comments/', include('django.contrib.comments.urls')),
+    url(r'^account/logout/$', logout, name="logout"),
+    url(r'^account/login/$', login, name="login"),
     (r'^account/', include('registration.backends.default.urls')),
 )
 

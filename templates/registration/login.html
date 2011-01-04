@@ -1,22 +1,37 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block title %}{% trans "Login" %}{% endblock %}
-
 {% block content %}
   <h1>{% trans "Kamu login" %}</h1>
+{% if fb_enabled %}
+{% include "_facebook.html" %}
+<script>
+  FB.Event.subscribe('auth.sessionChange', function(response) {
+    if (response.session) {
+      window.location = '{% url facebook_connect %}'
+    } else {
+      // The user has logged out, and the cookie has been cleared
+    }
+  });
+  FB.getLoginStatus();
+</script>
+{% endif %}
   {% if form.errors %}
     <p class="error">{% trans "Sorry, that's not a valid username or password" %}</p>
   {% endif %}
 
-  <form action="" method="post">
+  <form id="login_form" action="" method="post">
     <label for="username">{% trans "User name:" %}</label>
     <input type="text" name="username" value="" id="username">
     <br />
     <label for="password">{% trans "Password:" %}</label>
     <input type="password" name="password" value="" id="password">
     <br />
-    <input style="margin-top: 16px;" type="submit" name="login" value="{% trans "Login" %}"/>
+    <input id="login_button" type="submit" name="login" value="{% trans "Login" %}"/>
     <input type="hidden" name="next" value="{{ next|escape }}" />
+{% if fb_enabled %}
+  <span class="fb_login_button"><fb:login-button></fb:login-button></span>
+{% endif %}
   </form>
   <br />
   <p><a class="link" href="{% url auth_password_reset %}">{% trans "Forgot your username or password?" %}</a></p>

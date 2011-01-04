@@ -754,3 +754,31 @@ div#list_orgs {
 #list_orgs a {
 	color: #2f7670;
 }
+
+/*
+ * Login form
+ */
+#login_form {
+	width: 300px;
+}
+#login_form input {
+	width: 144px;
+}
+#login_button {
+	margin-top: 16px;
+	height: 22px;
+}
+
+.fb_login_button {
+	float: right;
+	margin-top: 16px;
+}
+
+/*
+ * General Facebook stuff
+ */
+.fb_like {
+	height: 23px;
+	margin-bottom: 8px;
+}
+

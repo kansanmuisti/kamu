@@ -2,6 +2,10 @@
 {% load i18n thumbnail comments %}
 {% block title %}{{ member.name }}{% endblock %}
 {% block head %}
+<meta property="og:title" content="{{ member.get_print_name }}" />
+<meta property="og:type" content="politician" />
+<meta property="og:image" content="http://{{ fb_host }}/static/{% thumbnail member.photo 64x96 %}" />
+<meta property="og:url" content="http://{{ fb_host }}{{ member.get_absolute_url }}" />
 <script type="text/javascript">
   $(document).ready(function() {
     $('[title]').tooltip({
@@ -23,7 +27,12 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ member.name }}</h1>
+    <h1>{{ member.get_print_name }}</h1>
+
+{% if fb_enabled %}
+{% include "_facebook.html" %}
+<div class="fb_like"><fb:like show_faces=false></fb:like></div>
+{% endif %}
 
 {% comment %}---------------- BASIC ----------------{% endcomment %}
 {% ifequal section "basic" %}
