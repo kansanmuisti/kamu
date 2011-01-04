@@ -7,7 +7,8 @@ from django.db.models import Q, Count
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.utils.safestring import mark_safe
-from django.utils.http import urlencode
+from django.utils import simplejson
+from django.utils.http import urlencode, http_date
 from django.contrib.auth.decorators import login_required
 from tagging.models import Tag
 from tagging.utils import parse_tag_input
@@ -17,6 +18,7 @@ from kamu.votes.index import complete_indexer
 from sorl.thumbnail.main import DjangoThumbnail
 from kamu.contact_form.views import contact_form
 
+import time
 import djapian
 import operator
 import datetime
@@ -716,6 +718,19 @@ def search(request):
 
     return render_to_response('search.html', {'result_page': result_page},
                               context_instance = RequestContext(request))
+
+def search_county(request):
+    name = request.GET['name']
+    max_results = request.GET['max_results']
+    county_list = County.objects.filter(name__istartswith=name).    \
+                    order_by("name")[:max_results]
+    json = simplejson.dumps([x.name for x in county_list])
+
+    response = HttpResponse(json, mimetype="text/javascript")
+    response['Cache-Control'] = "max-age=1000"
+    response['Expires'] = http_date(time.time() + 1000)
+
+    return response
 
 def about(request, section):
     if section == 'main':
