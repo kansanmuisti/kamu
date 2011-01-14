@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Finalize your registration" %}{% endblock %}
+{% block content %}
+  <h1>{% trans "Finalize your registration" %}</h1>
+{% include "_facebook.html" %}
+<div style="min-height: 50px; margin-bottom: 16px;">
+  <img style="float: left; padding-right: 16px;" src="/static/{{ fb_portrait }}" />
+<p>{% blocktrans with fb_reg_info.first_name as first_name and fb_reg_info.last_name as last_name %}
+<h2>Welcome to Kansan muisti, {{ first_name }} {{ last_name }}!</h2>
+Please finalize your registration by choosing a username below.
+{% endblocktrans %}</p>
+</div>
+<div>
+{% if form.errors %}
+  <p style="color: red;">
+{% blocktrans count form.errors as counter %}
+Please correct the error below.
+{% plural %}
+Please correct the errors below.
+{% endblocktrans %}
+  </p>
+{% endif %}
+  <form enctype="multipart/form-data" action="{% url facebook_register_form %}" method="post">
+    <table id="fb_registration_form">
+      {{ form.as_p }}
+    </table>
+    <input type="submit" name="submit" value="{% trans 'Submit' %}">
+  </form>
+</div>
+{% endblock %}
+

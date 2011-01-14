@@ -31,7 +31,10 @@ def login(request):
     return auth_login(request)
 
 def logout(request):
+    args = {}
+    if get_user_from_cookie(request.COOKIES):
+        args['fb_logout'] = True
     auth_logout(request)
-    resp = render_to_response("registration/logout.html",
+    resp = render_to_response("registration/logout.html", args,
                               context_instance=RequestContext(request))
     return resp

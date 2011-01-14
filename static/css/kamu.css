@@ -321,6 +321,7 @@ div#footer {
 label {
 	display: block;
 	float: left;
+	text-align: start;
 	min-width: 150px;
 }
 

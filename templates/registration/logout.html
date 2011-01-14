@@ -4,7 +4,7 @@
 <head>
 </head>
 <body>
-{% if fb_enabled %}
+{% if fb_enabled and fb_logout %}
 {% include "_facebook.html" %}
 <script>
   FB.getLoginStatus(function(response) {
