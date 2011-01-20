@@ -8,10 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-18 16:09+0300\n"
+"POT-Creation-Date: 2011-01-16 17:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -112,6 +113,18 @@ msgstr "Sähköpostiosoite"
 msgid "Your message"
 msgstr "Palaute"
 
+#: facebook/forms.py:10 registration/forms.py:35
+msgid "Username"
+msgstr "Käyttäjätunnus"
+
+#: facebook/forms.py:11 registration/forms.py:36
+msgid "This value must contain only letters, numbers and underscores."
+msgstr "Ainoastaan kirjaimet, numerot ja alaviivat ovat sallittu."
+
+#: facebook/forms.py:18 registration/forms.py:55
+msgid "A user with that username already exists."
+msgstr "Käyttäjätunnus on jo käytössä."
+
 #: orgs/forms.py:15
 msgid "File size too big."
 msgstr "Tiedosto on liian iso."
@@ -120,8 +133,8 @@ msgstr "Tiedosto on liian iso."
 msgid "Image dimensions too big."
 msgstr "Kuvan dimensiot ovat liian suuret."
 
-#: orgs/forms.py:50 templates/preview_org.html:11 votes/views.py:315
-#: votes/views.py:468
+#: orgs/forms.py:50 templates/preview_org.html:11 votes/views.py:327
+#: votes/views.py:480
 msgid "Name"
 msgstr "Nimi"
 
@@ -157,15 +170,7 @@ msgstr "Aktivoi käyttäjät"
 msgid "Re-send activation emails"
 msgstr "Lähetä aktivaatio-sähköpostit uudelleen"
 
-#: registration/forms.py:35
-msgid "Username"
-msgstr "Käyttäjätunnus"
-
-#: registration/forms.py:36
-msgid "This value must contain only letters, numbers and underscores."
-msgstr "Ainoastaan kirjaimet, numerot ja alaviivat ovat sallittu."
-
-#: registration/forms.py:39 templates/show_member.html:39
+#: registration/forms.py:39 templates/show_member.html:48
 msgid "Email address"
 msgstr "Sähköpostiosoite"
 
@@ -177,10 +182,6 @@ msgstr "Salasana"
 #: templates/registration/password_change_form.html:32
 msgid "Password (again)"
 msgstr "Salasana (uudestaan)"
-
-#: registration/forms.py:55
-msgid "A user with that username already exists."
-msgstr "Käyttäjätunnus on jo käytössä."
 
 #: registration/forms.py:67
 msgid "The two password fields didn't match."
@@ -279,50 +280,54 @@ msgstr "Lisää uusi järjestö"
 msgid "Preview"
 msgstr "Esikatsele"
 
-#: templates/base.html:22 templates/base.html.py:67
+#: templates/base.html:27 templates/base.html.py:72
 msgid "Search"
 msgstr "Hae"
 
-#: templates/base.html:72
+#: templates/base.html:77
 msgid "Logged in"
 msgstr "Kirjautuneena"
 
-#: templates/base.html:73
+#: templates/base.html:78
 msgid "Log out"
 msgstr "Kirjaudu ulos"
 
-#: templates/base.html:75
+#: templates/base.html:80
 #: templates/registration/password_reset_complete.html:12
 msgid "Log in"
 msgstr "Kirjaudu sisään"
 
-#: templates/base.html:82
+#: templates/base.html:87
 msgid "What is Kamu?"
 msgstr "Kansan muisti"
 
-#: templates/base.html:83
+#: templates/base.html:88
 msgid "Plenary Sessions"
 msgstr "Täysistunnot"
 
-#: templates/base.html:84 templates/members.html:3
+#: templates/base.html:89 templates/members.html:3
 msgid "Members"
 msgstr "Kansanedustajat"
 
-#: templates/base.html:85 templates/list_parties.html:3
+#: templates/base.html:90 templates/list_parties.html:3
 msgid "Parties"
 msgstr "Puolueet"
 
-#: templates/base.html:86
+#: templates/base.html:91
 msgid "Orgs"
 msgstr "Järjestöt"
 
-#: templates/base.html:95 votes/views.py:525
+#: templates/base.html:100 votes/views.py:538
 msgid "Period"
 msgstr "Valitse aikaväli"
 
-#: templates/base.html:102
+#: templates/base.html:107
 msgid "District"
 msgstr "Valitse vaalipiiri"
+
+#: templates/base.html:112
+msgid "or choose your county"
+msgstr "tai valitse kuntasi"
 
 #: templates/confirm_beta.html:3 templates/confirm_beta.html.py:6
 msgid "Registration received"
@@ -386,16 +391,16 @@ msgstr ""
 msgid "Main page"
 msgstr "Etusivu"
 
-#: templates/main_page.html:8 votes/views.py:726
+#: templates/main_page.html:8 votes/views.py:752
 msgid "Background"
 msgstr "Taustaa"
 
-#: templates/main_page.html:9 votes/views.py:730
+#: templates/main_page.html:9 votes/views.py:756
 msgid "Feedback"
 msgstr "Palaute"
 
 #: templates/main_page.html:10 templates/main_page.html.py:56
-#: votes/views.py:728
+#: votes/views.py:754
 msgid "Contact information"
 msgstr "Yhteystiedot"
 
@@ -477,7 +482,7 @@ msgstr "Nimi palvelussa"
 msgid "Info link"
 msgstr "Linkki kotisivulle"
 
-#: templates/preview_org.html:24 templates/show_org.html:30 votes/views.py:256
+#: templates/preview_org.html:24 templates/show_org.html:30 votes/views.py:268
 msgid "Modify"
 msgstr "Muokkaa"
 
@@ -524,84 +529,84 @@ msgstr "Tyhjä-äänien lukumäärä"
 msgid "Number of absentees"
 msgstr "Poissaolevien lukumäärä"
 
-#: templates/show_member.html:18 templates/votes.html:5
+#: templates/show_member.html:22 templates/votes.html:5
 msgid "General"
 msgstr "Yleistiedot"
 
-#: templates/show_member.html:19 templates/votes.html:3
+#: templates/show_member.html:23 templates/votes.html:3
 #: templates/votes.html.py:58
 msgid "Votes"
 msgstr "Äänet"
 
-#: templates/show_member.html:20
+#: templates/show_member.html:24
 msgid "Register of interest"
 msgstr "Sidonnaisuudet"
 
-#: templates/show_member.html:21
+#: templates/show_member.html:25
 msgid "Statements"
 msgstr "Puheenvuorot"
 
-#: templates/show_member.html:22 templates/votes.html:6
+#: templates/show_member.html:26 templates/votes.html:6
 msgid "Comments"
 msgstr "Kommentit"
 
-#: templates/show_member.html:34
+#: templates/show_member.html:43
 msgid "Surname"
 msgstr "Sukunimi"
 
-#: templates/show_member.html:35
+#: templates/show_member.html:44
 msgid "Given names"
 msgstr "Etunimet"
 
-#: templates/show_member.html:36
+#: templates/show_member.html:45
 msgid "Birthdate"
 msgstr "Syntymäaika"
 
-#: templates/show_member.html:42
+#: templates/show_member.html:51
 msgid "Telephone"
 msgstr "Puhelinnumero"
 
-#: templates/show_member.html:45
+#: templates/show_member.html:54
 msgid "Electoral districts"
 msgstr "Vaalipiirit"
 
-#: templates/show_member.html:53
+#: templates/show_member.html:62
 msgid "Party associations"
 msgstr "Eduskuntaryhmät"
 
-#: templates/show_member.html:75
+#: templates/show_member.html:84
 msgid "Session"
 msgstr "Äänestys"
 
-#: templates/show_member.html:76 votes/views.py:316
+#: templates/show_member.html:85 votes/views.py:328
 msgid "Vote"
 msgstr "Ääni"
 
-#: templates/show_member.html:83 votes/views.py:330
+#: templates/show_member.html:92 votes/views.py:342
 msgid "Yay"
 msgstr "Kyllä"
 
-#: templates/show_member.html:86 votes/views.py:333
+#: templates/show_member.html:95 votes/views.py:345
 msgid "Nay"
 msgstr "Ei"
 
-#: templates/show_member.html:89 votes/views.py:336
+#: templates/show_member.html:98 votes/views.py:348
 msgid "Empty"
 msgstr "Tyhjä"
 
-#: templates/show_member.html:99
+#: templates/show_member.html:108
 msgid "No votes in database"
 msgstr "Ei ääniä tietokannassa"
 
-#: templates/show_member.html:114 templates/votes.html:106
+#: templates/show_member.html:123 templates/votes.html:106
 msgid "ago"
 msgstr "sitten"
 
-#: templates/show_member.html:121 templates/votes.html:113
+#: templates/show_member.html:130 templates/votes.html:113
 msgid "Leave a new comment"
 msgstr "Jätä uusi kommentti"
 
-#: templates/show_member.html:142
+#: templates/show_member.html:151
 msgid "No statements found"
 msgstr "Ei puheenvuoroja"
 
@@ -697,6 +702,62 @@ msgstr ""
 "  <p>Kiitos palautteestasi!</p>\n"
 "  "
 
+#: templates/facebook/connect.html:3 templates/facebook/connect.html.py:5
+msgid "Facebook Connect"
+msgstr "Yhdistäminen Facebook-tiliin"
+
+#: templates/facebook/connect.html:6
+msgid ""
+"\n"
+"<p>The only personal information we will display publicly is your name. Any "
+"other information collected about you will remain private unless you choose "
+"to allow us to display it.</p>\n"
+"<p>We use your personal information only in an anonymized fashion, according "
+"to our privacy policy.</p>\n"
+msgstr ""
+"\n"
+"<p>Kerätyistä henkilötiedoista näytämme julkisesti ainoastaan nimesi. Muita "
+"tietoja näytämme ainoastaan siinä tapauksessa, että hyväksyt sen erikseen.</p>\n"
+"<p>Rekisteriselosteemme mukaisesti luovutamme tietojasi kolmansille osapuolille ainoastaan anonymisoituna.</p>\n"
+
+#: templates/facebook/connect.html:19
+msgid "Facebook functionality disabled."
+msgstr "Facebook-toiminnallisuus pois käytöstä."
+
+#: templates/facebook/register_form.html:3
+#: templates/facebook/register_form.html:5
+msgid "Finalize your registration"
+msgstr "Viimeistele rekisteröintisi"
+
+#: templates/facebook/register_form.html:9
+#, python-format
+msgid ""
+"\n"
+"<h2>Welcome to Kansan muisti, %(first_name)s %(last_name)s!</h2>\n"
+"Please finalize your registration by choosing a username below.\n"
+msgstr ""
+"\n"
+"<h2>Tervetuloa Kansan muistiin, %(first_name)s %(last_name)s!</h2>\n"
+"Viimeistele rekisteröintisi valitsemalla vielä käyttäjätunnuksesi.\n"
+
+#: templates/facebook/register_form.html:17
+msgid ""
+"\n"
+"Please correct the error below.\n"
+msgid_plural ""
+"\n"
+"Please correct the errors below.\n"
+msgstr[0] ""
+"\n"
+"Korjaa alla oleva virhe.\n"
+msgstr[1] ""
+"\n"
+"Korjaa alla olevat virheet.\n"
+
+#: templates/facebook/register_form.html:28
+msgid "Submit"
+msgstr "Lähetä"
+
 #: templates/registration/activate.html:3
 #: templates/registration/activation_complete.html:3
 msgid "Activation"
@@ -719,31 +780,41 @@ msgstr ""
 msgid "Your account is now active and logged in."
 msgstr "Tunnuksesi on nyt käytössä ja kirjautunut Kamuun."
 
-#: templates/registration/login.html:3 templates/registration/login.html:18
+#: templates/registration/login.html:3 templates/registration/login.html:30
 msgid "Login"
 msgstr "Kirjaudu sisään"
 
-#: templates/registration/login.html:6
+#: templates/registration/login.html:5
 msgid "Kamu login"
 msgstr "Sisäänkirjautuminen Kamuun"
 
-#: templates/registration/login.html:8
+#: templates/registration/login.html:20
 msgid "Sorry, that's not a valid username or password"
 msgstr "Antamasi käyttäjätunnus tai salasana ei kelpaa."
 
-#: templates/registration/login.html:12
+#: templates/registration/login.html:24
 msgid "User name:"
 msgstr "Käyttäjätunnus:"
 
-#: templates/registration/login.html:15
+#: templates/registration/login.html:27
 msgid "Password:"
 msgstr "Salasana:"
 
-#: templates/registration/login.html:22
+#: templates/registration/login.html:35
+msgid ""
+"\n"
+"If you have a Facebook account, you can login or register using the button "
+"below.\n"
+msgstr ""
+"\n"
+"Jos sinulla on Facebook-tili, voit kirjautua sisään tai rekisteröityä klikkaamalla "
+"allaolevaa nappia.\n"
+
+#: templates/registration/login.html:44
 msgid "Forgot your username or password?"
 msgstr "Unohditko käyttäjätunnuksesi tai salasanasi?"
 
-#: templates/registration/login.html:23
+#: templates/registration/login.html:45
 msgid "Create a new account."
 msgstr "Luo uusi tunnus."
 
@@ -772,6 +843,7 @@ msgid ""
 "Please enter your old password, for security's sake, and then enter your new "
 "password twice so we can verify you typed it in correctly."
 msgstr ""
+"Syötä vanha salasanasi ja kirjoita uusi salasanasi kahdesti."
 
 #: templates/registration/password_change_form.html:22
 msgid "Old password"
@@ -899,76 +971,64 @@ msgstr "Luo uusi tunnus"
 msgid "Create the account"
 msgstr "Luo tunnus"
 
-#: votes/models.py:204 votes/models.py:207
+#: votes/models.py:218 votes/models.py:221
 msgid "Statement "
 msgstr "Puheenvuoro"
 
-#: votes/views.py:235
+#: votes/views.py:247
 msgid "Organization"
 msgstr "Järjestö"
 
-#: votes/views.py:236
+#: votes/views.py:248
 msgid "Score"
 msgstr "Pisteet"
 
-#: votes/views.py:313 votes/views.py:466
+#: votes/views.py:325 votes/views.py:478
 msgid "Party"
 msgstr "Puolue"
 
-#: votes/views.py:339
+#: votes/views.py:351
 msgid "Absent"
 msgstr "Poissa"
 
-#: votes/views.py:470 votes/views.py:526
+#: votes/views.py:482 votes/views.py:539
 msgid "ATT"
 msgstr "L.o."
 
-#: votes/views.py:471 votes/views.py:527
+#: votes/views.py:483 votes/views.py:540
 msgid "Attendance in voting sessions"
 msgstr "Läsnäoloprosentti äänestyksissä"
 
-#: votes/views.py:472 votes/views.py:528
+#: votes/views.py:484 votes/views.py:541
 msgid "PA"
 msgstr "SP"
 
-#: votes/views.py:473 votes/views.py:529
+#: votes/views.py:485 votes/views.py:542
 msgid "Agreement with party majority"
 msgstr "Samanmielisyys puolueen enemmistön kanssa"
 
-#: votes/views.py:474 votes/views.py:530
+#: votes/views.py:486 votes/views.py:543
 msgid "SA"
 msgstr "SI"
 
-#: votes/views.py:475 votes/views.py:531
+#: votes/views.py:487 votes/views.py:544
 msgid "Agreement with session majority"
 msgstr "Samanmielisyys äänestyksen lopputuloksen kanssa"
 
-#: votes/views.py:476 votes/views.py:532
+#: votes/views.py:488 votes/views.py:545
 msgid "St"
 msgstr "Pv"
 
-#: votes/views.py:477 votes/views.py:533
+#: votes/views.py:489 votes/views.py:546
 msgid "Number of statements"
 msgstr "Puheenvuorojen lukumäärä"
 
-#: votes/views.py:724
+#: votes/views.py:750
 msgid "Home"
 msgstr "Etusivu"
 
-#: votes/templatetags/basic.py:108
+#: votes/templatetags/basic.py:110
 msgid "All districts"
 msgstr "Kaikki"
 
-#~ msgid "Please use the following link to activate your Kamu account:"
-#~ msgstr "Käytä seuraavaa linkkiä aktivoidaksesi Kamu-käyttäjätunnuksesi:"
 
-#~ msgid ""
-#~ "Please note that this link will only be valid for %(expiration_days)s "
-#~ "days."
-#~ msgstr "Linkki toimii vain %(expiration_days)s päivän ajan."
-
-#~ msgid "Activate your account"
-#~ msgstr "Aktivoi tunnuksesi"
-
-#~ msgid "Contact"
-#~ msgstr "Palaute"
