@@ -29,11 +29,17 @@
     <br />
     <input id="login_button" type="submit" name="login" value="{% trans "Login" %}"/>
     <input type="hidden" name="next" value="{{ next|escape }}" />
-{% if fb_enabled %}
-  <span class="fb_login_button"><fb:login-button></fb:login-button></span>
-{% endif %}
   </form>
   <br />
+{% if fb_enabled %}
+  <p>{% blocktrans %}
+If you have a Facebook account, you can login or register using the button below.
+{% endblocktrans %}</p>
+  <div class="fb_login_button">
+    <fb:login-button></fb:login-button>
+  </div>
+{% endif %}
+
   <p><a class="link" href="{% url auth_password_reset %}">{% trans "Forgot your username or password?" %}</a></p>
   <p><a class="link" href="{% url registration_register %}">{% trans "Create a new account." %}</a></p>
 

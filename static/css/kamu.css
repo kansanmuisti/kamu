@@ -771,12 +771,11 @@ div#list_orgs {
 }
 #login_button {
 	margin-top: 16px;
-	height: 22px;
 }
 
 .fb_login_button {
-	float: right;
 	margin-top: 16px;
+	margin-bottom: 16px;
 }
 
 /*
