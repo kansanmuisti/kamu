@@ -3,6 +3,7 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.http import HttpResponseForbidden
 from django.template import RequestContext
+from django.template.defaultfilters import slugify
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.query_utils import Q
@@ -127,10 +128,17 @@ def register_form(request):
         # Try to find a default account name
         account = user_data['link'].split('/')[-1]
         if account.startswith('profile.php'):
+            # No account shortname defined, use first and last names.
+            info = reg_data['registration']
+            account = slugify("%s %s" % (info['first_name'], info['last_name']))
+            account = account.replace('-', '_')[0:30]
+        # Filter all non-word characters from account name
+        account = re.sub('\W', '', account)[0:30]
+        try:
+            User.objects.get(username=account)
             account = None
-        else:
-            # Filter all non-word characters from account name
-            account = re.sub('\W', '', account)[0:30]
+        except User.DoesNotExist:
+            pass
         form = RegistrationForm(initial={'username': account})
 
     args = {}
