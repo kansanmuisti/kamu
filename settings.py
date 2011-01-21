@@ -122,6 +122,7 @@ INSTALLED_APPS = (
     'djapian',
     'facebook',
     'registration',
+    'cms',
 )
 
 AUTH_PROFILE_MODULE="kamu.users.KamuProfile"
