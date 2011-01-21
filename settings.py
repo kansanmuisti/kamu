@@ -140,6 +140,7 @@ DEFAULT_FROM_EMAIL = 'Kansan muisti <noreply@kansanmuisti.fi>'
 SERVER_EMAIL = 'noreply@kansanmuisti.fi'
 
 COMMENTS_APP = 'kamu.comments'
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 FACEBOOK_ENABLED = False
 FACEBOOK_APP_ID = "Set this in settings_local"

@@ -61,6 +61,36 @@
 </head>
 
 <body>
+{% if messages %}
+<div id="messages">
+  <script type="text/javascript" src="/static/js/jquery.jnotify.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#message_bars').jnotifyInitialize({
+	oneAtTime: false
+      });
+  {% for msg in messages %}
+    {% if msg.level == 40 %}
+      $('#message_bars').jnotifyAddMessage({
+	text: '{{ msg }}',
+	permanent: true,
+	type: 'error'
+      });
+    {% else %}
+      $('#message_bars').jnotifyAddMessage({
+	text: '{{ msg }}',
+	permanent: false,
+	disappearTime: 10000
+      });
+    {% endif %}
+  {% endfor %}
+    });
+  </script>
+  <div id="message_bars">
+  </div>
+</div>
+{% endif %}
+
 <div id="full_page">
 
 <div id="header">

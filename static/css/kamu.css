@@ -816,3 +816,21 @@ div#list_orgs {
 	vertical-align : top;
 	left : -1px;
 }
+
+/*
+ * jNotify
+ */
+.jnotify-item
+{
+    height: auto;
+    padding: 4px 4px 4px 4px;
+    margin: 0 0 5px 0;
+    display: block;
+    position: relative;
+}
+
+.jnotify-item-close
+{
+    float: right;
+    margin-left: 2px;
+}
