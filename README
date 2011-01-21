@@ -5,7 +5,7 @@ Dependencies
 - python-mysqldb
 - python-imaging
 - gettext
-- django-tagging
+- django-tagging (python-django-tagging on Debian/Ubuntu)
 - python-markdown
 
 mkdir
@@ -18,10 +18,11 @@ Commands
 ========
 $ ./manage.py compilemessages
 $ ./manage.py index --rebuild
-$ utils/populate-db -p
-$ utils/populate-db -m
-$ utils/populate-db -v --full-update
-$ utils/populate-db -M --full-update
+$ utils/populate-db.py -p
+$ utils/populate-db.py -m
+$ utils/populate-db.py -v --full-update
+$ utils/populate-db.py -M --full-update
+$ utils/populate-db.py -c
 
 SQL
 ===
