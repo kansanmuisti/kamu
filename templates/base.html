@@ -110,6 +110,24 @@
       <a href="/account/login/?next={{ request.path }}">{% trans "Log in" %}</a>
 {% endif %}
     </p>
+
+    <form id="langsel" method="post"
+                        action="{% url django.views.i18n.set_language %}">
+        <input type="hidden" name="language">
+        <script>
+            function submit_form(elem, val) {
+                elem.parentNode.language.value = val;
+                elem.parentNode.submit();
+            }
+        </script>
+        {% for lang in OTHER_LANGUAGES %}
+        <a class="langopt" href="#"
+         onClick="javascript:submit_form(this, '{{ lang.0 }}');">
+            {{ lang.2 }}
+        </a>
+        {% endfor %}
+    </form>
+
 </div>
 </div>
 <div id="navbar">

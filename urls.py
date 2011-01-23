@@ -61,6 +61,7 @@ urlpatterns += patterns('',
     (r'^account/', include('registration.backends.default.urls')),
 )
 
+urlpatterns += patterns('', (r'^i18n/', include('django.conf.urls.i18n')))
 
 if settings.DEBUG:
     urlpatterns += patterns('',

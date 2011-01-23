@@ -29,8 +29,11 @@ DJAPIAN_DATABASE_PATH = os.path.dirname(__file__) + '/djapian/'
 # system time zone.
 TIME_ZONE = 'Europe/Helsinki'
 
-LANGUAGES=(('en', 'English'), ('fi', 'Finnish'))
 # Language code for this installation. All choices can be found here:
+LANGUAGES_EXT=(('en', 'English', 'in English'),
+               ('fi', 'Finnish', 'suomeksi'))
+LANGUAGES=[(l[0], l[1]) for l in LANGUAGES_EXT]
+
 # http://www.i18nguy.com/unicode/language-identifiers.html
 #LANGUAGE_CODE = 'en-us'
 LANGUAGE_CODE = 'fi'
@@ -79,6 +82,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.contrib.messages.context_processors.messages',
     'facebook.context_processors.facebook',
+    'i18n.context_processors.other_languages',
 )
 
 
@@ -87,9 +91,10 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.csrf.middleware.CsrfMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'i18n.middleware.SetDefaultLanguageMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-#    'django.middleware.locale.LocaleMiddleware',
 
 #    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
