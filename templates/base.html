@@ -97,7 +97,7 @@
     <h1><a href="/">Kansan muisti</a></h1>
     <img id="beta_image" src="/static/images/beta.png" alt="Beta" />
 <div id="inputbar">
-    <form action="/search" method="get" id="head-search">
+    <form action="{% url votes.views.search %}" method="get" id="head-search">
       <input id="head-search-text" name="query" type="text" maxlength="150" />
       <button type="submit" id="head-search-button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" value="Go">{% trans "Search" %}
       </button>
