@@ -63,7 +63,8 @@ var SEARCH_DELAY=200;
 
             input.bind("autocompleteselect", function(event, ui) {
                 var val = input.val();
-                input.val(ui.item.value);
+                last_val = ui.item.value;
+                input.val(last_val);
                 /*
                  * Don't trigger the event for keyboard selection. In
                  * that case we trigger it already through the keypress
