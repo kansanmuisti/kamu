@@ -178,35 +178,40 @@ var SEARCH_DELAY=200;
                 }
             });
 
-            $( "<button type='button'>&nbsp;</button>" )
-                .attr( "tabIndex", -1 )
-                .insertAfter( input )
-                .button({
-                    icons: {
-                        primary: "ui-icon-triangle-1-s"
-                    },
-                    text: false
-                })
-                .removeAttr( "title" )
-                .removeClass( "ui-corner-all" )
-                .addClass( "ui-corner-right ui-button-icon" )
-                .click(function() {
+            function button_click() {
+                /* close if already visible */
+                if ( input.autocomplete( "widget" ).is( ":visible" ) ) {
+                    input.autocomplete("option", "minLength", 1);
+                    input.autocomplete( "close" );
+                    return;
+                }
 
-                    /* close if already visible */
-                    if ( input.autocomplete( "widget" ).is( ":visible" ) ) {
-                        input.autocomplete("option", "minLength", 1);
-                        input.autocomplete( "close" );
-                        return;
-                    }
+                input.autocomplete("option", "minLength", 0);
+                /*
+                 * pass empty string as value to search for,
+                 * displaying all results
+                 */
+                input.autocomplete( "search", "" );
+                input.focus();
+            };
 
-                    input.autocomplete("option", "minLength", 0);
-                    /*
-                     * pass empty string as value to search for,
-                     * displaying all results
-                     */
-                    input.autocomplete( "search", "" );
-                    input.focus();
-                });
+            function add_button() {
+                $("<button type='button'>&nbsp;</button>")
+                    .attr("tabIndex", -1)
+                    .insertAfter(input)
+                    .button({
+                        icons: {
+                            primary: "ui-icon-triangle-1-s"
+                        },
+                        text: false,
+                    })
+                    .removeAttr( "title" )
+                    .removeClass( "ui-corner-all" )
+                    .addClass( "ui-corner-right ui-button-icon" )
+                    .click(button_click);
+            }
+
+            add_button();
 	    }
 	});
 })( jQuery );
