@@ -15,6 +15,12 @@ var SEARCH_DELAY=200;
             var search_callback = null;
             var sel_timer = null;
 
+            if (typeof(String.prototype.trim) === "undefined") {
+                String.prototype.trim = function() {
+                    return String(this).replace(/^\s+|\s+$/g, '');
+                };
+            }
+
             var input = $(this.element)
                 .appendTo( container )
                 .autocomplete({
@@ -27,7 +33,7 @@ var SEARCH_DELAY=200;
                             timeout : 1000,
                             data    : {
                                 max_results: 500,
-                                name: request.term,
+                                name: request.term.trim(),
                             },
                             success: function(data) {
                                 last_val = data[0];
@@ -138,6 +144,13 @@ var SEARCH_DELAY=200;
             }
 
             function check_valid(event, force_leave) {
+                var val = input.val().trim();
+
+                if (val == "") {
+                    if (!force_leave)
+                        event.preventDefault();
+                    return;
+                }
                 if (!stricmp(last_val, input.val())) {
                     trigger_selected(force_leave, false);
                 } else {
