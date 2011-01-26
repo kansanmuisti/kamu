@@ -4,6 +4,8 @@ var SEARCH_DELAY=200;
     $.widget( "ui.combobox", {
         options: {
             source_url: null,
+            any_text  : false,
+            button    : true,
         },
         _create: function() {
             var self = this;
@@ -152,7 +154,7 @@ var SEARCH_DELAY=200;
                         event.preventDefault();
                     return;
                 }
-                if (!stricmp(last_val, input.val())) {
+                if (self.options.any_text || !stricmp(last_val, input.val())) {
                     trigger_selected(force_leave, false);
                 } else {
                     setup_async_comp(function() {
@@ -211,7 +213,8 @@ var SEARCH_DELAY=200;
                     .click(button_click);
             }
 
-            add_button();
+            if (self.options.button)
+                add_button();
 	    }
 	});
 })( jQuery );
