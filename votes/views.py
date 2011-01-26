@@ -741,8 +741,10 @@ def search_county(request):
     if not name or max_results <= 0:
         return HttpResponseBadRequest()
     county_list = County.objects.filter(name__istartswith=name).    \
-                    order_by("name")[:max_results]
-    json = simplejson.dumps([x.name for x in county_list])
+                                 order_by('name')[:max_results].    \
+                                 values_list('name', flat=True)
+    county_list = list(county_list)
+    json = simplejson.dumps(county_list)
 
     response = HttpResponse(json, mimetype="text/javascript")
     response['Cache-Control'] = "max-age=1000"
