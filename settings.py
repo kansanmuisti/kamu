@@ -95,7 +95,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-
+    'httpstatus.middleware.HttpStatusErrorsMiddleware',
 #    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
