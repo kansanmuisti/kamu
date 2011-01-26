@@ -98,7 +98,18 @@
     <img id="beta_image" src="/static/images/beta.png" alt="Beta" />
 <div id="inputbar">
     <form action="{% url votes.views.search %}" method="get" id="head-search">
-      <input id="head-search-text" name="query" type="text" maxlength="150" />
+        <input id="head-search-text" name="query" type="text" maxlength="150" />
+            <script>
+                $("[name=query]").
+                    combobox({
+                        source_url: "{% url votes.views.search_autocomplete %}",
+                        any_text  : true,
+                        button    : false,
+                    }).
+                    bind("comboboxselected", function() {
+                        $("#head-search").submit();
+                    });
+            </script>
       <button type="submit" id="head-search-button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" value="Go">{% trans "Search" %}
       </button>
     </form>

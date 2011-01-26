@@ -702,6 +702,23 @@ def list_parties(request):
     return render_to_response('list_parties.html', args,
                               context_instance=RequestContext(request))
 
+def search_autocomplete(request):
+    name = request.GET.get('name', None)
+    try:
+        max_results = int(request.GET.get('max_results', 0))
+    except ValueError:
+        max_results = 0
+    if not name or max_results <= 0:
+        return HttpResponseBadRequest();
+    member_list = Member.objects.filter(name__istartswith=name).    \
+                                 order_by('name')[:max_results].    \
+                                 values_list('name', flat=True)
+    member_list = list(member_list)
+    json = simplejson.dumps(member_list)
+    response = HttpResponse(json, mimetype="text/javascript")
+
+    return response
+
 def search(request):
     try:
         page = int(request.GET.get('page', '1'))
