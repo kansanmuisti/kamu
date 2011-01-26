@@ -7,7 +7,7 @@ var SEARCH_DELAY=200;
         },
         _create: function() {
             var self = this;
-            var container = $( "<div> ")
+            var container = $("<span>")
                 .addClass("combobox_container")
                 .insertBefore(this.element);
             var last_val = null;
