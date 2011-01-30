@@ -23,9 +23,14 @@ Kansan muisti -verkkopalvelun pilottiversiossa voit seurata kansanedustajien puh
 
 Tulevaisuudessa voit äänestää myös itse ja vertailla mielipiteitäsi kansanedustajien ja kansalaisjärjestöjen kanssa vaalikoneiden tapaan. Jatkossa saat lisäksi vaalirahoitustiedot kootusti yhdestä paikasta.
 
-Seuraa palvelun kehitystä [Facebookissa](http://www.facebook.com/pages/Kansan-muisti/106166239434745).
-
-{% endfilter %}{% endifequal %}
+{% endfilter %}
+{% if fb_enabled %}
+{% include "_facebook.html" %}
+<div style="margin-top: 48px;">
+<fb:like-box href="http://www.facebook.com/kansanmuisti" width="480" show_faces="true" stream="false" header="false"></fb:like-box>
+</div>
+{% endif %}
+{% endifequal %}
 
 {% ifequal section 'background' %}{% filter markdown %}
 Mikä Kamu on?
@@ -39,7 +44,8 @@ Kansan muisti ry:n tavoitteena on uutta teknologiaa hyödyntäen tarjota kansala
 
 *Esimerkki 2*. Ympäristöjärjestö on valinnut ja pisteyttänyt luonnonsuojelun kannalta kiinnostavat lakiesitykset. Kalle Kansalainen haluaa luontoihmisenä selvittää kansanedustajat, jotka ovat eniten äänestäneet ympäristöjärjestön arvotusten mukaisesti. Palvelu tuottaa muutaman hiirennäpäytyksen jälkeen Kallelle järjestetyn listan edustajista pisteytyksineen. Jos Kalle haluaa lisätietoa yksittäisestä edustajasta, se onnistuu yhdellä lisänäpäytyksellä.
 
-{% endfilter %}{% endifequal %}
+{% endfilter %}
+{% endifequal %}
 
 {% ifequal section 'feedback' %}
   <h1>{% trans "Leave us feedback" %}</h1>
