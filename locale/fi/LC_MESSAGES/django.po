@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-30 19:22+0200\n"
+"POT-Creation-Date: 2011-01-31 00:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -280,52 +280,52 @@ msgstr "Lisää uusi järjestö"
 msgid "Preview"
 msgstr "Esikatsele"
 
-#: templates/base.html:27 templates/base.html.py:114
+#: templates/base.html:27 templates/base.html.py:113
 msgid "Search"
 msgstr "Hae"
 
-#: templates/base.html:122
+#: templates/base.html:121
 msgid "Logged in"
 msgstr "Kirjautuneena"
 
-#: templates/base.html:123
+#: templates/base.html:122
 msgid "Log out"
 msgstr "Kirjaudu ulos"
 
-#: templates/base.html:125
+#: templates/base.html:124
 #: templates/registration/password_reset_complete.html:12
 msgid "Log in"
 msgstr "Kirjaudu sisään"
 
-#: templates/base.html:151
+#: templates/base.html:150
 msgid "What is Kamu?"
 msgstr "Kansan muisti"
 
-#: templates/base.html:152
+#: templates/base.html:151
 msgid "Plenary Sessions"
 msgstr "Täysistunnot"
 
-#: templates/base.html:153 templates/members.html:3
+#: templates/base.html:152 templates/members.html:3
 msgid "Members"
 msgstr "Kansanedustajat"
 
-#: templates/base.html:154 templates/list_parties.html:3
+#: templates/base.html:153 templates/list_parties.html:3
 msgid "Parties"
 msgstr "Puolueet"
 
-#: templates/base.html:155
+#: templates/base.html:154
 msgid "Orgs"
 msgstr "Järjestöt"
 
-#: templates/base.html:164 votes/views.py:550
-msgid "Period"
+#: templates/base.html:163
+msgid "Select period"
 msgstr "Valitse aikaväli"
 
-#: templates/base.html:171
-msgid "District"
+#: templates/base.html:170
+msgid "Select district"
 msgstr "Valitse vaalipiiri"
 
-#: templates/base.html:176
+#: templates/base.html:175
 msgid "or choose your county"
 msgstr "tai valitse kuntasi"
 
@@ -391,23 +391,23 @@ msgstr ""
 msgid "Main page"
 msgstr "Etusivu"
 
-#: templates/main_page.html:8 votes/views.py:793
+#: templates/main_page.html:8 votes/views.py:788
 msgid "Background"
 msgstr "Taustaa"
 
-#: templates/main_page.html:9 votes/views.py:797
+#: templates/main_page.html:9 votes/views.py:792
 msgid "Feedback"
 msgstr "Palaute"
 
-#: templates/main_page.html:10 votes/views.py:795
+#: templates/main_page.html:10 votes/views.py:790
 msgid "Contact"
 msgstr "Yhteystiedot"
 
-#: templates/main_page.html:45
+#: templates/main_page.html:51
 msgid "Leave us feedback"
 msgstr "Jätä palautetta"
 
-#: templates/main_page.html:46
+#: templates/main_page.html:52
 msgid ""
 "Please report any errors you find, send us your ideas for improvement, "
 "volunteer for work, or just say hi."
@@ -415,19 +415,19 @@ msgstr ""
 "Raportoi meille löytämistäsi virheistä sivustolla, lähetä ideoitasi "
 "jatkokehitystä varten, tarjoa apuasi tai jätä muuta palautetta."
 
-#: templates/main_page.html:51
+#: templates/main_page.html:57
 msgid "Send"
 msgstr "Lähetä"
 
-#: templates/main_page.html:56
+#: templates/main_page.html:62
 msgid "Contact information"
 msgstr "Yhteystiedot"
 
-#: templates/main_page.html:76
+#: templates/main_page.html:82
 msgid "News"
 msgstr "Uutiset"
 
-#: templates/main_page.html:89
+#: templates/main_page.html:95
 msgid "Latest votes"
 msgstr "Uusimmat äänestykset"
 
@@ -785,7 +785,7 @@ msgstr ""
 msgid "Your account is now active and logged in."
 msgstr "Tunnuksesi on nyt käytössä ja kirjautunut Kamuun."
 
-#: templates/registration/login.html:3 templates/registration/login.html:40
+#: templates/registration/login.html:3 templates/registration/login.html:41
 msgid "Login"
 msgstr "Kirjaudu sisään"
 
@@ -793,7 +793,7 @@ msgstr "Kirjaudu sisään"
 msgid "Kamu login"
 msgstr "Sisäänkirjautuminen Kamuun"
 
-#: templates/registration/login.html:19
+#: templates/registration/login.html:20
 msgid ""
 "\n"
 "If you have a Facebook account, you can login or register using the button "
@@ -811,23 +811,23 @@ msgstr ""
 "\n"
 "Voit myös kirjautua sisään Kamu-tunnuksillasi.\n"
 
-#: templates/registration/login.html:30
+#: templates/registration/login.html:31
 msgid "Sorry, that's not a valid username or password"
 msgstr "Antamasi käyttäjätunnus tai salasana ei kelpaa."
 
-#: templates/registration/login.html:34
+#: templates/registration/login.html:35
 msgid "User name:"
 msgstr "Käyttäjätunnus:"
 
-#: templates/registration/login.html:37
+#: templates/registration/login.html:38
 msgid "Password:"
 msgstr "Salasana:"
 
-#: templates/registration/login.html:45
+#: templates/registration/login.html:46
 msgid "Forgot your username or password?"
 msgstr "Unohditko käyttäjätunnuksesi tai salasanasi?"
 
-#: templates/registration/login.html:46
+#: templates/registration/login.html:47
 msgid "Create a new account."
 msgstr "Luo uusi tunnus."
 
@@ -1043,7 +1043,11 @@ msgstr "VB"
 msgid "Election budget"
 msgstr "Vaalibudjetti"
 
-#: votes/views.py:791
+#: votes/views.py:550
+msgid "Period"
+msgstr "Aikaväli"
+
+#: votes/views.py:786
 msgid "Home"
 msgstr "Etusivu"
 

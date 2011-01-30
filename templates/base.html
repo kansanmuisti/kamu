@@ -160,14 +160,14 @@
 <div id="sidebar">
 {% block sidebar %}{% endblock %}
 {% if switch_period %}
-<a href="#" id="period_opener" class="opener action_link">{% trans "Period" %}</a>
+<a href="#" id="period_opener" class="opener action_link">{% trans "Select period" %}</a>
 <div class="filter" id="period_list">
 {% generate_option_list "period" %}
 </div>
 {% endif %}
 
 {% if switch_district %}
-<a href="#" id="district_opener" class="opener action_link">{% trans "District" %}</a>
+<a href="#" id="district_opener" class="opener action_link">{% trans "Select district" %}</a>
 <div class="filter" id="district_list">
 {% generate_option_list "district" %}
 
