@@ -108,12 +108,6 @@ h3 {
 	padding: 0 30px;
 }
 
-#inputbar {
-	padding-top: 30px;
-	min-height: 40px;
-        width: 930px;
-}
-
 #header {
 	margin: 0 auto;
 	width: 930px;
@@ -144,6 +138,18 @@ img#beta_image {
 	margin-top: 55px;
 	margin-left: -172px;
 	float: left;
+}
+
+#inputbar {
+	padding-top: 30px;
+	min-height: 30px;
+	width: 100%;
+}
+
+#langbar {
+	min-height: 20px;
+	width: 100%;
+	margin: 0px auto;
 }
 
 div#navbar {
@@ -185,20 +191,29 @@ div#navbar {
 
 #langsel {
 	float: right;
-	margin-top: 2px;
-	margin-right: 30px;
 	display: inline;
 	list-style: none;
+	font-size: 80%;
 }
 
 .langopt {
-	margin-right: 10px;
+	margin-right: 1px;
+}
+
+#hdr_fb_login {
+	background: url("/static/images/icons/fb-logo-18px.png") no-repeat;
+	float: right;
+	width: 18px;
+	height: 18px;
+	margin-top: 1px;
+	margin-right: 32px;
 }
 
 #logged_user {
 	float: right;
-        margin-top: 2px;
-        margin-right: 30px;
+	font-size: 80%;	
+	margin-top: 3px;
+	margin-right: 32px;
 }
 
 #login_name {
@@ -445,29 +460,29 @@ table.sessions {
 }
 
 .yes_vote {
-	height: 18px;
+	height: 24px;
 	background: url("/static/images/icons/vote_yes.png") center right no-repeat;
 	text-indent: -9999px;
-        width: 2em;
+	width: 2em;
 }
 .no_vote {
-	height: 18px;
+	height: 24px;
 	background: url("/static/images/icons/vote_no.png") center right no-repeat;
 	text-indent: -9999px;
-        width: 2em;
+	width: 2em;
 }
 .empty_vote {
-	height: 18px;
+	height: 24px;
 	background: url("/static/images/icons/vote_empty.png") center right no-repeat;
 	text-indent: -9999px;
-        width: 2em;
+	width: 2em;
 }
 
 .absent_vote {
-	height: 18px;
+	height: 24px;
 	background: url("/static/images/icons/vote_absent.png") center right no-repeat;
 	text-indent: -9999px;
-        width: 2em;
+	width: 2em;
 }
 
 td.session_name {
@@ -551,6 +566,15 @@ div#member_info {
         width: 100%;
         border-bottom: 1px solid #999;
         margin-bottom: 16px;
+}
+
+div#member_basic_info {
+	min-height: 192px;
+	margin-bottom: 16px;
+}
+
+div#member_user_vote {
+	margin-bottom: 16px;
 }
 
 img.member_portrait {
@@ -787,7 +811,7 @@ div#list_orgs {
 
 .fb_login_button {
 	margin-top: 16px;
-	margin-bottom: 16px;
+	margin-bottom: 24px;
 }
 
 /*
@@ -795,7 +819,19 @@ div#list_orgs {
  */
 .fb_like {
 	height: 23px;
-	margin-bottom: 8px;
+	margin-top: 32px;
+	margin-bottom: 16px;
+}
+
+/*
+ * User voting
+ */
+.user_vote_count {
+	font-size: 80%;
+	margin-top: 6px;
+	margin-left: 4px;
+	margin-right: 4px;
+	float: left;
 }
 
 /*

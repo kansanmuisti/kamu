@@ -96,7 +96,7 @@
 <div id="header">
     <h1><a href="/">Kansan muisti</a></h1>
     <img id="beta_image" src="/static/images/beta.png" alt="Beta" />
-<div id="inputbar">
+  <div id="inputbar">
     <form action="{% url votes.views.search %}" method="get" id="head-search">
         <input id="head-search-text" name="query" type="text" maxlength="150" />
             <script>
@@ -113,6 +113,9 @@
       <button type="submit" id="head-search-button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" value="Go">{% trans "Search" %}
       </button>
     </form>
+{% if not user.is_authenticated %}
+    <a id="hdr_fb_login" href="#" onclick="alert('FB login!');"></a>
+{% endif %}
     <p id="logged_user">
 {% if user.is_authenticated %}
       <span id="login_name">{% trans "Logged in" %}: <b>{{ user.username }}</b></span>
@@ -121,7 +124,8 @@
       <a href="/account/login/?next={{ request.path }}">{% trans "Log in" %}</a>
 {% endif %}
     </p>
-
+  </div>
+  <div id="langbar">
     <form id="langsel" method="post"
                         action="{% url django.views.i18n.set_language %}">
         <input type="hidden" name="language">
@@ -138,9 +142,9 @@
         </a>
         {% endfor %}
     </form>
+  </div>
+</div>
 
-</div>
-</div>
 <div id="navbar">
     <ul>
       <li class="navbar_link{% ifequal active_page "info" %} navbar_link_active{% endifequal %}"><a href="/">{% trans "What is Kamu?" %}</a></li>

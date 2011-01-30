@@ -417,10 +417,18 @@ def tag_session(request, plsess, sess):
     path = reverse('votes.views.show_session', kwargs=kwargs)
     return HttpResponseRedirect(path)
 
-def format_stat_col(request, val, class_name):
+def format_stat_col(request, val, class_name, is_percent=True):
     if val:
-        s = "%.0f %%" % (val * 100.0)
-        s2 = "%.02f %%" % (val * 100.0)
+        if is_percent:
+            s = "%.0f %%" % (val * 100.0)
+            s2 = "%.02f %%" % (val * 100.0)
+        else:
+            s = ""
+            while val > 1000:
+                s = " %03d%s" % (val % 1000, s)
+                val = val / 1000
+            s = "%d%s" % (val, s)
+            s2 = s
         col = { 'value': s, 'title': s2 }
     else:
         col = { 'value': '' }
@@ -487,6 +495,8 @@ def list_members(request):
         'title': _('Agreement with session majority'), 'img': 'images/icons/session_agr.png', 'no_tn': True})
     hdr_cols.append({ 'name': _('St'), 'sort_key': 'st_cnt', 'class': 'member_list_stat',
         'title': _('Number of statements'), 'img': 'images/icons/nr_statements.png', 'no_tn': True})
+    hdr_cols.append({ 'name': _('ElBud'), 'sort_key': 'el_bud', 'class': 'member_list_stat',
+        'title': _('Election budget'), 'img': 'images/icons/election_budget.png', 'no_tn': True})
     for col in hdr_cols:
         if 'img' in col:
             col['img_alt'] = col['title']
@@ -515,8 +525,10 @@ def list_members(request):
             col_vals.append(format_stat_col(request, mem.stats.attendance, CLASS_NAME))
             col_vals.append(format_stat_col(request, mem.stats.party_agree, CLASS_NAME))
             col_vals.append(format_stat_col(request, mem.stats.session_agree, CLASS_NAME))
-            col_vals.append({ 'value': str(mem.stats.statement_count), 'class': CLASS_NAME + ' member_list_statements' })
+            col_vals.append({'value': str(mem.stats.statement_count), 'class': CLASS_NAME + ' member_list_statements'})
+            col_vals.append(format_stat_col(request, random.randint(0, 15000), CLASS_NAME, is_percent=False))
         else:
+            col_vals.append(None)
             col_vals.append(None)
             col_vals.append(None)
             col_vals.append(None)
@@ -775,7 +787,7 @@ def about(request, section):
     elif section == 'background':
         section_name = _('Background')
     elif section == 'contact':
-        section_name = _('Contact information')
+        section_name = _('Contact')
     elif section == 'feedback':
 	section_name = _('Feedback')
     else:

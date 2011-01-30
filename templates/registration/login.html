@@ -3,6 +3,7 @@
 {% block title %}{% trans "Login" %}{% endblock %}
 {% block content %}
   <h1>{% trans "Kamu login" %}</h1>
+
 {% if fb_enabled %}
 {% include "_facebook.html" %}
 <script>
@@ -15,6 +16,16 @@
   });
   FB.getLoginStatus();
 </script>
+
+  <p>{% blocktrans %}
+If you have a Facebook account, you can login or register using the button below.
+{% endblocktrans %}</p>
+  <div class="fb_login_button">
+    <fb:login-button></fb:login-button>
+  </div>
+  <p>{% blocktrans %}
+You can also login using your Kamu account.
+{% endblocktrans %}</p>
 {% endif %}
   {% if form.errors %}
     <p class="error">{% trans "Sorry, that's not a valid username or password" %}</p>
@@ -31,14 +42,6 @@
     <input type="hidden" name="next" value="{{ next|escape }}" />
   </form>
   <br />
-{% if fb_enabled %}
-  <p>{% blocktrans %}
-If you have a Facebook account, you can login or register using the button below.
-{% endblocktrans %}</p>
-  <div class="fb_login_button">
-    <fb:login-button></fb:login-button>
-  </div>
-{% endif %}
 
   <p><a class="link" href="{% url auth_password_reset %}">{% trans "Forgot your username or password?" %}</a></p>
   <p><a class="link" href="{% url registration_register %}">{% trans "Create a new account." %}</a></p>

@@ -7,7 +7,7 @@
 <p><a class="action_link{% ifequal section 'main' %} action_link_active{% endifequal %}" href="{% url votes.views.about section='main' %}">{% trans "Main page" %}</a></p>
 <p><a class="action_link{% ifequal section 'background' %} action_link_active{% endifequal %}" href="{% url votes.views.about section='background' %}">{% trans "Background" %}</a></p>
 <p><a class="action_link{% ifequal section 'feedback' %} action_link_active{% endifequal %}" href="/contact/">{% trans "Feedback" %}</a></p>
-<p><a class="action_link{% ifequal section 'contact' %} action_link_active{% endifequal %}" href="{% url votes.views.about section='contact' %}">{% trans "Contact information" %}</a></p>
+<p><a class="action_link{% ifequal section 'contact' %} action_link_active{% endifequal %}" href="{% url votes.views.about section='contact' %}">{% trans "Contact" %}</a></p>
 {% endblock %}
 
 {% block content %}

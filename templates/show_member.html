@@ -29,14 +29,10 @@
 {% block content %}
     <h1>{{ member.get_print_name }}</h1>
 
-{% if fb_enabled %}
-{% include "_facebook.html" %}
-<div class="fb_like"><fb:like show_faces=false></fb:like></div>
-{% endif %}
-
 {% comment %}---------------- BASIC ----------------{% endcomment %}
 {% ifequal section "basic" %}
     <div id="member_info">
+    <div id="member_basic_info">
     <a href="{{ member.info_link }}"><img class="member_portrait" src="/static/{% thumbnail member.photo 128x192 %}" /></a>
         <img class="member_party_logo" src="/static/{% thumbnail member.party.logo 96x96 %}" />
     <table>
@@ -67,8 +63,18 @@
       </ul></td></tr>
 {% endif %}
     </table>
+    </div>{% comment %}member_basic_info{% endcomment %}
+    <div id="member_user_vote">
+    <span style="margin-right: 16px; float: left;" class="user_vote">
+      <a style="float: left;" class="yes_vote"></a><p class="user_vote_count">1234</p>
+      <a style="float: left;" class="no_vote"></a><p class="user_vote_count">1234</p>
+    </span>
+{% if fb_enabled %}
+{% include "_facebook.html" %}
+    <span class="fb_like"><fb:like show_faces=false></fb:like></span>
+{% endif %}
     </div>
-
+    </div>{% comment %}member_info{% endcomment %}
     <div id="stats">
 {% with stats_table as table %}
 {% include "_table.html" %}
