@@ -47,6 +47,9 @@ DISTRICT_KEY = 'district'
 
 COUNTY_KEY = 'county'
 
+THUMBNAIL_WIDTH_LIMITS = (24,80)
+THUMBNAIL_HEIGHT_LIMITS = (24,80)
+
 def find_period(request):
     chosen_period = None
     if PERIOD_KEY in request.GET:
@@ -715,18 +718,34 @@ def list_parties(request):
     return render_to_response('list_parties.html', args,
                               context_instance=RequestContext(request))
 
+def get_req_param_int(request, param):
+    try:
+        val = int(request.GET.get(param, 0))
+    except ValueError:
+        val = 0
+    return val
+
+def val_in_range(val, limits):
+    return val >= limits[0] and val <= limits[1]
+
 def search_autocomplete(request):
     name = request.GET.get('name', None)
-    try:
-        max_results = int(request.GET.get('max_results', 0))
-    except ValueError:
-        max_results = 0
+    max_results = get_req_param_int(request, 'max_results')
     if max_results <= 0:
         return HttpResponseBadRequest();
-    member_list = Member.objects.filter(name__istartswith=name).    \
-                                 order_by('name')[:max_results].    \
-                                 values_list('name', flat=True)
-    member_list = list(member_list)
+    thumbnail_width = get_req_param_int(request, 'thumbnail_width')
+    thumbnail_height = get_req_param_int(request, 'thumbnail_height')
+    # TODO: is this enough to defeat any DoS attempts?
+    if not val_in_range(thumbnail_width, THUMBNAIL_WIDTH_LIMITS) or     \
+            not val_in_range(thumbnail_height, THUMBNAIL_HEIGHT_LIMITS):
+       return HttpResponseBadRequest();
+    member_query = Member.objects.filter(name__istartswith=name).       \
+                                 order_by('name')[:max_results]
+    member_list=[]
+    for x in member_query:
+        tn = DjangoThumbnail(x.photo, (thumbnail_width, thumbnail_height))
+        member_list.append((x.name, unicode(tn)))
+
     json = simplejson.dumps(member_list)
     response = HttpResponse(json, mimetype="text/javascript")
 

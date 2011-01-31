@@ -102,9 +102,11 @@
             <script>
                 $("[name=query]").
                     combobox({
-                        source_url: "{% url votes.views.search_autocomplete %}",
-                        any_text  : true,
-                        button    : false,
+                        source_url  : "{% url votes.views.search_autocomplete %}",
+                        any_text    : true,
+                        button      : false,
+                        thumbnail   : true,
+                        max_results : 50,
                     }).
                     bind("comboboxselected", function() {
                         $("#head-search").submit();
