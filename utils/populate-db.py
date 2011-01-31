@@ -21,11 +21,17 @@ import minutes_parser
 
 from django.core.management import setup_environ
 
-my_path = os.path.dirname(__file__)
-app_base = my_path + '/../'
+my_path = os.path.abspath(os.path.dirname(__file__))
+app_path = os.path.normpath(my_path + '/..')
+app_base = app_path + '/'
 
-sys.path.append(my_path + '/../..')
-sys.path.append(my_path + '/..')
+# We need a path like '<app_path>/utils:<app_path>:<app_path>/..'
+# The first one is inserted by python itself. The order is important to
+# guarantee that we'll import the proper app specific module in case there
+# is also a generic (non-app-specific) module with the same name later in
+# the path.
+sys.path.insert(1, app_path)
+sys.path.insert(2, os.path.normpath(app_path + '/..'))
 
 from kamu import settings
 setup_environ(settings)
