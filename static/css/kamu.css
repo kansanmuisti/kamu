@@ -845,6 +845,7 @@ div#list_orgs {
 .ui-autocomplete {
 	max-height: 200px;
 	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 .combobox_container {
