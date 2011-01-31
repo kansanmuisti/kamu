@@ -250,7 +250,7 @@ var THUMBNAIL_BLOCK_CLASS       = "combobox_thumbnail_block";
                 }
             }
 
-            input.bind("keypress", function(e) {
+            input.bind("keydown", function(e) {
                 var keyCode = $.ui.keyCode;
                 switch (e.keyCode) {
                 case keyCode.ENTER:
