@@ -1,5 +1,6 @@
 Dependencies
 ============
+- python-django (>= 1.2.3)
 - python-lxml
 - python-django-djapian
 - python-mysqldb
