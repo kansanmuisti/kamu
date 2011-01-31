@@ -2,8 +2,9 @@ from django import template
 from django.utils.encoding import smart_unicode
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
+from django.core.urlresolvers import reverse
 
-COUNTY_SEARCH_URL="/search/county/"
+COUNTY_SEARCH_VIEW="votes.views.search_county"
 
 def get_query_string(p, new_params=None, remove=None):
     """
@@ -124,9 +125,9 @@ def generate_option_list(context, option):
         (begin, end) = find_period(context['request'])
         chosen_district = find_district(context['request'], begin, end)
         list_type = 'combobox'
-        source_url = COUNTY_SEARCH_URL
+        source_url = reverse(COUNTY_SEARCH_VIEW)
 
-    return {'options': opt_list, 'type': list_type, 'name': option, \
+    return {'options': opt_list, 'type': list_type, 'name': option,
             'source_url': source_url}
 
 @register.filter("truncate_chars")
