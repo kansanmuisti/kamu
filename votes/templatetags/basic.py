@@ -122,8 +122,6 @@ def generate_option_list(context, option):
             opt_list.append(opt)
         list_type = 'link'
     elif option == 'county':
-        (begin, end) = find_period(context['request'])
-        chosen_district = find_district(context['request'], begin, end)
         list_type = 'combobox'
         source_url = reverse(COUNTY_SEARCH_VIEW)
 
