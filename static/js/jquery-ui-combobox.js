@@ -41,7 +41,7 @@ var REMOTE_LOOKUP_MAX_RESULTS   = 500;
 
             function autocomplete_source(request, response) {
                 search_active = true;
-                $.ajax({
+                self.xhr = $.ajax({
                     cache   : true,
                     url     : self.options.source_url,
                     dataType: "json",
@@ -51,10 +51,15 @@ var REMOTE_LOOKUP_MAX_RESULTS   = 500;
                     success : function(data) {
                         ajax_result(data, response);
                     },
+                    error   : function(xhr) {
+                        if (xhr == self.xhr)
+                            ajax_result([], response);
+                    },
                     complete: function() {
                         search_active = false;
                         if (search_callback)
                             search_callback();
+                        self.xhr = null;
                     },
                 });
             }
