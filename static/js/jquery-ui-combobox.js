@@ -1,5 +1,5 @@
 var SEARCH_DELAY                = 200;
-var REMOTE_LOOKUP_TIMEOUT       = 1000;
+var REMOTE_LOOKUP_TIMEOUT       = 5000;
 var REMOTE_LOOKUP_MAX_RESULTS   = 500;
 
 (function( $ ) {
