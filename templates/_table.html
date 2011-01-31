@@ -8,9 +8,9 @@
 {% if col.img %}
 <th class="{{ col.class }}">
 {% if col.no_tn %}
-  <img title="{{ col.title }}" src='/static/{{ col.img }}' />
+  <img title="{{ col.title }}" src='{{ MEDIA_URL }}{{ col.img }}' />
 {% else %}
-  <img title="{{ col.title }}" src='/static/{% thumbnail col.img 32x32 %}' />
+  <img title="{{ col.title }}" src='{% thumbnail col.img 32x32 %}' />
 {% endif %}
 {% else %}
 <th class="{{ col.class }}" title="{{ col.title }}">
@@ -53,7 +53,7 @@
       <a href='{{ val.link }}'>
 {% endif %}
 {% if val.img %}
-      <img src='/static/{% thumbnail val.img val.img_dim %}' />
+      <img src='{% thumbnail val.img val.img_dim %}' />
 {% else %}
       {{ val.value }}
 {% endif %}

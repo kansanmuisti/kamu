@@ -10,14 +10,14 @@
   <title>{% block title %}{% endblock %} - KAMU</title>
   <meta property="og:site_name" content="Kansan muisti" />
   <meta property="fb:app_id" content="107387482616243" />
-  <link type="text/css" href="/static/css/jquery-ui-1.8.1.custom.css" rel="stylesheet" />
-  <script type="text/javascript" src="/static/js/jquery-1.4.2.min.js"></script>
-  <script type="text/javascript" src="/static/js/jquery-ui-1.8.1.custom.js"></script>
-  <script type="text/javascript" src="/static/js/jquery-ui-combobox.js"></script>
-  <script type="text/javascript" src="/static/js/jquery.example.min.js"></script>
-  <script type="text/javascript" src="/static/js/jquery.tooltip.js"></script>
-  <link type="text/css" href="/static/css/kamu.css" rel="stylesheet" />
-  <link rel="shortcut icon" href="/static/images/icons/favicon.ico" />
+  <link type="text/css" href="{{ MEDIA_URL }}css/jquery-ui-1.8.1.custom.css" rel="stylesheet" />
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.4.2.min.js"></script>
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-ui-1.8.1.custom.js"></script>
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-ui-combobox.js"></script>
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.example.min.js"></script>
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.tooltip.js"></script>
+  <link type="text/css" href="{{ MEDIA_URL }}css/kamu.css" rel="stylesheet" />
+  <link rel="shortcut icon" href="{{ MEDIA_URL }}images/icons/favicon.ico" />
   <script type="text/javascript">
     $(function() {
       $("#head-search-button").button({
@@ -63,7 +63,7 @@
 <body>
 {% if messages %}
 <div id="messages">
-  <script type="text/javascript" src="/static/js/jquery.jnotify.js"></script>
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.jnotify.js"></script>
   <script>
     $(document).ready(function() {
       $('#message_bars').jnotifyInitialize({
@@ -95,7 +95,7 @@
 
 <div id="header">
     <h1><a href="/">Kansan muisti</a></h1>
-    <img id="beta_image" src="/static/images/beta.png" alt="Beta" />
+    <img id="beta_image" src="{{ MEDIA_URL }}images/beta.png" alt="Beta" />
   <div id="inputbar">
     <form action="{% url votes.views.search %}" method="get" id="head-search">
         <input id="head-search-text" name="query" type="text" maxlength="150" />

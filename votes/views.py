@@ -1,5 +1,6 @@
 from django.http import Http404, HttpResponse
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.conf import settings
 from django.shortcuts import render_to_response, get_list_or_404, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
@@ -109,7 +110,7 @@ def generate_row_html(row):
             html += '<a href="%s">' % (val['link'])
         if 'img' in val:
             tn = DjangoThumbnail(val['img'], val['img_dim'].split('x'))
-            html += '<img src="/static/%s" alt="%s" />' % (unicode(tn), val['img_alt'])
+            html += '<img src="%s" alt="%s" />' % (unicode(tn), val['img_alt'])
         elif 'value' in val:
             html += val['value']
         if 'link' in val:
@@ -139,7 +140,7 @@ def generate_header_html(hdr):
             html += '<a href="%s">' % (col['link'])
         if 'img' in col:
             if 'no_tn' in col and col['no_tn']:
-                img_src = col['img']
+                img_src = settings.MEDIA_URL + col['img']
             else:
                 img_src = DjangoThumbnail(col['img'], col['img_dim'].split('x'))
                 img_src = unicode(img_src)
@@ -147,7 +148,7 @@ def generate_header_html(hdr):
                 title = 'title="%s" ' % (col['title'])
             else:
                 title = ''
-            html += '<img src="/static/%s" %s/>' % (img_src, title)
+            html += '<img src="%s" %s/>' % (img_src, title)
         else:
             html += col['name']
         if 'link' in col:

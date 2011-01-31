@@ -8,7 +8,7 @@
   <h1>{{ org.name }}</h1>
   <div id="show_org_info">
     <div>
-      <img src='/static/{% thumbnail org.logo 128x128 %}'>
+      <img src='{% thumbnail org.logo 128x128 %}'>
       {{ org.description|safe|linebreaks }}
     </div>
   </div>

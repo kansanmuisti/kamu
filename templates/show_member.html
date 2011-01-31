@@ -4,7 +4,7 @@
 {% block head %}
 <meta property="og:title" content="{{ member.get_print_name }}" />
 <meta property="og:type" content="politician" />
-<meta property="og:image" content="http://{{ fb_host }}/static/{% thumbnail member.photo 64x96 %}" />
+<meta property="og:image" content="http://{{ fb_host }}{% thumbnail member.photo 64x96 %}" />
 <meta property="og:url" content="http://{{ fb_host }}{{ member.get_absolute_url }}" />
 <script type="text/javascript">
   $(document).ready(function() {
@@ -33,8 +33,8 @@
 {% ifequal section "basic" %}
     <div id="member_info">
     <div id="member_basic_info">
-    <a href="{{ member.info_link }}"><img class="member_portrait" src="/static/{% thumbnail member.photo 128x192 %}" /></a>
-        <img class="member_party_logo" src="/static/{% thumbnail member.party.logo 96x96 %}" />
+    <a href="{{ member.info_link }}"><img class="member_portrait" src="{% thumbnail member.photo 128x192 %}" /></a>
+        <img class="member_party_logo" src="{% thumbnail member.party.logo 96x96 %}" />
     <table>
     <tr><td class='member_info_field_name'>{% trans "Surname" %}</td><td>{{ member.surname }}</td></tr>
     <tr><td class='member_info_field_name'>{% trans "Given names" %}</td><td>{{ member.given_names }}</td></tr>
@@ -121,7 +121,7 @@
 {% for comment in comment_list %}
 <div class="comment">
   <div class="user_portrait">
-    <img src="/static/images/icons/anon.png" />
+    <img src="{{ MEDIA_URL }}images/icons/anon.png" />
   </div>
   <div class="comment_body">{{ comment.comment|linebreaks }}</div>
   <div class="comment_meta">

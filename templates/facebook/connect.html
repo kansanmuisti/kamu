@@ -12,7 +12,7 @@
 {% include "_facebook.html" %}
 <fb:registration fields="name,first_name,last_name,birthday,gender,location,email" redirect-uri="http://{{ fb_host }}{% url facebook_register %}"></fb:registration>
 {% comment %}
-<img src="/static/{{ portrait }}" />
+<img src="{{ MEDIA_URL }}{{ portrait }}" />
 {{ info.first_name }} {{ info.last_name }} {% endcomment %}
 </div>
 {% else %}
