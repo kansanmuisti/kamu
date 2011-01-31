@@ -721,7 +721,7 @@ def search_autocomplete(request):
         max_results = int(request.GET.get('max_results', 0))
     except ValueError:
         max_results = 0
-    if not name or max_results <= 0:
+    if max_results <= 0:
         return HttpResponseBadRequest();
     member_list = Member.objects.filter(name__istartswith=name).    \
                                  order_by('name')[:max_results].    \
@@ -768,7 +768,7 @@ def search_county(request):
         max_results = int(request.GET.get('max_results', 0))
     except ValueError:
         max_results = 0
-    if not name or max_results <= 0:
+    if max_results <= 0:
         return HttpResponseBadRequest()
     county_list = County.objects.filter(name__istartswith=name).    \
                                  order_by('name')[:max_results].    \

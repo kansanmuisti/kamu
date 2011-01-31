@@ -117,7 +117,7 @@ var SEARCH_DELAY=200;
             }
 
             function trigger_selected(force_leave, async) {
-                var val = input.val();
+                var val = input.val().trim();
 
                 if (stricmp(last_val, val) && search_active) {
                     setup_async_comp(function() {
@@ -154,7 +154,7 @@ var SEARCH_DELAY=200;
                         event.preventDefault();
                     return;
                 }
-                if (self.options.any_text || !stricmp(last_val, input.val())) {
+                if (self.options.any_text || !stricmp(last_val, val)) {
                     trigger_selected(force_leave, false);
                 } else {
                     setup_async_comp(function() {
