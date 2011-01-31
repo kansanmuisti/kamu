@@ -864,6 +864,23 @@ div#list_orgs {
 	left : -1px;
 }
 
+.combobox_list_item {
+	clear: left;
+	min-height: 40px;
+	width: 200px;
+}
+
+.combobox_thumbnail_block {
+	float: left;
+	width: 35px;
+	height: 40px;
+}
+
+.combobox_text_block {
+	margin-left: 35px;
+	width: 100px;
+}
+
 /*
  * jNotify
  */

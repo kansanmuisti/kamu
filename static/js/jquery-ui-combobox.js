@@ -1,6 +1,10 @@
 var SEARCH_DELAY                = 200;
 var REMOTE_LOOKUP_TIMEOUT       = 5000;
 var REMOTE_LOOKUP_MAX_RESULTS   = 500;
+var THUMBNAIL_DEFAULT_WIDTH     = 40;
+var THUMBNAIL_DEFAULT_HEIGHT    = 40;
+
+var THUMBNAIL_BLOCK_CLASS       = "combobox_thumbnail_block";
 
 (function( $ ) {
     $.widget( "ui.combobox", {
@@ -9,6 +13,7 @@ var REMOTE_LOOKUP_MAX_RESULTS   = 500;
             max_results : REMOTE_LOOKUP_MAX_RESULTS,
             any_text    : false,
             button      : true,
+            thumbnail   : false,
         },
         _create: function() {
             var self = this;
@@ -19,6 +24,9 @@ var REMOTE_LOOKUP_MAX_RESULTS   = 500;
             var search_active = false;
             var search_callback = null;
             var sel_timer = null;
+            var thumbnail_width;
+            var thumbnail_height;
+            var input;
 
             if (typeof(String.prototype.trim) === "undefined") {
                 String.prototype.trim = function() {
@@ -26,16 +34,40 @@ var REMOTE_LOOKUP_MAX_RESULTS   = 500;
                 };
             }
 
+            if (self.options.thumbnail) {
+                /* dummy element to get access to a class's css properties */
+                var dummy = $('<div>').addClass(THUMBNAIL_BLOCK_CLASS);
+                /*
+                 * parseInt also strips the trailing px and convert auto
+                 * to Nan.
+                 */
+                thumbnail_width = parseInt(dummy.css('width'));
+                thumbnail_height = parseInt(dummy.css('height'));
+                if (isNaN(thumbnail_width) || isNaN(thumbnail_height)) {
+                    thumbnail_width = THUMBNAIL_DEFAULT_WIDTH;
+                    thumbnail_height = THUMBNAIL_DEFAULT_HEIGHT;
+                }
+            }
+
             function ajax_data(search_term) {
                 data = {
                         max_results : self.options.max_results,
                         name        : search_term,
                 };
+                if (self.options.thumbnail) {
+                    $.extend(data, {
+                        thumbnail_width     : thumbnail_width,
+                        thumbnail_height    : thumbnail_height,
+                    });
+                }
                 return data;
             }
 
             function ajax_result(data, autocomplete_callback) {
-                last_val = data[0];
+                if (self.options.thumbnail && data[0])
+                    last_val = data[0][0];
+                else
+                    last_val = data[0];
                 autocomplete_callback(data);
             }
 
@@ -64,7 +96,7 @@ var REMOTE_LOOKUP_MAX_RESULTS   = 500;
                 });
             }
 
-            var input = $(this.element)
+            input = $(this.element)
                 .appendTo( container )
                 .autocomplete({
                     minLength   : 1,
@@ -81,6 +113,41 @@ var REMOTE_LOOKUP_MAX_RESULTS   = 500;
                     }
                 })
                 .addClass("ui-widget ui-widget-content ui-corner-left");
+
+            function autocomplete_normalize(items) {
+                var norm_items = [];
+                $.map(items, function(item) {
+                    norm_items.push({
+                        label       : item[0],
+                        value       : item[0],
+                        thumbnail   : item[1],
+                    });
+                });
+                return norm_items;
+            }
+
+            function autocomplete_renderitem(ul, item) {
+                var list_item =
+                    "<a class='combobox_list_item'>"                    +
+                        "<span class='" + THUMBNAIL_BLOCK_CLASS + "'>"  +
+                            "<img src='" + item.thumbnail + "'/>"       +
+                        "</span>"                                       +
+                        "<p class='combobox_text_block'>"               +
+                            item.value                                  +
+                        "</p>"                                          +
+                    "</a>";
+
+                var elem = $("<li>").data("item.autocomplete", item)
+                        .append(list_item)
+                        .appendTo(ul);
+                return elem;
+            };
+
+            if (self.options.thumbnail) {
+                input.data("autocomplete")._normalize = autocomplete_normalize;
+                input.data("autocomplete")._renderItem =
+                                            autocomplete_renderitem;
+            }
 
             input.bind("autocompleteselect", function(event, ui) {
                 var val = input.val();
