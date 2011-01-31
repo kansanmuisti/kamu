@@ -1,11 +1,14 @@
-var SEARCH_DELAY=200;
+var SEARCH_DELAY                = 200;
+var REMOTE_LOOKUP_TIMEOUT       = 1000;
+var REMOTE_LOOKUP_MAX_RESULTS   = 500;
 
 (function( $ ) {
     $.widget( "ui.combobox", {
         options: {
-            source_url: null,
-            any_text  : false,
-            button    : true,
+            source_url  : null,
+            max_results : REMOTE_LOOKUP_MAX_RESULTS,
+            any_text    : false,
+            button      : true,
         },
         _create: function() {
             var self = this;
@@ -23,40 +26,51 @@ var SEARCH_DELAY=200;
                 };
             }
 
+            function ajax_data(search_term) {
+                data = {
+                        max_results : self.options.max_results,
+                        name        : search_term,
+                };
+                return data;
+            }
+
+            function ajax_result(data, autocomplete_callback) {
+                last_val = data[0];
+                autocomplete_callback(data);
+            }
+
+            function autocomplete_source(request, response) {
+                search_active = true;
+                $.ajax({
+                    cache   : true,
+                    url     : self.options.source_url,
+                    dataType: "json",
+                    timeout : REMOTE_LOOKUP_TIMEOUT,
+                    data    : ajax_data(request.term.trim()),
+
+                    success : function(data) {
+                        ajax_result(data, response);
+                    },
+                    complete: function() {
+                        search_active = false;
+                        if (search_callback)
+                            search_callback();
+                    },
+                });
+            }
+
             var input = $(this.element)
                 .appendTo( container )
                 .autocomplete({
-                    source: function( request, response ) {
-                        search_active = true;
-                        $.ajax({
-                            cache   : true,
-                            url     : self.options.source_url,
-                            dataType: "json",
-                            timeout : 1000,
-                            data    : {
-                                max_results: 500,
-                                name: request.term.trim(),
-                            },
-                            success: function(data) {
-                                last_val = data[0];
-                                response(data);
-                            },
-                            complete: function() {
-                                search_active = false;
-                                if (search_callback)
-                                    search_callback();
-                            },
-                        });
-                    },
+                    minLength   : 1,
+                    delay       : SEARCH_DELAY,
 
-                    minLength: 1,
-                    delay: SEARCH_DELAY,
-
-                    open: function() {
+                    source      : autocomplete_source,
+                    open        : function() {
                         $(this).removeClass("ui-corner-all").
                                         addClass("ui-corner-top");
                     },
-                    close: function() {
+                    close       : function() {
                         $(this).removeClass("ui-corner-top").
                                         addClass("ui-corner-all");
                     }
