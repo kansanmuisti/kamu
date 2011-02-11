@@ -2,7 +2,6 @@ from django.db import models
 from django.utils import translation
 from django.conf import settings
 from cms.markupfield.fields import MarkupField
-from django.utils.safestring import mark_safe
 from django.utils.translation import get_language
 
 class Category(models.Model):
@@ -17,8 +16,9 @@ class ItemManager(models.Manager):
 
         return self.get(category=category)
 
-    def retrieve_content(self, category, lang):
-        return mark_safe(self.retrieve(category=category).get_latest(lang))
+    def retrieve_content(self, category, lang=None):
+        latest = self.retrieve(category=category).get_latest(lang)
+        return latest
 
 class Item(models.Model):
     category = models.ForeignKey(Category)
