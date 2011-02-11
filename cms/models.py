@@ -25,8 +25,9 @@ class Item(models.Model):
 
     objects = ItemManager()
 
-    def get_latest(self, lang=get_language()):
-        return self.content_set.get(language=lang).revision_set.all()[0]
+    def get_latest(self, lang=None):
+        if not lang:
+            lang = get_language()
 
     @property
     def content(self):
@@ -41,7 +42,9 @@ class Item(models.Model):
         return "Content in '%s': %s" % (content.language, str(content))
 
 class NewsitemManager(models.Manager):
-    def newest(self, amount=None, lang=get_language()):
+    def newest(self, amount=None, lang=None):
+        if not lang:
+            lang=get_language()
         newsitems = self.filter(content__language=lang)
 
         if amount == None:
