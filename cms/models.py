@@ -3,6 +3,7 @@ from django.utils import translation
 from django.conf import settings
 from cms.markupfield.fields import MarkupField
 from django.utils.translation import get_language
+from django.core.exceptions import ObjectDoesNotExist
 
 class Category(models.Model):
     name = models.CharField(max_length=80)
@@ -28,6 +29,12 @@ class Item(models.Model):
     def get_latest(self, lang=None):
         if not lang:
             lang = get_language()
+        # Case of no news
+        try:
+            latest = self.content_set.get(language=lang).revision_set.all()[0]
+        except ObjectDoesNotExist:
+            return None
+        return latest
 
     @property
     def content(self):
@@ -37,7 +44,10 @@ class Item(models.Model):
         try:
             content = self.content_set.get(language=get_language())
         except Content.DoesNotExist:
-            content = self.content_set.all()[0]
+            content = self.content_set.all()
+            if not content:
+                return "Content not set"
+            content = content[0]
 
         return "Content in '%s': %s" % (content.language, str(content))
 
