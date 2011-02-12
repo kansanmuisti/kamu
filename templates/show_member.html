@@ -14,6 +14,30 @@
       track: true,
       showURL: false,
     });
+    var vote_func = function() {
+      var up_count = $('.user_vote_up .user_vote_count');
+      var down_count = $('.user_vote_down .user_vote_count');
+
+      var success_func = function(resp) {
+	up_count.text(resp.up);
+	down_count.text(resp.down);
+      };
+      if ($(this).parent().hasClass('user_vote_up')) {
+	data = "vote=up";
+      } else {
+	data = "vote=down";
+      }
+      $.ajax({
+	type: "POST",
+	data: data,
+	dataType: "json",
+	url: "{% url votes.views.set_member_user_vote member=member.url_name %}",
+	success: success_func,
+      });
+
+      return false;
+    };
+    $('.user_vote_button').click(vote_func);
   });
 </script>
 {% endblock %}
@@ -66,8 +90,8 @@
     </div>{% comment %}member_basic_info{% endcomment %}
     <div id="member_user_vote">
     <span style="margin-right: 16px; float: left;" class="user_vote">
-      <a style="float: left;" class="yes_vote"></a><p class="user_vote_count">1234</p>
-      <a style="float: left;" class="no_vote"></a><p class="user_vote_count">1234</p>
+      <span class="user_vote_up"><a href="#" style="float: left;" class="yes_vote user_vote_button"></a><p class="user_vote_count">{{ user_votes.up }}</p></span>
+      <span class="user_vote_down"><a href="#" style="float: left;" class="no_vote user_vote_button"></a><p class="user_vote_count">{{ user_votes.down }}</p></span>
     </span>
 {% if fb_enabled %}
 {% include "_facebook.html" %}

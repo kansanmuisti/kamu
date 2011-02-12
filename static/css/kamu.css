@@ -575,6 +575,7 @@ div#member_basic_info {
 
 div#member_user_vote {
 	margin-bottom: 16px;
+	min-height: 25px;
 }
 
 img.member_portrait {
@@ -829,6 +830,7 @@ div#list_orgs {
 	margin-top: 6px;
 	margin-left: 4px;
 	margin-right: 4px;
+	min-width: 24px;
 	float: left;
 }
 

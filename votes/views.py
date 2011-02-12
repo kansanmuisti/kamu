@@ -11,6 +11,7 @@ from django.utils.safestring import mark_safe
 from django.utils import simplejson
 from django.utils.http import urlencode, http_date
 from django.contrib.auth.decorators import login_required
+from httpstatus.decorators import postonly
 from tagging.models import Tag
 from tagging.utils import parse_tag_input
 from kamu.votes.models import *
@@ -18,6 +19,8 @@ from kamu.orgs.models import Organization, SessionScore
 from kamu.votes.index import complete_indexer
 from sorl.thumbnail.main import DjangoThumbnail
 from kamu.contact_form.views import contact_form
+from httpstatus import Http400
+from user_voting.models import Vote as UserVote
 
 import time
 import djapian
@@ -167,6 +170,26 @@ def generate_modified_query(request, mod_key, mod_val, remove=[]):
             del params[k]
     params[mod_key] = mod_val
     return request.path + '?%s' % urlencode(params)
+
+def set_user_vote(request, obj):
+    if not 'vote' in request.POST:
+        raise Http400
+    vote = request.POST['vote'].lower()
+    vote_names = ('up', 'down', 'clear')
+    vote_values = (1, -1, None)
+    if vote not in vote_names:
+        raise Http400
+
+    UserVote.objects.record_vote(obj, request.user,
+                                 vote_values[vote_names.index(vote)])
+
+    counts = {}
+    counts['up'] = UserVote.objects.get_count(obj, 1)
+    counts['down'] = UserVote.objects.get_count(obj, -1)
+    json = simplejson.dumps(counts)
+
+    return HttpResponse(json, mimetype='application/json')
+
 
 def list_plsessions(request):
     (date_begin, date_end) = find_period(request)
@@ -644,7 +667,10 @@ def show_member_basic(request, member):
     else:
         table = None
 
-    return {'stats_table': table }
+    user_votes = {'up': UserVote.objects.get_count(member, 1),
+                  'down': UserVote.objects.get_count(member, -1)}
+
+    return {'stats_table': table, 'user_votes': user_votes }
 
 def show_member_statements(request, member):
     try:
@@ -682,6 +708,13 @@ def show_member(request, member, section=None):
     args['active_page'] = 'members'
 
     return render_to_response('show_member.html', args, context_instance=RequestContext(request))
+
+@postonly
+@login_required
+def set_member_user_vote(request, member):
+    member = get_object_or_404(Member, url_name=member)
+
+    return set_user_vote(request, member)
 
 def show_plsession(request, plsess, section=None, dsc=None):
     psess = get_object_or_404(PlenarySession, url_name=plsess)

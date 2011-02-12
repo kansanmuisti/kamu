@@ -129,6 +129,7 @@ INSTALLED_APPS = (
     'facebook',
     'registration',
     'cms',
+    'user_voting',
 )
 
 AUTH_PROFILE_MODULE="kamu.users.KamuProfile"
