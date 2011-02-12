@@ -4,6 +4,7 @@ from django.conf import settings
 from cms.markupfield.fields import MarkupField
 from django.utils.translation import get_language
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.models import User
 
 class Category(models.Model):
     name = models.CharField(max_length=80)
@@ -87,6 +88,7 @@ class Revision(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     content = models.ForeignKey(Content)
     subject = models.CharField(max_length=200, null=True, blank=True)
+    user = models.ForeignKey(User, null=True, blank=True)
     data = MarkupField()
 
     class Meta:
