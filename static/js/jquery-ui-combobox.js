@@ -28,9 +28,15 @@ var THUMBNAIL_BLOCK_CLASS       = "combobox_thumbnail_block";
             var thumbnail_height;
             var input;
 
-            if (typeof(String.prototype.trim) === "undefined") {
-                String.prototype.trim = function() {
-                    return String(this).replace(/^\s+|\s+$/g, '');
+            if (typeof(String.prototype.ltrim) === "undefined") {
+                String.prototype.ltrim = function() {
+                    var s = String(this);
+                    var len = s.length;
+                    var l = 0;
+
+                    while(l < len && s[l] == ' ')
+                        l++;
+                    return s.substring(l, len);
                 };
             }
 
@@ -78,7 +84,7 @@ var THUMBNAIL_BLOCK_CLASS       = "combobox_thumbnail_block";
                     url     : self.options.source_url,
                     dataType: "json",
                     timeout : REMOTE_LOOKUP_TIMEOUT,
-                    data    : ajax_data(request.term.trim()),
+                    data    : ajax_data(request.term.ltrim()),
 
                     success : function(data) {
                         ajax_result(data, response);
@@ -203,7 +209,7 @@ var THUMBNAIL_BLOCK_CLASS       = "combobox_thumbnail_block";
             }
 
             function trigger_selected(force_leave, async) {
-                var val = input.val().trim();
+                var val = input.val().ltrim();
 
                 if (stricmp(last_val, val) && search_active) {
                     setup_async_comp(function() {
@@ -233,7 +239,7 @@ var THUMBNAIL_BLOCK_CLASS       = "combobox_thumbnail_block";
             }
 
             function check_valid(event, force_leave) {
-                var val = input.val().trim();
+                var val = input.val().ltrim();
 
                 if (val == "") {
                     if (!force_leave)
