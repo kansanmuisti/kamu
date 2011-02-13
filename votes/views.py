@@ -772,9 +772,22 @@ def search_autocomplete(request):
     if not val_in_range(thumbnail_width, THUMBNAIL_WIDTH_LIMITS) or     \
             not val_in_range(thumbnail_height, THUMBNAIL_HEIGHT_LIMITS):
        return HttpResponseBadRequest();
-    member_query = Member.objects.filter(name__istartswith=name).       \
-                                 order_by('name')[:max_results]
-    member_list=[]
+
+    member_query = Q()
+    trailing_space = name[-1] == ' '
+    words = name.split()
+    full_word_cnt = len(words) - 1
+    if trailing_space:
+        full_word_cnt += 1
+
+    for w in words[:full_word_cnt]:
+        member_query &= Q(name__iregex=r'(^| )' + w + r'( |$)')
+    if not trailing_space:
+        member_query &= Q(name__iregex=r'(^| )' + words[-1])
+
+    member_query = Member.objects.filter(member_query).         \
+                            order_by("name")[:max_results]
+    member_list = []
     for x in member_query:
         tn = DjangoThumbnail(x.photo, (thumbnail_width, thumbnail_height))
         member_list.append((x.name, unicode(tn)))
