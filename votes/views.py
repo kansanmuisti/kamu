@@ -762,7 +762,7 @@ def val_in_range(val, limits):
     return val >= limits[0] and val <= limits[1]
 
 def search_autocomplete(request):
-    name = request.GET.get('name', None)
+    name = request.GET.get('name', '')
     max_results = get_req_param_int(request, 'max_results')
     if max_results <= 0:
         return HttpResponseBadRequest();
@@ -773,20 +773,25 @@ def search_autocomplete(request):
             not val_in_range(thumbnail_height, THUMBNAIL_HEIGHT_LIMITS):
        return HttpResponseBadRequest();
 
-    member_query = Q()
-    trailing_space = name[-1] == ' '
     words = name.split()
-    full_word_cnt = len(words) - 1
-    if trailing_space:
-        full_word_cnt += 1
+    full_word_cnt = len(words)
+    if full_word_cnt > 10:
+        return HttpResponseBadRequest();
+    if full_word_cnt == 0:
+        member_query = Member.objects.all()[:max_results]
+    else:
+        member_query = Q()
+        trailing_space = name[-1] == ' '
+        if not trailing_space:
+            full_word_cnt -= 1
 
-    for w in words[:full_word_cnt]:
-        member_query &= Q(name__iregex=r'(^| )' + w + r'( |$)')
-    if not trailing_space:
-        member_query &= Q(name__iregex=r'(^| )' + words[-1])
+        for w in words[:full_word_cnt]:
+            member_query &= Q(name__iregex=r'(^| )' + w + r'( |$)')
+        if not trailing_space:
+            member_query &= Q(name__iregex=r'(^| )' + words[-1])
 
-    member_query = Member.objects.filter(member_query).         \
-                            order_by("name")[:max_results]
+        member_query = Member.objects.filter(member_query).         \
+                                order_by("name")[:max_results]
     member_list = []
     for x in member_query:
         tn = DjangoThumbnail(x.photo, (thumbnail_width, thumbnail_height))
