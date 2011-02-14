@@ -132,6 +132,39 @@ var THUMBNAIL_BLOCK_CLASS       = "combobox_thumbnail_block";
                 return norm_items;
             }
 
+            function emphasize_matching_parts(query, text) {
+                var trailing_space = text[text.length - 1] == " ";
+                var words = query.ltrim().split(/ +/);
+                var cnt = words.length;
+                var idx = 1;
+
+                $.map(words, function(w) {
+                        var pat = "( |^)(" + w + ")";
+
+                        if (idx < cnt || trailing_space)
+                            pat += "( |$)";
+                        else
+                            pat += "(.|$)";
+                        text = text.replace(new RegExp(pat, "ig"),
+                                            "$1<b>$2</b>$3");
+                        idx++;
+                });
+
+                return text;
+            }
+
+            function autocomplete_renderitem_plain(ul, item) {
+                var list_item = "<a>" +
+                                emphasize_matching_parts(input.val(),
+                                                        item.value) +
+                                "</a>";
+                var elem = $("<li>").data("item.autocomplete", item)
+                        .append(list_item)
+                        .appendTo(ul);
+
+                return elem;
+            }
+
             function autocomplete_renderitem(ul, item) {
                 var list_item =
                     "<a class='combobox_list_item'>"                    +
@@ -139,7 +172,8 @@ var THUMBNAIL_BLOCK_CLASS       = "combobox_thumbnail_block";
                             "<img src='" + item.thumbnail + "'/>"       +
                         "</span>"                                       +
                         "<p class='combobox_text_block'>"               +
-                            item.value                                  +
+                            emphasize_matching_parts(input.val(),
+                                                    item.value)         +
                         "</p>"                                          +
                     "</a>";
 
@@ -153,6 +187,9 @@ var THUMBNAIL_BLOCK_CLASS       = "combobox_thumbnail_block";
                 input.data("autocomplete")._normalize = autocomplete_normalize;
                 input.data("autocomplete")._renderItem =
                                             autocomplete_renderitem;
+            } else {
+                input.data("autocomplete")._renderItem =
+                                            autocomplete_renderitem_plain;
             }
 
             input.bind("autocompleteselect", function(event, ui) {
