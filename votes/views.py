@@ -833,16 +833,22 @@ def search(request):
                               context_instance = RequestContext(request))
 
 def search_county(request):
-    name = request.GET.get('name', None)
+    name = request.GET.get('name', '')
     try:
         max_results = int(request.GET.get('max_results', 0))
     except ValueError:
         max_results = 0
     if max_results <= 0:
         return HttpResponseBadRequest()
-    county_list = County.objects.filter(name__istartswith=name).    \
-                                 order_by('name')[:max_results].    \
-                                 values_list('name', flat=True)
+
+    name = name.rstrip()
+    if name == '':
+        county_list = County.objects.all()
+    else:
+        county_list = County.objects.filter(name__istartswith=name)
+
+    county_list = county_list.order_by('name')[:max_results].   \
+                              values_list('name', flat=True)
     county_list = list(county_list)
     json = simplejson.dumps(county_list)
 
