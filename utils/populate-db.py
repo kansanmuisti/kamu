@@ -12,6 +12,7 @@ import hashlib
 import operator
 from optparse import OptionParser
 
+from BeautifulSoup import BeautifulSoup
 import session_list_parser
 import vote_list_parser
 import mop_list_parser
@@ -88,6 +89,8 @@ heti_url = '/triphome/bin/hex5000.sh?hnro=%s&kieli=su'
 STAT_URL_BASE = 'http://www.stat.fi'
 STAT_COUNTY_URL = '/meta/luokitukset/vaalipiiri/001-2007/luokitusavain_teksti.txt'
 
+KEYWORD_URL_BASE = 'http://www.eduskunta.fi'
+KEYWORD_LIST_URL = '/faktatmp/tmp/asiasana/asperushaku2327299.shtml'
 
 def process_parties(db_insert):
     s = open_url_with_cache(party_url_base + party_list_url, 'party')
@@ -299,6 +302,55 @@ def process_counties(db_insert):
         c.district = district_name
         c.save()
 
+def insert_keyword(kword, max_len, trim_re):
+    # recurse into any nested list items
+    children = kword.findAll('li', recursive=False)
+    if children:
+        for child in children:
+            insert_keyword(child, max_len, trim_re)
+        return
+
+    if not kword.a:                                   # is there a hyper-link?
+        return
+    kword_str = unicode(kword.contents[0].string)
+    kword_str = trim_re.sub('', kword_str)            # strip any trailing ' ]'
+    kword_str = kword_str[:max_len]
+
+    try:
+        k = Keyword.objects.get(name=kword_str)
+    except:
+        k = None
+    if not k:
+        k = Keyword()
+        k.name = kword_str
+        k.save()
+
+def process_keywords():
+    mpage = open_url_with_cache(KEYWORD_URL_BASE + KEYWORD_LIST_URL, 'keyword')
+    # BeautifulSoup's SGML parser will break at the following pattern,
+    # so remove it before handing over for parsing
+    pat = 'document.write\("<SCR"\+"IPT Language=.JavaScript. SRC=."\+"' +  \
+          'http://"\+gDomain\+"/"\+gDcsId\+"/wtid.js"\+".></SCR"\+"IPT>"\);'
+
+    massage = [(re.compile(pat), lambda match: '')]
+    dir_soup = BeautifulSoup(mpage, markupMassage=massage,
+                             fromEncoding='iso-8859-1',
+                             convertEntities=BeautifulSoup.HTML_ENTITIES)
+    dir_list = dir_soup.find('p', text='A) Valitse asiasana aakkosittain'). \
+                          parent.findNextSiblings('a')
+
+    max_len = Keyword._meta.get_field_by_name('name')[0].max_length
+    trim_re = re.compile(' \[$')
+    for dir_elem in dir_list:
+        kpage_url = KEYWORD_URL_BASE + dir_elem['href']
+        kpage = open_url_with_cache(kpage_url, 'keyword')
+        ksoup = BeautifulSoup(kpage, markupMassage=massage,
+                              fromEncoding='iso-8859-1',
+                              convertEntities=BeautifulSoup.HTML_ENTITIES)
+        anchor = ksoup.find('p', text=' Suorita haku asiasanalla:')
+        kword_list = anchor.parent.parent.nextSibling.nextSibling.findAll('li')
+        for kword in kword_list:
+            insert_keyword(kword, max_len, trim_re)
 
 # VOTE_URL = "/triphome/bin/aax3000.sh?kanta=&PALUUHAKU=%2Fthwfakta%2Faanestys%2Faax%2Faax.htm&" +\
 #           "haku=suppea&VAPAAHAKU=&OTSIKKO=&ISTUNTO=&AANVPVUOSI=(2007%2Bor%2B2008%2Bor%2B2009%2Bor%2B2010)&PVM1=&PVM2=&TUNNISTE="
@@ -596,6 +648,8 @@ parser.add_option('-v', '--votes', action='store_true', dest='votes',
                   help='populate vote database')
 parser.add_option('-M', '--minutes', action='store_true', dest='minutes'
                   , help='populate session minutes database')
+parser.add_option('-k', '--keywords', action='store_true', dest='keywords'
+                  , help='populate voting keywords database')
 parser.add_option('--cache', action='store', type='string', dest='cache'
                   , help='use cache in directory CACHE')
 parser.add_option('--full-update', action='store_true',
@@ -622,3 +676,5 @@ if opts.votes:
     process_votes(opts.full_update)
 if opts.minutes:
     process_minutes(opts.full_update)
+if opts.keywords:
+    process_keywords()

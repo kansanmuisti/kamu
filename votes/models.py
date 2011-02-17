@@ -323,3 +323,8 @@ class Vote(models.Model):
 
     def __unicode__(self):
         return str(self.session) + ' / ' + self.member.name
+
+class Keyword(models.Model):
+    name = models.CharField(max_length=128, db_index=True)
+    def __unicode__(self):
+        return self.name
