@@ -90,7 +90,7 @@ STAT_URL_BASE = 'http://www.stat.fi'
 STAT_COUNTY_URL = '/meta/luokitukset/vaalipiiri/001-2007/luokitusavain_teksti.txt'
 
 KEYWORD_URL_BASE = 'http://www.eduskunta.fi'
-KEYWORD_LIST_URL = '/faktatmp/tmp/asiasana/asperushaku2327299.shtml'
+KEYWORD_LIST_URL = '/triphome/bin/vex6000.sh'
 
 def process_parties(db_insert):
     s = open_url_with_cache(party_url_base + party_list_url, 'party')
@@ -303,24 +303,19 @@ def process_counties(db_insert):
         c.save()
 
 def insert_keyword(kword, max_len, trim_re):
-    # recurse into any nested list items
-    children = kword.findAll('li', recursive=False)
-    if children:
-        for child in children:
-            insert_keyword(child, max_len, trim_re)
-        return
-
     if not kword.a:                                   # is there a hyper-link?
         return
+    # skip keywords with a class defined -- they're not real keywords
+    for c in kword.attrs:
+        if c[0] == 'class':
+            return
     kword_str = unicode(kword.contents[0].string)
     kword_str = trim_re.sub('', kword_str)            # strip any trailing ' ]'
     kword_str = kword_str[:max_len]
 
     try:
         k = Keyword.objects.get(name=kword_str)
-    except:
-        k = None
-    if not k:
+    except Keyword.DoesNotExist:
         k = Keyword()
         k.name = kword_str
         k.save()
@@ -348,7 +343,8 @@ def process_keywords():
                               fromEncoding='iso-8859-1',
                               convertEntities=BeautifulSoup.HTML_ENTITIES)
         anchor = ksoup.find('p', text=' Suorita haku asiasanalla:')
-        kword_list = anchor.parent.parent.nextSibling.nextSibling.findAll('li')
+        elem = anchor.parent.parent.nextSibling.nextSibling
+        kword_list = elem.findAll('li')
         for kword in kword_list:
             insert_keyword(kword, max_len, trim_re)
 
