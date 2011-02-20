@@ -33,3 +33,4 @@ $ mysqladmin create kamu
 
 CREATE USER 'kamu'@'localhost' IDENTIFIED BY 'kamu';
 GRANT ALL PRIVILEGES ON kamu.* TO 'kamu'@'localhost';
+
