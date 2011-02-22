@@ -9,6 +9,7 @@ Dependencies
 - django-tagging (python-django-tagging on Debian/Ubuntu)
 - python-markdown
 - python-beautifulsoup
+- python-dateutil
 
 mkdir
 =====

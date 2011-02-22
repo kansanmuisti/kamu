@@ -10,9 +10,11 @@ import re
 import sqlite3
 import hashlib
 import operator
+import difflib
 from optparse import OptionParser
 
 from BeautifulSoup import BeautifulSoup
+from lxml import etree, html
 import session_list_parser
 import vote_list_parser
 import mop_list_parser
@@ -53,13 +55,19 @@ def create_path_for_file(fname):
         os.makedirs(dirname)
 
 
-def open_url_with_cache(url, prefix, skip_cache=False):
+def open_url_with_cache(url, prefix, skip_cache=False, error_ok=False):
     fname = None
     if cache_dir and not skip_cache:
         fname = cache_dir + '/' + prefix + '/' + url.replace('/', '-')
     if not fname or not os.access(fname, os.R_OK):
         opener = urllib2.build_opener(urllib2.HTTPHandler)
-        f = opener.open(url)
+        opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+        try:
+            f = opener.open(url)
+        except urllib2.URLError:
+            if error_ok:
+                return None
+            raise
         s = f.read()
         if fname:
             create_path_for_file(fname)
@@ -280,6 +288,55 @@ def process_mops(party_list, update=False, db_insert=False):
 
     return mop_list
 
+def get_mp_homepage_link(mp, force_update=False):
+    if mp.homepage_link and not force_update:
+        return
+    s = open_url_with_cache(mp.wikipedia_link, 'misc')
+    doc = html.fromstring(s)
+    b = doc.xpath(".//b[.='Kotisivu']")
+    if not b:
+        return
+    elem = b[0].getparent()
+    href = elem.getnext().getchildren()[0].attrib['href']
+    print "%s: %s" % (mp.name, href)
+    # Try to fetch the homepage
+    s = open_url_with_cache(href, 'misc', skip_cache=True, error_ok=True)
+    if s:
+        mp.homepage_link = href
+    else:
+        print "\tFailed to fetch"
+
+def get_wikipedia_links():
+    MP_LINK = 'http://fi.wikipedia.org/wiki/Luokka:Nykyiset_kansanedustajat'
+
+    print "Populating Wikipedia links to MP's..."
+    mp_list = Member.objects.all()
+    mp_names = [mp.name for mp in mp_list]
+    s = open_url_with_cache(MP_LINK, 'misc')
+    doc = html.fromstring(s)
+    links = doc.xpath(".//table//a[starts-with(@href, '/wiki')]")
+    doc.make_links_absolute(MP_LINK)
+    for l in links:
+        href = l.attrib['href']
+        if 'Toiminnot:Haku' in href:
+            continue
+        name = l.text
+        if '(' in name:
+            name = name.split('(')[0].strip()
+        a = name.split()
+        a = list((a[-1],)) + a[0:-1]
+        name = ' '.join(a)
+        try:
+            mp = Member.objects.get(name=name)
+        except Member.DoesNotExist:
+            matches = difflib.get_close_matches(name, mp_names, cutoff=0.8)
+            if len(matches) > 1:
+                raise Exception("Multiple matches for '%s'" % name)
+            print("Mapping '%s' to %s'" % (name, matches[0]))
+            mp = Member.objects.get(name=matches[0])
+        mp.wikipedia_link = href
+        get_mp_homepage_link(mp)
+        mp.save()
 
 def process_counties(db_insert):
     s = open_url_with_cache(STAT_URL_BASE + STAT_COUNTY_URL, 'county')
@@ -666,6 +723,7 @@ if opts.parties or opts.members:
     party_list = process_parties(True)
 if opts.members:
     mp_list = process_mops(party_list, True, True)
+    get_wikipedia_links()
 if opts.counties:
     counties = process_counties(True)
 if opts.votes:

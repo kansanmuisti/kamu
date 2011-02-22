@@ -27,21 +27,28 @@ class MemberManager(models.Manager):
         query &= Q(end__isnull=True) | Q(end__gte=date_begin)
         mem_list = DistrictAssociation.objects.filter(query).distinct().values_list('member', flat=True)
         return self.filter(id__in=mem_list)
+    def get_with_print_name(self, name):
+        names = name.split()
+        names = list((names[-1],)) + names[0:-1]
+        name = ' '.join(names)
+        return self.get(name=name)
 
 class Member(models.Model):
-    name = models.CharField(max_length = 50, unique = True)
-    url_name = models.SlugField(max_length = 50, unique = True)
-    birth_date = models.DateField(blank = True, null = True)
-    given_names = models.CharField(max_length = 50)
-    surname = models.CharField(max_length = 50)
+    name = models.CharField(max_length=50, unique=True)
+    url_name = models.SlugField(max_length=50, unique=True)
+    birth_date = models.DateField(blank=True, null=True)
+    given_names = models.CharField(max_length=50)
+    surname = models.CharField(max_length=50)
 
     email = models.EmailField()
-    phone = models.CharField(max_length = 20)
+    phone = models.CharField(max_length=20)
 
-    party = models.ForeignKey(Party, blank = True, null = True)
-    photo = models.ImageField(upload_to = 'images/members')
+    party = models.ForeignKey(Party, blank=True, null=True)
+    photo = models.ImageField(upload_to='images/members')
     info_link = models.URLField()
     is_active = models.BooleanField()
+    wikipedia_link = models.URLField(blank=True, null=True)
+    homepage_link = models.URLField(blank=True, null=True)
 
     objects = MemberManager()
 
@@ -61,8 +68,9 @@ class Member(models.Model):
 
     def get_print_name(self):
         names = self.name.split()
-        (last, first) = (names[0], names[1])
-        return "%s %s" % (first, last)
+        names = list((names[-1],)) + names[0:-1]
+        name = ' '.join(names)
+        return name
 
     @models.permalink
     def get_absolute_url(self):

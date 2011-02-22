@@ -1,0 +1,2 @@
+git://github.com/IanLewis/django-lifestream.git
+05914a9fbae53fafad844fef3579067a2bef6425
