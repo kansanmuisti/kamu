@@ -49,6 +49,7 @@ class Member(models.Model):
     is_active = models.BooleanField()
     wikipedia_link = models.URLField(blank=True, null=True)
     homepage_link = models.URLField(blank=True, null=True)
+    twitter_account = models.CharField(max_length=30)
 
     objects = MemberManager()
 
