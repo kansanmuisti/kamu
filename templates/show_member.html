@@ -48,6 +48,8 @@
 <p class="action_link_disabled">{% trans "Register of interest" %}</p>
 <p><a class="action_link{% ifequal section 'statements' %} action_link_active{% endifequal %}" href="{% url votes.views.show_member member=member.url_name section='statements' %}">{% trans "Statements" %}</a></p>
 <p><a class="action_link{% ifequal section 'comments' %} action_link_active{% endifequal %}" href="{% url votes.views.show_member member=member.url_name section='comments' %}">{% trans "Comments" %}</a></p>
+<p><a class="action_link{% ifequal section 'opinions' %} action_link_active{% endifequal %}" href="{% url votes.views.show_member member=member.url_name section='opinions' %}">{% trans "Opinions" %}</a></p>
+
 {% endblock %}
 
 {% block content %}
@@ -175,11 +177,41 @@
 </div>
 {% endfor %}
 
+
 {% pagination_nav_qs statement_page "" request.GET %}
 
 {% else %}
   <h2>{% trans "No statements found" %}</h2>
 {% endif %}
+{% endifequal %}
+
+{% ifequal section "opinions" %}
+{% for answer in answers %}
+<div class="opinion_answer">
+  <div class="question">
+    <span class="source">
+      {{answer.option.question.source.name}}
+      {{answer.option.question.source.year}}
+    </span>
+    {{answer.option.question.text}}
+  </div>
+  {% with answer.option.question.option_set.all as options %}
+  <ul class="options">
+  {% for option in options %}
+    <li
+       class="option{% ifequal option answer.option %} selected{% endifequal %}"
+    >
+	{{option.name}}</li>
+  {% endfor %}
+  </ul>
+  {% if answer.explanation %}
+    <div class="opinion_explanation">
+      "{{answer.explanation}}"
+    </div>
+  {% endif %}
+  {% endwith %}
+</div>
+{% endfor %}
 {% endifequal %}
 
 {% endblock %}

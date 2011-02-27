@@ -883,6 +883,49 @@ div#list_orgs {
 	width: 100px;
 }
 
+/* Opinions */
+
+.opinion_answer
+{
+	padding: 2em;
+	border-bottom: 1px solid gray;
+}
+
+.question
+{
+	font-weight: bold;
+}
+
+.question .source
+{
+	display: block;
+	font-weight: normal;
+	font-size: xx-small;
+}
+
+ul.options
+{
+	margin-left: 1em;
+}
+
+.opinion_answer .option
+{
+	margin-left: 1em;
+	margin-bottom: 0.2em;
+}
+
+.opinion_answer .selected
+{
+	text-decoration: underline;
+}
+
+.opinion_answer .opinion_explanation
+{
+	margin-left: 3em;
+	margin-top: 0.1em;
+	font-style: italic;
+}
+
 /*
  * jNotify
  */

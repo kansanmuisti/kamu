@@ -21,6 +21,7 @@ from sorl.thumbnail.main import DjangoThumbnail
 from kamu.contact_form.views import contact_form
 from httpstatus import Http400
 from user_voting.models import Vote as UserVote
+from kamu.opinions.models import Answer
 
 import time
 import djapian
@@ -682,6 +683,11 @@ def show_member_statements(request, member):
 
     return {'statement_page': statement_page}
 
+def show_member_opinions(request, member):
+    answers = Answer.objects.filter(member=member)
+    ret = {'answers': answers}
+    return ret
+
 def show_member(request, member, section=None):
     member = get_object_or_404(Member, url_name=member)
     if not section:
@@ -694,6 +700,8 @@ def show_member(request, member, section=None):
         args = {'next': request.path}
     elif section == 'statements':
         args = show_member_statements(request, member)
+    elif section == 'opinions':
+        args = show_member_opinions(request, member)
     else:
         raise Http404
 
