@@ -3,6 +3,14 @@ from django.db.models import Q
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
 
+class Term(models.Model):
+    display_name = models.CharField(max_length=40)
+    name = models.CharField(max_length=40)
+    begin = models.DateField()
+    end = models.DateField(blank=True, null=True)
+    def __unicode__(self):
+        return self.name
+
 class Party(models.Model):
     name = models.CharField(max_length = 10, primary_key=True)
     full_name = models.CharField(max_length = 50)
@@ -46,7 +54,6 @@ class Member(models.Model):
     party = models.ForeignKey(Party, blank=True, null=True)
     photo = models.ImageField(upload_to='images/members')
     info_link = models.URLField()
-    is_active = models.BooleanField()
     wikipedia_link = models.URLField(blank=True, null=True)
     homepage_link = models.URLField(blank=True, null=True)
     twitter_account = models.CharField(max_length=30)
@@ -130,6 +137,11 @@ class MemberStats(models.Model):
         self.party_agree = self.__calc_agree(self.party_agreement)
         self.session_agree = self.__calc_agree(self.session_agreement)
 
+class TermMember(models.Model):
+    term = models.ForeignKey(Term)
+    member = models.ForeignKey(Member)
+    election_budget = models.DecimalField(max_digits=10, decimal_places=2,
+                                          blank=True, null=True)
 
 class DistrictAssociationManager(models.Manager):
     def between(self, date_begin, date_end):

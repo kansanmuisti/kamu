@@ -48,6 +48,32 @@ from kamu.votes.models import *
 cache_dir = None
 until_pl = None
 
+TERM_DASH = u'\u2013'
+TERMS = [
+    {'display_name': '2007'+TERM_DASH+'2010', 'begin': '2007-03-21', 'end': None,
+     'name': '2007-2010' },
+    {'display_name': '2003'+TERM_DASH+'2006', 'begin': '2003-03-19', 'end': '2007-03-20',
+     'name': '2003-2006' },
+    {'display_name': '1999'+TERM_DASH+'2002', 'begin': '1999-03-24', 'end': '2003-03-18',
+     'name': '1999-2002' },
+]
+
+term_list = Term.objects.all()
+def fill_terms():
+    for term in TERMS:
+        try:
+            nt = Term.objects.get(name=term['name'])
+        except Term.DoesNotExist:
+            print(u'Adding term %s' % term['display_name'])
+            nt = Term()
+        nt.name = term['name']
+        nt.begin = term['begin']
+        nt.end = term['end']
+        nt.display_name = term['display_name']
+        nt.save()
+
+    global term_list
+    terms = Term.objects.all()
 
 def create_path_for_file(fname):
     dirname = os.path.dirname(fname)
@@ -58,7 +84,8 @@ def create_path_for_file(fname):
 def open_url_with_cache(url, prefix, skip_cache=False, error_ok=False):
     fname = None
     if cache_dir and not skip_cache:
-        fname = cache_dir + '/' + prefix + '/' + url.replace('/', '-')
+        fname = cache_dir + '/' + prefix + '/'
+        fname += hashlib.sha1(url.replace('/', '-')).hexdigest()
     if not fname or not os.access(fname, os.R_OK):
         opener = urllib2.build_opener(urllib2.HTTPHandler)
         opener.addheaders = [('User-agent', 'Mozilla/5.0')]
@@ -228,12 +255,9 @@ def process_mops(party_list, update=False, db_insert=False):
             else:
                 assoc['name'] = party
 
-        is_active = False
         # Find last party association
         last_assoc = sorted(mp['assoc'], key=operator.itemgetter('start'))[-1]
-        if 'end' not in last_assoc:
-            is_active = True
-        else:
+        if 'end' in last_assoc:
             if party_name:
                 raise Exception('party set for inactive MP')
             party_name = last_assoc['name']
@@ -247,8 +271,7 @@ def process_mops(party_list, update=False, db_insert=False):
         member.name = mp['name']
         member.party_id = party_name
         member.photo = mp_photo_path + mp['photo']
-        member.info_link = url_base + mp['info_link']
-        member.is_active = is_active
+        member.info_link = url_base + heti_url % mp['hnro']
         member.birth_date = mp['birthdate']
         member.given_names = mp['firstnames']
         member.surname = mp['surname']
@@ -337,6 +360,24 @@ def get_wikipedia_links():
         mp.wikipedia_link = href
         get_mp_homepage_link(mp)
         mp.save()
+
+def process_mp_terms():
+    for mp in Member.objects.all():
+        # Check if MP was active during a term.
+        for term in Term.objects.all():
+            q = DistrictAssociation.objects.between(term.begin, term.end)
+            q = q.filter(member=mp)
+            if q:
+                try:
+                    tm = TermMember.objects.get(term=term, member=mp)
+                except TermMember.DoesNotExist:
+                    tm = TermMember(term=term, member=mp)
+                    tm.save()
+            else:
+                try:
+                    tm = TermMember.objects.get(term=term, member=mp).delete()
+                except TermMember.DoesNotExist:
+                    pass
 
 def process_counties(db_insert):
     s = open_url_with_cache(STAT_URL_BASE + STAT_COUNTY_URL, 'county')
@@ -721,9 +762,13 @@ if opts.until_pl:
     until_pl = opts.until_pl
 if opts.parties or opts.members:
     party_list = process_parties(True)
+    fill_terms()
+
 if opts.members:
     mp_list = process_mops(party_list, True, True)
     get_wikipedia_links()
+    process_mp_terms()
+
 if opts.counties:
     counties = process_counties(True)
 if opts.votes:

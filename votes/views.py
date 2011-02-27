@@ -30,18 +30,12 @@ import random
 
 PERIOD_DASH = u'\u2013'
 PERIODS = [
-    { 'name': '2007'+PERIOD_DASH+'2011',   'begin': '2007-03-21', 'end': None,
-      'query_name': '2007-2011' },
-    { 'name': '2010',               'begin': '2010-01-01', 'end': None,
-      'query_name': '2010' },
-    { 'name': '2009',               'begin': '2009-01-01', 'end': '2009-12-31',
-      'query_name': '2009' },
-    { 'name': '2008',               'begin': '2008-01-01', 'end': '2008-12-31',
-      'query_name': '2008' },
-    { 'name': '2007',               'begin': '2007-03-21', 'end': '2007-12-31',
-      'query_name': '2007b' },
-    { 'name': '2003'+PERIOD_DASH+'2007',   'begin': '2003-03-19', 'end': '2007-03-20',
-      'query_name': '2003-2007' },
+    {'name': '2007'+PERIOD_DASH+'2010',   'begin': '2007-03-21', 'end': None,
+     'query_name': '2007-2010'},
+    {'name': '2003'+PERIOD_DASH+'2006',   'begin': '2003-03-19', 'end': '2007-03-20',
+     'query_name': '2003-2006'},
+    {'name': '1999'+PERIOD_DASH+'2002',   'begin': '1999-03-24', 'end': '2003-03-18',
+     'query_name': '1999-2002'},
 ]
 
 PERIOD_KEY = 'period'
