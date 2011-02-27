@@ -119,6 +119,7 @@ INSTALLED_APPS = (
     'django.contrib.webdesign',
     'django.contrib.markup',
     'django.contrib.messages',
+    'django_extensions',
     'lifestream',
     'sorl.thumbnail',
     'kamu.votes',
