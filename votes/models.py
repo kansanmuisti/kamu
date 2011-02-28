@@ -346,6 +346,13 @@ class Vote(models.Model):
         return str(self.session) + ' / ' + self.member.name
 
 class Keyword(models.Model):
-    name = models.CharField(max_length=128, db_index=True)
+    name = models.CharField(max_length=128, db_index=True, unique=True)
     def __unicode__(self):
         return self.name
+
+class SessionKeyword(models.Model):
+    session = models.ForeignKey(Session)
+    keyword = models.ForeignKey(Keyword)
+
+    class Meta:
+        unique_together = (('session', 'keyword'),)

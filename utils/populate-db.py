@@ -15,7 +15,7 @@ from optparse import OptionParser
 
 from BeautifulSoup import BeautifulSoup
 from lxml import etree, html
-import session_list_parser
+
 import vote_list_parser
 import mop_list_parser
 import mop_info_parser
@@ -81,11 +81,15 @@ def create_path_for_file(fname):
         os.makedirs(dirname)
 
 
+def get_cache_fname(url, prefix):
+    hash = hashlib.sha1(url.replace('/', '-')).hexdigest()
+    fname = '%s/%s/%s' % (cache_dir, prefix, hash)
+    return fname
+
 def open_url_with_cache(url, prefix, skip_cache=False, error_ok=False):
     fname = None
     if cache_dir and not skip_cache:
-        fname = cache_dir + '/' + prefix + '/'
-        fname += hashlib.sha1(url.replace('/', '-')).hexdigest()
+        fname = get_cache_fname(url, prefix)
     if not fname or not os.access(fname, os.R_OK):
         opener = urllib2.build_opener(urllib2.HTTPHandler)
         opener.addheaders = [('User-agent', 'Mozilla/5.0')]
@@ -452,68 +456,70 @@ def process_keywords():
 # VOTE_URL = "/triphome/bin/aax3000.sh?kanta=&PALUUHAKU=%2Fthwfakta%2Faanestys%2Faax%2Faax.htm&" +\
 #           "haku=suppea&VAPAAHAKU=&OTSIKKO=&ISTUNTO=&AANVPVUOSI=(2003%2Bor%2B2004%2Bor%2B2005%2Bor%2B2006)&PVM1=&PVM2=&TUNNISTE="
 
-VOTE_URL = '/triphome/bin/aax3000.sh?VAPAAHAKU=aanestysvpvuosi>=1999'
-MINUTES_URL = '/triphome/bin/akx3000.sh?kanta=utaptk&uusimmat=k&lajittelu=PAIVAMAARA+desc,tstamp+desc&VAPAAHAKU2=vpvuosi%3E2002&paluuhaku=/triphome/bin/akxhaku.sh%3Flyh=PTKSUP%3Flomake=akirjat/akx3100&haku=PTKSUP'
+VOTE_URL = '/triphome/bin/aax3000.sh?VAPAAHAKU=aanestysvpvuosi=%i'
+MINUTES_URL = '/triphome/bin/akx3000.sh?kanta=utaptk&LYH=LYH-PTK&haku=PTKSUP&kieli=su&VPVUOSI>=1999'
+BEGIN_YEAR = 1999
+END_YEAR = 2010
 
-def read_links(is_minutes, link=None, new_only=False):
+def read_links(is_minutes, url, new_only=False):
     if is_minutes:
         link_type = 'minutes'
-        url = MINUTES_URL
     else:
         link_type = 'votes'
-        url = VOTE_URL
 
-    links = []
-    if cache_dir and not new_only:
-        cache_file = cache_dir + '/%s_links.txt' % link_type
-        if os.access(cache_file, os.R_OK):
-            f = open(cache_file, 'r')
-            for line in f.readlines():
-                links.append(line.strip())
-            return (links, None)
-
-    parser = session_list_parser.Parser()
-    if link:
-        url = url_base + link
-    else:
-        url = url_base + url
+    ret = []
 
     while True:
         s = open_url_with_cache(url, link_type, new_only)
-        parser.reset(is_minutes)
-        parser.feed(s)
-        parser.close()
-        l = parser.get_links()
-        if not l:
-            return None
-        print 'Got %d links' % len(l)
-        links += l
+        doc = html.fromstring(s)
+        votes = doc.xpath(".//div[@class='listing']/div/p")
+        doc.make_links_absolute(url)
+
+        for vote in votes:
+            link = {}
+
+            elem_list = vote.xpath('.//a')
+            links = [l.attrib['href'] for l in elem_list]
+
+            minutes_link = [l for l in links if '/akxptk.sh?' in l]
+            if len(minutes_link) != 1:
+                print get_cache_fname(url, link_type)
+                raise Exception("Unable to find link to minutes")
+            link['minutes'] = minutes_link[0]
+
+            if not is_minutes:
+                link_list = [l for l in links if '=aax/aax5000&' in l]
+                if len(link_list) != 1:
+                    raise Exception("Unable to find vote results")
+                link['results'] = link_list[0]
+
+                link_list = [l for l in links if '/vex3000.sh?' in l]
+                if len(link_list) != 1:
+                    print >> sys.stderr, 'Warning: Vote does not have keyword info'
+                else:
+                    link['info'] = link_list[0]
+
+            ret.append(link)
 
         # Check if last page of links
-        if len(l) >= 50:
-            fwd_link = parser.get_forward_link()
-            url = url_base + fwd_link
+        if len(votes) >= 50:
+            fwd_link = doc.xpath(".//input[@name='forward']")
+            url = url_base + fwd_link[0].attrib['value']
         else:
             fwd_link = None
             break
         if new_only:
             break
 
-    if cache_dir and not new_only:
-        f = open(cache_file, 'w')
-        for link in links:
-            f.write(link + '\n')
-        f.close()
 
-    return (links, fwd_link)
+    return (ret, fwd_link)
 
 pl_sess_list = {}
 mem_name_list = {}
 
 @transaction.commit_manually
-def process_session_votes(link, nr, only_new=False, noop=False):
+def process_session_votes(url, nr, only_new=False, noop=False):
     parser = vote_list_parser.Parser()
-    url = url_base + link
     s = open_url_with_cache(url, 'votes')
     parser.reset()
     parser.feed(s)
@@ -601,22 +607,49 @@ def process_session_votes(link, nr, only_new=False, noop=False):
     transaction.commit()
     db.reset_queries()
 
-    return True
+    return sess
 
+def process_session_keywords(url, sess, noop=False):
+    s = open_url_with_cache(url, 'votes')
+    doc = html.fromstring(s)
+    kw_list = doc.xpath(".//div[@id='vepsasia-asiasana']//div[@class='linkspace']/a")
+    print sess
+
+    for kw in kw_list:
+        kw = kw.text.strip()
+        print '\t%s' % kw
+        try:
+            kw_obj = Keyword.objects.get(name=kw)
+        except Keyword.DoesNotExist:
+            import codecs
+            f = codecs.open('new-kws.txt', 'a', 'utf-8')
+            f.write(u'%s\n' % kw)
+            f.close()
+            kw_obj = Keyword(name=kw).save()
+        SessionKeyword.objects.get_or_create(session=sess, keyword=kw_obj)
 
 def process_votes(full_update=False, noop=False):
+    year = END_YEAR
     next_link = None
     while True:
+        if not next_link:
+            next_link = url_base + VOTE_URL % year
         (vote_links, next_link) = read_links(False, next_link, not full_update)
         print 'Got links for total of %d sessions' % len(vote_links)
         for link in vote_links:
             nr = vote_links.index(link)
-            if not process_session_votes(link, nr, not full_update, noop):
+            sess = process_session_votes(link['results'], nr, not full_update, noop)
+            if not sess:
                 next_link = None
                 break
-        if not next_link:
-            break
+            # Process keywords
+            if 'info' in link:
+                process_session_keywords(link['info'], sess, noop)
 
+        if not next_link:
+            year -= 1
+            if year < BEGIN_YEAR:
+                break
 
 def insert_minutes(full_update, minutes):
     if until_pl and minutes['id'] == until_pl:
@@ -628,8 +661,8 @@ def insert_minutes(full_update, minutes):
 
         # If the plsession exists and has the minutes field set
         # already, but we're not doing a full update, bail out.
-        minutes = Minutes.objects.get(plenary_session=pl_sess)
-        if not full_update and minutes:
+        mins = Minutes.objects.get(plenary_session=pl_sess)
+        if not full_update and mins:
             return None
     except PlenarySession.DoesNotExist:
         pl_sess = PlenarySession()
@@ -701,12 +734,12 @@ def process_minutes(full_update):
             raise Exception()
         member_dict[name] = mem
 
-    next_link = None
+    next_link = url_base + MINUTES_URL
     while True:
         (links, next_link) = read_links(True, next_link, new_only=not full_update)
         print 'Got links for total of %d minutes' % len(links)
         for link in links:
-            url = url_base + link
+            url = link['minutes']
             print '%4d. %s' % (links.index(link), url)
             s = open_url_with_cache(url, 'minutes')
             tmp_url = 'http://www.eduskunta.fi/faktatmp/utatmp/akxtmp/'
