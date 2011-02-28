@@ -625,7 +625,8 @@ def process_session_keywords(url, sess, noop=False):
             f = codecs.open('new-kws.txt', 'a', 'utf-8')
             f.write(u'%s\n' % kw)
             f.close()
-            kw_obj = Keyword(name=kw).save()
+            kw_obj = Keyword(name=kw)
+            kw_obj.save()
         SessionKeyword.objects.get_or_create(session=sess, keyword=kw_obj)
 
 def process_votes(full_update=False, noop=False):
