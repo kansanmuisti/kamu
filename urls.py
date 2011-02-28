@@ -9,6 +9,14 @@ admin.autodiscover()
 import djapian
 djapian.load_indexes()
 
+# Change the length of EmailFields to accommodate overlong
+# Facebook email addresses.
+from django.db.models.fields import EmailField, CharField
+def email_field_init(self, *args, **kwargs):
+  kwargs['max_length'] = kwargs.get('max_length', 200)
+  CharField.__init__(self, *args, **kwargs)
+EmailField.__init__ = email_field_init
+
 urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
 )
