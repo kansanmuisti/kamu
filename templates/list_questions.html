@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load i18n thumbnail %}
+{% block title %}{% trans "Opinions" %}{% endblock %}
+{% block head %}
+    <script type="text/javascript">
+    $(function() {
+    	// Accordion
+	$("#accordion").accordion({
+        	header: "h3",
+        	autoHeight: false,
+                collapsible: true,
+                active: false });
+    });
+    </script>
+{% endblock %}
+
+
+{% block content %}
+
+  <div id="accordion" class="ui-accordion ui-widget ui-helper-reset ui-accordion-icons">
+
+  {% for question in questions %}
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+          <td class="source">{{ question.source.name }} {{question.source.year}}</td>
+          <td class="question_text">{{ question.text }}</td>
+          <td class="answer_count">
+             {% comment %}{% blocktrans count question.answers.count as count %}
+             {{count}} answer
+             {% plural %}
+             {{count}} answers
+             {% endblocktrans %} {%endcomment%}
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+    <div style="display: none;">
+    <table class="question_options">
+    {% for option in question.option_set.all %}
+      <tr>
+        <td class="option_text">{{option.name}}</td>
+        <td class="votechart">
+        <dl class="votechart">
+	{% for party in option.party_shares %}
+          <dt>{{party.name}}</dt>
+          <dd><span style="height: {{party.share}}%"><em>{{party.share}}%<br />{{party.name}}</em></span></dt>
+          {%comment%}<img class="votebar" src="/static/images/dummy.png" style="height: {{party.share}}%" />{%comment%}{{party.name}}:&nbsp;{{party.share}}%</div>{%endcomment%}
+        {% endfor %}
+        </dl>
+      </td>
+      </tr>
+    {% endfor %}
+    </table>
+    </div>
+  </div>
+  {% endfor %}
+   </div>
+{% endblock %}

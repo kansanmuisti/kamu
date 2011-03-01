@@ -926,6 +926,104 @@ ul.options
 	font-style: italic;
 }
 
+.question_bar
+{
+	width: 100%;
+}
+
+.question_bar .source
+{
+	width: 10%;
+	font-size: xx-small;
+}
+
+.question_bar .question_text
+{
+	width: 80%;
+}
+
+.question_bar .answer_count
+{
+	font-size: x-small;
+}
+
+.question_options
+{
+	width: 100%;
+}
+
+.question_options td
+{
+	border-bottom: 1px solid gray;
+}
+
+.question_options .option_text
+{
+	font-size: x-small;
+	width: 50%;
+}
+
+dl.votechart
+{
+	width: 100%;
+	height: 100px;
+}
+
+dl.votechart dt
+{
+	display: none;
+}
+
+dl.votechart dd
+{
+	position: relative;
+	float: left;
+	width: 40px;
+	height: 80px;
+	margin-left: 2px;
+}
+
+dl.votechart dd span
+{
+	display: block;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	left 0;
+	background-color: #ccc;
+}
+
+dl.votechart dd span em
+{
+	display: block;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	text-align: center;
+	font-size: xx-small;
+}
+
+.question_options td.votechart
+{
+	height: 50px;
+	vertical-align: bottom;
+}
+
+.question_options .votebar
+{
+	margin: 2px;
+	background-color: #dddddd;
+	width: 30px;
+}
+
+table.votechart td.votebarcontainer
+{
+	float: left;
+	height: 100%;
+	vertical-align: bottom;
+	border: 1px solid black;
+}
+
 /*
  * jNotify
  */
