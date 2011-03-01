@@ -4,11 +4,6 @@
 {% block content %}
   <h1>{% trans "Kamu login" %}</h1>
 
-{% blocktrans %}
-<p>The only personal information we will display publicly is your name. Any other information collected about you will remain private unless you choose to allow us to display it.</p>
-<p>We use your personal information only in an anonymized fashion, according to our privacy policy.</p>
-{% endblocktrans %}
-<br />
 
 {% if fb_enabled %}
 {% include "_facebook.html" %}
@@ -51,6 +46,10 @@ You can also login using your Kamu account.
 
   <p><a class="link" href="{% url auth_password_reset %}">{% trans "Forgot your username or password?" %}</a></p>
   <p><a class="link" href="{% url registration_register %}">{% trans "Create a new account." %}</a></p>
+<br />
+{% blocktrans %}
+<p>The only personal information we will display publicly is your name. Any other information collected about you will remain private unless you choose to allow us to display it.</p>
+<p>We use your personal information only in an anonymized fashion, according to our privacy policy.</p>
+{% endblocktrans %}
 
 {% endblock %}
-
