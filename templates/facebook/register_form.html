@@ -6,7 +6,7 @@
 {% include "_facebook.html" %}
 <div style="min-height: 50px; margin-bottom: 16px;">
   <img style="float: left; padding-right: 16px;" src="/static/{{ fb_portrait }}" />
-<p>{% blocktrans with fb_reg_info.first_name as first_name and fb_reg_info.last_name as last_name %}
+<p>{% blocktrans with fb_data.first_name as first_name and fb_data.last_name as last_name %}
 <h2>Welcome to Kansan muisti, {{ first_name }} {{ last_name }}!</h2>
 Please finalize your registration by choosing a username below.
 {% endblocktrans %}</p>

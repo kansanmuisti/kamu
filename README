@@ -16,6 +16,7 @@ mkdir
 =====
 static/images/parties
 static/images/orgs
+static/images/users
 static/tmp
 
 Commands

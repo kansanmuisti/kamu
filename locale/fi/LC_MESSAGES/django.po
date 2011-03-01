@@ -801,7 +801,7 @@ msgid ""
 msgstr ""
 "\n"
 "Jos sinulla on Facebook-tili, voit kirjautua sisään tai rekisteröityä "
-"klikkaamalla allaolevaa nappia.\n"
+"klikkaamalla alla olevaa nappia.\n"
 
 #: templates/registration/login.html:26
 msgid ""

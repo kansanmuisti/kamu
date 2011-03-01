@@ -15,6 +15,7 @@ from kamu.users.models import KamuProfile
 from facebook.forms import RegistrationForm
 from facebook.api import get_user_from_cookie, do_request, FacebookError
 from facebook.api import delete_cookie
+from httpstatus import Http403
 from PIL import Image
 import StringIO
 import os
@@ -32,7 +33,7 @@ def base64_url_decode(inp):
 
 def redirect_with_next(request, url):
     next = request.REQUEST.get('next')
-    if next and not next.beginswith(request.path):
+    if next and not next.startswith(request.path):
         url += '?next=%s' % next
     return HttpResponseRedirect(url)
 
@@ -54,10 +55,7 @@ def fetch_user_data(request, uid, access_token):
         resp = do_request(access_token, uid)
     except FacebookError as e:
         if e.type == "OAuthException":
-            url = reverse('login')
-            resp = redirect_with_next(request, url)
-            delete_cookie(resp)
-            return resp
+            return None
         else:
             raise
     me = resp
@@ -87,50 +85,69 @@ def fetch_user_data(request, uid, access_token):
 
     return args
 
-def create_fb_user(username, reg_data, user_data, portrait):
-    reg = reg_data['registration']
+def create_fb_user(username, fb_data):
+    info = fb_data['info']
 
-    user = User.objects.create_user(username, reg['email']) #FIXME
-    user.first_name = reg['first_name']
-    user.last_name = reg['last_name']
-    user.save()
+    user = User.objects.create_user(username, info['email']) #FIXME
+    user.first_name = info['first_name']
+    user.last_name = info['last_name']
 
     profile_model = settings.AUTH_PROFILE_MODULE.split('.')[-1]
     profile_class = ContentType.objects.get(model=profile_model.lower()).model_class()
     profile = profile_class()
+    profile.facebook_id = fb_data['uid']
+    if 'location' in info:
+        profile.location = info['location']['name']
+    if 'birthday' in info:
+        bd = info['birthday'].split('/')
+        profile.birthday = '-'.join((bd[2], bd[0], bd[1]))
+
+    image = os.path.join("images/users/", "%s.png" % username)
+    fn = os.path.join(settings.MEDIA_ROOT, image)
+    tmp_fn = os.path.join(settings.MEDIA_ROOT, fb_data['portrait'])
+    os.rename(tmp_fn, fn)
+
+    user.save()
     profile.user = user
-    profile.facebook_id = reg_data['user_id']
-    profile.location = reg_data['registration']['location']['name']
-    bd = reg_data['registration']['birthday'].split('/')
-    profile.birthday = '-'.join((bd[2], bd[0], bd[1]))
     profile.save()
 
     return user
 
-@csrf_exempt
 def register_form(request):
-    if not 'fb_reg_data' in request.session:
-        return HttpResponseBadRequest() #FIXME
-
-    reg_data = request.session['fb_reg_data']
-    user_data = request.session['fb_user_data']
+    fb_user = get_user_from_cookie(request.COOKIES)
+    if not fb_user:
+        raise Http403()
 
     if request.method == 'POST':
+        if not 'fb_reg_data' in request.session:
+            raise Http400()
+        fb_data = request.session['fb_reg_data']
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            create_fb_user(form.cleaned_data['username'], reg_data,
-                           user_data, request.session['fb_portrait'])
-            user = authenticate(facebook_id=reg_data['user_id'])
+            create_fb_user(form.cleaned_data['username'], fb_data)
+            user = authenticate(facebook_id=fb_data['uid'])
             login(request, user)
             url = reverse('registration_activation_complete')
 	    return HttpResponseRedirect(url)
     else:
+        fb_data = fetch_user_data(request, fb_user['uid'],
+                                  fb_user['access_token'])
+        if not fb_data:
+            url = reverse('login')
+            resp = redirect_with_next(request, url)
+            delete_cookie(resp)
+            return resp
+
+        fb_data['uid'] = fb_user['uid']
+        fb_data['access_token'] = fb_user['access_token']
+        request.session['fb_reg_data'] = fb_data
+
+        user_data = fb_data['info']
         # Try to find a default account name
         account = user_data['link'].split('/')[-1]
         if account.startswith('profile.php'):
             # No account shortname defined, use first and last names.
-            info = reg_data['registration']
-            account = slugify("%s %s" % (info['first_name'], info['last_name']))
+            account = slugify("%s %s" % (user_data['first_name'], user_data['last_name']))
             account = account.replace('-', '_')[0:30]
         # Filter all non-word characters from account name
         account = re.sub('\W', '', account)[0:30]
@@ -142,50 +159,19 @@ def register_form(request):
         form = RegistrationForm(initial={'username': account})
 
     args = {}
-    args['fb_portrait'] = request.session['fb_portrait']
-    args['fb_data'] = reg_data
-    args['fb_reg_info'] = reg_data['registration']
+    args['fb_portrait'] = fb_data['portrait']
+    args['fb_data'] = fb_data['info']
     args['form'] = form
 
     return render_to_response("facebook/register_form.html", args,
                               context_instance=RequestContext(request))
-
-@csrf_exempt
-def register(request):
-    if request.method != 'POST' or not 'signed_request' in request.POST:
-        return HttpResponseBadRequest() #FIXME
-
-    (sig, payload) = request.POST['signed_request'].split('.')
-    sig = base64_url_decode(sig)
-    data = json.loads(base64_url_decode(payload))
-
-    if data.get('algorithm').upper() != 'HMAC-SHA256':
-        log.error('Unknown hash algorithm')
-        return HttpResponseBadRequest()
-    expected_sig = hmac.new(settings.FACEBOOK_APP_SECRET, msg=payload,
-                            digestmod=hashlib.sha256).digest()
-    if sig != expected_sig:
-        log.error('Signature mismatch')
-        return HttpResponseBadRequest() #FIXME
-
-    profile = get_profile_by_fb_id(data['user_id'])
-    if profile:
-        return HttpResponseForbidden() #FIXME
-
-    fb_data = fetch_user_data(request, data['user_id'], data['oauth_token'])
-
-    request.session['fb_reg_data'] = data
-    request.session['fb_user_data'] = fb_data['info']
-    request.session['fb_portrait'] = fb_data['portrait']
-
-    url = reverse('facebook_register_form')
-    return redirect_with_next(request, url)
 
 def connect(request):
     fb_user = get_user_from_cookie(request.COOKIES)
     if not fb_user:
         url = reverse('login')
 	return redirect_with_next(request, url)
+
     profile = get_profile_by_fb_id(fb_user['uid'])
     if profile:
         user = profile.user
@@ -196,6 +182,10 @@ def connect(request):
         login(request, user)
         return HttpResponseRedirect(request.REQUEST.get('next', '/'))
 
-    args = {}
-    return render_to_response('facebook/connect.html', args,
-                              context_instance=RequestContext(request))
+    # args = {}
+    # return render_to_response('facebook/connect.html', args,
+    #                          context_instance=RequestContext(request))
+
+    url = reverse('facebook_register_form')
+    return redirect_with_next(request, url)
+
