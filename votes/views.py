@@ -586,6 +586,8 @@ def generate_member_stat_table(request, member, stats):
         'title': _('Agreement with session majority'), 'img': 'images/icons/session_agr.png', 'no_tn': True})
     hdr.append({ 'name': _('St'), 'sort_key': 'st_cnt', 'class': 'member_list_stat',
         'title': _('Number of statements'), 'img': 'images/icons/nr_statements.png', 'no_tn': True})
+    hdr.append({ 'name': _('ElBud'), 'sort_key': 'el_bud', 'class': 'member_list_stat',
+        'title': _('Election budget'), 'img': 'images/icons/election_budget.png', 'no_tn': True})
     table['header'] = hdr
 
     vals = []
@@ -609,6 +611,7 @@ def generate_member_stat_table(request, member, stats):
         row.append(format_stat_col(request, s.party_agree, CLASS_NAME))
         row.append(format_stat_col(request, s.session_agree, CLASS_NAME))
         row.append({ 'value': str(s.statement_count), 'class': CLASS_NAME })
+        row.append(format_stat_col(request, s.election_budget, CLASS_NAME, is_percent=False))
         if not s.attendance and not s.statement_count:
             continue;
         vals.append(row)
