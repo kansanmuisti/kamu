@@ -11,12 +11,15 @@ from kamu.orgs.forms import AddOrgForm, ModifyOrgForm, ModifyScoreForm
 
 from kamu.votes.models import PlenarySession, Session
 
+from kamu.cms.models import Item
+
 import os
 
 def list_orgs(request):
     orgs = Organization.objects.order_by('name')
     arg_dict = { 'org_list': orgs, 'active_page': 'orgs' }
-
+    arg_dict['content'] = Item.objects.retrieve_content('list_orgs')
+    
     ctx = RequestContext(request)
     return render_to_response('list_orgs.html', arg_dict, ctx)
 
