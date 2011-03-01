@@ -726,6 +726,10 @@ msgstr "Tyhjä-äänien lukumäärä"
 msgid "Number of absentees"
 msgstr "Poissaolevien lukumäärä"
 
+#: templates/show_member.html:44
+msgid "Please log in first!"
+msgstr "Kirjaudu sisään ensin!"
+
 #: templates/show_member.html:46 templates/votes.html:5
 msgid "General"
 msgstr "Yleistiedot"

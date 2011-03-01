@@ -14,6 +14,8 @@
       track: true,
       showURL: false,
     });
+
+{% if user.is_authenticated %}
     var vote_func = function() {
       var up_count = $('.user_vote_up .user_vote_count');
       var down_count = $('.user_vote_down .user_vote_count');
@@ -37,6 +39,11 @@
 
       return false;
     };
+{% else %}
+    var vote_func = function() {
+        alert("{% trans 'Please log in first!' %}");
+    }
+{% endif %}
     $('.user_vote_button').click(vote_func);
   });
 </script>
