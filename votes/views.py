@@ -11,6 +11,7 @@ from django.utils.safestring import mark_safe
 from django.utils import simplejson
 from django.utils.http import urlencode, http_date
 from django.contrib.auth.decorators import login_required
+from django.contrib.csrf.middleware import csrf_exempt
 from httpstatus.decorators import postonly
 from tagging.models import Tag
 from tagging.utils import parse_tag_input
@@ -711,9 +712,11 @@ def show_member(request, member, section=None):
 
     return render_to_response('show_member.html', args, context_instance=RequestContext(request))
 
+@csrf_exempt
 @postonly
-@login_required
 def set_member_user_vote(request, member):
+    if not request.user.is_authenticated():
+        raise Http403()
     member = get_object_or_404(Member, url_name=member)
 
     return set_user_vote(request, member)
