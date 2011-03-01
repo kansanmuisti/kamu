@@ -1,5 +1,6 @@
 from django import template
 from django.utils.encoding import smart_unicode
+from django.utils import dateformat, translation
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
@@ -142,3 +143,16 @@ def truncate_chars(value, max_length):
         return truncd_val + "..."
     else:
         return truncd_val
+
+@register.filter("i18n_date")
+def i18n_date(date, format_name):
+    lang = translation.get_language()
+    suffix = fmt = ''
+    if format_name == 'long-month':
+        if lang == 'fi':
+            fmt = 'j. F'
+            suffix = 'ta'
+        elif lang == 'en':
+            fmt = 'jS F'
+    s = dateformat.format(date, fmt)
+    return s + suffix
