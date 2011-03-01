@@ -4,6 +4,12 @@
 {% block content %}
   <h1>{% trans "Kamu login" %}</h1>
 
+{% blocktrans %}
+<p>The only personal information we will display publicly is your name. Any other information collected about you will remain private unless you choose to allow us to display it.</p>
+<p>We use your personal information only in an anonymized fashion, according to our privacy policy.</p>
+{% endblocktrans %}
+<br />
+
 {% if fb_enabled %}
 {% include "_facebook.html" %}
 <script>
