@@ -598,7 +598,6 @@ def generate_member_stat_table(request, member, stats):
                 continue
             if (not term.end and not s.end) or str(term.end) == str(s.end):
                 name = term.display_name
-                print "match"
                 break
         if not name:
             name = str(s.begin) + PERIOD_DASH
