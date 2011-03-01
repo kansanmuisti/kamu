@@ -11,6 +11,7 @@ Dependencies
 - python-beautifulsoup
 - python-dateutil
 - python-feedparser
+- python-simplejson
 
 mkdir
 =====
