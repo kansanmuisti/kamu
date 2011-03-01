@@ -631,7 +631,7 @@ def process_session_keywords(url, sess, noop=False):
         SessionKeyword.objects.get_or_create(session=sess, keyword=kw_obj)
 
 def process_votes(full_update=False, noop=False):
-    year = END_YEAR - 3
+    year = END_YEAR
     next_link = None
     while True:
         if not next_link:
@@ -642,8 +642,7 @@ def process_votes(full_update=False, noop=False):
             nr = vote_links.index(link)
             sess = process_session_votes(link['results'], nr, not full_update, noop)
             if not sess:
-                next_link = None
-                break
+                return
             # Process keywords
             if 'info' in link:
                 process_session_keywords(link['info'], sess, noop)
