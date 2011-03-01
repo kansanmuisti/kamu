@@ -66,9 +66,8 @@ class Option(models.Model):
                ROUND(COALESCE(partyvotes/partytotal, 0)*100) AS share
             FROM
              (SELECT party_id, count(*) as partytotal
-              FROM opinions_answer, opinions_option, votes_member
-              WHERE opinions_option.question_id=%s
-                AND opinions_answer.option_id=opinions_option.id
+              FROM opinions_answer, votes_member
+              WHERE opinions_answer.question_id=%s
                 AND votes_member.id=opinions_answer.member_id
               GROUP BY votes_member.party_id) as totals,
              (SELECT votes_member.party_id, count(*) AS partyvotes
@@ -88,6 +87,7 @@ class Option(models.Model):
 class Answer(models.Model):
     member = models.ForeignKey(Member)
     option = models.ForeignKey(Option, null=True)
+    question = models.ForeignKey(Question)
     explanation = models.TextField()
 
     class Meta:
