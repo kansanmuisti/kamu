@@ -60,7 +60,7 @@ class Member(models.Model):
     info_link = models.URLField()
     wikipedia_link = models.URLField(blank=True, null=True)
     homepage_link = models.URLField(blank=True, null=True)
-    twitter_account = models.CharField(max_length=30)
+    twitter_account = models.CharField(max_length=30, blank=True, null=True)
 
     objects = MemberManager()
 
