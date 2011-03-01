@@ -40,34 +40,40 @@ PERIODS = [
      'query_name': '1999-2002'},
 ]
 
-PERIOD_KEY = 'period'
-
+TERM_KEY = 'term'
 DISTRICT_KEY = 'district'
-
 COUNTY_KEY = 'county'
 
 THUMBNAIL_WIDTH_LIMITS = (24,80)
 THUMBNAIL_HEIGHT_LIMITS = (24,80)
 
+term_list = list(Term.objects.all())
+
+def find_term(request):
+    """Return the active term for the request."""
+    chosen_term = None
+    if TERM_KEY in request.GET:
+        term = request.GET[TERM_KEY]
+        for t in term_list:
+            if t.name == term:
+                chosen_term = t
+                break
+    if chosen_term:
+        request.session[TERM_KEY] = chosen_term.name
+    elif TERM_KEY in request.session:
+        term = request.session[TERM_KEY]
+        for t in term_list:
+            if t.name == term:
+                chosen_term = t
+                break
+    # Choose default if another term is not specifically requested.
+    if not chosen_term:
+        chosen_term = term_list[0]
+    return chosen_term
+
 def find_period(request):
-    chosen_period = None
-    if PERIOD_KEY in request.GET:
-        period = request.GET[PERIOD_KEY]
-        for per in PERIODS:
-            if per['query_name'] == period:
-                chosen_period = per
-                break
-    if chosen_period:
-        request.session[PERIOD_KEY] = chosen_period['query_name']
-    elif PERIOD_KEY in request.session:
-        period = request.session[PERIOD_KEY]
-        for per in PERIODS:
-            if per['query_name'] == period:
-                chosen_period = per
-                break
-    if not chosen_period:
-        chosen_period = PERIODS[0]
-    return (chosen_period['begin'], chosen_period['end'])
+    term = find_term(request)
+    return (term.begin, term.end)
 
 def find_district(request, begin, end):
     da_list = DistrictAssociation.objects.list_between(begin, end)
@@ -202,7 +208,7 @@ def list_plsessions(request):
         session_page = paginator.page(paginator.num_pages)
 
     data_dict = { 'pl_session_page': session_page }
-    data_dict['switch_period'] = True
+    data_dict['switch_term'] = True
 
     data_dict['active_page'] = 'plsessions'
 
@@ -239,7 +245,7 @@ def list_sessions(request):
         pl_sess.sess_list = sess_list
 
     data_dict = { 'pl_session_page': session_page }
-    data_dict['switch_period'] = True
+    data_dict['switch_term'] = True
 
     data_dict['active_page'] = 'sessions';
 
@@ -473,11 +479,12 @@ def list_members(request):
         sort_reverse = True
     else:
         sort_reverse = False
-    if sort_key not in ['name', 'party', 'att', 'pagree', 'sagree', 'st_cnt']:
+    if sort_key not in ['name', 'party', 'att', 'pagree', 'sagree', 'st_cnt', 'el_bud']:
         sort_key = 'name'
-    calc_keys = ['att', 'pagree', 'sagree', 'st_cnt']
+    calc_keys = ['att', 'pagree', 'sagree', 'st_cnt', 'el_bud']
     if sort_key in calc_keys:
-        stat_attr = ['attendance', 'party_agree', 'session_agree', 'statement_count']
+        stat_attr = ['attendance', 'party_agree', 'session_agree', 'statement_count',
+                     'election_budget']
         stat_attr = stat_attr[calc_keys.index(sort_key)]
         # Some fields are calculated dynamically, so we need
         # to calculate it for all objects first in order to
@@ -549,7 +556,7 @@ def list_members(request):
             col_vals.append(format_stat_col(request, mem.stats.party_agree, CLASS_NAME))
             col_vals.append(format_stat_col(request, mem.stats.session_agree, CLASS_NAME))
             col_vals.append({'value': str(mem.stats.statement_count), 'class': CLASS_NAME + ' member_list_statements'})
-            col_vals.append(format_stat_col(request, random.randint(0, 15000), CLASS_NAME, is_percent=False))
+            col_vals.append(format_stat_col(request, mem.stats.election_budget, CLASS_NAME, is_percent=False))
         else:
             col_vals.append(None)
             col_vals.append(None)
@@ -560,7 +567,7 @@ def list_members(request):
     table_html = "".join(row_list)
 
     return render_to_response('members.html',
-                             {'member_page': member_page, 'switch_period': True,
+                             {'member_page': member_page, 'switch_term': True,
                               'switch_district': True, 'switch_county': True,
                               'hdr': hdr_html,
                               'rows': table_html, 'active_page': 'members'},
@@ -570,7 +577,7 @@ def generate_member_stat_table(request, member, stats):
     table = {}
 
     hdr = []
-    hdr.append({ 'name': _('Period'), 'class': 'member_list_name' })
+    hdr.append({ 'name': _('Term'), 'class': 'member_list_name' })
     hdr.append({ 'name': _('ATT'), 'sort_key': 'att', 'class': 'member_list_stat',
         'title': _('Attendance in voting sessions'), 'img': 'images/icons/attendance.png', 'no_tn': True})
     hdr.append({ 'name': _('PA'), 'sort_key': 'pagree', 'class': 'member_list_stat',
@@ -586,11 +593,12 @@ def generate_member_stat_table(request, member, stats):
     for s in stats:
         row = []
         name = None
-        for per in PERIODS:
-            if per['begin'] != str(s.begin):
+        for term in term_list:
+            if str(term.begin) != str(s.begin):
                 continue
-            if (not per['end'] and not s.end) or per['end'] == str(s.end):
-                name = per['name']
+            if (not term.end and not s.end) or str(term.end) == str(s.end):
+                name = term.display_name
+                print "match"
                 break
         if not name:
             name = str(s.begin) + PERIOD_DASH
@@ -653,9 +661,9 @@ def show_member_basic(request, member):
 
     stats = MemberStats.objects.filter(member = member)
     stat_list = []
-    for per in PERIODS:
+    for term in term_list:
         for st in stats:
-            if (str(st.begin) == str(per['begin'])) and (str(st.end) == str(per['end'])):
+            if (str(st.begin) == str(term.begin)) and (str(st.end) == str(term.end)):
                 stat_list.append(st)
                 break
     if stat_list:

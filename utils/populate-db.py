@@ -54,8 +54,8 @@ TERMS = [
      'name': '2007-2010' },
     {'display_name': '2003'+TERM_DASH+'2006', 'begin': '2003-03-19', 'end': '2007-03-20',
      'name': '2003-2006' },
-    {'display_name': '1999'+TERM_DASH+'2002', 'begin': '1999-03-24', 'end': '2003-03-18',
-     'name': '1999-2002' },
+#    {'display_name': '1999'+TERM_DASH+'2002', 'begin': '1999-03-24', 'end': '2003-03-18',
+#     'name': '1999-2002' },
 ]
 
 term_list = Term.objects.all()
@@ -631,7 +631,7 @@ def process_session_keywords(url, sess, noop=False):
         SessionKeyword.objects.get_or_create(session=sess, keyword=kw_obj)
 
 def process_votes(full_update=False, noop=False):
-    year = END_YEAR
+    year = END_YEAR - 3
     next_link = None
     while True:
         if not next_link:

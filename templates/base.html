@@ -41,7 +41,7 @@
       });
     });
 {% endif %}
-{% if switch_period %}
+{% if switch_term %}
     $(function() {
       var open = false;
 
@@ -161,10 +161,10 @@
 
 <div id="sidebar">
 {% block sidebar %}{% endblock %}
-{% if switch_period %}
-<a href="#" id="period_opener" class="opener action_link">{% trans "Select period" %}</a>
+{% if switch_term %}
+<a href="#" id="period_opener" class="opener action_link">{% trans "Select term" %}</a>
 <div class="filter" id="period_list">
-{% generate_option_list "period" %}
+{% generate_option_list "term" %}
 </div>
 {% endif %}
 

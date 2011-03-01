@@ -83,7 +83,7 @@ def query_string(context, add=None, remove=None):
     response = get_query_string(params, add, remove)
     return {'response': response }
 
-from votes.views import PERIODS, find_period, find_district
+from votes.views import TERM_KEY, term_list, find_period, find_district
 from votes.models import DistrictAssociation, County
 
 @register.inclusion_tag('opt_list.html', takes_context=True)
@@ -91,14 +91,14 @@ def generate_option_list(context, option):
     opt_list = []
     source_url = None
     session = context['request'].session
-    if option == 'period':
-        if 'period' in session:
-            chosen_period = session['period']
+    if option == 'term':
+        if TERM_KEY in session:
+            chosen_term = session[TERM_KEY]
         else:
-            chosen_period = None
-        for per in PERIODS:
-            opt = { 'name': per['name'], 'value': per['query_name']}
-            if chosen_period and opt['value'] == chosen_period:
+            chosen_term = None
+        for term in term_list:
+            opt = {'name': term.display_name, 'value': term.name}
+            if chosen_term and opt['value'] == chosen_term:
                 opt['selected'] = True
             opt_list.append(opt)
         if 'selected' in opt_list[0]:

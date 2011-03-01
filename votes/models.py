@@ -8,6 +8,10 @@ class Term(models.Model):
     name = models.CharField(max_length=40)
     begin = models.DateField()
     end = models.DateField(blank=True, null=True)
+
+    class Meta:
+        ordering = ('-begin', )
+
     def __unicode__(self):
         return self.name
 
@@ -112,6 +116,8 @@ class MemberStats(models.Model):
     session_agreement = models.CommaSeparatedIntegerField(max_length = 20)
     vote_counts = models.CommaSeparatedIntegerField(max_length = 30)
     statement_count = models.IntegerField()
+    election_budget = models.DecimalField(max_digits=10, decimal_places=2,
+                                          blank=True, null=True)
 
     objects = MemberStatsManager()
 
