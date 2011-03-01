@@ -126,7 +126,8 @@ mp_list_url = '/triphome/bin/thw/trip/?${base}=hetekaue&${maxpage}=10001&${snhtm
 heti_url = '/triphome/bin/hex5000.sh?hnro=%s&kieli=su'
 
 STAT_URL_BASE = 'http://www.stat.fi'
-STAT_COUNTY_URL = '/meta/luokitukset/vaalipiiri/001-2007/luokitusavain_teksti.txt'
+STAT_COUNTY_URL = '/meta/luokitukset/vaalipiiri/001-2011/luokitusavain_kunta_teksti.txt'
+# STAT_COUNTY_URL = '/meta/luokitukset/vaalipiiri/001-2007/luokitusavain_teksti.txt'
 
 KEYWORD_URL_BASE = 'http://www.eduskunta.fi'
 KEYWORD_LIST_URL = '/triphome/bin/vex6000.sh'
@@ -389,7 +390,7 @@ def process_counties(db_insert):
     # strip first 4 lines of header and any blank/empty lines at EOF
     for line in s.rstrip().split('\n')[4:]:
         dec_line = line.decode('iso8859-1').rstrip().split('\t')
-        (district_id, district_name, county_id, county_name) = dec_line
+        (county_id, county_name, district_id, district_name) = dec_line
 
         if not db_insert:
             continue
