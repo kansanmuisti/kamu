@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-01 21:26+0200\n"
+"POT-Creation-Date: 2011-03-02 00:44+0200\n"
 "PO-Revision-Date: 2011-03-01 21:29+0200\n"
 "Last-Translator: Juha Yrjölä <juha.yrjola@iki.fi>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -603,15 +603,15 @@ msgstr[1] ""
 msgid "Main page"
 msgstr "Etusivu"
 
-#: templates/main_page.html:8 votes/views.py:878
+#: templates/main_page.html:8 votes/views.py:903
 msgid "Background"
 msgstr "Taustaa"
 
-#: templates/main_page.html:9 votes/views.py:882
+#: templates/main_page.html:9 votes/views.py:907
 msgid "Feedback"
 msgstr "Palaute"
 
-#: templates/main_page.html:10 votes/views.py:880
+#: templates/main_page.html:10 votes/views.py:905
 msgid "Contact"
 msgstr "Yhteystiedot"
 
@@ -636,10 +636,14 @@ msgid "Contact information"
 msgstr "Yhteystiedot"
 
 #: templates/main_page.html:82
+msgid "Most popular"
+msgstr "Suosituimmat"
+
+#: templates/main_page.html:106
 msgid "News"
 msgstr "Uutiset"
 
-#: templates/main_page.html:95
+#: templates/main_page.html:119
 msgid "Latest votes"
 msgstr "Uusimmat äänestykset"
 
@@ -748,12 +752,12 @@ msgstr "Poissaolevien lukumäärä"
 msgid "Please log in first!"
 msgstr "Kirjaudu sisään ensin!"
 
-#: templates/show_member.html:53 templates/votes.html:5
+#: templates/show_member.html:53 templates/votes.html:6
 msgid "General"
 msgstr "Yleistiedot"
 
 #: templates/show_member.html:54 templates/votes.html:3
-#: templates/votes.html.py:58
+#: templates/votes.html.py:60
 msgid "Votes"
 msgstr "Äänet"
 
@@ -765,7 +769,7 @@ msgstr "Sidonnaisuudet"
 msgid "Statements"
 msgstr "Puheenvuorot"
 
-#: templates/show_member.html:57 templates/votes.html:6
+#: templates/show_member.html:57 templates/votes.html:7
 msgid "Comments"
 msgstr "Kommentit"
 
@@ -817,11 +821,11 @@ msgstr "Tyhjä"
 msgid "No votes in database"
 msgstr "Ei ääniä tietokannassa"
 
-#: templates/show_member.html:162 templates/votes.html:106
+#: templates/show_member.html:162 templates/votes.html:108
 msgid "ago"
 msgstr "sitten"
 
-#: templates/show_member.html:169 templates/votes.html:113
+#: templates/show_member.html:169 templates/votes.html:115
 msgid "Leave a new comment"
 msgstr "Jätä uusi kommentti"
 
@@ -848,35 +852,35 @@ msgstr ""
 "    "
 
 #: templates/show_session.html:3 templates/show_session.html.py:7
-#: templates/votes.html:9
+#: templates/votes.html:11
 msgid "Plenary session"
 msgstr "Täysistunto"
 
-#: templates/votes.html:9
+#: templates/votes.html:11
 msgid "vote"
 msgstr "äänestys"
 
-#: templates/votes.html:10
+#: templates/votes.html:12
 msgid "time"
 msgstr "klo. "
 
-#: templates/votes.html:22
+#: templates/votes.html:24
 msgid "Tags"
 msgstr "Tunnisteet"
 
-#: templates/votes.html:27
+#: templates/votes.html:29
 msgid "Add tag"
 msgstr "Lisää tunniste"
 
-#: templates/votes.html:36
+#: templates/votes.html:38
 msgid "Scoring"
 msgstr "Pisteytykset"
 
-#: templates/votes.html:45
+#: templates/votes.html:47
 msgid "Session documents"
 msgstr "Asiakirjat"
 
-#: templates/votes.html:48
+#: templates/votes.html:50
 msgid "Plenary session minutes"
 msgstr "Istuntopöytäkirja"
 
@@ -1215,55 +1219,55 @@ msgstr "Puolue"
 msgid "Absent"
 msgstr "Poissa"
 
-#: votes/views.py:520 votes/views.py:582
+#: votes/views.py:520 votes/views.py:581
 msgid "ATT"
 msgstr "L.o."
 
-#: votes/views.py:521 votes/views.py:583
+#: votes/views.py:521 votes/views.py:582
 msgid "Attendance in voting sessions"
 msgstr "Läsnäoloprosentti äänestyksissä"
 
-#: votes/views.py:522 votes/views.py:584
+#: votes/views.py:522 votes/views.py:583
 msgid "PA"
 msgstr "SP"
 
-#: votes/views.py:523 votes/views.py:585
+#: votes/views.py:523 votes/views.py:584
 msgid "Agreement with party majority"
 msgstr "Samanmielisyys puolueen enemmistön kanssa"
 
-#: votes/views.py:524 votes/views.py:586
+#: votes/views.py:524 votes/views.py:585
 msgid "SA"
 msgstr "SI"
 
-#: votes/views.py:525 votes/views.py:587
+#: votes/views.py:525 votes/views.py:586
 msgid "Agreement with session majority"
 msgstr "Samanmielisyys äänestyksen lopputuloksen kanssa"
 
-#: votes/views.py:526 votes/views.py:588
+#: votes/views.py:526 votes/views.py:587
 msgid "St"
 msgstr "Pv"
 
-#: votes/views.py:527 votes/views.py:589
+#: votes/views.py:527 votes/views.py:588
 msgid "Number of statements"
 msgstr "Puheenvuorojen lukumäärä"
 
-#: votes/views.py:528
+#: votes/views.py:528 votes/views.py:589
 msgid "ElBud"
 msgstr "VB"
 
-#: votes/views.py:529
+#: votes/views.py:529 votes/views.py:590
 msgid "Election budget"
 msgstr "Vaalibudjetti"
 
-#: votes/views.py:581
+#: votes/views.py:580
 msgid "Term"
 msgstr "Vaalikausi"
 
-#: votes/views.py:876
+#: votes/views.py:901
 msgid "Home"
 msgstr "Etusivu"
 
-#: votes/templatetags/basic.py:111
+#: votes/templatetags/basic.py:112
 msgid "All districts"
 msgstr "Kaikki"
 

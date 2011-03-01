@@ -817,6 +817,29 @@ def search_autocomplete(request):
 
     return response
 
+def mp_hall_of_fame(max_results):
+    thumbnail_width = 70
+    thumbnail_height = 70
+
+    query = Member.objects.raw("""
+        select *,count(score) as like_cnt
+        from user_votes as v
+        join votes_member m on v.object_id=m.id
+        where v.score > 0
+        group by m.id
+        order by like_cnt desc
+    """)[:max_results]
+    member_list=[]
+    for memb in query:
+        tn = DjangoThumbnail(memb.photo, (thumbnail_width, thumbnail_height))
+        member_list.append({
+            'name'      : memb.name,
+            'url_name'  : memb.url_name,
+            'thumbnail' : unicode(tn),
+            'like_cnt'  : memb.like_cnt})
+
+    return member_list
+
 def search(request):
     try:
         page = int(request.GET.get('page', '1'))
@@ -893,6 +916,7 @@ def about(request, section):
     args = {'active_page': 'info', 'section': section}
     args['sess_list'] = sess_list
     args['section_name'] = section_name
+    args['mp_hall_of_fame'] = mp_hall_of_fame(10)
     if section == 'feedback':
         return contact_form(request, template_name='main_page.html',
                             extra_context=args)

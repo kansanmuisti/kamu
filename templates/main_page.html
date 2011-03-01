@@ -79,6 +79,30 @@ Kansan muisti ry:n tavoitteena on uutta teknologiaa hyödyntäen tarjota kansala
 <div id="news_col">
 
 <div class="news_items">
+    <h1>{% trans "Most popular" %}</h1>
+    <table>
+        {% for mp in mp_hall_of_fame %}
+            {% if forloop.counter0|divisibleby:"5" %}
+                {% if not forloop.fist %}
+                    </tr>
+                {% endif %}
+                <tr>
+            {% endif %}
+
+            <td>
+                <a href="{% url votes.views.show_member member=mp.url_name %}">
+                <img src='{{ mp.thumbnail }}'/>
+                </a>
+            </td>
+
+            {% if forloop.last %}
+                </tr>
+            {% endif %}
+    {% endfor %}
+    </table>
+</div>
+
+<div class="news_items">
   <h1>{% trans "News" %}</h1>
   <h2>Kamu on taas terve</h2>
   <p>Sivuston palvelimessa oli laitevika, mutta nyt olemme tolpillamme.</p>
