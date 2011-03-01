@@ -31,8 +31,17 @@ $ utils/populate-db.py -c
 SQL
 ===
 
-$ mysqladmin create kamu
-
+CREATE DATABASE kamu CHARACTER SET utf8;
 CREATE USER 'kamu'@'localhost' IDENTIFIED BY 'kamu';
 GRANT ALL PRIVILEGES ON kamu.* TO 'kamu'@'localhost';
 
+If your existing database is in latin1, you can convert to utf-8
+like this:
+
+ALTER DATABASE kamu DEFAULT CHARACTER SET utf8;
+
+echo "show tables" | ./manage.py dbshell > /tmp/tables
+for a in $(cat /tmp/tables) ; do
+	echo $a
+	echo "alter table $a convert to character set utf8" | ./manage.py dbshell
+done
