@@ -54,7 +54,7 @@
 <p><a class="action_link{% ifequal section 'votes' %} action_link_active{% endifequal %}" href="{% url votes.views.show_member member=member.url_name section='votes' %}">{% trans "Votes" %}</a></p>
 <p class="action_link_disabled">{% trans "Register of interest" %}</p>
 <p><a class="action_link{% ifequal section 'statements' %} action_link_active{% endifequal %}" href="{% url votes.views.show_member member=member.url_name section='statements' %}">{% trans "Statements" %}</a></p>
-<p><a class="action_link{% ifequal section 'comments' %} action_link_active{% endifequal %}" href="{% url votes.views.show_member member=member.url_name section='comments' %}">{% trans "Comments" %}</a></p>
+{% comment %}<p><a class="action_link{% ifequal section 'comments' %} action_link_active{% endifequal %}" href="{% url votes.views.show_member member=member.url_name section='comments' %}">{% trans "Comments" %}</a></p> {% endcomment %}
 <p><a class="action_link{% ifequal section 'opinions' %} action_link_active{% endifequal %}" href="{% url votes.views.show_member member=member.url_name section='opinions' %}">{% trans "Opinions" %}</a></p>
 
 {% endblock %}

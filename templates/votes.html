@@ -2,8 +2,10 @@
 {% load i18n thumbnail tagging_tags basic comments %}
 {% block title %}{% trans "Votes" %} - {{ psession.name }}/{{ session.number }}{% endblock %}
 {% block sidebar %}
-<div style='margin-bottom: 32px'><p><a class="action_link{% ifequal section 'basic' %} action_link_active{% endifequal %}" href="{% url votes.views.show_session plsess=psession.url_name,sess=session.number %}">{% trans "General" %}</a></p>
-<p><a class="action_link{% ifequal section 'comments' %} action_link_active{% endifequal %}" href="{% url votes.views.show_session plsess=psession.url_name,sess=session.number,section='comments' %}">{% trans "Comments" %}</a></p></div>
+<div style='margin-bottom: 32px'>
+  <p><a class="action_link{% ifequal section 'basic' %} action_link_active{% endifequal %}" href="{% url votes.views.show_session plsess=psession.url_name,sess=session.number %}">{% trans "General" %}</a></p>
+  {% comment %}<p><a class="action_link{% ifequal section 'comments' %} action_link_active{% endifequal %}" href="{% url votes.views.show_session plsess=psession.url_name,sess=session.number,section='comments' %}">{% trans "Comments" %}</a></p>{% endcomment %}
+</div>
 {% endblock %}
 {% block content %}
   <h1>{% trans "Plenary session" %} {{ psession.name }}, {% trans "vote" %} {{ session.number }},
