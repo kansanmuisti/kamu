@@ -1,0 +1,4963 @@
+{% extends "base.html" %}
+{% load i18n thumbnail %}
+{% block title %}{% trans "Opinions" %}{% endblock %}
+{% block head %}
+    <script type="text/javascript">
+    $(function() {
+    	// Accordion
+	$("#accordion").accordion({
+        	header: "h3",
+        	autoHeight: false,
+                collapsible: true,
+                active: false });
+    });
+    </script>
+{% endblock %}
+
+
+{% block content %}
+
+  <div id="accordion" class="ui-accordion ui-widget ui-helper-reset ui-accordion-icons">
+
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Pitäisikö rekisteröidyssä parisuhteessa eläville homo- ja lesbopareille sallia adoptio-oikeus?</td>
+
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+
+        <td class="option_text">Samaa sukupuolta oleville ei tule sallia adoptiota.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 92%"><em>92%<br />kd</em></span></dt>
+          
+        
+          <dt>kesk</dt>
+
+          <dd><span style="height: 67%"><em>67%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 40%"><em>40%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+          <dd><span style="height: 75%"><em>75%<br />ps</em></span></dt>
+
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 24%"><em>24%<br />sd</em></span></dt>
+          
+        
+          <dt>vas</dt>
+
+          <dd><span style="height: 5%"><em>5%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+      </tr>
+
+    
+      <tr>
+        <td class="option_text">Perheen sisäinen adoptio, jossa toinen puolisoista voi adoptoida kumppaninsa lapsen, tulisi sallia. </td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+          
+        
+          <dt>kesk</dt>
+
+          <dd><span style="height: 26%"><em>26%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 41%"><em>41%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+          <dd><span style="height: 25%"><em>25%<br />ps</em></span></dt>
+
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 43%"><em>43%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 47%"><em>47%<br />sd</em></span></dt>
+          
+        
+          <dt>vas</dt>
+
+          <dd><span style="height: 30%"><em>30%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 22%"><em>22%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+      </tr>
+
+    
+      <tr>
+        <td class="option_text">Kyllä, heille tulisi sallia samat oikeudet kuin avioliitossa oleville.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 8%"><em>8%<br />kd</em></span></dt>
+          
+        
+          <dt>kesk</dt>
+
+          <dd><span style="height: 7%"><em>7%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 19%"><em>19%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 57%"><em>57%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 29%"><em>29%<br />sd</em></span></dt>
+          
+        
+          <dt>vas</dt>
+
+          <dd><span style="height: 65%"><em>65%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 78%"><em>78%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+      </tr>
+
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+          <td class="source">HS vaalikone 2007</td>
+
+          <td class="question_text">Suomessa on päätetty, että analogiset televisiolähetykset loppuvat 31.8.2007. Tulisiko päätös purkaa ja antaa analogisille lähetyksille jatkoaikaa?</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+    <div style="display: none;">
+
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Ei.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 42%"><em>42%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 70%"><em>70%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 62%"><em>62%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 100%"><em>100%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 69%"><em>69%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 55%"><em>55%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 56%"><em>56%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Kyllä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 58%"><em>58%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 30%"><em>30%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 38%"><em>38%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 100%"><em>100%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 31%"><em>31%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 45%"><em>45%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 44%"><em>44%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Mitä mieltä olette seuraavasta väittämästä: Poliisin valtuuksia tulisi lisätä rikollisuuden torjumiseksi ja yleisen turvallisuuden lisäämiseksi.  </td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Täysin eri mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 0%"><em>0%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 3%"><em>3%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 29%"><em>29%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 7%"><em>7%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 10%"><em>10%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 28%"><em>28%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Jokseenkin eri mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 20%"><em>20%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 3%"><em>3%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 25%"><em>25%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 14%"><em>14%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 47%"><em>47%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 70%"><em>70%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 61%"><em>61%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Jokseenkin samaa mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 67%"><em>67%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 67%"><em>67%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 60%"><em>60%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 50%"><em>50%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 57%"><em>57%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 41%"><em>41%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 20%"><em>20%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 6%"><em>6%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Täysin samaa mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 33%"><em>33%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 13%"><em>13%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 33%"><em>33%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 25%"><em>25%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 5%"><em>5%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 6%"><em>6%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Miten Suomen puolustus tulisi järjestää?</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Pysyttelemällä Naton ulkopuolella ja luopumalla yleisestä asevelvollisuudesta.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 0%"><em>0%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 2%"><em>2%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 2%"><em>2%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 5%"><em>5%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 39%"><em>39%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Pysyttelemällä Naton ulkopuolella ja säilyttämällä yleinen asevelvollisuus.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 100%"><em>100%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 95%"><em>95%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 21%"><em>21%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 100%"><em>100%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 57%"><em>57%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 95%"><em>95%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 95%"><em>95%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 56%"><em>56%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Liittymällä Natoon ja säilyttämällä yleinen asevelvollisuus.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 5%"><em>5%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 76%"><em>76%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 43%"><em>43%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 2%"><em>2%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 6%"><em>6%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Liittymällä Natoon ja luopumalla yleisestä asevelvollisuudesta.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 0%"><em>0%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 2%"><em>2%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 2%"><em>2%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Millaisin keinoin energiankulutuksen kasvua tulisi Suomessa hillitä?</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Energiankulutuksen kasvua ei tarvitse hillitä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 0%"><em>0%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 0%"><em>0%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 0%"><em>0%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Säästöön tulisi pyrkiä vain valistuksen keinoin.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 33%"><em>33%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 46%"><em>46%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 51%"><em>51%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 75%"><em>75%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 29%"><em>29%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 29%"><em>29%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 35%"><em>35%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Sähkön ja polttoaineiden verotusta voitaisiin kiristää hieman, mutta pääpainon kulutuksen kasvun hillinnässä tulisi olla valistuksessa.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 67%"><em>67%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 54%"><em>54%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 48%"><em>48%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 25%"><em>25%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 71%"><em>71%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 71%"><em>71%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 40%"><em>40%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 56%"><em>56%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Sähkön ja polttoaineiden verotusta tulisi tuntuvasti kiristää.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 0%"><em>0%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 2%"><em>2%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 0%"><em>0%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 25%"><em>25%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 44%"><em>44%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Mitä mieltä olette seuraavasta väittämästä: Suomeen tulisi rakentaa kuudes ydinvoimala.</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Täysin eri mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 17%"><em>17%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 3%"><em>3%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 2%"><em>2%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 25%"><em>25%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 29%"><em>29%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 14%"><em>14%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 55%"><em>55%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 89%"><em>89%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Jokseenkin eri mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 50%"><em>50%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 39%"><em>39%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 0%"><em>0%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 75%"><em>75%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 29%"><em>29%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 24%"><em>24%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 15%"><em>15%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 6%"><em>6%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Jokseenkin samaa mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 33%"><em>33%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 41%"><em>41%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 32%"><em>32%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 43%"><em>43%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 33%"><em>33%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 20%"><em>20%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Täysin samaa mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 16%"><em>16%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 67%"><em>67%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 29%"><em>29%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 10%"><em>10%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 6%"><em>6%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Millaista linjaa Suomen tulisi ajaa EU:n ilmastopolitiikassa?</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Kasvihuonekaasujen päästöjen vähentäminen ei ainakaan vielä ole ajankohtaista. </td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 0%"><em>0%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 0%"><em>0%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 0%"><em>0%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Päästöjä on vähennettävä globaalisti, mutta EU:n ei tule sitoutua vähennyksiin enempää kuin muutkaan maat.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 17%"><em>17%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 49%"><em>49%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 51%"><em>51%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 50%"><em>50%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 43%"><em>43%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 14%"><em>14%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 30%"><em>30%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">EU.n tulisi olla edelläkävijä ja rajoittaa kasvihuonekaasujen päästöjä, vaikka muut kuten USA ja Kiina eivät vielä siihen olisi halukkaita.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 83%"><em>83%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 51%"><em>51%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 49%"><em>49%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 50%"><em>50%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 57%"><em>57%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 86%"><em>86%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 70%"><em>70%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 100%"><em>100%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Suomessa on tällä hetkellä 220–250 sutta. Määrä on</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Liian suuri.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 42%"><em>42%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 64%"><em>64%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 46%"><em>46%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 25%"><em>25%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 29%"><em>29%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 29%"><em>29%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 20%"><em>20%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 6%"><em>6%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Sopiva.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 58%"><em>58%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 36%"><em>36%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 54%"><em>54%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 75%"><em>75%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 71%"><em>71%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 71%"><em>71%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 80%"><em>80%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 50%"><em>50%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Liian pieni.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 0%"><em>0%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 0%"><em>0%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 0%"><em>0%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 44%"><em>44%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Tulisiko Turkki ottaa EU:n jäseneksi, jos se täyttää jäsenyyden ehdot?</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Ei.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 83%"><em>83%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 31%"><em>31%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 40%"><em>40%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 75%"><em>75%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 14%"><em>14%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 16%"><em>16%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 20%"><em>20%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 6%"><em>6%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Kyllä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 17%"><em>17%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 69%"><em>69%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 60%"><em>60%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 25%"><em>25%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 86%"><em>86%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 84%"><em>84%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 80%"><em>80%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 94%"><em>94%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Miten haluaisitte tarkistaa presidentin valtaoikeuksia?</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Presidentin valtaoikeuksia tulisi lisätä nykyisestä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 8%"><em>8%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 0%"><em>0%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 0%"><em>0%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 2%"><em>2%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Presidentin valtaoikeudet tulee säilyttää nykyisinä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 67%"><em>67%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 44%"><em>44%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 24%"><em>24%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 75%"><em>75%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 14%"><em>14%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 84%"><em>84%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 75%"><em>75%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 6%"><em>6%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Presidentin tulisi  johtaa ulkopolitiikkaa vastakin yhteistoiminnassa valtioneuvoston kanssa, mutta ei osallistua enää EU:n huippukokouksiin.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 25%"><em>25%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 39%"><em>39%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 40%"><em>40%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 57%"><em>57%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 9%"><em>9%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 10%"><em>10%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 39%"><em>39%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Presidentin ulkopoliittista valtaa tulisi vähentää valtioneuvoston hyväksi.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 16%"><em>16%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 37%"><em>37%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 25%"><em>25%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 29%"><em>29%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 5%"><em>5%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 15%"><em>15%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 56%"><em>56%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Miten opiskelijoiden toimeentuloa tulisi ensisijaisesti tukea tulevaisuudessa?</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Kannustamalla opiskelijoita entistä enemmän työntekoon opintojen ohella nostamalla tulorajaa, jonka verran opiskelija voi ansaita menettämättä opintorahaansa.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 16%"><em>16%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 10%"><em>10%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 3%"><em>3%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Kannustamalla opiskelijoita rahoittamaan opintonsa nykyistä enemmän opintolainalla.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 5%"><em>5%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 5%"><em>5%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 14%"><em>14%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 9%"><em>9%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Korottamalla opintorahaa. </td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 100%"><em>100%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 79%"><em>79%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 86%"><em>86%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 100%"><em>100%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 86%"><em>86%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 88%"><em>88%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 100%"><em>100%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 100%"><em>100%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Suomessa korkeakouluopiskelu on maksutonta. Miten tulisi menetellä vastedes?</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Korkeakouluihin tulisi säätää kaikille lukukausimaksu.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 2%"><em>2%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 2%"><em>2%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 0%"><em>0%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">EU:n ulkopuolisten maiden opiskelijoille tulisi säätää lukukausimaksu.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 17%"><em>17%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 72%"><em>72%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 52%"><em>52%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 75%"><em>75%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 43%"><em>43%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 21%"><em>21%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 11%"><em>11%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Korkeakouluopetuksen tulee olla vastaisuudessakin maksutonta.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 83%"><em>83%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 26%"><em>26%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 46%"><em>46%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 25%"><em>25%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 57%"><em>57%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 79%"><em>79%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 100%"><em>100%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 89%"><em>89%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Suomessa on keskusteltu energian hinnannoususta sekä pörssissä noteeratun Fortumin johdon optioista. Mitä mieltä olette seuraavasta väittämästä: Suomeen tulisi perustaa uusi valtiollinen energiayhtiö? </td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Täysin eri mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 17%"><em>17%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 3%"><em>3%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 22%"><em>22%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 57%"><em>57%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 3%"><em>3%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 6%"><em>6%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Jokseenkin eri mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 42%"><em>42%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 49%"><em>49%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 44%"><em>44%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 43%"><em>43%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 34%"><em>34%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 11%"><em>11%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Jokseenkin samaa mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 33%"><em>33%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 43%"><em>43%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 30%"><em>30%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 100%"><em>100%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 45%"><em>45%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 30%"><em>30%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 56%"><em>56%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Täysin samaa mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 8%"><em>8%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 5%"><em>5%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 3%"><em>3%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 17%"><em>17%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 70%"><em>70%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 28%"><em>28%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Vapaaehtoisia eläkevakuutuksia tuetaan nykyisin veroedulla. Pitäisikö eläkesäästämisen veroetu laajentaa myös muihin säästötapoihin kuten osakkeisiin, rahastoihin ja talletuksiin?</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Nykyinenkin veroetu pitää poistaa.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 0%"><em>0%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 2%"><em>2%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 25%"><em>25%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 7%"><em>7%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 25%"><em>25%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Ei.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 75%"><em>75%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 52%"><em>52%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 41%"><em>41%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 75%"><em>75%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 57%"><em>57%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 86%"><em>86%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 75%"><em>75%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 94%"><em>94%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Kyllä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 25%"><em>25%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 48%"><em>48%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 57%"><em>57%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 43%"><em>43%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 7%"><em>7%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 6%"><em>6%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Mitä mieltä olette seuraavasta väittämästä: Sairaanhoidon potilasmaksut pitäisi porrastaa tulotason mukaan.</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Täysin eri mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 42%"><em>42%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 23%"><em>23%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 67%"><em>67%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 100%"><em>100%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 28%"><em>28%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 55%"><em>55%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 39%"><em>39%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Jokseenkin eri mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 58%"><em>58%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 59%"><em>59%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 22%"><em>22%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 50%"><em>50%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 34%"><em>34%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 40%"><em>40%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 33%"><em>33%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Jokseenkin samaa mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 15%"><em>15%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 11%"><em>11%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 50%"><em>50%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 34%"><em>34%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 5%"><em>5%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 28%"><em>28%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Täysin samaa mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 3%"><em>3%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 0%"><em>0%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 3%"><em>3%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Päivähoito-oikeuden rajoittamista on esitetty yhdeksi vaihtoehdoksi, kun kunnat etsivät keinoja pitää sosiaalimenojen kasvu kurissa. Miten suhtaudutte ajatukseen? </td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Jokaiselle automaattisesti kuuluvasta, niin sanotusta subjektiivisesta päivähoito-oikeudesta tulisi luopua.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 8%"><em>8%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 10%"><em>10%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 3%"><em>3%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 5%"><em>5%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Päivähoito-oikeutta tulee rajoittaa, jos toinen vanhemmista on kotona.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 42%"><em>42%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 57%"><em>57%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 75%"><em>75%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 100%"><em>100%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 14%"><em>14%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 9%"><em>9%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 22%"><em>22%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Lasten päivähoito-oikeutta ei saa rajoittaa.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 50%"><em>50%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 33%"><em>33%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 22%"><em>22%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 86%"><em>86%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 86%"><em>86%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 100%"><em>100%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 78%"><em>78%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Hallitus saa eduskunnassa taakseen enemmistön todennäköisesti vain, jos kolmesta suurimmasta puolueesta kaksi on siinä mukana. Jos vaalitulos sallisi, mikä olisi sopivin yhdistelmä?</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Kokoomus ja keskusta</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 33%"><em>33%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 26%"><em>26%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 89%"><em>89%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 50%"><em>50%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 14%"><em>14%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 3%"><em>3%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 11%"><em>11%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Keskusta ja Sdp.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 50%"><em>50%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 67%"><em>67%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 3%"><em>3%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 50%"><em>50%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 86%"><em>86%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 84%"><em>84%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 100%"><em>100%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 56%"><em>56%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Sdp ja kokoomus.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 8%"><em>8%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 0%"><em>0%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 8%"><em>8%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 9%"><em>9%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 33%"><em>33%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Alkoholiverotusta kevennettiin vuonna 2004. Miten alkoholiverotusta tulisi kehittää?</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Alkoholin verotusta tulisi kiristää kauttaaltaan.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 83%"><em>83%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 34%"><em>34%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 8%"><em>8%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 25%"><em>25%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 14%"><em>14%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 22%"><em>22%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 20%"><em>20%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 33%"><em>33%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Väkevien juomien verotusta tulisi kiristää.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 17%"><em>17%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 62%"><em>62%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 83%"><em>83%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 75%"><em>75%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 86%"><em>86%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 64%"><em>64%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 75%"><em>75%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 61%"><em>61%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Nykyinen taso on sopiva.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 3%"><em>3%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 10%"><em>10%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 14%"><em>14%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 5%"><em>5%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 6%"><em>6%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Veroa tulisi edelleen keventää.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 0%"><em>0%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 0%"><em>0%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 0%"><em>0%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Mitä mieltä olette seuraavasta väittämästä: Globalisaatio ja vapaakauppa ovat olleet suomalaisten hyvinvoinnille pääosin hyödyksi.</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Täysin eri mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 0%"><em>0%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 0%"><em>0%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 2%"><em>2%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 10%"><em>10%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Jokseenkin eri mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 17%"><em>17%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 8%"><em>8%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 5%"><em>5%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 75%"><em>75%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 21%"><em>21%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 50%"><em>50%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 17%"><em>17%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Jokseenkin samaa mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 67%"><em>67%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 84%"><em>84%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 60%"><em>60%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 25%"><em>25%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 43%"><em>43%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 67%"><em>67%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 40%"><em>40%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 78%"><em>78%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Täysin samaa mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 17%"><em>17%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 8%"><em>8%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 35%"><em>35%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 57%"><em>57%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 10%"><em>10%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 6%"><em>6%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Tulisiko Suomen houkutella ulkomaalaista työvoimaa?</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Ei, vaan nykyistä käytäntöä tulisi tiukentaa.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 0%"><em>0%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 0%"><em>0%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 3%"><em>3%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 10%"><em>10%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Nykyinen käytäntö on hyvä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 21%"><em>21%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 13%"><em>13%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 75%"><em>75%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 16%"><em>16%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 20%"><em>20%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Työlupia on myönnettävä nykyistä joustavammin tarpeen mukaan, mutta ei ole syytä pyrkiä laajamittaiseen siirtolaisuuteen. </td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 92%"><em>92%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 72%"><em>72%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 68%"><em>68%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 25%"><em>25%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 29%"><em>29%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 57%"><em>57%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 55%"><em>55%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 50%"><em>50%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Kyllä. </td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 8%"><em>8%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 7%"><em>7%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 19%"><em>19%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 71%"><em>71%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 24%"><em>24%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 15%"><em>15%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 50%"><em>50%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Mitä mieltä olette seuraavasta väittämästä: Suomen työmarkkinoilla tulisi ottaa oppia Tanskasta, missä irtisanominen on helpompaa mutta työttömyysturvan taso korkeampi.</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Täysin eri mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 8%"><em>8%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 2%"><em>2%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 2%"><em>2%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 25%"><em>25%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 22%"><em>22%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 40%"><em>40%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Jokseenkin eri mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 50%"><em>50%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 34%"><em>34%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 35%"><em>35%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 75%"><em>75%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 29%"><em>29%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 67%"><em>67%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 50%"><em>50%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 72%"><em>72%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Jokseenkin samaa mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 42%"><em>42%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 59%"><em>59%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 59%"><em>59%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 71%"><em>71%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 9%"><em>9%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 10%"><em>10%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 22%"><em>22%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Täysin samaa mieltä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 5%"><em>5%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 5%"><em>5%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 2%"><em>2%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 6%"><em>6%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Lapsilisä on tätä nykyä ensimmäisestä lapsesta 100 euroa kuukaudessa ja lisä nousee portaittain niin, että viidennestä lapsesta lähtien se on 172 euroa kuukaudessa. Mitä lapsilisille tulisi tehdä?</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Korotukset eivät ole tarpeen.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 2%"><em>2%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 2%"><em>2%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 3%"><em>3%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Nostaa painottaen monilapsisia perheitä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 25%"><em>25%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 34%"><em>34%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 13%"><em>13%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 25%"><em>25%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 12%"><em>12%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 10%"><em>10%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 28%"><em>28%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Nostaa painottaen vähälapsisia perheitä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 8%"><em>8%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 0%"><em>0%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 2%"><em>2%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 25%"><em>25%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 29%"><em>29%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 22%"><em>22%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 10%"><em>10%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 22%"><em>22%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Nostaa kaikista lapsista nykyjärjestelmän mukaisissa suhteissa.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 67%"><em>67%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 64%"><em>64%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 84%"><em>84%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 50%"><em>50%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 71%"><em>71%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 62%"><em>62%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 80%"><em>80%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 50%"><em>50%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Perintöverotusta tulisi seuraavalla vaalikaudella</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Perintövero tulisi poistaa kokonaan.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 5%"><em>5%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 56%"><em>56%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 25%"><em>25%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 57%"><em>57%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 7%"><em>7%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 11%"><em>11%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Keventää kauttaaltaan.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 75%"><em>75%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 92%"><em>92%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 44%"><em>44%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 50%"><em>50%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 43%"><em>43%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 60%"><em>60%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 25%"><em>25%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 50%"><em>50%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Keventää vain yritysten sukupolvenvaihdosten yhteydessä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 25%"><em>25%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 3%"><em>3%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 0%"><em>0%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 0%"><em>0%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 10%"><em>10%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 11%"><em>11%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Pitää nykyisellään.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 0%"><em>0%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 0%"><em>0%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 25%"><em>25%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 33%"><em>33%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 65%"><em>65%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 28%"><em>28%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Kiristää.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 0%"><em>0%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 0%"><em>0%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 0%"><em>0%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Palkkaverotusta tulisi seuraavalla vaalikaudella</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Kiristää.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 0%"><em>0%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 0%"><em>0%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 0%"><em>0%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 5%"><em>5%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Pitää nykyisellään.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 8%"><em>8%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 7%"><em>7%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 3%"><em>3%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 25%"><em>25%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 16%"><em>16%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 30%"><em>30%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 28%"><em>28%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Keventää jonkin verran.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 83%"><em>83%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 93%"><em>93%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 81%"><em>81%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 75%"><em>75%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 100%"><em>100%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 83%"><em>83%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 65%"><em>65%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 67%"><em>67%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Keventää reilusti.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 8%"><em>8%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 0%"><em>0%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 16%"><em>16%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 2%"><em>2%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 6%"><em>6%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Yleinen arvonlisävero on Suomessa 22 prosenttia. Ruoalle säädetty arvonlisävero on alempi eli 17 prosenttia.</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Ruoan arvonlisäveroa tulisi alentaa.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 100%"><em>100%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 98%"><em>98%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 54%"><em>54%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 75%"><em>75%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 71%"><em>71%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 34%"><em>34%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 100%"><em>100%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 28%"><em>28%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Nykyinen taso on hyvä.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 2%"><em>2%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 46%"><em>46%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 25%"><em>25%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 29%"><em>29%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 66%"><em>66%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 72%"><em>72%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Ruoan arvonlisäveroa tulisi nostaa. </td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 0%"><em>0%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 0%"><em>0%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 0%"><em>0%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Mikä on paras keino turvata kansalaisten kunnalliset palvelut?</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Kunnissa tulisi hyödyntää selvästi nykyistä enemmän ostopalveluita.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 10%"><em>10%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 32%"><em>32%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 43%"><em>43%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 0%"><em>0%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Kuntien tulisi tehostaa omaa palvelutuotantoaan.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 17%"><em>17%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 49%"><em>49%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 40%"><em>40%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 50%"><em>50%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 43%"><em>43%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 47%"><em>47%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 10%"><em>10%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 17%"><em>17%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Kuntien tulisi kattaa lisärahoituksen tarve kiristämällä verotusta tai nostamalla asiakasmaksuja.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 0%"><em>0%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 0%"><em>0%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 0%"><em>0%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 0%"><em>0%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Valtion on annettava kunnille lisää rahaa.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 83%"><em>83%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 41%"><em>41%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 29%"><em>29%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 50%"><em>50%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 14%"><em>14%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 53%"><em>53%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 90%"><em>90%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 83%"><em>83%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  
+  <div>
+  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
+    <a href="#">
+      <table class="question_bar">
+        <tr>
+
+          <td class="source">HS vaalikone 2007</td>
+          <td class="question_text">Suomessa on käynnissä kuntauudistus. Yhtenä tavoitteena on vähentää kuntien lukumäärää nykyisestä 416:stä. Mikä olisi sopiva kuntien määrä?</td>
+          <td class="answer_count">
+             
+          </td>
+        </tr>
+      </table>
+    </a>
+  </h3>
+
+    <div style="display: none;">
+    <table class="question_options">
+    
+      <tr>
+        <td class="option_text">Noin 100 kuntaa.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 0%"><em>0%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 0%"><em>0%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 16%"><em>16%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 5%"><em>5%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 15%"><em>15%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 17%"><em>17%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Noin 200 kuntaa. </td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 33%"><em>33%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 13%"><em>13%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 48%"><em>48%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 0%"><em>0%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 43%"><em>43%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 60%"><em>60%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 25%"><em>25%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 61%"><em>61%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Noin 300 kuntaa.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 58%"><em>58%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 56%"><em>56%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 37%"><em>37%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 75%"><em>75%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 57%"><em>57%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 34%"><em>34%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 50%"><em>50%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 22%"><em>22%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+      <tr>
+        <td class="option_text">Noin 400 kuntaa.</td>
+        <td class="votechart">
+        <dl class="votechart">
+	
+          <dt>kd</dt>
+          <dd><span style="height: 8%"><em>8%<br />kd</em></span></dt>
+
+          
+        
+          <dt>kesk</dt>
+          <dd><span style="height: 31%"><em>31%<br />kesk</em></span></dt>
+          
+        
+          <dt>kok</dt>
+          <dd><span style="height: 0%"><em>0%<br />kok</em></span></dt>
+          
+        
+          <dt>ps</dt>
+
+          <dd><span style="height: 25%"><em>25%<br />ps</em></span></dt>
+          
+        
+          <dt>r</dt>
+          <dd><span style="height: 0%"><em>0%<br />r</em></span></dt>
+          
+        
+          <dt>sd</dt>
+          <dd><span style="height: 0%"><em>0%<br />sd</em></span></dt>
+
+          
+        
+          <dt>vas</dt>
+          <dd><span style="height: 10%"><em>10%<br />vas</em></span></dt>
+          
+        
+          <dt>vihr</dt>
+          <dd><span style="height: 0%"><em>0%<br />vihr</em></span></dt>
+          
+        
+        </dl>
+      </td>
+
+      </tr>
+    
+    </table>
+    </div>
+  </div>
+  {% endblock %}

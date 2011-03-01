@@ -10,3 +10,7 @@ def list_questions(request):
 	args = dict(questions=questions, parties=parties)
 	return render_to_response('list_questions.html', args,
 		context_instance=RequestContext(request))
+
+def list_questions_static(request):
+	return render_to_response('list_questions_static.html', {},
+		context_instance=RequestContext(request))
