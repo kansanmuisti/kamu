@@ -24,6 +24,8 @@ from httpstatus import Http400
 from user_voting.models import Vote as UserVote
 from kamu.opinions.models import Answer
 
+from kamu.cms.models import Item, Newsitem
+
 import time
 import djapian
 import operator
@@ -897,13 +899,19 @@ def search_county(request):
     return response
 
 def about(request, section):
+    args = {'active_page': 'info', 'section': section}
+
     if section == 'main':
+        args['content'] = Item.objects.retrieve_content('main')
         section_name = _('Home')
     elif section == 'background':
+        args['content'] = Item.objects.retrieve_content('background')
         section_name = _('Background')
     elif section == 'contact':
+        args['content'] = Item.objects.retrieve_content('contact')
         section_name = _('Contact')
     elif section == 'feedback':
+        # Feedback does not contain anything long at the moment, left out of cms
 	section_name = _('Feedback')
     else:
         raise Http404
@@ -913,7 +921,6 @@ def about(request, section):
         ses.count_votes()
 #        ses.info = ses.info.replace('\n', '\n\n')
 
-    args = {'active_page': 'info', 'section': section}
     args['sess_list'] = sess_list
     args['section_name'] = section_name
     args['mp_hall_of_fame'] = mp_hall_of_fame(10)

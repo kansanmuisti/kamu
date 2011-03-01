@@ -12,7 +12,10 @@
 
 {% block content %}
 <div id="main_col">
-{% ifequal section 'main' %}{% filter markdown %}
+{% ifequal section 'main' %}
+{{ content.data }}
+{% comment %}
+{% filter markdown %}
 
 Kansan muisti tuo demokratian 2010-luvulle
 ==========================================
@@ -30,9 +33,12 @@ Tulevaisuudessa voit äänestää myös itse ja vertailla mielipiteitäsi kansan
 <fb:like-box href="http://www.facebook.com/kansanmuisti" width="480" show_faces="true" stream="false" header="false"></fb:like-box>
 </div>
 {% endif %}
+{% endcomment %}
 {% endifequal %}
-
-{% ifequal section 'background' %}{% filter markdown %}
+{% ifequal section 'background' %}
+{{ content.data }}
+{% comment %}
+{% filter markdown %}
 Mikä Kamu on?
 =============
 
@@ -45,6 +51,7 @@ Kansan muisti ry:n tavoitteena on uutta teknologiaa hyödyntäen tarjota kansala
 *Esimerkki 2*. Ympäristöjärjestö on valinnut ja pisteyttänyt luonnonsuojelun kannalta kiinnostavat lakiesitykset. Kalle Kansalainen haluaa luontoihmisenä selvittää kansanedustajat, jotka ovat eniten äänestäneet ympäristöjärjestön arvotusten mukaisesti. Palvelu tuottaa muutaman hiirennäpäytyksen jälkeen Kallelle järjestetyn listan edustajista pisteytyksineen. Jos Kalle haluaa lisätietoa yksittäisestä edustajasta, se onnistuu yhdellä lisänäpäytyksellä.
 
 {% endfilter %}
+{% endcomment %}
 {% endifequal %}
 
 {% ifequal section 'feedback' %}
@@ -59,6 +66,8 @@ Kansan muisti ry:n tavoitteena on uutta teknologiaa hyödyntäen tarjota kansala
 {% endifequal %}
 
 {% ifequal section 'contact' %}
+{{ content.data }}
+{% comment %}
   <h1>{% trans "Contact information" %}</h1>
   <p>Palvelua ylläpitää vuonna 2010 perustettu poliittisesti sitoutumaton, voittoa tavoittelematon ja vapaaehtoisvoimin toimiva Kansan muisti ry.</p>
   <p>Kansan muisti ry<br />
@@ -72,6 +81,7 @@ Kansan muisti ry:n tavoitteena on uutta teknologiaa hyödyntäen tarjota kansala
   Matti Kari<br />
   matti.kari@kansanmuisti.fi<br />
   040 838 6607<br />
+{% endcomment %}
 {% endifequal %}
 
 </div>
