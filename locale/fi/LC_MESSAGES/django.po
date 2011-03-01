@@ -1,16 +1,15 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Kansan muisti
+# Copyright (C) 2010-2011 Kansan muisti ry.
+# This file is distributed under the same license as the kamu package.
+# Juha Yrjölä <juha.yrjola@iki.fi>, 2010, 2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-31 00:52+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2011-03-01 16:24+0200\n"
+"PO-Revision-Date: 2011-03-01 16:30+0200\n"
+"Last-Translator: Juha Yrjölä <juha.yrjola@iki.fi>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -113,6 +112,66 @@ msgstr "Sähköpostiosoite"
 msgid "Your message"
 msgstr "Palaute"
 
+#: django_extensions/admin/__init__.py:121 templates/comments/preview.html:14
+msgid "and"
+msgstr ""
+
+#: django_extensions/admin/__init__.py:123
+#, python-format
+msgid ""
+"Use the left field to do %(model_name)s lookups in the fields %(field_list)s."
+msgstr ""
+
+#: django_extensions/db/models.py:15
+msgid "created"
+msgstr ""
+
+#: django_extensions/db/models.py:16
+msgid "modified"
+msgstr ""
+
+#: django_extensions/db/models.py:26 lifestream/models.py:35
+#: lifestream/models.py:85
+msgid "title"
+msgstr ""
+
+#: django_extensions/db/models.py:27 lifestream/models.py:34
+msgid "slug"
+msgstr ""
+
+#: django_extensions/db/models.py:28
+msgid "description"
+msgstr "kuvaus"
+
+#: django_extensions/db/models.py:50
+msgid "Inactive"
+msgstr ""
+
+#: django_extensions/db/models.py:51
+msgid "Active"
+msgstr ""
+
+#: django_extensions/db/models.py:53
+msgid "status"
+msgstr ""
+
+#: django_extensions/db/models.py:56
+msgid "keep empty for an immediate activation"
+msgstr ""
+
+#: django_extensions/db/models.py:58
+msgid "keep empty for indefinite activation"
+msgstr ""
+
+#: django_extensions/management/commands/show_urls.py:34
+#, python-format
+msgid "%s does not appear to be a urlpattern object"
+msgstr ""
+
+#: django_extensions/templates/django_extensions/widgets/foreignkey_searchinput.html:4
+msgid "Lookup"
+msgstr ""
+
 #: facebook/forms.py:10 registration/forms.py:35
 msgid "Username"
 msgstr "Käyttäjätunnus"
@@ -125,6 +184,141 @@ msgstr "Ainoastaan kirjaimet, numerot ja alaviivat ovat sallittu."
 msgid "A user with that username already exists."
 msgstr "Käyttäjätunnus on jo käytössä."
 
+#: lifestream/admin.py:83
+msgid "Mark as unfetchable"
+msgstr ""
+
+#: lifestream/admin.py:87
+msgid "Mark as fetchable"
+msgstr ""
+
+#: lifestream/admin.py:96
+#, python-format
+msgid "The %(name)s \"%(obj)s\" was added successfully."
+msgstr ""
+
+#: lifestream/admin.py:104
+msgid "You may edit it again below."
+msgstr ""
+
+#: lifestream/admin.py:111
+msgid "Add feed"
+msgstr ""
+
+#: lifestream/admin.py:143
+msgid "Unpublish items"
+msgstr ""
+
+#: lifestream/admin.py:147
+msgid "Publish items"
+msgstr ""
+
+#: lifestream/models.py:28
+msgid "site"
+msgstr ""
+
+#: lifestream/models.py:34
+msgid "Slug for use in urls (Autopopulated from the title)."
+msgstr ""
+
+#: lifestream/models.py:50
+msgid "lifestream"
+msgstr ""
+
+#: lifestream/models.py:51
+msgid "feed name"
+msgstr ""
+
+#: lifestream/models.py:52
+msgid "feed url"
+msgstr ""
+
+#: lifestream/models.py:53
+msgid "Must be a valid url."
+msgstr ""
+
+#: lifestream/models.py:54
+msgid "feed domain"
+msgstr ""
+
+#: lifestream/models.py:55 lifestream/models.py:90
+msgid "permalink"
+msgstr ""
+
+#: lifestream/models.py:56
+msgid "Permalink to the feed page."
+msgstr ""
+
+#: lifestream/models.py:57
+msgid "fetchable"
+msgstr ""
+
+#: lifestream/models.py:60
+msgid "plugin name"
+msgstr ""
+
+#: lifestream/models.py:83
+msgid "feed"
+msgstr ""
+
+#: lifestream/models.py:84
+msgid "date"
+msgstr ""
+
+#: lifestream/models.py:85
+msgid "The title of the item. Could be html."
+msgstr ""
+
+#: lifestream/models.py:86
+msgid "content"
+msgstr ""
+
+#: lifestream/models.py:86
+msgid ""
+"Rich item content. Could be html based on the content type. This html is "
+"escaped."
+msgstr ""
+
+#: lifestream/models.py:87
+msgid "content type"
+msgstr ""
+
+#: lifestream/models.py:88
+msgid "Cleaned, plain text version of the item content."
+msgstr ""
+
+#: lifestream/models.py:89
+msgid "author"
+msgstr ""
+
+#: lifestream/models.py:90
+msgid "Permalink to the original item."
+msgstr ""
+
+#: lifestream/models.py:91
+msgid "media url"
+msgstr ""
+
+#: lifestream/models.py:92
+msgid "media thumbnail url"
+msgstr ""
+
+#: lifestream/models.py:93
+msgid "media player url"
+msgstr ""
+
+#: lifestream/models.py:94
+msgid "media description"
+msgstr ""
+
+#: lifestream/models.py:95
+msgid "media description type"
+msgstr ""
+
+#: lifestream/models.py:97
+msgid "published"
+msgstr ""
+
 #: orgs/forms.py:15
 msgid "File size too big."
 msgstr "Tiedosto on liian iso."
@@ -133,8 +327,8 @@ msgstr "Tiedosto on liian iso."
 msgid "Image dimensions too big."
 msgstr "Kuvan dimensiot ovat liian suuret."
 
-#: orgs/forms.py:50 templates/preview_org.html:11 votes/views.py:327
-#: votes/views.py:488
+#: orgs/forms.py:50 templates/preview_org.html:11 votes/views.py:350
+#: votes/views.py:511
 msgid "Name"
 msgstr "Nimi"
 
@@ -170,7 +364,7 @@ msgstr "Aktivoi käyttäjät"
 msgid "Re-send activation emails"
 msgstr "Lähetä aktivaatio-sähköpostit uudelleen"
 
-#: registration/forms.py:39 templates/show_member.html:44
+#: registration/forms.py:39 templates/show_member.html:70
 msgid "Email address"
 msgstr "Sähköpostiosoite"
 
@@ -179,7 +373,7 @@ msgid "Password"
 msgstr "Salasana"
 
 #: registration/forms.py:43
-#: templates/registration/password_change_form.html:32
+#: templates/registration/password_change_form.html:33
 msgid "Password (again)"
 msgstr "Salasana (uudestaan)"
 
@@ -280,52 +474,52 @@ msgstr "Lisää uusi järjestö"
 msgid "Preview"
 msgstr "Esikatsele"
 
-#: templates/base.html:27 templates/base.html.py:113
+#: templates/base.html:27 templates/base.html.py:115
 msgid "Search"
 msgstr "Hae"
 
-#: templates/base.html:121
+#: templates/base.html:123
 msgid "Logged in"
 msgstr "Kirjautuneena"
 
-#: templates/base.html:122
+#: templates/base.html:124
 msgid "Log out"
 msgstr "Kirjaudu ulos"
 
-#: templates/base.html:124
+#: templates/base.html:126
 #: templates/registration/password_reset_complete.html:12
 msgid "Log in"
 msgstr "Kirjaudu sisään"
 
-#: templates/base.html:150
+#: templates/base.html:152
 msgid "What is Kamu?"
 msgstr "Kansan muisti"
 
-#: templates/base.html:151
+#: templates/base.html:153
 msgid "Plenary Sessions"
 msgstr "Täysistunnot"
 
-#: templates/base.html:152 templates/members.html:3
+#: templates/base.html:154 templates/members.html:3
 msgid "Members"
 msgstr "Kansanedustajat"
 
-#: templates/base.html:153 templates/list_parties.html:3
+#: templates/base.html:155 templates/list_parties.html:3
 msgid "Parties"
 msgstr "Puolueet"
 
-#: templates/base.html:154
+#: templates/base.html:156
 msgid "Orgs"
 msgstr "Järjestöt"
 
-#: templates/base.html:163
+#: templates/base.html:165
 msgid "Select period"
 msgstr "Valitse aikaväli"
 
-#: templates/base.html:170
+#: templates/base.html:172
 msgid "Select district"
 msgstr "Valitse vaalipiiri"
 
-#: templates/base.html:175
+#: templates/base.html:177
 msgid "or choose your county"
 msgstr "tai valitse kuntasi"
 
@@ -391,15 +585,15 @@ msgstr ""
 msgid "Main page"
 msgstr "Etusivu"
 
-#: templates/main_page.html:8 votes/views.py:788
+#: templates/main_page.html:8 votes/views.py:870
 msgid "Background"
 msgstr "Taustaa"
 
-#: templates/main_page.html:9 votes/views.py:792
+#: templates/main_page.html:9 votes/views.py:874
 msgid "Feedback"
 msgstr "Palaute"
 
-#: templates/main_page.html:10 votes/views.py:790
+#: templates/main_page.html:10 votes/views.py:872
 msgid "Contact"
 msgstr "Yhteystiedot"
 
@@ -485,7 +679,7 @@ msgstr "Nimi palvelussa"
 msgid "Info link"
 msgstr "Linkki kotisivulle"
 
-#: templates/preview_org.html:24 templates/show_org.html:30 votes/views.py:268
+#: templates/preview_org.html:24 templates/show_org.html:30 votes/views.py:291
 msgid "Modify"
 msgstr "Muokkaa"
 
@@ -532,84 +726,88 @@ msgstr "Tyhjä-äänien lukumäärä"
 msgid "Number of absentees"
 msgstr "Poissaolevien lukumäärä"
 
-#: templates/show_member.html:22 templates/votes.html:5
+#: templates/show_member.html:46 templates/votes.html:5
 msgid "General"
 msgstr "Yleistiedot"
 
-#: templates/show_member.html:23 templates/votes.html:3
+#: templates/show_member.html:47 templates/votes.html:3
 #: templates/votes.html.py:58
 msgid "Votes"
 msgstr "Äänet"
 
-#: templates/show_member.html:24
+#: templates/show_member.html:48
 msgid "Register of interest"
 msgstr "Sidonnaisuudet"
 
-#: templates/show_member.html:25
+#: templates/show_member.html:49
 msgid "Statements"
 msgstr "Puheenvuorot"
 
-#: templates/show_member.html:26 templates/votes.html:6
+#: templates/show_member.html:50 templates/votes.html:6
 msgid "Comments"
 msgstr "Kommentit"
 
-#: templates/show_member.html:39
+#: templates/show_member.html:51
+msgid "Opinions"
+msgstr "Vaalikoneet"
+
+#: templates/show_member.html:65
 msgid "Surname"
 msgstr "Sukunimi"
 
-#: templates/show_member.html:40
+#: templates/show_member.html:66
 msgid "Given names"
 msgstr "Etunimet"
 
-#: templates/show_member.html:41
+#: templates/show_member.html:67
 msgid "Birthdate"
 msgstr "Syntymäaika"
 
-#: templates/show_member.html:47
+#: templates/show_member.html:73
 msgid "Telephone"
 msgstr "Puhelinnumero"
 
-#: templates/show_member.html:50
+#: templates/show_member.html:76
 msgid "Electoral districts"
 msgstr "Vaalipiirit"
 
-#: templates/show_member.html:58
+#: templates/show_member.html:84
 msgid "Party associations"
 msgstr "Eduskuntaryhmät"
 
-#: templates/show_member.html:90
+#: templates/show_member.html:116
 msgid "Session"
 msgstr "Äänestys"
 
-#: templates/show_member.html:91 votes/views.py:328
+#: templates/show_member.html:117 votes/views.py:351
 msgid "Vote"
 msgstr "Ääni"
 
-#: templates/show_member.html:98 votes/views.py:342
+#: templates/show_member.html:124 votes/views.py:365
 msgid "Yay"
 msgstr "Kyllä"
 
-#: templates/show_member.html:101 votes/views.py:345
+#: templates/show_member.html:127 votes/views.py:368
 msgid "Nay"
 msgstr "Ei"
 
-#: templates/show_member.html:104 votes/views.py:348
+#: templates/show_member.html:130 votes/views.py:371
 msgid "Empty"
 msgstr "Tyhjä"
 
-#: templates/show_member.html:114
+#: templates/show_member.html:140
 msgid "No votes in database"
 msgstr "Ei ääniä tietokannassa"
 
-#: templates/show_member.html:129 templates/votes.html:106
+#: templates/show_member.html:155 templates/votes.html:106
 msgid "ago"
 msgstr "sitten"
 
-#: templates/show_member.html:136 templates/votes.html:113
+#: templates/show_member.html:162 templates/votes.html:113
 msgid "Leave a new comment"
 msgstr "Jätä uusi kommentti"
 
-#: templates/show_member.html:157
+#: templates/show_member.html:184
 msgid "No statements found"
 msgstr "Ei puheenvuoroja"
 
@@ -677,10 +875,6 @@ msgid "Please correct the error below"
 msgid_plural "Please correct the errors below"
 msgstr[0] "Korjaa alla oleva virhe."
 msgstr[1] "Korjaa alla olevat virheet."
-
-#: templates/comments/preview.html:14
-msgid "and"
-msgstr ""
 
 #: templates/comments/preview.html:14
 msgid "Post your comment"
@@ -840,32 +1034,32 @@ msgstr "Salasanan vaihto onnistui"
 msgid "Your password was changed."
 msgstr "Salasanasi on vaihdettu."
 
-#: templates/registration/password_change_form.html:2
-#: templates/registration/password_change_form.html:14
+#: templates/registration/password_change_form.html:3
+#: templates/registration/password_change_form.html:15
 msgid "Password change"
 msgstr "Salasanan vaihto"
 
-#: templates/registration/password_change_form.html:10
+#: templates/registration/password_change_form.html:11
 msgid "Please correct the error below."
 msgid_plural "Please correct the errors below."
 msgstr[0] "Korjaa alla oleva virhe."
 msgstr[1] "Korjaa alla olevat virheet."
 
-#: templates/registration/password_change_form.html:16
+#: templates/registration/password_change_form.html:17
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new "
 "password twice so we can verify you typed it in correctly."
 msgstr "Syötä vanha salasanasi ja kirjoita uusi salasanasi kahdesti."
 
-#: templates/registration/password_change_form.html:22
+#: templates/registration/password_change_form.html:23
 msgid "Old password"
 msgstr "Vanha salasana:"
 
-#: templates/registration/password_change_form.html:27
+#: templates/registration/password_change_form.html:28
 msgid "New password"
 msgstr "Uusi salasana:"
 
-#: templates/registration/password_change_form.html:38
+#: templates/registration/password_change_form.html:39
 #: templates/registration/password_reset_confirm.html:19
 msgid "Change my password"
 msgstr "Vaihda salasana"
@@ -983,74 +1177,74 @@ msgstr "Luo uusi tunnus"
 msgid "Create the account"
 msgstr "Luo tunnus"
 
-#: votes/models.py:218 votes/models.py:221
+#: votes/models.py:239 votes/models.py:242
 msgid "Statement "
 msgstr "Puheenvuoro"
 
-#: votes/views.py:247
+#: votes/views.py:270
 msgid "Organization"
 msgstr "Järjestö"
 
-#: votes/views.py:248
+#: votes/views.py:271
 msgid "Score"
 msgstr "Pisteet"
 
-#: votes/views.py:325 votes/views.py:486
+#: votes/views.py:348 votes/views.py:509
 msgid "Party"
 msgstr "Puolue"
 
-#: votes/views.py:351
+#: votes/views.py:374
 msgid "Absent"
 msgstr "Poissa"
 
-#: votes/views.py:490 votes/views.py:551
+#: votes/views.py:513 votes/views.py:574
 msgid "ATT"
 msgstr "L.o."
 
-#: votes/views.py:491 votes/views.py:552
+#: votes/views.py:514 votes/views.py:575
 msgid "Attendance in voting sessions"
 msgstr "Läsnäoloprosentti äänestyksissä"
 
-#: votes/views.py:492 votes/views.py:553
+#: votes/views.py:515 votes/views.py:576
 msgid "PA"
 msgstr "SP"
 
-#: votes/views.py:493 votes/views.py:554
+#: votes/views.py:516 votes/views.py:577
 msgid "Agreement with party majority"
 msgstr "Samanmielisyys puolueen enemmistön kanssa"
 
-#: votes/views.py:494 votes/views.py:555
+#: votes/views.py:517 votes/views.py:578
 msgid "SA"
 msgstr "SI"
 
-#: votes/views.py:495 votes/views.py:556
+#: votes/views.py:518 votes/views.py:579
 msgid "Agreement with session majority"
 msgstr "Samanmielisyys äänestyksen lopputuloksen kanssa"
 
-#: votes/views.py:496 votes/views.py:557
+#: votes/views.py:519 votes/views.py:580
 msgid "St"
 msgstr "Pv"
 
-#: votes/views.py:497 votes/views.py:558
+#: votes/views.py:520 votes/views.py:581
 msgid "Number of statements"
 msgstr "Puheenvuorojen lukumäärä"
 
-#: votes/views.py:498
+#: votes/views.py:521
 msgid "ElBud"
 msgstr "VB"
 
-#: votes/views.py:499
+#: votes/views.py:522
 msgid "Election budget"
 msgstr "Vaalibudjetti"
 
-#: votes/views.py:550
+#: votes/views.py:573
 msgid "Period"
 msgstr "Aikaväli"
 
-#: votes/views.py:786
+#: votes/views.py:868
 msgid "Home"
 msgstr "Etusivu"
 
-#: votes/templatetags/basic.py:110
+#: votes/templatetags/basic.py:111
 msgid "All districts"
 msgstr "Kaikki"
