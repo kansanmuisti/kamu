@@ -894,6 +894,7 @@ div#list_orgs {
 .question
 {
 	font-weight: bold;
+	color: #2f7670;
 }
 
 .question .source
@@ -916,7 +917,7 @@ ul.options
 
 .opinion_answer .selected
 {
-	text-decoration: underline;
+	font-weight: bold;
 }
 
 .opinion_answer .opinion_explanation
