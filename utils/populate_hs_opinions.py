@@ -1,9 +1,6 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 import sys
 import csv
 import os
-import difflib
 
 sys.path.append(os.path.abspath(__file__ + '/../../..'))
 sys.path.append(os.path.abspath(__file__ + '/../..'))
@@ -14,84 +11,96 @@ setup_environ(settings)
 from kamu.opinions.models import *
 from kamu.votes.models import Member
 
+def get_reader(input):
+	return csv.DictReader(input, delimiter=';', quotechar='"')
 
-def parse_questions(input):
-    questions = {}
-    reader = csv.reader(input, delimiter='@')
-    for row in reader:
-        questions[row[0]] = row[1:]
-    return questions
+def parse_model(input, idcol):
+	reader = get_reader(input)
+	model = {}
+	for row in reader:
+		model[row[idcol]] = row
+	return model
+
+def parse_question_model(questions):
+	return parse_model(questions, 'Question_id')
+
+def parse_candidate_model(members):
+	return parse_model(members, 'Candidate_id')
+
+def parse_option_model(members):
+	return parse_model(members, 'AnswerAlternative_id')
+
+def populate_answers(answers, question_mapping, option_mapping, candidate_mapping):
+	reader = get_reader(answers)
+	for answer in reader:
+		cid = answer['user_id']
+		if(cid not in candidate_mapping):
+			continue
+		member = candidate_mapping[cid]
+		option_id = answer['Answer_alternative_id']
+		if(option_id == '0'):
+			option = None
+		else:
+			option = option_mapping[option_id]
+		
+		Answer.objects.get_or_create(
+			option=option,
+			question=question_mapping[answer['Question_id']],
+			member=member,
+			explanation=answer['Explanation'])
+
+def initialize_schema(questions, options, srcname, srcyear):
+	src, c = QuestionSource.objects.get_or_create(name=srcname, year=srcyear)
+	
+	question_mapping = {}
+	for id, question in questions.items():
+		qm, c = Question.objects.get_or_create(
+				text=question['Question'],
+				source=src)
+		question_mapping[id] = qm
+	
+	option_mapping = {}
+	for id, option in options.items():
+		om, c = Option.objects.get_or_create(
+				question=question_mapping[option['Question_id']],
+				name=option['Answer_text'],
+				weight=option['AnswerAlternative_number'])
+		option_mapping[id] = om
+	
+	return (question_mapping, option_mapping)
+
+def get_candidate_mapping(candidates):
+	reader = get_reader(candidates)
+	mapping = {}
+	for member in reader:
+		fullname = ' '.join((member['Last_name'], member['First_name']))
+		matches = Member.objects.filter(name=fullname)
+		
+		if(matches.count() == 0):
+			#print >>sys.stderr, "No match for %s"%fullname
+			continue
+		elif(matches.count() > 1):
+			print matches
+			print >>sys.stderr, "Ambiguous match for %s"%fullname
+			continue
+
+		mapping[member['Candidate_id']] = matches[0]
+	print >>sys.stderr, "%i members accepted"%len(mapping)
+	return mapping
+
+def populate_database(questions, options, candidates, answers):
+	candidate_mapping = get_candidate_mapping(open(candidates, 'r'))
+
+	qm = parse_question_model(open(questions, 'r'))
+	om = parse_option_model(open(options, 'r'))
+
+	question_map, option_map = initialize_schema(qm, om, 'HS vaalikone', 2007)
+	cm = parse_candidate_model(open(candidates, 'r'))
+	
+	populate_answers(open(answers, 'r'), question_map,
+		option_map , candidate_mapping)
 
 
-def get_member_match(name, choices, candidates):
-    try:
-        member = Member.objects.get(name=name)
-        return member
-    except Member.DoesNotExist:
-        pass
-
-    # return None # Comment to enable fuzzy matching....
-
-    close = difflib.get_close_matches(name, choices, cutoff=0.8)
-    close = filter(lambda x: x not in candidates, close)
-    if close:
-        print >> sys.stderr, 'Close to %s: %s' % (name, ', '.join(close))
-
-    return None
-
-
-def populate_answers(input, questions, src):
-    answers = list(csv.reader(input, delimiter='@'))
-    allnames = map(lambda x: x.name, Member.objects.all())[:]
-    candidatenames = set(map(lambda x: x[0], answers))
-
-    members = dict(map(lambda n: (n, get_member_match(n, allnames,
-                   candidatenames)), candidatenames))
-
-    accepted = len(filter(lambda x: x is not None, members.values()))
-    print >> sys.stderr, 'Accepted %i of %i candidates' % (accepted,
-            len(members))
-    for answer in answers:
-        (name, q, a, expl) = answer
-        member = members[name]
-        if member is None:
-            continue
-
-        try:
-            qm = Question.objects.get(text=q, source=src)
-        except Question.DoesNotExist:
-            print >> sys.stderr, "Unknown question '%s'" % q
-            continue
-
-        om = None
-        if a:
-            try:
-                om = Option.objects.get(question=qm, name=a)
-            except Option.DoesNotExist:
-                print >> sys.stderr, "Unknown option '%s' for question '%s'" \
-                    % (a, q)
-                continue
-
-        Answer.objects.get_or_create(member=member, option=om,
-                                     explanation=expl)
-
-
-def initialize_schema(questions, srcname, srcyear):
-    (src, c) = QuestionSource.objects.get_or_create(name=srcname, year=srcyear)
-
-    for (question, options) in questions.items():
-        (qm, c) = Question.objects.get_or_create(text=question, source=src)
-        for option in options:
-            Option.objects.get_or_create(question=qm, name=option)
-
-    return src
-
-
-def main(questionfile, answerfile):
-    questions = parse_questions(questionfile)
-    src = initialize_schema(questions, 'HS vaalikone', 2007)
-    populate_answers(answerfile, questions, src)
-
-
-if __name__ == '__main__':
-    main(open(sys.argv[1], 'r'), sys.stdin)
+if(__name__ == '__main__'):
+	populate_database(*sys.argv[1:])
+	
