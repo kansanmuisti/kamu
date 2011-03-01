@@ -7,7 +7,7 @@
 {% endblock %}
 {% block content %}
   <h1>{% trans "Plenary session" %} {{ psession.name }}, {% trans "vote" %} {{ session.number }},
-    {{ psession.date|date:"j. F" }}ta, {% trans "time" %} {{ session.time|time }}
+    {{ psession.date|i18n_date:"long-month" }}, {% trans "time" %} {{ session.time|time }}
   </h1>
 {% ifequal section "basic" %}
   <div class='session_info h2_section'>

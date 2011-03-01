@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n basic %}
 {% block title %}{% trans "Plenary sessions" %}{% endblock %}
 {% block head %}
     <script type="text/javascript">
@@ -26,7 +26,7 @@
 {% for ps in pl_session_page.object_list %}
     <div>
       <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all"><a href="#"><table class="psession_bar">
-        <tr><td style="width: 100px;">{{ ps.name }}</td><td>{{ ps.date|date:"j. F" }}ta</td><td class="psession_bar">
+        <tr><td style="width: 100px;">{{ ps.name }}</td><td>{{ ps.date|i18n_date:"long-month" }}</td><td class="psession_bar">
 {% blocktrans count ps.sess_list|length as count %}
 {{ count }} voting session
 {% plural %}
