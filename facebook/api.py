@@ -21,7 +21,6 @@ def do_request(access_token, path, args=None, raw=False):
     url = "https://graph.facebook.com/%s" % path
     if args:
         url += "?%s" % urllib.urlencode(args)
-    print url
     file = urllib.urlopen(url)
     content = file.read()
     try:
