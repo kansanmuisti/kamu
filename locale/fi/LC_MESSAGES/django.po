@@ -523,6 +523,16 @@ msgstr "Valitse vaalipiiri"
 msgid "or choose your county"
 msgstr "tai valitse kuntasi"
 
+#: templates/base.html:191
+msgid ""
+"\n"
+"Copyright &copy; 2010 Kansan muisti ry. The owners and operators of this\n"
+"website are not responsible for the accuracy of the information provided.\n"
+msgstr ""
+"\n"
+"Copyright &copy; 2010 Kansan muisti ry. Palvelun ylläpitäjä ei vastaa "
+"tietojen oikeellisuudesta.\n"
+
 #: templates/confirm_beta.html:3 templates/confirm_beta.html.py:6
 msgid "Registration received"
 msgstr "Rekisteröinti vastaanotettu"
