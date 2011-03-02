@@ -12,6 +12,7 @@ from django.utils import simplejson
 from django.utils.http import urlencode, http_date
 from django.contrib.auth.decorators import login_required
 from django.contrib.csrf.middleware import csrf_exempt
+from django.contrib.contenttypes.models import ContentType
 from httpstatus.decorators import postonly
 from tagging.models import Tag
 from tagging.utils import parse_tag_input
@@ -833,14 +834,15 @@ def mp_hall_of_fame(max_results):
     thumbnail_width = 70
     thumbnail_height = 70
 
+    memb_ctype_id = ContentType.objects.get_for_model(Member).id
     query = Member.objects.raw("""
         select *,count(score) as like_cnt
         from user_votes as v
-        join votes_member m on v.object_id=m.id
-        where v.score > 0
+        join votes_member m on v.object_id = m.id
+        where v.content_type_id = %s and v.score > 0
         group by m.id
         order by like_cnt desc
-    """)[:max_results]
+    """, [memb_ctype_id])[:max_results]
     member_list=[]
     for memb in query:
         tn = DjangoThumbnail(memb.photo, (thumbnail_width, thumbnail_height))
