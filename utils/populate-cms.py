@@ -4,6 +4,7 @@
 
 import sys
 import os
+import codecs
 #from optparse import OptionParser
 
 from django.core.management import setup_environ
@@ -34,7 +35,7 @@ def process_file(root, filename, category_name, type):
         (category_name, newsdate, order) = filename.split("_")
 
     category = Category.objects.filter(name=category_name)
-        
+
     if category.count() == 0:
         print "Creating category %s" % category_name
         category = Category(name=category_name)
@@ -49,7 +50,7 @@ def process_file(root, filename, category_name, type):
         item.save()
     else:
         item = Item.objects.filter(category=category)
-                
+
         if item.count() == 0:
             print "Creating _item_ under category %s" % category_name
             item = Item(category=category)
@@ -66,16 +67,16 @@ def process_file(root, filename, category_name, type):
     else:
         content = content[0]
 
-    f = open(os.path.join(root,filename))
-            
+    f = codecs.open(os.path.join(root, filename), mode="r", encoding="utf8")
+
     if category_name == "news":
         # Newsfiles contain the subject as first line
         subject = f.readline()[:-1]
     else:
         subject = "Initial commit for %s in %s" % (category, language)
-            
+
     content_data = f.read()
-            
+
     revision = Revision(content=content, subject=subject, data=content_data, data_markup_type=type)
     revision.save()
     print "Prepared revision %s" % revision
@@ -85,10 +86,10 @@ def process_file(root, filename, category_name, type):
 for root, dirs, files in os.walk(content_path):
     if not files:
         continue
-        
+
     (head,tail) = os.path.split(root)
     language = tail
-    
+
     for filename in files:
         (category_name, type) = os.path.splitext(filename)
         type = type[1:]
