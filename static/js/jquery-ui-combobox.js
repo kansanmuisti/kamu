@@ -107,6 +107,7 @@ var THUMBNAIL_BLOCK_CLASS       = "combobox_thumbnail_block";
                 .autocomplete({
                     minLength   : 1,
                     delay       : SEARCH_DELAY,
+                    appendTo    : container,
 
                     source      : autocomplete_source,
                     open        : function() {

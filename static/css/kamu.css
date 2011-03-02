@@ -224,6 +224,10 @@ div#navbar {
 	float: right;
 }
 
+#head-search .ui-autocomplete {
+	max-width: 200px;
+}
+
 #login-button {
 	height: 20px;
         width: 32px;
@@ -839,6 +843,10 @@ div#list_orgs {
  */
 #county_selector input {
 	width: 95px;
+}
+
+#county_selector .ui-autocomplete {
+	max-width: 100px;
 }
 
 /*
