@@ -86,8 +86,11 @@ def find_district(request, begin, end):
             del request.session[DISTRICT_KEY]
         county_name = request.GET[COUNTY_KEY];
         if county_name != u'All counties':
-            county = County.objects.get(name=county_name)
-            district = county.get_district_name()
+            try:
+                county = County.objects.get(name=county_name)
+                district = county.get_district_name()
+            except County.DoesNotExist:
+                pass
     elif DISTRICT_KEY in request.GET:
         district = request.GET[DISTRICT_KEY]
 
