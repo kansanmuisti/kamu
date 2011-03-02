@@ -72,19 +72,10 @@
 
 <div class="news_items">
   <h1>{% trans "News" %}</h1>
-  <h2>Uusi versio avattu</h2>
-  <p>Nyt muistamme, miten Facebookia käytetään. Muistamme myös
-  eduskuntavaalien 2007 vaalibudjetit sekä <a class="link" href="/opinions/">
-  Hesarin vaalikonevastaukset</a>.</p>
-  <h2>Kamu on taas terve</h2>
-  <p>Sivuston palvelimessa oli laitevika, mutta nyt olemme tolpillamme.</p>
-  <h2>Ydinvoimaäänestyksen tulokset lisätty palveluun</h2>
-  <p>Eduskunta äänesti <a class="link" href="/session/77-2010/7/">TVO:n</a>
-  ja <a class="link" href="/session/77-2010/10/">Fennovoima Oy:n</a>
-  ydinvoimalaitosyksiköiden rakentamisesta sekä käytetyn
-  ydinpolttoaineen <a class="link" href="/session/77-2010/9/">loppusijoituslaitoksen</a> rakentamisesta.</p>
-  <h2>Kamu avattu testikäyttöön</h2>
-  <p>Kamun rajoitettu testiversio on avattu. Tervetuloa!</p>
+  {% for newsitem in news %}
+  <h2>{{ newsitem.content.subject }}</h2>
+  {{ newsitem.content.data }}
+  {% endfor %}
 </div>
 
 <div class="news_items">

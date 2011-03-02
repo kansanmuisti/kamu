@@ -947,6 +947,8 @@ def search_county(request):
 def about(request, section):
     args = {'active_page': 'info', 'section': section}
 
+    args['news'] = Newsitem.objects.newest()
+
     if section == 'main':
         args['content'] = Item.objects.retrieve_content('main')
         section_name = _('Home')
