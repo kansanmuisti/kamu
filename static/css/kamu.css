@@ -688,6 +688,14 @@ td.vote_list_name {
         vertical-align: bottom;
 }
 
+ul.session_keyword {
+	margin-top: 16px;
+	list-style: none outside none;
+}
+li.session_keyword {
+	display: inline;
+}
+
 /*
  * Search
  */

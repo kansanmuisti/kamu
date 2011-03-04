@@ -47,6 +47,7 @@ from kamu.votes.models import *
 
 cache_dir = None
 until_pl = None
+from_pl = None
 
 TERM_DASH = u'\u2013'
 TERMS = [
@@ -479,26 +480,35 @@ def read_links(is_minutes, url, new_only=False):
         for vote in votes:
             link = {}
 
-            elem_list = vote.xpath('.//a')
-            links = [l.attrib['href'] for l in elem_list]
+            links = vote.xpath('.//a')
 
-            minutes_link = [l for l in links if '/akxptk.sh?' in l]
+            minutes_link = [l for l in links if '/akxptk.sh?' in l.attrib['href']]
             if len(minutes_link) != 1:
                 print get_cache_fname(url, link_type)
                 raise Exception("Unable to find link to minutes")
-            link['minutes'] = minutes_link[0]
-
-            if not is_minutes:
-                link_list = [l for l in links if '=aax/aax5000&' in l]
+            link['minutes'] = minutes_link[0].attrib['href']
+            if is_minutes:
+                pls_name = vote.getchildren()[0].text.strip()
+                m = re.match(r"PTK (\w+/\d{4}) vp", pls_name)
+                link['plsess'] = m.group(1)
+            else:
+                link['plsess'] = minutes_link[0].text.strip()[4:-3]
+                b_elem = minutes_link[0].getnext()
+                if b_elem.tag != 'b':
+                    print get_cache_fname(url, link_type)
+                    raise Exception("Unexpected <b> tag")
+                nr = int(b_elem.text.strip()[10:].strip().split()[1])
+                link['number'] = nr
+                link_list = [l for l in links if '=aax/aax5000&' in l.attrib['href']]
                 if len(link_list) != 1:
                     raise Exception("Unable to find vote results")
-                link['results'] = link_list[0]
+                link['results'] = link_list[0].attrib['href']
 
-                link_list = [l for l in links if '/vex3000.sh?' in l]
+                link_list = [l for l in links if '/vex3000.sh?' in l.attrib['href']]
                 if len(link_list) != 1:
                     print >> sys.stderr, 'Warning: Vote does not have keyword info'
                 else:
-                    link['info'] = link_list[0]
+                    link['info'] = link_list[0].attrib['href']
 
             ret.append(link)
 
@@ -507,19 +517,18 @@ def read_links(is_minutes, url, new_only=False):
             fwd_link = doc.xpath(".//input[@name='forward']")
             url = url_base + fwd_link[0].attrib['value']
         else:
-            fwd_link = None
+            url = None
             break
         if new_only:
             break
 
-
-    return (ret, fwd_link)
+    return (ret, url)
 
 pl_sess_list = {}
 mem_name_list = {}
 
 @transaction.commit_manually
-def process_session_votes(url, nr, only_new=False, noop=False):
+def process_session_votes(url, pl_sess_name):
     parser = vote_list_parser.Parser()
     s = open_url_with_cache(url, 'votes')
     parser.reset()
@@ -528,70 +537,43 @@ def process_session_votes(url, nr, only_new=False, noop=False):
     votes = parser.get_votes()
     desc = parser.get_desc()
 
-    sess_id = desc['pl_session']
-    if until_pl:
-        only_new = False
-        if sess_id == until_pl:
-            return False
     desc['nr'] = int(desc['nr'])
-    print '%4d. Vote %d / %s' % (nr, desc['nr'], desc['pl_session'])
+    desc['pl_session'] = pl_sess_name
 
-    if noop:
-        return True
-
-    deleted_pl = False
-    if sess_id in pl_sess_list:
-        pl_sess = pl_sess_list[sess_id]
+    if pl_sess_name in pl_sess_list:
+        pl_sess = pl_sess_list[pl_sess_name]
     else:
         try:
-            pl_sess = PlenarySession.objects.get(name=sess_id)
+            pl_sess = PlenarySession.objects.get(name=pl_sess_name)
         except PlenarySession.DoesNotExist:
-            pl_sess = None
+            pl_sess = PlenarySession(name=pl_sess_name)
+            pl_sess_list[pl_sess_name] = pl_sess
+        pl_sess.date = desc['date']
+        pl_sess.info_link = url_base + desc['session_link']
+        pl_sess.save()
 
-        if not pl_sess:
-            PlenarySession.objects.filter(name=sess_id).delete()
-            deleted_pl = True
-            pl_sess = PlenarySession()
-            pl_sess.name = sess_id
-            pl_sess.date = desc['date']
-            pl_sess.info_link = url_base + desc['session_link']
-            pl_sess.save()
-
-    pl_sess_list[sess_id] = pl_sess
-
-        # If the plenary session was deleted, all the child
-        # objects were, too.
-
-    if not deleted_pl:
-        try:
-            sess = Session.objects.get(plenary_session=pl_sess,
-                    number=desc['nr'])
-        except Session.DoesNotExist:
-            sess = None
-        if only_new and sess:
-            return False
-        if sess:
-            sess.delete()
-
-    sess = Session()
-    sess.plenary_session = pl_sess
-    sess.number = desc['nr']
+    # If the plenary session was deleted, all the child
+    # objects were, too.
+    try:
+        sess = Session.objects.get(plenary_session=pl_sess, number=desc['nr'])
+    except Session.DoesNotExist:
+        sess = Session(plenary_session=pl_sess, number=desc['nr'])
     sess.time = desc['time']
     sess.info = '\n'.join(desc['info'])
     sess.subject = desc['subject']
     sess.info_link = None
     sess.save()
 
+    sess.sessiondocument_set.clear()
     for doc in desc['docs']:
         name = doc[0]
-        try:
-            sd = SessionDocument.objects.get(name=name)
-        except SessionDocument.DoesNotExist:
-            sd = SessionDocument(name=name)
-        sd.info_link = url_base + doc[1]
-        sd.save()
+        sd, c = SessionDocument.objects.get_or_create(name=name)
+        if c:
+            sd.info_link = url_base + doc[1]
+            sd.save()
         sd.sessions.add(sess)
 
+    sess.vote_set.all().delete()
     for v in votes:
         vote = Vote()
         vote.session = sess
@@ -603,14 +585,16 @@ def process_session_votes(url, nr, only_new=False, noop=False):
             mem_name_list[vote.member_name] = member
         vote.member = mem_name_list[vote.member_name]
         vote.save()
+
     sess.count_votes()
+    sess.save()
 
     transaction.commit()
     db.reset_queries()
 
     return sess
 
-def process_session_keywords(url, sess, noop=False):
+def process_session_keywords(sess, url):
     s = open_url_with_cache(url, 'votes')
     doc = html.fromstring(s)
     kw_list = doc.xpath(".//div[@id='vepsasia-asiasana']//div[@class='linkspace']/a")
@@ -630,54 +614,71 @@ def process_session_keywords(url, sess, noop=False):
             kw_obj.save()
         SessionKeyword.objects.get_or_create(session=sess, keyword=kw_obj)
 
-def process_votes(full_update=False, noop=False):
+def process_votes(full_update=False):
+    start_from = from_pl
     year = END_YEAR
     next_link = None
     while True:
         if not next_link:
             next_link = url_base + VOTE_URL % year
-        (vote_links, next_link) = read_links(False, next_link, not full_update)
-        print 'Got links for total of %d sessions' % len(vote_links)
-        for link in vote_links:
-            nr = vote_links.index(link)
-            sess = process_session_votes(link['results'], nr, not full_update, noop)
-            if not sess:
-                return
+        (sess_list, next_link) = read_links(False, next_link, not full_update)
+        print 'Got links for total of %d sessions' % len(sess_list)
+        for sess_desc in sess_list:
+            sess = Session.objects.filter(plenary_session=sess_desc['plsess'],
+                                          number=sess_desc['number'])
+            if sess:
+                assert len(sess) == 1
+                sess = sess[0]
+
+            idx = sess_list.index(sess_desc)
+            print '%4d. Vote %d / %s' % (idx, sess_desc['number'], sess_desc['plsess'])
+            if start_from:
+                if start_from == sess_desc['plsess']:
+                    start_from = None
+                else:
+                    continue
+            if not full_update and sess:
+                # If the session doesn't have keywords, we process only those.
+                if not sess.sessionkeyword_set:
+                    if 'info' in sess_desc:
+                        process_session_keywords(sess_desc['info'], sess)
+                else:
+                    return
+
+            sess = process_session_votes(sess_desc['results'], sess_desc['plsess'])
             # Process keywords
-            if 'info' in link:
-                process_session_keywords(link['info'], sess, noop)
+            if 'info' in sess_desc:
+                process_session_keywords(sess, sess_desc['info'])
 
         if not next_link:
             year -= 1
             if year < BEGIN_YEAR:
                 break
 
-def insert_minutes(full_update, minutes):
-    if until_pl and minutes['id'] == until_pl:
-        return False
-    print minutes['id']
+def process_session_kws():
+    year = END_YEAR
+    next_link = None
+    while True:
+        if not next_link:
+            next_link = url_base + VOTE_URL % year
+        (vote_links, next_link) = read_links(False, next_link, False)
+        print 'Got links for total of %d sessions' % len(vote_links)
+        for link in vote_links:
+            nr = vote_links.index(link)
+
+def insert_minutes(minutes):
     mins = None
     try:
         pl_sess = PlenarySession.objects.get(name=minutes['id'])
-
-        # If the plsession exists and has the minutes field set
-        # already, but we're not doing a full update, bail out.
-        mins = Minutes.objects.get(plenary_session=pl_sess)
-        if not full_update and mins:
-            return None
     except PlenarySession.DoesNotExist:
         pl_sess = PlenarySession()
         pl_sess.name = minutes['id']
         pl_sess.date = minutes['date']
         pl_sess.info_link = minutes['url']
         pl_sess.save()
-    except Minutes.DoesNotExist:
-        mins = None
 
-    if not mins:
-        mins = Minutes()
-        mins.plenary_session = pl_sess
-
+    mins = Minutes()
+    mins.plenary_session = pl_sess
     mins.html = minutes['html']
     mins.save()
 
@@ -714,10 +715,14 @@ def insert_discussion(full_update, pl_sess, disc, dsc_nr, members):
         match = False
         for n in st.text:
             OK = [225, 224, 189, 232, 237, 352, 248, 201, 180, 233, 196,
-                  214, 252, 229, 197, 167, 353, 228, 160, 246]
+                  214, 252, 229, 197, 167, 353, 228, 160, 246, 250, 8230,
+                  243, 235, 244, 231]
             if ord(n) >= 128 and ord(n) not in OK:
                 print '%d: %c' % (ord(n), n)
-                print st.text[st.text.index(n):]
+                start = st.text.index(n) - 20
+                if start < 0:
+                    start = 0
+                print st.text[start:]
                 match = True
         st.html = spkr['html']
         st.save()
@@ -726,6 +731,7 @@ def insert_discussion(full_update, pl_sess, disc, dsc_nr, members):
 
 @transaction.commit_manually
 def process_minutes(full_update):
+    start_from = from_pl
     member_list = Member.objects.all()
     member_dict = {}
     for mem in member_list:
@@ -736,34 +742,46 @@ def process_minutes(full_update):
         member_dict[name] = mem
 
     next_link = url_base + MINUTES_URL
-    while True:
+    while next_link:
         (links, next_link) = read_links(True, next_link, new_only=not full_update)
         print 'Got links for total of %d minutes' % len(links)
         for link in links:
             url = link['minutes']
-            print '%4d. %s' % (links.index(link), url)
+            print '%4d. %s' % (links.index(link), link['plsess'])
+            if until_pl and link['plsess'] == until_pl:
+                return
+            if start_from:
+                if link['plsess'] == start_from:
+                    start_from = None
+                else:
+                    continue
             s = open_url_with_cache(url, 'minutes')
             tmp_url = 'http://www.eduskunta.fi/faktatmp/utatmp/akxtmp/'
             minutes = minutes_parser.parse_minutes(s, tmp_url)
             if not minutes:
                 continue
-            s = open_url_with_cache(minutes['sgml_url'], 'minutes')
             minutes['url'] = url
-            pl_sess = insert_minutes(full_update, minutes)
-            if not pl_sess:
-                next_link = None
-                break
-            for l in minutes['cnv_links']:
-                print l
-                s = open_url_with_cache(l, 'minutes')
-                disc = minutes_parser.parse_discussion(s, l)
-                insert_discussion(full_update, pl_sess, disc,
-                                  minutes['cnv_links'].index(l),
-                                  member_dict)
+            try:
+                mins = Minutes.objects.get(plenary_session__name=link['plsess'])
+                if not full_update:
+                    return
+            except Minutes.DoesNotExist:
+                pass
+            pl_sess = insert_minutes(minutes)
+            try:
+                for l in minutes['cnv_links']:
+                    print l
+                    s = open_url_with_cache(l, 'minutes')
+                    disc = minutes_parser.parse_discussion(s, l)
+                    insert_discussion(full_update, pl_sess, disc,
+                                      minutes['cnv_links'].index(l),
+                                      member_dict)
+            except:
+                Minutes.objects.get(plenary_session=pl_sess).delete()
+                Statement.objects.filter(plenary_session=pl_sess).delete()
+                raise
             transaction.commit()
             db.reset_queries()
-        if not next_link:
-            break
 
 parser = OptionParser()
 parser.add_option('-p', '--parties', action='store_true', dest='parties'
@@ -786,6 +804,9 @@ parser.add_option('--full-update', action='store_true',
 parser.add_option('--until-pl', action='store', type='string',
                   dest='until_pl',
                   help='process until named plenary session reached')
+parser.add_option('--from-pl', action='store', type='string',
+                  dest='from_pl',
+                  help='process starting from named plenary session')
 
 (opts, args) = parser.parse_args()
 
@@ -794,6 +815,8 @@ if opts.cache:
     cache_dir = opts.cache
 if opts.until_pl:
     until_pl = opts.until_pl
+if opts.from_pl:
+    from_pl = opts.from_pl
 if opts.parties or opts.members:
     party_list = process_parties(True)
     fill_terms()

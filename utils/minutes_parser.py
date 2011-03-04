@@ -46,10 +46,9 @@ def parse_minutes(html_str, url):
                 raise Exception("Invalid 'h1' tag: " + hdr[0].text)
         minutes['id'] = '/'.join(grp)
         hdr = html_doc.xpath(".//h2")
-        text = hdr[0].text.lower()
+        text = hdr[0].text.strip().lower()
         if "jumalanpalvelus" in text or "avajaiset" in text or "vaalikauden" in text:
                 return None
-        print text
         text = text.replace(u'p\u00e4iv\u00e4n\u00e4', '')
         grps = re.search(r'(?u)\d+\s*\. .+na\s+(\d{1,2})[. ]{1,3}(\w+)kuuta\s+(\d{4})', text)
         if not grps:

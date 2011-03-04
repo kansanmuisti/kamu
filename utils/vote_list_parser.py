@@ -164,7 +164,6 @@ class Parser(SGMLParser):
                                 self.info = ""
                                 return
                         self.desc['subject'] = info
-                        print info
                         self.info = None
                         self.in_subject = 0
                         return
@@ -211,10 +210,8 @@ class Parser(SGMLParser):
                         (id, date) = text.split('/')
                         if not id or not date:
                                 raise Exception("invalid session id")
-                        self.desc['pl_session'] = text
                         (d, m, y) = date.split('.')
                         self.desc['date'] = '-'.join((y, m, d))
-                        self.desc['pl_session'] = "%s/%s" % (id, y)
                         self.desc_parse_nr = 0
                 return
 

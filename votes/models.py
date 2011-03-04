@@ -196,10 +196,10 @@ class PlenarySessionManager(models.Manager):
         return self.filter(query)
 
 class PlenarySession(models.Model):
-    name = models.CharField(max_length = 20, primary_key = True)
-    date = models.DateField(db_index = True)
+    name = models.CharField(max_length=20, primary_key=True)
+    date = models.DateField(db_index=True)
     info_link = models.URLField()
-    url_name = models.SlugField(max_length = 20, unique = True, db_index = True)
+    url_name = models.SlugField(max_length=20, unique=True, db_index=True)
 
     objects = PlenarySessionManager()
 
@@ -213,7 +213,7 @@ class PlenarySession(models.Model):
         return self.name
 
 class Minutes(models.Model):
-    plenary_session = models.ForeignKey(PlenarySession)
+    plenary_session = models.ForeignKey(PlenarySession, db_index=True, unique=True)
     html = models.TextField()
 
     def __unicode__(self):
@@ -229,16 +229,19 @@ class StatementManager(models.Manager):
         return self.filter(query)
 
 class Statement(models.Model):
-    plenary_session = models.ForeignKey(PlenarySession)
+    plenary_session = models.ForeignKey(PlenarySession, db_index=True)
     # Discussion number in plenary session minutes
     dsc_number = models.IntegerField()
-    member = models.ForeignKey(Member, blank = True, null = True)
+    member = models.ForeignKey(Member, db_index=True, blank=True, null=True)
     # Index of statement in discussion
     index = models.IntegerField()
     text = models.TextField()
     html = models.TextField()
 
     objects = StatementManager()
+
+    class Meta:
+        unique_together = (('plenary_session', 'dsc_number', 'index'),)
 
     def __unicode__(self):
         if self.member:
@@ -264,10 +267,11 @@ class Session(models.Model):
     number = models.IntegerField()
     time = models.TimeField()
     info = models.TextField()
-    subject = models.CharField(max_length = 100)
-    info_link = models.URLField(blank = True, null = True)
+    subject = models.CharField(max_length=100)
+    info_link = models.URLField(blank=True, null=True)
 
-    vote_counts = models.CommaSeparatedIntegerField(max_length = 20, blank = True, null = True)
+    vote_counts = models.CommaSeparatedIntegerField(max_length=20, blank=True,
+                                                    null=True)
 
     objects = SessionManager()
 
@@ -276,11 +280,9 @@ class Session(models.Model):
             return
         vcnt = []
         for v in Vote.VOTE_CHOICES:
-                c = Vote.objects.filter(session = self, vote = v[0]).count()
-                vcnt.append(str(c))
+            c = Vote.objects.filter(session=self, vote=v[0]).count()
+            vcnt.append(str(c))
         self.vote_counts = ','.join(vcnt)
-        # Update db
-        Session.objects.filter(pk = self.pk).update(vote_counts = self.vote_counts)
 
     def get_vote_counts(self):
         if not self.vote_counts:
@@ -303,15 +305,17 @@ class Session(models.Model):
 
 class SessionDocument(models.Model):
     sessions = models.ManyToManyField(Session)
-    name = models.CharField(max_length = 20, db_index = True)
-    url_name = models.SlugField(max_length = 20, unique = True)
-    info_link = models.URLField()
+    name = models.CharField(max_length=20, db_index=True, unique=True)
+    url_name = models.SlugField(max_length=20, unique=True)
+    info_link = models.URLField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.url_name:
             # only do this with the first save
             self.url_name = slugify(self.name)
         super(SessionDocument, self).save(*args, **kwargs)
+    def __unicode__(self):
+        return self.name
 
 
 class VoteManager(models.Manager):
@@ -360,5 +364,6 @@ class SessionKeyword(models.Model):
     session = models.ForeignKey(Session)
     keyword = models.ForeignKey(Keyword)
 
-    class Meta:
-        unique_together = (('session', 'keyword'),)
+    def __unicode__(self):
+        return "%s: %s" % (str(self.session), self.keyword.name)
+

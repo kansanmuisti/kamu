@@ -349,6 +349,7 @@ def show_session_basic(request, session, psess):
     query &= query.filter(session = session).order_by(order, 'member__name')
     votes = query.select_related('member', 'member__party')
     session.docs = SessionDocument.objects.filter(sessions=session)
+    session.kw_list = session.sessionkeyword_set.values_list('keyword__name', flat=True).order_by('keyword__name')
 
     score_table = generate_score_table(request, session)
 
