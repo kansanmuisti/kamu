@@ -104,9 +104,10 @@ def tally_votes(party_list, member_list, begin, end):
 def update_stats(party_list, member_list, begin, end):
     ms_list = []
     for m in member_list:
-        ms = MemberStats(member = m)
-        ms.begin = begin
-        ms.end = end
+        try:
+            ms = MemberStats.objects.get(member=m, begin=begin, end=end)
+        except MemberStats.DoesNotExist:
+            ms = MemberStats(member=m, begin=begin, end=end)
         if hasattr(m, "party_agree"):
                 vcnt = []
                 for v in Vote.VOTE_CHOICES:
@@ -116,9 +117,6 @@ def update_stats(party_list, member_list, begin, end):
                 ms.session_agreement = "%d,%d" % (m.session_agree[True], m.session_agree[False])
         query = Statement.objects.between(begin, end).filter(member = m)
         ms.statement_count = query.count()
-        ms_list.append(ms)
-    MemberStats.objects.for_period(begin, end).delete()
-    for ms in ms_list:
         ms.save()
 
 for per in PERIODS:
