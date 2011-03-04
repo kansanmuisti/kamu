@@ -366,8 +366,11 @@ def show_session_basic(request, session, psess):
     def fill_cols(vote):
         row = []
         mem = vote.member
-        row.append({'img': mem.party.logo, 'img_alt': 'logo', 'img_dim': '24x24',
-                    'title': mem.party.full_name, 'class': 'vote_list_party' })
+        if mem.party:
+            row.append({'img': mem.party.logo, 'img_alt': 'logo', 'img_dim': '24x24',
+                        'title': mem.party.full_name, 'class': 'vote_list_party' })
+        else:
+            row.append(None)
         row.append({'img': mem.photo, 'img_alt': 'portrait', 'img_dim': '24x36',
                 'class': 'vote_list_portrait'})
         row.append({'value': mem.name, 'link': '/member/' + mem.url_name + '/',
@@ -548,8 +551,11 @@ def list_members(request):
     row_list = []
     for mem in member_page.object_list:
         col_vals = []
-        col_vals.append({'img': mem.party.logo, 'img_alt': 'logo', 'img_dim': '36x36',
-                'title': mem.party.full_name, 'class': 'member_list_party' })
+        if mem.party:
+            col_vals.append({'img': mem.party.logo, 'img_alt': 'logo', 'img_dim': '36x36',
+                    'title': mem.party.full_name, 'class': 'member_list_party' })
+        else:
+            col_vals.append(None)
         col_vals.append({'img': mem.photo, 'img_alt': 'portrait', 'link': mem.url_name,
                          'img_dim': '28x42', 'class': 'member_list_portrait'})
         col_vals.append({'value': mem.name, 'link': mem.url_name, 'class': 'member_list_name'})
