@@ -17,9 +17,11 @@
   {% if session.subject %}
     <p><i>{{ session.subject }}</i></p>
   {% endif %}
-  <ul class='session_keyword'>{% for kw in session.kw_list %}
+  {% if session.kw_list %}
+    <ul class='session_keyword'>{% for kw in session.kw_list %}
       <li class='session_keyword'>{{ kw }}</li>{% if not forloop.last %} |{% endif %}
-  {% endfor %}</ul></p>
+    {% endfor %}</ul></p>
+  {% endif %}
   </div>
 
 {% comment %}
