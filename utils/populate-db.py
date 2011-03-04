@@ -639,9 +639,10 @@ def process_votes(full_update=False):
                     continue
             if not full_update and sess:
                 # If the session doesn't have keywords, we process only those.
-                if not sess.sessionkeyword_set:
+                if not sess.sessionkeyword_set.all():
                     if 'info' in sess_desc:
-                        process_session_keywords(sess_desc['info'], sess)
+                        process_session_keywords(sess, sess_desc['info'])
+                        continue
                 else:
                     return
 
