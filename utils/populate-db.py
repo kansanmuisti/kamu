@@ -620,6 +620,7 @@ def process_votes(full_update=False):
     start_from = from_pl
     year = END_YEAR
     next_link = None
+    stop_after = None
     while True:
         if not next_link:
             next_link = url_base + VOTE_URL % year
@@ -639,6 +640,8 @@ def process_votes(full_update=False):
                     start_from = None
                 else:
                     continue
+            if stop_after and sess_desc['plsess'] != stop_after:
+                return
             if not full_update and sess:
                 # If the session doesn't have keywords, we process only those.
                 if not sess.sessionkeyword_set.all():
@@ -652,6 +655,8 @@ def process_votes(full_update=False):
             # Process keywords
             if 'info' in sess_desc:
                 process_session_keywords(sess, sess_desc['info'])
+            if until_pl and sess_desc['plsess'] == until_pl:
+                stop_after = until_pl
 
         if not next_link:
             year -= 1
@@ -735,6 +740,7 @@ def insert_discussion(full_update, pl_sess, disc, dsc_nr, members):
 @transaction.commit_manually
 def process_minutes(full_update):
     start_from = from_pl
+    stop_after = None
     member_list = Member.objects.all()
     member_dict = {}
     for mem in member_list:
@@ -751,13 +757,13 @@ def process_minutes(full_update):
         for link in links:
             url = link['minutes']
             print '%4d. %s' % (links.index(link), link['plsess'])
-            if until_pl and link['plsess'] == until_pl:
-                return
             if start_from:
                 if link['plsess'] == start_from:
                     start_from = None
                 else:
                     continue
+            if stop_after and sess_desc['plsess'] != stop_after:
+                return
             s = open_url_with_cache(url, 'minutes')
             tmp_url = 'http://www.eduskunta.fi/faktatmp/utatmp/akxtmp/'
             minutes = minutes_parser.parse_minutes(s, tmp_url)
@@ -785,6 +791,8 @@ def process_minutes(full_update):
                 raise
             transaction.commit()
             db.reset_queries()
+            if until_pl and link['plsess'] == until_pl:
+                stop_after = until_pl
 
 parser = OptionParser()
 parser.add_option('-p', '--parties', action='store_true', dest='parties'
