@@ -254,13 +254,18 @@ class Statement(models.Model):
 
 
 class SessionManager(models.Manager):
-    def between(self, begin = None, end = None):
+    def between(self, begin=None, end=None):
         query = Q()
         if begin:
             query &= Q(plenary_session__date__gte=begin)
         if end:
             query &= Q(plenary_session__date__lte=end)
         return self.filter(query)
+    def by_name(self, name):
+        f = name.split('/')
+        nr = int(f[0])
+        pls_name = '/'.join(f[1:])
+        return self.get(Q(plenary_session__name=pls_name) & Q(number=nr))
 
 class Session(models.Model):
     plenary_session = models.ForeignKey(PlenarySession)
