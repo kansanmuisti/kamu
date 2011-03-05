@@ -567,8 +567,10 @@ def process_session_votes(url, pl_sess_name):
     sess.sessiondocument_set.clear()
     for doc in desc['docs']:
         name = doc[0]
-        sd, c = SessionDocument.objects.get_or_create(name=name)
-        if c:
+        try:
+            sd = SessionDocument.objects.get(name=name)
+        except SessionDocument.DoesNotExist:
+            sd = SessionDocument(name=name)
             sd.info_link = url_base + doc[1]
             sd.save()
         sd.sessions.add(sess)
