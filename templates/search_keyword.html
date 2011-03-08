@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Search results" %}{% endblock %}
+{% block content %}
+
+<h1>{% trans "Search results for keyword" %} {{ keyword.name }}</h1>
+
+{% if 1 %}
+<ol class="search_results">
+{% for sess in sess_list %}
+  <li style="margin-bottom: 8px;"><a href='{% url votes.views.show_session plsess=sess.plenary_session.url_name,sess=sess.number %}'>
+    <h3 style="display: inline;">{{ sess }}</h3></a>
+    <div style="font-size: 80%; width: 480px;">{{ sess.info|linebreaks }}</div>
+  </li>
+{% endfor %}
+</ol>
+{% else %}
+<h2>{% trans "No results found" %}</h2>
+{% endif %}
+
+{% endblock %}

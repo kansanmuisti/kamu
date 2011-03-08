@@ -258,6 +258,18 @@ def list_sessions(request):
     return render_to_response('sessions.html', data_dict,
                               context_instance = RequestContext(request))
 
+def search_by_keyword(request):
+    if not 'query' in request.GET:
+        raise Http404()
+    kw = get_object_or_404(Keyword, name=request.GET['query'])
+    sess_ids = SessionKeyword.objects.filter(keyword=kw).values_list('session', flat=True)
+    sess_list = Session.objects.filter(id__in=sess_ids).order_by('-plenary_session__date')
+
+    args = {'sess_list': sess_list, 'keyword': kw}
+
+    return render_to_response('search_keyword.html', args,
+                              context_instance=RequestContext(request))
+
 def get_admin_orgs(user, org_name=None):
     groups = user.groups.filter(name__startswith='org-')
     names = [grp.name[4:] for grp in groups]
