@@ -61,6 +61,12 @@
   </div>
 {% endif %}
 
+  {% if session.summary %}
+  <div class="h2_section session_summary">
+    {{ session.summary|linebreaks }}
+  </div>
+  {% endif %}
+
   <div class='session_votes'>
   <h2>{% trans "Votes" %}</h2>
 {% for table in tables %}

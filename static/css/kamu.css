@@ -653,6 +653,9 @@ div.session_info {
 #session_score_table {
 	margin-bottom: 22px;
 }
+div.session_summary {
+	font-size: 80%;
+}
 
 /*
  * Vote list
