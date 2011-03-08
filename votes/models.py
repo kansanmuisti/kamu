@@ -314,6 +314,8 @@ class SessionDocument(models.Model):
     url_name = models.SlugField(max_length=20, unique=True)
     info_link = models.URLField(blank=True, null=True)
 
+    summary = models.TextField(blank=True, null=True)
+
     def save(self, *args, **kwargs):
         if not self.url_name:
             # only do this with the first save

@@ -363,6 +363,10 @@ def show_session_basic(request, session, psess):
     votes = query.select_related('member', 'member__party')
     session.docs = SessionDocument.objects.filter(sessions=session)
     session.kw_list = session.sessionkeyword_set.values_list('keyword__name', flat=True).order_by('keyword__name')
+    for doc in session.docs:
+        if doc.summary:
+            session.summary = doc.summary.replace('\n', '\n\n')
+            break
 
     score_table = generate_score_table(request, session)
 

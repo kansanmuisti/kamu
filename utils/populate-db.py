@@ -87,7 +87,8 @@ def get_cache_fname(url, prefix):
     fname = '%s/%s/%s' % (cache_dir, prefix, hash)
     return fname
 
-def open_url_with_cache(url, prefix, skip_cache=False, error_ok=False):
+def open_url_with_cache(url, prefix, skip_cache=False, error_ok=False, return_url=False):
+    final_url = None
     fname = None
     if cache_dir and not skip_cache:
         fname = get_cache_fname(url, prefix)
@@ -101,6 +102,7 @@ def open_url_with_cache(url, prefix, skip_cache=False, error_ok=False):
                 return None
             raise
         s = f.read()
+        final_url = f.geturl()
         if fname:
             create_path_for_file(fname)
             outf = open(fname, 'w')
@@ -110,7 +112,8 @@ def open_url_with_cache(url, prefix, skip_cache=False, error_ok=False):
         f = open(fname)
         s = f.read()
     f.close()
-
+    if return_url:
+        return s, final_url
     return s
 
 
@@ -600,7 +603,6 @@ def process_session_keywords(sess, url):
     s = open_url_with_cache(url, 'votes')
     doc = html.fromstring(s)
     kw_list = doc.xpath(".//div[@id='vepsasia-asiasana']//div[@class='linkspace']/a")
-    print sess
 
     for kw in kw_list:
         kw = kw.text.strip()
@@ -794,21 +796,140 @@ def process_minutes(full_update):
             if until_pl and link['plsess'] == until_pl:
                 stop_after = until_pl
 
+HE_URL = "http://217.71.145.20/TRIPviewer/temp/TUNNISTE_HE_%i_%i_fi.html"
+
+def process_doc(doc):
+    hematch = re.compile('HE (\d+)/(\d{4})')
+    match = hematch.match(doc.name)
+    number, year = map(int, match.groups())
+    url = HE_URL % (number, year)
+
+    s = open_url_with_cache(url, 'docs', error_ok=True)
+    if not s:
+        (s, url) = open_url_with_cache(doc.info_link, 'docs', return_url=True)
+        if '<!-- akxereiloydy.thw -->' in s or '<!-- akx5000.thw -->' in s:
+            print "\tNot found!"
+            return
+        html_doc = html.fromstring(s)
+        frames = html_doc.xpath(".//frame")
+        link_elem = None
+        for f in frames:
+            if f.attrib['src'].startswith('temp/'):
+                link_elem = f
+                break
+        html_doc.make_links_absolute(url)
+        url = link_elem.attrib['src']
+        print "\tGenerated and found!"
+        s = open_url_with_cache(url, 'docs')
+    # First check if's not a valid HE doc, the surest way to
+    # detect it appears to be the length. *sigh*
+    if len(s) < 1500:
+        print "\tJust PDF"
+        return
+    html_doc = html.fromstring(s)
+    elem_list = html_doc.xpath(".//p[@class='Normaali']")
+
+    ELEM_CL = ['LLEsityksenPaaSis',
+               'LLEsityksenp-00e4-00e4asiallinensis-00e4lt-00f6',
+               'LLVSEsityksenp-00e4-00e4asiallinensis-00e4lt-00f6',
+               'LLPaaotsikko']
+    for cl in ELEM_CL:
+        elem = html_doc.xpath(".//p[@class='%s']" % cl)
+        if elem:
+            break
+    if not elem:
+        print "\tNo header found: %d" % len(s)
+        print get_cache_fname(url, 'docs')
+        return
+    # Choose the first header. Sometimes they are replicated. *sigh*
+    elem = elem[0].getnext()
+    p_list = []
+    if 'class' in elem.attrib and elem.attrib['class'] == 'LLNormaali' and \
+            elem.getnext().attrib['class'] == 'LLKappalejako':
+        elem = elem.getnext()
+    while elem is not None:
+        if elem.tag != 'p':
+            print elem.tag
+            break
+        OK_CLASS = ('LLKappalejako', 'LLJohtolauseKappaleet',
+                    'LLVoimaantulokappale',
+                    'LLKappalejako-0020Char-0020Char-0020Char', # WTF
+        )
+        if not 'class' in elem.attrib or elem.attrib['class'] not in OK_CLASS:
+            break
+        p_list.append(elem)
+        elem = elem.getnext()
+    BREAK_CLASS = ('LLNormaali', 'LLYleisperustelut', 'LLPerustelut',
+                   'LLNormaali-0020Char', 'Normaali', 'LLSisallysluettelo')
+    if 'class' in elem.attrib and elem.attrib['class'] not in BREAK_CLASS:
+        print "\tMystery class: %s" % elem.attrib
+        print get_cache_fname(url, 'docs')
+        return
+    if not p_list:
+        print "\tNo summary found"
+        print get_cache_fname(url, 'docs')
+        return
+    text_list = []
+
+    def append_text(elem, no_append=False):
+        text = ''
+        if elem.text:
+            text = elem.text.replace('\r', '').replace('\n', '').strip()
+            text = text.replace('&nbsp;', '')
+        if elem.getchildren():
+            for ch in elem.getchildren():
+                text += append_text(ch, no_append=True)
+        if len(text) < 15 and u'\u2014' in text:
+            return
+        if no_append:
+            return text
+        text = text.strip()
+        if text:
+            text_list.append(text)
+
+    for p in p_list:
+        append_text(p)
+    mark = False
+    for t in text_list:
+        if len(t) < 15:
+            mark = True
+            break
+    if mark:
+        print get_cache_fname(url, 'docs')
+        for t in text_list:
+            print t
+        return
+    doc.summary = '\n'.join(text_list)
+    doc.save()
+
+def process_session_docs(full_update):
+    doc_list = SessionDocument.objects.filter(name__startswith='HE')
+    doc_list = list(doc_list)
+    for doc in doc_list:
+        if doc.summary and not full_update:
+            continue
+        print "%s: %s" % (doc_list.index(doc), doc.name)
+        if not doc.info_link:
+            continue
+        process_doc(doc)
+
 parser = OptionParser()
-parser.add_option('-p', '--parties', action='store_true', dest='parties'
-                  , help='populate party database')
-parser.add_option('-m', '--members', action='store_true', dest='members'
-                  , help='populate member database')
+parser.add_option('-p', '--parties', action='store_true', dest='parties',
+                  help='populate party database')
+parser.add_option('-m', '--members', action='store_true', dest='members',
+                  help='populate member database')
 parser.add_option('-c', '--counties', action='store_true',
                   dest='counties', help='populate counties database')
 parser.add_option('-v', '--votes', action='store_true', dest='votes',
                   help='populate vote database')
-parser.add_option('-M', '--minutes', action='store_true', dest='minutes'
-                  , help='populate session minutes database')
-parser.add_option('-k', '--keywords', action='store_true', dest='keywords'
-                  , help='populate voting keywords database')
-parser.add_option('--cache', action='store', type='string', dest='cache'
-                  , help='use cache in directory CACHE')
+parser.add_option('-M', '--minutes', action='store_true', dest='minutes',
+                  help='populate session minutes database')
+parser.add_option('-k', '--keywords', action='store_true', dest='keywords',
+                  help='populate voting keywords database')
+parser.add_option('-d', '--docs', action='store_true', dest='docs',
+                  help='populate session documents')
+parser.add_option('--cache', action='store', type='string', dest='cache',
+                  help='use cache in directory CACHE')
 parser.add_option('--full-update', action='store_true',
                   dest='full_update',
                   help='perform a full database update')
@@ -845,3 +966,6 @@ if opts.minutes:
     process_minutes(opts.full_update)
 if opts.keywords:
     process_keywords()
+if opts.docs:
+    process_session_docs(opts.full_update)
+
