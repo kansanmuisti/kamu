@@ -305,6 +305,22 @@ class Session(models.Model):
 #        MemberStats.objects.filter(query).delete()
         super(Session, self).save(args, kwargs)
 
+    def get_short_summary(self):
+        lines = []
+        for line in self.info.split('\n'):
+            if not line:
+                continue
+            if line[-1] != '.':
+                line += '.'
+            lines.append(line)
+        lines.append(self.subject)
+        return ' '.join(lines)
+
+    @models.permalink
+    def get_absolute_url(self):
+        args = {'plsess': self.plenary_session.url_name, 'sess': self.number}
+        return ('votes.views.show_session', (), args)
+
     def __unicode__(self):
         return str(self.number) + '/' + self.plenary_session.name
 

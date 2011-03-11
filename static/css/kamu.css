@@ -640,6 +640,10 @@ div.session_info {
         padding-bottom: 1em;
 }
 
+div#session_user_vote {
+	min-height: 25px;
+}
+
 #session_doc_list ul {
 	list-style: none;
 }

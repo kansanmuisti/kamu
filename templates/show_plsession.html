@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Plenary session" %} - {{ psession.name }}{% endblock %}
+{% block content %}
+{% load basic %}
+
+  <h1>{% trans "Plenary session" %} <a href='{{ psession.info_link }}'>
+    {{ psession.name }}</a>
+  </h1>
+{% ifequal section 'basic' %}
+  <div>
+  {{ minutes.html|safe }}
+  </div>
+{% endifequal %}
+{% ifequal section 'statements' %}
+{% for st in st_list %}
+<div id="statement-{{ st.index }}" class="statement">
+{{ st.html|safe }}
+</div>
+{% endfor %}
+{% endifequal %}
+
+{% endblock %}

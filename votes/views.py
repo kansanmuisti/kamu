@@ -421,8 +421,12 @@ def show_session_basic(request, session, psess):
     tables[1]['html'] = html
     tables[1]['class'] = 'vote_list_right'
 
+    user_votes = {'up': UserVote.objects.get_count(session, 1),
+                  'down': UserVote.objects.get_count(session, -1)}
+
     args = {'vote_list': votes, 'tables': tables, 'score_table': score_table,
-            'tags': Tag.objects.get_for_object(session), 'switch_district': True}
+            'tags': Tag.objects.get_for_object(session), 'switch_district': True,
+            'user_votes': user_votes}
 
     return args
 
@@ -449,7 +453,21 @@ def show_session(request, plsess, sess, section=None):
     args['active_page'] = 'sessions'
     args['section'] = section
 
-    return render_to_response('votes.html', args, context_instance=RequestContext(request))
+    return render_to_response('show_session.html', args, context_instance=RequestContext(request))
+
+@csrf_exempt
+@postonly
+def set_session_user_vote(request, plsess, sess):
+    if not request.user.is_authenticated():
+        raise Http403()
+    try:
+        number = int(sess)
+    except ValueError:
+        raise Http404
+    sess = get_object_or_404(Session, plenary_session__url_name=plsess,
+                             number=number)
+
+    return set_user_vote(request, sess)
 
 @login_required
 def tag_session(request, plsess, sess):
@@ -786,7 +804,7 @@ def show_plsession(request, plsess, section=None, dsc=None):
     args['psession'] = psess
     args['section'] = section
     args['active_page'] = 'sessions'
-    return render_to_response('show_session.html', args,
+    return render_to_response('show_plsession.html', args,
                               context_instance=RequestContext(request))
 
 def list_parties(request):
