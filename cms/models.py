@@ -64,7 +64,7 @@ class NewsitemManager(models.Manager):
             return newsitems[:amount]
 
 class Newsitem(Item):
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField()
 
     objects = NewsitemManager()
 
