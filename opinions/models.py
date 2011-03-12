@@ -1,7 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 from django.db import models, connection, transaction
-from kamu.votes.models import Member,Party
+from kamu.votes.models import Member, Party, Session, Vote
+from django.contrib.auth.models import User
 
 class QuestionSource(models.Model):
     name = models.CharField(max_length=255)
@@ -31,11 +33,10 @@ class Question(models.Model):
     def answers(self):
         options = self.option_set.all()
         return Answer.objects.filter(option__in=options)
-        
 
     class Meta:
         ordering = ('-weight', )
-        unique_together = (('weight', 'source'),)
+        unique_together = (('weight', 'source'), )
 
     def __unicode__(self):
         return self.text
@@ -58,10 +59,13 @@ class Option(models.Model):
             self.weight = int(max_weight) + 1
 
         super(Option, self).save(*args, **kwargs)
-    
+
     def party_shares(self):
+
         # Ah, SQL is so nice and terse
-	query = """
+
+        query = \
+            """
             SELECT votes_party.*,
                ROUND(COALESCE(partyvotes/partytotal, 0)*100) AS share
             FROM
@@ -78,11 +82,10 @@ class Option(models.Model):
             RIGHT JOIN votes_party ON votes_party.name=stats.party_id
             WHERE votes_party.name = totals.party_id
             """
-	return Party.objects.raw(query, [self.question_id, self.id])
+        return Party.objects.raw(query, [self.question_id, self.id])
 
     def __unicode__(self):
         return u'%s: %s' % (self.question, self.name)
-
 
 class Answer(models.Model):
     member = models.ForeignKey(Member)
@@ -95,4 +98,24 @@ class Answer(models.Model):
 
     def __unicode__(self):
         return u'%s %s' % (self.member, self.option)
+
+class VoteOptionCongruence(models.Model):
+    option = models.ForeignKey(Option)
+    session = models.ForeignKey(Session)
+    vote = models.CharField(max_length=1, choices=Vote.VOTE_CHOICES,
+                            db_index=True)
+    congruence = models.FloatField()
+    user = models.ForeignKey(User)
+
+    class Meta:
+        unique_together = (('user', 'option', 'session', 'vote'), )
+
+class QuestionSessionRelevance(models.Model):
+    question = models.ForeignKey(Question)
+    session = models.ForeignKey(Session)
+    relevance = models.FloatField()
+    user = models.ForeignKey(User, blank=True, null=True)
+
+    class Meta:
+        unique_together = (('question', 'session', 'user'), )
 
