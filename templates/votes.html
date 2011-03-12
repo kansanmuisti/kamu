@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Votes" %} - {{ psession.name }}/{{ session.number }}{% endblock %}
+{% block content %}
+{% load basic %}
+{% load thumbnail %}
+
+  <h1>{% trans "Plenary session" %} <a href='{{ psession.info_link }}'>
+    {{ psession.name }}</a>, {% trans "vote" %} {{ session.number }},
+    {% trans "time" %} {{ session.time|time }}
+  </h1>
+  <div class='session_info h2_section'>
+    {{ session.info|linebreaks }}
+  {% if session.subject %}
+    <p><i>{{ session.subject }}</i></p>
+  {% endif %}
+  </div>
+
+{% if score_table %}
+  <div class="h2_section">
+  <h2>{% trans "Scoring" %}</h2>
+{% with score_table as table %}
+{% include "_table.html" %}
+{% endwith %}
+  </div>
+{% endif %}
+
+{% if session.docs %}
+  <div class="h2_section">
+  <h2>{% trans "Session documents" %}</h2>
+  <div id='session_doc_list'>
+  <ul>
+{% for doc in session.docs %}
+    <li><a class='action_link' href='{{ doc.info_link }}'>{{ doc.name }}</a></li>
+{% endfor %}
+  </ul>
+  </div>
+  </div>
+{% endif %}
+
+  <div class='session_votes'>
+  <h2>{% trans "Votes" %}</h2>
+{% for table in tables %}
+  <table class='vote_list {{ table.class }}'>
+  <tr>
+{% for col in table.col_hdr %}
+{% spaceless %}
+  <th class="{{ col.class }}" title="{{ col.title }}">
+{% if col.sort_key %}
+{% ifequal request.GET.sort col.sort_key %}
+    <a href="{% query_string "" "sort" %}&sort=-{{ col.sort_key }}">
+{% else %}
+    <a href="{% query_string "" "sort" %}&sort={{ col.sort_key }}">
+{% endifequal %}
+{% endif %}
+{% if col.img %}
+    <img src='/static/{% thumbnail col.img 32x32 %}' />
+{% else %}
+  {{ col.name }}
+{% endif %}
+{% if col.sort_key %}
+    </a>
+{% ifequal request.GET.sort col.sort_key %}
+    &#x25bc
+{% else %}
+{% ifequal request.GET.sort|cut:"-" col.sort_key %}
+    &#x25b2
+{% endifequal %}
+{% endifequal %}
+{% endif %}
+  </th>
+{% endspaceless %}
+{% endfor %}
+  </tr>
+
+{% for row in table.col_vals %}
+{% spaceless %}
+  <tr>
+{% for val in row %}
+  <td class="{{ val.class }}" title='{{ val.title }}'>
+{% if val.link %}
+    <a href='{{ val.link }}'>
+{% endif %}
+{% if val.img %}
+    <img src='/static/{% thumbnail val.img val.img_dim %}' />
+{% else %}
+    {{ val.value }}
+{% endif %}
+{% if val.link %}
+    </a>
+{% endif %}
+{% endfor %}
+  </tr>
+{% endspaceless %}
+{% endfor %}
+  </table>
+{% endfor %}
+  </div>
+{% endblock %}

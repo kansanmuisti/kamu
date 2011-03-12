@@ -1,0 +1,62 @@
+{% if pagination.pages %}
+<style type="text/css">
+div.pagination {
+	padding:3px;
+	margin:3px;
+	text-align:center;
+}
+
+div.pagination a {
+	padding: 2px 5px 2px 5px;
+	margin-right: 2px;
+	border: 1px solid #9aafe5;
+	
+	text-decoration: none; 
+	color: #2e6ab1;
+}
+div.pagination a:hover, div.pagination a:active {
+	border: 1px solid #2b66a5;
+	color: #000;
+	background-color: #e4f1fb;
+}
+div.pagination span.current {
+	padding: 2px 5px 2px 5px;
+	margin-right: 2px;
+	border: 1px solid #2694e8;
+	font-weight: bold;
+	background-color: #2694e8;
+	color: #FFF;
+}
+div.pagination span.disabled {
+	padding: 2px 5px 2px 5px;
+	margin-right: 2px;
+	border: 1px solid #929292;
+	color: #929292;
+}
+
+</style>
+
+<div class="pagination">
+
+{% if pagination.previous %}<a class="prev" href="{{ pagination.view }}?page={{ pagination.previous }}">&lt; Previous</a>{% else %}<span class="disabled">&lt; Previous</span>{% endif %}
+
+{% for page in pagination.left %}
+{% ifequal page pagination.page %}<span class="current">{{ page }}</span>{% else %}<a href="{{ pagination.view }}?page={{ page }}">{{ page }}</a>{% endifequal %}
+{% endfor %}
+
+{% if pagination.middle %}
+...
+{% for page in pagination.middle %}
+{% ifequal page pagination.page %}<span class="current">{{ page }}</span>{% else %}<a href="{{ pagination.view }}?page={{ page }}">{{ page }}</a>{% endifequal %}
+{% endfor %}
+{% endif %}
+
+{% if pagination.right %}
+...
+{% for page in pagination.right %}
+{% ifequal page pagination.page %}<span class="current">{{ page }}</span>{% else %}<a href="{{ pagination.view }}?page={{ page }}">{{ page }}</a>{% endifequal %}
+{% endfor %}
+{% endif %}
+
+{% if pagination.next %}<a class="next" href="{{ pagination.view }}?page={{ pagination.next }}">Next &gt;</a>{% else %}<span class="disabled">Next &gt;</span>{% endif %}</div>
+{% endif %}

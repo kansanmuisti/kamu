@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Plenary session" %} - {{ psession.name }}{% endblock %}
+{% block content %}
+{% load basic %}
+
+  <h1>{% trans "Plenary session" %} <a href='{{ psession.info_link }}'>
+    {{ psession.name }}</a>
+  </h1>
+  <div>
+  {{ psession.minutes|safe }}
+  </div>
+
+{% endblock %}

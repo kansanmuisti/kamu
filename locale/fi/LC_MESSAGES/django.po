@@ -1,0 +1,571 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-05-22 12:06+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: beta/models.py:8
+msgid "Will not tell"
+msgstr "En kerro"
+
+#: beta/models.py:14
+msgid "No affiliation"
+msgstr "Ei puoluekantaa"
+
+#: beta/models.py:17 beta/models.py:34
+msgid "Other"
+msgstr "Muu"
+
+#: beta/models.py:29
+msgid "Age"
+msgstr "Ikä"
+
+#: beta/models.py:32
+msgid "Male"
+msgstr ""
+
+#: beta/models.py:33
+msgid "Female"
+msgstr "Nainen"
+
+#: beta/models.py:36
+msgid "Gender"
+msgstr "Sukupuoli"
+
+#: beta/models.py:49
+msgid "Monthly income"
+msgstr "Kuukausitulot"
+
+#: beta/models.py:58
+msgid "Education"
+msgstr "Koulutus"
+
+#: beta/models.py:62
+msgid "I belong to a party"
+msgstr "Kuulun puolueeseen"
+
+#: beta/models.py:63
+msgid "I always vote"
+msgstr "Äänestän aina"
+
+#: beta/models.py:64
+msgid "I have never voted"
+msgstr "En ole koskaan äänestänyt"
+
+#: beta/models.py:65
+msgid "I vote in the communal elections"
+msgstr "Äänestän kunnallivaaleissa"
+
+#: beta/models.py:66
+msgid "I vote in the parliamentary elections"
+msgstr "Äänestän eduskuntavaaleissa"
+
+#: beta/models.py:67
+msgid "I vote in the presidentiary elections"
+msgstr "Äänestän presidentinvaaleissa"
+
+#: beta/models.py:69
+msgid "Political activity"
+msgstr "Poliittinen aktiivisuus"
+
+#: beta/models.py:73
+msgid "Can facebook"
+msgstr "Osaa facebookata"
+
+#: beta/models.py:74
+msgid "Can word process"
+msgstr "Osaa tekstinkäsitellä"
+
+#: beta/models.py:75
+msgid "Can code"
+msgstr "Osaa koodata"
+
+#: beta/models.py:77
+msgid "E-mail"
+msgstr "Sähköposti"
+
+#: beta/models.py:78
+msgid "Party affiliation"
+msgstr "Puoluekanta"
+
+#: orgs/forms.py:13 templates/add_org.html:12 votes/views.py:245
+#: votes/views.py:355
+msgid "Name"
+msgstr "Nimi"
+
+#: orgs/forms.py:14 templates/add_org.html:14
+msgid "Description"
+msgstr "Kuvaus"
+
+#: orgs/forms.py:15
+msgid "Home page link"
+msgstr "Kotisivun osoite"
+
+#: orgs/forms.py:16 templates/add_org.html:16
+msgid "Logo"
+msgstr "Logo"
+
+#: orgs/forms.py:21 orgs/forms.py:31
+msgid "Not enough characters."
+msgstr "Ei tarpeeksi merkkejä."
+
+#: orgs/forms.py:24
+msgid "Organization already exists."
+msgstr "Järjestö on jo luotu."
+
+#: orgs/forms.py:38
+msgid "Invalid logo."
+msgstr "Logo on väärässä formaatissa."
+
+#: orgs/forms.py:44
+msgid "Logo required."
+msgstr "Logo tarvitaan."
+
+#: orgs/forms.py:47
+msgid "File size too big."
+msgstr "Tiedosto on liian iso."
+
+#: orgs/forms.py:60
+msgid "Image dimensions too big."
+msgstr "Kuvan dimensiot ovat liian suuret."
+
+#: templates/_table.html:29 templates/members.html:33
+msgid "Sort ascending"
+msgstr "Lajittele nousevassa järjestyksessa"
+
+#: templates/_table.html:36 templates/members.html:40
+msgid "Sort descending"
+msgstr "Lajittele laskevassa järjestyksessä"
+
+#: templates/about.html:4
+msgid "Info"
+msgstr "tietoa"
+
+#: templates/about.html:7
+msgid "About the site"
+msgstr "Tietoa kamusta"
+
+#: templates/add_beta.html:3
+msgid "Register as beta tester"
+msgstr "Rekisteröidy beta-testaajaksi"
+
+#: templates/add_beta.html:6
+msgid "Register as beta tester for KAMU"
+msgstr "Registeröidy KAMUn beetatestaajaksi"
+
+#: templates/add_beta.html:7
+msgid "Only e-mail is mandatory. Fill as many as you wish."
+msgstr "Vain sähköpostiosoite on pakollinen. Muuten täytä ne jotka haluat."
+
+#: templates/add_beta.html:12
+msgid "Send registration"
+msgstr "Lähetä rekisteröinti"
+
+#: templates/add_org.html:4
+msgid "Add organization"
+msgstr "Järjestön lisääminen"
+
+#: templates/add_org.html:7
+msgid "Add a new organization"
+msgstr "Lisää uusi järjestö"
+
+#: templates/add_org.html:10 templates/add_org.html.py:33
+msgid "Preview"
+msgstr "Esikatsele"
+
+#: templates/add_org.html:13
+msgid "Name in service links"
+msgstr "Nimi palvelussa"
+
+#: templates/add_org.html:15
+msgid "Info link"
+msgstr "Linkki kotisivulle"
+
+#: templates/add_org.html:22 templates/show_org.html:30 votes/views.py:175
+msgid "Modify"
+msgstr "Muokkaa"
+
+#: templates/add_org.html:36 templates/base.html:96 templates/base.html.py:106
+msgid "Submit"
+msgstr "Lähetä"
+
+#: templates/base.html:20 templates/base.html.py:62
+msgid "Search"
+msgstr "Hae"
+
+#: templates/base.html:67
+msgid "Logged in"
+msgstr "Kirjautuneena"
+
+#: templates/base.html:68
+msgid "Log out"
+msgstr "Kirjaudu ulos"
+
+#: templates/base.html:70
+msgid "Log in"
+msgstr "Kirjaudu sisään"
+
+#: templates/base.html:77 templates/members.html:3
+msgid "Members"
+msgstr "Kansanedustajat"
+
+#: templates/base.html:78
+msgid "Plenary Sessions"
+msgstr "Täysistunnot"
+
+#: templates/base.html:79
+msgid "Parties"
+msgstr "Puolueet"
+
+#: templates/base.html:80
+msgid "Orgs"
+msgstr "Järjestöt"
+
+#: templates/base.html:81
+msgid "What is Kamu?"
+msgstr "Mikä Kamu on?"
+
+#: templates/base.html:92
+msgid "period"
+msgstr "Aikaväli"
+
+#: templates/base.html:102
+msgid "district"
+msgstr "Vaalipiiri"
+
+#: templates/confirm_beta.html:3 templates/confirm_beta.html.py:6
+msgid "Registration received"
+msgstr "Rekisteröinti vastaanotettu"
+
+#: templates/confirm_beta.html:7
+msgid ""
+"\n"
+"  <p>Thank you for your interest in KAMU. We will contact you soon.</p>\n"
+"  "
+msgstr ""
+"\n"
+"  <p>Kiitos, että olet kiinnostunut KAMUsta. Otamme pian yhteyttä.</p>\n"
+"  "
+
+#: templates/list_member_statements.html:16
+msgid "No statements found"
+msgstr "Ei puheenvuoroja"
+
+#: templates/list_orgs.html:3
+msgid "Organizations"
+msgstr "Järjestöt"
+
+#: templates/list_orgs.html:9
+#, python-format
+msgid ""
+"\n"
+"%(count)s organization\n"
+msgid_plural ""
+"\n"
+"%(count)s organizations\n"
+msgstr[0] ""
+"\n"
+"%(count)s järjestö\n"
+msgstr[1] ""
+"\n"
+"%(count)s järjestöä\n"
+
+#: templates/login.html:3
+msgid "Login"
+msgstr "Kirjaudu sisään"
+
+#: templates/login.html:6
+msgid "Kamu login"
+msgstr "Sisäänkirjautuminen Kamuun"
+
+#: templates/login.html:12
+msgid "User name:"
+msgstr "Käyttäjätunnus:"
+
+#: templates/login.html:15
+msgid "Password:"
+msgstr "Salasana:"
+
+#: templates/main_page.html:3
+msgid "Home"
+msgstr "Etusivu"
+
+#: templates/main_page.html:23
+msgid "News"
+msgstr "Uutiset"
+
+#: templates/main_page.html:26
+msgid "Latest sessions"
+msgstr "Uusimmat äänestykset"
+
+#: templates/main_page.html:29 templates/sessions.html:33
+msgid "Number of Yay votes"
+msgstr "Jaa-äänien lukumäärä"
+
+#: templates/main_page.html:30 templates/sessions.html:34
+msgid "Number of Nay votes"
+msgstr "Ei-äänien lukumäärä"
+
+#: templates/main_page.html:31 templates/sessions.html:35
+msgid "Number of Empty votes"
+msgstr "Tyhjä-äänien lukumäärä"
+
+#: templates/main_page.html:32 templates/sessions.html:36
+msgid "Number of absentees"
+msgstr "Poissaolevien lukumäärä"
+
+#: templates/modify_score.html:4
+msgid "Score a session"
+msgstr "Pisteytä äänestys"
+
+#: templates/modify_score.html:23
+msgid "Score for session"
+msgstr "Äänestyksen pisteytys"
+
+#: templates/modify_score.html:30
+msgid "Save"
+msgstr "Tallenna"
+
+#: templates/pagination-nav.html:4
+msgid "Previous"
+msgstr "Edell."
+
+#: templates/pagination-nav.html:11
+msgid "Next"
+msgstr "Seur."
+
+#: templates/plsessions.html:3 templates/sessions.html:3
+msgid "Plenary sessions"
+msgstr "Täysistunnot"
+
+#: templates/plsessions.html:9 templates/sessions.html:19
+#, python-format
+msgid ""
+"\n"
+"%(count)s plenary session\n"
+msgid_plural ""
+"\n"
+"%(count)s plenary sessions\n"
+msgstr[0] ""
+"\n"
+"%(count)s täysistunto\n"
+msgstr[1] ""
+"\n"
+"%(count)s täysistuntoa\n"
+
+#: templates/register.html:3
+msgid "Register"
+msgstr "Rekisteröidy"
+
+#: templates/register.html:6
+msgid "Create an account"
+msgstr "Luo tunnus"
+
+#: templates/register.html:10
+msgid "Create the account"
+msgstr "Luo tunnus"
+
+#: templates/search.html:3 templates/search.html.py:6
+msgid "Search results"
+msgstr "Hakutulokset"
+
+#: templates/search.html:13
+msgid "match"
+msgstr "osuma"
+
+#: templates/search.html:25
+msgid "No results found"
+msgstr "Ei hakuosumia"
+
+#: templates/show_member.html:25
+msgid "Basic"
+msgstr "Perus"
+
+#: templates/show_member.html:26
+msgid "Register of interest"
+msgstr "Sidonnaisuudet"
+
+#: templates/show_member.html:27 templates/votes.html:3
+#: templates/votes.html.py:42
+msgid "Votes"
+msgstr "Äänet"
+
+#: templates/show_member.html:28
+msgid "Statements"
+msgstr "Puheenvuorot"
+
+#: templates/show_member.html:29
+msgid "Comments"
+msgstr "Kommentit"
+
+#: templates/show_member.html:37
+msgid "Surname"
+msgstr "Sukunimi"
+
+#: templates/show_member.html:38
+msgid "Given names"
+msgstr "Etunimet"
+
+#: templates/show_member.html:39
+msgid "Birthdate"
+msgstr "Syntymäaika"
+
+#: templates/show_member.html:42
+msgid "Email address"
+msgstr "Sähköpostiosoite"
+
+#: templates/show_member.html:45
+msgid "Telephone"
+msgstr "Puhelinnumero"
+
+#: templates/show_member.html:49
+msgid "Electoral districts"
+msgstr "Vaalipiirit"
+
+#: templates/show_member.html:57
+msgid "Party associations"
+msgstr "Eduskuntaryhmät"
+
+#: templates/show_member.html:82
+msgid "Session"
+msgstr "Äänestys"
+
+#: templates/show_member.html:83 votes/views.py:246
+msgid "Vote"
+msgstr "Ääni"
+
+#: templates/show_member.html:103
+msgid "No votes in database"
+msgstr "Ei ääniä tietokannassa"
+
+#: templates/show_member.html:113
+msgid "ago"
+msgstr "sitten"
+
+#: templates/show_member.html:118
+msgid "Leave a new comment"
+msgstr "Jätä uusi kommentti"
+
+#: templates/show_org.html:17
+msgid "Session scores"
+msgstr "Äänestysten pisteytykset"
+
+#: templates/show_org.html:24
+msgid "No sessions scored"
+msgstr "Ei pisteytettyjä äänestyksiä"
+
+#: templates/show_org.html:25
+msgid ""
+"\n"
+"    You may add a score here through the page for the voting session.\n"
+"    "
+msgstr ""
+"\n"
+"Pisteytyksiä voi lisätä äänestyksen sivulta.\n"
+"    "
+
+#: templates/show_session.html:3 templates/show_session.html.py:7
+#: templates/votes.html:8
+msgid "Plenary session"
+msgstr "Täysistunto"
+
+#: templates/votes.html:9
+msgid "vote"
+msgstr "äänestys"
+
+#: templates/votes.html:10
+msgid "time"
+msgstr "klo. "
+
+#: templates/votes.html:21
+msgid "Scoring"
+msgstr "Pisteytykset"
+
+#: templates/votes.html:30
+msgid "Session documents"
+msgstr "Asiakirjat"
+
+#: votes/models.py:198
+msgid "Statement "
+msgstr "Puheenvuoro"
+
+#: votes/views.py:154
+msgid "Organization"
+msgstr "Järjestö"
+
+#: votes/views.py:155
+msgid "Score"
+msgstr "Pisteet"
+
+#: votes/views.py:243 votes/views.py:353
+msgid "Party"
+msgstr "Puolue"
+
+#: votes/views.py:260
+msgid "Yay"
+msgstr "Kyllä"
+
+#: votes/views.py:263
+msgid "Nay"
+msgstr "Ei"
+
+#: votes/views.py:266
+msgid "Empty"
+msgstr "Tyhjä"
+
+#: votes/views.py:269
+msgid "Absent"
+msgstr "Poissa"
+
+#: votes/views.py:357 votes/views.py:405
+msgid "ATT"
+msgstr "L.o."
+
+#: votes/views.py:358 votes/views.py:406
+msgid "Attendance in voting sessions"
+msgstr "Läsnäoloprosentti äänestyksissä"
+
+#: votes/views.py:359 votes/views.py:407
+msgid "PA"
+msgstr "SP"
+
+#: votes/views.py:360 votes/views.py:408
+msgid "Agreement with party majority"
+msgstr "Samanmielisyys puolueen enemmistön kanssa"
+
+#: votes/views.py:361 votes/views.py:409
+msgid "SA"
+msgstr "SI"
+
+#: votes/views.py:362 votes/views.py:410
+msgid "Agreement with session majority"
+msgstr "Samanmielisyys äänestyksen lopputuloksen kanssa"
+
+#: votes/views.py:363 votes/views.py:411
+msgid "St"
+msgstr "Pv"
+
+#: votes/views.py:364 votes/views.py:412
+msgid "Number of statements"
+msgstr "Puheenvuorojen lukumäärä"
+
+#: votes/views.py:404
+msgid "Period"
+msgstr "Aikaväli"
+
+#: votes/templatetags/basic.py:106
+msgid "All districts"
+msgstr "Kaikki"
+

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load webdesign %}
+{% block title %}{% trans "Info" %}{% endblock %}
+{% block content %}
+
+<h1>{% trans "About the site" %}</h1>
+
+<h2>Johdanto</h2>
+
+<p>Suomessa ei ole tarjolla sellaista mielekästä, uutta teknologiaa hyödyntävää kansalaisvaikuttamisen foorumia, jossa koko edustajakirjo olisi objektiivisesti esillä. Yksittäisen edustajan kanssa rajattu vuorovaikuttaminen on mahdollista edustajan itse perustamien kanavien (lähinnä blogit) kautta. Vaalikoneet antavat yleiskatsauksen kaikista ehdokkaista, mutta ehdokkaiden vaalikonevastauksien ja toteutuneen äänestyskäyttäytymisen välillä ei välttämättä ole mitään yhteyttä.</p>
+
+<p>Edustajien äänestyskäyttäymistä pystyy tarkastelemaan <i>eduskunta.fi</i>-sivuston kautta, mutta yleiskatsauksen saaminen on hankalaa ja osin tavallisen kansalaisen saavuttamattomissa.</p>
+
+<p>Halusimme tehdä uudenlaisen demokratia-portaalin, jossa oman edustajan poliittista toimintaa pystyy helposti ja ymmärrettävästi seuraamaan. Portaaliin keräämme julkista tietoa edustajan vaalirahoituksesta, äänestämisistä, valiokuntatyöstä, lakialoitteista ym. Annamme portaalissa mahdollisuuden yhdistää kansalaisjärjestöjen ja muiden intressiryhmien näkemykset tarkasti yksittäisiin lakiesityksiin liittyviin äänestyksiin. Samalla tarjoamme puolueretoriikasta irrallisen näkymän todelliseen poliittiseen työhön.</p>
+
+<p><i>Esimerkki 1</i>. WWF on yksilöinyt ja pisteyttänyt viime vaalikauden aikana äänestetyt luonnonsuojelun kannalta kiinnostavat lakiesitykset. Kalle Kansalainen haluaa luontoihmisenä selvittää kansanedustajat, jotka ovat keskimäärin äänestäneet WWF:n arvotusten mukaisesti. Portaalimme tuottaa muutaman hiirennäpäytyksen jälkeen Kallelle järjestetyn listan edustajista pisteytyksineen. Jos Kalle haluaa lisätietoa yksittäisestä edustajasta, se onnistuu yhdellä lisänäpäytyksellä.</p>
+
+<p><i>Esimerkki 2</i>. Maija Miettinen on äänestänyt kolmissa viime vaaleissa aina samaa ehdokasta. Seuraavien vaalien lähestyessä Maija haluaa varmistua siitä, että oma edustaja on äänestänyt eduskunnassa Maijan etujen mukaisesti. Maija voi koota listan hänen näkemyksiään edustavista järjestöistä, ja nähdä yhdellä sivulla miten hänen edustajansa todellinen toiminta vastaa järjestöjen arvotuksia. Jos Maijalla on kiire, hän voi myös klikata omaa edustajaansa, ja saada yhdellä sivulla näkymään suosituimpien järjestöjen pisteytykset edustajalleen.</p>
+
+<h2>Toteutus</h2>
+
+<p>Uuden sukupolven <i>data mining</i> -teknologialla tietoa pystytään automaattisesti keräämään eri lähteistä. Yhdistämme tietokannoissamme kerätyn datan, käsittelemme sitä tilastotieteellisillä menetelmillä ja tarjoamme siihen käyttäjäystävällisen web-pohjaisen näkymän.</p>
+
+<p>Projektin yhteydessä tuotettu data ja ohjelmistojen lähdekoodi julkaistaan avoimen GPLv3-lisenssin alla. Käyttöliittymä toteutetaan helposti käännettäväksi eri kielille.</p>
+
+<h2>Palvelun tila</h2>
+
+<p>Kamu on koekäytössä ja sitä kehitetään vapaaehtoisvoimin. <a class='action_link' href='mailto:info@kansanmuisti.fi'>Ota yhteyttä</a> ja tarjoa apuasi!</p>
+
+{% endblock %}
+

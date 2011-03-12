@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Search results" %}{% endblock %}
+{% block content %}
+
+<h1>{% trans "Search results" %}</h1>
+
+{% if result_page %}
+
+<ol class="search_results" start={{ result_page.start_index }}>
+{% for hit in result_page.object_list %}
+  <li>{% if hit.url %}<a href='{{ hit.url }}'>{% endif %}
+    {{ hit.instance }}{% if hit.url %}</a>{% endif %} - {{ hit.percent }} % {% trans "match" %}
+{% if hit.info %}
+    <p>{{ hit.info|linebreaks }}</p>
+{% endif %}
+  </li>
+{% endfor %}
+</ol>
+
+{% load pagination_nav %}
+{% pagination_nav_qs result_page "" request.GET %}
+
+{% else %}
+<h2>{% trans "No results found" %}</h2>
+{% endif %}
+
+{% endblock %}

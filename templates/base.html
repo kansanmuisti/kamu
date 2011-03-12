@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+{% load i18n %}
+{% load basic %}
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>{% block title %}{% endblock %} - KAMU</title>
+  <link type="text/css" href="/static/css/jquery-ui-1.8.1.custom.css" rel="stylesheet" />
+  <script type="text/javascript" src="/static/js/jquery-1.4.2.min.js"></script>
+  <script type="text/javascript" src="/static/js/jquery-ui-1.8.1.custom.js"></script>
+  <script type="text/javascript" src="/static/js/jquery.example.min.js"></script>
+  <script type="text/javascript" src="/static/js/jquery.tooltip.js"></script>
+  <link type="text/css" href="/static/css/kamu.css" rel="stylesheet" />
+  <script type="text/javascript">
+    $(function() {
+      $("#head-search-button").button({
+        icons: {primary:'ui-icon-search' },
+	text: false
+      });
+      $("#head-search-text").example('{% trans "Search" %}');
+    });
+{% if switch_district %}
+    $(function() {
+      var open = false;
+
+      $('#district_opener').click(function() {
+        if (open) {
+          $('#district_list').hide("blind");
+          open = false;
+        } else {
+          $('#district_list').show("blind");
+          open = true;
+        }
+      });
+    });
+{% endif %}
+{% if switch_period %}
+    $(function() {
+      var open = false;
+
+      $('#period_opener').click(function() {
+        if (open) {
+          $('#period_list').hide("blind");
+          open = false;
+        } else {
+          $('#period_list').show("blind");
+          open = true;
+        }
+      });
+    });
+{% endif %}
+  </script>
+  {% block head %}{% endblock %}
+</head>
+
+<body>
+<div id="full_page">
+
+<div id="header">
+    <h1><a href="/">Kansan muisti</a></h1>
+<div id="inputbar">
+    <form action="/search" method="get" id="head-search">
+      <input id="head-search-text" name="query" type="text" maxlength="150" />
+      <button type="submit" id="head-search-button" value="Go">{% trans "Search" %}</button>
+      </input>
+    </form>
+    <p id="logged_user">
+{% if user.is_authenticated %}
+      <span id="login_name">{% trans "Logged in" %}: <b>{{ user.username }}</b></span>
+      <a href="/account/logout/">{% trans "Log out" %}</a>
+{% else %}
+      <a href="/account/login/?next={{ request.path }}">{% trans "Log in" %}</a>
+{% endif %}
+    </p>
+</div>
+</div>
+<div id="navbar">
+    <ul>
+      <li class="navbar_link{% ifequal active_page "info" %} navbar_link_active{% endifequal %}"><a href="/">{% trans "What is Kamu?" %}</a></li>
+      <li class="navbar_link{% ifequal active_page "members" %} navbar_link_active{% endifequal %}"><a href="/member/">{% trans "Members" %}</a></li>
+      <li class="navbar_link{% ifequal active_page "sessions" %} navbar_link_active{% endifequal %}"><a href="/session/">{% trans "Plenary Sessions" %}</a></li>
+      <li class="navbar_link{% ifequal active_page "parties" %} navbar_link_active{% endifequal %}"><a href="/party/">{% trans "Parties" %}</a></li>
+      <li class="navbar_link{% ifequal active_page "orgs" %} navbar_link_active{% endifequal %}"><a href="/org/">{% trans "Orgs" %}</a></li>
+    </ul>
+</div>
+
+<div id="wrap">
+
+<div id="sidebar">
+
+{% if switch_period %}
+<p id="period_opener" class="opener action_link">{% trans "period" %}</p>
+<div id="period_list" style="display: none;">
+<form method="get">
+{% generate_option_list "period" %}
+  <noscript><input type='submit' value='{% trans "Submit" %}')</noscript>
+</form>
+</div>
+{% endif %}
+
+{% if switch_district %}
+<p id="district_opener" class="opener action_link">{% trans "district" %}</p>
+<div id="district_list" style="display: none;">
+<form method="get">
+{% generate_option_list "district" %}
+  <noscript><input type='submit' value='{% trans "Submit" %}')</noscript>
+</form>
+</div>
+{% endif %}
+
+</div>
+
+<div id="content">
+{% block content %}{% endblock %}
+</div>
+
+{% if 1 %}
+{% include "debug.html" %}
+{% endif %}
+
+</div>
+
+</div>
+</body>
+</html>

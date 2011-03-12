@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Register as beta tester" %}{% endblock %}
+{% block content %}
+  <div id="beta_register">
+  <h1>{% trans "Register as beta tester for KAMU" %}</h1>
+  <p>{% trans "Only e-mail is mandatory. Fill as many as you wish." %}</p>
+  <form action="" method="post">
+    <table id="beta_register_form">
+      {{ form.as_table }}
+    </table>
+    <input type="submit" name="beta_register" value="{% trans 'Send registration' %}">
+  </form>
+  </div>
+{% endblock %}

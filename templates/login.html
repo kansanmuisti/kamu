@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Login" %}{% endblock %}
+
+{% block content %}
+  <h1>{% trans "Kamu login" %}</h1>
+  {% if form.errors %}
+    <p class="error">Sorry, that's not a valid username or password</p>
+  {% endif %}
+
+  <form action="" method="post">
+    <label for="username">{% trans "User name:" %}</label>
+    <input type="text" name="username" value="" id="username">
+    <br />
+    <label for="password">{% trans "Password:" %}</label>
+    <input type="password" name="password" value="" id="password">
+    <br />
+    <input type="submit" value="login" />
+    <input type="hidden" name="next" value="{{ next|escape }}" />
+  </form>
+{% endblock %}

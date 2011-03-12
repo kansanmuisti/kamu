@@ -1,0 +1,13 @@
+{% ifequal type "link" %}
+{% for opt in options %}
+<a style="display: block;" href="?{{ name }}={{ opt.value }}">{{ opt.name }}</a>
+{% endfor %}
+{% else %}
+{% for opt in options %}
+<input type="radio" name="{{ name }}" value='{{ opt.value }}'
+{% if opt.selected %} checked="true" {% endif %}
+onchange='this.form.submit()'>
+{{ opt.name }}<br />
+</input>
+{% endfor %}
+{% endifequal %}

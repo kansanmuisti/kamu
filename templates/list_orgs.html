@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n thumbnail %}
+{% block title %}{% trans "Organizations" %}{% endblock %}
+{% block head %}
+{% endblock %}
+
+{% block content %}
+  <h1>
+{% blocktrans count org_list.count as count %}
+{{ count }} organization
+{% plural %}
+{{ count }} organizations
+{% endblocktrans %}</h1>
+
+  <table>
+{% for org in org_list %}
+    <tr>
+      <td style="height: 40px; padding-right: 16px;"><img src='/static/{% thumbnail org.logo 40x40 %}' /></td>
+      <td style="min-width: 180px; padding-right: 16px;"><a href='{% url orgs.views.show_org org=org.url_name %}'>{{ org.name }}</a></td>
+      <td style="font-size: 80%; width: 450px;">{{ org.description|truncatewords:16 }}</td>
+    </tr>
+{% endfor %}
+  </table>
+{% endblock %}

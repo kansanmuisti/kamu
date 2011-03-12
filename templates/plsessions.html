@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Plenary sessions" %}{% endblock %}
+{% block head %}
+{% endblock %}
+
+{% block content %}
+  <h1>
+{% blocktrans count pl_session_page.paginator.count as count %}
+{{ count }} plenary session
+{% plural %}
+{{ count }} plenary sessions
+{% endblocktrans %}</h1>
+
+<table>
+<tr><th></th></tr>
+{% for ps in pl_session_page.object_list %}
+<tr><td><a href='/session/{{ ps.url_name }}/'>{{ ps.name }}</a></td></tr>
+{% endfor %}
+</table>
+
+{% load pagination_nav %}
+{% pagination_nav_qs pl_session_page "" request.GET %}
+
+{% endblock %}

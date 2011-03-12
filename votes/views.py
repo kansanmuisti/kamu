@@ -1,0 +1,568 @@
+from django.http import Http404, HttpResponse
+from django.shortcuts import render_to_response, get_list_or_404, get_object_or_404
+from django.core.urlresolvers import reverse
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
+from django.db.models import Q, Count
+from django.template import RequestContext
+from django.utils.translation import ugettext as _
+from kamu.votes.models import Session, Member, Vote, MemberStats, PlenarySession
+from kamu.votes.models import PartyAssociation, DistrictAssociation, SessionDocument
+from kamu.votes.models import Statement, Party
+from kamu.orgs.models import Organization, SessionScore
+from kamu.votes.index import complete_indexer
+
+import djapian
+import operator
+import datetime
+import random
+
+PERIOD_DASH = u'\u2013'
+PERIODS = [
+    { 'name': '2007'+PERIOD_DASH+'2011',   'begin': '2007-03-21', 'end': None,
+      'query_name': '2007-2011' },
+    { 'name': '2010',               'begin': '2010-01-01', 'end': None,
+      'query_name': '2010' },
+    { 'name': '2009',               'begin': '2009-01-01', 'end': '2009-12-31',
+      'query_name': '2009' },
+    { 'name': '2008',               'begin': '2008-01-01', 'end': '2008-12-31',
+      'query_name': '2008' },
+    { 'name': '2007',               'begin': '2007-03-21', 'end': '2007-12-31',
+      'query_name': '2007b' },
+    { 'name': '2003'+PERIOD_DASH+'2007',   'begin': '2003-03-19', 'end': '2007-03-20',
+      'query_name': '2003-2007' },
+]
+
+PERIOD_KEY = 'period'
+
+DISTRICT_KEY = 'district'
+
+def find_period(request):
+    chosen_period = None
+    if PERIOD_KEY in request.GET:
+        period = request.GET[PERIOD_KEY]
+        for per in PERIODS:
+            if per['query_name'] == period:
+                chosen_period = per
+                break
+    if chosen_period:
+        request.session[PERIOD_KEY] = chosen_period['query_name']
+    elif PERIOD_KEY in request.session:
+        period = request.session[PERIOD_KEY]
+        for per in PERIODS:
+            if per['query_name'] == period:
+                chosen_period = per
+                break
+    if not chosen_period:
+        chosen_period = PERIODS[0]
+    return (chosen_period['begin'], chosen_period['end'])
+
+def find_district(request, begin, end):
+    if not DISTRICT_KEY in request.GET and not PERIOD_KEY in request.session:
+        return None
+    da_list = DistrictAssociation.objects.list_between(begin, end)
+
+    if DISTRICT_KEY in request.GET:
+        district = request.GET[DISTRICT_KEY]
+        if district == 'all':
+            if DISTRICT_KEY in request.session:
+                del request.session[DISTRICT_KEY]
+            return None
+        if district in da_list:
+            request.session[DISTRICT_KEY] = district
+            return district
+
+    if DISTRICT_KEY in request.session:
+        district = request.session[DISTRICT_KEY]
+        if district in da_list:
+            return district
+
+def list_plsessions(request):
+    (date_begin, date_end) = find_period(request)
+    pl_list = PlenarySession.objects.between(date_begin, date_end).order_by('-date')
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    paginator = Paginator(pl_list, 25)
+    try:
+        session_page = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        session_page = paginator.page(paginator.num_pages)
+
+    data_dict = { 'pl_session_page': session_page }
+    data_dict['switch_period'] = True
+
+    data_dict['active_page'] = 'plsessions'
+
+    return render_to_response('plsessions.html', data_dict,
+                              context_instance = RequestContext(request))
+
+def list_sessions(request):
+    (date_begin, date_end) = find_period(request)
+    # Get only PlenarySessions with at least one voting session
+    query = Session.objects.between(date_begin, date_end)
+    pl_list = query.distinct().values_list('plenary_session', flat=True)
+    # FIXME: Maybe a better way?
+    # http://www.djangoproject.com/documentation/models/many_to_one/
+
+    query = PlenarySession.objects.filter(name__in=pl_list)
+
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    pl_session_list = query.order_by('-date')
+    paginator = Paginator(pl_session_list, 15)
+    try:
+        session_page = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        session_page = paginator.page(paginator.num_pages)
+
+    for pl_sess in session_page.object_list:
+        sess_list = Session.objects.filter(plenary_session = pl_sess).order_by('number')
+        for ses in sess_list:
+                ses.count_votes()
+                ses.info = ses.info.replace("\n", "\n\n")
+        pl_sess.sess_list = sess_list
+
+    data_dict = { 'pl_session_page': session_page }
+    data_dict['switch_period'] = True
+
+    data_dict['active_page'] = 'sessions';
+
+    return render_to_response('sessions.html', data_dict,
+                              context_instance = RequestContext(request))
+
+def get_admin_orgs(user, org_name=None):
+    groups = user.groups.filter(name__startswith='org-')
+    names = [grp.name[4:] for grp in groups]
+    orgs = Organization.objects.filter(url_name__in=names)
+    return orgs
+
+def generate_score_table(request, session):
+    scores = SessionScore.objects.filter(session=session).select_related('org')
+    user = request.user
+    admin_orgs = []
+    if user.is_authenticated():
+        # Add the links for scoring this session
+        admin_orgs = get_admin_orgs(user)
+    if not scores and not admin_orgs:
+        return None
+    tbl = {}
+    col_hdr = []
+    col_hdr.append({ 'name': '' })  # Logo
+    col_hdr.append({ 'name': _('Organization'), 'class': 'td_text' })
+    col_hdr.append({ 'name': _('Score') })
+    col_hdr.append({ 'name': '' })  # Admin scoring link
+    tbl['header'] = col_hdr
+
+    def make_row(org, score, admin):
+        row = []
+        kwargs = { 'org': org.url_name }
+        org_link = reverse('orgs.views.show_org', kwargs=kwargs)
+        row.append({ 'img': org.logo, 'img_dim': '32x32',
+            'title': org.name, 'link': org_link })
+        row.append({ 'value': org.name, 'link': org_link, 'class': 'td_text' })
+        if score:
+            row.append({ 'value': score.score, 'class': 'td_number' })
+        else:
+            row.append({ 'value': '' })
+        if admin:
+            kwargs = { 'org': org.url_name }
+            kwargs['plsess'] = session.plenary_session.url_name
+            kwargs['sess'] = session.number
+            adm_link = reverse('orgs.views.modify_score', kwargs=kwargs)
+            row.append({ 'link': adm_link, 'value': _('Modify') })
+        return row
+
+    rows = []
+    admin_orgs = list(admin_orgs)
+    for score in scores:
+        org = score.org
+        # FIXME: Does this actually work?
+        if score.org in admin_orgs:
+            admin = True
+            admin_orgs.remove(score.org)
+        else:
+            admin = False
+        rows.append(make_row(org, score, admin))
+    for org in admin_orgs:
+        rows.append(make_row(org, None, True))
+    tbl['body'] = rows
+    return tbl
+
+def show_session(request, plsess, sess):
+    try:
+        number = int(sess)
+    except ValueError:
+        raise Http404
+
+    sort_key = request.GET.get('sort')
+    if sort_key and sort_key[0] == '-':
+        sort_key = sort_key[1:]
+        sort_reverse = True
+    else:
+        sort_reverse = False
+    if sort_key not in ('name', 'party', 'vote'):
+        sort_key = 'vote'
+
+    if sort_key == 'name':
+        order = 'member__name'
+    elif sort_key == 'party':
+        order = 'member__party'
+    elif sort_key == 'vote':
+        order = 'vote'
+        sort_reverse = not sort_reverse
+
+    if sort_reverse:
+        order = '-' + order
+
+    try:
+        psess = PlenarySession.objects.get(url_name = plsess)
+    except PlenarySession.DoesNotExist:
+        raise Http404
+
+    session = Session.objects.get(plenary_session = psess, number = number)
+    session.info = session.info.replace('\n', '\n\n')
+
+    district = find_district(request, psess.date, psess.date)
+    if district:
+        query = Vote.objects.in_district(district, psess.date, psess.date)
+    else:
+        query = Vote.objects.all()
+    query &= query.filter(session = session).order_by(order, 'member__name')
+    votes = query.select_related('member', 'member__party')
+    session.docs = SessionDocument.objects.filter(sessions=session)
+
+    score_table = generate_score_table(request, session)
+
+    tables = [{}, {}]
+    col_hdr = []
+    for t in tables:
+        col_hdr = []
+        col_hdr.append({ 'name': _('Party'), 'sort_key': 'party', 'class': 'vote_list_party' })
+        col_hdr.append({ 'name': '' })
+        col_hdr.append({ 'name': _('Name'), 'sort_key': 'name', 'class': 'vote_list_name' })
+        col_hdr.append({ 'name': _('Vote'), 'sort_key': 'vote', 'class': 'vote_list_vote' })
+        t['col_hdr'] = col_hdr
+
+    def fill_cols(vote):
+        row = []
+        mem = vote.member
+        row.append({'img': mem.party.logo, 'img_dim': '24x24',
+                    'title': mem.party.full_name, 'class': 'vote_list_party' })
+        row.append({'img': mem.photo, 'img_dim': '24x36',
+                'class': 'vote_list_portrait'})
+        row.append({'value': mem.name, 'link': '/member/' + mem.url_name + '/',
+                'class': 'vote_list_name'})
+        if vote.vote == 'Y':
+            c = 'yes_vote'
+            t = _('Yay')
+        elif vote.vote == 'N':
+            c = 'no_vote'
+            t = _('Nay')
+        elif vote.vote == 'E':
+            c = 'empty_vote'
+            t = _('Empty')
+        elif vote.vote == 'A':
+            c = 'absent_vote'
+            t = _('Absent')
+        else:
+            c = ''
+            t = ''
+        row.append({'title': t, 'class': c})
+        return row
+
+    col_vals = []
+    middle = (len(votes) + 2) / 2
+    for vote in votes[0:middle]:
+        col_vals.append(fill_cols(vote))
+    tables[0]['col_vals'] = col_vals
+    tables[0]['class'] = 'vote_list_left'
+    col_vals = []
+    for vote in votes[middle:]:
+        col_vals.append(fill_cols(vote))
+    tables[1]['col_vals'] = col_vals
+    tables[1]['class'] = 'vote_list_right'
+
+    args = { 'psession': psess, 'session': session, 'vote_list': votes }
+    args['tables'] = tables
+    args['switch_district'] = True
+    args['score_table'] = score_table
+
+    return render_to_response('votes.html', args, context_instance = RequestContext(request))
+
+def format_stat_col(request, val, class_name):
+    if val:
+        s = "%.0f %%" % (val * 100.0)
+        s2 = "%.02f %%" % (val * 100.0)
+        col = { 'value': s, 'title': s2 }
+    else:
+        col = { 'value': '' }
+    if class_name:
+        col['class'] = class_name
+    return col
+
+def list_members(request):
+    (date_begin, date_end) = find_period(request)
+    district = find_district(request, date_begin, date_end)
+    if district:
+        query = Member.objects.in_district(district, date_begin, date_end)
+    else:
+        query = Member.objects.active_in(date_begin, date_end)
+
+    sort_key = request.GET.get('sort')
+    if sort_key and sort_key[0] == '-':
+        sort_key = sort_key[1:]
+        sort_reverse = True
+    else:
+        sort_reverse = False
+    if sort_key not in ['name', 'party', 'att', 'pagree', 'sagree', 'st_cnt']:
+        sort_key = 'name'
+    calc_keys = ['att', 'pagree', 'sagree', 'st_cnt']
+    if sort_key in calc_keys:
+        stat_attr = ['attendance', 'party_agree', 'session_agree', 'statement_count']
+        stat_attr = stat_attr[calc_keys.index(sort_key)]
+        # Some fields are calculated dynamically, so we need
+        # to calculate it for all objects first in order to
+        # sort to work.
+        members = list(query.order_by('name'))
+        for mem in members:
+            mem.stats = mem.get_stats(date_begin, date_end)
+            if not mem.stats:
+                mem.sort_key = float(0)
+            else:
+                mem.sort_key = getattr(mem.stats, stat_attr)
+        members.sort(key=operator.attrgetter('sort_key'), reverse=sort_reverse)
+    else:
+        if sort_reverse:
+            sort_key = '-' + sort_key
+        members = query.select_related('party').order_by(sort_key, 'name')
+
+    paginator = Paginator(members, 25)
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+    try:
+        member_page = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        member_page = paginator.page(paginator.num_pages)
+
+    col_hdr = []
+    col_hdr.append({ 'name': _('Party'), 'sort_key': 'party' })
+    col_hdr.append({ 'name': '' })
+    col_hdr.append({ 'name': _('Name'), 'sort_key': 'name', 'class': 'member_list_name' })
+
+    col_hdr.append({ 'name': _('ATT'), 'sort_key': 'att', 'class': 'member_list_stat',
+        'title': _('Attendance in voting sessions'), 'img': 'images/icons/attendance.png', 'no_tn': True})
+    col_hdr.append({ 'name': _('PA'), 'sort_key': 'pagree', 'class': 'member_list_stat',
+        'title': _('Agreement with party majority'), 'img': 'images/icons/party_agr.png', 'no_tn': True})
+    col_hdr.append({ 'name': _('SA'), 'sort_key': 'sagree', 'class': 'member_list_stat',
+        'title': _('Agreement with session majority'), 'img': 'images/icons/session_agr.png', 'no_tn': True})
+    col_hdr.append({ 'name': _('St'), 'sort_key': 'st_cnt', 'class': 'member_list_stat',
+        'title': _('Number of statements'), 'img': 'images/icons/nr_statements.png', 'no_tn': True})
+    col_hdr.append({ 'title': 'Amnesty', 'img': 'images/orgs/amnesty.gif', 'class': 'member_list_stat' })
+
+    for mem in member_page.object_list:
+        col_vals = []
+        col_vals.append({'img': mem.party.logo, 'img_dim': '36x36',
+                'title': mem.party.full_name, 'class': 'member_list_party' })
+        col_vals.append({'img': mem.photo, 'link': mem.url_name, 'img_dim': '28x42', 'class': 'member_list_portrait'})
+        col_vals.append({'value': mem.name, 'link': mem.url_name, 'class': 'member_list_name'})
+
+        if not hasattr(mem, 'stats'):
+            mem.stats = mem.get_stats(date_begin, date_end)
+        CLASS_NAME = 'member_list_stat'
+        if mem.stats:
+            col_vals.append(format_stat_col(request, mem.stats.attendance, CLASS_NAME))
+            col_vals.append(format_stat_col(request, mem.stats.party_agree, CLASS_NAME))
+            col_vals.append(format_stat_col(request, mem.stats.session_agree, CLASS_NAME))
+            col_vals.append({ 'value': str(mem.stats.statement_count), 'class': CLASS_NAME + ' member_list_statements' })
+        else:
+            col_vals.append(None)
+            col_vals.append(None)
+            col_vals.append(None)
+            col_vals.append(None)
+        for x in range(1):
+                col_vals.append(format_stat_col(request, 0.5, CLASS_NAME))
+        mem.col_vals = col_vals
+
+    return render_to_response('members.html',
+                             {'member_page': member_page, 'switch_period': True,
+                              'switch_district': True, 'col_hdr': col_hdr,
+                              'active_page': 'members'},
+                              context_instance = RequestContext(request))
+
+def generate_member_stat_table(request, member, stats):
+    table = {}
+    hdr = []
+    hdr.append({ 'name': _('Period'), 'class': 'member_list_name' })
+    hdr.append({ 'name': _('ATT'), 'class': 'member_list_stat',
+        'title': _('Attendance in voting sessions'), 'img': 'images/attendance.png', 'no_tn': True})
+    hdr.append({ 'name': _('PA'), 'class': 'member_list_stat',
+        'title': _('Agreement with party majority')})
+    hdr.append({ 'name': _('SA'), 'class': 'member_list_stat',
+        'title': _('Agreement with session majority')})
+    hdr.append({ 'name': _('St'), 'class': 'member_list_stat',
+        'title': _('Number of statements')})
+    table['header'] = hdr
+    vals = []
+    CLASS_NAME = 'member_list_stat'
+    for s in stats:
+        row = []
+        name = None
+        for per in PERIODS:
+            if per['begin'] != str(s.begin):
+                continue
+            if (not per['end'] and not s.end) or per['end'] == str(s.end):
+                name = per['name']
+                break
+        if not name:
+                name = str(s.begin) + PERIOD_DASH
+                if s.end:
+                        name += str(s.end)
+        row.append({ 'value': name })
+        s.calc()
+        row.append(format_stat_col(request, s.attendance, CLASS_NAME))
+        row.append(format_stat_col(request, s.party_agree, CLASS_NAME))
+        row.append(format_stat_col(request, s.session_agree, CLASS_NAME))
+        row.append({ 'value': str(s.statement_count), 'class': CLASS_NAME })
+        vals.append(row)
+    table['body'] = vals
+    return table
+
+def show_member(request, url_name):
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    sort_key = request.GET.get('sort')
+    if sort_key and sort_key[0] == '-':
+        sort_key = sort_key[1:]
+        sort_reverse = True
+    else:
+        sort_reverse = False
+    if sort_key not in ('session', 'vote'):
+        sort_key = 'session'
+        sort_reverse = not sort_reverse
+    if sort_key == 'vote':
+        order = 'vote'
+        sort_reverse = not sort_reverse
+    elif sort_key == 'session':
+        order = 'session__plenary_session__date'
+    if sort_reverse:
+        order = '-' + order
+
+    member = Member.objects.get(url_name = url_name)
+    pa_list = PartyAssociation.objects.filter(member = member).order_by('begin')
+    pa_list = pa_list.select_related('party__full_name')
+    da_list = DistrictAssociation.objects.filter(member = member).order_by('begin')
+    query = Q(member = member)
+    query &= Q(vote__in=['Y', 'N', 'E'])
+    vote_list = Vote.objects.filter(query).order_by(order).select_related('session__number')
+    vote_list = vote_list.select_related('session__plenary_session__name')
+    if vote_list.count():
+        paginator = Paginator(vote_list, 30)
+        try:
+            vote_page = paginator.page(page)
+        except (EmptyPage, InvalidPage):
+            vote_page = paginator.page(paginator.num_pages)
+    else:
+        vote_page = None
+
+    member.pa_list = pa_list
+    member.da_list = da_list
+
+    stats = MemberStats.objects.filter(member = member)
+    stat_list = []
+    for per in PERIODS:
+        for st in stats:
+            if (str(st.begin) == str(per['begin'])) and (str(st.end) == str(per['end'])):
+                stat_list.append(st)
+                break
+    if stat_list:
+        table = generate_member_stat_table(request, member, stat_list)
+    else:
+        table = None
+
+    args = {'member': member, 'stats_table': table, 'vote_page': vote_page}
+    return render_to_response('show_member.html', args, context_instance = RequestContext(request))
+
+def list_member_statements(request, url_name):
+    try:
+        member = Member.objects.get(url_name = url_name)
+    except Member.DoesNotExist:
+        raise Http404
+
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    statements = Statement.objects.filter(member = member)
+    statements = statements.order_by('-plenary_session__date', 'dsc_number', 'index')
+    paginator = Paginator(statements, 10)
+    try:
+        statement_page = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        statement_page = paginator.page(paginator.num_pages)
+    args = {'statement_page': statement_page}
+    return render_to_response('list_member_statements.html', args,
+                              context_instance = RequestContext(request))
+
+def show_plsession(request, plsess):
+    psess = get_object_or_404(PlenarySession, url_name=plsess)
+    args = { 'psession': psess }
+    return render_to_response('show_session.html', args,
+                              context_instance=RequestContext(request))
+
+def list_parties(request):
+    party_list = get_list_or_404(Party)
+    args = { 'party_list': party_list }
+    return render_to_response('list_parties.html', args,
+                              context_instance=RequestContext(request))
+
+def search(request):
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    if 'query' not in request.GET:
+        raise Http404
+    query = request.GET['query']
+    res = complete_indexer.search(query)
+    res = res.flags(djapian.resultset.xapian.QueryParser.FLAG_WILDCARD)
+    paginator = Paginator(res, 15)
+    result_page = paginator.page(page)
+    for hit in result_page.object_list:
+        if type(hit.instance) == Member:
+            hit.url = '/member/' + hit.instance.url_name
+        elif type(hit.instance) == Session:
+            s = hit.instance
+            hit.url = '/session/' + s.plenary_session.name + '/' + str(s.number)
+            hit.info = s.info
+            s.info = s.info.replace('\n', '\n\n')
+        elif type(hit.instance) == Statement:
+            s = hit.instance
+            hit.info = s.text[0:200].replace('\n', '\n\n') + "..."
+
+    return render_to_response('search.html', {'result_page': result_page},
+                              context_instance = RequestContext(request))
+
+def about(request):
+    return render_to_response('about.html', {'active_page': 'info'},
+                              context_instance = RequestContext(request))
+
+def main_page(request):
+    sess_list = Session.objects.all().order_by('-plenary_session__date', '-number')[:5]
+    for ses in sess_list:
+        ses.count_votes()
+#        ses.info = ses.info.replace('\n', '\n\n')
+
+    return render_to_response('main_page.html', {'active_page': 'info', 'sess_list': sess_list },
+                              context_instance = RequestContext(request))

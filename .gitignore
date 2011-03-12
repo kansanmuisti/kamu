@@ -1,0 +1,8 @@
+*~
+*.pyc
+*.mo
+settings_local.py
+utils/cache
+static/images/parties
+static/images/members
+static/tmp

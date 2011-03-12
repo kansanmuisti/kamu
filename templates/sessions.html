@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Plenary sessions" %}{% endblock %}
+{% block head %}
+    <script type="text/javascript">
+    $(function() {
+    	// Accordion
+	$("#accordion").accordion({
+        	header: "h3",
+        	autoHeight: false,
+                collapsible: true,
+                active: false });
+    });
+    </script>
+{% endblock %}
+
+{% block content %}
+  <h1>
+{% blocktrans count pl_session_page.paginator.count as count %}
+{{ count }} plenary session
+{% plural %}
+{{ count }} plenary sessions
+{% endblocktrans %}</h1>
+
+  <div id="accordion" class="ui-accordion ui-widget ui-helper-reset ui-accordion-icons">
+{% for ps in pl_session_page.object_list %}
+    <div>
+      <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all"><a href="#"><table class="psession_bar">
+        <tr><td>{{ ps.name }}</td><td class="psession_bar">{{ ps.sess_list|length }} {% trans "voting sessions" %}</td></table></a></h3>
+    <div style="display: none;"><table class="sessions" id="v{{ ps.name }}">
+    <tbody>
+      <tr><th /><th /><th />
+        <th class="yes_vote" title='{% trans "Number of Yay votes" %}' />
+        <th class="no_vote" title='{% trans "Number of Nay votes" %}' />
+        <th class="empty_vote" title='{% trans "Number of Empty votes" %}' />
+        <th class="absent_vote" title='{% trans "Number of absentees" %}' />
+      </tr>
+{% for session in ps.sess_list %}
+      <tr>
+      	<td class="session_name">
+          <a href='{% url votes.views.show_session plsess=ps.url_name,sess=session.number %}'>{{ session.number }}</a>
+      	</td>
+      	<td class="session_desc">
+          <a href='{% url votes.views.show_session plsess=ps.url_name,sess=session.number %}'>
+            {{ session.info|linebreaks }}
+          </a>
+      	</td>
+        <td class="session_subj">
+{% if session.subject %}
+            <p><i>{{ session.subject }}</i></p>
+{% endif %}
+	</td>
+
+      	<td class="session_votes">{{ session.get_vote_counts.Y }}</td>
+      	<td class="session_votes">{{ session.get_vote_counts.N }}</td>
+      	<td class="session_votes">{{ session.get_vote_counts.E }}</td>
+      	<td class="session_votes">{{ session.get_vote_counts.A }}</td>
+      </tr>
+{% endfor %}
+    </tbody></table></div>
+    </div>
+{% endfor %}
+  </div>
+{% load pagination_nav %}
+{% pagination_nav_qs pl_session_page "" request.GET %}
+{% endblock %}

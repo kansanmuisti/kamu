@@ -1,0 +1,13 @@
+{% load i18n %}
+{% if pages %}
+<div class="pagination">
+{% if previous_url %}<a href="{{ previous_url }}">{% else %}<span class="disabled">{% endif %}&laquo; {% trans "Previous" %}{% if previous_url %}</a>{% else %}</span>{% endif %}
+{% for group in pages %}
+{% for page in group %}
+{% if page.current %}<span class="current">{{ page.number }}</span>{% else %}<a href="{{ page.url }}">{{ page.number }}</a>{% endif %}
+{% endfor %}
+{% if not forloop.last %}<span>...</span>{% endif %}
+{% endfor %}
+{% if next_url %}<a href="{{ next_url }}">{% else %}<span class="disabled">{% endif %}{% trans "Next" %} &raquo;{% if next_url %}</a>{% else %}</span>{% endif %}
+</div>
+{% endif %}

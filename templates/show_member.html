@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block title %}{{ member.name }}{% endblock %}
+{% block head %}
+<script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("#tabs").tabs({
+  	load: function(event, ui) {
+	    $('a', ui.panel).click(function() {
+            	$(ui.panel).load(this.href);
+            	return false;
+            });
+        }, disabled: [1], cookie: { expires: 30, path: '/member' }
+    });
+  });
+</script>
+{% endblock %}
+{% block content %}
+{% load i18n %}
+{% load thumbnail %}
+{% load comments %}
+    <h1>{{ member.name }}</h1>
+
+<div id="tabs">
+  <ul>
+    <li><a href="#basic_info"><span>{% trans "Basic" %}</span></a></li>
+    <li><a href="#interest"><span>{% trans "Register of interest" %}</span></a></li>
+    <li><a href="#votes"><span>{% trans "Votes" %}</span></a></li>
+    <li><a href="statement/"><span>{% trans "Statements" %}</span></a></li>
+    <li><a href="#comments"><span>{% trans "Comments" %}</span></a></li>
+  </ul>
+
+  <div id="basic_info">
+    <div id="member_info">
+    <a href="{{ member.info_link }}"><img class="member_portrait" src="/static/{% thumbnail member.photo 128x192 %}" /></a>
+        <img class="member_party_logo" src="/static/{% thumbnail member.party.logo 96x96 %}" />
+    <table>
+    <tr><td class='member_info_field_name'>{% trans "Surname" %}</td><td>{{ member.surname }}</td></tr>
+    <tr><td class='member_info_field_name'>{% trans "Given names" %}</td><td>{{ member.given_names }}</td></tr>
+    <tr><td class='member_info_field_name'>{% trans "Birthdate" %}</td><td>{{ member.birth_date|date }}</td></tr>
+    <tr></tr>
+{% if member.email %}
+    <tr><td class='member_info_field_name'>{% trans "Email address" %}</td><td>{{ member.email }}</td></tr>
+{% endif %}
+{% if member.phone %}
+    <tr><td class='member_info_field_name'>{% trans "Telephone" %}</td><td>{{ member.phone }}</td></tr>
+{% endif %}
+    <tr>
+{% if member.da_list.count %}
+      <td class='member_info_field_name'>{% trans "Electoral districts" %}</td>
+      <td><ul>
+{% for da in member.da_list %}
+	<li>{{ da.name }} {{ da.begin|date }}&#8211;{% if da.end %}{{ da.end|date }}{% endif %}</li>
+{% endfor %}
+      </ul></td></tr>
+{% endif %}
+{% if member.pa_list.count %}
+      <td class='member_info_field_name'>{% trans "Party associations" %}</td>
+      <td><ul>
+{% for pa in member.pa_list %}
+	<li>{{ pa.party.full_name }} {{ pa.begin|date }}&#8211;{% if pa.end %}{{ pa.end|date }}{% endif %}</li>
+{% endfor %}
+      </ul></td></tr>
+{% endif %}
+    </table>
+    </div>
+    <div id="interest">
+    </div>
+    <div id="stats">
+{% with stats_table as table %}
+{% include "_table.html" %}
+{% endwith %}
+    </div>
+  </div>
+
+  <div id="funding">
+  </div>
+
+  <div id="votes">
+{% if vote_page %}
+    <table id="member_vote_list">
+      <tr>
+        <th>{% trans "Session" %} &#x25bc</th>
+        <th>{% trans "Vote" %}</th>
+      </tr>
+    {% for vote in vote_page.object_list %}
+    {% with vote.session as sess %}
+       <tr>
+          <td class="member_info_session"><a href="{% url votes.views.show_session plsess=sess.plenary_session.url_name,sess=sess.number %}">{{ vote.session.plenary_session.name }}/{{ vote.session.number }}</a></td>
+    {% endwith %}
+    {% ifequal vote.vote 'Y' %}
+          <td class="member_info_vote_yes" title='Y'></td>
+    {% endifequal %}
+    {% ifequal vote.vote 'N' %}
+          <td class="member_info_vote_no" title='N'></td>
+    {% endifequal %}
+    {% ifequal vote.vote 'E' %}
+          <td class="member_info_vote_empty" title='E'></td>
+    {% endifequal %}
+        </tr>
+    {% endfor %}
+    </table>
+{% load pagination_nav %}
+{% pagination_nav_qs vote_page "" request.GET %}
+{% else %}
+    <h2>{% trans "No votes in database" %}</h2>
+{% endif %}
+  </div>
+
+  <div id="statements">
+  </div>
+
+  <div id="comments">
+{% get_comment_list for member as comment_list %}
+{% for comment in comment_list %}
+<p>Posted by: {{ comment.user_name }} {{ comment.submit_date|timesince }} {% trans "ago" %}</p>
+<p>Comment: {{ comment.comment }}</p>
+{% endfor %}
+    <br />
+    <div id="new_comment">
+      <h3>{% trans "Leave a new comment" %}</h3>
+      {% render_comment_form for member %}
+    </div>
+  </div>
+
+  </div>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Members" %}{% endblock %}
+
+{% block head %}
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('[title]').tooltip({
+      delay: 50,
+      fade: 100,
+      track: true,
+    });
+  });
+</script>
+{% endblock %}
+
+{% block content %}
+    <h1>{{ member_page.paginator.count }} kansanedustajaa</h1>
+
+{% load thumbnail %}
+    <table class="member_list">
+{% spaceless %}
+	<tr id="member_list_head">
+{% load basic %}
+{% for col in col_hdr %}
+            <th class="{{ col.class }}" title="{{ col.title }}">
+{% if col.img %}
+{% if col.no_tn %}
+    	        <img src='/static/{{ col.img }}' />
+{% else %}
+    	        <img src='/static/{% thumbnail col.img 32x32 %}' />
+{% endif %}
+{% else %}
+      		{{ col.name }}
+{% endif %}
+	    </th>
+{% endfor %}
+{% comment %}
+	<tr id="member_list_sort">
+{% for col in col_hdr %}
+{% if col.sort_key %}
+          <th class="{{ col.class }}">
+            <a
+{% ifequal request.GET.sort col.sort_key %}
+              class="sort_active"
+{% endifequal %}
+              title="{% trans "Sort ascending" %}" href="{% query_string "" "sort" %}&sort={{ col.sort_key }}">&#x25bc</a>
+            <a
+{% ifnotequal request.GET.sort col.sort_key %}
+{% ifequal request.GET.sort|cut:"-" col.sort_key %}
+              class="sort_active"
+{% endifequal %}
+{% endifnotequal %}
+              title="{% trans "Sort descending" %}" href="{% query_string "" "sort" %}&sort=-{{ col.sort_key }}">&#x25b2</a>
+          </th>
+{% else %}
+	  <th></th>
+{% endif %}
+{% endfor %}
+        </tr>
+{% endcomment %}
+{% endspaceless %}
+
+{% for member in member_page.object_list %}
+{% spaceless %}
+  <tr>
+{% for val in member.col_vals %}
+    <td class="{{ val.class }}" title='{{ val.title }}'>
+{% if val.link %}
+      <a href='{{ val.link }}'>
+{% endif %}
+{% if val.img %}
+      <img src='/static/{% thumbnail val.img val.img_dim %}' />
+{% else %}
+      {{ val.value }}
+{% endif %}
+{% if val.link %}
+      </a>
+{% endif %}
+{% endfor %}
+  </tr>
+{% endspaceless %}
+{% endfor %}
+  </table>
+
+{% load pagination_nav %}
+{% pagination_nav_qs member_page "" request.GET %}
+
+{% endblock %}
