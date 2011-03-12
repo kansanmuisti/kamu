@@ -93,7 +93,7 @@
 {% with session.plenary_session as ps %}
   {% ifchanged %}<span class="news_item_date">{{ ps.date|date:"j.n.Y" }}</span>{% endifchanged %}
   <h2><a href='{% url votes.views.show_session plsess=ps.url_name,sess=session.number %}'>{{ ps.name }}, {{ session.number }}.</a></h2>
-  <p><a href='{% url votes.views.show_session plsess=ps.url_name,sess=session.number %}'>{{ session.info }}</a></p>
+  <p><a href='{% url votes.views.show_session plsess=ps.url_name,sess=session.number %}'>{{ session.get_short_summary }}</a></p>
 {% endwith %}
 {% endfor %}
 </div>
