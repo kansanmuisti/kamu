@@ -1,0 +1,51 @@
+{% load i18n basic %}
+<div class="question_relevant_session">
+<table class="question_session_relevance">
+  <tr>
+    <th class="session_relevance_cell">
+      {% trans "Relevance" %}
+	<div class="session_relevance_bar" style="width: {{session.question_relevance}}%">
+        </div>
+        <span class="session_relevance_percentage">
+          {{session.question_relevance}}%
+        </span>
+    </th>
+    <td>
+      <h3><a href="{%url votes.views.show_session session.plenary_session.url_name session.number %}">{{session.info}}</a></h3>
+    </td>
+  </tr>
+  </table>
+<table class="question_session_congruence">
+  <tr>
+    <th></th>
+    <th colspan="{{congruence_choices|length}}">
+      <div>{% trans "Congruence" %}</div>
+    </th>
+  </tr>
+  <tr>
+  {% for choice in option_choices %}
+    <td class="option_name" rowspan="2">{{choice.option.name}}</td>
+    {% for congruence in choice.congruence_choices %}
+      <td class="congruence_choice_cell">
+        <input type="radio" name="{{choice.name}}" value="{{congruence.value}}"
+	{% if not user.is_authenticated %}
+        disabled="disabled"
+        {% endif %}
+        {% if choice.user_congruence == congruence.value %}
+        checked="checked"
+        {% endif %}
+        /> 
+      </td>
+    {% endfor %}
+  </tr>
+  <tr>
+    <td class="option_congruence_bar_cell" colspan="{{congruence_choices|length}}">
+       <div class="option_congruence_bar" style="width: {{choice.congruence_scale}}%">
+          <span></span>
+       </div>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+</div>

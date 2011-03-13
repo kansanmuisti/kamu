@@ -1048,6 +1048,98 @@ table.votechart td.votebarcontainer
 	border: 1px solid black;
 }
 
+.question_relevant_session
+{
+	margin: 1em;
+	margin-bottom: 3em;
+}
+
+.question_session_congruence,
+.question_session_relevance
+{
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.question_session_congruence td,
+.question_session_relevance td,
+.question_session_relevance th
+{
+	padding: 0.5em;
+}
+
+.question_session_relevance th
+{
+	text-align: center;
+}
+
+.question_session_congruence td
+{
+	border-bottom: 1px solid gray;
+}
+
+td.congruence_choice_cell
+{
+	border: 0;
+	padding-bottom: 0;
+}
+
+.question_session_congruence td.option_name
+{
+	width: 100%;
+}
+
+.question_session_relevance .session_relevance_bar
+{
+	height: 4px;
+	background-color: #ccc;
+	margin: 0.5em;
+	margin-bottom: 0;
+}
+
+td.option_congruence_bar_cell
+{
+	padding-right: 1.5em;
+}
+
+.option_congruence_bar
+{
+	display: block;
+	height: 4px;
+	text-align: right;
+}
+
+.option_congruence_bar span
+{
+	display: block;
+	position: relative;
+	float: right;
+	left: 1em;
+	width: 1em;
+	height: 100%;
+	background-color: #ccc;
+	
+}
+
+.question_session_relevance .session_relevance_cell
+{
+	width: 10em;
+}
+
+.question_session_relevance .session_relevance_percentage
+{
+	display: block;
+	text-align: center;
+	margin-top: -0.9em;
+}
+
+.question_session_congruence .login_nag
+{
+	font-weight: normal;
+	font-size: x-small;
+	text-align: right;
+}
+
 /*
  * jNotify
  */
