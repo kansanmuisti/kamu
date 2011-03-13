@@ -133,6 +133,76 @@ class VoteOptionCongruence(models.Model):
         congruence = congruence.aggregate(models.Avg('congruence'))
         return congruence['congruence__avg']
 
+    @classmethod
+    def __get_average_congruence(cls, grouping_object, id_field):
+        query = """
+                SELECT
+                    SUM(congruence)/SUM(ABS(congruence)) AS congruence_avg
+                  FROM
+                    opinions_voteoptioncongruence as c,
+                    opinions_answer as a,
+                    votes_vote AS v
+                  WHERE v.session_id=c.session_id
+                    AND a.option_id=c.option_id
+                    AND a.member_id=v.member_id
+                    AND v.vote=c.vote
+                    AND %s=%%s
+                  """%(id_field,)
+        cursor = connection.cursor()
+        count = cursor.execute(query, [grouping_object.pk])
+        if(count < 1): return None
+        return cursor.fetchone()[0]
+
+    @classmethod
+    def get_member_congruence(cls, member):
+        return cls.__get_average_congruence(member, 'v.member_id')
+
+    @classmethod
+    def get_party_congruence(cls, party):
+        return cls.__get_average_congruence(party, 'v.party')
+
+    @classmethod
+    def get_question_congruence(cls, question):
+        return cls.__get_average_congruence(question, 'a.question_id')
+
+
+
+    @classmethod
+    def __get_average_congruences(cls, grouping_class, id_field,
+            descending=True, limit=False):
+        query = """
+                SELECT %s AS %s,
+                    SUM(congruence)/SUM(ABS(congruence)) AS congruence_avg
+                  FROM
+                    opinions_voteoptioncongruence as c,
+                    opinions_answer as a,
+                    votes_vote AS v
+                  WHERE v.session_id=c.session_id
+                    AND a.option_id=c.option_id
+                    AND a.member_id=v.member_id
+                    AND v.vote=c.vote
+                  GROUP BY %s
+                  ORDER BY congruence_avg %s
+                  %s
+                  """%(id_field, grouping_class._meta.pk.name,
+                       id_field,
+                       ('ASC', 'DESC')[descending],
+                       ('', 'LIMIT %i'%(int(limit),))[bool(limit)])
+        return grouping_class.objects.raw(query)
+
+    @classmethod
+    def get_party_congruences(cls, **kwargs):
+        return cls.__get_average_congruences(Party, 'v.party', **kwargs)
+
+    @classmethod
+    def get_member_congruences(cls, **kwargs):
+        return cls.__get_average_congruences(Member, 'v.member_id', **kwargs)
+
+    @classmethod
+    def get_question_congruences(cls, **kwargs):
+        return cls.__get_average_congruences(Question, 'a.question_id')
+
+
     class Meta:
         unique_together = (('user', 'option', 'session', 'vote'), )
 
