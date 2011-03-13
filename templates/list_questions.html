@@ -39,6 +39,7 @@
     </a>
   </h3>
     <div style="display: none;">
+    <a href="{% url opinions.views.show_question question.id %}">{% trans "View relevant voting sessions" %}</a>
     <table class="question_options">
     {% for option in question.option_set.all %}
       <tr>
