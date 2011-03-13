@@ -113,10 +113,10 @@ def lexicon_relevance(a, b, full):
     return 1 - distance / math.pi
 
 
-def estimate_relations(cache_file='word_cache.shelve'):
+def estimate_relations(cache_file='word_cache.shelve', docs=None):
     cache = shelve.open(cache_file)
     try:
-        _estimate_relations(cache)
+        _estimate_relations(cache, docs)
     finally:
         cache.close()
 
@@ -140,7 +140,9 @@ def get_session_word_features_full(session, document_store, cache=None):
 
     return words
 
-def get_session_word_features(session, cache=None):
+def get_session_word_features(session, cache=None, document_store=None):
+    if(document_store is not None):
+        return get_session_word_features_full(session, document_store, cache)
     documents = session.sessiondocument_set.filter(name__startswith='HE')
     words = []
     for document in documents:
@@ -161,7 +163,7 @@ def get_session_word_features(session, cache=None):
 
 
 
-def _estimate_relations(cache):
+def _estimate_relations(cache, docs=None):
     lexicon = Lexicon()
 
     questions = {}
@@ -204,7 +206,7 @@ def _estimate_relations(cache):
         if session.plenary_session.date.year < 2007:
             continue
 
-        words = get_session_word_features(session, cache)
+        words = get_session_word_features(session, cache, docs)
        
         if len(words) == 0:
             continue
@@ -239,6 +241,8 @@ def _estimate_relations(cache):
         record.save()
 
 if __name__ == '__main__':
-    #docs = shelve.open(sys.argv[1], 'r')
-    estimate_relations()
+    docs = None
+    if(len(sys.argv) > 1):
+        docs = shelve.open(sys.argv[1], 'r')
+    estimate_relations(docs=docs)
 
