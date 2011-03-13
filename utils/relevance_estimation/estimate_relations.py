@@ -192,12 +192,12 @@ def _estimate_relations(cache):
 
     sessions = {}
     handled = []
-    session_objects = Session.objects.filter(info__contains=u'Toinen ')
+    session_objects = Session.objects.filter(subject__contains=u'Hyv')
     n_sessions = session_objects.count()
     for (i, session) in enumerate(session_objects):
-        if session.info in handled:
-            continue
-        handled.append(session.info)
+        #if session.info in handled:
+        #    continue
+        #handled.append(session.info)
         print >>sys.stderr, "Handling session %i/%i"%(i+1, n_sessions)
         # TODO: Filter by actual period
 
