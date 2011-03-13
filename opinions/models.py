@@ -107,6 +107,32 @@ class VoteOptionCongruence(models.Model):
     congruence = models.FloatField()
     user = models.ForeignKey(User)
 
+    def save(self, update_if_exists=False, **kwargs):
+        if update_if_exists:
+            congruence = self.congruence
+            self.congruence = None
+            matches = VoteOptionCongruence.objects.filter(user=self.user,
+                    option=self.option, session=self.session, vote=self.vote)
+            if matches.count() > 0:
+                self = matches[0]
+            self.congruence = congruence
+
+        return models.Model.save(self, **kwargs)
+
+    @classmethod
+    def get_congruence(
+        cls,
+        option,
+        session,
+        vote='Y',
+        ):
+        congruence = cls.objects.filter(option=option, session=session,
+                vote=vote)
+        if congruence.count() == 0:
+            return None
+        congruence = congruence.aggregate(models.Avg('congruence'))
+        return congruence['congruence__avg']
+
     class Meta:
         unique_together = (('user', 'option', 'session', 'vote'), )
 
@@ -115,6 +141,25 @@ class QuestionSessionRelevance(models.Model):
     session = models.ForeignKey(Session)
     relevance = models.FloatField()
     user = models.ForeignKey(User, blank=True, null=True)
+
+    @classmethod
+    def get_relevant_sessions(cls, question):
+        query = \
+            """
+                SELECT votes_session.id, SQRT(AVG(relevance)) AS question_relevance
+                FROM
+                  (SELECT session_id, relevance
+                     FROM opinions_questionsessionrelevance
+                     WHERE question_id=%s
+                   UNION ALL
+                   SELECT session_id, ABS(congruence) AS relevance
+                     FROM opinions_voteoptioncongruence, opinions_option
+                     WHERE opinions_option.id=option_id AND question_id=%s) 
+                  as merged, votes_session
+                 WHERE votes_session.id = session_id
+                 GROUP BY session_id ORDER BY question_relevance DESC
+                 """
+        return Session.objects.raw(query, [question.id] * 2)
 
     class Meta:
         unique_together = (('question', 'session', 'user'), )
