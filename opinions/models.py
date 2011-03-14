@@ -182,6 +182,7 @@ class VoteOptionCongruence(models.Model):
                     AND a.member_id=v.member_id
                     AND v.vote=c.vote
                   GROUP BY %s
+                  HAVING congruence_avg IS NOT NULL
                   ORDER BY congruence_avg %s
                   %s
                   """%(id_field, grouping_class._meta.pk.name,
