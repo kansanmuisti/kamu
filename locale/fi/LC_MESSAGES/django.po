@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-12 01:46+0200\n"
+"POT-Creation-Date: 2011-03-14 18:04+0200\n"
 "PO-Revision-Date: 2011-03-12 01:48+0200\n"
 "Last-Translator: Juha Yrjölä <juha.yrjola@iki.fi>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -645,15 +645,15 @@ msgstr "Tarkastele kysymykseen liittyviä äänestyksiä"
 msgid "Main page"
 msgstr "Etusivu"
 
-#: templates/main_page.html:8 votes/views.py:955
+#: templates/main_page.html:8 votes/views.py:957
 msgid "Background"
 msgstr "Taustaa"
 
-#: templates/main_page.html:9 votes/views.py:961
+#: templates/main_page.html:9 votes/views.py:963
 msgid "Feedback"
 msgstr "Palaute"
 
-#: templates/main_page.html:10 votes/views.py:958
+#: templates/main_page.html:10 votes/views.py:960
 msgid "Contact"
 msgstr "Yhteystiedot"
 
@@ -681,7 +681,7 @@ msgstr "Suosituimmat"
 msgid "News"
 msgstr "Uutiset"
 
-#: templates/main_page.html:91
+#: templates/main_page.html:82
 msgid "Latest votes"
 msgstr "Uusimmat äänestykset"
 
@@ -918,6 +918,11 @@ msgstr "Kysymykseen liittyvät äänestykset"
 #: templates/show_question.html:12
 msgid "Log in or register to make a difference"
 msgstr "Kirjaudu sisään tai rekisteröidy vaikuttaaksesi"
+
+#: templates/show_question.html:28
+#, fuzzy
+msgid "Add a new vote"
+msgstr "Lisää uusi äänestys"
 
 #: templates/show_session.html:5
 msgid "Parliament vote"
@@ -1338,7 +1343,7 @@ msgstr "Vaalibudjetti"
 msgid "Term"
 msgstr "Vaalikausi"
 
-#: votes/views.py:952
+#: votes/views.py:954
 msgid "Home"
 msgstr "Etusivu"
 

@@ -1,11 +1,26 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import re
+
 from django.shortcuts import render_to_response, get_list_or_404, \
     get_object_or_404, redirect
 from django.template import RequestContext
-from kamu.opinions.models import *
-from kamu.votes.models import Party, Session
+from django.http import Http404
+from opinions.models import *
+from votes.models import Party, Session
+from httpstatus import Http400, Http403
 
+def add_new_custom_vote(question, user, sess_name):
+    try:
+        sess = Session.objects.by_name(sess_name)
+    except Session.DoesNotExist:
+        raise Http404
+    try:
+        rel = QuestionSessionRelevance.objects.get(question=question, session=sess, user=user)
+    except QuestionSessionRelevance.DoesNotExist:
+        rel = QuestionSessionRelevance(question=question, session=sess, user=user)
+    rel.relevance = 1.00
+    rel.save()
 
 def show_question(request, question):
     question = Question.objects.get(pk=question)
@@ -26,6 +41,15 @@ def show_question(request, question):
     # has to be processed before we redirect
 
     if request.method == 'POST':
+        if not request.user.is_authenticated():
+            raise Http403
+        if 'custom_vote' in request.POST:
+            sess_name = request.POST['custom_vote'].strip()
+            m = re.match(r'(\d+/\d+/\d+)', sess_name)
+            if not m:
+                raise Http400
+            sess_name = m.groups()[0]
+            add_new_custom_vote(question, request.user, sess_name)
         return redirect(request.get_full_path())
 
     return response

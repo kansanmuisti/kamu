@@ -24,4 +24,12 @@
  />
 </form>
 
+<form style="margin-top: 16px;" action="" method="POST">
+  <label>{% trans "Add a new vote" %}</label><input type="text" name="custom_vote" />
+  <input type="submit" 
+{% if not user.is_authenticated %}
+  disabled="disabled"
+{% endif %} />
+</form>
+
 {% endblock %}
