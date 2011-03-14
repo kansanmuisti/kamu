@@ -65,7 +65,7 @@ def process_file(root, filename, category_name, type):
         content = Content(item=item, language=language)
         content.save()
     else:
-        content = content[0]
+        return
 
     f = codecs.open(os.path.join(root, filename), mode="r", encoding="utf8")
 
@@ -75,7 +75,12 @@ def process_file(root, filename, category_name, type):
     else:
         subject = "Initial commit for %s in %s" % (category, language)
 
-    content_data = f.read()
+    data = f.read()
+    content_data = data
+    while data:
+        data = f.read()
+        content_data += data
+    content_data = content_data.strip()
 
     revision = Revision(content=content, subject=subject, data=content_data, data_markup_type=type)
     revision.save()

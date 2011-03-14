@@ -947,7 +947,9 @@ msgstr "Pisteytykset"
 msgid ""
 "\n"
 "<p>You may indicate how you yourself would vote on this subject.</p>\n"
-msgstr "<p>Voit äänestää asiasta myös itse.</p>"
+msgstr ""
+"\n"
+"<p>Voit äänestää asiasta myös itse.</p>\n"
 
 #: templates/show_session.html:105
 msgid "Session documents"

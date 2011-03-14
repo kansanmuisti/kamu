@@ -418,6 +418,10 @@ div.news_items {
 	margin-bottom: 16px;
 }
 
+.news_links a {
+	color: #2f7670;
+}
+
 .news_items h2 a {
 	/* needed to override general definition for 'a' */
 	color: #2f7670;
