@@ -133,6 +133,7 @@ INSTALLED_APPS = (
     'cms',
     'user_voting',
     'opinions',
+    'south',
 )
 
 AUTH_PROFILE_MODULE="kamu.users.KamuProfile"

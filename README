@@ -12,6 +12,7 @@ Dependencies
 - python-dateutil
 - python-feedparser
 - python-simplejson
+- python-django-south
 
 mkdir
 =====
