@@ -49,8 +49,8 @@ def populate_answers(answers, question_mapping, option_mapping, candidate_mappin
 			member=member,
 			explanation=answer['Explanation'])
 
-def initialize_schema(questions, options, srcname, srcyear):
-	src, c = QuestionSource.objects.get_or_create(name=srcname, year=srcyear)
+def initialize_schema(questions, options, srcname, srcyear, slug):
+	src, c = QuestionSource.objects.get_or_create(name=srcname, year=srcyear, url_name=slug)
 	
 	question_mapping = {}
 	for id, question in questions.items():
@@ -64,7 +64,7 @@ def initialize_schema(questions, options, srcname, srcyear):
 		om, c = Option.objects.get_or_create(
 				question=question_mapping[option['Question_id']],
 				name=option['Answer_text'],
-				weight=option['AnswerAlternative_number'])
+				order=option['AnswerAlternative_number'])
 		option_mapping[id] = om
 	
 	return (question_mapping, option_mapping)
@@ -94,7 +94,7 @@ def populate_database(questions, options, candidates, answers):
 	qm = parse_question_model(open(questions, 'r'))
 	om = parse_option_model(open(options, 'r'))
 
-	question_map, option_map = initialize_schema(qm, om, 'HS vaalikone', 2007)
+	question_map, option_map = initialize_schema(qm, om, 'HS vaalikone', 2007, 'hs2007')
 	cm = parse_candidate_model(open(candidates, 'r'))
 	
 	populate_answers(open(answers, 'r'), question_map,

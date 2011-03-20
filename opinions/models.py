@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 class QuestionSource(models.Model):
     name = models.CharField(max_length=255)
     year = models.IntegerField()
+    url_name = models.SlugField(unique=True)
 
     class Meta:
         unique_together = (('name', 'year'), )
@@ -18,15 +19,15 @@ class QuestionSource(models.Model):
 class Question(models.Model):
     text = models.TextField()
     source = models.ForeignKey(QuestionSource)
-    weight = models.IntegerField(unique=True)
+    order = models.IntegerField()
 
     def save(self, *args, **kwargs):
-        if self.weight is None:
+        if self.order is None:
             q = Question.objects.filter(source=self.source)
-            max_weight = q.aggregate(models.Max('weight'))['weight__max']
-            if max_weight is None:
-                max_weight = 0
-            self.weight = int(max_weight) + 1
+            max_order = q.aggregate(models.Max('order'))['order__max']
+            if max_order is None:
+                max_order = 0
+            self.order = int(max_order) + 1
 
         super(Question, self).save(*args, **kwargs)
 
@@ -35,8 +36,8 @@ class Question(models.Model):
         return Answer.objects.filter(option__in=options)
 
     class Meta:
-        ordering = ('-weight', )
-        unique_together = (('weight', 'source'), )
+        ordering = ('-order', )
+        unique_together = (('order', 'source'), )
 
     def __unicode__(self):
         return self.text
@@ -44,19 +45,19 @@ class Question(models.Model):
 class Option(models.Model):
     question = models.ForeignKey(Question)
     name = models.CharField(max_length=255)
-    weight = models.IntegerField()
+    order = models.IntegerField()
 
     class Meta:
-        unique_together = (('question', 'weight'), )
-        ordering = ('-question__weight', '-weight')
+        unique_together = (('question', 'order'), )
+        ordering = ('-question__order', '-order')
 
     def save(self, *args, **kwargs):
-        if self.weight is None:
+        if self.order is None:
             q = Option.objects.filter(question=self.question)
-            max_weight = q.aggregate(models.Max('weight'))['weight__max']
-            if max_weight is None:
-                max_weight = 0
-            self.weight = int(max_weight) + 1
+            max_order = q.aggregate(models.Max('order'))['order__max']
+            if max_order is None:
+                max_order = 0
+            self.order = int(max_order) + 1
 
         super(Option, self).save(*args, **kwargs)
 
