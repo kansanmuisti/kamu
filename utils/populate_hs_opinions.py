@@ -112,5 +112,8 @@ def populate_database(questions, options, candidates, answers):
 
 
 if __name__ == '__main__':
-    populate_database(*sys.argv[1:])
-
+    dir_name = sys.argv[1]
+    fnames = ('2007_questions.csv', '2007_answeralternatives.csv',
+              '2007_candidates.csv', '2007_answers.csv')
+    files = ['%s/%s' % (dir_name, fn) for fn in fnames]
+    populate_database(*files)
