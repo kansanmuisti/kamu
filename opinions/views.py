@@ -22,8 +22,13 @@ def add_new_custom_vote(question, user, sess_name):
     rel.relevance = 1.00
     rel.save()
 
-def show_question(request, question):
-    question = Question.objects.get(pk=question)
+def show_question(request, source, question):
+    src = get_object_or_404(QuestionSource, url_name=source)
+    try:
+        question = int(question)
+    except ValueError:
+        raise Http404()
+    question = get_object_or_404(Question, order=question)
     relevant_sessions = \
         QuestionSessionRelevance.get_relevant_sessions(question)
     relevant_sessions = relevant_sessions[:3]
