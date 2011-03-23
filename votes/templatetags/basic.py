@@ -154,5 +154,10 @@ def i18n_date(date, format_name):
             suffix = 'ta'
         elif lang == 'en':
             fmt = 'jS F'
+    elif format_name == 'numeric':
+        if lang == 'fi':
+            fmt = 'j.n.Y'
+        elif lang == 'en':
+            fmt = 'j/n/Y'
     s = dateformat.format(date, fmt)
     return s + suffix
