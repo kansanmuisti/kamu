@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n markup %}
+{% load i18n markup basic %}
 
 {% block title %}{{ section_name }}{% endblock %}
 
@@ -72,17 +72,18 @@
 
 <div class="news_items news_links">
   <h1>{% trans "News" %}</h1>
-  {% for newsitem in news %}
+{% for newsitem in news %}
+  {% ifchanged %}<span class="news_item_date">{{ newsitem.date|i18n_date:"numeric" }}</span>{% endifchanged %}
   <h2>{{ newsitem.content.subject }}</h2>
   {{ newsitem.content.data }}
-  {% endfor %}
+{% endfor %}
 </div>
 
 <div class="news_items">
   <h1><a href='{% url votes.views.list_sessions %}'>{% trans "Latest votes" %}</a></h1>
 {% for session in sess_list %}
 {% with session.plenary_session as ps %}
-  {% ifchanged %}<span class="news_item_date">{{ ps.date|date:"j.n.Y" }}</span>{% endifchanged %}
+  {% ifchanged %}<span class="news_item_date">{{ ps.date|i18n_date:"numeric" }}</span>{% endifchanged %}
   <h2><a href='{% url votes.views.show_session plsess=ps.url_name,sess=session.number %}'>{{ ps.name }}, {{ session.number }}.</a></h2>
   <p><a href='{% url votes.views.show_session plsess=ps.url_name,sess=session.number %}'>{{ session.get_short_summary }}</a></p>
 {% endwith %}
