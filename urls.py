@@ -78,7 +78,11 @@ urlpatterns += patterns('', (r'^i18n/', include('django.conf.urls.i18n')))
 urlpatterns += patterns('opinions.views',
     url(r'^opinions/$', 'list_questions'),
     url(r'^opinions/(?P<source>\w+)/(?P<question>\d+)/$', 'show_question'),
-    )
+)
+
+urlpatterns += patterns('cms.views',
+    url(r'^news/vaalikoneet-avoimiksi/', 'show_news'),
+)
 
 if settings.DEBUG:
     urlpatterns += patterns('',
