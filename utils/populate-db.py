@@ -618,11 +618,12 @@ def process_session_keywords(sess, url):
             kw_obj.save()
         SessionKeyword.objects.get_or_create(session=sess, keyword=kw_obj)
 
-def process_votes(full_update=False):
+def process_votes(full_update=False, verify=False):
     start_from = from_pl
     year = END_YEAR
     next_link = None
     stop_after = None
+    processed_sess_list = []
     while True:
         if not next_link:
             next_link = url_base + VOTE_URL % year
@@ -643,7 +644,10 @@ def process_votes(full_update=False):
                 else:
                     continue
             if stop_after and sess_desc['plsess'] != stop_after:
-                return
+                return processed_sess_list
+            processed_sess_list.append(sess)
+            if verify:
+                continue
             if not full_update and sess:
                 # If the session doesn't have keywords, we process only those.
                 if not sess.sessionkeyword_set.all():
@@ -651,7 +655,7 @@ def process_votes(full_update=False):
                         process_session_keywords(sess, sess_desc['info'])
                         continue
                 else:
-                    return
+                    return processed_sess_list
 
             sess = process_session_votes(sess_desc['results'], sess_desc['plsess'])
             # Process keywords
@@ -664,6 +668,7 @@ def process_votes(full_update=False):
             year -= 1
             if year < BEGIN_YEAR:
                 break
+    return processed_sess_list
 
 def process_session_kws():
     year = END_YEAR
@@ -913,13 +918,23 @@ def process_session_docs(full_update):
             continue
         process_doc(doc)
 
+def verify_sessions():
+    found_sess_list = process_votes(full_update=True, verify=True)
+    found_sess_dict = {}
+    for sess in found_sess_list:
+        found_sess_dict[str(sess)] = sess
+    sess_list = list(Session.objects.all())
+    for sess in sess_list:
+        if str(sess) not in found_sess_dict:
+            print str(sess)
+
 parser = OptionParser()
 parser.add_option('-p', '--parties', action='store_true', dest='parties',
                   help='populate party database')
 parser.add_option('-m', '--members', action='store_true', dest='members',
                   help='populate member database')
-parser.add_option('-c', '--counties', action='store_true',
-                  dest='counties', help='populate counties database')
+parser.add_option('-c', '--counties', action='store_true', dest='counties',
+                  help='populate counties database')
 parser.add_option('-v', '--votes', action='store_true', dest='votes',
                   help='populate vote database')
 parser.add_option('-M', '--minutes', action='store_true', dest='minutes',
@@ -928,16 +943,15 @@ parser.add_option('-k', '--keywords', action='store_true', dest='keywords',
                   help='populate voting keywords database')
 parser.add_option('-d', '--docs', action='store_true', dest='docs',
                   help='populate session documents')
+parser.add_option('--verify-sessions', action='store_true', dest='verify_sessions',
+                  help='verify session list')
 parser.add_option('--cache', action='store', type='string', dest='cache',
                   help='use cache in directory CACHE')
-parser.add_option('--full-update', action='store_true',
-                  dest='full_update',
+parser.add_option('--full-update', action='store_true', dest='full_update',
                   help='perform a full database update')
-parser.add_option('--until-pl', action='store', type='string',
-                  dest='until_pl',
+parser.add_option('--until-pl', action='store', type='string', dest='until_pl',
                   help='process until named plenary session reached')
-parser.add_option('--from-pl', action='store', type='string',
-                  dest='from_pl',
+parser.add_option('--from-pl', action='store', type='string', dest='from_pl',
                   help='process starting from named plenary session')
 
 (opts, args) = parser.parse_args()
@@ -968,4 +982,5 @@ if opts.keywords:
     process_keywords()
 if opts.docs:
     process_session_docs(opts.full_update)
-
+if opts.verify_sessions:
+    verify_sessions()
