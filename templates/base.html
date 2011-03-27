@@ -4,18 +4,15 @@
       xmlns:og="http://opengraphprotocol.org/schema/"
       xmlns:fb="http://www.facebook.com/2008/fbml">
 <head>
-{% load i18n %}
-{% load basic %}
+{% load basic i18n assets %}
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>{% block title %}{% endblock %} - KAMU</title>
   <meta property="og:site_name" content="Kansan muisti" />
   <meta property="fb:app_id" content="107387482616243" />
   <link type="text/css" href="{{ MEDIA_URL }}css/jquery-ui-1.8.1.custom.css" rel="stylesheet" />
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.4.2.min.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-ui.min.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-ui-combobox.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.example.min.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.tooltip.js"></script>
+{% assets "js_base" %}
+  <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
   <link type="text/css" href="{{ MEDIA_URL }}css/kamu.css" rel="stylesheet" />
   <link rel="shortcut icon" href="{{ MEDIA_URL }}images/icons/favicon.ico" />
   <script type="text/javascript">
