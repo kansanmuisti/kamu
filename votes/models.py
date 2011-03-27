@@ -8,12 +8,15 @@ class TermManager(models.Manager):
         query = Q(begin__lte=date)
         query &= Q(end__isnull=True) | Q(end__gte=date)
         return self.get(query)
+    def visible(self):
+        return self.filter(visible=True)
 
 class Term(models.Model):
     display_name = models.CharField(max_length=40)
     name = models.CharField(max_length=40)
     begin = models.DateField()
     end = models.DateField(blank=True, null=True)
+    visible = models.BooleanField(default=True)
 
     objects = TermManager()
 

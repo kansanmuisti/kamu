@@ -56,7 +56,7 @@ TERMS = [
     {'display_name': '2003'+TERM_DASH+'2006', 'begin': '2003-03-19', 'end': '2007-03-20',
      'name': '2003-2006' },
     {'display_name': '1999'+TERM_DASH+'2002', 'begin': '1999-03-24', 'end': '2003-03-18',
-     'name': '1999-2002' },
+     'name': '1999-2002', 'visible': False },
 ]
 
 term_list = Term.objects.all()
@@ -71,6 +71,8 @@ def fill_terms():
         nt.begin = term['begin']
         nt.end = term['end']
         nt.display_name = term['display_name']
+        if 'visible' in term:
+            nt.visible = term['visible']
         nt.save()
 
     global term_list

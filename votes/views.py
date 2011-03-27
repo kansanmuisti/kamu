@@ -50,7 +50,7 @@ COUNTY_KEY = 'county'
 THUMBNAIL_WIDTH_LIMITS = (24,80)
 THUMBNAIL_HEIGHT_LIMITS = (24,80)
 
-term_list = list(Term.objects.all())
+term_list = list(Term.objects.visible())
 
 def find_term(request):
     """Return the active term for the request."""
