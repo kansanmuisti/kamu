@@ -120,6 +120,7 @@ INSTALLED_APPS = (
     'django.contrib.markup',
     'django.contrib.messages',
     'django_extensions',
+    'django_assets',
     'lifestream',
     'sorl.thumbnail',
     'kamu.votes',
