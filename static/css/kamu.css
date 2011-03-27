@@ -1140,6 +1140,28 @@ td.option_congruence_bar_cell
 	margin-top: -0.9em;
 }
 
+.congruence_input_option
+{
+	width: 100%;
+}
+
+.congruence_input_container
+{
+	white-space: nowrap;
+}
+
+.congruence_input_container label
+{
+	display: none;
+}
+
+.congruence_input_container li
+{
+	display: inline;
+	list-style-type: none;
+	padding: 0.3em;
+}
+
 .question_session_congruence .login_nag
 {
 	font-weight: normal;

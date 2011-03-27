@@ -127,6 +127,7 @@ class VoteOptionCongruence(models.Model):
         session,
         vote='Y',
         ):
+
         congruence = cls.objects.filter(option=option, session=session,
                 vote=vote)
         if congruence.count() == 0:
@@ -136,7 +137,8 @@ class VoteOptionCongruence(models.Model):
 
     @classmethod
     def __get_average_congruence(cls, grouping_object, id_field):
-        query = """
+        query = \
+            """
                 SELECT
                     SUM(congruence)/SUM(ABS(congruence)) AS congruence_avg
                   FROM
@@ -148,10 +150,12 @@ class VoteOptionCongruence(models.Model):
                     AND a.member_id=v.member_id
                     AND v.vote=c.vote
                     AND %s=%%s
-                  """%(id_field,)
+                  """ \
+            % (id_field, )
         cursor = connection.cursor()
         count = cursor.execute(query, [grouping_object.pk])
-        if(count < 1): return None
+        if count < 1:
+            return None
         return cursor.fetchone()[0]
 
     @classmethod
@@ -166,12 +170,16 @@ class VoteOptionCongruence(models.Model):
     def get_question_congruence(cls, question):
         return cls.__get_average_congruence(question, 'a.question_id')
 
-
-
     @classmethod
-    def __get_average_congruences(cls, grouping_class, id_field,
-            descending=True, limit=False):
-        query = """
+    def __get_average_congruences(
+        cls,
+        grouping_class,
+        id_field,
+        descending=True,
+        limit=False,
+        ):
+        query = \
+            """
                 SELECT %s AS %s,
                     SUM(congruence)/SUM(ABS(congruence)) AS congruence_avg
                   FROM
@@ -186,10 +194,9 @@ class VoteOptionCongruence(models.Model):
                   HAVING congruence_avg IS NOT NULL
                   ORDER BY congruence_avg %s
                   %s
-                  """%(id_field, grouping_class._meta.pk.name,
-                       id_field,
-                       ('ASC', 'DESC')[descending],
-                       ('', 'LIMIT %i'%(int(limit),))[bool(limit)])
+                  """ \
+            % (id_field, grouping_class._meta.pk.name, id_field, ('ASC', 'DESC'
+               )[descending], ('', 'LIMIT %i' % (int(limit), ))[bool(limit)])
         return grouping_class.objects.raw(query)
 
     @classmethod
