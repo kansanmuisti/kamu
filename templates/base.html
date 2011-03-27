@@ -9,11 +9,12 @@
   <title>{% block title %}{% endblock %} - KAMU</title>
   <meta property="og:site_name" content="Kansan muisti" />
   <meta property="fb:app_id" content="107387482616243" />
-  <link type="text/css" href="{{ MEDIA_URL }}css/jquery-ui-1.8.1.custom.css" rel="stylesheet" />
 {% assets "js_base" %}
   <script type="text/javascript" src="{{ ASSET_URL }}"></script>
 {% endassets %}
-  <link type="text/css" href="{{ MEDIA_URL }}css/kamu.css" rel="stylesheet" />
+{% assets "css_base" %}
+  <link type="text/css" href="{{ ASSET_URL }}" rel="stylesheet" />
+{% endassets %}
   <link rel="shortcut icon" href="{{ MEDIA_URL }}images/icons/favicon.ico" />
   <script type="text/javascript">
     $(function() {

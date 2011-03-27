@@ -13,6 +13,16 @@ Dependencies
 - python-feedparser
 - python-simplejson
 - python-django-south
+- python-cssutils
+- libnode-less
+
+LESS (CSS extension)
+====================
+# apt-get install rubygems1.8
+# gem install less
+
+Define the path to the lessc binary in settings_local.py, e.g.:
+LESS_PATH='/var/lib/gems/1.8/gems/less-1.2.21/bin/lessc'
 
 mkdir
 =====
