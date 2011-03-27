@@ -20,7 +20,7 @@ var THUMBNAIL_BLOCK_CLASS       = "combobox_thumbnail_block";
             var container = $("<span>")
                 .addClass("combobox_container")
                 .insertBefore(this.element);
-            var last_val = null;
+            var last_item = null;
             var search_active = false;
             var search_callback = null;
             var sel_timer = null;
@@ -69,11 +69,19 @@ var THUMBNAIL_BLOCK_CLASS       = "combobox_thumbnail_block";
                 return data;
             }
 
+            function normalize_ajax_result(data) {
+                if (!data)
+                    return {}
+                return {
+                    label       : data[0],
+                    value       : data[0],
+                    thumbnail   : data[1],
+                    url         : data[2],
+                };
+            }
+
             function ajax_result(data, autocomplete_callback) {
-                if (self.options.thumbnail && data[0])
-                    last_val = data[0][0];
-                else
-                    last_val = data[0];
+                last_item = normalize_ajax_result(data[0]);
                 autocomplete_callback(data);
             }
 
@@ -124,11 +132,7 @@ var THUMBNAIL_BLOCK_CLASS       = "combobox_thumbnail_block";
             function autocomplete_normalize(items) {
                 var norm_items = [];
                 $.map(items, function(item) {
-                    norm_items.push({
-                        label       : item[0],
-                        value       : item[0],
-                        thumbnail   : item[1],
-                    });
+                    norm_items.push(normalize_ajax_result(item));
                 });
                 return norm_items;
             }
@@ -169,8 +173,12 @@ var THUMBNAIL_BLOCK_CLASS       = "combobox_thumbnail_block";
             function autocomplete_renderitem(ul, item) {
                 var list_item =
                     "<a class='combobox_list_item'>"                    +
-                        "<span class='" + THUMBNAIL_BLOCK_CLASS + "'>"  +
-                            "<img src='" + item.thumbnail + "'/>"       +
+                        "<span class='" + THUMBNAIL_BLOCK_CLASS + "'>";
+
+                if (item.thumbnail[0])
+                    list_item += "<img src='" + item.thumbnail + "'/>";
+
+                list_item +=
                         "</span>"                                       +
                         "<p class='combobox_text_block'>"               +
                             emphasize_matching_parts(input.val(),
@@ -184,8 +192,8 @@ var THUMBNAIL_BLOCK_CLASS       = "combobox_thumbnail_block";
                 return elem;
             };
 
+            input.data("autocomplete")._normalize = autocomplete_normalize;
             if (self.options.thumbnail) {
-                input.data("autocomplete")._normalize = autocomplete_normalize;
                 input.data("autocomplete")._renderItem =
                                             autocomplete_renderitem;
             } else {
@@ -195,15 +203,15 @@ var THUMBNAIL_BLOCK_CLASS       = "combobox_thumbnail_block";
 
             input.bind("autocompleteselect", function(event, ui) {
                 var val = input.val();
-                last_val = ui.item.value;
-                input.val(last_val);
+                last_item = ui.item;
+                input.val(last_item.value);
                 /*
                  * Don't trigger the event for keyboard selection. In
                  * that case we trigger it already through the keypress
                  * handler and this would only cause a double trigger.
                  */
                 if (event.button >= 0)
-                    self._trigger("selected", null, { value: val });
+                    self._trigger("selected", null, last_item);
             });
 
             function setup_async_comp(callback) {
@@ -249,19 +257,19 @@ var THUMBNAIL_BLOCK_CLASS       = "combobox_thumbnail_block";
             function trigger_selected(force_leave, async) {
                 var val = input.val().ltrim();
 
-                if (stricmp(last_val, val) && search_active) {
+                if (stricmp(last_item.value, val) && search_active) {
                     setup_async_comp(function() {
                             trigger_selected(force_leave, true);
                     });
                     return;
                 }
 
-                if (!stricmp(last_val, val)) {
-                    input.val(last_val);
-                    self._trigger("selected", null, { value: last_val });
+                if (!stricmp(last_item.value, val)) {
+                    input.val(last_item.value);
+                    self._trigger("selected", null, last_item);
                 }
                 if (force_leave) {
-                    if (stricmp(last_val, val))
+                    if (stricmp(last_item.value, val))
                         input.val("");
                     if (async) {
                         input.autocomplete("close");
@@ -284,7 +292,7 @@ var THUMBNAIL_BLOCK_CLASS       = "combobox_thumbnail_block";
                         event.preventDefault();
                     return;
                 }
-                if (self.options.any_text || !stricmp(last_val, val)) {
+                if (self.options.any_text || !stricmp(last_item.value, val)) {
                     trigger_selected(force_leave, false);
                 } else {
                     setup_async_comp(function() {

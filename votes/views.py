@@ -826,7 +826,7 @@ def val_in_range(val, limits):
 def search_autocomplete(request):
     name = request.GET.get('name', '')
     max_results = get_req_param_int(request, 'max_results')
-    if max_results <= 0:
+    if not val_in_range(max_results, (1, 100)):
         return HttpResponseBadRequest();
     thumbnail_width = get_req_param_int(request, 'thumbnail_width')
     thumbnail_height = get_req_param_int(request, 'thumbnail_height')
@@ -841,25 +841,45 @@ def search_autocomplete(request):
         return HttpResponseBadRequest();
     if full_word_cnt == 0:
         member_query = Member.objects.all()[:max_results]
+        keyword_query = Keyword.objects.all()[:max_results]
     else:
-        member_query = Q()
+        member_q = Q()
+        keyword_q = Q()
+
         trailing_space = name[-1] == ' '
         if not trailing_space:
             full_word_cnt -= 1
 
         for w in words[:full_word_cnt]:
-            member_query &= Q(name__iregex=r'(^| )' + w + r'( |$)')
+            re = r'(^| )' + w + r'( |$)'
+            member_q &= Q(name__iregex=re)
+            keyword_q &= Q(keyword__iregex=re)
         if not trailing_space:
-            member_query &= Q(name__iregex=r'(^| )' + words[-1])
+            re = r'(^| )' + words[-1]
+            member_q &= Q(name__iregex=re)
+            keyword_q &= Q(keyword__name__iregex=re)
 
-        member_query = Member.objects.filter(member_query).         \
+        member_query = Member.objects.filter(member_q).            \
                                 order_by("name")[:max_results]
-    member_list = []
+        keyword_query = SessionKeyword.objects.filter(keyword_q).  \
+                                order_by("keyword__name").         \
+                                values("keyword__name").           \
+                                distinct()[:max_results]
+
+    result_list = []
     for x in member_query:
         tn = DjangoThumbnail(x.photo, (thumbnail_width, thumbnail_height))
-        member_list.append((x.name, unicode(tn)))
+        result_list.append((x.name, unicode(tn), "/search/?query=" + x.name))
 
-    json = simplejson.dumps(member_list)
+    for x in keyword_query:
+        if (len(result_list) == max_results):
+            break
+        result_list.append((x['keyword__name'], "",
+                            "/search/keyword/?query=" + x['keyword__name']))
+
+    result_list.sort(key=lambda n:n[0])
+
+    json = simplejson.dumps(result_list)
     response = HttpResponse(json, mimetype="text/javascript")
 
     return response
@@ -935,7 +955,8 @@ def search_county(request):
 
     county_list = county_list.order_by('name')[:max_results].   \
                               values_list('name', flat=True)
-    county_list = list(county_list)
+    county_list = [(x,) for x in county_list]
+
     json = simplejson.dumps(county_list)
 
     response = HttpResponse(json, mimetype="text/javascript")
