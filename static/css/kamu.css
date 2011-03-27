@@ -1,3 +1,6 @@
+@main_color: #2f7670;
+@main_pale: #daf0ee;
+
 body {
 	font-size: 80%;
 	font-family: "Verdana";
@@ -38,7 +41,7 @@ h2 {
 h3 {
 	font-size: 100%;
 	font-weight: bold;
-	color: #2f7670;
+	color: @main_color;
 	margin-bottom: 8px;
 }
 
@@ -68,7 +71,7 @@ h3 {
 }
 
 .link {
-	color: #2f7670;
+	color: @main_color;
 }
 
 .error {
@@ -79,7 +82,7 @@ h3 {
 	position: absolute;
 	z-index: 3000;
 	border: 1px solid #111;
-	background-color: #daf0ee;
+	background-color: @main_pale;
 	padding: 5px;
 	opacity: 0.85;
 }
@@ -177,7 +180,7 @@ div#navbar {
 }
 
 #navbar ul li:hover {
-	background-color: #daf0ee;
+	background-color: @main_pale;
 }
 
 #navbar ul li {
@@ -267,7 +270,7 @@ div.pagination a {
 div.pagination a:hover, div.pagination a:active {
 	border: 1px solid #999999;
 	color: #212121;
-	background-color: #daf0ee;
+	background-color: @main_pale;
 }
 div.pagination span.current {
 	padding: 2px 5px 2px 5px;
@@ -405,7 +408,7 @@ div.comment_date {
 }
 
 #main_col a {
-	color: #2f7670;
+	color: @main_color;
 }
 
 #news_col {
@@ -419,18 +422,18 @@ div.news_items {
 }
 
 .news_links a {
-	color: #2f7670;
+	color: @main_color;
 }
 
 .news_items h2 a {
 	/* needed to override general definition for 'a' */
-	color: #2f7670;
+	color: @main_color;
 }
 .news_items h2 {
 	/* copied from '#content h3' */
 	font-size: 90%;
 	font-weight: bold;
-	color: #2f7670;
+	color: @main_color;
 	margin-bottom: 4px;
 }
 .news_items h2 + h2 {
@@ -779,7 +782,7 @@ div.statement {
 }
 
 .statement strong {
-	color: #2f7670;
+	color: @main_color;
 }
 
 .statement strong + p {
@@ -817,7 +820,7 @@ div#list_orgs {
 }
 
 #list_orgs a {
-	color: #2f7670;
+	color: @main_color;
 }
 
 /*
@@ -921,7 +924,7 @@ div#list_orgs {
 .question
 {
 	font-weight: bold;
-	color: #2f7670;
+	color: @main_color;
 }
 
 .question .source
