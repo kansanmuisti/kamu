@@ -3,11 +3,19 @@ from django.db.models import Q
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
 
+class TermManager(models.Manager):
+    def get_for_date(self, date):
+        query = Q(begin__lte=date)
+        query &= Q(end__isnull=True) | Q(end__gte=date)
+        return self.get(query)
+
 class Term(models.Model):
     display_name = models.CharField(max_length=40)
     name = models.CharField(max_length=40)
     begin = models.DateField()
     end = models.DateField(blank=True, null=True)
+
+    objects = TermManager()
 
     class Meta:
         ordering = ('-begin', )
@@ -197,6 +205,7 @@ class PlenarySessionManager(models.Manager):
 
 class PlenarySession(models.Model):
     name = models.CharField(max_length=20, primary_key=True)
+    term = models.ForeignKey(Term, db_index=True)
     date = models.DateField(db_index=True)
     info_link = models.URLField()
     url_name = models.SlugField(max_length=20, unique=True, db_index=True)

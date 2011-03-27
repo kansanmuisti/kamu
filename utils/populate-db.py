@@ -55,8 +55,8 @@ TERMS = [
      'name': '2007-2010' },
     {'display_name': '2003'+TERM_DASH+'2006', 'begin': '2003-03-19', 'end': '2007-03-20',
      'name': '2003-2006' },
-#    {'display_name': '1999'+TERM_DASH+'2002', 'begin': '1999-03-24', 'end': '2003-03-18',
-#     'name': '1999-2002' },
+    {'display_name': '1999'+TERM_DASH+'2002', 'begin': '1999-03-24', 'end': '2003-03-18',
+     'name': '1999-2002' },
 ]
 
 term_list = Term.objects.all()
@@ -552,6 +552,7 @@ def process_session_votes(url, pl_sess_name):
             pl_sess = PlenarySession(name=pl_sess_name)
             pl_sess_list[pl_sess_name] = pl_sess
         pl_sess.date = desc['date']
+        pl_sess.term = Term.objects.get_for_date(pl_sess.date)
         pl_sess.info_link = url_base + desc['session_link']
         pl_sess.save()
 
@@ -689,6 +690,7 @@ def insert_minutes(minutes):
         pl_sess = PlenarySession()
         pl_sess.name = minutes['id']
         pl_sess.date = minutes['date']
+        pl_sess.term = Term.objects.get_for_date(pl_sess.date)
         pl_sess.info_link = minutes['url']
         pl_sess.save()
 
