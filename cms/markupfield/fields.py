@@ -1,3 +1,4 @@
+import django
 from django.conf import settings
 from django.db import models
 from django.utils.safestring import mark_safe
@@ -104,6 +105,12 @@ class MarkupField(models.TextField):
             raise ValueError("Invalid default_markup_type for field '%s', allowed values: %s" %
                              (name, ', '.join(self.markup_choices_list)))
 
+        # for South FakeORM compatibility: the frozen version of a
+        # MarkupField can't try to add a _rendered field, because the
+        # _rendered field itself is frozen as well. See introspection
+        # rules below.
+        self.rendered_field = not kwargs.pop('rendered_field', False)
+
         super(MarkupField, self).__init__(verbose_name, name, **kwargs)
 
     def contribute_to_class(self, cls, name):
@@ -135,12 +142,15 @@ class MarkupField(models.TextField):
         setattr(model_instance, _rendered_field_name(self.attname), rendered)
         return value.raw
 
-    def get_db_prep_value(self, value):
-        # for Django 1.2+ rename this to get_prep_value
+    def get_prep_value(self, value):
         if isinstance(value, Markup):
             return value.raw
         else:
             return value
+
+    # copy get_prep_value to get_db_prep_value if pre-1.2
+    if django.VERSION < (1,2):
+        get_db_prep_value = get_prep_value
 
     def value_to_string(self, obj):
         value = self._get_val_from_obj(obj)
@@ -154,3 +164,15 @@ class MarkupField(models.TextField):
 # register MarkupField to use the custom widget in the Admin
 from django.contrib.admin.options import FORMFIELD_FOR_DBFIELD_DEFAULTS
 FORMFIELD_FOR_DBFIELD_DEFAULTS[MarkupField] = {'widget': widgets.AdminMarkupTextareaWidget}
+
+# allow South to handle MarkupField smoothly
+try:
+    from south.modelsinspector import add_introspection_rules
+    # For a normal MarkupField, the add_rendered_field attribute is
+    # always True, which means no_rendered_field arg will always be
+    # True in a frozen MarkupField, which is what we want.
+    add_introspection_rules(rules=[
+        ( (MarkupField,), [], { 'rendered_field': ['rendered_field', {}], })
+    ], patterns=['markupfield\.fields\.MarkupField'])
+except ImportError:
+    pass

@@ -1,0 +1,2 @@
+git://github.com/jamesturk/django-markupfield.git
+c48e95d9ac145a8f3b608686a496c7d584c4f811
