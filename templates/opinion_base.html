@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load opinions %}
+
+{% block sidebar %}
+{% if user.is_authenticated %}
+   {% promise_statistics_sidebar user %}
+{% endif %}
+{% endblock %}

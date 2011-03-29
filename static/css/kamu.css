@@ -1169,6 +1169,28 @@ td.option_congruence_bar_cell
 	text-align: right;
 }
 
+table.promise_statistics_box
+{
+	width: 100%;
+}
+
+td.promise_label_column
+{
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    padding-right: 4px;
+}
+
+div.promise_percentage_bar
+{
+    background-color: #eee;
+    border: 1px solid #ddd;
+    padding: 3px;
+    text-align: right;
+    font-size: xx-small;
+}
+
 /*
  * jNotify
  */
