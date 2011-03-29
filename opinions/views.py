@@ -90,7 +90,7 @@ def show_question(request, source, question):
             if input_form.is_valid():
                 _handle_congruence_form(request, input_form, option, session)
 
-            congruence = VoteOptionCongruence.get_congruence(option, session)
+            congruence = VoteOptionCongruence.objects.get_congruence(option, session)
             if congruence is None:
                 congruence = 0
             congruence_scale = int((congruence + 1) / 2.0 * 100)

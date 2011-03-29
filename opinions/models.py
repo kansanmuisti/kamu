@@ -100,43 +100,30 @@ class Answer(models.Model):
     def __unicode__(self):
         return u'%s %s' % (self.member, self.option)
 
-class VoteOptionCongruence(models.Model):
-    option = models.ForeignKey(Option)
-    session = models.ForeignKey(Session)
-    vote = models.CharField(max_length=1, choices=Vote.VOTE_CHOICES,
-                            db_index=True)
-    congruence = models.FloatField()
-    user = models.ForeignKey(User)
+class VoteOptionCongruenceManager(models.Manager):
 
-    def save(self, update_if_exists=False, **kwargs):
-        if update_if_exists:
-            congruence = self.congruence
-            self.congruence = None
-            matches = VoteOptionCongruence.objects.filter(user=self.user,
-                    option=self.option, session=self.session, vote=self.vote)
-            if matches.count() > 0:
-                self = matches[0]
-            self.congruence = congruence
-
-        return models.Model.save(self, **kwargs)
-
-    @classmethod
     def get_congruence(
-        cls,
+        self,
         option,
         session,
         vote='Y',
         ):
 
-        congruence = cls.objects.filter(option=option, session=session,
-                vote=vote)
+        congruence = VoteOptionCongruence.objects.filter(
+                                option=option, session=session,
+                                vote=vote)
         if congruence.count() == 0:
             return None
         congruence = congruence.aggregate(models.Avg('congruence'))
         return congruence['congruence__avg']
 
-    @classmethod
-    def __get_average_congruence(cls, grouping_object, id_field):
+    def __get_average_congruence(self, grouping_object, id_field, for_user=None):
+        args = []
+        for_user_query = ""
+        if(for_user is not None and for_user.is_authenticated()):
+            args.append(for_user.id)
+            for_user_query = "AND c.user_id=%s"
+
         query = \
             """
                 SELECT
@@ -149,34 +136,37 @@ class VoteOptionCongruence(models.Model):
                     AND a.option_id=c.option_id
                     AND a.member_id=v.member_id
                     AND v.vote=c.vote
+                    %s
                     AND %s=%%s
                   """ \
-            % (id_field, )
+            % (for_user_query, id_field)
+        
+        args.append(grouping_object.pk)
         cursor = connection.cursor()
-        count = cursor.execute(query, [grouping_object.pk])
+        count = cursor.execute(query, args)
         if count < 1:
             return None
         return cursor.fetchone()[0]
 
-    @classmethod
-    def get_member_congruence(cls, member):
-        return cls.__get_average_congruence(member, 'v.member_id')
+    def get_member_congruence(self, member, **kargs):
+        return self.__get_average_congruence(member, 'v.member_id', **kargs)
 
     @classmethod
-    def get_party_congruence(cls, party):
-        return cls.__get_average_congruence(party, 'v.party')
+    def get_party_congruence(self, party, **kargs):
+        return self.__get_average_congruence(party, 'v.party', **kargs)
 
     @classmethod
-    def get_question_congruence(cls, question):
-        return cls.__get_average_congruence(question, 'a.question_id')
+    def get_question_congruence(self, question, **kargs):
+        return self.__get_average_congruence(question, 'a.question_id', **kargs)
 
     @classmethod
     def __get_average_congruences(
-        cls,
+        self,
         grouping_class,
         id_field,
         descending=True,
         limit=False,
+        for_user=None
         ):
         query = \
             """
@@ -190,6 +180,7 @@ class VoteOptionCongruence(models.Model):
                     AND a.option_id=c.option_id
                     AND a.member_id=v.member_id
                     AND v.vote=c.vote
+                    %%s
                   GROUP BY %s
                   HAVING congruence_avg IS NOT NULL
                   ORDER BY congruence_avg %s
@@ -197,7 +188,15 @@ class VoteOptionCongruence(models.Model):
                   """ \
             % (id_field, grouping_class._meta.pk.name, id_field, ('ASC', 'DESC'
                )[descending], ('', 'LIMIT %i' % (int(limit), ))[bool(limit)])
-        return grouping_class.objects.raw(query)
+        
+        for_user_query = ''
+        query_args = tuple()
+        if(for_user is not None and for_user.is_authenticated()):
+            for_user_query = "AND c.user_id=%s"
+            query_args = (for_user.id,)
+
+        query = query % for_user_query
+        return grouping_class.objects.raw(query, query_args)
 
     @classmethod
     def get_party_congruences(cls, **kwargs):
@@ -211,7 +210,34 @@ class VoteOptionCongruence(models.Model):
     def get_question_congruences(cls, **kwargs):
         return cls.__get_average_congruences(Question, 'a.question_id')
 
+    @classmethod
+    def get_session_congruences(cls, **kwargs):
+        return cls.__get_average_congruences(Session, 'v.session_id')
 
+
+class VoteOptionCongruence(models.Model):
+    option = models.ForeignKey(Option)
+    session = models.ForeignKey(Session)
+    vote = models.CharField(max_length=1, choices=Vote.VOTE_CHOICES,
+                            db_index=True)
+    congruence = models.FloatField()
+    user = models.ForeignKey(User)
+
+    objects = VoteOptionCongruenceManager()
+
+    def save(self, update_if_exists=False, **kwargs):
+        if update_if_exists:
+            congruence = self.congruence
+            self.congruence = None
+            matches = VoteOptionCongruence.objects.filter(user=self.user,
+                    option=self.option, session=self.session, vote=self.vote)
+            if matches.count() > 0:
+                self = matches[0]
+            self.congruence = congruence
+
+        return models.Model.save(self, **kwargs)
+
+   
     class Meta:
         unique_together = (('user', 'option', 'session', 'vote'), )
 
