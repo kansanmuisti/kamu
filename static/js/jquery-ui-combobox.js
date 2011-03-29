@@ -42,13 +42,17 @@ var THUMBNAIL_BLOCK_CLASS       = "combobox_thumbnail_block";
 
             if (self.options.thumbnail) {
                 /* dummy element to get access to a class's css properties */
-                var dummy = $('<div>').addClass(THUMBNAIL_BLOCK_CLASS);
+                var dummy = $('<div>').addClass(THUMBNAIL_BLOCK_CLASS).
+                                      appendTo(document.body);
+
                 /*
                  * parseInt also strips the trailing px and convert auto
                  * to Nan.
                  */
                 thumbnail_width = parseInt(dummy.css('width'));
                 thumbnail_height = parseInt(dummy.css('height'));
+
+                dummy.remove();
                 if (isNaN(thumbnail_width) || isNaN(thumbnail_height)) {
                     thumbnail_width = THUMBNAIL_DEFAULT_WIDTH;
                     thumbnail_height = THUMBNAIL_DEFAULT_HEIGHT;
