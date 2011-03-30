@@ -16,8 +16,9 @@ register = template.Library()
 
 @register.inclusion_tag('promise_statistics_sidebar.html',
                         takes_context=True)
-def promise_statistics_sidebar(context, user):
-    parties = VoteOptionCongruence.objects.get_party_congruences(for_user=user)
+def promise_statistics_sidebar(context, user, question=None):
+    parties = VoteOptionCongruence.objects.get_party_congruences(for_user=user,
+                                                                 for_question=question)
 
     member_type = ContentType.objects.get_for_model(Member)
     member_votes = user_voting.Vote.objects.filter(user=user,
@@ -41,3 +42,4 @@ def congruence_to_percentage(share):
         return "%i" % int((share+1)/2.0*100)
     except ValueError:
         return ''
+

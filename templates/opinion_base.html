@@ -3,6 +3,10 @@
 
 {% block sidebar %}
 {% if user.is_authenticated %}
-   {% promise_statistics_sidebar user %}
+  {% if question %}
+    {% promise_statistics_sidebar user question %}
+  {% else %}
+    {% promise_statistics_sidebar user %}
+  {% endif %} 
 {% endif %}
 {% endblock %}
