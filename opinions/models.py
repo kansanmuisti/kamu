@@ -117,29 +117,36 @@ class VoteOptionCongruenceManager(models.Manager):
         congruence = congruence.aggregate(models.Avg('congruence'))
         return congruence['congruence__avg']
 
-    def __get_average_congruence(self, grouping_object, id_field, for_user=None):
+    def __get_average_congruence(self, grouping_object, id_field,
+                                 for_user=None, for_question=None):
         args = []
-        for_user_query = ""
+        extra_where = ""
         if(for_user is not None and for_user.is_authenticated()):
             args.append(for_user.id)
-            for_user_query = "AND c.user_id=%s"
+            extra_where += "AND c.user_id=%s\n"
+
+        if(for_question is not None):
+            args.append(for_question.id)
+            extra_where += "AND o.id=%s\n"
 
         query = \
             """
                 SELECT
                     SUM(congruence)/SUM(ABS(congruence)) AS congruence_avg
                   FROM
-                    opinions_voteoptioncongruence as c,
-                    opinions_answer as a,
+                    opinions_voteoptioncongruence AS c,
+                    opinions_answer AS a,
+                    opinions_option AS o,
                     votes_vote AS v
                   WHERE v.session_id=c.session_id
                     AND a.option_id=c.option_id
                     AND a.member_id=v.member_id
                     AND v.vote=c.vote
+                    AND o.id=a.option_id
                     %s
                     AND %s=%%s
                   """ \
-            % (for_user_query, id_field)
+            % (extra_where, id_field)
         
         args.append(grouping_object.pk)
         cursor = connection.cursor()
@@ -151,22 +158,20 @@ class VoteOptionCongruenceManager(models.Manager):
     def get_member_congruence(self, member, **kargs):
         return self.__get_average_congruence(member, 'v.member_id', **kargs)
 
-    @classmethod
     def get_party_congruence(self, party, **kargs):
         return self.__get_average_congruence(party, 'v.party', **kargs)
 
-    @classmethod
     def get_question_congruence(self, question, **kargs):
         return self.__get_average_congruence(question, 'a.question_id', **kargs)
 
-    @classmethod
     def __get_average_congruences(
         self,
         grouping_class,
         id_field,
         descending=True,
         limit=False,
-        for_user=None
+        for_user=None,
+        for_question=None
         ):
         query = \
             """
@@ -175,11 +180,13 @@ class VoteOptionCongruenceManager(models.Manager):
                   FROM
                     opinions_voteoptioncongruence as c,
                     opinions_answer as a,
+                    opinions_option as o,
                     votes_vote AS v
                   WHERE v.session_id=c.session_id
                     AND a.option_id=c.option_id
                     AND a.member_id=v.member_id
                     AND v.vote=c.vote
+                    AND o.id=a.option_id
                     %%s
                   GROUP BY %s
                   HAVING congruence_avg IS NOT NULL
@@ -189,30 +196,30 @@ class VoteOptionCongruenceManager(models.Manager):
             % (id_field, grouping_class._meta.pk.name, id_field, ('ASC', 'DESC'
                )[descending], ('', 'LIMIT %i' % (int(limit), ))[bool(limit)])
         
-        for_user_query = ''
-        query_args = tuple()
+        extra_where = ''
+        query_args = []
         if(for_user is not None and for_user.is_authenticated()):
-            for_user_query = "AND c.user_id=%s"
-            query_args = (for_user.id,)
+            query_args.append(for_user.id)
+            extra_where += "AND c.user_id=%s\n"
 
-        query = query % for_user_query
+        if(for_question is not None):
+            query_args.append(for_question.id)
+            extra_where += "AND o.question_id=%s\n"
+
+        query = query % extra_where
         return grouping_class.objects.raw(query, query_args)
 
-    @classmethod
-    def get_party_congruences(cls, **kwargs):
-        return cls.__get_average_congruences(Party, 'v.party', **kwargs)
+    def get_party_congruences(self, **kwargs):
+        return self.__get_average_congruences(Party, 'v.party', **kwargs)
 
-    @classmethod
-    def get_member_congruences(cls, **kwargs):
-        return cls.__get_average_congruences(Member, 'v.member_id', **kwargs)
+    def get_member_congruences(self, **kwargs):
+        return self.__get_average_congruences(Member, 'v.member_id', **kwargs)
 
-    @classmethod
-    def get_question_congruences(cls, **kwargs):
-        return cls.__get_average_congruences(Question, 'a.question_id')
+    def get_question_congruences(self, **kwargs):
+        return self.__get_average_congruences(Question, 'a.question_id')
 
-    @classmethod
-    def get_session_congruences(cls, **kwargs):
-        return cls.__get_average_congruences(Session, 'v.session_id')
+    def get_session_congruences(self, **kwargs):
+        return self.__get_average_congruences(Session, 'v.session_id')
 
 
 class VoteOptionCongruence(models.Model):
