@@ -840,8 +840,12 @@ def search_autocomplete(request):
     if full_word_cnt > 10:
         return HttpResponseBadRequest();
     if full_word_cnt == 0:
-        member_query = Member.objects.all()[:max_results]
-        keyword_query = Keyword.objects.all()[:max_results]
+        member_query = Member.objects.all().                    \
+                                order_by("name")[:max_results]
+        keyword_query = SessionKeyword.objects.all().           \
+                                order_by("keyword__name").      \
+                                values("keyword__name").        \
+                                distinct()[:max_results]
     else:
         member_q = Q()
         keyword_q = Q()
@@ -872,12 +876,11 @@ def search_autocomplete(request):
         result_list.append((x.name, unicode(tn), "/search/?query=" + x.name))
 
     for x in keyword_query:
-        if (len(result_list) == max_results):
-            break
         result_list.append((x['keyword__name'], "",
                             "/search/keyword/?query=" + x['keyword__name']))
 
     result_list.sort(key=lambda n:n[0])
+    result_list = result_list[:max_results]
 
     json = simplejson.dumps(result_list)
     response = HttpResponse(json, mimetype="text/javascript")
