@@ -1,0 +1,58 @@
+[
+    {
+        "pk": 13685,
+        "model": "votes.sessionkeyword",
+        "fields": {
+            "session": 1650,
+            "keyword": 2871
+        }
+    },
+    {
+        "pk": 8888,
+        "model": "votes.sessionkeyword",
+        "fields": {
+            "session": 3471,
+            "keyword": 2874
+        }
+    },
+    {
+        "pk": 13043,
+        "model": "votes.sessionkeyword",
+        "fields": {
+            "session": 2154,
+            "keyword": 2875
+        }
+    },
+    {
+        "pk": 13686,
+        "model": "votes.sessionkeyword",
+        "fields": {
+            "session": 1650,
+            "keyword": 2876
+        }
+    },
+    {
+        "pk": 16973,
+        "model": "votes.sessionkeyword",
+        "fields": {
+            "session": 625,
+            "keyword": 2878
+        }
+    },
+    {
+        "pk": 16988,
+        "model": "votes.sessionkeyword",
+        "fields": {
+            "session": 626,
+            "keyword": 2878
+        }
+    },
+    {
+        "pk": 14437,
+        "model": "votes.sessionkeyword",
+        "fields": {
+            "session": 1442,
+            "keyword": 3074
+        }
+    }
+]

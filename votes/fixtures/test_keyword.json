@@ -1,0 +1,86 @@
+[
+    {
+        "pk": 2870,
+        "model": "votes.keyword",
+        "fields": {
+            "name": "Aalto-yliopisto"
+        }
+    },
+    {
+        "pk": 2871,
+        "model": "votes.keyword",
+        "fields": {
+            "name": "Aasia"
+        }
+    },
+    {
+        "pk": 2872,
+        "model": "votes.keyword",
+        "fields": {
+            "name": "Abortti"
+        }
+    },
+    {
+        "pk": 2873,
+        "model": "votes.keyword",
+        "fields": {
+            "name": "Raskaus"
+        }
+    },
+    {
+        "pk": 2874,
+        "model": "votes.keyword",
+        "fields": {
+            "name": "Adoptio"
+        }
+    },
+    {
+        "pk": 2875,
+        "model": "votes.keyword",
+        "fields": {
+            "name": "Afganistan"
+        }
+    },
+    {
+        "pk": 2876,
+        "model": "votes.keyword",
+        "fields": {
+            "name": "Afrikka"
+        }
+    },
+    {
+        "pk": 2877,
+        "model": "votes.keyword",
+        "fields": {
+            "name": "Agenda 2000"
+        }
+    },
+    {
+        "pk": 2878,
+        "model": "votes.keyword",
+        "fields": {
+            "name": "Ahvenanmaa"
+        }
+    },
+    {
+        "pk": 2879,
+        "model": "votes.keyword",
+        "fields": {
+            "name": "Aids"
+        }
+    },
+    {
+        "pk": 2880,
+        "model": "votes.keyword",
+        "fields": {
+            "name": "Tartuntataudit"
+        }
+    },
+    {
+        "pk": 3074,
+        "model": "votes.keyword",
+        "fields": {
+            "name": "Asumisen rahoitus- ja kehitt\u00e4miskeskus"
+        }
+    }
+]
