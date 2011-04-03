@@ -48,6 +48,11 @@ CREATE DATABASE kamu CHARACTER SET utf8 COLLATE utf8_swedish_ci;
 CREATE USER 'kamu'@'localhost' IDENTIFIED BY 'kamu';
 GRANT ALL PRIVILEGES ON kamu.* TO 'kamu'@'localhost';
 
+If you are planning to run the integrated unit tests you also need the
+following:
+
+GRANT ALL PRIVILEGES ON `test_kamu`.* TO 'kamu'@'localhost';
+
 If your existing database is in latin1, you can convert to utf-8
 like this:
 
