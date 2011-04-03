@@ -853,7 +853,7 @@ def search_autocomplete(request):
         for w in words[:full_word_cnt]:
             re = r'(^| )' + w + r'( |$)'
             member_q &= Q(name__iregex=re)
-            keyword_q &= Q(keyword__iregex=re)
+            keyword_q &= Q(keyword__name__iregex=re)
         if not trailing_space:
             re = r'(^| )' + words[-1]
             member_q &= Q(name__iregex=re)
