@@ -20,6 +20,10 @@ DATABASE_PASSWORD = 'kamu'
 DATABASE_HOST = ''
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
+if 'KAMU_FAST_TEST' in os.environ:
+    DATABASE_ENGINE = 'sqlite3'
+    SOUTH_TESTS_MIGRATE = False
+
 DJAPIAN_DATABASE_PATH = os.path.dirname(__file__) + '/djapian/'
 
 # Local time zone for this installation. Choices can be found here:

@@ -48,11 +48,6 @@ CREATE DATABASE kamu CHARACTER SET utf8 COLLATE utf8_swedish_ci;
 CREATE USER 'kamu'@'localhost' IDENTIFIED BY 'kamu';
 GRANT ALL PRIVILEGES ON kamu.* TO 'kamu'@'localhost';
 
-If you are planning to run the integrated unit tests you also need the
-following:
-
-GRANT ALL PRIVILEGES ON `test_kamu`.* TO 'kamu'@'localhost';
-
 If your existing database is in latin1, you can convert to utf-8
 like this:
 
@@ -64,3 +59,32 @@ for a in $(cat /tmp/tables) ; do
 	ALT="alter table $a convert to character set utf8 collate utf8_swedish_ci"
 	echo $ALT | ./manage.py dbshell
 done
+
+Unit testing
+============
+
+To run the integrated unit tests make sure the access rights are set up
+for the test framework:
+
+GRANT ALL PRIVILEGES ON `test_kamu`.* TO 'kamu'@'localhost';
+
+Then just run
+
+./manage.py test votes
+
+or specify any of the other kamu applications instead of 'votes'.
+
+If it's not important to run the tests on the mysql backend, you can
+speed up the tests considerably by setting up fast testing mode. This
+will use the sqlite3 backend keeping the DB in memory and use the faster
+syncdb method instead of south migration.
+
+First make sure that the sqlite3 test tables are synchronized to the
+main database (this is set up automatically in normal testing mode):
+
+KAMU_FAST_TEST=1 ./manage.py migrate votes
+
+Then run the tests as usual:
+
+KAMU_FAST_TEST=1 ./manage.py test votes
+
