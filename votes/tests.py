@@ -11,7 +11,7 @@ class AutocompleteSearchTest(TestCase):
             u'thumbnail_width'  : 30,
             u'thumbnail_height' : 30
     }
-    autocomplete_url = reverse('votes.views.search_autocomplete')
+    autocomplete_url = reverse('votes.views.autocomplete_search')
     qpar_str = u'?query='
     search_kw_url = reverse('votes.views.search_by_keyword') + qpar_str
     search_mb_url = reverse('votes.views.search') + qpar_str

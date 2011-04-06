@@ -823,7 +823,7 @@ def get_req_param_int(request, param):
 def val_in_range(val, limits):
     return val >= limits[0] and val <= limits[1]
 
-def search_autocomplete(request):
+def autocomplete_search(request):
     name = request.GET.get('name', '')
     max_results = get_req_param_int(request, 'max_results')
     if not val_in_range(max_results, (1, 100)):
@@ -887,6 +887,33 @@ def search_autocomplete(request):
 
     return response
 
+def autocomplete_county(request):
+    name = request.GET.get('name', '')
+    try:
+        max_results = int(request.GET.get('max_results', 0))
+    except ValueError:
+        max_results = 0
+    if max_results <= 0:
+        return HttpResponseBadRequest()
+
+    name = name.rstrip()
+    if not name:
+        county_list = County.objects.all()
+    else:
+        county_list = County.objects.filter(name__istartswith=name)
+
+    county_list = county_list.order_by('name')[:max_results].   \
+                              values_list('name', flat=True)
+    county_list = [(x,) for x in county_list]
+
+    json = simplejson.dumps(county_list)
+
+    response = HttpResponse(json, mimetype="text/javascript")
+    response['Cache-Control'] = "max-age=1000"
+    response['Expires'] = http_date(time.time() + 1000)
+
+    return response
+
 def mp_hall_of_fame(max_results):
     thumbnail_width = 70
     thumbnail_height = 70
@@ -941,32 +968,6 @@ def search(request):
     return render_to_response('search.html', {'result_page': result_page},
                               context_instance = RequestContext(request))
 
-def search_county(request):
-    name = request.GET.get('name', '')
-    try:
-        max_results = int(request.GET.get('max_results', 0))
-    except ValueError:
-        max_results = 0
-    if max_results <= 0:
-        return HttpResponseBadRequest()
-
-    name = name.rstrip()
-    if name == '':
-        county_list = County.objects.all()
-    else:
-        county_list = County.objects.filter(name__istartswith=name)
-
-    county_list = county_list.order_by('name')[:max_results].   \
-                              values_list('name', flat=True)
-    county_list = [(x,) for x in county_list]
-
-    json = simplejson.dumps(county_list)
-
-    response = HttpResponse(json, mimetype="text/javascript")
-    response['Cache-Control'] = "max-age=1000"
-    response['Expires'] = http_date(time.time() + 1000)
-
-    return response
 
 def about(request, section):
     args = {'active_page': 'info', 'section': section}

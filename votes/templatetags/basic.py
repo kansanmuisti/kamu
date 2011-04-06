@@ -5,8 +5,6 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
 
-COUNTY_SEARCH_VIEW="votes.views.search_county"
-
 def get_query_string(p, new_params=None, remove=None):
     """
     Add and remove query parameters. From `django.contrib.admin`.
@@ -124,7 +122,7 @@ def generate_option_list(context, option):
         list_type = 'link'
     elif option == 'county':
         list_type = 'combobox'
-        source_url = reverse(COUNTY_SEARCH_VIEW)
+        source_url = reverse("votes.views.autocomplete_county")
 
     return {'options': opt_list, 'type': list_type, 'name': option,
             'source_url': source_url}

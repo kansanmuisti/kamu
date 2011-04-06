@@ -100,7 +100,8 @@
             <script>
                 $("[name=query]").
                     combobox({
-                        source_url  : "{% url votes.views.search_autocomplete %}",
+                        source_url  :
+                                   "{% url votes.views.autocomplete_search %}",
                         any_text    : true,
                         button      : false,
                         thumbnail   : true,
