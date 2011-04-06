@@ -1,5 +1,6 @@
 # Django settings for kamu project.
 import os
+import sys
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -19,10 +20,6 @@ DATABASE_USER = 'kamu'
 DATABASE_PASSWORD = 'kamu'
 DATABASE_HOST = ''
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
-
-if 'KAMU_FAST_TEST' in os.environ:
-    DATABASE_ENGINE = 'sqlite3'
-    SOUTH_TESTS_MIGRATE = False
 
 DJAPIAN_DATABASE_PATH = os.path.dirname(__file__) + '/djapian/'
 
@@ -165,7 +162,14 @@ FACEBOOK_APP_SECRET = "Set this in settings_local"
 # Optional
 FACEBOOK_DOMAIN = None
 
+FAST_TEST = False
+
 try:
     from settings_local import *
 except ImportError:
     pass
+
+if FAST_TEST and 'test' in sys.argv:
+    DATABASE_NAME = 'kamu.db'
+    DATABASE_ENGINE = 'sqlite3'
+    SOUTH_TESTS_MIGRATE = False

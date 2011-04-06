@@ -79,12 +79,19 @@ speed up the tests considerably by setting up fast testing mode. This
 will use the sqlite3 backend keeping the DB in memory and use the faster
 syncdb method instead of south migration.
 
-First make sure that the sqlite3 test tables are synchronized to the
-main database (this is set up automatically in normal testing mode):
+Add to settings_local.py:
 
-KAMU_FAST_TEST=1 ./manage.py migrate votes
+FAST_TEST = True
 
-Then run the tests as usual:
+Create an sqlite3 database and bring its tables synchronized to the
+django models. The test framework will clone and populate this database
+during test execution:
 
-KAMU_FAST_TEST=1 ./manage.py test votes
+./manage.py syncdb
+./manage.py migrate votes
+
+optionally migrate also all other kamu applications besides 'votes' that
+you want to test.
+
+Then run the tests normally as described above.
 
