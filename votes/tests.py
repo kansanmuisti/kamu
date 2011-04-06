@@ -6,25 +6,20 @@ import json
 
 class AutocompleteSearchTest(TestCase):
     fixtures = ['test_keyword', 'test_sessionkeyword', 'test_member']
-    req_params = {
-            u'max_results'      : 6,
-            u'thumbnail_width'  : 30,
-            u'thumbnail_height' : 30
-    }
-    autocomplete_url = reverse('votes.views.autocomplete_search')
-    qpar_str = u'?query='
-    search_kw_url = reverse('votes.views.search_by_keyword') + qpar_str
-    search_mb_url = reverse('votes.views.search') + qpar_str
 
     def setUp(self):
+        qpar_str = u'?query='
+        search_kw_url = reverse('votes.views.search_by_keyword') + qpar_str
+        search_mb_url = reverse('votes.views.search') + qpar_str
+
         def query_res(name, exp_url):
             return { 'name' : name, 'url' : exp_url + name }
 
         def kw_res(name):
-            return query_res(name, self.search_kw_url)
+            return query_res(name, search_kw_url)
 
         def mb_res(name):
-            return query_res(name, self.search_mb_url)
+            return query_res(name, search_mb_url)
 
         def query_item(term, exp_url, exp_names):
             if type(exp_names) is not list:
@@ -36,10 +31,10 @@ class AutocompleteSearchTest(TestCase):
             }
 
         def kw_query(term, exp_names):
-            return query_item(term, self.search_kw_url, exp_names)
+            return query_item(term, search_kw_url, exp_names)
 
         def mb_query(term, exp_names):
-            return query_item(term, self.search_mb_url, exp_names)
+            return query_item(term, search_mb_url, exp_names)
 
         def mixed_query(term, exp_results):
             return {
@@ -90,21 +85,27 @@ class AutocompleteSearchTest(TestCase):
         return [{'name': x[0], 'url' : x[2]} for x in dr]
 
     def run_query(self, term, exp_res):
-        rp = self.req_params.copy()
-        rp[u'name'] = term
-        mymsg = 'query=' + term + ' expected=' + unicode(exp_res)
+        req_params = {
+                u'name'             : term,
+                u'max_results'      : 6,
+                u'thumbnail_width'  : 30,
+                u'thumbnail_height' : 30,
+        }
+        autocomplete_url = reverse('votes.views.autocomplete_search')
+
+        err_msg = 'query=' + term + ' expected=' + unicode(exp_res)
         try:
-            response = self.client.get(self.autocomplete_url, rp)
+            response = self.client.get(autocomplete_url, req_params)
         except:
-            print mymsg
+            print err_msg
             raise           # Re-raise the exception we're handling
 
-        mymsg_raw = u'(resp_cont=' + response.content + u')'
+        err_msg_raw = u'(resp_cont=' + response.content + u')'
         self.assertEqual(response.status_code, 200,
-                         msg=mymsg + ' ' + mymsg_raw)
+                         msg=err_msg + ' ' + err_msg_raw)
         decoded_res = self.decode_res(response.content)
-        mymsg = mymsg + ' got=' + unicode(decoded_res) + ' ' + mymsg_raw
-        self.assertEqual(decoded_res, exp_res, msg=mymsg)
+        err_msg = err_msg + ' got=' + unicode(decoded_res) + ' ' + err_msg_raw
+        self.assertEqual(decoded_res, exp_res, msg=err_msg)
 
     def test_queries(self):
         for q in self.queries:
