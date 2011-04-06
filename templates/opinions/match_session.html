@@ -1,0 +1,22 @@
+{% load i18n %}
+<form action="{% url opinions.views.match_session %}" method="post">
+{% if not question %}
+<select name="question">
+{% for src in src_list %}
+  <optgroup label="{{ src.name }}">
+  {% for q in src.question_set.all %}
+    <option label="{{ src.url_name }}/{{ q.order }}" value="{{ src.url_name }}/{{ q.order }}">{{ q.text|truncatewords:7 }}</option>
+  {% endfor %}
+  </optgroup>
+{% endfor %}
+</select>
+{% else %}
+<input type="hidden" name="question" value="{{ src.url_name }}/{{ question.order }}" />
+{% if delete %}
+<input type="hidden" name="delete" value="1" />
+{% endif %}
+{% endif %}
+<input type="hidden" name="session" value="{{ session }}" />
+<input type="submit" name="match" value="{% trans "Match" %}" />
+</form>
+

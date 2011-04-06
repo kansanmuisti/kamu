@@ -1,4 +1,4 @@
-{% extends "opinion_base.html" %}
+{% extends "opinions/opinion_base.html" %}
 {% load i18n thumbnail %}
 {% block title %}{% trans "Question" %}{{question.name}}{% endblock %}
 
@@ -49,18 +49,10 @@
     </table>
   </div>
   {% endfor %}
-  <input type="submit"
+  <input style="margin-left: 1em" type="submit"
     {% if not user.is_authenticated %}
     disabled="disabled"
-    {% endif %} />
+    {% endif %} value="{% trans 'Submit scores' %}"/>
 </form>
-
-<form style="margin-top: 16px;" action="" method="post">
-  <label>{% trans "Add a new vote" %}</label><input type="text" name="custom_vote" />
-  <input type="submit" 
-{% if not user.is_authenticated %}
-  disabled="disabled"
-{% endif %} />
-</form>
-
 {% endblock %}
+

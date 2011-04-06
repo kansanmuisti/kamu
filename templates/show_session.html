@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n thumbnail tagging_tags basic comments %}
+{% load i18n thumbnail tagging_tags basic comments opinions %}
 {% block title %}{% trans "Votes" %} - {{ psession.name }}/{{ session.number }}{% endblock %}
 {% block head %}
 <meta property="og:title" content="{% trans "Parliament vote" %} {{ session }}" />
@@ -83,6 +83,13 @@
 {% with score_table as table %}
 {% include "_table.html" %}
 {% endwith %}
+  </div>
+{% endif %}
+
+{% if perms.opinions.change_questionsessionrelevance %}
+  <div class="h2_section">
+  <p>{% trans "Match to Opinions:" %}</p>
+  {% match_session session %}
   </div>
 {% endif %}
 
