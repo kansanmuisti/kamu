@@ -1,0 +1,114 @@
+[
+    {
+        "pk": 6298,
+        "model": "votes.county",
+        "fields": {
+            "name": "Akaa",
+            "district": "Pirkanmaan"
+        }
+    },
+    {
+        "pk": 6299,
+        "model": "votes.county",
+        "fields": {
+            "name": "Alaj\u00e4rvi",
+            "district": "Vaasan"
+        }
+    },
+    {
+        "pk": 6300,
+        "model": "votes.county",
+        "fields": {
+            "name": "Alavieska",
+            "district": "Oulun"
+        }
+    },
+    {
+        "pk": 6301,
+        "model": "votes.county",
+        "fields": {
+            "name": "Alavus",
+            "district": "Vaasan"
+        }
+    },
+    {
+        "pk": 6302,
+        "model": "votes.county",
+        "fields": {
+            "name": "Asikkala",
+            "district": "H\u00e4meen"
+        }
+    },
+    {
+        "pk": 6303,
+        "model": "votes.county",
+        "fields": {
+            "name": "Askola",
+            "district": "Uudenmaan"
+        }
+    },
+    {
+        "pk": 6304,
+        "model": "votes.county",
+        "fields": {
+            "name": "Aura",
+            "district": "Varsinais-Suomen"
+        }
+    },
+    {
+        "pk": 6305,
+        "model": "votes.county",
+        "fields": {
+            "name": "Br\u00e4nd\u00f6",
+            "district": "Ahvenanmaan maakunnan"
+        }
+    },
+    {
+        "pk": 6306,
+        "model": "votes.county",
+        "fields": {
+            "name": "Ecker\u00f6",
+            "district": "Ahvenanmaan maakunnan"
+        }
+    },
+    {
+        "pk": 6307,
+        "model": "votes.county",
+        "fields": {
+            "name": "Enonkoski",
+            "district": "Etel\u00e4-Savon"
+        }
+    },
+    {
+        "pk": 6308,
+        "model": "votes.county",
+        "fields": {
+            "name": "Enonteki\u00f6",
+            "district": "Lapin"
+        }
+    },
+    {
+        "pk": 6309,
+        "model": "votes.county",
+        "fields": {
+            "name": "Espoo",
+            "district": "Uudenmaan"
+        }
+    },
+    {
+        "pk": 6310,
+        "model": "votes.county",
+        "fields": {
+            "name": "Eura",
+            "district": "Satakunnan"
+        }
+    },
+    {
+        "pk": 6503,
+        "model": "votes.county",
+        "fields": {
+            "name": "Peders\u00f6ren kunta",
+            "district": "Vaasan"
+        }
+    }
+]

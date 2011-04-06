@@ -111,3 +111,64 @@ class AutocompleteSearchTest(TestCase):
         for q in self.queries:
             self.run_query(q['term'], q['exp_res'])
 
+
+class AutocompleteCountyTest(TestCase):
+    fixtures = ['test_county']
+
+    def setUp(self):
+        def c_query(term, exp_counties):
+            if type(exp_counties) is not list:
+                exp_counties = [exp_counties]
+
+            return {
+                'term'    : term,
+                'exp_res' : [[c] for c in exp_counties]
+            }
+
+        self.queries = [
+                # member queries returning a single result
+                c_query(u'Akaa',               u'Akaa'),
+                c_query(u'alajärvi',           u'Alajärvi'),
+                c_query(u'alajärvi  ',         u'Alajärvi'),
+                c_query(u'Pedersören ',        u'Pedersören kunta'),
+
+                c_query(u'As',                 [u'Asikkala',
+                                                u'Askola']),
+
+                c_query(u'',                   [u'Akaa',
+                                                u'Alajärvi',
+                                                u'Alavieska',
+                                                u'Alavus',
+                                                u'Asikkala',
+                                                u'Askola']),
+        ]
+
+    def decode_res(self, res):
+        return json.loads(res)
+
+    def run_query(self, term, exp_res):
+        req_params = {
+                u'name'             : term,
+                u'max_results'      : 6,
+                u'thumbnail_width'  : 30,
+                u'thumbnail_height' : 30,
+        }
+        autocomplete_url = reverse('votes.views.autocomplete_county')
+
+        err_msg = 'query="' + term + '" expected="' + unicode(exp_res) + '"'
+        try:
+            response = self.client.get(autocomplete_url, req_params)
+        except:
+            print err_msg
+            raise           # Re-raise the exception we're handling
+
+        err_msg_raw = u'(resp_cont="' + response.content + u'")'
+        self.assertEqual(response.status_code, 200,
+                         msg=err_msg + ' ' + err_msg_raw)
+        decoded_res = self.decode_res(response.content)
+        err_msg = err_msg + ' got=' + unicode(decoded_res) + ' ' + err_msg_raw
+        self.assertEqual(decoded_res, exp_res, msg=err_msg)
+
+    def test_queries(self):
+        for q in self.queries:
+            self.run_query(q['term'], q['exp_res'])
