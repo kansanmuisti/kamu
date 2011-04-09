@@ -5,7 +5,7 @@ import os
 import settings
 
 IMAGE_PATHS = ('images/members', 'images/orgs', 'images/parties',
-               'images/users', 'images/gen')
+               'images/users', 'gen')
 
 all_paths = IMAGE_PATHS
 all_paths += (settings.MEDIA_TMP_DIR, )
