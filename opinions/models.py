@@ -120,7 +120,7 @@ class VoteOptionCongruenceManager(models.Manager):
 
         if (for_question is not None):
             args.append(for_question.id)
-            extra_where += "AND o.id=%s\n"
+            extra_where += "AND o.question_id=%s\n"
 
         query = \
             """

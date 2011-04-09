@@ -28,7 +28,8 @@ def promise_statistics_sidebar(context, user, question=None):
         member = Member.objects.get(pk=vote.object_id)
         member.congruence = VoteOptionCongruence.objects.get_member_congruence(
                                                             member,
-                                                            for_user=user)
+                                                            for_user=user,
+                                                            for_question=question)
         if (member.congruence is None):
             continue
         members.append(member)
