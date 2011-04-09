@@ -5,6 +5,7 @@ import sys
 import os
 import codecs
 import csv
+import collections
 from optparse import OptionParser
 
 from django.core.management import setup_environ
@@ -27,6 +28,7 @@ from django.db import connection, transaction
 from django import db
 
 from votes.models import PlenarySession, Session, Vote, Term, SessionKeyword
+from django.contrib.auth.models import User
 
 
 def dump_votes(output):
@@ -61,23 +63,49 @@ def dump_keywords(output):
             s2 = unicode(kw.keyword.name).encode('utf8')
             writer.writerow([s1, s2])
 
-from opinions.models import VoteOptionCongruence
+from opinions.models import QuestionSource, Question, Option, \
+        VoteOptionCongruence
 
 def dump_congruence(output):
     voc_list = VoteOptionCongruence.objects
     voc_list = voc_list.order_by('option__question__source__url_name',
                                  'option__question__order')
-    f = open(output, mode="w")
+    f = open(output, mode='w')
     writer = csv.writer(f, delimiter=',', quotechar='"')
     for voc in voc_list:
         print voc
         s1 = str(voc.option.question.source.url_name)
         s2 = str(voc.option.question.order)
-        s3 = str(voc.session)
-        s4 = str(voc.vote)
-        s5 = "%f" % voc.congruence
-        s6 = str(voc.user)
-        writer.writerow([s1, s2, s3, s4, s5, s6])
+        s3 = str(voc.option.order)
+        s4 = str(voc.session)
+        s5 = str(voc.vote)
+        s6 = "%f" % voc.congruence
+        s7 = str(voc.user)
+        writer.writerow([s1, s2, s3, s4, s5, s6, s7])
+
+CongEntry = collections.namedtuple('CongEntry', 'src_name, q_idx, o_idx, sess, vote, cong, user')
+
+def import_congruence(input):
+    f = open(input, mode='r')
+    reader = csv.reader(f, delimiter=',', quotechar='"')
+    for row in reader:
+        row = CongEntry(*row)
+        src = QuestionSource.objects.get(url_name=row.src_name)
+        que = Question.objects.get(source=src, order=row.q_idx)
+        opt = Option.objects.get(question=que, order=row.o_idx)
+        sess = Session.objects.by_name(row.sess)
+        try:
+            user = User.objects.get(username=row.user)
+        except User.DoesNotExist:
+            user = None
+        try:
+            voc = VoteOptionCongruence.objects.get(option=opt, session=sess,
+                                                   vote=row.vote, user=user)
+        except VoteOptionCongruence.DoesNotExist:
+            voc = VoteOptionCongruence(option=opt, session=sess, vote=row.vote,
+                                       user=user)
+        voc.congruence = row.cong
+        voc.save()
 
 
 parser = OptionParser()
@@ -87,6 +115,8 @@ parser.add_option('-k', '--keywords', action='store_true', dest='keywords',
                   help='dump session keywords database')
 parser.add_option('-c', '--congruence', action='store_true', dest='congruence',
                   help='dump congruence database')
+parser.add_option('-i', '--input', action='store', type='string',
+                  dest='input')
 parser.add_option('-o', '--output', action='store', type='string',
                   dest='output')
 
@@ -99,4 +129,7 @@ if opts.keywords:
     dump_keywords(opts.output)
 
 if opts.congruence:
-    dump_congruence(opts.output)
+    if opts.input:
+        import_congruence(opts.input)
+    else:
+        dump_congruence(opts.output)

@@ -101,14 +101,7 @@ class Answer(models.Model):
         return u'%s %s' % (self.member, self.option)
 
 class VoteOptionCongruenceManager(models.Manager):
-
-    def get_congruence(
-        self,
-        option,
-        session,
-        vote='Y',
-        ):
-
+    def get_congruence(self, option, session, vote='Y'):
         congruence = VoteOptionCongruence.objects.filter(
                                 option=option, session=session,
                                 vote=vote)
@@ -121,11 +114,11 @@ class VoteOptionCongruenceManager(models.Manager):
                                  for_user=None, for_question=None):
         args = []
         extra_where = ""
-        if(for_user is not None and for_user.is_authenticated()):
+        if (for_user is not None and for_user.is_authenticated()):
             args.append(for_user.id)
             extra_where += "AND c.user_id=%s\n"
 
-        if(for_question is not None):
+        if (for_question is not None):
             args.append(for_question.id)
             extra_where += "AND o.id=%s\n"
 
@@ -164,15 +157,9 @@ class VoteOptionCongruenceManager(models.Manager):
     def get_question_congruence(self, question, **kargs):
         return self.__get_average_congruence(question, 'a.question_id', **kargs)
 
-    def __get_average_congruences(
-        self,
-        grouping_class,
-        id_field,
-        descending=True,
-        limit=False,
-        for_user=None,
-        for_question=None
-        ):
+    def __get_average_congruences(self, grouping_class, id_field,
+                                  descending=True, limit=False, for_user=None,
+                                  for_question=None):
         query = \
             """
                 SELECT %s AS %s,
@@ -195,14 +182,14 @@ class VoteOptionCongruenceManager(models.Manager):
                   """ \
             % (id_field, grouping_class._meta.pk.name, id_field, ('ASC', 'DESC'
                )[descending], ('', 'LIMIT %i' % (int(limit), ))[bool(limit)])
-        
+
         extra_where = ''
         query_args = []
-        if(for_user is not None and for_user.is_authenticated()):
+        if (for_user is not None and for_user.is_authenticated()):
             query_args.append(for_user.id)
             extra_where += "AND c.user_id=%s\n"
 
-        if(for_question is not None):
+        if for_question is not None:
             query_args.append(for_question.id)
             extra_where += "AND o.question_id=%s\n"
 
