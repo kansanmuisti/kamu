@@ -128,6 +128,11 @@ class AutocompleteSearchTest(AutocompleteTestCase):
         for q in self.queries:
             self.run_query(q['term'], q['exp_res'])
 
+        # queries resulting in an HTTP bad-request response
+        self.run_query(u'1 2 3 4 5 6 7 8 9 10 11', None, exp_code=400)
+        self.run_query(u'1', None, exp_code=400, req_opts={'max_results':101})
+        self.run_query(u'1', None, exp_code=400,
+                       req_opts={'thumbnail_width':81})
 
 class AutocompleteCountyTest(AutocompleteTestCase):
     fixtures = ['test_county']
@@ -169,3 +174,7 @@ class AutocompleteCountyTest(AutocompleteTestCase):
     def test_queries(self):
         for q in self.queries:
             self.run_query(q['term'], q['exp_res'])
+
+        # queries resulting in an HTTP bad-request response
+        self.run_query(u'1 2 3 4 5 6 7 8 9 10 11', None, exp_code=400)
+        self.run_query(u'1', None, exp_code=400, req_opts={'max_results':501})
