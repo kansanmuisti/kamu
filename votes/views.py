@@ -48,9 +48,6 @@ TERM_KEY = 'term'
 DISTRICT_KEY = 'district'
 COUNTY_KEY = 'county'
 
-THUMBNAIL_WIDTH_LIMITS = (24,80)
-THUMBNAIL_HEIGHT_LIMITS = (24,80)
-
 term_list = list(Term.objects.visible())
 
 def find_term(request):
@@ -853,62 +850,60 @@ def get_req_param_int(request, param):
         val = 0
     return val
 
-def val_in_range(val, limits):
-    return val >= limits[0] and val <= limits[1]
+def word_search(data_set, key_name, words, trailing_space):
+    full_word_cnt = len(words)
+
+    if full_word_cnt > 10:
+        return None
+    if full_word_cnt == 0:
+        return data_set.objects.all().order_by(key_name)
+
+    query = Q()
+
+    if not trailing_space:
+        full_word_cnt -= 1
+
+    for w in words[:full_word_cnt]:
+        re = r'(^| )' + w + r'( |$)'
+        query &= Q(**{key_name + '__iregex':re})
+
+    if not trailing_space:
+        re = r'(^| )' + words[-1]
+        query &= Q(**{key_name + '__iregex':re})
+
+    return data_set.objects.filter(query).order_by(key_name)
 
 def autocomplete_search(request):
     name = request.GET.get('name', '')
     max_results = get_req_param_int(request, 'max_results')
-    if not val_in_range(max_results, (1, 100)):
-        return HttpResponseBadRequest();
+    if not 1 <= max_results <= 100:
+        return HttpResponseBadRequest()
     thumbnail_width = get_req_param_int(request, 'thumbnail_width')
     thumbnail_height = get_req_param_int(request, 'thumbnail_height')
     # TODO: is this enough to defeat any DoS attempts?
-    if not val_in_range(thumbnail_width, THUMBNAIL_WIDTH_LIMITS) or     \
-            not val_in_range(thumbnail_height, THUMBNAIL_HEIGHT_LIMITS):
-       return HttpResponseBadRequest();
+    if not 24 <= thumbnail_width <= 80 or not 24 <= thumbnail_height <= 80:
+       return HttpResponseBadRequest()
 
     words = name.split()
-    full_word_cnt = len(words)
-    if full_word_cnt > 10:
-        return HttpResponseBadRequest();
-    if full_word_cnt == 0:
-        member_query = Member.objects.all().                    \
-                                order_by("name")[:max_results]
-        keyword_query = SessionKeyword.objects.all().           \
-                                order_by("keyword__name").      \
-                                values("keyword__name").        \
-                                distinct()[:max_results]
-    else:
-        member_q = Q()
-        keyword_q = Q()
+    trailing_space = name and name[-1] == ' '
+    members = word_search(Member, 'name', words, trailing_space)
+    if members is None:
+        return HttpResponseBadRequest()
 
-        trailing_space = name[-1] == ' '
-        if not trailing_space:
-            full_word_cnt -= 1
+    members = members[:max_results]
 
-        for w in words[:full_word_cnt]:
-            re = r'(^| )' + w + r'( |$)'
-            member_q &= Q(name__iregex=re)
-            keyword_q &= Q(keyword__name__iregex=re)
-        if not trailing_space:
-            re = r'(^| )' + words[-1]
-            member_q &= Q(name__iregex=re)
-            keyword_q &= Q(keyword__name__iregex=re)
-
-        member_query = Member.objects.filter(member_q).            \
-                                order_by("name")[:max_results]
-        keyword_query = SessionKeyword.objects.filter(keyword_q).  \
-                                order_by("keyword__name").         \
-                                values("keyword__name").           \
-                                distinct()[:max_results]
+    keywords = word_search(SessionKeyword, 'keyword__name', words,
+                           trailing_space)
+    if keywords is None:
+        return HttpResponseBadRequest()
+    keywords = keywords.values('keyword__name').distinct()[:max_results]
 
     result_list = []
-    for x in member_query:
+    for x in members:
         tn = DjangoThumbnail(x.photo, (thumbnail_width, thumbnail_height))
         result_list.append((x.name, unicode(tn), "/search/?query=" + x.name))
 
-    for x in keyword_query:
+    for x in keywords:
         result_list.append((x['keyword__name'], "",
                             "/search/keyword/?query=" + x['keyword__name']))
 
@@ -922,23 +917,17 @@ def autocomplete_search(request):
 
 def autocomplete_county(request):
     name = request.GET.get('name', '')
-    try:
-        max_results = int(request.GET.get('max_results', 0))
-    except ValueError:
-        max_results = 0
-    if max_results <= 0:
+    max_results = get_req_param_int(request, 'max_results')
+    if not 4 <= max_results <= 500:
         return HttpResponseBadRequest()
 
-    name = name.rstrip()
-    if not name:
-        county_list = County.objects.all()
-    else:
-        county_list = County.objects.filter(name__istartswith=name)
+    trailing_space = name and name[-1] == ' '
+    counties = word_search(County, 'name', name.split(), trailing_space)
+    if counties is None:
+        return HttpResponseBadRequest()
+    counties = counties[:max_results]
 
-    county_list = county_list.order_by('name')[:max_results].   \
-                              values_list('name', flat=True)
-    county_list = [(x,) for x in county_list]
-
+    county_list = [(x.name,) for x in counties]
     json = simplejson.dumps(county_list)
 
     response = HttpResponse(json, mimetype="text/javascript")
