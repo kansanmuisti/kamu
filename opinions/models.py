@@ -180,8 +180,10 @@ class VoteOptionCongruenceManager(models.Manager):
                   ORDER BY congruence_avg %s
                   %s
                   """ \
-            % (id_field, grouping_class._meta.pk.name, id_field, ('ASC', 'DESC'
-               )[descending], ('', 'LIMIT %i' % (int(limit), ))[bool(limit)])
+            % (id_field, grouping_class._meta.pk.name,
+               id_field,
+               ('ASC', 'DESC')[descending],
+               ('', 'LIMIT %i' % (int(limit), ))[bool(limit)])
 
         extra_where = ''
         query_args = []
@@ -207,10 +209,33 @@ class VoteOptionCongruenceManager(models.Manager):
         return self.__get_average_congruences(Member, 'v.member_id', **kwargs)
 
     def get_question_congruences(self, **kwargs):
-        return self.__get_average_congruences(Question, 'a.question_id')
+        return self.__get_average_congruences(Question, 'a.question_id', **kwargs)
 
     def get_session_congruences(self, **kwargs):
-        return self.__get_average_congruences(Session, 'v.session_id')
+        return self.__get_average_congruences(Session, 'v.session_id', **kwargs)
+
+    def get_vote_congruences(self, for_member):
+        # This could maybe be done without SQL, but my brain
+        # doesn't work enough for that at the moment
+        query = \
+        """
+        SELECT
+          c.*
+        FROM
+          opinions_voteoptioncongruence AS c,
+          votes_vote AS v,
+          opinions_answer AS a
+        WHERE
+          c.session_id=v.session_id AND
+          c.vote=v.vote AND
+          v.member_id=a.member_id AND
+          a.option_id=c.option_id AND
+          v.member_id=%s AND
+          c.congruence <> 0
+        ORDER BY
+          c.option_id
+        """
+        return VoteOptionCongruence.objects.raw(query, (for_member.id,))
 
 
 class VoteOptionCongruence(models.Model):
