@@ -24,62 +24,65 @@ class AutocompleteSearchTest(TestCase):
         def mb_res(name):
             return query_res(name, search_mb_url)
 
-        def query_item(term, exp_url, exp_names):
+        def query_req(term, exp_url, exp_names):
             if type(exp_names) is not list:
                 exp_names = [exp_names]
 
             return {
                 'term'    : term,
-                'exp_res' : [query_res(n, exp_url) for n in exp_names]
+                'exp_res' : [query_res(n, exp_url) for n in exp_names],
             }
 
-        def kw_query(term, exp_names):
-            return query_item(term, search_kw_url, exp_names)
+        def kw_req(term, exp_names):
+            return query_req(term, search_kw_url, exp_names)
 
-        def mb_query(term, exp_names):
-            return query_item(term, search_mb_url, exp_names)
+        def mb_req(term, exp_names):
+            return query_req(term, search_mb_url, exp_names)
 
-        def mixed_query(term, exp_results):
+        def mix_req(term, exp_results):
             return {
                 'term'    : term,
-                'exp_res' : exp_results
+                'exp_res' : exp_results,
             }
 
         self.queries = [
                 # member queries returning a single result
-                mb_query(u'aalto',               u'Aaltonen Markus'),
-                mb_query(u'Markus ',             u'Aaltonen Markus'),
-                mb_query(u' Aaltonen   Markus ', u'Aaltonen Markus'),
-                mb_query(u'ala-nissilä',         [u'Ala-Nissilä Olavi']),
+                mb_req(u'aalto',               u'Aaltonen Markus'),
+                mb_req(u'Markus ',             u'Aaltonen Markus'),
+                mb_req(u' Aaltonen   Markus ', u'Aaltonen Markus'),
+                mb_req(u'ala-nissilä',         [u'Ala-Nissilä Olavi']),
 
                 # keyword queries returning a single result
-                kw_query(u'aasia',               u'Aasia'),
-                kw_query(u'Aasia ',              u'Aasia'),
-                kw_query(u' Aasia ',             u'Aasia'),
-                kw_query(u'ja rahoitus- kehittä',
+                kw_req(u'aasia',               u'Aasia'),
+                kw_req(u'Aasia ',              u'Aasia'),
+                kw_req(u' Aasia ',             u'Aasia'),
+                kw_req(u'ja rahoitus- kehittä',
                                 u'Asumisen rahoitus- ja kehittämiskeskus'),
 
                 # member queries returning multiple results
-                mb_query(u'aho',                 [u'Aho Esko',
+                mb_req(u'aho',                 [u'Aho Esko',
                                                   u'Aho Hannu',
                                                   u'Ahonen Esko']),
 
                 # keyword queries returning multiple results
-                kw_query('af',                   [u'Afganistan',
+                kw_req('af',                   [u'Afganistan',
                                                   u'Afrikka']),
 
                 # mixed queries returning both members and keywords
-                mixed_query(u'aa',               [mb_res(u'Aaltonen Markus'),
+                mix_req(u'aa',               [mb_res(u'Aaltonen Markus'),
                                                   kw_res(u'Aasia')]),
 
                 # mixed queries returning all members and keywords limited
                 # by max_results
-                mixed_query(u'',                 [mb_res(u'Aaltonen Markus'),
+                mix_req(u'',                 [mb_res(u'Aaltonen Markus'),
                                                   kw_res(u'Aasia'),
                                                   kw_res(u'Adoptio'),
                                                   kw_res(u'Afganistan'),
                                                   kw_res(u'Afrikka'),
                                                   mb_res(u'Ahde Matti')]),
+
+                # query returning nothing
+                mb_req(u'foobar',             []),
         ]
 
     def decode_res(self, res):
@@ -119,7 +122,7 @@ class AutocompleteCountyTest(TestCase):
     fixtures = ['test_county']
 
     def setUp(self):
-        def c_query(term, exp_counties):
+        def c_req(term, exp_counties):
             if type(exp_counties) is not list:
                 exp_counties = [exp_counties]
 
@@ -129,16 +132,15 @@ class AutocompleteCountyTest(TestCase):
             }
 
         self.queries = [
-                # member queries returning a single result
-                c_query(u'Akaa',               u'Akaa'),
-                c_query(u'alajärvi',           u'Alajärvi'),
-                c_query(u'alajärvi  ',         u'Alajärvi'),
-                c_query(u'Pedersören ',        u'Pedersören kunta'),
+                c_req(u'Akaa',               u'Akaa'),
+                c_req(u'alajärvi',           u'Alajärvi'),
+                c_req(u'alajärvi  ',         u'Alajärvi'),
+                c_req(u'Pedersören ',        u'Pedersören kunta'),
 
-                c_query(u'As',                 [u'Asikkala',
+                c_req(u'As',                 [u'Asikkala',
                                                 u'Askola']),
 
-                c_query(u'',                   [u'Akaa',
+                c_req(u'',                   [u'Akaa',
                                                 u'Alajärvi',
                                                 u'Alavieska',
                                                 u'Alavus',
