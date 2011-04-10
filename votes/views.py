@@ -23,7 +23,7 @@ from sorl.thumbnail.main import DjangoThumbnail
 from kamu.contact_form.views import contact_form
 from httpstatus import Http400
 from user_voting.models import Vote as UserVote
-from kamu.opinions.models import Answer
+from kamu.opinions.models import Answer, VoteOptionCongruence
 
 from kamu.cms.models import Item, Newsitem
 
@@ -32,6 +32,7 @@ import djapian
 import operator
 import datetime
 import random
+import itertools
 
 PERIOD_DASH = u'\u2013'
 PERIODS = [
@@ -743,6 +744,38 @@ def show_member_statements(request, member):
 
 def show_member_opinions(request, member):
     answers = Answer.objects.filter(member=member)
+    answers = answers.select_related('option', 'option__question',
+                            'option__question__source')
+
+    for_user = request.user
+    if(not for_user.is_authenticated()):
+        return dict(answers=answers)
+
+    congruences = VoteOptionCongruence.objects.get_vote_congruences(member)
+    congruences = itertools.groupby(congruences, lambda c: c.option_id)
+    # Somebody seems to read the iterator before we make it
+    # a list later, can't be bothered to debug now
+    congruences = ((g, list(c)) for (g, c) in congruences)
+    congruences = dict(congruences)
+
+    # itertools.groupby requires a sorted list :(
+    a_with_cong = []
+    rest = []
+    for a in answers:
+        a_congs = congruences.get(a.option_id, None)
+        if a_congs is not None:
+            a_congs = list(a_congs)
+            a_cong_values = [c.congruence for c in a_congs]
+            a.congruence = sum(a_cong_values)/len(a_cong_values)
+            a.relevant_votes = a_congs
+            a_with_cong.append(a)
+        else:
+            a.congruence = None
+            a.relevant_votes = []
+            rest.append(a)
+
+    
+    answers = list(itertools.chain(a_with_cong, rest))
     ret = {'answers': answers}
     return ret
 

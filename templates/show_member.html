@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n thumbnail comments %}
+{% load i18n thumbnail comments opinions %}
 {% block title %}{{ member.name }}{% endblock %}
 {% block head %}
 <meta property="og:title" content="{{ member.get_print_name }}" />
@@ -216,6 +216,61 @@
       "{{answer.explanation}}"
     </div>
   {% endif %}
+  {% if answer.congruence != None %}
+    <div class="answer_congruence">
+      {%comment%}
+      <span class="answer_congruence_average">
+        {% trans "Average congruence of this answer:" %}
+        {{answer.congruence|congruence_to_percentage}}%
+      </span>
+      {%endcomment%}
+      <table class="answer_relevant_votes">
+        <tr>
+          <th class="relevant_vote_session">
+            {% trans "Relevant voting session" %}
+          <th class="relevant_vote_vote">
+            {% trans "Vote" %}
+          </th>
+          <th class="relevant_vote_congruence">
+            {% trans "Congruence" %}
+          </th>
+        </tr>
+        {% for v in answer.relevant_votes %}
+          <tr>
+            <td class="relevant_vote_session">
+              <a href="{% url votes.views.show_session plsess=v.session.plenary_session.url_name sess=v.session.number %} ">
+                {{v.session.get_short_summary}}
+              </a>
+            </td>
+
+            {% if v.vote == 'Y' %}
+            <td class="relevant_vote_vote yes_vote" title={% trans 'Yay' %}></td>
+            {% endif %}
+
+            {% if v.vote == 'N' %}
+            <td class="relevant_vote_vote no_vote" title={% trans 'Nay' %}></td>
+            {% endif %}
+
+            {% if v.vote != 'Y' and v.vote != 'N' %}
+            {% comment %}
+              This shouln't occur. Oh, and BTW Django's template
+              system is a piece of shit
+            {% endcomment %}
+            <td class="relevant_vote_vote"></td>
+            {% endif %}
+            
+            </td>
+            <td class="relevant_vote_congruence">
+              <a href="{% url opinions.views.show_question answer.option.question.source.url_name answer.option.question.order %}">
+                {{v.congruence|congruence_to_percentage}}%
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+  {% endif %}
+
   {% endwith %}
 </div>
 {% endfor %}

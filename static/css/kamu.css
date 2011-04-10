@@ -957,6 +957,40 @@ ul.options
 	font-style: italic;
 }
 
+.answer_congruence
+{
+    margin-top: 1em;
+}
+
+table.answer_relevant_votes
+{
+    border-collapse: collapse;
+    margin-left: 1em;
+}
+
+
+
+.answer_relevant_votes td,
+.answer_relevant_votes th
+{
+    padding: 0.5em;
+}
+
+.answer_relevant_votes td
+{
+    border-top: 1px solid black;
+}
+
+.answer_relevant_votes td.relevant_vote_congruence
+{
+    text-align: center;
+}
+
+.answer_relevant_votes th.relevant_vote_average_label
+{
+    text-align: right;
+}
+
 .question_bar
 {
 	width: 100%;
