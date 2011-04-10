@@ -159,7 +159,7 @@ class VoteOptionCongruenceManager(models.Manager):
 
     def __get_average_congruences(self, grouping_class, id_field,
                                   descending=True, limit=False, for_user=None,
-                                  for_question=None):
+                                  for_question=None, for_member=None):
         query = \
             """
                 SELECT %s AS %s,
@@ -192,6 +192,10 @@ class VoteOptionCongruenceManager(models.Manager):
         if for_question is not None:
             query_args.append(for_question.id)
             extra_where += "AND o.question_id=%s\n"
+
+        if for_member is not None:
+            query_args.append(for_member.id)
+            extra_where += "AND a.member_id=%s\n"
 
         query = query % extra_where
         return grouping_class.objects.raw(query, query_args)
