@@ -221,8 +221,15 @@ class PlenarySession(models.Model):
             # only do this with the first save
             self.url_name = slugify(self.url_name)
         super(PlenarySession, self).save(*args, **kwargs)
+
     def __unicode__(self):
         return self.name
+
+    def get_json(self):
+        arg = {'name': self.name, 'date': str(self.date),
+               'uri': self.info_link}
+        arg['sessions'] = [sess.get_json() for sess in self.session_set.all()]
+        return arg
 
 class Minutes(models.Model):
     plenary_session = models.ForeignKey(PlenarySession, db_index=True, unique=True)
@@ -333,8 +340,26 @@ class Session(models.Model):
         args = {'plsess': self.plenary_session.url_name, 'sess': self.number}
         return ('votes.views.show_session', (), args)
 
+    def get_json(self):
+        arg = {'id': str(self), 'number': self.number, 'time': str(self.time)}
+        arg['subject'] = self.subject
+        arg['info'] = self.info
+        if self.info_link:
+            arg['uri'] = self.info_link
+        vc = self.get_vote_counts()
+        del vc['S']
+        arg['vote_counts'] = vc
+        votes = self.vote_set.all().select_related('member')
+        arg['votes'] = [v.get_json() for v in votes]
+        kw_list = self.sessionkeyword_set.all().select_related('keyword')
+        arg['keywords'] = [k.keyword.name for k in kw_list]
+        return arg
+
     def __unicode__(self):
         return str(self.number) + '/' + self.plenary_session.name
+
+    class Meta:
+        ordering = ('plenary_session__date', 'number')
 
 class SessionDocument(models.Model):
     sessions = models.ManyToManyField(Session)
@@ -387,8 +412,13 @@ class Vote(models.Model):
 
     objects = VoteManager()
 
+    def get_json(self):
+        return {'member': str(self.member), 'party': self.party,
+                'vote': self.vote}
+
     def __unicode__(self):
         return str(self.session) + ' / ' + self.member.name
+
 
 class Keyword(models.Model):
     name = models.CharField(max_length=128, db_index=True, unique=True)
@@ -401,4 +431,7 @@ class SessionKeyword(models.Model):
 
     def __unicode__(self):
         return "%s: %s" % (str(self.session), self.keyword.name)
+
+    class Meta:
+        ordering = ('keyword__name', )
 
