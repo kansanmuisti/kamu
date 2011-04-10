@@ -4,8 +4,41 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 import json
 
-class AutocompleteSearchTest(TestCase):
+class AutocompleteTestCase(TestCase):
+    def run_query(self, term, exp_res, exp_code=200, req_opts={}):
+        req_pars = self.req_params.copy()
+        req_pars.update(req_opts)
+        req_pars[u'name'] = term
+
+        err_msg = 'query=' + term
+        err_msg += ' exp_code=' + unicode(exp_code)
+        err_msg += ' exp_res=' + unicode(exp_res)
+        try:
+            response = self.client.get(self.req_url, req_pars)
+        except:
+            print err_msg
+            raise           # Re-raise the exception we're handling
+
+        err_msg_raw = u'(resp_code=' + unicode(response.status_code)
+        err_msg_raw += ' resp_raw=' + response.content + u')'
+        self.assertEqual(response.status_code, exp_code,
+                         msg=err_msg + ' ' + err_msg_raw)
+
+        if (exp_res is None):
+            return
+
+        decoded_res = self.decode_res(response.content)
+        err_msg = err_msg + ' res=' + unicode(decoded_res) + ' ' + err_msg_raw
+        self.assertEqual(decoded_res, exp_res, msg=err_msg)
+
+class AutocompleteSearchTest(AutocompleteTestCase):
     fixtures = ['test_keyword', 'test_sessionkeyword', 'test_member']
+    req_url = reverse('votes.views.autocomplete_search')
+    req_params = {
+            u'max_results'      : 6,
+            u'thumbnail_width'  : 30,
+            u'thumbnail_height' : 30,
+    }
 
     def setUp(self):
         qpar_str = u'?query='
@@ -90,36 +123,18 @@ class AutocompleteSearchTest(TestCase):
         # TODO: validate also the thumbnail path which is dynamically generated
         return [{'name': x[0], 'url' : x[2]} for x in dr]
 
-    def run_query(self, term, exp_res):
-        req_params = {
-                u'name'             : term,
-                u'max_results'      : 6,
-                u'thumbnail_width'  : 30,
-                u'thumbnail_height' : 30,
-        }
-        autocomplete_url = reverse('votes.views.autocomplete_search')
-
-        err_msg = 'query=' + term + ' expected=' + unicode(exp_res)
-        try:
-            response = self.client.get(autocomplete_url, req_params)
-        except:
-            print err_msg
-            raise           # Re-raise the exception we're handling
-
-        err_msg_raw = u'(resp_cont=' + response.content + u')'
-        self.assertEqual(response.status_code, 200,
-                         msg=err_msg + ' ' + err_msg_raw)
-        decoded_res = self.decode_res(response.content)
-        err_msg = err_msg + ' got=' + unicode(decoded_res) + ' ' + err_msg_raw
-        self.assertEqual(decoded_res, exp_res, msg=err_msg)
 
     def test_queries(self):
         for q in self.queries:
             self.run_query(q['term'], q['exp_res'])
 
 
-class AutocompleteCountyTest(TestCase):
+class AutocompleteCountyTest(AutocompleteTestCase):
     fixtures = ['test_county']
+    req_url = reverse('votes.views.autocomplete_county')
+    req_params = {
+            u'max_results'      : 6,
+    }
 
     def setUp(self):
         def c_req(term, exp_counties):
@@ -150,29 +165,6 @@ class AutocompleteCountyTest(TestCase):
 
     def decode_res(self, res):
         return json.loads(res)
-
-    def run_query(self, term, exp_res):
-        req_params = {
-                u'name'             : term,
-                u'max_results'      : 6,
-                u'thumbnail_width'  : 30,
-                u'thumbnail_height' : 30,
-        }
-        autocomplete_url = reverse('votes.views.autocomplete_county')
-
-        err_msg = 'query="' + term + '" expected="' + unicode(exp_res) + '"'
-        try:
-            response = self.client.get(autocomplete_url, req_params)
-        except:
-            print err_msg
-            raise           # Re-raise the exception we're handling
-
-        err_msg_raw = u'(resp_cont="' + response.content + u'")'
-        self.assertEqual(response.status_code, 200,
-                         msg=err_msg + ' ' + err_msg_raw)
-        decoded_res = self.decode_res(response.content)
-        err_msg = err_msg + ' got=' + unicode(decoded_res) + ' ' + err_msg_raw
-        self.assertEqual(decoded_res, exp_res, msg=err_msg)
 
     def test_queries(self):
         for q in self.queries:
