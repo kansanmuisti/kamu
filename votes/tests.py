@@ -115,6 +115,7 @@ class AutocompleteSearchTest(AutocompleteTestCase):
                                                   mb_res(u'Ahde Matti')]),
 
                 # query returning nothing
+                mb_req(u'aa ',                []),
                 mb_req(u'foobar',             []),
         ]
 
@@ -156,6 +157,7 @@ class AutocompleteCountyTest(AutocompleteTestCase):
                 c_req(u'alajärvi',           u'Alajärvi'),
                 c_req(u'alajärvi  ',         u'Alajärvi'),
                 c_req(u'Pedersören ',        u'Pedersören kunta'),
+                c_req(u' kunt',              u'Pedersören kunta'),
 
                 c_req(u'As',                 [u'Asikkala',
                                                 u'Askola']),
@@ -166,6 +168,9 @@ class AutocompleteCountyTest(AutocompleteTestCase):
                                                 u'Alavus',
                                                 u'Asikkala',
                                                 u'Askola']),
+
+                c_req(u'as ',                []),
+                c_req(u'foobar',             []),
         ]
 
     def decode_res(self, res):
