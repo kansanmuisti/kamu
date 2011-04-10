@@ -13,7 +13,10 @@ class AutocompleteSearchTest(TestCase):
         search_mb_url = reverse('votes.views.search') + qpar_str
 
         def query_res(name, exp_url):
-            return { 'name' : name, 'url' : exp_url + name }
+            return {
+                'name'      : name,
+                'url'       : exp_url + name,
+            }
 
         def kw_res(name):
             return query_res(name, search_kw_url)
