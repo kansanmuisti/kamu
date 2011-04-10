@@ -1,14 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import urllib2
-import cookielib
 import time
 import sys
 import os
 import re
-import sqlite3
-import hashlib
 import operator
 import difflib
 from optparse import OptionParser
@@ -22,6 +18,9 @@ import mop_info_parser
 import party_list_parser
 import party_info_parser
 import minutes_parser
+
+import http_cache
+from http_cache import create_path_for_file
 
 from django.core.management import setup_environ
 
@@ -45,7 +44,6 @@ from django import db
 import kamu.votes.models
 from kamu.votes.models import *
 
-cache_dir = None
 until_pl = None
 from_pl = None
 
@@ -78,47 +76,6 @@ def fill_terms():
     global term_list
     terms = Term.objects.all()
 
-def create_path_for_file(fname):
-    dirname = os.path.dirname(fname)
-    if not os.path.exists(dirname):
-        os.makedirs(dirname)
-
-
-def get_cache_fname(url, prefix):
-    hash = hashlib.sha1(url.replace('/', '-')).hexdigest()
-    fname = '%s/%s/%s' % (cache_dir, prefix, hash)
-    return fname
-
-def open_url_with_cache(url, prefix, skip_cache=False, error_ok=False, return_url=False):
-    final_url = None
-    fname = None
-    if cache_dir and not skip_cache:
-        fname = get_cache_fname(url, prefix)
-    if not fname or not os.access(fname, os.R_OK):
-        opener = urllib2.build_opener(urllib2.HTTPHandler)
-        opener.addheaders = [('User-agent', 'Mozilla/5.0')]
-        try:
-            f = opener.open(url)
-        except urllib2.URLError:
-            if error_ok:
-                return None
-            raise
-        s = f.read()
-        final_url = f.geturl()
-        if fname:
-            create_path_for_file(fname)
-            outf = open(fname, 'w')
-            outf.write(s)
-            outf.close()
-    else:
-        f = open(fname)
-        s = f.read()
-    f.close()
-    if return_url:
-        return s, final_url
-    return s
-
-
 static_path = app_base + 'static/'
 
 url_base = 'http://www.eduskunta.fi'
@@ -139,14 +96,14 @@ KEYWORD_URL_BASE = 'http://www.eduskunta.fi'
 KEYWORD_LIST_URL = '/triphome/bin/vex6000.sh'
 
 def process_parties(db_insert):
-    s = open_url_with_cache(party_url_base + party_list_url, 'party')
+    s = http_cache.open_url(party_url_base + party_list_url, 'party')
     parser = party_list_parser.Parser()
     parser.feed(s)
     parser.close()
     party_list = parser.get_list()
     parser = party_info_parser.Parser()
     for party in party_list:
-        s = open_url_with_cache(party_url_base + party['info_link'], 'party')
+        s = http_cache.open_url(party_url_base + party['info_link'], 'party')
         parser.reset()
         parser.feed(s)
         parser.close()
@@ -159,7 +116,7 @@ def process_parties(db_insert):
         create_path_for_file(fname)
         if not os.path.exists(fname):
             print 'Fetching logo ' + logo_url
-            s = open_url_with_cache(logo_url, 'party')
+            s = http_cache.open_url(logo_url, 'party')
             f = open(fname, 'wb')
             f.write(s)
             f.close()
@@ -192,7 +149,7 @@ def find_party(party_list, fname):
 
 
 def process_mops(party_list, update=False, db_insert=False):
-    s = open_url_with_cache(url_base + mp_list_url, 'member')
+    s = http_cache.open_url(url_base + mp_list_url, 'member')
     BAD_HTML = '<! hx4600.thw>'
     idx = s.find(BAD_HTML)
     if idx >= 0:
@@ -206,7 +163,7 @@ def process_mops(party_list, update=False, db_insert=False):
     for mp in mop_list:
         print '%3d: %s, %s' % (mop_list.index(mp), mp['surname'],
                                mp['firstnames'])
-        s = open_url_with_cache(url_base + mp['link'], 'member')
+        s = http_cache.open_url(url_base + mp['link'], 'member')
         parser.reset(is_lame_frame=True)
         parser.feed(s)
         parser.close()
@@ -222,7 +179,7 @@ def process_mops(party_list, update=False, db_insert=False):
         if member and not update:
             continue
 
-        s = open_url_with_cache(url_base + heti_url % mp['hnro'],
+        s = http_cache.open_url(url_base + heti_url % mp['hnro'],
                                 'member')
         parser.reset(is_lame_frame=False)
         parser.feed(s)
@@ -238,7 +195,7 @@ def process_mops(party_list, update=False, db_insert=False):
         create_path_for_file(photo_fname)
         if not os.path.exists(photo_fname):
             print 'Fetching photo ' + photo_url
-            s = open_url_with_cache(photo_url, 'member')
+            s = http_cache.open_url(photo_url, 'member')
             f = open(photo_fname, 'wb')
             f.write(s)
             f.close()
@@ -325,7 +282,7 @@ def process_mops(party_list, update=False, db_insert=False):
 def get_mp_homepage_link(mp, force_update=False):
     if mp.homepage_link and not force_update:
         return
-    s = open_url_with_cache(mp.wikipedia_link, 'misc')
+    s = http_cache.open_url(mp.wikipedia_link, 'misc')
     doc = html.fromstring(s)
     b = doc.xpath(".//b[.='Kotisivu']")
     if not b:
@@ -334,7 +291,7 @@ def get_mp_homepage_link(mp, force_update=False):
     href = elem.getnext().getchildren()[0].attrib['href']
     print "%s: %s" % (mp.name, href)
     # Try to fetch the homepage
-    s = open_url_with_cache(href, 'misc', skip_cache=True, error_ok=True)
+    s = http_cache.open_url(href, 'misc', skip_cache=True, error_ok=True)
     if s:
         mp.homepage_link = href
     else:
@@ -346,7 +303,7 @@ def get_wikipedia_links():
     print "Populating Wikipedia links to MP's..."
     mp_list = Member.objects.all()
     mp_names = [mp.name for mp in mp_list]
-    s = open_url_with_cache(MP_LINK, 'misc')
+    s = http_cache.open_url(MP_LINK, 'misc')
     doc = html.fromstring(s)
     links = doc.xpath(".//table//a[starts-with(@href, '/wiki')]")
     doc.make_links_absolute(MP_LINK)
@@ -391,7 +348,7 @@ def process_mp_terms():
                     pass
 
 def process_counties(db_insert):
-    s = open_url_with_cache(STAT_URL_BASE + STAT_COUNTY_URL, 'county')
+    s = http_cache.open_url(STAT_URL_BASE + STAT_COUNTY_URL, 'county')
 
     # strip first 4 lines of header and any blank/empty lines at EOF
     for line in s.rstrip().split('\n')[4:]:
@@ -430,7 +387,7 @@ def insert_keyword(kword, max_len, trim_re):
         k.save()
 
 def process_keywords():
-    mpage = open_url_with_cache(KEYWORD_URL_BASE + KEYWORD_LIST_URL, 'keyword')
+    mpage = http_cache.open_url(KEYWORD_URL_BASE + KEYWORD_LIST_URL, 'keyword')
     # BeautifulSoup's SGML parser will break at the following pattern,
     # so remove it before handing over for parsing
     pat = 'document.write\("<SCR"\+"IPT Language=.JavaScript. SRC=."\+"' +  \
@@ -447,7 +404,7 @@ def process_keywords():
     trim_re = re.compile(' \[$')
     for dir_elem in dir_list:
         kpage_url = KEYWORD_URL_BASE + dir_elem['href']
-        kpage = open_url_with_cache(kpage_url, 'keyword')
+        kpage = http_cache.open_url(kpage_url, 'keyword')
         ksoup = BeautifulSoup(kpage, markupMassage=massage,
                               fromEncoding='iso-8859-1',
                               convertEntities=BeautifulSoup.HTML_ENTITIES)
@@ -477,7 +434,7 @@ def read_links(is_minutes, url, new_only=False):
     ret = []
 
     while True:
-        s = open_url_with_cache(url, link_type, new_only)
+        s = http_cache.open_url(url, link_type, new_only)
         doc = html.fromstring(s)
         votes = doc.xpath(".//div[@class='listing']/div/p")
         doc.make_links_absolute(url)
@@ -489,7 +446,7 @@ def read_links(is_minutes, url, new_only=False):
 
             minutes_link = [l for l in links if '/akxptk.sh?' in l.attrib['href']]
             if len(minutes_link) != 1:
-                print get_cache_fname(url, link_type)
+                print http_cache.get_fname(url, link_type)
                 raise Exception("Unable to find link to minutes")
             link['minutes'] = minutes_link[0].attrib['href']
             if is_minutes:
@@ -500,7 +457,7 @@ def read_links(is_minutes, url, new_only=False):
                 link['plsess'] = minutes_link[0].text.strip()[4:-3]
                 b_elem = minutes_link[0].getnext()
                 if b_elem.tag != 'b':
-                    print get_cache_fname(url, link_type)
+                    print http_cache.get_fname(url, link_type)
                     raise Exception("Unexpected <b> tag")
                 nr = int(b_elem.text.strip()[10:].strip().split()[1])
                 link['number'] = nr
@@ -535,7 +492,7 @@ mem_name_list = {}
 @transaction.commit_manually
 def process_session_votes(url, pl_sess_name):
     parser = vote_list_parser.Parser()
-    s = open_url_with_cache(url, 'votes')
+    s = http_cache.open_url(url, 'votes')
     parser.reset()
     parser.feed(s)
     parser.close()
@@ -603,7 +560,7 @@ def process_session_votes(url, pl_sess_name):
     return sess
 
 def process_session_keywords(sess, url):
-    s = open_url_with_cache(url, 'votes')
+    s = http_cache.open_url(url, 'votes')
     doc = html.fromstring(s)
     kw_list = doc.xpath(".//div[@id='vepsasia-asiasana']//div[@class='linkspace']/a")
 
@@ -775,7 +732,7 @@ def process_minutes(full_update):
                     continue
             if stop_after and sess_desc['plsess'] != stop_after:
                 return
-            s = open_url_with_cache(url, 'minutes')
+            s = http_cache.open_url(url, 'minutes')
             tmp_url = 'http://www.eduskunta.fi/faktatmp/utatmp/akxtmp/'
             minutes = minutes_parser.parse_minutes(s, tmp_url)
             if not minutes:
@@ -791,7 +748,7 @@ def process_minutes(full_update):
             try:
                 for l in minutes['cnv_links']:
                     print l
-                    s = open_url_with_cache(l, 'minutes')
+                    s = http_cache.open_url(l, 'minutes')
                     disc = minutes_parser.parse_discussion(s, l)
                     insert_discussion(full_update, pl_sess, disc,
                                       minutes['cnv_links'].index(l),
@@ -813,9 +770,9 @@ def process_doc(doc):
     number, year = map(int, match.groups())
     url = HE_URL % (number, year)
 
-    s = open_url_with_cache(url, 'docs', error_ok=True)
+    s = http_cache.open_url(url, 'docs', error_ok=True)
     if not s:
-        (s, url) = open_url_with_cache(doc.info_link, 'docs', return_url=True)
+        (s, url) = http_cache.open_url(doc.info_link, 'docs', return_url=True)
         if '<!-- akxereiloydy.thw -->' in s or '<!-- akx5000.thw -->' in s:
             print "\tNot found!"
             return
@@ -829,7 +786,7 @@ def process_doc(doc):
         html_doc.make_links_absolute(url)
         url = link_elem.attrib['src']
         print "\tGenerated and found!"
-        s = open_url_with_cache(url, 'docs')
+        s = http_cache.open_url(url, 'docs')
     # First check if's not a valid HE doc, the surest way to
     # detect it appears to be the length. *sigh*
     if len(s) < 1500:
@@ -848,7 +805,7 @@ def process_doc(doc):
             break
     if not elem:
         print "\tNo header found: %d" % len(s)
-        print get_cache_fname(url, 'docs')
+        print http_cache.get_fname(url, 'docs')
         return
     # Choose the first header. Sometimes they are replicated. *sigh*
     elem = elem[0].getnext()
@@ -872,11 +829,11 @@ def process_doc(doc):
                    'LLNormaali-0020Char', 'Normaali', 'LLSisallysluettelo')
     if 'class' in elem.attrib and elem.attrib['class'] not in BREAK_CLASS:
         print "\tMystery class: %s" % elem.attrib
-        print get_cache_fname(url, 'docs')
+        print http_cache.get_fname(url, 'docs')
         return
     if not p_list:
         print "\tNo summary found"
-        print get_cache_fname(url, 'docs')
+        print http_cache.get_fname(url, 'docs')
         return
     text_list = []
 
@@ -904,7 +861,7 @@ def process_doc(doc):
             mark = True
             break
     if mark:
-        print get_cache_fname(url, 'docs')
+        print http_cache.get_fname(url, 'docs')
         for t in text_list:
             print t
         return
@@ -962,7 +919,7 @@ parser.add_option('--from-pl', action='store', type='string', dest='from_pl',
 
 party_list = None
 if opts.cache:
-    cache_dir = opts.cache
+    http_cache.set_cache_dir(opts.cache)
 if opts.until_pl:
     until_pl = opts.until_pl
 if opts.from_pl:
