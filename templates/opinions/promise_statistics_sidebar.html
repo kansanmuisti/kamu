@@ -21,8 +21,10 @@
   {% for member in members %}
   <tr>
     <td class="promise_label_column">
-      <img src="{% thumbnail member.photo 50x50 %}"
+      <a href="{% url votes.views.show_member member=member.url_name section='opinions' %}">
+        <img src="{% thumbnail member.photo 50x50 %}"
            alt="{{member.name}}" title="{{member.name}}" />
+      </a>
     </td>
     <td class="promise_percentage_column">
       <div class="promise_percentage_bar" style="width: {{member.congruence|congruence_to_percentage}}%; ">
