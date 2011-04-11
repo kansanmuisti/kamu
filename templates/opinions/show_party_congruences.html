@@ -4,6 +4,8 @@
 
 {% block content %}
 
+<h1><img src="{% thumbnail party.logo 64x64 %}" /> {{ party.full_name }}</h1>
+
 {% for q in questions %}
   <div class="opinion_answer">
     <div class="question">
