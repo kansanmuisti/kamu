@@ -1005,6 +1005,9 @@ def about(request, section):
     elif section == 'contact':
         args['content'] = Item.objects.retrieve_content('contact')
         section_name = _('Contact')
+    elif section == 'donate':
+        args['content'] = Item.objects.retrieve_content('donate')
+        section_name = _('Donate')
     elif section == 'feedback':
         # Feedback does not contain anything long at the moment, left out of cms
 	section_name = _('Feedback')
