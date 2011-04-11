@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import re
+import itertools
 
 from django.shortcuts import render_to_response, get_list_or_404, \
     get_object_or_404, redirect
@@ -168,3 +169,61 @@ def match_session(request):
 
     args = {'source': src.url_name, 'question': question.order}
     return HttpResponseRedirect(reverse('opinions.views.show_question', kwargs=args))
+
+def weighted_congruence(l):
+    return sum(l)/sum(abs(x) for x in l)
+
+def show_party_congruences(request, party):
+    for_party = get_object_or_404(Party, pk=party)
+    # TODO: This is quite expensive because all questions/options/answers
+    #       are fetched separatedly. There should be a way to get related
+    #       objects with raw queries
+    congruences = VoteOptionCongruence.objects.get_vote_congruences(
+                    for_party=for_party)
+    congruences = list(congruences)
+   
+    by_question = itertools.groupby(congruences, lambda c: c.option.question_id)
+    questions = []
+    for qid, congruences in by_question:
+        q = Question.objects.get(pk=qid)
+        congruences = list(congruences)
+        total = float(len(congruences))
+        q.congruence = weighted_congruence([c.congruence for c in congruences])
+
+        option_cong = itertools.groupby(congruences, lambda c: c.option_id)
+        option_cong = [(o, list(c)) for o, c in option_cong]
+        option_cong = dict(option_cong)
+        
+        options = []
+        for option in q.option_set.all():
+            c = list(option_cong.get(option.id, []))
+            option.congruences = list(c)
+            option.share = int(len(option.congruences)/total*100)
+            options.append(option)
+
+        q.options = options
+        
+        by_session = sorted(congruences, key=lambda c: c.session_id)
+        by_session = itertools.groupby(by_session, lambda c: c.session_id)
+        sessions = []
+        for sid, c in by_session:
+            session = Session.objects.get(pk=sid)
+            c = list(c)
+            session.congruence = weighted_congruence([d.congruence for d in c])
+            votes = [c.vote for c in c]
+            total = float(len(votes))
+            session.yay_share = int(votes.count('Y')/total*100)
+            session.nay_share = int(votes.count('N')/total*100)
+            sessions.append(session)
+
+        q.sessions = sessions
+
+
+        questions.append(q)
+    
+    
+    args = dict(questions=questions, party=for_party)
+    return render_to_response('opinions/show_party_congruences.html', args,
+                              context_instance=RequestContext(request))
+
+

@@ -1,0 +1,73 @@
+{% extends "opinions/opinion_base.html" %}
+{% load i18n thumbnail opinions %}
+{% block title %}{% trans "Promise statistics for" %} {{party.full_name}}{% endblock %}
+
+{% block content %}
+
+{% for q in questions %}
+  <div class="opinion_answer">
+    <div class="question">
+      <span class="source">
+        {{q.source.name}}
+        {{q.source.year}}
+      </span>
+      {{q.text}}
+    </div>
+    <table class="party_option_choices">
+      {% for o in q.options %}
+        <tr>
+          <td class="party_option_share">
+            <div class="percentage_bar" style="width: {{o.share}}%">
+              {{o.share}}%
+            </div>
+          </td>
+          <td>
+            {{o.name}}
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+    <h4>
+      {% trans "Party promise percentage for this question:" %}
+      {{q.congruence|congruence_to_percentage}}%
+    </h4>
+    <table class="party_question_sessions">
+    <tr>
+      <th>{% trans "Relevant voting session" %}</th>
+      <th>{% trans "Party votes" %}</th>
+    </tr>
+    {% for s in q.sessions %}
+      <tr>
+        <td>
+          {{s.get_short_summary}}
+          <h4>
+            {% trans "Average congruence:" %}
+            {{s.congruence|congruence_to_percentage}}%
+          </h4>
+        </td>
+        <td class="party_vote_shares">
+          <table>
+            <tr>
+              <td class="yes_vote" title="{% trans "Yay" %}"></td>
+              <td>
+                <div class="percentage_bar" style="width: {{s.yay_share}}%">
+                  {{s.yay_share}}%
+                </div>
+              </td>
+            <tr>
+              <td class="no_vote" title="{% trans "Nay" %}"></td>
+              <td>
+                <div class="percentage_bar" style="width: {{s.nay_share}}%">
+                  {{s.nay_share}}%
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    {% endfor %}
+    </table>
+  </div>
+{% endfor %}
+
+{% endblock %}

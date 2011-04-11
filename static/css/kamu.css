@@ -1216,13 +1216,70 @@ td.promise_label_column
     padding-right: 4px;
 }
 
+.percentage_bar,
 div.promise_percentage_bar
 {
     background-color: #eee;
     border: 1px solid #ddd;
-    padding: 3px;
+    padding: 0px;
+    padding-top: 3px;
+    padding-bottom: 3px;
     text-align: right;
     font-size: xx-small;
+}
+
+table.party_option_choices
+{
+    width: 100%;
+}
+
+table.party_option_choices td
+{
+    padding: 0.2em;
+}
+
+td.party_option_share
+{
+    width: 10em;
+}
+
+.party_question_sessions
+{
+    margin-left: 1em;
+    margin-top: 1em;
+    border-collapse: collapse;
+}
+
+.party_question_sessions td
+{
+    border-top: 1px solid black;
+    padding: 1em;
+}
+
+.party_question_sessions td.party_vote_shares
+{
+    width: 10em;
+}
+
+.party_question_sessions td.party_vote_shares .percentage_bar
+{
+    margin-bottom: 0.4em;
+}
+
+.party_question_sessions td.party_vote_shares td
+{
+    border-width: 0;
+    padding: 0;
+}
+
+.party_question_sessions td.party_vote_shares table
+{
+    width: 12em;
+}
+
+.party_question_sessions td.party_vote_shares td.vote_label
+{
+    width: 1em;
 }
 
 /*

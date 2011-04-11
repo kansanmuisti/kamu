@@ -79,6 +79,7 @@ urlpatterns += patterns('opinions.views',
     url(r'^opinions/$', 'list_questions'),
     url(r'^opinions/(?P<source>\w+)/(?P<question>\d+)/$', 'show_question'),
     url(r'^opinions/match_session/$', 'match_session'),
+    url(r'^opinions/party/(?P<party>\w+)/$', 'show_party_congruences'),
 )
 
 urlpatterns += patterns('cms.views',
