@@ -6,7 +6,11 @@
 <table class="promise_statistics_box">
   {% for party in parties %}
   <tr>
-    <td class="promise_label_column"><img src="{% thumbnail party.logo 50x50 %}" alt="{{party.full_name}}" title="{{party.full_name}}" /></td>
+    <td class="promise_label_column">
+      <a href="{% url opinions.views.show_party_congruences party=party.name %}">
+        <img src="{% thumbnail party.logo 50x50 %}" alt="{{party.full_name}}" title="{{party.full_name}}" />
+      </a>
+    </td>
     <td class="promise_percentage_column">
       <div class="promise_percentage_bar" style="width: {{party.congruence_avg|congruence_to_percentage}}%">
         {{party.congruence_avg|congruence_to_percentage}}%
