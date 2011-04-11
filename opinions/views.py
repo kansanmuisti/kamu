@@ -55,7 +55,7 @@ def show_question(request, source, question):
     options = list(question.option_set.all())
 
     for session in relevant_sessions:
-        session.question_relevance = int(session.question_relevance * 100)
+        session.question_relevance = int(round(session.question_relevance * 100))
         option_congruences = []
         for option in options:
             user_congruence = None
@@ -83,7 +83,7 @@ def show_question(request, source, question):
             congruence = VoteOptionCongruence.objects.get_congruence(option, session)
             if congruence is None:
                 congruence = 0
-            congruence_scale = int((congruence + 1) / 2.0 * 100)
+            congruence_scale = int(round((congruence + 1) / 2.0 * 100))
 
             option_congruences.append(dict(input_form=input_form,
                                       option=option,
@@ -198,7 +198,7 @@ def show_party_congruences(request, party):
         for option in q.option_set.all():
             c = list(option_cong.get(option.id, []))
             option.congruences = list(c)
-            option.share = int(len(option.congruences)/total*100)
+            option.share = int(round(len(option.congruences)/total*100))
             options.append(option)
 
         q.options = options
@@ -212,8 +212,8 @@ def show_party_congruences(request, party):
             session.congruence = weighted_congruence([d.congruence for d in c])
             votes = [c.vote for c in c]
             total = float(len(votes))
-            session.yay_share = int(votes.count('Y')/total*100)
-            session.nay_share = int(votes.count('N')/total*100)
+            session.yay_share = int(round(votes.count('Y')/total*100))
+            session.nay_share = int(round(votes.count('N')/total*100))
             sessions.append(session)
 
         q.sessions = sessions
