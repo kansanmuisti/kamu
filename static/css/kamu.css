@@ -927,6 +927,11 @@ div#list_orgs {
 	color: @main_color;
 }
 
+.question a
+{
+    color: inherit;
+}
+
 .question .source
 {
 	display: block;

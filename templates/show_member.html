@@ -200,7 +200,9 @@
       {{answer.option.question.source.name}}
       {{answer.option.question.source.year}}
     </span>
-    {{answer.option.question.text}}
+    <a href="{% url opinions.views.show_question answer.option.question.source.url_name answer.option.question.order %}">
+      {{answer.option.question.text}}
+    </a>
   </div>
   {% with answer.option.question.option_set.all as options %}
   <ul class="options">
@@ -261,9 +263,7 @@
             
             </td>
             <td class="relevant_vote_congruence">
-              <a href="{% url opinions.views.show_question answer.option.question.source.url_name answer.option.question.order %}">
-                {{v.congruence|congruence_to_percentage}}%
-              </a>
+              {{v.congruence|congruence_to_percentage}}%
             </td>
           </tr>
         {% endfor %}

@@ -11,7 +11,9 @@
         {{q.source.name}}
         {{q.source.year}}
       </span>
-      {{q.text}}
+      <a href="{% url opinions.views.show_question q.source.url_name q.order %}">
+        {{q.text}}
+      </a>
     </div>
     <table class="party_option_choices">
       {% for o in q.options %}
@@ -39,7 +41,9 @@
     {% for s in q.sessions %}
       <tr>
         <td>
-          {{s.get_short_summary}}
+          <a href="{{s.get_absolute_url}}">
+            {{s.get_short_summary}}
+          </a>
           <h4>
             {% trans "Average congruence:" %}
             {{s.congruence|congruence_to_percentage}}%
