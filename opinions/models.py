@@ -214,9 +214,19 @@ class VoteOptionCongruenceManager(models.Manager):
     def get_session_congruences(self, **kwargs):
         return self.__get_average_congruences(Session, 'v.session_id', **kwargs)
 
-    def get_vote_congruences(self, for_member):
+    def get_vote_congruences(self, for_member=None, for_party=None):
         # This could maybe be done without SQL, but my brain
         # doesn't work enough for that at the moment
+        extra_where = ''
+        args = []
+        if for_member is not None:
+            extra_where += "AND v.member_id=%s\n"
+            args.append(for_member.pk)
+
+        if for_party is not None:
+            extra_where += "AND v.party=%s"
+            args.append(for_party.pk)
+
         query = \
         """
         SELECT
@@ -230,12 +240,12 @@ class VoteOptionCongruenceManager(models.Manager):
           c.vote=v.vote AND
           v.member_id=a.member_id AND
           a.option_id=c.option_id AND
-          v.member_id=%s AND
           c.congruence <> 0
+          %s
         ORDER BY
-          c.option_id
-        """
-        return VoteOptionCongruence.objects.raw(query, (for_member.id,))
+          a.question_id, c.option_id
+        """ % (extra_where, )
+        return VoteOptionCongruence.objects.raw(query, args)
 
 
 class VoteOptionCongruence(models.Model):
