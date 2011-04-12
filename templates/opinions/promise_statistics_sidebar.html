@@ -21,6 +21,7 @@
   {% endfor %}
 </table>
 
+{% if members %}
 <h2>{% trans "Members you have evaluated" %}</h2>
 <table class="promise_statistics_box">
   {% for member in members %}
@@ -40,6 +41,8 @@
   </tr>
   {% endfor %}
 </table>
+{% endif %}
+
 {% else %}
 <h3>{% trans "No sessions scored" %}</h3>
 {% endif %}
