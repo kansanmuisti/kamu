@@ -17,8 +17,11 @@ register = template.Library()
 @register.inclusion_tag('opinions/promise_statistics_sidebar.html',
                         takes_context=True)
 def promise_statistics_sidebar(context, user, question=None):
-    parties = VoteOptionCongruence.objects.get_party_congruences(for_user=user,
-                                                                 for_question=question)
+    get_party_cong = VoteOptionCongruence.objects.get_party_congruences
+    parties = list(get_party_cong(for_user=user, for_question=question))
+    # If no congruences found for parties, skip the other queries.
+    if not parties:
+        return {}
 
     member_type = ContentType.objects.get_for_model(Member)
     member_votes = user_voting.Vote.objects.filter(user=user,
@@ -26,14 +29,11 @@ def promise_statistics_sidebar(context, user, question=None):
     members = []
     for vote in member_votes:
         member = Member.objects.get(pk=vote.object_id)
-        member.congruence = VoteOptionCongruence.objects.get_member_congruence(
-                                                            member,
-                                                            for_user=user,
-                                                            for_question=question)
-        if (member.congruence is None):
+        get_cong = VoteOptionCongruence.objects.get_member_congruence
+        member.congruence = get_cong(member, for_user=user, for_question=question)
+        if member.congruence is None:
             continue
         members.append(member)
-
 
     return dict(parties=parties, members=members, user=user)
 

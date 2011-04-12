@@ -1,7 +1,8 @@
 {% load i18n opinions thumbnail %}
 
-<h3>{% trans "Promise percentages*" %}</h3>
-<p style="font-size: xx-small">{% trans "* Based on your question/vote evaluations" %}</p>
+{% if parties %}
+<h3>{% trans "Promise percentages" %}</h3>
+<p style="font-size: xx-small">{% trans "Based on your question/vote evaluations" %}</p>
 <h2>{% trans "Parties" %}</h2>
 <table class="promise_statistics_box">
   {% for party in parties %}
@@ -39,3 +40,7 @@
   </tr>
   {% endfor %}
 </table>
+{% else %}
+<h3>{% trans "No sessions scored" %}</h3>
+{% endif %}
+
