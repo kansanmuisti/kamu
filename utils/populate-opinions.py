@@ -23,8 +23,13 @@ from kamu import settings
 setup_environ(settings)
 
 import hs2011_opinions
+import mtv2007_opinions
 
 parser = OptionParser()
+parser.add_option('--mtv2007', action='store_true', dest='mtv2007',
+                  help='use cache in directory CACHE')
+parser.add_option('--hs2011', action='store_true', dest='hs2011',
+                  help='use cache in directory CACHE')
 parser.add_option('--cache', action='store', type='string', dest='cache',
                   help='use cache in directory CACHE')
 
@@ -32,5 +37,7 @@ parser.add_option('--cache', action='store', type='string', dest='cache',
 
 if opts.cache:
     http_cache.set_cache_dir(opts.cache)
-
-hs2011_opinions.parse()
+if opts.mtv2007:
+    mtv2007_opinions.parse()
+if opts.hs2011:
+    hs2011_opinions.parse()

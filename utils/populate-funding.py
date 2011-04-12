@@ -26,6 +26,8 @@ from django import db
 
 from votes.models import Member, TermMember, Term, MemberStats
 
+import parse_tools
+
 parser = OptionParser()
 parser.add_option('--input', action='store', type='string', dest='input',
                   help='input file')
@@ -52,8 +54,7 @@ for row in reader:
     last_name = row[0].strip()
     budget = row[4].strip().replace(',', '')
     name = "%s %s" % (last_name, first_name)
-    if name in MEMBER_NAME_TRANSFORMS:
-        name = MEMBER_NAME_TRANSFORMS[name]
+    name = parse_tools.fix_mp_name(name)
     print "%-20s %-20s %10s" % (first_name, last_name, budget)
     try:
         member = Member.objects.get(name=name)

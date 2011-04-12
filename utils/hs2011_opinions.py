@@ -8,15 +8,11 @@ import urllib2
 from opinions.models import QuestionSource, Question, Option, Answer
 from votes.models import Member
 import http_cache
+import parse_tools
 
 URL_BASE = 'http://www.kansanmuisti.fi/storage/vaalikone/hs2011/'
 CSV_URL = URL_BASE + 'HS-vaalikone2011.csv'
 OPTIONS_URL = URL_BASE + 'options.html'
-
-MEMBER_NAME_TRANSFORMS = {
-    'Korhonen Timo': 'Korhonen Timo V.',
-}
-
 
 ROW_HEADER = ['name', 'district', 'party', 'age', 'gender', 'edu']
 
@@ -32,8 +28,7 @@ def handle_row(src, row, writer=None):
     comment_list = row[18::3]
 
     name = ' '.join((last_name, first_name))
-    if name in MEMBER_NAME_TRANSFORMS:
-        name = MEMBER_NAME_TRANSFORMS[name]
+    name = parse_tools.fix_mp_name(name)
 
     if writer:
         if district.endswith(' vaalipiiri'):
@@ -107,12 +102,12 @@ def parse_option_order(html_str, src):
         add_question(src, qtext, q_idx, atext_list)
 
 def parse():
-    s = http_cache.open_url(OPTIONS_URL, 'hs2011')
+    s = http_cache.open_url(OPTIONS_URL, 'opinions')
     src, c = QuestionSource.objects.get_or_create(name='HS vaalikone', year=2011,
                                                   url_name='hs2011')
     parse_option_order(s, src)
 
-    s = http_cache.open_url(CSV_URL, 'hs2011')
+    s = http_cache.open_url(CSV_URL, 'opinions')
     reader = csv.reader(s.splitlines(), delimiter=',', quotechar='"')
     hdr = reader.next()
     questions = [s.decode('utf8') for s in hdr[16::3]]
