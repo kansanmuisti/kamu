@@ -180,6 +180,7 @@ def _estimate_relations(cache, docs=None):
                 words.extend(text_to_basewords(option.name))
 
             for answer in question.answer_set.all():
+                if(answer.explanation is None): continue
                 words.extend(text_to_basewords(answer.explanation))
 
             cache[name] = ' '.join(words)
@@ -236,8 +237,16 @@ def _estimate_relations(cache, docs=None):
                      relevances)
 
     for (relevance, question, session) in relevances:
-        record = QuestionSessionRelevance(relevance=relevance,
-                question=question, session=session)
+        try:
+            record = QuestionSessionRelevance.objects.get(
+                            question=question,
+                            session=session, user=None)
+        except QuestionSessionRelevance.DoesNotExist:
+            record = QuestionSessionRelevance(relevance=relevance,
+                        question=question,
+                        session=session, user=None)
+        
+        record.relevance = relevance
         record.save()
 
 if __name__ == '__main__':
