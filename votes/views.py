@@ -901,7 +901,7 @@ def autocomplete_search(request):
     result_list = []
     for x in members:
         tn = DjangoThumbnail(x.photo, (thumbnail_width, thumbnail_height))
-        result_list.append((x.name, unicode(tn), "/search/?query=" + x.name))
+        result_list.append((x.name, unicode(tn), x.get_absolute_url()))
 
     for x in keywords:
         result_list.append((x['keyword__name'], "",
