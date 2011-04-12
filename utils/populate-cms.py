@@ -41,30 +41,35 @@ def process_file(root, filename, category_name, type):
         category = Category(name=category_name)
         category.save()
     else:
+        assert(category.count() == 1)
         category = category[0]
 
     if category_name == "news":
-        print "Creating newsitem with date %s" % newsdate
-        # FIXME add date setting
-        item = Newsitem(category=category, date=newsdate)
-        item.save()
+        print "Processing newsitem with date %s" % newsdate
+        item = Newsitem.objects.filter(category=category, date=newsdate)
+        # FIXME: Many newsitems per date
+        if not item.count():
+            item = Newsitem(category=category, date=newsdate)
+            item.save()
+        else:
+            assert(item.count() == 1)
+            item = item[0]
     else:
         item = Item.objects.filter(category=category)
-
         if item.count() == 0:
-            print "Creating _item_ under category %s" % category_name
+            print "Creating_item under category %s" % category_name
             item = Item(category=category)
             item.save()
         else:
             item = item[0]
 
     content = Content.objects.filter(item=item, language=language)
-
     if content.count() == 0:
         print "Creating content for item %s with lang %s" % (item, language)
         content = Content(item=item, language=language)
         content.save()
     else:
+        # FIXME: Compare Revision date to file mtime.
         return
 
     f = codecs.open(os.path.join(root, filename), mode="r", encoding="utf8")
