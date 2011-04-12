@@ -27,13 +27,6 @@
         <tr>
           <td class="source">{{ question.source.name }} {{question.source.year}}</td>
           <td class="question_text">{{ question.text }}</td>
-          <td class="answer_count">
-             {% comment %}{% blocktrans count question.answers.count as count %}
-             {{count}} answer
-             {% plural %}
-             {{count}} answers
-             {% endblocktrans %} {%endcomment%}
-          </td>
         </tr>
       </table>
     </a>
