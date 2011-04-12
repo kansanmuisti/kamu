@@ -48,7 +48,7 @@ def show_question(request, source, question):
         question = int(question)
     except ValueError:
         raise Http404()
-    question = get_object_or_404(Question, order=question)
+    question = get_object_or_404(Question, source=src, order=question)
     relevant_sessions = \
         QuestionSessionRelevance.get_relevant_sessions(question)
     relevant_sessions = relevant_sessions[:3]
