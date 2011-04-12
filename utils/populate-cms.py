@@ -77,8 +77,16 @@ def process_file(root, filename, category_name, type):
     if category_name == "news":
         # Newsfiles contain the subject as first line
         subject = f.readline()[:-1]
+        # Summary is defined as being all the text after subject until
+        # marker "[full]" alone at the beginning of line with LF at end
+        summary = ""
+        for line in f:
+            if line == "[full]\n":
+                break
+            summary += line
     else:
         subject = "Initial commit for %s in %s" % (category, language)
+        summary = ""
 
     data = f.read()
     content_data = data
@@ -87,7 +95,7 @@ def process_file(root, filename, category_name, type):
         content_data += data
     content_data = content_data.strip()
 
-    revision = Revision(content=content, subject=subject, data=content_data, data_markup_type=type)
+    revision = Revision(content=content, subject=subject, summary=summary, summary_markup_type=type, data=content_data, data_markup_type=type)
     revision.save()
     print "Prepared revision %s" % revision
 
