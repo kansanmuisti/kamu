@@ -1,5 +1,5 @@
 {% extends "opinions/opinion_base.html" %}
-{% load i18n thumbnail %}
+{% load i18n thumbnail cache %}
 {% block title %}{% trans "Opinions" %}{% endblock %}
 {% block head %}
     <script type="text/javascript">
@@ -14,11 +14,9 @@
     </script>
 {% endblock %}
 
-
 {% block content %}
-
+{% cache 600 question_list %}
   <div id="accordion" class="ui-accordion ui-widget ui-helper-reset ui-accordion-icons">
-
   {% for question in questions %}
   <div>
   <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
@@ -53,4 +51,6 @@
   </div>
   {% endfor %}
    </div>
+{% endcache %}
 {% endblock %}
+
