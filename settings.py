@@ -69,6 +69,8 @@ SECRET_KEY = 'ljqf))w56l68l26zgtn**2u198y0j5$82o^ac%m0x23l=hq_75'
 
 INTERNAL_IPS = ( '127.0.0.1', )
 
+CACHE_BACKEND = 'locmem://'
+
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.load_template_source',
