@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-12 23:07+0300\n"
-"PO-Revision-Date: 2011-04-12 23:08+0300\n"
+"POT-Creation-Date: 2011-04-13 00:28+0300\n"
+"PO-Revision-Date: 2011-04-13 00:28+0300\n"
 "Last-Translator: Juha Yrjölä <juha.yrjola@iki.fi>\n"
 "Language-Team: Finnish <info@kansanmuisti.fi>\n"
 "Language: \n"
@@ -348,15 +348,15 @@ msgstr "Jokseenkin yhdenmukainen"
 msgid "Congruent"
 msgstr "Yhdenmukainen"
 
-#: opinions/views.py:165
+#: opinions/views.py:160
 msgid "Session connected to question."
 msgstr "Äänestys yhdistetty kysymykseen."
 
-#: opinions/views.py:168
+#: opinions/views.py:163
 msgid "Session removed from question."
 msgstr "Äänestys poistettu kysymyksen yhteydestä."
 
-#: opinions/templatetags/opinions.py:43
+#: opinions/templatetags/opinions.py:44
 msgid "N/A"
 msgstr "-"
 
@@ -637,27 +637,27 @@ msgstr ""
 msgid "Main page"
 msgstr "Etusivu"
 
-#: templates/main_page.html:8 votes/views.py:1004
+#: templates/main_page.html:8 votes/views.py:1030
 msgid "Background"
 msgstr "Taustaa"
 
-#: templates/main_page.html:9 votes/views.py:1013
+#: templates/main_page.html:9 votes/views.py:1039
 msgid "Feedback"
 msgstr "Palaute"
 
-#: templates/main_page.html:10 votes/views.py:1010
+#: templates/main_page.html:10 votes/views.py:1036
 msgid "Donate"
 msgstr "Lahjoita"
 
-#: templates/main_page.html:11 votes/views.py:1007
+#: templates/main_page.html:11 votes/views.py:1033
 msgid "Contact"
 msgstr "Yhteystiedot"
 
-#: templates/main_page.html:36
+#: templates/main_page.html:39
 msgid "Leave us feedback"
 msgstr "Jätä palautetta"
 
-#: templates/main_page.html:37
+#: templates/main_page.html:40
 msgid ""
 "Please report any errors you find, send us your ideas for improvement, "
 "volunteer for work, or just say hi."
@@ -665,19 +665,19 @@ msgstr ""
 "Raportoi meille löytämistäsi virheistä sivustolla, lähetä ideoitasi "
 "jatkokehitystä varten, tarjoa apuasi tai jätä muuta palautetta."
 
-#: templates/main_page.html:42
+#: templates/main_page.html:45
 msgid "Send"
 msgstr "Lähetä"
 
-#: templates/main_page.html:55
+#: templates/main_page.html:58
 msgid "Most popular"
 msgstr "Suosituimmat"
 
-#: templates/main_page.html:79
+#: templates/main_page.html:82
 msgid "News"
 msgstr "Uutiset"
 
-#: templates/main_page.html:88
+#: templates/main_page.html:91
 msgid "Latest votes"
 msgstr "Uusimmat äänestykset"
 
@@ -971,6 +971,10 @@ msgstr "Asiakirjat"
 msgid "Plenary session minutes"
 msgstr "Istuntopöytäkirja"
 
+#: templates/tagcloud.html:4
+msgid "Keywords from the latest votes"
+msgstr "Uusimpien äänestysten asiasanat"
+
 #: templates/comments/form.html:17 templates/comments/preview.html:30
 msgid "Post"
 msgstr "Julkaise"
@@ -1066,7 +1070,7 @@ msgstr[1] ""
 msgid "Submit"
 msgstr "Lähetä"
 
-#: templates/opinions/list_questions.html:35
+#: templates/opinions/list_questions.html:33
 msgid "View relevant voting sessions"
 msgstr "Tarkastele kysymykseen liittyviä äänestyksiä"
 
@@ -1406,7 +1410,7 @@ msgstr "Vaalibudjetti"
 msgid "Term"
 msgstr "Vaalikausi"
 
-#: votes/views.py:1001
+#: votes/views.py:1027
 msgid "Home"
 msgstr "Etusivu"
 
