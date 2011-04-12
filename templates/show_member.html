@@ -197,14 +197,14 @@
 <div class="opinion_answer">
   <div class="question">
     <span class="source">
-      {{answer.option.question.source.name}}
-      {{answer.option.question.source.year}}
+      {{answer.question.source.name}}
+      {{answer.question.source.year}}
     </span>
-    <a href="{% url opinions.views.show_question answer.option.question.source.url_name answer.option.question.order %}">
-      {{answer.option.question.text}}
+    <a href="{% url opinions.views.show_question answer.question.source.url_name answer.question.order %}">
+      {{answer.question.text}}
     </a>
   </div>
-  {% with answer.option.question.option_set.all as options %}
+  {% with answer.question.option_set.all as options %}
   <ul class="options">
   {% for option in options %}
     <li
