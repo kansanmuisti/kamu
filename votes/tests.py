@@ -32,7 +32,7 @@ class AutocompleteTestCase(TestCase):
         self.assertEqual(decoded_res, exp_res, msg=err_msg)
 
 class AutocompleteSearchTest(AutocompleteTestCase):
-    fixtures = ['test_keyword', 'test_sessionkeyword', 'test_member']
+    fixtures = ['test_keyword', 'test_session_keyword', 'test_member']
     req_url = reverse('votes.views.autocomplete_search')
     req_params = {
             u'max_results'      : 6,
