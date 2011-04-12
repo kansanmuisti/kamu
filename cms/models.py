@@ -96,6 +96,7 @@ class Content(models.Model):
 
 class Revision(models.Model):
     date = models.DateTimeField(auto_now_add=True)
+    summary = MarkupField(blank=True)
     content = models.ForeignKey(Content)
     subject = models.CharField(max_length=200, null=True, blank=True)
     user = models.ForeignKey(User, null=True, blank=True)
