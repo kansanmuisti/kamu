@@ -960,6 +960,32 @@ def mp_hall_of_fame(max_results):
 
     return member_list
 
+def tagcloud_keywords(search_depth, max_keywords):
+    pls = PlenarySession.objects.order_by('-date').values_list('pk', flat=True)
+    pls = list(pls[0:search_depth])
+    sess_list = Session.objects.filter(plenary_session__in=pls)
+    sess_list = sess_list.order_by('plenary_session__date')
+
+    skw_list = SessionKeyword.objects.              \
+                filter(session__in=sess_list).      \
+                values('keyword').                  \
+                annotate(count=Count('keyword')).   \
+                values('keyword__name', 'count').   \
+                order_by('-count')
+
+    kw_list = []
+    for k in skw_list[:max_keywords]:
+        kw = {
+            'name':k['keyword__name'],
+            'url':'/search/keyword/?query=' + k['keyword__name'],
+            'count':k['count'],
+        };
+        kw_list.append(kw)
+
+    kw_list.sort(key=lambda n:n['name'])
+
+    return kw_list
+
 def search(request):
     try:
         page = int(request.GET.get('page', '1'))
@@ -1022,6 +1048,7 @@ def about(request, section):
     args['sess_list'] = sess_list
     args['section_name'] = section_name
     args['mp_hall_of_fame'] = mp_hall_of_fame(10)
+    args['keyword_tagcloud'] = tagcloud_keywords(20, 30)
     if section == 'feedback':
         return contact_form(request, template_name='main_page.html',
                             extra_context=args)

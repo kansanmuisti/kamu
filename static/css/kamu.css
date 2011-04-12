@@ -1305,3 +1305,25 @@ td.party_option_share
     float: right;
     margin-left: 2px;
 }
+
+.tag_cloud h1 {
+	margin-top:20px;
+}
+
+#tag_cloud_items {
+	margin-left:-10px;
+}
+
+#tag_list li {
+	display:inline-block;
+	margin:0 9px;
+	height:25px;
+}
+
+#tag_list li a {
+	text-decoration:none;
+}
+
+#tag_list li a:hover {
+	text-decoration:underline;
+}

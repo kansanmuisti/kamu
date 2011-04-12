@@ -16,6 +16,9 @@
 
 {% ifequal section 'main' %}
 {{ content.data }}
+
+{% include "tagcloud.html" %}
+
 {% if fb_enabled %}
 {% include "_facebook.html" %}
 <div style="margin-top: 48px;">
