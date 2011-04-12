@@ -36,7 +36,7 @@ class Question(models.Model):
         return Answer.objects.filter(option__in=options)
 
     class Meta:
-        ordering = ('-order', )
+        ordering = ('-source__year', 'source__name', 'order', )
         unique_together = (('order', 'source'), )
 
     def __unicode__(self):
