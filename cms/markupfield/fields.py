@@ -173,6 +173,6 @@ try:
     # True in a frozen MarkupField, which is what we want.
     add_introspection_rules(rules=[
         ( (MarkupField,), [], { 'rendered_field': ['rendered_field', {}], })
-    ], patterns=['markupfield\.fields\.MarkupField'])
+    ], patterns=['cms\.markupfield\.fields\.MarkupField'])
 except ImportError:
     pass
