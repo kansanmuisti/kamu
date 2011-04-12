@@ -7,14 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-12 18:13+0300\n"
-"PO-Revision-Date: 2011-04-12 18:09+0300\n"
+"POT-Creation-Date: 2011-04-12 23:07+0300\n"
+"PO-Revision-Date: 2011-04-12 23:08+0300\n"
 "Last-Translator: Juha Yrjölä <juha.yrjola@iki.fi>\n"
 "Language-Team: Finnish <info@kansanmuisti.fi>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
 
 #: beta/models.py:8
 msgid "Will not tell"
@@ -544,7 +545,7 @@ msgid "Members"
 msgstr "Kansanedustajat"
 
 #: templates/base.html:154 templates/list_parties.html:3
-#: templates/opinions/promise_statistics_sidebar.html:5
+#: templates/opinions/promise_statistics_sidebar.html:6
 msgid "Parties"
 msgstr "Puolueet"
 
@@ -739,12 +740,12 @@ msgid "Modify"
 msgstr "Muokkaa"
 
 #: templates/question_session_congruence_input.html:6
-#: templates/opinions/show_question.html:22
+#: templates/opinions/show_question.html:25
 msgid "Relevance"
 msgstr "Relevanssi"
 
 #: templates/question_session_congruence_input.html:22
-#: templates/opinions/show_question.html:38
+#: templates/opinions/show_question.html:41
 msgid "Congruence with voting yes"
 msgstr "Yhdenmukaisuus puoltavan äänen kanssa"
 
@@ -907,6 +908,7 @@ msgid "Session scores"
 msgstr "Äänestysten pisteytykset"
 
 #: templates/show_org.html:24
+#: templates/opinions/promise_statistics_sidebar.html:47
 msgid "No sessions scored"
 msgstr "Ei pisteytettyjä äänestyksiä"
 
@@ -1072,15 +1074,15 @@ msgstr "Tarkastele kysymykseen liittyviä äänestyksiä"
 msgid "Match"
 msgstr "Yhdistä"
 
-#: templates/opinions/promise_statistics_sidebar.html:3
+#: templates/opinions/promise_statistics_sidebar.html:4
 msgid "Promise percentages"
 msgstr "Yhdenmukaisuudet"
 
-#: templates/opinions/promise_statistics_sidebar.html:4
+#: templates/opinions/promise_statistics_sidebar.html:5
 msgid "Based on your question/vote evaluations"
 msgstr "Perustuvat omiin pisteytyksiisi"
 
-#: templates/opinions/promise_statistics_sidebar.html:23
+#: templates/opinions/promise_statistics_sidebar.html:25
 msgid "Members you have evaluated"
 msgstr "Edustajat, joita olet arvioinut"
 
@@ -1104,15 +1106,19 @@ msgstr "Keskimääräinen yhdenmukaisuus:"
 msgid "Question"
 msgstr "Kysymys"
 
-#: templates/opinions/show_question.html:8
+#: templates/opinions/show_question.html:9
+msgid "No relevant voting sessions found."
+msgstr "Kysymykseen yhdistettyjä äänestyksiä ei löytynyt."
+
+#: templates/opinions/show_question.html:11
 msgid "Relevant voting sessions"
 msgstr "Kysymykseen liittyvät äänestykset"
 
-#: templates/opinions/show_question.html:12
+#: templates/opinions/show_question.html:15
 msgid "Log in or register to make a difference"
 msgstr "Kirjaudu sisään tai rekisteröidy vaikuttaaksesi"
 
-#: templates/opinions/show_question.html:55
+#: templates/opinions/show_question.html:58
 msgid "Submit scores"
 msgstr "Lähetä pisteytykset"
 
@@ -1407,4 +1413,3 @@ msgstr "Etusivu"
 #: votes/templatetags/basic.py:110
 msgid "All districts"
 msgstr "Kaikki"
-

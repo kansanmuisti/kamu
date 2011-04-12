@@ -5,6 +5,9 @@
 {% block content %}
 <h1>{{question}}</h1>
 
+{% if not relevant_sessions %}
+<h2>{% trans "No relevant voting sessions found." %}</h2>
+{% else %}
 <h2>{% trans "Relevant voting sessions" %}</h2>
 
 {% if not user.is_authenticated %}
@@ -54,5 +57,6 @@
     disabled="disabled"
     {% endif %} value="{% trans 'Submit scores' %}"/>
 </form>
+{% endif %}
 {% endblock %}
 
