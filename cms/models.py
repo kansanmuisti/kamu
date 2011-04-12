@@ -6,6 +6,8 @@ from django.utils.translation import get_language
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 
+DEFAULT_LANGUAGE = settings.LANGUAGE_CODE
+
 class Category(models.Model):
     name = models.CharField(max_length=80)
 
@@ -31,9 +33,16 @@ class Item(models.Model):
         if not lang:
             lang = get_language()
         # Case of no news
+        content_list = list(self.content_set.filter(language=lang))
+        if not content_list:
+            content_list = list(self.content_set.filter(language=DEFAULT_LANGUAGE))
+        if not content_list:
+            return None
+        assert len(content_list) == 1
+        content = content_list[0]
         try:
-            latest = self.content_set.get(language=lang).revision_set.all()[0]
-        except ObjectDoesNotExist:
+            latest = content.revision_set.all()[0]
+        except Content.DoesNotExist:
             return None
         return latest
 
@@ -57,7 +66,8 @@ class NewsitemManager(models.Manager):
         if not lang:
             lang=get_language()
         newsitems = self.filter(content__language=lang)
-
+        if not newsitems:
+            newsitems = self.filter(content__language=DEFAULT_LANGUAGE)
         if amount == None:
             return newsitems
         else:
