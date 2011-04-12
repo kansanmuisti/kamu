@@ -80,7 +80,7 @@
 {% for newsitem in news %}
   {% ifchanged %}<span class="news_item_date">{{ newsitem.date|i18n_date:"numeric" }}</span>{% endifchanged %}
   <h2>{{ newsitem.content.subject }}</h2>
-  {{ newsitem.content.data }}
+  {{ newsitem.content.summary }}
 {% endfor %}
 </div>
 
