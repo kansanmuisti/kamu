@@ -77,8 +77,13 @@ def parse():
     q_list.extend(q2_list)
     i_list.extend([-1] * len(q2_list))
 
-    txt_list = [hdr[idx][7:].replace('_', ',') for idx in q_list]
     o_list = range(0, len(q_list))
+
+    txt_list = [hdr[idx][7:].replace('_', ',') for idx in q_list]
+    for i in o_list:
+        if q_list[i] in range(56, 64):
+            txt_list[i] = "Hallituspuolueena " + txt_list[i]
+
     q_info_list = zip(q_list, i_list, o_list, txt_list)
     for q in q_info_list:
         insert_question(src, q)
