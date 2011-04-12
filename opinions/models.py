@@ -92,7 +92,7 @@ class Answer(models.Model):
     member = models.ForeignKey(Member)
     option = models.ForeignKey(Option, null=True)
     question = models.ForeignKey(Question)
-    explanation = models.TextField()
+    explanation = models.TextField(null=True)
 
     class Meta:
         unique_together = (('member', 'option'), )
