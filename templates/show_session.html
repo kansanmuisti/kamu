@@ -52,7 +52,7 @@
   </div>
 {% endif %}
 
-{% if perms.opinions.change_questionsessionrelevance %}
+{% if user.is_authenticated %}
   <div class="h2_section">
   <p>{% trans "Match to Opinions:" %}</p>
   {% match_session session %}
