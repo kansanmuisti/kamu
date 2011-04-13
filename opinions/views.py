@@ -17,6 +17,7 @@ from opinions.forms import VoteOptionCongruenceForm
 from votes.models import Party, Session
 from httpstatus import Http400, Http403
 from httpstatus.decorators import postonly
+from kamu.cms.models import Item
 
 MATCH_PERM = 'opinions.change_questionsessionrelevance'
 LAST_QUESTION_KEY = 'opinions:last_question'
@@ -127,9 +128,9 @@ def get_promise_statistics_summary(user, question=None):
     if not parties:
         return {}
 
-    if(not user.is_authenticated()):
+    if not user.is_authenticated():
         return dict(parties=parties, members=[], user=user, question=question)
-        
+
     member_type = ContentType.objects.get_for_model(Member)
     member_votes = user_voting.Vote.objects.filter(user=user,
                                                    content_type=member_type)
@@ -145,12 +146,11 @@ def get_promise_statistics_summary(user, question=None):
 
     return dict(parties=parties, members=members, user=user, question=question)
 
-def opinions_summary(request):
+def summary(request):
     args = get_promise_statistics_summary(user=request.user)
-    return render_to_response('opinions/opinions_summary.html', args,
+    args['content'] = Item.objects.retrieve_content('opinions_about')
+    return render_to_response('opinions/summary.html', args,
                             context_instance=RequestContext(request))
-   
-    
 
 @postonly
 def match_session(request):
@@ -218,7 +218,7 @@ def show_party_congruences(request, party):
     congruences = VoteOptionCongruence.objects.get_vote_congruences(
                     for_party=for_party, for_user=request.user)
     congruences = list(congruences)
-   
+
     by_question = itertools.groupby(congruences, lambda c: c.option.question_id)
     questions = []
     for qid, congruences in by_question:
@@ -261,5 +261,3 @@ def show_party_congruences(request, party):
     args['active_page'] = 'opinions'
     return render_to_response('opinions/show_party_congruences.html', args,
                               context_instance=RequestContext(request))
-
-

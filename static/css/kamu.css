@@ -1236,37 +1236,39 @@ td.option_congruence_bar_cell
 .promise_summary_members,
 .promise_summary_parties
 {
-    width: 45%;
-    float: left;
-    padding: 1em;
+	float: left;
+}
+
+.promise_percentage_column {
+	width: 160px;
 }
 
 ul.opinion_navigation li
 {
-    list-style-type: none;
-    padding-bottom: 0.5em;
+	list-style-type: none;
+	padding-bottom: 0.5em;
 }
 
 ul.opinion_navigation .opinion_navigation_category
 {
-    padding-top: 0.5em;
+	padding-top: 0.5em;
 }
 
 ul.opinion_navigation a
 {
-    display: block;
+	display: block;
 }
 
 
 ul.opinion_navigation .promise_percentage_bar
 {
-    padding: 0;
-    height: 2px;
+	padding: 0;
+	height: 2px;
 }
 
 ul.opinion_navigation .opinion_navigation_category_label
 {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 table.promise_statistics_box
