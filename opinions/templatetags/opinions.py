@@ -49,9 +49,9 @@ def congruence_to_percentage(share):
 @register.inclusion_tag('opinions/match_session.html', takes_context=True)
 def match_session(context, session, question=None, delete=False):
     src_list = QuestionSource.objects.all()
-    session = context['request'].session
     args = dict(src_list=src_list, session=session, question=question,
                 delete=delete)
+    session = context['request'].session
     if session and LAST_QUESTION_KEY in session:
         act_que = session[LAST_QUESTION_KEY]
         args['active_question'] = act_que
