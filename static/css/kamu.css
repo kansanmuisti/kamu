@@ -482,6 +482,18 @@ table.sessions {
 	text-indent: -9999px;
 	width: 2em;
 }
+.yes_vote_selected {
+	height: 24px;
+	background: url("/static/images/icons/vote_yes_selected.png") center right no-repeat;
+	text-indent: -9999px;
+	width: 2em;
+}
+.no_vote_selected {
+	height: 24px;
+	background: url("/static/images/icons/vote_no_selected.png") center right no-repeat;
+	text-indent: -9999px;
+	width: 2em;
+}
 .empty_vote {
 	height: 24px;
 	background: url("/static/images/icons/vote_empty.png") center right no-repeat;
