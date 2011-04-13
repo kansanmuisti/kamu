@@ -177,25 +177,42 @@ def generate_modified_query(request, mod_key, mod_val, remove=[]):
     params[mod_key] = mod_val
     return request.path + '?%s' % urlencode(params)
 
+vote_names = ('up', 'down', 'clear')
+vote_values = (1, -1, None)
+
+def vote_value_to_name(value):
+    if value not in vote_values:
+        raise Http400
+    return vote_names[vote_values.index(value)]
+
+def vote_name_to_value(name):
+    if name not in vote_names:
+        raise Http400
+    return vote_values[vote_names.index(name)]
+
+def get_user_votes(user, obj):
+    user_votes = {'up': UserVote.objects.get_count(obj, 1),
+                  'down': UserVote.objects.get_count(obj, -1)}
+    if (user.is_authenticated()):
+        vote_value = UserVote.objects.get_vote(obj, user)
+    else:
+        vote_value = None
+
+    user_votes.update({ 'selected':vote_value_to_name(vote_value) })
+
+    return user_votes
+
 def set_user_vote(request, obj):
     if not 'vote' in request.POST:
         raise Http400
     vote = request.POST['vote'].lower()
-    vote_names = ('up', 'down', 'clear')
-    vote_values = (1, -1, None)
-    if vote not in vote_names:
-        raise Http400
 
-    UserVote.objects.record_vote(obj, request.user,
-                                 vote_values[vote_names.index(vote)])
+    vote = vote_name_to_value(vote)
+    new_vote = UserVote.objects.toggle_vote(obj, request.user, vote)
 
-    counts = {}
-    counts['up'] = UserVote.objects.get_count(obj, 1)
-    counts['down'] = UserVote.objects.get_count(obj, -1)
-    json = simplejson.dumps(counts)
+    json = simplejson.dumps(get_user_votes(request.user, obj))
 
     return HttpResponse(json, mimetype='application/json')
-
 
 def list_plsessions(request):
     (date_begin, date_end) = find_period(request)
@@ -419,8 +436,7 @@ def show_session_basic(request, session, psess):
     tables[1]['html'] = html
     tables[1]['class'] = 'vote_list_right'
 
-    user_votes = {'up': UserVote.objects.get_count(session, 1),
-                  'down': UserVote.objects.get_count(session, -1)}
+    user_votes = get_user_votes(request.user, session)
 
     args = {'vote_list': votes, 'tables': tables, 'score_table': score_table,
             'tags': Tag.objects.get_for_object(session), 'switch_district': True,
@@ -699,6 +715,7 @@ def show_member_votes(request, member):
 
     return {'vote_page': vote_page}
 
+
 def show_member_basic(request, member):
     pa_list = PartyAssociation.objects.filter(member=member).order_by('begin')
     pa_list = pa_list.select_related('party__full_name')
@@ -718,8 +735,7 @@ def show_member_basic(request, member):
     else:
         table = None
 
-    user_votes = {'up': UserVote.objects.get_count(member, 1),
-                  'down': UserVote.objects.get_count(member, -1)}
+    user_votes = get_user_votes(request.user, member)
 
     return {'stats_table': table, 'user_votes': user_votes }
 
