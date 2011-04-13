@@ -29,7 +29,7 @@ def _handle_congruence_form(request, form, option, session):
         raise Http403
 
     value = form.cleaned_data['congruence']
-    if value is None:
+    if value is None or value == '':
         return
 
     value = int(value)
@@ -55,6 +55,7 @@ def show_question(request, source, question):
     relevant_sessions = relevant_sessions[:3]
     options = list(question.option_set.all())
 
+    has_input = False
     for session in relevant_sessions:
         session.question_relevance = int(round(session.question_relevance * 100))
         option_congruences = []
@@ -81,6 +82,7 @@ def show_question(request, source, question):
                 input_form.fields['congruence'].widget.attrs['disabled'] = 'disabled'
 
             if input_form.is_valid():
+                has_input = True
                 _handle_congruence_form(request, input_form, option, session)
 
             congruence = VoteOptionCongruence.objects.get_congruence(option, session)
@@ -93,7 +95,12 @@ def show_question(request, source, question):
                                       congruence_scale=congruence_scale,
                                       user_congruence=user_congruence))
         session.option_congruences = option_congruences
-
+    
+    if(has_input):
+        return HttpResponseRedirect(
+                reverse('opinions.views.show_question',
+                        kwargs=dict(source=source, question=question.order)))
+        
     args = dict(question=question, relevant_sessions=relevant_sessions)
     args['active_page'] = 'opinions'
 

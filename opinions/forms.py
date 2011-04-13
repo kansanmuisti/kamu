@@ -46,4 +46,5 @@ class RadioFieldRendererWithSanerLabels(forms.RadioSelect.renderer):
  
 class VoteOptionCongruenceForm(forms.Form):
     congruence = forms.ChoiceField(choices=CONGRUENCE_CHOICES,
-        widget=forms.RadioSelect(renderer=RadioFieldRendererWithSanerLabels))
+        widget=forms.RadioSelect(renderer=RadioFieldRendererWithSanerLabels),
+        required=False)
