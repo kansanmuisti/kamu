@@ -26,4 +26,5 @@ def user_notification(sender, instance, **kwargs):
 
     mail_managers(subject, msg, fail_silently=True)
 
-post_save.connect(user_notification, sender=User)
+post_save.connect(user_notification, sender=User,
+                  dispatch_uid="user_email_notification")
