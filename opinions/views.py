@@ -92,6 +92,7 @@ def show_question(request, source, question):
         session.option_congruences = option_congruences
 
     args = dict(question=question, relevant_sessions=relevant_sessions)
+    args['active_page'] = 'opinions'
 
     context_instance = RequestContext(request)
     response = render_to_response('opinions/show_question.html', args,
@@ -105,6 +106,7 @@ def list_questions(request):
     parties = Party.objects.all()
 
     args = dict(questions=questions, parties=parties)
+    args['active_page'] = 'opinions'
     return render_to_response('opinions/list_questions.html', args,
                               context_instance=RequestContext(request))
 
@@ -193,7 +195,7 @@ def show_party_congruences(request, party):
         option_cong = itertools.groupby(congruences, lambda c: c.option_id)
         option_cong = [(o, list(c)) for o, c in option_cong]
         option_cong = dict(option_cong)
-        
+
         options = []
         for option in q.option_set.all():
             c = list(option_cong.get(option.id, []))
@@ -202,7 +204,7 @@ def show_party_congruences(request, party):
             options.append(option)
 
         q.options = options
-        
+
         by_session = sorted(congruences, key=lambda c: c.session_id)
         by_session = itertools.groupby(by_session, lambda c: c.session_id)
         sessions = []
@@ -218,11 +220,10 @@ def show_party_congruences(request, party):
 
         q.sessions = sessions
 
-
         questions.append(q)
-    
-    
+
     args = dict(questions=questions, party=for_party)
+    args['active_page'] = 'opinions'
     return render_to_response('opinions/show_party_congruences.html', args,
                               context_instance=RequestContext(request))
 
