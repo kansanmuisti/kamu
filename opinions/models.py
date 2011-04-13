@@ -302,7 +302,6 @@ class VoteOptionCongruenceManager(models.Manager):
                GROUP BY session_id
             """
         
-        print extra_where
         query = \
         """
         SELECT
