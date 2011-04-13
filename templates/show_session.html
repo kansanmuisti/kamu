@@ -5,40 +5,6 @@
 <meta property="og:title" content="{% trans "Parliament vote" %} {{ session }}" />
 <meta property="og:description" content="{{ session.get_short_summary }}" />
 <meta property="og:url" content="http://{{ fb_host }}{{ session.get_absolute_url }}" />
-<script type="text/javascript">
-  $(document).ready(function() {
-{% if user.is_authenticated %}
-    var vote_func = function() {
-      var up_count = $('.user_vote_up .user_vote_count');
-      var down_count = $('.user_vote_down .user_vote_count');
-
-      var success_func = function(resp) {
-	up_count.text(resp.up);
-	down_count.text(resp.down);
-      };
-      if ($(this).parent().hasClass('user_vote_up')) {
-	data = "vote=up";
-      } else {
-	data = "vote=down";
-      }
-      $.ajax({
-	type: "POST",
-	data: data,
-	dataType: "json",
-	url: "{% url votes.views.set_session_user_vote plsess=psession.url_name,sess=session.number %}",
-	success: success_func,
-      });
-
-      return false;
-    };
-{% else %}
-    var vote_func = function() {
-        alert("{% trans 'Please log in first!' %}");
-    }
-{% endif %}
-    $('.user_vote_button').click(vote_func);
-  });
-</script>
 {% endblock %}
 {% block sidebar %}
 <div style='margin-bottom: 32px'>
@@ -97,11 +63,18 @@
 {% blocktrans %}
 <p>You may indicate how you yourself would vote on this subject.</p>
 {% endblocktrans %}
-  <div id="session_user_vote">
-    <span style="display: block; margin-right: 16px; float: left;" class="user_vote">
-      <span class="user_vote_up"><a href="#" style="float: left;" class="yes_vote user_vote_button"></a><p class="user_vote_count">{{ user_votes.up }}</p></span>
-      <span class="user_vote_down"><a href="#" style="float: left;" class="no_vote user_vote_button"></a><p class="user_vote_count">{{ user_votes.down }}</p></span>
-    </span>
+    <div id="session_user_vote">
+
+    <script type="text/javascript">
+        $('#session_user_vote').user_vote_panel({
+            init_state:"{{user_votes.selected}}",
+            disabled:{{ user.is_authenticated|yesno:"false,true" }},
+            disabled_text:"{% trans 'Please log in first!' %}",
+            up_count:{{ user_votes.up }},
+            down_count:{{ user_votes.down }},
+            toggle_url:"{% url votes.views.set_session_user_vote plsess=psession.url_name,sess=session.number %}"
+        });
+    </script>
 {% if fb_enabled %}
 {% include "_facebook.html" %}
     <span class="fb_like"><fb:like show_faces=false action="recommend" font="verdana"></fb:recommendations></span>
