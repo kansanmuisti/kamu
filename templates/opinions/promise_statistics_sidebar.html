@@ -1,5 +1,7 @@
 {% load i18n opinions thumbnail %}
 
+
+
 {% if parties or members %}
 <ul class="opinion_navigation">
   <li>
@@ -61,4 +63,17 @@
 {% else %}
 <h3>{% trans "No sessions scored" %}</h3>
 {% endif %}
+
+<div class="congruence_source_nag">
+  {% if system_congruences %}
+    {% trans "Congruences based on Kansan Muisti's estimations." %}
+    {% trans "Log in or register to make your own." %}
+  {% else %}
+    {% trans "Congruences based on your estimations." %}
+    {% trans "You can view results based on Kansan Muisti's estimations by logging out." %}
+  {% endif %}
+
+</div>
+
+
 

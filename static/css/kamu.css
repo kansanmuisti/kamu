@@ -1279,6 +1279,12 @@ ul.opinion_navigation .opinion_navigation_category_label
 	font-weight: bold;
 }
 
+.congruence_source_nag
+{
+    font-size: x-small;
+    margin-bottom: 1em;
+}
+
 table.promise_statistics_box
 {
 	width: 100%;

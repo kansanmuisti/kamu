@@ -180,10 +180,9 @@ class VoteOptionCongruenceManager(models.Manager):
         if(for_user is None): return None
 
         if (not VoteOptionCongruence.objects.user_has_congruences(for_user)):
-            magic_user = settings.KAMU_OPINIONS_MAGIC_USER
+            magic_user = VoteOptionCongruence.magic_username
             for_user = User.objects.get(username=magic_user)
         return for_user
-
 
     def __get_average_congruences(self, grouping_class, id_field,
                                   descending=True, limit=False, for_user=None,
@@ -334,6 +333,9 @@ class VoteOptionCongruence(models.Model):
     user = models.ForeignKey(User)
 
     objects = VoteOptionCongruenceManager()
+    
+    magic_username = settings.KAMU_OPINIONS_MAGIC_USER
+
 
     def save(self, update_if_exists=False, **kwargs):
         if update_if_exists:
