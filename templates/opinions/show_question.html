@@ -3,7 +3,7 @@
 {% block title %}{% trans "Question" %}{{question.name}}{% endblock %}
 
 {% block content %}
-<h1>{{question}}</h1>
+<h1>{{ question.text }}</h1>
 <table class="question_options">
 {% for option in question.option_set.all %}
   <tr>
