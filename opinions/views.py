@@ -10,7 +10,9 @@ from django.template import RequestContext
 from django.http import Http404, HttpResponseRedirect
 from django.contrib import messages
 from django.core.urlresolvers import reverse
+from django.core.cache import cache
 from django.contrib.contenttypes.models import ContentType
+from django.db.models.signals import post_save
 from kamu.user_voting import models as user_voting
 from opinions.models import *
 from opinions.forms import VoteOptionCongruenceForm
@@ -116,12 +118,32 @@ def list_questions(request):
     return render_to_response('opinions/list_questions.html', args,
                               context_instance=RequestContext(request))
 
+def clear_cache(sender, **kwargs):
+    # FIXME: oh my
+    k = cache.get('opinions_summary_keys')
+    if not k:
+        return
+    cache.delete_many(k)
+    cache.delete('opinions_summary_keys')
+post_save.connect(clear_cache, sender=VoteOptionCongruence)
 
-def list_questions_static(request):
-    return render_to_response('opinions/list_questions_static.html', {},
-                              context_instance=RequestContext(request))
+def save_cache(key, arg):
+    cache.set(key, arg, 1200)
+    k = cache.get('opinions_summary_keys')
+    if not k:
+        k = []
+    k.append(key)
+    cache.set('opinions_summary_keys', k, 1200)
 
 def get_promise_statistics_summary(user, question=None):
+    cache_key = "opinions_summary/%s/%s" % (user, question)
+    ret = cache.get(cache_key)
+    if ret:
+        return ret
+    # workaround for un-pickleable django lazy objects
+    if type(user) != User:
+        user = User.objects.get(pk=user.pk)
+
     get_party_cong = VoteOptionCongruence.objects.get_party_congruences
     parties = list(get_party_cong(for_user=user, for_question=question))
     # If no congruences found for parties, skip the other queries.
@@ -129,7 +151,9 @@ def get_promise_statistics_summary(user, question=None):
         return {}
 
     if not user.is_authenticated():
-        return dict(parties=parties, members=[], user=user, question=question)
+        ret = dict(parties=parties, members=[], user=user, question=question)
+        save_cache(cache_key, ret)
+        return ret
 
     member_type = ContentType.objects.get_for_model(Member)
     member_votes = user_voting.Vote.objects.filter(user=user,
@@ -144,7 +168,9 @@ def get_promise_statistics_summary(user, question=None):
         members.append(member)
     members.sort(key=lambda m: m.congruence, reverse=True)
 
-    return dict(parties=parties, members=members, user=user, question=question)
+    ret = dict(parties=parties, members=members, user=user, question=question)
+    save_cache(cache_key, ret)
+    return ret
 
 def summary(request):
     args = get_promise_statistics_summary(user=request.user)
@@ -155,8 +181,6 @@ def summary(request):
 @postonly
 def match_session(request):
     if not request.user.is_authenticated():
-        raise Http403()
-    elif not request.user.has_perm(MATCH_PERM):
         raise Http403()
 
     s = request.POST.get('session', None)
