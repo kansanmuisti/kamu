@@ -100,7 +100,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'httpstatus.middleware.HttpStatusErrorsMiddleware',
-#    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'kamu.urls'
@@ -123,7 +122,6 @@ INSTALLED_APPS = (
     'django.contrib.markup',
     'django.contrib.messages',
     'django_extensions',
-#    'debug_toolbar',
     'django_assets',
     'lifestream',
     'sorl.thumbnail',
@@ -165,7 +163,7 @@ FACEBOOK_APP_SECRET = "Set this in settings_local"
 # Optional
 FACEBOOK_DOMAIN = None
 
-KAMU_OPINIONS_MAGIC_USER='jey'
+KAMU_OPINIONS_MAGIC_USER = 'kamu'
 
 FAST_TEST = False
 
