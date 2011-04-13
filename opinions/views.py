@@ -65,7 +65,7 @@ def show_question(request, source, question):
                          session=session, vote='Y', user=request.user))
                 assert len(user_congruence) <= 1
                 if len(user_congruence) > 0:
-                    user_congruence = int(user_congruence[0].congruence * 3)
+                    user_congruence = int(round(user_congruence[0].congruence * 3))
                 else:
                     user_congruence = None
 
@@ -137,7 +137,6 @@ def match_session(request):
     s = request.POST.get('question', None)
     if not s or len(s) > 200:
         raise Http400()
-    print s
     m = re.match(r'^\w+/\d+$', s)
     if not m:
         raise Http400()
