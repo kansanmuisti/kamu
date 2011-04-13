@@ -11,6 +11,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
+from django.utils.functional import SimpleLazyObject
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_save
@@ -149,8 +150,8 @@ def get_promise_statistics_summary(user, question=None):
     if ret:
         return ret
     # workaround for un-pickleable django lazy objects
-    if type(user) not in (User, AnonymousUser):
-        user = User.objects.get(pk=user.pk)
+    if type(user) == SimpleLazyObject:
+        user = user._wrapped
 
     get_party_cong = VoteOptionCongruence.objects.get_party_congruences
     parties = list(get_party_cong(for_user=user, for_question=question))
