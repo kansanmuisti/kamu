@@ -130,17 +130,27 @@ class VoteOptionCongruenceManager(models.Manager):
         if (for_question is not None):
             args.append(for_question.id)
             extra_where += "AND o.question_id=%s\n"
+        
+        session_freq_query = \
+            """
+            SELECT session_id, COUNT(session_id) AS freq
+               FROM opinions_voteoptioncongruence
+               GROUP BY session_id
+            """
+
 
         query = \
             """
                 SELECT
-                    SUM(congruence)/SUM(ABS(congruence)) AS congruence_avg
+                    SUM(congruence/f.freq)/SUM(ABS(congruence/f.freq)) AS congruence_avg
                   FROM
                     opinions_voteoptioncongruence AS c,
                     opinions_answer AS a,
                     opinions_option AS o,
-                    votes_vote AS v
+                    votes_vote AS v,
+                    (%s) AS f
                   WHERE v.session_id=c.session_id
+                    AND f.session_id=c.session_id
                     AND a.option_id=c.option_id
                     AND a.member_id=v.member_id
                     AND v.vote=c.vote
@@ -148,7 +158,7 @@ class VoteOptionCongruenceManager(models.Manager):
                     %s
                     AND %s=%%s
                   """ \
-            % (extra_where, id_field)
+            % (session_freq_query, extra_where, id_field)
         
         args.append(grouping_object.pk)
         cursor = connection.cursor()
@@ -179,17 +189,27 @@ class VoteOptionCongruenceManager(models.Manager):
                                   descending=True, limit=False, for_user=None,
                                   for_question=None, for_member=None,
                                   allow_null_congruences=False):
+        
+        session_freq_query = \
+            """
+            SELECT session_id, COUNT(session_id) AS freq
+               FROM opinions_voteoptioncongruence
+               GROUP BY session_id
+            """
+
         query = \
             """
                 SELECT %s.*,
-                    SUM(congruence)/SUM(ABS(congruence)) AS congruence_avg
+                    SUM(congruence/f.freq)/SUM(ABS(congruence/f.freq)) AS congruence_avg
                   FROM
                     opinions_voteoptioncongruence as c,
                     opinions_answer as a,
                     opinions_option as o,
                     votes_vote AS v,
+                    (%s) AS f,
                     %s
                   WHERE v.session_id=c.session_id
+                    AND f.session_id=c.session_id
                     AND a.option_id=c.option_id
                     AND a.member_id=v.member_id
                     AND v.vote=c.vote
@@ -202,6 +222,7 @@ class VoteOptionCongruenceManager(models.Manager):
                   %s
                   """ \
             % (grouping_class._meta.db_table,
+               session_freq_query,
                grouping_class._meta.db_table,
                grouping_class._meta.db_table,
                grouping_class._meta.pk.name,
@@ -274,25 +295,34 @@ class VoteOptionCongruenceManager(models.Manager):
             args.append(cong_user.id)
             extra_where += "AND c.user_id=%s\n"
 
-
+        session_freq_query = \
+            """
+            SELECT session_id, COUNT(session_id) AS freq
+               FROM opinions_voteoptioncongruence
+               GROUP BY session_id
+            """
+        
+        print extra_where
         query = \
         """
         SELECT
-          c.*
+          c.congruence/f.freq, c.*
         FROM
           opinions_voteoptioncongruence AS c,
           votes_vote AS v,
-          opinions_answer AS a
+          opinions_answer AS a,
+          (%(session_freq)s) AS f
         WHERE
           c.session_id=v.session_id AND
+          f.session_id=c.session_id AND
           c.vote=v.vote AND
           v.member_id=a.member_id AND
           a.option_id=c.option_id AND
           c.congruence <> 0
-          %s
+          %(extra_where)s
         ORDER BY
           a.question_id, c.option_id
-        """ % (extra_where, )
+        """ % {'session_freq': session_freq_query, 'extra_where': extra_where}
         return VoteOptionCongruence.objects.raw(query, args)
 
 
