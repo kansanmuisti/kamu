@@ -1,4 +1,4 @@
-Miten vaalikonevastaukset näkyvät käytännössä?
+Miten vaalikonevastaukset toteutuvat käytännössä?
 ================
 
 Suomessa vaalikoneita käytetään laajalti äänestyspäätösten apuna. Halusimme tutkia, toteutuvatko vaalikoneiden lupaukset vaalien jälkeen. Näillä sivuilla voit vertailla vaalikonevastausten ja kansanedustajien toteutuneen äänestyskäyttäytymisen välistä yhteyttä.
