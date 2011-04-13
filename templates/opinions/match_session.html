@@ -5,7 +5,7 @@
 {% for src in src_list %}
   <optgroup label="{{ src.name }}">
   {% for q in src.question_set.all %}
-    <option label="{{ src.url_name }}/{{ q.order }}" value="{{ src.url_name }}/{{ q.order }}"{% if q == active_question %} selected="selected"{% endif %}>{{ q.text|truncatewords:7 }}</option>
+    <option value="{{ src.url_name }}/{{ q.order }}"{% if q == active_question %} selected="selected"{% endif %}>{{ q.text|truncatewords:7 }}</option>
   {% endfor %}
   </optgroup>
 {% endfor %}
