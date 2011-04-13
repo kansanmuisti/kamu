@@ -64,7 +64,7 @@ def dump_keywords(output):
             writer.writerow([s1, s2])
 
 from opinions.models import QuestionSource, Question, Option, \
-        VoteOptionCongruence
+        VoteOptionCongruence, QuestionSessionRelevance
 
 def dump_congruence(output):
     voc_list = VoteOptionCongruence.objects
@@ -107,6 +107,48 @@ def import_congruence(input):
         voc.congruence = row.cong
         voc.save()
 
+def dump_relevance(output):
+    rel_list = QuestionSessionRelevance.objects.filter(relevance__gt=0.04)
+    rel_list = rel_list.order_by('question')
+    f = open(output, 'w')
+    writer = csv.writer(f, delimiter=',', quotechar='"')
+    for rel in rel_list:
+        s1 = str(rel.question.source.url_name)
+        s2 = str(rel.question.order)
+        s3 = str(rel.session)
+        s4 = "%f" % rel.relevance
+        if not rel.user:
+            s5 = ''
+        else:
+            s5 = str(rel.user)
+        writer.writerow([s1, s2, s3, s4, s5])
+
+RelEntry = collections.namedtuple('RelEntry', 'src_name, q_idx, sess, rel, user')
+
+def import_relevance(input):
+    f = open(input, mode='r')
+    reader = csv.reader(f, delimiter=',', quotechar='"')
+    for row in reader:
+        row = RelEntry(*row)
+        src = QuestionSource.objects.get(url_name=row.src_name)
+        que = Question.objects.get(source=src, order=row.q_idx)
+        sess = Session.objects.by_name(row.sess)
+        user = None
+        if row.user:
+            try:
+                user = User.objects.get(username=row.user)
+            except User.DoesNotExist:
+                pass
+        get_obj = QuestionSessionRelevance.objects.get
+        try:
+
+            rel = get_obj(option=opt, question=que, session=sess, user=user)
+        except QuestionSessionRelevance.DoesNotExist:
+            rel = QuestionSessionRelevance(option=opt, question=que, session=sess,
+                                           user=user)
+        rel.relevance = row.rel
+        rel.save()
+
 
 parser = OptionParser()
 parser.add_option('-v', '--votes', action='store_true', dest='votes',
@@ -115,6 +157,8 @@ parser.add_option('-k', '--keywords', action='store_true', dest='keywords',
                   help='dump session keywords database')
 parser.add_option('-c', '--congruence', action='store_true', dest='congruence',
                   help='dump congruence database')
+parser.add_option('-r', '--relevance', action='store_true', dest='relevance',
+                  help='dump relevance database')
 parser.add_option('-i', '--input', action='store', type='string',
                   dest='input')
 parser.add_option('-o', '--output', action='store', type='string',
@@ -133,3 +177,10 @@ if opts.congruence:
         import_congruence(opts.input)
     else:
         dump_congruence(opts.output)
+
+if opts.relevance:
+    if opts.input:
+#        import_congruence(opts.input)
+        pass
+    else:
+        dump_relevance(opts.output)
