@@ -872,6 +872,14 @@ div#list_orgs {
 	float: left;
 }
 
+.user_vote_up .user_vote_button {
+	margin-top: -1px;
+}
+
+.user_vote_down .user_vote_button {
+	margin-top: 5px;
+}
+
 /*
  * County selector field
  */
