@@ -20,6 +20,7 @@ class Vote(models.Model):
     object_id    = models.PositiveIntegerField()
     object       = generic.GenericForeignKey('content_type', 'object_id')
     score        = models.SmallIntegerField()
+    date         = models.DateTimeField(auto_now=True)
 
     objects = VoteManager()
 
