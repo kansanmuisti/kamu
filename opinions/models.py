@@ -4,6 +4,7 @@
 from django.db import models, connection, transaction
 from kamu.votes.models import Member, Party, Session, Vote
 from django.contrib.auth.models import User
+from django.conf import settings 
 
 class QuestionSource(models.Model):
     name = models.CharField(max_length=255)
@@ -101,6 +102,12 @@ class Answer(models.Model):
         return u'%s %s' % (self.member, self.option)
 
 class VoteOptionCongruenceManager(models.Manager):
+    
+    def user_has_congruences(self, user):
+        if(not user.is_authenticated()): return False
+        return self.filter(user=user).count() > 0
+
+
     def get_congruence(self, option, session, vote='Y'):
         congruence = VoteOptionCongruence.objects.filter(
                                 option=option, session=session,
@@ -114,8 +121,10 @@ class VoteOptionCongruenceManager(models.Manager):
                                  for_user=None, for_question=None):
         args = []
         extra_where = ""
-        if (for_user is not None and for_user.is_authenticated()):
-            args.append(for_user.id)
+        
+        cong_user = self.__user_magic(for_user)
+        if cong_user is not None:
+            args.append(cong_user.id)
             extra_where += "AND c.user_id=%s\n"
 
         if (for_question is not None):
@@ -157,38 +166,56 @@ class VoteOptionCongruenceManager(models.Manager):
     def get_question_congruence(self, question, **kargs):
         return self.__get_average_congruence(question, 'a.question_id', **kargs)
 
+    def __user_magic(self, for_user):
+        if(for_user is None): return None
+
+        if (not VoteOptionCongruence.objects.user_has_congruences(for_user)):
+            magic_user = settings.KAMU_OPINIONS_MAGIC_USER
+            for_user = User.objects.get(username=magic_user)
+        return for_user
+
+
     def __get_average_congruences(self, grouping_class, id_field,
                                   descending=True, limit=False, for_user=None,
-                                  for_question=None, for_member=None):
+                                  for_question=None, for_member=None,
+                                  allow_null_congruences=False):
         query = \
             """
-                SELECT %s AS %s,
+                SELECT %s.*,
                     SUM(congruence)/SUM(ABS(congruence)) AS congruence_avg
                   FROM
                     opinions_voteoptioncongruence as c,
                     opinions_answer as a,
                     opinions_option as o,
-                    votes_vote AS v
+                    votes_vote AS v,
+                    %s
                   WHERE v.session_id=c.session_id
                     AND a.option_id=c.option_id
                     AND a.member_id=v.member_id
                     AND v.vote=c.vote
                     AND o.id=a.option_id
+                    AND %s.%s=%s
                     %%s
                   GROUP BY %s
                   HAVING congruence_avg IS NOT NULL
                   ORDER BY congruence_avg %s
                   %s
                   """ \
-            % (id_field, grouping_class._meta.pk.name,
+            % (grouping_class._meta.db_table,
+               grouping_class._meta.db_table,
+               grouping_class._meta.db_table,
+               grouping_class._meta.pk.name,
+               id_field,
                id_field,
                ('ASC', 'DESC')[descending],
                ('', 'LIMIT %i' % (int(limit), ))[bool(limit)])
 
         extra_where = ''
         query_args = []
-        if (for_user is not None and for_user.is_authenticated()):
-            query_args.append(for_user.id)
+        
+        cong_user = self.__user_magic(for_user)
+        if cong_user is not None:
+            query_args.append(cong_user.id)
             extra_where += "AND c.user_id=%s\n"
 
         if for_question is not None:
@@ -200,6 +227,20 @@ class VoteOptionCongruenceManager(models.Manager):
             extra_where += "AND a.member_id=%s\n"
 
         query = query % extra_where
+
+        if(allow_null_congruences):
+            nullquery = \
+                """
+                SELECT *, NULL as congruence_avg
+                FROM %s
+                """ % (grouping_class._meta.db_table,)
+            query = """
+                %s UNION (%s)
+                  ORDER BY
+                    ISNULL(congruence_avg),
+                    congruence_avg %s
+                """%(nullquery, query, ('ASC', 'DESC')[descending])
+
         return grouping_class.objects.raw(query, query_args)
 
     def get_party_congruences(self, **kwargs):
@@ -214,7 +255,8 @@ class VoteOptionCongruenceManager(models.Manager):
     def get_session_congruences(self, **kwargs):
         return self.__get_average_congruences(Session, 'v.session_id', **kwargs)
 
-    def get_vote_congruences(self, for_member=None, for_party=None):
+    def get_vote_congruences(self, for_member=None, for_party=None,
+                                    for_user=None):
         # This could maybe be done without SQL, but my brain
         # doesn't work enough for that at the moment
         extra_where = ''
@@ -226,6 +268,12 @@ class VoteOptionCongruenceManager(models.Manager):
         if for_party is not None:
             extra_where += "AND v.party=%s"
             args.append(for_party.pk)
+            
+        cong_user = self.__user_magic(for_user)
+        if cong_user is not None:
+            args.append(cong_user.id)
+            extra_where += "AND c.user_id=%s\n"
+
 
         query = \
         """
