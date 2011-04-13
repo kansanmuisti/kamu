@@ -15,7 +15,7 @@ class QuestionSource(models.Model):
         unique_together = (('name', 'year'), )
 
     def __unicode__(self):
-        return u'%s (%i)' % (self.name, self.year)
+        return self.url_name
 
 class Question(models.Model):
     text = models.TextField()
@@ -41,7 +41,7 @@ class Question(models.Model):
         unique_together = (('order', 'source'), )
 
     def __unicode__(self):
-        return self.text
+        return u"%s/%d" % (self.source, self.order)
 
 class Option(models.Model):
     question = models.ForeignKey(Question)
@@ -102,11 +102,10 @@ class Answer(models.Model):
         return u'%s %s' % (self.member, self.option)
 
 class VoteOptionCongruenceManager(models.Manager):
-    
     def user_has_congruences(self, user):
-        if(not user.is_authenticated()): return False
+        if not user.is_authenticated():
+            return False
         return self.filter(user=user).count() > 0
-
 
     def get_congruence(self, option, session, vote='Y'):
         congruence = VoteOptionCongruence.objects.filter(
@@ -349,7 +348,11 @@ class VoteOptionCongruence(models.Model):
 
         return models.Model.save(self, **kwargs)
 
-   
+    def __unicode__(self):
+        args = (self.option.question.source, self.option.question.order,
+                self.option.order, self.vote, self.user, self.congruence)
+        return u"%s/%d/%d-%s (%s): %0.02f" % args
+
     class Meta:
         unique_together = (('user', 'option', 'session', 'vote'), )
 
