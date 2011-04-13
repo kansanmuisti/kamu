@@ -30,11 +30,17 @@
           </td>
         </tr>
       {% endfor %}
+      <tr>
+        <td></td>
+        <td>
+          <h4>
+            {% trans "Party promise percentage for this question:" %}
+            {{q.congruence|congruence_to_percentage}}%
+          </h4>
+        </td>
+      </tr>
+
     </table>
-    <h4>
-      {% trans "Party promise percentage for this question:" %}
-      {{q.congruence|congruence_to_percentage}}%
-    </h4>
     <table class="party_question_sessions">
     <tr>
       <th>{% trans "Relevant voting session" %}</th>
@@ -43,13 +49,7 @@
     {% for s in q.sessions %}
       <tr>
         <td>
-          <a href="{{s.get_absolute_url}}">
-            {{s.get_short_summary}}
-          </a>
-          <h4>
-            {% trans "Average congruence:" %}
-            {{s.congruence|congruence_to_percentage}}%
-          </h4>
+          <a href="{{s.get_absolute_url}}">{{s.get_short_summary}}</a>
         </td>
         <td class="party_vote_shares">
           <table>
@@ -70,6 +70,15 @@
             </tr>
           </table>
         </td>
+      </tr>
+      <tr>
+        <td class="average_congruence_cell">
+          <h4>
+            {% trans "Average congruence:" %}
+            {{s.congruence|congruence_to_percentage}}%
+          </h4>
+        </td>
+        <td></td>
       </tr>
     {% endfor %}
     </table>

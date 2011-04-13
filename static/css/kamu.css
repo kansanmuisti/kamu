@@ -931,12 +931,14 @@ div#list_orgs {
 {
 	padding: 2em;
 	border-bottom: 1px solid gray;
+    
 }
 
 .question
 {
 	font-weight: bold;
 	color: @main_color;
+    padding-right: 14em;
 }
 
 .question a
@@ -1249,6 +1251,7 @@ div.promise_percentage_bar
 table.party_option_choices
 {
     width: 100%;
+    padding-right: 14em;
 }
 
 table.party_option_choices td
@@ -1263,15 +1266,33 @@ td.party_option_share
 
 .party_question_sessions
 {
-    margin-left: 1em;
+    margin-left: 3em;
     margin-top: 1em;
     border-collapse: collapse;
 }
 
+.party_question_sessions th
+{
+    padding-bottom: 0.5em;
+}
+
 .party_question_sessions td
 {
-    border-top: 1px solid black;
-    padding: 1em;
+    padding: 0;
+    padding-right: 1em;
+    vertical-align: top;
+}
+
+.party_question_sessions td.average_congruence_cell
+{
+    padding-top: 0;
+    padding-bottom: 1em;
+    text-align: center;
+}
+
+.party_question_sessions th
+{
+    text-align: left;
 }
 
 .party_question_sessions td.party_vote_shares
