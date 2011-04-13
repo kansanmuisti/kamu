@@ -4,7 +4,8 @@
 
 {% block content %}
 
-<h1><img src="{% thumbnail party.logo 64x64 %}" /> {{ party.full_name }}</h1>
+<h1>{{ party.full_name }}</h1>
+<img style="float: right;" src="{% thumbnail party.logo 64x64 %}" /> 
 
 {% for q in questions %}
   <div class="opinion_answer">
@@ -33,10 +34,8 @@
       <tr>
         <td></td>
         <td>
-          <h4>
-            {% trans "Party promise percentage for this question:" %}
-            {{q.congruence|congruence_to_percentage}}%
-          </h4>
+          {% trans "Party promise percentage for this question:" %}
+          <strong>{{q.congruence|congruence_to_percentage}}%</strong>
         </td>
       </tr>
 
@@ -73,10 +72,8 @@
       </tr>
       <tr>
         <td class="average_congruence_cell">
-          <h4>
-            {% trans "Average congruence:" %}
-            {{s.congruence|congruence_to_percentage}}%
-          </h4>
+	  {% trans "Average congruence:" %}
+          <strong>{{s.congruence|congruence_to_percentage}}%</strong>
         </td>
         <td></td>
       </tr>

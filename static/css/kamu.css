@@ -937,7 +937,8 @@ div#list_orgs {
 
 .opinion_answer
 {
-	padding: 2em;
+	padding-top: 8px;
+	padding-bottom: 8px;
 	border-bottom: 1px solid gray;
     
 }
@@ -1347,9 +1348,9 @@ td.party_option_share
 
 .party_question_sessions td.average_congruence_cell
 {
-    padding-top: 0;
+    padding-top: 1em;
     padding-bottom: 1em;
-    text-align: center;
+    text-align: left;
 }
 
 .party_question_sessions th
