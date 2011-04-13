@@ -30,6 +30,7 @@ from django import db
 from votes.models import PlenarySession, Session, Vote, Term, SessionKeyword
 from django.contrib.auth.models import User
 
+user_override = None
 
 def dump_votes(output):
     term = Term.objects.all()[0]
@@ -94,8 +95,12 @@ def import_congruence(input):
         que = Question.objects.get(source=src, order=row.q_idx)
         opt = Option.objects.get(question=que, order=row.o_idx)
         sess = Session.objects.by_name(row.sess)
+        if user_override:
+            username = user_override
+        else:
+            username = row.user
         try:
-            user = User.objects.get(username=row.user)
+            user = User.objects.get(username=username)
         except User.DoesNotExist:
             user = None
         try:
@@ -134,7 +139,11 @@ def import_relevance(input):
         que = Question.objects.get(source=src, order=row.q_idx)
         sess = Session.objects.by_name(row.sess)
         user = None
-        if row.user:
+        if user_override:
+            username = user_override
+        else:
+            username = row.user
+        if username:
             try:
                 user = User.objects.get(username=row.user)
             except User.DoesNotExist:
@@ -159,12 +168,17 @@ parser.add_option('-c', '--congruence', action='store_true', dest='congruence',
                   help='dump congruence database')
 parser.add_option('-r', '--relevance', action='store_true', dest='relevance',
                   help='dump relevance database')
+parser.add_option('-U', '--user-override', action='store', type='string',
+                  dest='user_override', help='override username in import')
 parser.add_option('-i', '--input', action='store', type='string',
                   dest='input')
 parser.add_option('-o', '--output', action='store', type='string',
                   dest='output')
 
 (opts, args) = parser.parse_args()
+
+if opts.user_override:
+    user_override = opts.user_override
 
 if opts.votes:
     dump_votes(opts.output)
