@@ -760,11 +760,7 @@ def show_member_opinions(request, member):
     answers = answers.select_related('option', 'option__question',
                             'option__question__source')
 
-    for_user = request.user
-    if(not for_user.is_authenticated()):
-        return dict(answers=answers)
-
-    congruences = VoteOptionCongruence.objects.get_vote_congruences(for_member=member)
+    congruences = VoteOptionCongruence.objects.get_vote_congruences(for_member=member, for_user=request.user)
     congruences = itertools.groupby(congruences, lambda c: c.option_id)
     # Somebody seems to read the iterator before we make it
     # a list later, can't be bothered to debug now
