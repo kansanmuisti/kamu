@@ -4,10 +4,10 @@ import collections
 
 from kamu.opinions.models import Question, Option, Answer, \
     VoteOptionCongruence, QuestionSessionRelevance, QuestionSource
+from kamu.opinions.views import LAST_QUESTION_KEY
 from kamu.votes.models import Party, Session, Member
 from kamu.user_voting import models as user_voting
 from django.contrib.contenttypes.models import ContentType
-from django.db import models, connection, transaction, IntegrityError
 from django.utils.translation import ugettext as _
 from django import forms
 
@@ -49,6 +49,15 @@ def congruence_to_percentage(share):
 @register.inclusion_tag('opinions/match_session.html', takes_context=True)
 def match_session(context, session, question=None, delete=False):
     src_list = QuestionSource.objects.all()
-    return dict(src_list=src_list, session=session, question=question,
+    session = context['request'].session
+    args = dict(src_list=src_list, session=session, question=question,
                 delete=delete)
+    if session and LAST_QUESTION_KEY in session:
+        act_que = session[LAST_QUESTION_KEY]
+        args['active_question'] = act_que
+        que = src_list[1].question_set.all()[0]
+        print act_que
+        print que == act_que
+
+    return args
 

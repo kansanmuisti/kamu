@@ -17,13 +17,9 @@ from httpstatus import Http400, Http403
 from httpstatus.decorators import postonly
 
 MATCH_PERM = 'opinions.change_questionsessionrelevance'
+LAST_QUESTION_KEY = 'opinions:last_question'
 
-def _handle_congruence_form(
-    request,
-    form,
-    option,
-    session,
-    ):
+def _handle_congruence_form(request, form, option, session):
     if not request.user.is_authenticated():
         raise Http403
 
@@ -93,6 +89,9 @@ def show_question(request, source, question):
 
     args = dict(question=question, relevant_sessions=relevant_sessions)
     args['active_page'] = 'opinions'
+
+    if request.session:
+        request.session[LAST_QUESTION_KEY] = question
 
     context_instance = RequestContext(request)
     response = render_to_response('opinions/show_question.html', args,
