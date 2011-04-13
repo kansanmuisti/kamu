@@ -1,6 +1,6 @@
 {% extends "opinions/opinion_base.html" %}
-{% load i18n thumbnail cache %}
-{% block title %}{% trans "Opinions" %}{% endblock %}
+{% load i18n thumbnail cache opinions %}
+{% block title %}{% trans "Question listing" %}{% endblock %}
 {% block head %}
     <script type="text/javascript">
     $(function() {
@@ -15,7 +15,32 @@
 {% endblock %}
 
 {% block content %}
+
+{% for q in questions %}
+<div class="question_listing">
+  <div class="question">
+    <span class="source">
+      {{q.source.name}}
+      {{q.source.year}}
+    </span>
+    <a href="{% url opinions.views.show_question q.source.url_name q.order %}">
+      {{q.text}}
+    </a>
+  </div>
+  {% if q.congruence_avg != None%}
+    {% trans "Average congruence" %}
+    <div class="question_congruence">
+      <div class="percentage_bar" style="width: {{q.congruence_avg|congruence_to_percentage}}%">
+        {{q.congruence_avg|congruence_to_percentage}}%
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endfor %}
+
+{% comment %}
 {% cache 600 question_list %}
+
   <div id="accordion" class="ui-accordion ui-widget ui-helper-reset ui-accordion-icons">
   {% for question in questions %}
   <div>
@@ -40,7 +65,6 @@
 	{% for party in option.party_shares %}
           <dt>{{party.name}}</dt>
           <dd><span style="height: {{party.share}}%"><em>{{party.share}}%<br />{{party.name}}</em></span></dt>
-          {%comment%}<img class="votebar" src="/static/images/dummy.png" style="height: {{party.share}}%" />{%comment%}{{party.name}}:&nbsp;{{party.share}}%</div>{%endcomment%}
         {% endfor %}
         </dl>
       </td>
@@ -52,5 +76,6 @@
   {% endfor %}
    </div>
 {% endcache %}
+{% endcomment %}
 {% endblock %}
 

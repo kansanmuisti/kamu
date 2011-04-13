@@ -4,6 +4,22 @@
 
 {% block content %}
 <h1>{{question}}</h1>
+<table class="question_options">
+{% for option in question.option_set.all %}
+  <tr>
+    <td class="option_text">{{option.name}}</td>
+    <td class="votechart">
+    <dl class="votechart">
+	{% for party in option.party_shares %}
+      <dt>{{party.name}}</dt>
+      <dd><span style="height: {{party.share}}%"><em>{{party.share}}%<br />{{party.name}}</em></span></dt>
+    {% endfor %}
+    </dl>
+  </td>
+  </tr>
+{% endfor %}
+</table>
+
 
 {% if not relevant_sessions %}
 <h2>{% trans "No relevant voting sessions found." %}</h2>

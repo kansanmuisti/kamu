@@ -953,6 +953,16 @@ div#list_orgs {
 	font-size: xx-small;
 }
 
+.question_listing
+{
+    margin-bottom: 1em;
+}
+
+.question_listing .question_congruence
+{
+    width: 12em;
+}
+
 ul.options
 {
 	margin-left: 1em;
@@ -1221,6 +1231,42 @@ td.option_congruence_bar_cell
 	font-weight: normal;
 	font-size: x-small;
 	text-align: right;
+}
+
+.promise_summary_members,
+.promise_summary_parties
+{
+    width: 45%;
+    float: left;
+    padding: 1em;
+}
+
+ul.opinion_navigation li
+{
+    list-style-type: none;
+    padding-bottom: 0.5em;
+}
+
+ul.opinion_navigation .opinion_navigation_category
+{
+    padding-top: 0.5em;
+}
+
+ul.opinion_navigation a
+{
+    display: block;
+}
+
+
+ul.opinion_navigation .promise_percentage_bar
+{
+    padding: 0;
+    height: 2px;
+}
+
+ul.opinion_navigation .opinion_navigation_category_label
+{
+    font-weight: bold;
 }
 
 table.promise_statistics_box

@@ -10,6 +10,8 @@ from django.template import RequestContext
 from django.http import Http404, HttpResponseRedirect
 from django.contrib import messages
 from django.core.urlresolvers import reverse
+from django.contrib.contenttypes.models import ContentType
+from kamu.user_voting import models as user_voting
 from opinions.models import *
 from opinions.forms import VoteOptionCongruenceForm
 from votes.models import Party, Session
@@ -72,6 +74,8 @@ def show_question(request, source, question):
             name = '%i_%i' % (session.id, option.id)
             input_form = VoteOptionCongruenceForm(data=data, prefix=name,
                     initial={'congruence': user_congruence})
+            if not request.user.is_authenticated():
+                input_form.fields['congruence'].widget.attrs['disabled'] = 'disabled'
 
             if input_form.is_valid():
                 _handle_congruence_form(request, input_form, option, session)
@@ -101,7 +105,9 @@ def show_question(request, source, question):
 
 
 def list_questions(request):
-    questions = Question.objects.all()
+    questions = VoteOptionCongruence.objects.get_question_congruences(
+                        allow_null_congruences=True, for_user=request.user)
+
     parties = Party.objects.all()
 
     args = dict(questions=questions, parties=parties)
@@ -114,6 +120,37 @@ def list_questions_static(request):
     return render_to_response('opinions/list_questions_static.html', {},
                               context_instance=RequestContext(request))
 
+def get_promise_statistics_summary(user, question=None):
+    get_party_cong = VoteOptionCongruence.objects.get_party_congruences
+    parties = list(get_party_cong(for_user=user, for_question=question))
+    # If no congruences found for parties, skip the other queries.
+    if not parties:
+        return {}
+
+    if(not user.is_authenticated()):
+        return dict(parties=parties, members=[], user=user, question=question)
+        
+    member_type = ContentType.objects.get_for_model(Member)
+    member_votes = user_voting.Vote.objects.filter(user=user,
+                                                   content_type=member_type)
+    members = []
+    for vote in member_votes:
+        member = Member.objects.get(pk=vote.object_id)
+        get_cong = VoteOptionCongruence.objects.get_member_congruence
+        member.congruence = get_cong(member, for_user=user, for_question=question)
+        if member.congruence is None:
+            continue
+        members.append(member)
+    members.sort(key=lambda m: m.congruence, reverse=True)
+
+    return dict(parties=parties, members=members, user=user, question=question)
+
+def opinions_summary(request):
+    args = get_promise_statistics_summary(user=request.user)
+    return render_to_response('opinions/opinions_summary.html', args,
+                            context_instance=RequestContext(request))
+   
+    
 
 @postonly
 def match_session(request):
@@ -179,7 +216,7 @@ def show_party_congruences(request, party):
     #       are fetched separatedly. There should be a way to get related
     #       objects with raw queries
     congruences = VoteOptionCongruence.objects.get_vote_congruences(
-                    for_party=for_party)
+                    for_party=for_party, for_user=request.user)
     congruences = list(congruences)
    
     by_question = itertools.groupby(congruences, lambda c: c.option.question_id)

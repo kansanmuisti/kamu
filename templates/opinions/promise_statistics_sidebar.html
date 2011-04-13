@@ -1,47 +1,62 @@
 {% load i18n opinions thumbnail %}
 
-{% if parties %}
-<h3>{% trans "Promise percentages" %}</h3>
-<p style="font-size: xx-small">{% trans "Based on your question/vote evaluations" %}</p>
-<h2>{% trans "Parties" %}</h2>
-<table class="promise_statistics_box">
-  {% for party in parties %}
-  <tr>
-    <td class="promise_label_column">
-      <a href="{% url opinions.views.show_party_congruences party=party.name %}">
-        <img src="{% thumbnail party.logo 50x50 %}" alt="{{party.full_name}}" title="{{party.full_name}}" />
-      </a>
-    </td>
-    <td class="promise_percentage_column">
-      <div class="promise_percentage_bar" style="width: {{party.congruence_avg|congruence_to_percentage}}%">
-        {{party.congruence_avg|congruence_to_percentage}}%
-      </div>
-    </td>
-  </tr>
-  {% endfor %}
-</table>
+{% if parties or members %}
+<ul class="opinion_navigation">
+  <li>
+    <a href="{% url opinions.views.opinions_summary %}">
+      {% trans "Summary" %}
+    </a>
+  </li>
+  <li>
+    <a href="{% url opinions.views.list_questions %}">
+      {% trans "Questions" %}
+    </a>
+  </li>
 
-{% if members %}
-<h2>{% trans "Members you have evaluated" %}</h2>
-<table class="promise_statistics_box">
-  {% for member in members %}
-  <tr>
-    <td class="promise_label_column">
-      <a href="{% url votes.views.show_member member=member.url_name section='opinions' %}">
-        <img src="{% thumbnail member.photo 50x50 %}"
-           alt="{{member.name}}" title="{{member.name}}" />
-      </a>
-    </td>
-    <td class="promise_percentage_column">
-      <div class="promise_percentage_bar" style="width: {{member.congruence|congruence_to_percentage}}%; ">
-        {{member.congruence|congruence_to_percentage}}%
-      </div>
-    </td>
+  <li class="opinion_navigation_category">
+    <span class="opinion_navigation_category_label">{% trans "Parties" %}</span>
+    <ul>
+    {% for party in parties %}
+      <li>
+        <a href="{% url opinions.views.show_party_congruences party=party.name %}"
+           {% if question %}
+           title="{% trans "Promise percentage for this question" %}: {{party.congruence_avg|congruence_to_percentage}}%"
+           {% else %}
+           title="{% trans "Overall promise percentage" %}: {{party.congruence_avg|congruence_to_percentage}}%"
+           {% endif %}>
+          <!-- <img src="{% thumbnail party.logo 50x50 %}"
+               alt="{{party.full_name}}"
+               title="{{party.full_name}}" /> -->
+          {{ party.full_name }}
+          <div class="promise_percentage_bar" style="width: {{party.congruence_avg|congruence_to_percentage}}%">
+        </a>
 
-  </tr>
-  {% endfor %}
-</table>
-{% endif %}
+      </li>
+    {% endfor %}
+    </ul>
+  </li>
+  {% if members %}
+  <li class="opinion_navigation_category">
+    <span class="opinion_navigation_category_label">{% trans "Members you have evaluated" %}</span>
+    <ul>
+    {% for member in members %}
+      <li>
+        <a href="{% url votes.views.show_member member=member.url_name section='opinions' %}"
+           title="{% trans "Promise percentage" %}: {{member.congruence|congruence_to_percentage}}%">
+          <!-- <img src="{% thumbnail party.logo 50x50 %}"
+               alt="{{party.full_name}}"
+               title="{{party.full_name}}" /> -->
+          {{ member.name }}
+          <div class="promise_percentage_bar" style="width: {{member.congruence|congruence_to_percentage}}%">
+        </a>
+
+      </li>
+    {% endfor %}
+    </ul>
+  </li>
+  {% endif %}
+</ul>
+
 
 {% else %}
 <h3>{% trans "No sessions scored" %}</h3>
