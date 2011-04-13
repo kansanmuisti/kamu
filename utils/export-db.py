@@ -142,9 +142,9 @@ def import_relevance(input):
         get_obj = QuestionSessionRelevance.objects.get
         try:
 
-            rel = get_obj(option=opt, question=que, session=sess, user=user)
+            rel = get_obj(question=que, session=sess, user=user)
         except QuestionSessionRelevance.DoesNotExist:
-            rel = QuestionSessionRelevance(option=opt, question=que, session=sess,
+            rel = QuestionSessionRelevance(question=que, session=sess,
                                            user=user)
         rel.relevance = row.rel
         rel.save()
@@ -180,7 +180,6 @@ if opts.congruence:
 
 if opts.relevance:
     if opts.input:
-#        import_congruence(opts.input)
-        pass
+        import_relevance(opts.input)
     else:
         dump_relevance(opts.output)
