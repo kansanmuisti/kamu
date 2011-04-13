@@ -56,8 +56,6 @@ def match_session(context, session, question=None, delete=False):
         act_que = session[LAST_QUESTION_KEY]
         args['active_question'] = act_que
         que = src_list[1].question_set.all()[0]
-        print act_que
-        print que == act_que
 
     return args
 
