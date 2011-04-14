@@ -1,12 +1,10 @@
 Miten vaalikonevastaukset toteutuvat käytännössä?
 ================
 
-Suomessa vaalikoneita käytetään laajalti äänestyspäätösten apuna. Halusimme tutkia, toteutuvatko vaalikoneiden lupaukset vaalien jälkeen. Näillä sivuilla voit vertailla vaalikonevastausten ja kansanedustajien toteutuneen äänestyskäyttäytymisen välistä yhteyttä.
+Suomessa vaalikoneita käytetään laajasti äänestyspäätösten apuna. Halusimme tutkia, toteutuvatko vaalikoneiden lupaukset vaalien jälkeen. Näillä sivuilla voit vertailla vaalikonevastausten ja kansanedustajien toteutuneen äänestyskäyttäytymisen välistä yhteyttä. Olemme yhdistäneet vaalikonevastauksiin joitakin oleellisiksi katsomiamme eduskunnan äänestyksiä. Näiden perusteella lasketaan ehdokkaiden vastauksien ja toteutuneiden äänestysten välinen keskimääräinen yhdenmukaisuusprosentti.
 
-Käytämme lähteinä Helsingin Sanomien ja MTV3:n julkistamia kansanedustajaehdokkaiden vaalikonevastauksia vuodelta 2007. Näitä puolestaan vertaillaan vaalikaudella tapahtuneisiin äänestyksiin. Vertailun helpottamiseksi Kamun automaattinen relevanssialgoritmi tekee ehdotuksia kysymykseen liittyviksi äänestyksiksi. Tämä ei kuitenkaan vielä riitä, vaan ihmisen on arvioitava äänestysten lopullinen yhteys vaalikonevastausten ja äänestysten välillä. Käyttäjät voivat myös itse lisätä muita täysistuntoäänestyksiä, jos automaatti ei anna soveltuvia tuloksia.
+Käytämme lähteinä Helsingin Sanomien ja MTV3:n julkistamia kansanedustajaehdokkaiden vaalikonevastauksia vuodelta 2007. Näitä vertaillaan vaalikaudella tapahtuneisiin äänestyksiin. Vertailun helpottamiseksi Kamun automaattinen relevanssialgoritmi ehdottaa kuhunkin kysymykseen liittyviä äänestyksiä. Tämä ei kuitenkaan vielä riitä, vaan ihmisen on arvioitava äänestysten lopullinen yhteys vaalikonevastausten ja äänestysten välillä. Jos automaatti ei anna soveltuvia tuloksia, käyttäjät voivat itse lisätä mukaan tärkeiksi katsomiaan täysistuntoäänestyksiä. 
 
-Olemme yhdistäneet joitakin oleellisiksi katsomiamme eduskunnan äänestyksiä vaalikonevastauksiin. Näiden perusteella lasketaan ehdokkaiden vastauksien ja toteutuneiden äänestysten välinen keskimääräinen yhdenmukaisuusprosentti.
+Äänestysten ja vastausten yhdistäminen ei ole yksiselitteistä ja kysymysten tulkinnalla on merkitystä asian arvioinnissa. Usein vaalikoneissa esitetyistä kysymyksistä ei ole vaalikaudella äänestetty lainkaan. Toisaalta asioista äänestetään paketteina tai kompromisseina, jolloin selvän kyllä/ei-kannan arviointi on vaikeaa tai jopa mahdotonta. Myös alan asiantuntemus on auttaa arvioinnissa.
 
-Äänestysten yhdistäminen ei ole yksiselitteistä ja kysymysten tulkinnalla on merkitystä asian arvioinnissa. Usein vaalikoneissa esitetyistä kysymyksistä ei ole vaalikaudella äänestetty lainkaan. Toisaalta asioista äänestetään paketteina tai kompromisseina, jolloin selvän kyllä/ei-kannan arviointi on vaikeaa tai jopa mahdotonta. Alan asiantuntemus on lisäksi suureksi avuksi arvioinnissa.
-
-Tämän vuoksi Kamun käyttäjien apu on ensiarvoisen tärkää. Kutsumme kansalaiset tutustumaan yhdenmukaisuuslaskuriin ja pyydämme teitä arvioimaan teitä itseänne kiinnostavia kysymyksiä.
+Tämän vuoksi Kamun käyttäjien apu on ensiarvoisen tärkää. Kutsumme sinut tutustumaan yhdenmukaisuuslaskuriin ja pyydämme arvioimaan itseäsi kiinnostavia kysymyksiä.
