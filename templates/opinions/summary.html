@@ -3,6 +3,10 @@
 
 {% block title %}{% trans "Opinions" %}{% endblock %}
 
+{% block head %}
+<meta property="og:image" content="http://{{ fb_host }}/static/images/kamu.png" />
+{% endblock %}
+
 {% block content %}
 <div id="main_col">
 {{ content.data }}
