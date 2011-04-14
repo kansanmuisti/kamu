@@ -121,7 +121,7 @@ class VoteOptionCongruenceManager(models.Manager):
         args = []
         extra_where = ""
         
-        cong_user = self.__user_magic(for_user)
+        cong_user = self.get_congruence_user(for_user)
         if cong_user is not None:
             args.append(cong_user.id)
             extra_where += "AND c.user_id=%s\n"
@@ -175,7 +175,7 @@ class VoteOptionCongruenceManager(models.Manager):
     def get_question_congruence(self, question, **kargs):
         return self.__get_average_congruence(question, 'a.question_id', **kargs)
 
-    def __user_magic(self, for_user):
+    def get_congruence_user(self, for_user):
         if(for_user is None): return None
 
         if (not VoteOptionCongruence.objects.user_has_congruences(for_user)):
@@ -232,7 +232,7 @@ class VoteOptionCongruenceManager(models.Manager):
         extra_where = ''
         query_args = []
         
-        cong_user = self.__user_magic(for_user)
+        cong_user = self.get_congruence_user(for_user)
         if cong_user is not None:
             query_args.append(cong_user.id)
             extra_where += "AND c.user_id=%s\n"
@@ -288,7 +288,7 @@ class VoteOptionCongruenceManager(models.Manager):
             extra_where += "AND v.party=%s"
             args.append(for_party.pk)
             
-        cong_user = self.__user_magic(for_user)
+        cong_user = self.get_congruence_user(for_user)
         if cong_user is not None:
             args.append(cong_user.id)
             extra_where += "AND c.user_id=%s\n"

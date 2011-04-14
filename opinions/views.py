@@ -59,15 +59,20 @@ def show_question(request, source, question):
     options = list(question.option_set.all())
 
     has_input = False
+    cong_user = request.user
+    if not cong_user.is_authenticated():
+        cong_user = VoteOptionCongruence.objects.get_congruence_user(cong_user)
+    
+
     for session in relevant_sessions:
         session.question_relevance = int(round(session.question_relevance * 100))
         option_congruences = []
         for option in options:
             user_congruence = None
-            if request.user.is_authenticated():
+            if cong_user is not None:
                 user_congruence = \
                     list(VoteOptionCongruence.objects.filter(option=option,
-                         session=session, vote='Y', user=request.user))
+                         session=session, vote='Y', user=cong_user))
                 assert len(user_congruence) <= 1
                 if len(user_congruence) > 0:
                     user_congruence = int(round(user_congruence[0].congruence * 3))
