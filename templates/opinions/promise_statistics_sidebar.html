@@ -1,5 +1,4 @@
 {% load i18n opinions thumbnail %}
-{% if parties or members %}
 <ul class="opinion_navigation">
   <li>
     <a href="{% url opinions.views.summary %}">
@@ -12,6 +11,7 @@
     </a>
   </li>
 
+{% if parties or members %}
   <li class="opinion_navigation_category">
     <ul>
     {% for party in parties %}
@@ -44,23 +44,16 @@
       <li>
         <a href="{% url votes.views.show_member member=member.url_name section='opinions' %}"
            title="{% trans "Promise percentage" %}: {{member.congruence|congruence_to_percentage}}%">
-          <!-- <img src="{% thumbnail party.logo 50x50 %}"
-               alt="{{party.full_name}}"
-               title="{{party.full_name}}" /> -->
           {{ member.name }}
-          <div class="promise_percentage_bar" style="width: {{member.congruence|congruence_to_percentage}}%; background-color: {{member.congruence|congruence_to_color}};">
+          <div class="promise_percentage_bar" style="width: {{member.congruence|congruence_to_percentage}}%; background-color: {{member.congruence|congruence_to_color}};"></div>
         </a>
       </li>
     {% endfor %}
     </ul>
   </li>
   {% endif %}
+  {% endif %}
 </ul>
-
-
-{% else %}
-<h3>{% trans "No sessions scored" %}</h3>
-{% endif %}
 
 <div class="congruence_source_nag">
   {% if system_congruences %}
@@ -72,4 +65,3 @@
   {% endif %}
 
 </div>
-
