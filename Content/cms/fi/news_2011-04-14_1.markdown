@@ -1,0 +1,7 @@
+Miten vaalikonevastaukset toteutuvat käytännössä?
+
+Suomessa vaalikoneita on käytetty jo yli kymmenen vuotta helpottamaan
+sopivan ehdokkaan valintaa. Me viemme vaalikoneista tutun toimintatavan
+uudelle tasolle: palvelumme mahdollistaa vertailun ehdokkaiden
+vaalikonevastausten ja toteutuneen äänestyskäyttäytymisen perusteella.
+[Käy tutustumassa.](/opinions/)
