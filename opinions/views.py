@@ -185,6 +185,7 @@ def get_promise_statistics_summary(user, question=None):
 
 def summary(request):
     args = get_promise_statistics_summary(user=request.user)
+    args['active_page'] = 'opinions'
     args['content'] = Item.objects.retrieve_content('opinions_about')
     args['no_percentages'] = True
     return render_to_response('opinions/summary.html', args,
