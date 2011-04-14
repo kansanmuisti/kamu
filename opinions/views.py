@@ -62,7 +62,6 @@ def show_question(request, source, question):
     cong_user = request.user
     if not cong_user.is_authenticated():
         cong_user = VoteOptionCongruence.objects.get_congruence_user(cong_user)
-    
 
     for session in relevant_sessions:
         session.question_relevance = int(round(session.question_relevance * 100))
@@ -103,14 +102,15 @@ def show_question(request, source, question):
                                       congruence_scale=congruence_scale,
                                       user_congruence=user_congruence))
         session.option_congruences = option_congruences
-    
-    if(has_input):
+
+    if has_input:
         return HttpResponseRedirect(
                 reverse('opinions.views.show_question',
                         kwargs=dict(source=source, question=question.order)))
-        
+
     args = dict(question=question, relevant_sessions=relevant_sessions)
     args['active_page'] = 'opinions'
+    args['opinions_page'] = 'show_questions'
 
     if request.session:
         request.session[LAST_QUESTION_KEY] = question
@@ -130,6 +130,7 @@ def list_questions(request):
 
     args = dict(questions=questions, parties=parties)
     args['active_page'] = 'opinions'
+    args['opinions_page'] = 'list_questions'
     return render_to_response('opinions/list_questions.html', args,
                               context_instance=RequestContext(request))
 
@@ -191,6 +192,7 @@ def get_promise_statistics_summary(user, question=None):
 def summary(request):
     args = get_promise_statistics_summary(user=request.user)
     args['active_page'] = 'opinions'
+    args['opinions_page'] = 'summary'
     args['content'] = Item.objects.retrieve_content('opinions_about')
     args['no_percentages'] = True
     return render_to_response('opinions/summary.html', args,
@@ -301,5 +303,6 @@ def show_party_congruences(request, party):
 
     args = dict(questions=questions, party=for_party)
     args['active_page'] = 'opinions'
+    args['opinions_page'] = 'party'
     return render_to_response('opinions/show_party_congruences.html', args,
                               context_instance=RequestContext(request))

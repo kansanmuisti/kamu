@@ -15,8 +15,8 @@
 
 {% block sidebar %}
   {% if question %}
-    {% promise_statistics_sidebar user question %}
+    {% promise_statistics_sidebar opinions_page user question %}
   {% else %}
-    {% promise_statistics_sidebar user %}
+    {% promise_statistics_sidebar opinions_page user %}
   {% endif %} 
 {% endblock %}

@@ -14,6 +14,13 @@
 {% if parties or members %}
   <li class="opinion_navigation_category">
     <ul>
+{% if opinions_page == 'summary' or opinions_page == 'party' %}
+    {% for party in parties|dictsort:"full_name" %}
+      <li><a href="{% url opinions.views.show_party_congruences party=party.name %}">
+        {{ party.full_name }}
+      </a></li>
+    {% endfor %}
+{% else %}
     {% for party in parties %}
       <li>
         <a href="{% url opinions.views.show_party_congruences party=party.name %}"
@@ -23,13 +30,12 @@
            title="{% trans "Overall promise percentage" %}: {{party.congruence_avg|congruence_to_percentage}}%"
            {% endif %}>
           {{ party.full_name }}
-{% if not no_percentages %}
           <div class="promise_percentage_bar" style="width: {{party.congruence_avg|congruence_to_percentage}}%; background-color: {{party.congruence_avg|congruence_to_color}};"></div>
-{% endif %}
         </a>
 
       </li>
     {% endfor %}
+{% endif %}
     </ul>
   </li>
   {% if members %}

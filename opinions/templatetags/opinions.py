@@ -17,8 +17,9 @@ register = template.Library()
 
 @register.inclusion_tag('opinions/promise_statistics_sidebar.html',
                         takes_context=True)
-def promise_statistics_sidebar(context, user, question=None):
+def promise_statistics_sidebar(context, opinions_page, user, question=None):
     args = get_promise_statistics_summary(user, question)
+    args['opinions_page'] = opinions_page
     args['system_congruences'] = not VoteOptionCongruence.objects.user_has_congruences(user)
     return args
 
