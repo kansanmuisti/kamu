@@ -9,8 +9,11 @@
 </div>
 
 <div id="news_col">
-  <h3>{% trans "Promise percentages" %}</h3>
 {% if parties %}
+  <h3>{% trans "Promise percentages" %}</h3>
+  <div class="congruence_source_nag">
+{% trans "Below you may compare how well the parties voted according to the pre-stated opinions of their members." %}
+  </div>
   <div class="promise_summary_parties">
     <table class="promise_statistics_box">
 {% for party in parties %}
@@ -31,6 +34,8 @@
 {% endfor %}
     </table>
   </div>
+{% else %}
+  <h3>{% trans "No sessions scored" %}</h3>
 {% endif %}
 </div>
 {% comment %}

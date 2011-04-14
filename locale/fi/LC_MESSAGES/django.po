@@ -7,13 +7,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-14 12:35+0300\n"
+"POT-Creation-Date: 2011-04-14 14:47+0300\n"
 "PO-Revision-Date: 2011-04-14 12:54+0300\n"
 "Last-Translator: Juha Yrjölä <juha.yrjola@iki.fi>\n"
 "Language-Team: Finnish <info@kansanmuisti.fi>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: beta/models.py:8
@@ -347,11 +347,11 @@ msgstr "Jokseenkin yhdenmukainen"
 msgid "Congruent"
 msgstr "Yhdenmukainen"
 
-#: opinions/views.py:235
+#: opinions/views.py:238
 msgid "Session connected to question."
 msgstr "Äänestys yhdistetty kysymykseen."
 
-#: opinions/views.py:238
+#: opinions/views.py:241
 msgid "Session removed from question."
 msgstr "Äänestys poistettu kysymyksen yhteydestä."
 
@@ -543,30 +543,25 @@ msgstr "Täysistunnot"
 msgid "Members"
 msgstr "Kansanedustajat"
 
-#: templates/base.html:154 templates/list_parties.html:3
-#: templates/opinions/promise_statistics_sidebar.html:19
-msgid "Parties"
-msgstr "Puolueet"
-
-#: templates/base.html:155 templates/show_member.html:27
+#: templates/base.html:154 templates/show_member.html:27
 #: templates/opinions/list_questions_static.html:3
 #: templates/opinions/summary.html:4
 msgid "Opinions"
 msgstr "Vaalikoneet"
 
-#: templates/base.html:164
+#: templates/base.html:163
 msgid "Select term"
 msgstr "Valitse vaalikausi"
 
-#: templates/base.html:171
+#: templates/base.html:170
 msgid "Select district"
 msgstr "Valitse vaalipiiri"
 
-#: templates/base.html:176
+#: templates/base.html:175
 msgid "or choose your county"
 msgstr "tai valitse kuntasi"
 
-#: templates/base.html:190
+#: templates/base.html:189
 msgid ""
 "\n"
 "Copyright &copy; 2010 Kansan muisti ry. The owners and operators of this\n"
@@ -612,6 +607,10 @@ msgstr[1] ""
 #: templates/list_orgs.html:38
 msgid "Add an organization"
 msgstr "Lisää uusi järjestö"
+
+#: templates/list_parties.html:3
+msgid "Parties"
+msgstr "Puolueet"
 
 #: templates/list_parties.html:9
 #, python-format
@@ -904,8 +903,8 @@ msgid "Session scores"
 msgstr "Äänestysten pisteytykset"
 
 #: templates/show_org.html:24
-#: templates/opinions/promise_statistics_sidebar.html:64
-#: templates/opinions/summary.html:66
+#: templates/opinions/promise_statistics_sidebar.html:62
+#: templates/opinions/summary.html:38 templates/opinions/summary.html.py:70
 msgid "No sessions scored"
 msgstr "Ei pisteytettyjä äänestyksiä"
 
@@ -1083,44 +1082,44 @@ msgstr "Tarkastele kysymykseen liittyviä äänestyksiä"
 msgid "Match"
 msgstr "Yhdistä"
 
-#: templates/opinions/promise_statistics_sidebar.html:9
+#: templates/opinions/promise_statistics_sidebar.html:6
 msgid "Summary"
 msgstr "Yhteenveto"
 
-#: templates/opinions/promise_statistics_sidebar.html:14
+#: templates/opinions/promise_statistics_sidebar.html:11
 msgid "Questions"
 msgstr "Kysymykset"
 
-#: templates/opinions/promise_statistics_sidebar.html:25
+#: templates/opinions/promise_statistics_sidebar.html:21
 msgid "Promise percentage for this question"
 msgstr "Yhdenmukaisuusprosentti tälle kysymykselle"
 
-#: templates/opinions/promise_statistics_sidebar.html:27
+#: templates/opinions/promise_statistics_sidebar.html:23
 msgid "Overall promise percentage"
 msgstr "Yhdenmukaisuusprosentti"
 
-#: templates/opinions/promise_statistics_sidebar.html:42
-#: templates/opinions/summary.html:40
+#: templates/opinions/promise_statistics_sidebar.html:41
+#: templates/opinions/summary.html:44
 msgid "Members you have evaluated"
 msgstr "Edustajat, joita olet arvioinut"
 
-#: templates/opinions/promise_statistics_sidebar.html:47
+#: templates/opinions/promise_statistics_sidebar.html:46
 msgid "Promise percentage"
 msgstr "Yhdenmukaisuusprosentit"
 
-#: templates/opinions/promise_statistics_sidebar.html:69
+#: templates/opinions/promise_statistics_sidebar.html:67
 msgid "Congruences based on Kansan Muisti's estimations."
 msgstr "Lasketut yhdenmukaisuudet perustuvat Kansan muistin pisteytyksiin."
 
-#: templates/opinions/promise_statistics_sidebar.html:70
+#: templates/opinions/promise_statistics_sidebar.html:68
 msgid "Log in or register to make your own."
 msgstr "Kirjaudu sisään tai rekisteröidy, niin voit pisteyttää itse."
 
-#: templates/opinions/promise_statistics_sidebar.html:72
+#: templates/opinions/promise_statistics_sidebar.html:70
 msgid "Congruences based on your estimations."
 msgstr "Yhdenmukaisuudet perustuvat omiin arvioihisi."
 
-#: templates/opinions/promise_statistics_sidebar.html:73
+#: templates/opinions/promise_statistics_sidebar.html:71
 msgid ""
 "You can view results based on Kansan Muisti's estimations by logging out."
 msgstr ""
@@ -1162,13 +1161,17 @@ msgstr "Kirjaudu sisään tai rekisteröidy vaikuttaaksesi"
 msgid "Submit scores"
 msgstr "Lähetä pisteytykset"
 
-#: templates/opinions/summary.html:12
+#: templates/opinions/summary.html:13
 msgid "Promise percentages"
 msgstr "Yhdenmukaisuudet"
 
-#: templates/opinions/summary.html:13
-msgid "Based on your question/vote evaluations"
-msgstr "Perustuvat omiin pisteytyksiisi"
+#: templates/opinions/summary.html:15
+msgid ""
+"Below you may compare how well the parties voted according to the pre-stated "
+"opinions of their members."
+msgstr ""
+"Alla näet, kuinka yhdenmukaisesti eri puolueiden kansanedustajat ovat äänestäneet "
+"vaalikonevastaustensa mukaisesti."
 
 #: templates/registration/activate.html:3
 #: templates/registration/activation_complete.html:3
@@ -1461,6 +1464,9 @@ msgstr "Etusivu"
 #: votes/templatetags/basic.py:110
 msgid "All districts"
 msgstr "Kaikki"
+
+#~ msgid "Based on your question/vote evaluations"
+#~ msgstr "Perustuvat omiin pisteytyksiisi"
 
 #~ msgid "Orgs"
 #~ msgstr "Järjestöt"
