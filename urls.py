@@ -84,7 +84,8 @@ urlpatterns += patterns('opinions.views',
 )
 
 urlpatterns += patterns('cms.views',
-    url(r'^news/vaalikoneet-avoimiksi/', 'show_news'),
+    url(r'^news/vaalikoneet-avoimiksi/$', 'show_news'),
+    url(r'^news/(?P<date>\d{4}/\d{2}/\d{2})/(?P<index>\d+)/$', 'render_news'),
 )
 
 if settings.DEBUG:

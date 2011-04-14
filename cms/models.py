@@ -78,6 +78,12 @@ class Newsitem(Item):
 
     objects = NewsitemManager()
 
+    @models.permalink
+    def get_absolute_url(self):
+        date = str(self.date).replace('-', '/')
+        index = 1 # hardcode for now
+        return ('cms.views.render_news', (), {'date': date, 'index': index})
+
     class Meta:
         ordering = ['-date']
 
@@ -104,6 +110,9 @@ class Revision(models.Model):
 
     class Meta:
         ordering = ['-date']
+
+    def has_data(self):
+        return bool(self.data.rendered)
 
     def __unicode__(self):
         if not self.subject:

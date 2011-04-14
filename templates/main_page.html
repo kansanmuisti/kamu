@@ -82,7 +82,13 @@
   <h1>{% trans "News" %}</h1>
 {% for newsitem in news %}
   {% ifchanged %}<span class="news_item_date">{{ newsitem.date|i18n_date:"numeric" }}</span>{% endifchanged %}
-  <h2>{{ newsitem.content.subject }}</h2>
+  <h2>
+  {% if newsitem.content.has_data %}
+    <a href="{{ newsitem.get_absolute_url }}">{{ newsitem.content.subject }}</a>
+  {% else %}
+    {{ newsitem.content.subject }}
+  {% endif %}
+  </h2>
   {{ newsitem.content.summary }}
 {% endfor %}
 </div>
