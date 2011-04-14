@@ -1,5 +1,17 @@
 {% extends "base.html" %}
 {% load opinions %}
+{% block head %}
+    <script type="text/javascript">
+    $(function() {
+      $('.opinion_navigation_category [title]').tooltip({
+        delay: 0,
+        fade: 0,
+        track: true,
+        showURL: false,
+      });
+    });
+    </script>
+{% endblock %}
 
 {% block sidebar %}
   {% if question %}
