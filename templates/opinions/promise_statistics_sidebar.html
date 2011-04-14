@@ -1,7 +1,4 @@
 {% load i18n opinions thumbnail %}
-
-
-
 {% if parties or members %}
 <ul class="opinion_navigation">
   <li>
@@ -9,14 +6,13 @@
       {% trans "Summary" %}
     </a>
   </li>
-  <li>
+  <li style="margin-bottom: 16px;">
     <a href="{% url opinions.views.list_questions %}">
       {% trans "Questions" %}
     </a>
   </li>
 
   <li class="opinion_navigation_category">
-    <span class="opinion_navigation_category_label">{% trans "Parties" %}</span>
     <ul>
     {% for party in parties %}
       <li>
@@ -30,7 +26,10 @@
                alt="{{party.full_name}}"
                title="{{party.full_name}}" /> -->
           {{ party.full_name }}
-          <div class="promise_percentage_bar" style="width: {{party.congruence_avg|congruence_to_percentage}}%">
+	{{ summary_page }}
+{% if not no_percentages %}
+          <div class="promise_percentage_bar" style="width: {{party.congruence_avg|congruence_to_percentage}}%; background-color: {{party.congruence_avg|congruence_to_color}};">
+{% endif %}
         </a>
 
       </li>
@@ -49,9 +48,8 @@
                alt="{{party.full_name}}"
                title="{{party.full_name}}" /> -->
           {{ member.name }}
-          <div class="promise_percentage_bar" style="width: {{member.congruence|congruence_to_percentage}}%">
+          <div class="promise_percentage_bar" style="width: {{member.congruence|congruence_to_percentage}}%; background-color: {{member.congruence|congruence_to_color}};">
         </a>
-
       </li>
     {% endfor %}
     </ul>
@@ -74,6 +72,4 @@
   {% endif %}
 
 </div>
-
-
 

@@ -28,12 +28,12 @@
     </a>
   </div>
   {% if q.congruence_avg != None%}
-    {% trans "Average congruence" %}
-    <div class="question_congruence">
+    <table><tr><td style="padding-right: 1em;">{% trans "Average congruence" %}</td>
+    <td><div class="question_congruence">
       <div class="percentage_bar" style="width: {{q.congruence_avg|congruence_to_percentage}}%">
         {{q.congruence_avg|congruence_to_percentage}}%
       </div>
-    </div>
+    </div></td></table>
   {% endif %}
 </div>
 {% endfor %}

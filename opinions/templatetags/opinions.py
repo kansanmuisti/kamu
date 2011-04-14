@@ -31,6 +31,22 @@ def congruence_to_percentage(share):
     except ValueError:
         return ''
 
+@register.filter
+def congruence_to_color(share):
+    base = [0x90, 0x90, 0x90]
+    percent = int((share + 1) / 2.0 * 100)
+    percent *= 2
+    lim = 50 * 2
+    if percent < lim:
+        base[0] += lim - percent
+        base[1] -= lim - percent
+        base[2] -= lim - percent
+    else:
+        base[0] -= percent - lim
+        base[1] += percent - lim
+        base[2] -= percent - lim
+    return "#%02x%02x%02x" % tuple(base)
+
 @register.inclusion_tag('opinions/match_session.html', takes_context=True)
 def match_session(context, session, question=None, delete=False):
     src_list = QuestionSource.objects.all()
@@ -43,4 +59,3 @@ def match_session(context, session, question=None, delete=False):
         que = src_list[1].question_set.all()[0]
 
     return args
-

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-13 00:28+0300\n"
-"PO-Revision-Date: 2011-04-13 00:28+0300\n"
+"POT-Creation-Date: 2011-04-14 12:35+0300\n"
+"PO-Revision-Date: 2011-04-14 12:54+0300\n"
 "Last-Translator: Juha Yrjölä <juha.yrjola@iki.fi>\n"
 "Language-Team: Finnish <info@kansanmuisti.fi>\n"
 "Language: \n"
@@ -347,15 +347,15 @@ msgstr "Jokseenkin yhdenmukainen"
 msgid "Congruent"
 msgstr "Yhdenmukainen"
 
-#: opinions/views.py:160
+#: opinions/views.py:235
 msgid "Session connected to question."
 msgstr "Äänestys yhdistetty kysymykseen."
 
-#: opinions/views.py:163
+#: opinions/views.py:238
 msgid "Session removed from question."
 msgstr "Äänestys poistettu kysymyksen yhteydestä."
 
-#: opinions/templatetags/opinions.py:44
+#: opinions/templatetags/opinions.py:28
 msgid "N/A"
 msgstr "-"
 
@@ -367,8 +367,8 @@ msgstr "Tiedosto on liian iso."
 msgid "Image dimensions too big."
 msgstr "Kuvan dimensiot ovat liian suuret."
 
-#: orgs/forms.py:50 templates/preview_org.html:11 votes/views.py:377
-#: votes/views.py:560
+#: orgs/forms.py:50 templates/preview_org.html:11 votes/views.py:394
+#: votes/views.py:576
 msgid "Name"
 msgstr "Nimi"
 
@@ -404,7 +404,7 @@ msgstr "Aktivoi käyttäjät"
 msgid "Re-send activation emails"
 msgstr "Lähetä aktivaatio-sähköpostit uudelleen"
 
-#: registration/forms.py:39 templates/show_member.html:77
+#: registration/forms.py:39 templates/show_member.html:46
 msgid "Email address"
 msgstr "Sähköpostiosoite"
 
@@ -544,13 +544,15 @@ msgid "Members"
 msgstr "Kansanedustajat"
 
 #: templates/base.html:154 templates/list_parties.html:3
-#: templates/opinions/promise_statistics_sidebar.html:6
+#: templates/opinions/promise_statistics_sidebar.html:19
 msgid "Parties"
 msgstr "Puolueet"
 
-#: templates/base.html:155
-msgid "Orgs"
-msgstr "Järjestöt"
+#: templates/base.html:155 templates/show_member.html:27
+#: templates/opinions/list_questions_static.html:3
+#: templates/opinions/summary.html:4
+msgid "Opinions"
+msgstr "Vaalikoneet"
 
 #: templates/base.html:164
 msgid "Select term"
@@ -636,19 +638,19 @@ msgstr ""
 msgid "Main page"
 msgstr "Etusivu"
 
-#: templates/main_page.html:8 votes/views.py:1030
+#: templates/main_page.html:8 votes/views.py:1042
 msgid "Background"
 msgstr "Taustaa"
 
-#: templates/main_page.html:9 votes/views.py:1039
+#: templates/main_page.html:9 votes/views.py:1051
 msgid "Feedback"
 msgstr "Palaute"
 
-#: templates/main_page.html:10 votes/views.py:1036
+#: templates/main_page.html:10 votes/views.py:1048
 msgid "Donate"
 msgstr "Lahjoita"
 
-#: templates/main_page.html:11 votes/views.py:1033
+#: templates/main_page.html:11 votes/views.py:1045
 msgid "Contact"
 msgstr "Yhteystiedot"
 
@@ -734,17 +736,17 @@ msgstr "Nimi palvelussa"
 msgid "Info link"
 msgstr "Linkki kotisivulle"
 
-#: templates/preview_org.html:24 templates/show_org.html:30 votes/views.py:313
+#: templates/preview_org.html:24 templates/show_org.html:30 votes/views.py:330
 msgid "Modify"
 msgstr "Muokkaa"
 
 #: templates/question_session_congruence_input.html:6
-#: templates/opinions/show_question.html:25
+#: templates/opinions/show_question.html:41
 msgid "Relevance"
 msgstr "Relevanssi"
 
 #: templates/question_session_congruence_input.html:22
-#: templates/opinions/show_question.html:41
+#: templates/opinions/show_question.html:57
 msgid "Congruence with voting yes"
 msgstr "Yhdenmukaisuus puoltavan äänen kanssa"
 
@@ -796,109 +798,104 @@ msgstr "Tyhjä-äänien lukumäärä"
 msgid "Number of absentees"
 msgstr "Poissaolevien lukumäärä"
 
-#: templates/show_member.html:44 templates/show_session.html:36
-msgid "Please log in first!"
-msgstr "Kirjaudu sisään ensin!"
-
-#: templates/show_member.html:53 templates/show_session.html:45
+#: templates/show_member.html:22 templates/show_session.html:11
 msgid "General"
 msgstr "Yleistiedot"
 
-#: templates/show_member.html:54 templates/show_session.html:3
-#: templates/show_session.html.py:130
+#: templates/show_member.html:23 templates/show_session.html:3
+#: templates/show_session.html.py:103
 msgid "Votes"
 msgstr "Äänet"
 
-#: templates/show_member.html:55
+#: templates/show_member.html:24
 msgid "Register of interest"
 msgstr "Sidonnaisuudet"
 
-#: templates/show_member.html:56
+#: templates/show_member.html:25
 msgid "Statements"
 msgstr "Puheenvuorot"
 
-#: templates/show_member.html:57 templates/show_session.html:46
+#: templates/show_member.html:26 templates/show_session.html:12
 msgid "Comments"
 msgstr "Kommentit"
 
-#: templates/show_member.html:58 templates/opinions/list_questions.html:3
-#: templates/opinions/list_questions_static.html:3
-msgid "Opinions"
-msgstr "Vaalikoneet"
-
-#: templates/show_member.html:72
+#: templates/show_member.html:41
 msgid "Surname"
 msgstr "Sukunimi"
 
-#: templates/show_member.html:73
+#: templates/show_member.html:42
 msgid "Given names"
 msgstr "Etunimet"
 
-#: templates/show_member.html:74
+#: templates/show_member.html:43
 msgid "Birthdate"
 msgstr "Syntymäaika"
 
-#: templates/show_member.html:80
+#: templates/show_member.html:49
 msgid "Telephone"
 msgstr "Puhelinnumero"
 
-#: templates/show_member.html:83
+#: templates/show_member.html:52
 msgid "Electoral districts"
 msgstr "Vaalipiirit"
 
-#: templates/show_member.html:91
+#: templates/show_member.html:60
 msgid "Party associations"
 msgstr "Eduskuntaryhmät"
 
-#: templates/show_member.html:123
+#: templates/show_member.html:74 templates/show_session.html:72
+msgid "Please log in first!"
+msgstr "Kirjaudu sisään ensin!"
+
+#: templates/show_member.html:98
 msgid "Session"
 msgstr "Äänestys"
 
-#: templates/show_member.html:124 templates/show_member.html.py:234
-#: votes/views.py:378
+#: templates/show_member.html:99 templates/show_member.html.py:209
+#: votes/views.py:395
 msgid "Vote"
 msgstr "Ääni"
 
-#: templates/show_member.html:131 templates/show_member.html.py:249
-#: templates/opinions/show_party_congruences.html:57 votes/views.py:395
+#: templates/show_member.html:106 templates/show_member.html.py:224
+#: templates/opinions/show_party_congruences.html:56 votes/views.py:412
 msgid "Yay"
 msgstr "Kyllä"
 
-#: templates/show_member.html:134 templates/show_member.html.py:253
-#: templates/opinions/show_party_congruences.html:64 votes/views.py:398
+#: templates/show_member.html:109 templates/show_member.html.py:228
+#: templates/opinions/show_party_congruences.html:63 votes/views.py:415
 msgid "Nay"
 msgstr "Ei"
 
-#: templates/show_member.html:137 votes/views.py:401
+#: templates/show_member.html:112 votes/views.py:418
 msgid "Empty"
 msgstr "Tyhjä"
 
-#: templates/show_member.html:147
+#: templates/show_member.html:122
 msgid "No votes in database"
 msgstr "Ei ääniä tietokannassa"
 
-#: templates/show_member.html:162 templates/show_session.html:178
+#: templates/show_member.html:137 templates/show_session.html:151
 msgid "ago"
 msgstr "sitten"
 
-#: templates/show_member.html:169 templates/show_session.html:185
+#: templates/show_member.html:144 templates/show_session.html:158
 msgid "Leave a new comment"
 msgstr "Jätä uusi kommentti"
 
-#: templates/show_member.html:191
+#: templates/show_member.html:166
 msgid "No statements found"
 msgstr "Ei puheenvuoroja"
 
-#: templates/show_member.html:225
+#: templates/show_member.html:200
 msgid "Average congruence of this answer:"
 msgstr "Tämän vastauksen keskimääräinen yhdenmukaisuus:"
 
-#: templates/show_member.html:232
-#: templates/opinions/show_party_congruences.html:40
+#: templates/show_member.html:207
+#: templates/opinions/show_party_congruences.html:45
 msgid "Relevant voting session"
 msgstr "Kysymykseen liittyvä äänestys"
 
-#: templates/show_member.html:237
+#: templates/show_member.html:212
 msgid "Congruence"
 msgstr "Yhdenmukaisuus"
 
@@ -907,7 +904,8 @@ msgid "Session scores"
 msgstr "Äänestysten pisteytykset"
 
 #: templates/show_org.html:24
-#: templates/opinions/promise_statistics_sidebar.html:47
+#: templates/opinions/promise_statistics_sidebar.html:64
+#: templates/opinions/summary.html:66
 msgid "No sessions scored"
 msgstr "Ei pisteytettyjä äänestyksiä"
 
@@ -922,7 +920,7 @@ msgstr ""
 "    "
 
 #: templates/show_plsession.html:3 templates/show_plsession.html.py:7
-#: templates/show_session.html:50
+#: templates/show_session.html:16
 msgid "Plenary session"
 msgstr "Täysistunto"
 
@@ -930,31 +928,31 @@ msgstr "Täysistunto"
 msgid "Parliament vote"
 msgstr "Eduskunnan äänestys"
 
-#: templates/show_session.html:50
+#: templates/show_session.html:16
 msgid "vote"
 msgstr "äänestys"
 
-#: templates/show_session.html:51
+#: templates/show_session.html:17
 msgid "time"
 msgstr "klo. "
 
-#: templates/show_session.html:68
+#: templates/show_session.html:34
 msgid "Tags"
 msgstr "Tunnisteet"
 
-#: templates/show_session.html:73
+#: templates/show_session.html:39
 msgid "Add tag"
 msgstr "Lisää tunniste"
 
-#: templates/show_session.html:82
+#: templates/show_session.html:48
 msgid "Scoring"
 msgstr "Pisteytykset"
 
-#: templates/show_session.html:91
+#: templates/show_session.html:57
 msgid "Match to Opinions:"
 msgstr "Yhdistä vaalikonevastaukseen:"
 
-#: templates/show_session.html:97
+#: templates/show_session.html:63
 msgid ""
 "\n"
 "<p>You may indicate how you yourself would vote on this subject.</p>\n"
@@ -962,11 +960,11 @@ msgstr ""
 "\n"
 "<p>Voit äänestää asiasta myös itse.</p>\n"
 
-#: templates/show_session.html:112
+#: templates/show_session.html:85
 msgid "Session documents"
 msgstr "Asiakirjat"
 
-#: templates/show_session.html:115
+#: templates/show_session.html:88
 msgid "Plenary session minutes"
 msgstr "Istuntopöytäkirja"
 
@@ -1069,7 +1067,15 @@ msgstr[1] ""
 msgid "Submit"
 msgstr "Lähetä"
 
-#: templates/opinions/list_questions.html:33
+#: templates/opinions/list_questions.html:3
+msgid "Question listing"
+msgstr "Kysymykset"
+
+#: templates/opinions/list_questions.html:31
+msgid "Average congruence"
+msgstr "Keskimääräinen yhdenmukaisuus"
+
+#: templates/opinions/list_questions.html:58
 msgid "View relevant voting sessions"
 msgstr "Tarkastele kysymykseen liittyviä äänestyksiä"
 
@@ -1077,53 +1083,92 @@ msgstr "Tarkastele kysymykseen liittyviä äänestyksiä"
 msgid "Match"
 msgstr "Yhdistä"
 
-#: templates/opinions/promise_statistics_sidebar.html:4
-msgid "Promise percentages"
-msgstr "Yhdenmukaisuudet"
+#: templates/opinions/promise_statistics_sidebar.html:9
+msgid "Summary"
+msgstr "Yhteenveto"
 
-#: templates/opinions/promise_statistics_sidebar.html:5
-msgid "Based on your question/vote evaluations"
-msgstr "Perustuvat omiin pisteytyksiisi"
+#: templates/opinions/promise_statistics_sidebar.html:14
+msgid "Questions"
+msgstr "Kysymykset"
 
 #: templates/opinions/promise_statistics_sidebar.html:25
+msgid "Promise percentage for this question"
+msgstr "Yhdenmukaisuusprosentti tälle kysymykselle"
+
+#: templates/opinions/promise_statistics_sidebar.html:27
+msgid "Overall promise percentage"
+msgstr "Yhdenmukaisuusprosentti"
+
+#: templates/opinions/promise_statistics_sidebar.html:42
+#: templates/opinions/summary.html:40
 msgid "Members you have evaluated"
 msgstr "Edustajat, joita olet arvioinut"
+
+#: templates/opinions/promise_statistics_sidebar.html:47
+msgid "Promise percentage"
+msgstr "Yhdenmukaisuusprosentit"
+
+#: templates/opinions/promise_statistics_sidebar.html:69
+msgid "Congruences based on Kansan Muisti's estimations."
+msgstr "Lasketut yhdenmukaisuudet perustuvat Kansan muistin pisteytyksiin."
+
+#: templates/opinions/promise_statistics_sidebar.html:70
+msgid "Log in or register to make your own."
+msgstr "Kirjaudu sisään tai rekisteröidy, niin voit pisteyttää itse."
+
+#: templates/opinions/promise_statistics_sidebar.html:72
+msgid "Congruences based on your estimations."
+msgstr "Yhdenmukaisuudet perustuvat omiin arvioihisi."
+
+#: templates/opinions/promise_statistics_sidebar.html:73
+msgid ""
+"You can view results based on Kansan Muisti's estimations by logging out."
+msgstr ""
+"Voit tarkastella Kansan muistin arvioimia pisteytyksiä kirjautumalla ulos."
 
 #: templates/opinions/show_party_congruences.html:3
 msgid "Promise statistics for"
 msgstr "Yhdenmukaisuustilastot puolueelle"
 
-#: templates/opinions/show_party_congruences.html:35
+#: templates/opinions/show_party_congruences.html:37
 msgid "Party promise percentage for this question:"
 msgstr "Puolueen yhdenmukaisuusprosentti kysymykselle:"
 
-#: templates/opinions/show_party_congruences.html:41
+#: templates/opinions/show_party_congruences.html:46
 msgid "Party votes"
 msgstr "Puolueen äänet"
 
-#: templates/opinions/show_party_congruences.html:50
+#: templates/opinions/show_party_congruences.html:75
 msgid "Average congruence:"
 msgstr "Keskimääräinen yhdenmukaisuus:"
 
 #: templates/opinions/show_question.html:3
 msgid "Question"
-msgstr "Kysymys"
+msgstr "Vaalikonekysymys"
 
-#: templates/opinions/show_question.html:9
+#: templates/opinions/show_question.html:25
 msgid "No relevant voting sessions found."
 msgstr "Kysymykseen yhdistettyjä äänestyksiä ei löytynyt."
 
-#: templates/opinions/show_question.html:11
+#: templates/opinions/show_question.html:27
 msgid "Relevant voting sessions"
 msgstr "Kysymykseen liittyvät äänestykset"
 
-#: templates/opinions/show_question.html:15
+#: templates/opinions/show_question.html:31
 msgid "Log in or register to make a difference"
 msgstr "Kirjaudu sisään tai rekisteröidy vaikuttaaksesi"
 
-#: templates/opinions/show_question.html:58
+#: templates/opinions/show_question.html:74
 msgid "Submit scores"
 msgstr "Lähetä pisteytykset"
+
+#: templates/opinions/summary.html:12
+msgid "Promise percentages"
+msgstr "Yhdenmukaisuudet"
+
+#: templates/opinions/summary.html:13
+msgid "Based on your question/vote evaluations"
+msgstr "Perustuvat omiin pisteytyksiisi"
 
 #: templates/registration/activate.html:3
 #: templates/registration/activation_complete.html:3
@@ -1349,70 +1394,73 @@ msgstr "Luo tunnus"
 msgid "Statement "
 msgstr "Puheenvuoro"
 
-#: votes/views.py:292
+#: votes/views.py:309
 msgid "Organization"
 msgstr "Järjestö"
 
-#: votes/views.py:293
+#: votes/views.py:310
 msgid "Score"
 msgstr "Pisteet"
 
-#: votes/views.py:375 votes/views.py:558
+#: votes/views.py:392 votes/views.py:574
 msgid "Party"
 msgstr "Puolue"
 
-#: votes/views.py:404
+#: votes/views.py:421
 msgid "Absent"
 msgstr "Poissa"
 
-#: votes/views.py:562 votes/views.py:626
+#: votes/views.py:578 votes/views.py:642
 msgid "ATT"
 msgstr "L.o."
 
-#: votes/views.py:563 votes/views.py:627
+#: votes/views.py:579 votes/views.py:643
 msgid "Attendance in voting sessions"
 msgstr "Läsnäoloprosentti äänestyksissä"
 
-#: votes/views.py:564 votes/views.py:628
+#: votes/views.py:580 votes/views.py:644
 msgid "PA"
 msgstr "SP"
 
-#: votes/views.py:565 votes/views.py:629
+#: votes/views.py:581 votes/views.py:645
 msgid "Agreement with party majority"
 msgstr "Samanmielisyys puolueen enemmistön kanssa"
 
-#: votes/views.py:566 votes/views.py:630
+#: votes/views.py:582 votes/views.py:646
 msgid "SA"
 msgstr "SI"
 
-#: votes/views.py:567 votes/views.py:631
+#: votes/views.py:583 votes/views.py:647
 msgid "Agreement with session majority"
 msgstr "Samanmielisyys äänestyksen lopputuloksen kanssa"
 
-#: votes/views.py:568 votes/views.py:632
+#: votes/views.py:584 votes/views.py:648
 msgid "St"
 msgstr "Pv"
 
-#: votes/views.py:569 votes/views.py:633
+#: votes/views.py:585 votes/views.py:649
 msgid "Number of statements"
 msgstr "Puheenvuorojen lukumäärä"
 
-#: votes/views.py:570 votes/views.py:634
+#: votes/views.py:586 votes/views.py:650
 msgid "ElBud"
 msgstr "VB"
 
-#: votes/views.py:571 votes/views.py:635
+#: votes/views.py:587 votes/views.py:651
 msgid "Election budget"
 msgstr "Vaalibudjetti"
 
-#: votes/views.py:625
+#: votes/views.py:641
 msgid "Term"
 msgstr "Vaalikausi"
 
-#: votes/views.py:1027
+#: votes/views.py:1039
 msgid "Home"
 msgstr "Etusivu"
 
 #: votes/templatetags/basic.py:110
 msgid "All districts"
 msgstr "Kaikki"
+
+#~ msgid "Orgs"
+#~ msgstr "Järjestöt"

@@ -18,6 +18,7 @@ from django.db.models.signals import post_save
 from kamu.user_voting import models as user_voting
 from opinions.models import *
 from opinions.forms import VoteOptionCongruenceForm
+from user_voting.models import Vote as UserVote
 from votes.models import Party, Session
 from httpstatus import Http400, Http403
 from httpstatus.decorators import postonly
@@ -135,6 +136,7 @@ def clear_cache(sender, **kwargs):
     cache.delete_many(k)
     cache.delete('opinions_summary_keys')
 post_save.connect(clear_cache, sender=VoteOptionCongruence)
+post_save.connect(clear_cache, sender=UserVote)
 
 def save_cache(key, arg):
     cache.set(key, arg, 1200)
@@ -184,6 +186,7 @@ def get_promise_statistics_summary(user, question=None):
 def summary(request):
     args = get_promise_statistics_summary(user=request.user)
     args['content'] = Item.objects.retrieve_content('opinions_about')
+    args['no_percentages'] = True
     return render_to_response('opinions/summary.html', args,
                             context_instance=RequestContext(request))
 
