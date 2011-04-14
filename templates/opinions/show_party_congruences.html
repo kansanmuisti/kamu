@@ -4,7 +4,10 @@
 
 {% block content %}
 
-<h1>{{ party.full_name }}</h1>
+<h1>
+  {{ party.full_name }},
+  {% trans "congruence percentage" %}: {{total_congruence|congruence_to_percentage}}%
+</h1>
 <img style="float: right;" src="{% thumbnail party.logo 64x64 %}" /> 
 
 {% for q in questions %}

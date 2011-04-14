@@ -298,8 +298,11 @@ def show_party_congruences(request, party):
         q.sessions = sessions
 
         questions.append(q)
+    
+    total_congruence = VoteOptionCongruence.objects.get_party_congruence(for_party)
 
-    args = dict(questions=questions, party=for_party)
+    args = dict(questions=questions, party=for_party,
+                total_congruence=total_congruence)
     args['active_page'] = 'opinions'
     return render_to_response('opinions/show_party_congruences.html', args,
                               context_instance=RequestContext(request))

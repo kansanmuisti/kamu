@@ -29,7 +29,11 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ member.get_print_name }}</h1>
+    <h1>
+      {{ member.get_print_name }}{% if total_congruence %},
+        {% trans "congruence percentage" %}: {{total_congruence|congruence_to_percentage}}
+      {% endif %}
+    </h1>
 
 {% comment %}---------------- BASIC ----------------{% endcomment %}
 {% ifequal section "basic" %}
