@@ -22,13 +22,9 @@
            {% else %}
            title="{% trans "Overall promise percentage" %}: {{party.congruence_avg|congruence_to_percentage}}%"
            {% endif %}>
-          <!-- <img src="{% thumbnail party.logo 50x50 %}"
-               alt="{{party.full_name}}"
-               title="{{party.full_name}}" /> -->
           {{ party.full_name }}
-	{{ summary_page }}
 {% if not no_percentages %}
-          <div class="promise_percentage_bar" style="width: {{party.congruence_avg|congruence_to_percentage}}%; background-color: {{party.congruence_avg|congruence_to_color}};">
+          <div class="promise_percentage_bar" style="width: {{party.congruence_avg|congruence_to_percentage}}%; background-color: {{party.congruence_avg|congruence_to_color}};"></div>
 {% endif %}
         </a>
 
