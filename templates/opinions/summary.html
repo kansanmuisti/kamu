@@ -10,6 +10,13 @@
 {% block content %}
 <div id="main_col">
 {{ content.data }}
+
+{% if fb_enabled %}
+{% include "_facebook.html" %}
+<div style='margin-top: 30px'>
+<fb:like-box href="http://www.facebook.com/kansanmuisti" width="480" show_faces="false" stream="false" header="false"></fb:like-box>
+</div>
+{% endif %}
 </div>
 
 <div id="news_col">
