@@ -1314,6 +1314,7 @@ div.promise_percentage_bar
 table.party_option_choices
 {
     width: 100%;
+    margin-top: 16px;
     padding-right: 14em;
 }
 
