@@ -783,9 +783,9 @@ def show_member_opinions(request, member):
             a.relevant_votes = []
             rest.append(a)
 
-    total_congruence = VoteOptionCongruence.objects.get_member_congruence(member)
+    
     answers = list(itertools.chain(a_with_cong, rest))
-    ret = {'answers': answers, 'total_congruence': total_congruence}
+    ret = {'answers': answers}
     return ret
 
 def show_member(request, member, section=None):

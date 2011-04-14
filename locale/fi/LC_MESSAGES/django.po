@@ -1098,9 +1098,6 @@ msgstr "Yhdenmukaisuusprosentti tälle kysymykselle"
 msgid "Overall promise percentage"
 msgstr "Yhdenmukaisuusprosentti"
 
-msgid "congruence percentage"
-msgstr "yhdenmukaisuusprosentti"
-
 #: templates/opinions/promise_statistics_sidebar.html:41
 #: templates/opinions/summary.html:44
 msgid "Members you have evaluated"
