@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import collections
+import colorsys
 
 from kamu.opinions.models import Question, Option, Answer, \
     VoteOptionCongruence, QuestionSessionRelevance, QuestionSource
@@ -34,19 +35,10 @@ def congruence_to_percentage(share):
 
 @register.filter
 def congruence_to_color(share):
-    base = [0x90, 0x90, 0x90]
-    percent = int((share + 1) / 2.0 * 100)
-    percent *= 2
-    lim = 50 * 2
-    if percent < lim:
-        base[0] += lim - percent
-        base[1] -= lim - percent
-        base[2] -= lim - percent
-    else:
-        base[0] -= percent - lim
-        base[1] += percent - lim
-        base[2] -= percent - lim
-    return "#%02x%02x%02x" % tuple(base)
+    percent = (share + 1) / 2.0
+    cols = colorsys.hsv_to_rgb(percent / 3.0, .75, .75)
+    cols = [c * 255 for c in cols]
+    return "#%02x%02x%02x" % tuple(cols)
 
 @register.inclusion_tag('opinions/match_session.html', takes_context=True)
 def match_session(context, session, question=None, delete=False):
