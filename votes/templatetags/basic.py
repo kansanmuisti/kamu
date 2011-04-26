@@ -114,7 +114,7 @@ def generate_option_list(context, option):
         d_list = DistrictAssociation.objects.list_between(begin, end)
         for d in d_list:
             # Finnish mods
-            short = d.replace(" vaalipiiri", "").replace(" maakunnan", "")
+            short = canonize_district(d)
             opt = { 'name': short, 'value': d }
             if chosen_district and chosen_district == d:
                 opt['selected'] = True
@@ -159,3 +159,11 @@ def i18n_date(date, format_name):
             fmt = 'j/n/Y'
     s = dateformat.format(date, fmt)
     return s + suffix
+
+def strip_suffix(str, suffix):
+    pos = str.rfind(suffix)
+    return str[:pos if pos != -1 else None]
+
+@register.filter
+def canonize_district(district):
+    return strip_suffix(strip_suffix(district, ' vaalipiiri'), ' maakunnan')
