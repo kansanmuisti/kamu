@@ -19,10 +19,13 @@ from kamu.user_voting import models as user_voting
 from opinions.models import *
 from opinions.forms import VoteOptionCongruenceForm
 from user_voting.models import Vote as UserVote
-from votes.models import Party, Session
+from votes.models import Party, Session, Term, DistrictAssociation
+from votes.views import DISTRICT_KEY
 from httpstatus import Http400, Http403
 from httpstatus.decorators import postonly
 from kamu.cms.models import Item
+from operator import attrgetter
+from sorl.thumbnail.main import DjangoThumbnail
 
 MATCH_PERM = 'opinions.change_questionsessionrelevance'
 LAST_QUESTION_KEY = 'opinions:last_question'
@@ -152,8 +155,26 @@ def save_cache(key, arg):
     k.append(key)
     cache.set('opinions_summary_keys', k, 1200)
 
-def get_promise_statistics_summary(user, question=None):
+def get_member_congs(member_list, user, question):
+    member_congs = []
+    for member in member_list:
+        get_cong = VoteOptionCongruence.objects.get_member_congruence
+        member.congruence = get_cong(member, for_user=user,
+                                     for_question=question)
+        if member.congruence is None:
+            continue
+        member_congs.append(member)
+
+    member_congs.sort(key=attrgetter('name'))
+    member_congs.sort(key=attrgetter('congruence'), reverse=True)
+
+    return member_congs
+
+def get_promise_statistics_summary(district, user, question=None):
     cache_key = "opinions_summary/%s/%s" % (user, question)
+    if district:
+        cache_key += "/%s" % (district)
+
     ret = cache.get(cache_key)
     if ret:
         return ret
@@ -167,30 +188,27 @@ def get_promise_statistics_summary(user, question=None):
     if not parties:
         return {}
 
-    if not user.is_authenticated():
-        ret = dict(parties=parties, members=[], user=user, question=question)
-        save_cache(cache_key, ret)
-        return ret
+    if district:
+        term = Term.objects.order_by('-begin')[0]
+        members = Member.objects.in_district(district, term.begin, term.end)
+    else:
+        members = Member.objects.all()
+        district = None
 
-    member_type = ContentType.objects.get_for_model(Member)
-    member_votes = user_voting.Vote.objects.filter(user=user,
-                                                   content_type=member_type)
-    members = []
-    for vote in member_votes:
-        member = Member.objects.get(pk=vote.object_id)
-        get_cong = VoteOptionCongruence.objects.get_member_congruence
-        member.congruence = get_cong(member, for_user=user, for_question=question)
-        if member.congruence is None:
-            continue
-        members.append(member)
-    members.sort(key=lambda m: m.congruence, reverse=True)
+    member_congs = get_member_congs(members, user, question)
+    for m in member_congs:
+        tn = DjangoThumbnail(m.photo, (30, 40))
+        m.thumbnail = tn
 
-    ret = dict(parties=parties, members=members, user=user, question=question)
+    ret = dict(parties=parties, members=member_congs, user=user,
+                question=question, district=district)
     save_cache(cache_key, ret)
+
     return ret
 
 def summary(request):
-    args = get_promise_statistics_summary(user=request.user)
+    district = request.session.get(DISTRICT_KEY)
+    args = get_promise_statistics_summary(district, user=request.user)
     args['active_page'] = 'opinions'
     args['opinions_page'] = 'summary'
     args['content'] = Item.objects.retrieve_content('opinions_about')

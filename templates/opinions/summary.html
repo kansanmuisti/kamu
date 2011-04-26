@@ -1,5 +1,5 @@
 {% extends "opinions/opinion_base.html" %}
-{% load i18n thumbnail opinions %}
+{% load i18n thumbnail opinions basic %}
 
 {% block title %}{% trans "Opinions" %}{% endblock %}
 
@@ -10,6 +10,67 @@
 {% block content %}
 <div class="main_col">
 {{ content.data }}
+
+{% if members %}
+    <h1 style="margin-top:25px;">
+        {% if district %}
+            {% blocktrans with district|canonize_district as canon_district %}Promise percentages for members from {{canon_district}} district{% endblocktrans %}
+        {% else %}
+            {% trans "Promise percenteges for all members" %}
+        {% endif %}
+    </h1>
+
+    {% if members|length > 12 %}
+        <a id="mp_cong_toggle" href="#"
+           onclick="return toggle_mp_cong_list();">
+            {% trans "Full list" %}
+        </a>
+        <script type="text/javascript">
+            function toggle_mp_cong_list() {
+                var lists = [
+                        $("#mp_cong_short_list"),
+                        $("#mp_cong_long_list")
+                    ];
+                var texts = [
+                        "{{ _('Short list')|escapejs }}",
+                        "{{ _('Full list')|escapejs }}"
+                    ];
+                var active_list = lists[0].is(":visible") ? 0 : 1;
+
+                lists[active_list].hide();
+                lists[1 - active_list].show();
+                $("#mp_cong_toggle").text(texts[active_list]);
+
+                return false;
+            }
+        </script>
+
+        <div class='mp_cong_list' id='mp_cong_short_list'>
+            <table>
+                {% for member in members|slice:":6" %}
+                    {% include "opinions/member_cong_list.html" %}
+                {% endfor %}
+            </table>
+            <div>
+                . . . .
+            </div>
+            <table>
+                {% for member in members|slice:"-6:" %}
+                    {% include "opinions/member_cong_list.html" %}
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
+
+    <div class='mp_cong_list' id='mp_cong_long_list'
+     {% if members|length > 12 %}style="display:none"{% endif %}>
+        <table>
+            {% for member in members %}
+                {% include "opinions/member_cong_list.html" %}
+            {% endfor %}
+        </table>
+    </div>
+{% endif %}
 
 {% if fb_enabled %}
 {% include "_facebook.html" %}

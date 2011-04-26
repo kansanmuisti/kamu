@@ -38,22 +38,6 @@
 {% endif %}
     </ul>
   </li>
-  {% if members %}
-  <li class="opinion_navigation_category">
-    <span class="opinion_navigation_category_label">{% trans "Members you have evaluated" %}</span>
-    <ul>
-    {% for member in members %}
-      <li>
-        <a href="{% url votes.views.show_member member=member.url_name section='opinions' %}"
-           title="{% trans "Promise percentage" %}: {{member.congruence|congruence_to_percentage}}%">
-          {{ member.name }}
-          <div class="promise_percentage_bar" style="width: {{member.congruence|congruence_to_percentage}}%; background-color: {{member.congruence|congruence_to_color}};"></div>
-        </a>
-      </li>
-    {% endfor %}
-    </ul>
-  </li>
-  {% endif %}
   {% endif %}
 </ul>
 

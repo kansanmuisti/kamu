@@ -12,6 +12,7 @@ from django.contrib.contenttypes.models import ContentType
 from kamu.opinions.views import get_promise_statistics_summary
 from django.utils.translation import ugettext as _
 from django import forms
+from votes.views import DISTRICT_KEY
 
 from django import template
 register = template.Library()
@@ -19,7 +20,8 @@ register = template.Library()
 @register.inclusion_tag('opinions/promise_statistics_sidebar.html',
                         takes_context=True)
 def promise_statistics_sidebar(context, opinions_page, user, question=None):
-    args = get_promise_statistics_summary(user, question)
+    district = context['request'].session.get(DISTRICT_KEY)
+    args = get_promise_statistics_summary(district, user, question)
     args['opinions_page'] = opinions_page
     args['system_congruences'] = not VoteOptionCongruence.objects.user_has_congruences(user)
     return args
