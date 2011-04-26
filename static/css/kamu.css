@@ -397,17 +397,17 @@ div.comment_date {
 /*
  * Main page
  */
-#main_col {
+.main_col {
 	width: 480px;
 	float: left;
 }
 
-#main_col img {
+.main_col img {
 	margin-top: 16px;
 	margin-bottom: 16px;
 }
 
-#main_col a {
+.main_col a {
 	color: @main_color;
 }
 
