@@ -4,6 +4,7 @@ import sys
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+JS_DEBUG = False
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
