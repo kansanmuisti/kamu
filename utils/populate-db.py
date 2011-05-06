@@ -49,12 +49,14 @@ from_pl = None
 
 TERM_DASH = u'\u2013'
 TERMS = [
-    {'display_name': '2007'+TERM_DASH+'2010', 'begin': '2007-03-21', 'end': None,
-     'name': '2007-2010' },
+    {'display_name': '2011'+TERM_DASH+'2014', 'begin': '2011-04-20', 'end': None,
+     'name': '2011-2014'},
+    {'display_name': '2007'+TERM_DASH+'2010', 'begin': '2007-03-21', 'end': '2011-04-19',
+     'name': '2007-2010'},
     {'display_name': '2003'+TERM_DASH+'2006', 'begin': '2003-03-19', 'end': '2007-03-20',
-     'name': '2003-2006' },
+     'name': '2003-2006'},
     {'display_name': '1999'+TERM_DASH+'2002', 'begin': '1999-03-24', 'end': '2003-03-18',
-     'name': '1999-2002', 'visible': False },
+     'name': '1999-2002', 'visible': False},
 ]
 
 term_list = Term.objects.all()
