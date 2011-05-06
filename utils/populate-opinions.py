@@ -24,12 +24,15 @@ setup_environ(settings)
 
 import hs2011_opinions
 import mtv2007_opinions
+import yle2011_opinions
 
 parser = OptionParser()
 parser.add_option('--mtv2007', action='store_true', dest='mtv2007',
-                  help='use cache in directory CACHE')
+                  help='parse MTV3 2007 opinions')
 parser.add_option('--hs2011', action='store_true', dest='hs2011',
-                  help='use cache in directory CACHE')
+                  help='parse Helsingin Sanomat 2011 opinions')
+parser.add_option('--yle2011', action='store_true', dest='yle2011',
+                  help='parse Yle 2011 opinions')
 parser.add_option('--cache', action='store', type='string', dest='cache',
                   help='use cache in directory CACHE')
 
@@ -41,3 +44,5 @@ if opts.mtv2007:
     mtv2007_opinions.parse()
 if opts.hs2011:
     hs2011_opinions.parse()
+if opts.yle2011:
+    yle2011_opinions.parse()

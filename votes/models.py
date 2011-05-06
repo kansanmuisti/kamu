@@ -43,6 +43,8 @@ class MemberManager(models.Manager):
         query &= Q(end__isnull=True) | Q(end__gte=date_begin)
         mem_list = PartyAssociation.objects.filter(query).distinct().values_list('member', flat=True)
         return self.filter(id__in=mem_list)
+    def active_in_term(self, term):
+        return self.active_in(term.begin, term.end)
     def in_district(self, district, date_begin, date_end):
         query = Q(name = district)
         if date_end:
@@ -168,6 +170,8 @@ class DistrictAssociationManager(models.Manager):
         if date_begin:
             query &= Q(end__isnull=True) | Q(end__gte=date_begin)
         return self.filter(query)
+    def for_member_in_term(self, mp, term):
+        return self.between(term.begin, term.end).filter(member=mp)
     def list_between(self, date_begin, date_end):
         return self.between(date_begin, date_end).order_by('name').values_list('name', flat=True).distinct()
 
