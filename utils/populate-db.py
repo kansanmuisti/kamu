@@ -40,6 +40,7 @@ from kamu import settings
 setup_environ(settings)
 from django.db import connection, transaction
 from django import db
+from django.template.defaultfilters import slugify
 
 import kamu.votes.models
 from kamu.votes.models import *
@@ -191,7 +192,8 @@ def process_mops(party_list, update=False, db_insert=False):
         photo_url = url_base + mp['photo']
 
         ext = os.path.splitext(mp['photo'])[-1]
-        fname = hashlib.sha1(mp['name'].encode('iso8859-1')).hexdigest()
+
+        fname = slugify(mp['name'])
         mp['photo'] = fname + ext
         photo_fname = static_path + mp_photo_path + mp['photo']
         create_path_for_file(photo_fname)
