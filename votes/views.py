@@ -34,16 +34,6 @@ import datetime
 import random
 import itertools
 
-PERIOD_DASH = u'\u2013'
-PERIODS = [
-    {'name': '2007'+PERIOD_DASH+'2010',   'begin': '2007-03-21', 'end': None,
-     'query_name': '2007-2010'},
-    {'name': '2003'+PERIOD_DASH+'2006',   'begin': '2003-03-19', 'end': '2007-03-20',
-     'query_name': '2003-2006'},
-    {'name': '1999'+PERIOD_DASH+'2002',   'begin': '1999-03-24', 'end': '2003-03-18',
-     'query_name': '1999-2002'},
-]
-
 TERM_KEY = 'term'
 DISTRICT_KEY = 'district'
 COUNTY_KEY = 'county'
