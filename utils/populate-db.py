@@ -328,6 +328,9 @@ def get_wikipedia_links():
             matches = difflib.get_close_matches(name, mp_names, cutoff=0.8)
             if len(matches) > 1:
                 raise Exception("Multiple matches for '%s'" % name)
+            elif not matches:
+                print "No match found for '%s'" % name
+                continue
             print("Mapping '%s' to %s'" % (name, matches[0]))
             mp = Member.objects.get(name=matches[0])
         mp.wikipedia_link = href
