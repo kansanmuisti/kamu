@@ -2,7 +2,7 @@
 
 import os
 import sys
-import csv
+import http_cache
 from optparse import OptionParser
 
 from django.core.management import setup_environ
@@ -21,53 +21,25 @@ sys.path.insert(2, os.path.normpath(app_path + '/..'))
 
 from kamu import settings
 setup_environ(settings)
+
 from django.db import connection, transaction
 from django import db
 
-from votes.models import Member, TermMember, Term, MemberStats
-
-import parse_tools
+import funding_2007, funding_2011
 
 parser = OptionParser()
-parser.add_option('--input', action='store', type='string', dest='input',
-                  help='input file')
+parser.add_option('--f2007', action='store', type='string', dest='f2007',
+                  help='parse 2007 funding from supplied file')
+parser.add_option('--f2011', action='store_true', dest='f2011',
+                  help='parse 2011 funding')
+parser.add_option('--cache', action='store', type='string', dest='cache',
+                  help='use cache in directory CACHE')
+
 (opts, args) = parser.parse_args()
 
-if not opts.input:
-    exit(1)
-
-MEMBER_NAME_TRANSFORMS = {
-    'Korhonen Timo': 'Korhonen Timo V.',
-    'Ollila Heikki': 'Ollila Heikki A.',
-    'Saarela Tanja': 'Karpela Tanja',
-    'Kumpula Miapetra': 'Kumpula-Natri Miapetra',
-    'Forsius-Harkimo Merikukka': 'Forsius Merikukka',
-}
-
-TERM="2007-2010"
-term = Term.objects.get(name=TERM)
-
-f = open(opts.input, 'r')
-reader = csv.reader(f, delimiter=',', quotechar='"')
-for row in reader:
-    first_name = row[1].strip()
-    last_name = row[0].strip()
-    budget = row[4].strip().replace(',', '')
-    name = "%s %s" % (last_name, first_name)
-    name = parse_tools.fix_mp_name(name)
-    print "%-20s %-20s %10s" % (first_name, last_name, budget)
-    try:
-        member = Member.objects.get(name=name)
-        tm = TermMember.objects.get(member=member, term=term)
-    except Member.DoesNotExist:
-        continue
-    except TermMember.DoesNotExist:
-        continue
-    ms = MemberStats.objects.get(begin=term.begin, end=term.end, member=member)
-    tm.election_budget = budget
-    tm.save()
-    ms.election_budget = budget
-    ms.save()
-
-f.close()
-
+if opts.cache:
+    http_cache.set_cache_dir(opts.cache)
+if opts.f2007:
+    funding_2007.parse(opts.f2007)
+if opts.f2011:
+    funding_2011.parse()
