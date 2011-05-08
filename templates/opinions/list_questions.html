@@ -2,16 +2,6 @@
 {% load i18n thumbnail cache opinions %}
 {% block title %}{% trans "Question listing" %}{% endblock %}
 {% block head %}
-    <script type="text/javascript">
-    $(function() {
-    	// Accordion
-	$("#accordion").accordion({
-        	header: "h3",
-        	autoHeight: false,
-                collapsible: true,
-                active: false });
-    });
-    </script>
 {% endblock %}
 
 {% block content %}
@@ -38,44 +28,4 @@
 </div>
 {% endfor %}
 
-{% comment %}
-{% cache 600 question_list %}
-
-  <div id="accordion" class="ui-accordion ui-widget ui-helper-reset ui-accordion-icons">
-  {% for question in questions %}
-  <div>
-  <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all">
-    <a href="#">
-      <table class="question_bar">
-        <tr>
-          <td class="source">{{ question.source.name }} {{question.source.year}}</td>
-          <td class="question_text">{{ question.text }}</td>
-        </tr>
-      </table>
-    </a>
-  </h3>
-    <div style="display: none;">
-    <a href="{% url opinions.views.show_question source=question.source.url_name,question=question.order %}">{% trans "View relevant voting sessions" %}</a>
-    <table class="question_options">
-    {% for option in question.option_set.all %}
-      <tr>
-        <td class="option_text">{{option.name}}</td>
-        <td class="votechart">
-        <dl class="votechart">
-	{% for party in option.party_shares %}
-          <dt>{{party.name}}</dt>
-          <dd><span style="height: {{party.share}}%"><em>{{party.share}}%<br />{{party.name}}</em></span></dt>
-        {% endfor %}
-        </dl>
-      </td>
-      </tr>
-    {% endfor %}
-    </table>
-    </div>
-  </div>
-  {% endfor %}
-   </div>
-{% endcache %}
-{% endcomment %}
 {% endblock %}
-
