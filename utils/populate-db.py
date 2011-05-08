@@ -136,7 +136,8 @@ def process_parties(db_insert):
         if not p:
             p = Party()
             p.name = party['name']
-        p.full_name = party['fullname']
+        if not p.full_name:
+            p.full_name = party['fullname']
         p.logo = party_logo_path + party['logo']
         p.info_link = party_url_base + party['info_link']
         p.save()
