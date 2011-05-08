@@ -1,0 +1,34 @@
+{% load i18n thumbnail opinions %}
+
+{% if forloop.counter0|divisibleby:"3" %}
+    <tr>
+{% endif %}
+
+<td>
+    <a href="{%url opinions.views.show_question_session question.source.url_name question.order session.plenary_session.url_name session.number %}?party={{party.pk}}"
+        title='{% trans "Promise percentage" %}: {{party.congruence|congruence_to_percentage}}'>
+
+        <table class='mp_cong_list_item'>
+            <tr>
+                <td rowspan='2'>
+                    <img src='{{ party.thumbnail }}'>
+                </td>
+                <td>
+                    {{ party.full_name }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class='promise_percentage_bar'
+                        style='width: {{party.congruence|congruence_to_percentage}}%;
+                        background-color: {{party.congruence|congruence_to_color}}'>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </a>
+</td>
+
+{% if forloop.counter|divisibleby:"3" %}
+    </tr>
+{% endif %}

@@ -19,7 +19,7 @@ from kamu.user_voting import models as user_voting
 from opinions.models import *
 from opinions.forms import VoteOptionCongruenceForm
 from user_voting.models import Vote as UserVote
-from votes.models import Party, Session, Term, DistrictAssociation
+from votes.models import Party, Session, PlenarySession, Term, DistrictAssociation
 from votes.views import DISTRICT_KEY
 from httpstatus import Http400, Http403
 from httpstatus.decorators import postonly
@@ -124,6 +124,63 @@ def show_question(request, source, question):
                                   context_instance=context_instance)
 
     return response
+
+def show_question_session(request, source, question_no, plsess, sess_no, party=None):
+    # TODO: Mapping url to the model objects could be a bit more concise
+    src = get_object_or_404(QuestionSource, url_name=source)
+    try:
+        question_no = int(question_no)
+    except ValueError:
+        raise Http404()
+    question = get_object_or_404(Question, source=src, order=question_no)
+
+    try:
+        number = int(sess_no)
+    except ValueError:
+        raise Http404
+    psess = get_object_or_404(PlenarySession, url_name=plsess)
+    session = get_object_or_404(Session, plenary_session=psess, number=sess_no)
+
+
+    filter_args = dict(for_user=request.user,
+                       for_question=question,
+                       for_session=session)
+
+    parties = VoteOptionCongruence.objects.get_party_congruences(
+                    **filter_args)
+
+    members = VoteOptionCongruence.objects.get_member_congruences(
+                    **filter_args)
+    # A hack to have a unified duck-typing API with "non-average" congruences
+    # TODO: Get rid of this in non-demo code
+    members = list(members)
+    for m in members:
+        tn = DjangoThumbnail(m.photo, (30, 40))
+        m.thumbnail = tn
+        m.congruence = m.congruence_avg
+    
+    party = request.GET.get('party', None)
+    # This should be done in the query
+    if party is not None:
+        members = [m for m in members if m.party_id == party]
+        party = get_object_or_404(Party, pk=party)
+    
+    parties = list(parties)
+    for p in parties:
+        tn = DjangoThumbnail(p.logo, (30, 40))
+        p.thumbnail = tn
+        p.congruence = p.congruence_avg
+    
+    args = dict(parties=parties,
+                members=members,
+                question=question,
+                session=session,
+                party=party,
+                opinions_page='show_question_session')
+
+    return render_to_response('opinions/show_question_session.html', args,
+                              context_instance=RequestContext(request))
+                    
 
 
 def list_questions(request):

@@ -46,7 +46,7 @@
           </span>
         </th>
         <td>
-          <h3><a href="{%url votes.views.show_session session.plenary_session.url_name session.number %}">{{session.get_short_summary}}</a></h3>
+          <h3><a href="{%url opinions.views.show_question_session question.source.url_name question.order session.plenary_session.url_name session.number %}">{{session.get_short_summary}}</a></h3>
         </td>
       </tr>
     </table>

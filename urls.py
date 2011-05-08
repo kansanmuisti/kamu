@@ -79,6 +79,7 @@ urlpatterns += patterns('opinions.views',
     url(r'^opinions/$', 'summary'),
     url(r'^opinions/list/$', 'list_questions'),
     url(r'^opinions/(?P<source>\w+)/(?P<question>\d+)/$', 'show_question'),
+    url(r'^opinions/(?P<source>\w+)/(?P<question_no>\d+)/session/(?P<plsess>[\w-]+)/(?P<sess_no>\d+)$', 'show_question_session'),
     url(r'^opinions/match_session/$', 'match_session'),
     url(r'^opinions/party/(?P<party>\w+)/$', 'show_party_congruences'),
 )

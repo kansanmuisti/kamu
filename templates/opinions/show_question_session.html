@@ -1,0 +1,56 @@
+{% extends "opinions/opinion_base.html" %}
+{% load i18n thumbnail opinions basic %}
+{% block title %}{% trans "Question" %}{{question.name}}{% endblock %}
+
+{% block content %}
+<table style="width: 100%">
+  <tr>
+    <th style="width: 45%">{%trans "Question" %}</th>
+    <th></th>
+    <th style="width: 45%">{%trans "Session" %}</th>
+  </tr>
+  <tr>
+    <td><h3>{{ question.text }}</h3></td>
+    <td style="font-weight: bold">vs</td>
+    <td><h3>{{ session.get_short_summary }}</h3></td>
+  </tr>
+</table>
+
+<h1>{% trans "Party congruences" %}</h1>
+
+{% if parties %}
+    <div class='mp_cong_list' >
+        <table>
+            {% comment %} There's no limit to ugliness when demoing {% endcomment %}
+            {% for party in parties %}
+                {% include "opinions/party_cong_list.html" %}
+            {% endfor %}
+        </table>
+    </div>
+{% endif %}
+
+{% if members %}
+    <h1 style="margin-top:25px;">
+        {% if district %}
+            {% blocktrans with district|canonize_district as canon_district %}Promise percentages for members from {{canon_district}} district{% endblocktrans %}
+        {% else %}
+            {% trans "Promise percenteges for all members" %}
+            {% if party %}
+                of {{party.full_name}}
+                <a href="{%url opinions.views.show_question_session question.source.url_name question.order session.plenary_session.url_name session.number %}">[show all]</a>
+            {% endif %}
+        {% endif %}
+    </h1>
+
+    <div class='mp_cong_list' id='mp_cong_long_list'>
+        <table>
+            {% for member in members %}
+                {% include "opinions/member_cong_list.html" %}
+            {% endfor %}
+        </table>
+    </div>
+{% endif %}
+
+
+{% endblock %}
+
