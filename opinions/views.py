@@ -150,20 +150,22 @@ def show_question_session(request, source, question_no, plsess, sess_no, party=N
                     **filter_args)
 
     members = VoteOptionCongruence.objects.get_member_congruences(
-                    **filter_args)
+                    raw_average=True, **filter_args)
     # A hack to have a unified duck-typing API with "non-average" congruences
     # TODO: Get rid of this in non-demo code
     members = list(members)
-    for m in members:
-        tn = DjangoThumbnail(m.photo, (30, 40))
-        m.thumbnail = tn
-        m.congruence = m.congruence_avg
-    
+        
     party = request.GET.get('party', None)
     # This should be done in the query
     if party is not None:
         members = [m for m in members if m.party_id == party]
         party = get_object_or_404(Party, pk=party)
+
+    for m in members:
+        tn = DjangoThumbnail(m.photo, (30, 40))
+        m.thumbnail = tn
+        m.congruence = m.congruence_avg
+
     
     parties = list(parties)
     for p in parties:

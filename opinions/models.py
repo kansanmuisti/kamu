@@ -187,7 +187,8 @@ class VoteOptionCongruenceManager(models.Manager):
                                   descending=True, limit=False, for_user=None,
                                   for_question=None, for_member=None,
                                   for_session=None,
-                                  allow_null_congruences=False):
+                                  allow_null_congruences=False,
+                                  raw_average=False):
         
         session_freq_query = \
             """
@@ -195,11 +196,16 @@ class VoteOptionCongruenceManager(models.Manager):
                FROM opinions_voteoptioncongruence
                GROUP BY session_id
             """
+        
+        avg = "SUM(congruence/f.freq)/SUM(ABS(congruence/f.freq)) AS congruence_avg"
+        if(raw_average):
+            avg = "AVG(congruence) AS congruence_avg"
+
 
         query = \
             """
                 SELECT %s.*,
-                    SUM(congruence/f.freq)/SUM(ABS(congruence/f.freq)) AS congruence_avg
+                    %s
                   FROM
                     opinions_voteoptioncongruence as c,
                     opinions_answer as a,
@@ -221,6 +227,7 @@ class VoteOptionCongruenceManager(models.Manager):
                   %s
                   """ \
             % (grouping_class._meta.db_table,
+               avg,
                session_freq_query,
                grouping_class._meta.db_table,
                grouping_class._meta.db_table,
