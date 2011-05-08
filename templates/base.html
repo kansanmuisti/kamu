@@ -158,7 +158,7 @@
 <div id="wrap">
 
 <div id="sidebar">
-{% block sidebar %}{% endblock %}
+
 {% if switch_term %}
 <a href="#" id="period_opener" class="opener action_link">{% trans "Select term" %}</a>
 <div class="filter" id="period_list">
@@ -170,14 +170,14 @@
 <a href="#" id="district_opener" class="opener action_link">{% trans "Select district" %}</a>
 <div class="filter" id="district_list">
 {% generate_option_list "district" %}
-
-<div id="county_selector" class="sub_filter filter_options">
-{% trans "or choose your county" %}
-{% generate_option_list "county" %}
-</div>
-
+  <div id="county_selector" class="sub_filter filter_options">
+    {% trans "or choose your county" %}
+    {% generate_option_list "county" %}
+  </div>
 </div>
 {% endif %}
+
+{% block sidebar %}{% endblock %}
 
 </div>  {% comment %} id="wrap" {% endcomment %}
 

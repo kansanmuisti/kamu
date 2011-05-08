@@ -14,9 +14,11 @@
 {% endblock %}
 
 {% block sidebar %}
+  <div style="{% if switch_term or switch_district %}margin-top: 24px;{% endif %}">
   {% if question %}
     {% promise_statistics_sidebar opinions_page user question %}
   {% else %}
     {% promise_statistics_sidebar opinions_page user %}
-  {% endif %} 
+  {% endif %}
+  </div>
 {% endblock %}

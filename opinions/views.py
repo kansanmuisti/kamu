@@ -26,6 +26,7 @@ from httpstatus.decorators import postonly
 from kamu.cms.models import Item
 from operator import attrgetter
 from sorl.thumbnail.main import DjangoThumbnail
+from votes.views import find_term, find_district
 
 MATCH_PERM = 'opinions.change_questionsessionrelevance'
 LAST_QUESTION_KEY = 'opinions:last_question'
@@ -126,6 +127,10 @@ def show_question(request, source, question):
 
 
 def list_questions(request):
+    term = find_term(request)
+    year = str(term.begin).split('-')[0]
+    # FIXME: Show only questions from sources in chosen year
+
     questions = VoteOptionCongruence.objects.get_question_congruences(
                         allow_null_congruences=True, for_user=request.user)
 
@@ -134,6 +139,7 @@ def list_questions(request):
     args = dict(questions=questions, parties=parties)
     args['active_page'] = 'opinions'
     args['opinions_page'] = 'list_questions'
+    args['switch_term'] = True
     return render_to_response('opinions/list_questions.html', args,
                               context_instance=RequestContext(request))
 
@@ -207,12 +213,16 @@ def get_promise_statistics_summary(district, user, question=None):
     return ret
 
 def summary(request):
-    district = request.session.get(DISTRICT_KEY)
+    term = find_term(request)
+    district = find_district(request, term.begin, term.end)
+
     args = get_promise_statistics_summary(district, user=request.user)
     args['active_page'] = 'opinions'
     args['opinions_page'] = 'summary'
     args['content'] = Item.objects.retrieve_content('opinions_about')
     args['no_percentages'] = True
+    args['switch_term'] = True
+    args['switch_district'] = True
     return render_to_response('opinions/summary.html', args,
                             context_instance=RequestContext(request))
 
