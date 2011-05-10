@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-15 10:25+0300\n"
+"POT-Creation-Date: 2011-05-11 01:29+0300\n"
 "PO-Revision-Date: 2011-04-14 12:54+0300\n"
 "Last-Translator: Juha Yrjölä <juha.yrjola@iki.fi>\n"
 "Language-Team: Finnish <info@kansanmuisti.fi>\n"
@@ -1156,8 +1156,8 @@ msgstr ""
 "Yhdenmukaisuusprosentit kansanedustajille %(canon_district)s vaalipiiristä"
 
 #: templates/opinions/summary.html:20
-msgid "Promise percenteges for all members"
-msgstr "Yhdenmukaisuusprosentit kaikki kansanedustajille"
+msgid "Promise percentages for all MPs"
+msgstr "Yhdenmukaisuusprosentit kaikille kansanedustajille"
 
 #: templates/opinions/summary.html:64
 msgid "Promise percentage"
