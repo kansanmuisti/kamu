@@ -141,27 +141,6 @@ var THUMBNAIL_BLOCK_CLASS       = "combobox_thumbnail_block";
                 return norm_items;
             }
 
-            function emphasize_matching_parts(query, text) {
-                var trailing_space = text[text.length - 1] == " ";
-                var words = query.ltrim().split(/ +/);
-                var cnt = words.length;
-                var idx = 1;
-
-                $.map(words, function(w) {
-                        var pat = "( |^)(" + w + ")";
-
-                        if (idx < cnt || trailing_space)
-                            pat += "( |$)";
-                        else
-                            pat += "(.|$)";
-                        text = text.replace(new RegExp(pat, "ig"),
-                                            "$1<b>$2</b>$3");
-                        idx++;
-                });
-
-                return text;
-            }
-
             function autocomplete_renderitem_plain(ul, item) {
                 var list_item = "<a>" +
                                 emphasize_matching_parts(input.val(),
