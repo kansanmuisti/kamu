@@ -29,20 +29,32 @@
                 "url": "{% url votes.views.show_member member=member.url_name section='opinions' %}",
                 "cong_percent": "{{ member.congruence|congruence_to_percentage }}",
                 "thumbnail": "{{ member.thumbnail }}",
-                "bg_color": "{{ member.congruence|congruence_to_color }}",
-                "visible": true
+                "bg_color": "{{ member.congruence|congruence_to_color }}"
             }{% if not forloop.last %},{% endif %}
             {% endfor %}
         ];
         $("#mp_cong_block").data("mlist", mlist);
-        function gen_table(mlist) {
-            var table = $("<table>");
+
+        function gen_table(mlist, filter) {
+            var table = $("<table>").attr("class", "mp_cong_results");
             var i;
             var row;
+            var cnt = 0;
+
             for (i = 0; i < mlist.length; i++) {
-                if (!(i % 3))
+                var name;
+
+                if (filter) {
+                    name = emphasize_matching_parts(filter, mlist[i].name);
+                    if (!name)
+                        continue;
+                } else {
+                    name = mlist[i].name;
+                }
+                if (!(cnt % 3))
                     row = $("<tr>").
                         appendTo(table);
+                cnt++;
                 var data = $("<td>").
                     appendTo(row);
 
@@ -69,7 +81,7 @@
                     appendTo(thumbdata);
 
                 var namedata = $("<td>").
-                    text(mlist[i].name).
+                    html(name).
                     appendTo(mrow1);
 
                 var mrow2 = $("<tr>").
@@ -86,30 +98,103 @@
                     }).
                     appendTo(bardata);
             }
+
+            if (!cnt) {
+                table.remove();
+                table = $("<div>").
+                    attr("class", "mp_cong_results no_result_text").
+                    text("{% trans 'No results' %}");
+            }
+
             return table;
         }
     </script>
 
+    <div id="mp_cong_menu">
+        <input id="mp_cong_search"/>
+
+        <script>
+            function create_long_list(filter_name) {
+                var cong_list = $("#mp_cong_block");
+                var long_list = $("#mp_cong_long_list");
+                var table = long_list.children(".mp_cong_results");
+                var mlist = cong_list.data("mlist");
+                var new_table = gen_table(mlist, filter_name);
+
+                table.remove();
+                new_table.appendTo(long_list);
+			}
+
+			var timer = null;
+
+			$("#mp_cong_search").bind("keyup", function(e) {
+				var input = this;
+
+				if (timer)
+					clearTimeout(timer);
+				timer = setTimeout(function() {
+					create_long_list(input.value);
+					toggle_mp_cong_list(input);
+				}, 200);
+
+                return true;
+            }).example('{% trans "Search" %}');
+        </script>
+
+        {% if members|length > 12 %}
+            <a id="mp_cong_show_full" href="#"
+             onclick="return toggle_mp_cong_list(this);">
+                {% trans "Full list" %}
+            </a>
+            <a id="mp_cong_show_short" class="disabled"
+             onclick="return toggle_mp_cong_list(this);">
+                {% trans "Short list" %}
+            </a>
+        {% endif %}
+    </div>
+
     {% if members|length > 12 %}
-        <a id="mp_cong_toggle" href="#"
-           onclick="return toggle_mp_cong_list();">
-            {% trans "Full list" %}
-        </a>
         <script type="text/javascript">
-            function toggle_mp_cong_list() {
+            function toggle_mp_cong_list(elem) {
                 var lists = [
                         $("#mp_cong_short_list"),
                         $("#mp_cong_long_list")
                     ];
-                var texts = [
-                        "{{ _('Short list')|escapejs }}",
-                        "{{ _('Full list')|escapejs }}"
+                var links = [
+                        $("#mp_cong_show_short"),
+                        $("#mp_cong_show_full")
                     ];
-                var active_list = lists[0].is(":visible") ? 0 : 1;
+                var search = $("#mp_cong_search");
+                var activate_idx;
 
-                lists[active_list].hide();
-                lists[1 - active_list].show();
-                $("#mp_cong_toggle").text(texts[active_list]);
+                if ($(elem).attr("id") == "mp_cong_show_short") {
+                    activate_idx = 0;
+                } else if ($(elem).attr("id") == "mp_cong_show_full") {
+                    activate_idx = 1;
+                } else {
+                    if (search.val()) {
+                        activate_idx = 2;
+                    } else {
+                        activate_idx = 0;
+                    }
+                }
+
+                if (activate_idx == 2) {
+                    activate_idx = 1;
+                    links[0].removeClass("disabled").attr("href", "#");
+                    links[1].removeClass("disabled").attr("href", "#");
+                } else {
+                    if (search.val()) {
+                        search.val("");
+                        search.blur();
+                        create_long_list("");
+                    }
+                    links[activate_idx].addClass("disabled").removeAttr("href");
+                    links[1 - activate_idx].removeClass("disabled").attr("href", "#");
+                }
+
+                lists[1 - activate_idx].hide();
+                lists[activate_idx].show();
 
                 return false;
             }
@@ -130,7 +215,8 @@
     {% endif %}
 
     <div class='mp_cong_list' id='mp_cong_long_list'
-    {% if members|length > 12 %}style="display:none"{% endif %}>
+     style='min-height:200px;
+     {% if members|length > 12 %}display:none{% endif %}'>
         <script type="text/javascript">
             $(document).ready(function() {
                 var mlist = $("#mp_cong_block").data("mlist");

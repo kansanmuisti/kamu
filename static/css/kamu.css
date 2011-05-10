@@ -1451,3 +1451,27 @@ td.party_option_share
 .mp_cong_list_item tr:first-child td + td {
 	width:100px;
 }
+
+#mp_cong_menu {
+	margin-bottom:10px;
+}
+
+#mp_cong_search {
+	width:150px;
+	margin-right:10px;
+}
+
+#mp_cong_show_full,
+#mp_cong_show_short {
+	vertical-align:top;
+	margin-right:10px;
+}
+
+#mp_cong_show_full.disabled,
+#mp_cong_show_short.disabled {
+	color:gray;
+}
+
+.no_result_text {
+	font-style:italic;
+}
