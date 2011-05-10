@@ -13,13 +13,82 @@
 {{ content.data }}
 
 {% if members %}
-    <h1 style="margin-top:25px;">
+    <h1 id='mp_cong_block' style="margin-top:25px;">
         {% if district %}
             {% blocktrans with district|canonize_district as canon_district %}Promise percentages for members from {{canon_district}} district{% endblocktrans %}
         {% else %}
             {% trans "Promise percenteges for all members" %}
         {% endif %}
     </h1>
+
+    <script type="text/javascript">
+        var mlist = [
+            {% for member in members %}
+            {
+                "name": "{{ member.name|escapejs }}",
+                "url": "{% url votes.views.show_member member=member.url_name section='opinions' %}",
+                "cong_percent": "{{ member.congruence|congruence_to_percentage }}",
+                "thumbnail": "{{ member.thumbnail }}",
+                "bg_color": "{{ member.congruence|congruence_to_color }}",
+                "visible": true
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+        $("#mp_cong_block").data("mlist", mlist);
+        function gen_table(mlist) {
+            var table = $("<table>");
+            var i;
+            var row;
+            for (i = 0; i < mlist.length; i++) {
+                if (!(i % 3))
+                    row = $("<tr>").
+                        appendTo(table);
+                var data = $("<td>").
+                    appendTo(row);
+
+                var link = $("<a>").
+                    attr({
+                        "href":mlist[i].url,
+                        "title":"{{ _('Promise percentage')|escapejs }}: " +
+                                    mlist[i].cong_percent
+                    }).appendTo(data);
+
+                var mtable = $("<table>").
+                    attr("class", "mp_cong_list_item").
+                    appendTo(link);
+
+                var mrow1 = $("<tr>").
+                    appendTo(mtable);
+
+                var thumbdata = $("<td>").
+                    attr("rowspan", "2").
+                    appendTo(mrow1);
+
+                var thumbnail = $("<img>").
+                    attr("src", mlist[i].thumbnail).
+                    appendTo(thumbdata);
+
+                var namedata = $("<td>").
+                    text(mlist[i].name).
+                    appendTo(mrow1);
+
+                var mrow2 = $("<tr>").
+                    appendTo(mtable);
+
+                var bardata = $("<td>").
+                    appendTo(mrow2);
+
+                var bar = $("<div>").
+                    attr("class", "promise_percentage_bar").
+                    css({
+                        "width": mlist[i].cong_percent,
+                        "background-color": mlist[i].bg_color
+                    }).
+                    appendTo(bardata);
+            }
+            return table;
+        }
+    </script>
 
     {% if members|length > 12 %}
         <a id="mp_cong_toggle" href="#"
@@ -47,29 +116,27 @@
         </script>
 
         <div class='mp_cong_list' id='mp_cong_short_list'>
-            <table>
-                {% for member in members|slice:":6" %}
-                    {% include "opinions/member_cong_list.html" %}
-                {% endfor %}
-            </table>
-            <div>
-                . . . .
-            </div>
-            <table>
-                {% for member in members|slice:"-6:" %}
-                    {% include "opinions/member_cong_list.html" %}
-                {% endfor %}
-            </table>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    var mlist = $("#mp_cong_block").data("mlist");
+                    var top = gen_table(mlist.slice(0, 6)).
+                                appendTo("#mp_cong_short_list");
+                    var div = $("<div>").text(". . . .").
+                                insertAfter(top);
+                    gen_table(mlist.slice(-6)).insertAfter(div);
+                });
+            </script>
         </div>
     {% endif %}
 
     <div class='mp_cong_list' id='mp_cong_long_list'
-     {% if members|length > 12 %}style="display:none"{% endif %}>
-        <table>
-            {% for member in members %}
-                {% include "opinions/member_cong_list.html" %}
-            {% endfor %}
-        </table>
+    {% if members|length > 12 %}style="display:none"{% endif %}>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                var mlist = $("#mp_cong_block").data("mlist");
+                gen_table(mlist).appendTo("#mp_cong_long_list");
+            });
+        </script>
     </div>
 {% endif %}
 
