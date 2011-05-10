@@ -347,15 +347,15 @@ msgstr "Jokseenkin yhdenmukainen"
 msgid "Congruent"
 msgstr "Yhdenmukainen"
 
-#: opinions/views.py:266
+#: opinions/views.py:274
 msgid "Session connected to question."
 msgstr "Äänestys yhdistetty kysymykseen."
 
-#: opinions/views.py:269
+#: opinions/views.py:277
 msgid "Session removed from question."
 msgstr "Äänestys poistettu kysymyksen yhteydestä."
 
-#: opinions/templatetags/opinions.py:30
+#: opinions/templatetags/opinions.py:32
 msgid "N/A"
 msgstr "-"
 
@@ -367,8 +367,8 @@ msgstr "Tiedosto on liian iso."
 msgid "Image dimensions too big."
 msgstr "Kuvan dimensiot ovat liian suuret."
 
-#: orgs/forms.py:50 templates/preview_org.html:11 votes/views.py:394
-#: votes/views.py:576
+#: orgs/forms.py:50 templates/preview_org.html:11 votes/views.py:384
+#: votes/views.py:566
 msgid "Name"
 msgstr "Nimi"
 
@@ -515,6 +515,7 @@ msgid "Preview"
 msgstr "Esikatsele"
 
 #: templates/base.html:25 templates/base.html.py:114
+#: templates/opinions/summary.html:141
 msgid "Search"
 msgstr "Hae"
 
@@ -557,7 +558,7 @@ msgstr "Valitse vaalikausi"
 msgid "Select district"
 msgstr "Valitse vaalipiiri"
 
-#: templates/base.html:175
+#: templates/base.html:174
 msgid "or choose your county"
 msgstr "tai valitse kuntasi"
 
@@ -642,19 +643,19 @@ msgstr ""
 msgid "Main page"
 msgstr "Etusivu"
 
-#: templates/main_page.html:8 votes/views.py:1042
+#: templates/main_page.html:8 votes/views.py:1032
 msgid "Background"
 msgstr "Taustaa"
 
-#: templates/main_page.html:9 votes/views.py:1051
+#: templates/main_page.html:9 votes/views.py:1041
 msgid "Feedback"
 msgstr "Palaute"
 
-#: templates/main_page.html:10 votes/views.py:1048
+#: templates/main_page.html:10 votes/views.py:1038
 msgid "Donate"
 msgstr "Lahjoita"
 
-#: templates/main_page.html:11 votes/views.py:1045
+#: templates/main_page.html:11 votes/views.py:1035
 msgid "Contact"
 msgstr "Yhteystiedot"
 
@@ -736,7 +737,7 @@ msgstr "Nimi palvelussa"
 msgid "Info link"
 msgstr "Linkki kotisivulle"
 
-#: templates/preview_org.html:24 templates/show_org.html:30 votes/views.py:330
+#: templates/preview_org.html:24 templates/show_org.html:30 votes/views.py:320
 msgid "Modify"
 msgstr "Muokkaa"
 
@@ -852,21 +853,21 @@ msgid "Session"
 msgstr "Äänestys"
 
 #: templates/show_member.html:99 templates/show_member.html.py:209
-#: votes/views.py:395
+#: votes/views.py:385
 msgid "Vote"
 msgstr "Ääni"
 
 #: templates/show_member.html:106 templates/show_member.html.py:224
-#: templates/opinions/show_party_congruences.html:56 votes/views.py:412
+#: templates/opinions/show_party_congruences.html:56 votes/views.py:402
 msgid "Yay"
 msgstr "Kyllä"
 
 #: templates/show_member.html:109 templates/show_member.html.py:228
-#: templates/opinions/show_party_congruences.html:63 votes/views.py:415
+#: templates/opinions/show_party_congruences.html:63 votes/views.py:405
 msgid "Nay"
 msgstr "Ei"
 
-#: templates/show_member.html:112 votes/views.py:418
+#: templates/show_member.html:112 votes/views.py:408
 msgid "Empty"
 msgstr "Tyhjä"
 
@@ -903,8 +904,8 @@ msgstr "Yhdenmukaisuus"
 msgid "Session scores"
 msgstr "Äänestysten pisteytykset"
 
-#: templates/show_org.html:24 templates/opinions/summary.html:111
-#: templates/opinions/summary.html:143
+#: templates/show_org.html:24 templates/opinions/summary.html:264
+#: templates/opinions/summary.html:296
 msgid "No sessions scored"
 msgstr "Ei pisteytettyjä äänestyksiä"
 
@@ -1070,21 +1071,13 @@ msgstr "Lähetä"
 msgid "Question listing"
 msgstr "Kysymykset"
 
-#: templates/opinions/list_questions.html:31
+#: templates/opinions/list_questions.html:19
 msgid "Average congruence"
 msgstr "Keskimääräinen yhdenmukaisuus"
-
-#: templates/opinions/list_questions.html:58
-msgid "View relevant voting sessions"
-msgstr "Tarkastele kysymykseen liittyviä äänestyksiä"
 
 #: templates/opinions/match_session.html:20
 msgid "Match"
 msgstr "Yhdistä"
-
-#: templates/opinions/member_cong_list.html:9
-msgid "Promise percentage"
-msgstr "Yhdenmukaisuusprosentit"
 
 #: templates/opinions/promise_statistics_sidebar.html:5
 msgid "Summary"
@@ -1157,26 +1150,36 @@ msgid "Submit scores"
 msgstr "Lähetä pisteytykset"
 
 #: templates/opinions/summary.html:18
+#, python-format
 msgid "Promise percentages for members from %(canon_district)s district"
-msgstr "Yhdenmukaisuusprosentit kansanedustajille %(canon_district)s vaalipiiristä"
+msgstr ""
+"Yhdenmukaisuusprosentit kansanedustajille %(canon_district)s vaalipiiristä"
 
 #: templates/opinions/summary.html:20
 msgid "Promise percenteges for all members"
 msgstr "Yhdenmukaisuusprosentit kaikki kansanedustajille"
 
-#: templates/opinions/summary.html:27 templates/opinions/summary.html.py:37
+#: templates/opinions/summary.html:64
+msgid "Promise percentage"
+msgstr "Yhdenmukaisuusprosentit"
+
+#: templates/opinions/summary.html:106
+msgid "No results"
+msgstr "Ei hakuosumia"
+
+#: templates/opinions/summary.html:147
 msgid "Full list"
 msgstr "Koko lista"
 
-#: templates/opinions/summary.html:36
+#: templates/opinions/summary.html:151
 msgid "Short list"
 msgstr "Lyhyt lista"
 
-#: templates/opinions/summary.html:86
+#: templates/opinions/summary.html:239
 msgid "Promise percentages"
 msgstr "Yhdenmukaisuudet"
 
-#: templates/opinions/summary.html:88
+#: templates/opinions/summary.html:241
 msgid ""
 "Below you may compare how well the parties voted according to the pre-stated "
 "opinions of their members."
@@ -1184,7 +1187,7 @@ msgstr ""
 "Alla näet, kuinka yhdenmukaisesti eri puolueiden kansanedustajat ovat "
 "äänestäneet vaalikonevastaustensa mukaisesti."
 
-#: templates/opinions/summary.html:117
+#: templates/opinions/summary.html:270
 msgid "Members you have evaluated"
 msgstr "Edustajat, joita olet arvioinut"
 
@@ -1408,77 +1411,80 @@ msgstr "Luo uusi tunnus"
 msgid "Create the account"
 msgstr "Luo tunnus"
 
-#: votes/models.py:277 votes/models.py:280
+#: votes/models.py:271 votes/models.py:274
 msgid "Statement "
 msgstr "Puheenvuoro"
 
-#: votes/views.py:309
+#: votes/views.py:299
 msgid "Organization"
 msgstr "Järjestö"
 
-#: votes/views.py:310
+#: votes/views.py:300
 msgid "Score"
 msgstr "Pisteet"
 
-#: votes/views.py:392 votes/views.py:574
+#: votes/views.py:382 votes/views.py:564
 msgid "Party"
 msgstr "Puolue"
 
-#: votes/views.py:421
+#: votes/views.py:411
 msgid "Absent"
 msgstr "Poissa"
 
-#: votes/views.py:578 votes/views.py:642
+#: votes/views.py:568 votes/views.py:632
 msgid "ATT"
 msgstr "L.o."
 
-#: votes/views.py:579 votes/views.py:643
+#: votes/views.py:569 votes/views.py:633
 msgid "Attendance in voting sessions"
 msgstr "Läsnäoloprosentti äänestyksissä"
 
-#: votes/views.py:580 votes/views.py:644
+#: votes/views.py:570 votes/views.py:634
 msgid "PA"
 msgstr "SP"
 
-#: votes/views.py:581 votes/views.py:645
+#: votes/views.py:571 votes/views.py:635
 msgid "Agreement with party majority"
 msgstr "Samanmielisyys puolueen enemmistön kanssa"
 
-#: votes/views.py:582 votes/views.py:646
+#: votes/views.py:572 votes/views.py:636
 msgid "SA"
 msgstr "SI"
 
-#: votes/views.py:583 votes/views.py:647
+#: votes/views.py:573 votes/views.py:637
 msgid "Agreement with session majority"
 msgstr "Samanmielisyys äänestyksen lopputuloksen kanssa"
 
-#: votes/views.py:584 votes/views.py:648
+#: votes/views.py:574 votes/views.py:638
 msgid "St"
 msgstr "Pv"
 
-#: votes/views.py:585 votes/views.py:649
+#: votes/views.py:575 votes/views.py:639
 msgid "Number of statements"
 msgstr "Puheenvuorojen lukumäärä"
 
-#: votes/views.py:586 votes/views.py:650
+#: votes/views.py:576 votes/views.py:640
 msgid "ElBud"
 msgstr "VB"
 
-#: votes/views.py:587 votes/views.py:651
+#: votes/views.py:577 votes/views.py:641
 msgid "Election budget"
 msgstr "Vaalibudjetti"
 
-#: votes/views.py:641
+#: votes/views.py:631
 msgid "Term"
 msgstr "Vaalikausi"
 
-#: votes/views.py:1039
+#: votes/views.py:1029
 msgid "Home"
 msgstr "Etusivu"
 
 #: votes/templatetags/basic.py:110
 msgid "All districts"
 msgstr "Kaikki"
+
+#~ msgid "View relevant voting sessions"
+#~ msgstr "Tarkastele kysymykseen liittyviä äänestyksiä"
 
 #~ msgid "Based on your question/vote evaluations"
 #~ msgstr "Perustuvat omiin pisteytyksiisi"
