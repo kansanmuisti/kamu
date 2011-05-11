@@ -75,6 +75,8 @@ urlpatterns += patterns('',
 
 urlpatterns += patterns('', (r'^i18n/', include('django.conf.urls.i18n')))
 
+import opinions.views
+
 urlpatterns += patterns('opinions.views',
     url(r'^opinions/$', 'summary'),
     url(r'^opinions/list/$', 'list_questions'),
@@ -82,6 +84,12 @@ urlpatterns += patterns('opinions.views',
     url(r'^opinions/(?P<source>\w+)/(?P<question_no>\d+)/session/(?P<plsess>[\w-]+)/(?P<sess_no>\d+)$', 'show_question_session'),
     url(r'^opinions/match_session/$', 'match_session'),
     url(r'^opinions/party/(?P<party>\w+)/$', 'show_party_congruences'),
+
+    url(r'^opinions/portugal$',
+        lambda req: opinions.views.show_hypotetical_vote(req, 'hs2007', 27,
+                    'Portugalin tukipaketti',
+                    {1: 1, 2: -1, 3: -1})
+       )
 )
 
 urlpatterns += patterns('cms.views',

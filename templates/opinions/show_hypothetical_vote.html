@@ -1,0 +1,32 @@
+{% extends "opinions/opinion_base.html" %}
+{% load i18n thumbnail %}
+{% block title %}{% trans "Question" %}{{question.name}}{% endblock %}
+
+{% block content %}
+<h1>
+  {% trans "How members would vote on" %} {{vote_name}}
+  {% trans "based on answers to " %} {{question.text}}
+</h1>
+
+<div style="clear: both; margin-bottom: 2em">
+<h3>{% trans "Whole parliament" %}</h2>
+{% trans "Yay" %}: {{answers_for|length}}
+{% trans "Nay" %}: {{answers_against|length}}
+</div>
+
+<div style="width: 30%; float: left">
+<h3>{% trans "Members for" %}</h3>
+{% for answer in answers_for %}
+    <div>{{answer.member.name}}</div>
+{% endfor %}
+</div>
+
+<div style="width: 30%; float: left">
+<h3>{% trans "Members against" %}</h3>
+{% for answer in answers_against %}
+    <div>{{answer.member.name}}</div>
+{% endfor %}
+</div>
+
+
+{% endblock %}

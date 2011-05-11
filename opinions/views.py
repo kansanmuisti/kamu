@@ -112,7 +112,10 @@ def show_question(request, source, question):
                 reverse('opinions.views.show_question',
                         kwargs=dict(source=source, question=question.order)))
 
-    args = dict(question=question, relevant_sessions=relevant_sessions)
+    answers = Answer.objects.filter(question=question)
+
+    args = dict(question=question, answers=answers,
+            relevant_sessions=relevant_sessions)
     args['active_page'] = 'opinions'
     args['opinions_page'] = 'show_questions'
 
@@ -123,6 +126,43 @@ def show_question(request, source, question):
     response = render_to_response('opinions/show_question.html', args,
                                   context_instance=context_instance)
 
+    return response
+
+def show_hypotetical_vote(request, source, question_no,
+                          vote_name, congruences):
+    src = get_object_or_404(QuestionSource, url_name=source)
+    try:
+        question_no = int(question_no)
+    except ValueError:
+        raise Http404()
+    question = get_object_or_404(Question, source=src, order=question_no)
+
+    for foo in congruences.items():
+        print foo
+    
+    options_for = [opt for opt, cong in congruences.items() if cong > 0]
+    options_against = [opt for opt, cong in congruences.items() if cong < 0]
+
+    answers_for = list(Answer.objects.filter(
+                    question=question,
+                    option__order__in=options_for))
+
+    answers_against = list(Answer.objects.filter(
+                    question=question,
+                    option__order__in=options_against))
+
+    total_votes = len(answers_for)+len(answers_against)
+    parliament_percentage = len(answers_for)/float(total_votes)*100
+    
+    args = dict(answers_for=answers_for,
+                answers_against=answers_against,
+                vote_name=vote_name,
+                question=question,
+                parliament_percentage=parliament_percentage)
+    
+    args['opinions_page'] = 'show_hypothetical_vote'
+    response = render_to_response('opinions/show_hypothetical_vote.html', args,
+                                  context_instance=RequestContext(request))
     return response
 
 def show_question_session(request, source, question_no, plsess, sess_no, party=None):
@@ -182,7 +222,6 @@ def show_question_session(request, source, question_no, plsess, sess_no, party=N
 
     return render_to_response('opinions/show_question_session.html', args,
                               context_instance=RequestContext(request))
-                    
 
 
 def list_questions(request):
