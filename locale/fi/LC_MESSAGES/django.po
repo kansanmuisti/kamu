@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-12 16:12+0300\n"
+"POT-Creation-Date: 2011-05-12 18:04+0300\n"
 "PO-Revision-Date: 2011-04-14 12:54+0300\n"
 "Last-Translator: Juha Yrjölä <juha.yrjola@iki.fi>\n"
 "Language-Team: Finnish <info@kansanmuisti.fi>\n"
@@ -347,15 +347,15 @@ msgstr "Jokseenkin yhdenmukainen"
 msgid "Congruent"
 msgstr "Yhdenmukainen"
 
-#: opinions/views.py:387
+#: opinions/views.py:394
 msgid "Session connected to question."
 msgstr "Äänestys yhdistetty kysymykseen."
 
-#: opinions/views.py:390
+#: opinions/views.py:397
 msgid "Session removed from question."
 msgstr "Äänestys poistettu kysymyksen yhteydestä."
 
-#: opinions/templatetags/opinions.py:32
+#: opinions/templatetags/opinions.py:35
 msgid "N/A"
 msgstr "-"
 
@@ -854,18 +854,18 @@ msgid "Session"
 msgstr "Äänestys"
 
 #: templates/show_member.html:99 templates/show_member.html.py:209
-#: votes/views.py:385
+#: templates/opinions/show_hypothetical_vote.html:15 votes/views.py:385
 msgid "Vote"
 msgstr "Ääni"
 
 #: templates/show_member.html:106 templates/show_member.html.py:224
-#: templates/opinions/show_hypothetical_vote.html:12
+#: templates/opinions/show_hypothetical_vote.html:22
 #: templates/opinions/show_party_congruences.html:56 votes/views.py:402
 msgid "Yay"
 msgstr "Kyllä"
 
 #: templates/show_member.html:109 templates/show_member.html.py:228
-#: templates/opinions/show_hypothetical_vote.html:13
+#: templates/opinions/show_hypothetical_vote.html:23
 #: templates/opinions/show_party_congruences.html:63 votes/views.py:405
 msgid "Nay"
 msgstr "Ei"
@@ -1103,19 +1103,19 @@ msgstr "Yhdenmukaisuusprosentti tälle kysymykselle"
 msgid "Overall promise percentage"
 msgstr "Yhdenmukaisuusprosentti"
 
-#: templates/opinions/promise_statistics_sidebar.html:46
+#: templates/opinions/promise_statistics_sidebar.html:47
 msgid "Congruences based on Kansan Muisti's estimations."
 msgstr "Lasketut yhdenmukaisuudet perustuvat Kansan muistin pisteytyksiin."
 
-#: templates/opinions/promise_statistics_sidebar.html:47
+#: templates/opinions/promise_statistics_sidebar.html:48
 msgid "Log in or register to make your own."
 msgstr "Kirjaudu sisään tai rekisteröidy, niin voit pisteyttää itse."
 
-#: templates/opinions/promise_statistics_sidebar.html:49
+#: templates/opinions/promise_statistics_sidebar.html:50
 msgid "Congruences based on your estimations."
 msgstr "Yhdenmukaisuudet perustuvat omiin arvioihisi."
 
-#: templates/opinions/promise_statistics_sidebar.html:50
+#: templates/opinions/promise_statistics_sidebar.html:51
 msgid ""
 "You can view results based on Kansan Muisti's estimations by logging out."
 msgstr ""
@@ -1132,15 +1132,34 @@ msgstr "Vaalikonekysymys"
 msgid "How members would vote on"
 msgstr "Miten kansanedustajat äänestäisivät aiheesta"
 
-#: templates/opinions/show_hypothetical_vote.html:11
+#: templates/opinions/show_hypothetical_vote.html:9
+msgid ""
+"\n"
+"This page shows how the MPs would vote, if they were to vote according to "
+"their stated opinions.\n"
+msgstr ""
+"\n"
+"Tällä sivulla näet, miten kansanedustajat äänestäisivät, jos he äänestäisivät "
+"vaalikonevastaustensa mukaisesti. Allaolevassa taulukossa olemme listanneet, "
+"miten eri vaalikonevastaukset ovat yhdistetty ääniin.\n"
+
+#: templates/opinions/show_hypothetical_vote.html:12
+msgid "Source"
+msgstr "Lähde"
+
+#: templates/opinions/show_hypothetical_vote.html:15
+msgid "Option"
+msgstr "Vastausvaihtoehto"
+
+#: templates/opinions/show_hypothetical_vote.html:21
 msgid "Whole parliament"
 msgstr "Koko eduskunta"
 
-#: templates/opinions/show_hypothetical_vote.html:17
+#: templates/opinions/show_hypothetical_vote.html:27
 msgid "Members for"
 msgstr "Edustajat puolesta"
 
-#: templates/opinions/show_hypothetical_vote.html:24
+#: templates/opinions/show_hypothetical_vote.html:34
 msgid "Members against"
 msgstr "Edustajat vastaan"
 

@@ -141,6 +141,17 @@ def show_hypothetical_vote(request, source, question,
 
     mp_list = TermMember.objects.filter(term=term).values_list('member', flat=True)
 
+    options = Option.objects.filter(question=question)
+    for opt in options:
+        val = vote_map.get(opt.order, 0)
+        if val > 0:
+            vote_class = 'yes_vote'
+        elif val < 0:
+            vote_class = 'no_vote'
+        else:
+            vote_class = 'empty_vote'
+        opt.vote_class = vote_class
+
     options_for = [opt for opt, cong in vote_map.items() if cong > 0]
     options_against = [opt for opt, cong in vote_map.items() if cong < 0]
 
@@ -169,9 +180,9 @@ def show_hypothetical_vote(request, source, question,
     args = dict(answers_for=answers_for,
                 answers_against=answers_against,
                 vote_name=vote_name,
-                question=question,
+                question=question, options=options,
                 parliament_percentage=parliament_percentage)
-
+    args['active_page'] = 'opinions'
     args['opinions_page'] = 'show_hypothetical_vote'
     response = render_to_response('opinions/show_hypothetical_vote.html', args,
                                   context_instance=RequestContext(request))

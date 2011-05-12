@@ -21,7 +21,10 @@ register = template.Library()
                         takes_context=True)
 def promise_statistics_sidebar(context, opinions_page, user, question=None):
     district = context['request'].session.get(DISTRICT_KEY)
-    args = get_promise_statistics_summary(district, user, question)
+    if opinions_page != 'show_hypothetical_vote':
+        args = get_promise_statistics_summary(district, user, question)
+    else:
+        args = {}
     args['opinions_page'] = opinions_page
     args['system_congruences'] = not VoteOptionCongruence.objects.user_has_congruences(user)
     return args

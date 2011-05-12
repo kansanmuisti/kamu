@@ -40,6 +40,11 @@ class Question(models.Model):
         ordering = ('-source__year', 'source__name', 'order', )
         unique_together = (('order', 'source'), )
 
+    @models.permalink
+    def get_absolute_url(self):
+        args = {'source': self.source.url_name, 'question': self.order}
+        return ('opinions.views.show_question', (), args)
+
     def __unicode__(self):
         return u"%s/%d" % (self.source, self.order)
 

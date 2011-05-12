@@ -41,6 +41,7 @@
   {% endif %}
 </ul>
 
+{% if parties or members %}
 <div class="congruence_source_nag">
   {% if system_congruences %}
     {% trans "Congruences based on Kansan Muisti's estimations." %}
@@ -49,5 +50,6 @@
     {% trans "Congruences based on your estimations." %}
     {% trans "You can view results based on Kansan Muisti's estimations by logging out." %}
   {% endif %}
-
 </div>
+{% endif %}
+

@@ -4,9 +4,19 @@
 
 {% block content %}
 <h1>
-  {% trans "How members would vote on" %} {{vote_name}}
+  {% trans "How members would vote on" %} {{vote_name}}?
 </h1>
-
+<p>{% blocktrans %}
+This page shows how the MPs would vote, if they were to vote according to their stated opinions.
+{% endblocktrans %}</p>
+<h3 style="margin-top: 2em">{% trans "Source" %}</h3>
+<a class="link" href="{{ question.get_absolute_url }}">{{ question.text }}</a> ({{ question.source.name }} {{ question.source.year }})</p>
+<table style="margin-left: 32px; margin-bottom: 2em;">
+  <tr><th style="text-align: left">{% trans "Option" %}</th><th>{% trans "Vote" %}</th></tr>
+{% for opt in options %}
+  <tr><td style="width: 250px">{{ opt.name }}</td><td class="{{ opt.vote_class }}"></td></tr>
+{% endfor %}
+</table>
 <div style="clear: both; margin-bottom: 2em">
 <h3>{% trans "Whole parliament" %}</h2>
 {% trans "Yay" %}: {{answers_for|length}}
