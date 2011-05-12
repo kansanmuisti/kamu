@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load i18n thumbnail tagging_tags basic comments opinions %}
-{% block title %}{% trans "Votes" %} - {{ psession.name }}/{{ session.number }}{% endblock %}
+{% block title %}{% trans "Votes" %} | {{ psession.name }}/{{ session.number }}{% endblock %}
 {% block head %}
 <meta property="og:title" content="{% trans "Parliament vote" %} {{ session }}" />
 <meta property="og:description" content="{{ session.get_short_summary }}" />

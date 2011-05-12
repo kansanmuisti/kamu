@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-12 18:04+0300\n"
+"POT-Creation-Date: 2011-05-12 18:54+0300\n"
 "PO-Revision-Date: 2011-04-14 12:54+0300\n"
 "Last-Translator: Juha Yrjölä <juha.yrjola@iki.fi>\n"
 "Language-Team: Finnish <info@kansanmuisti.fi>\n"
@@ -1122,11 +1122,8 @@ msgstr ""
 "Voit tarkastella Kansan muistin arvioimia pisteytyksiä kirjautumalla ulos."
 
 #: templates/opinions/show_hypothetical_vote.html:3
-#: templates/opinions/show_question.html:3
-#: templates/opinions/show_question_session.html:3
-#: templates/opinions/show_question_session.html:8
-msgid "Question"
-msgstr "Vaalikonekysymys"
+msgid "Voting prediction"
+msgstr "Ennuste"
 
 #: templates/opinions/show_hypothetical_vote.html:7
 msgid "How members would vote on"
@@ -1139,9 +1136,9 @@ msgid ""
 "their stated opinions.\n"
 msgstr ""
 "\n"
-"Tällä sivulla näet, miten kansanedustajat äänestäisivät, jos he äänestäisivät "
-"vaalikonevastaustensa mukaisesti. Allaolevassa taulukossa olemme listanneet, "
-"miten eri vaalikonevastaukset ovat yhdistetty ääniin.\n"
+"Tällä sivulla näet, miten kansanedustajat äänestäisivät, jos he "
+"äänestäisivät vaalikonevastaustensa mukaisesti. Allaolevassa taulukossa "
+"olemme listanneet, miten eri vaalikonevastaukset ovat yhdistetty ääniin.\n"
 
 #: templates/opinions/show_hypothetical_vote.html:12
 msgid "Source"
@@ -1178,6 +1175,12 @@ msgstr "Puolueen äänet"
 #: templates/opinions/show_party_congruences.html:75
 msgid "Average congruence:"
 msgstr "Keskimääräinen yhdenmukaisuus:"
+
+#: templates/opinions/show_question.html:3
+#: templates/opinions/show_question_session.html:3
+#: templates/opinions/show_question_session.html:8
+msgid "Question"
+msgstr "Vaalikonekysymys"
 
 #: templates/opinions/show_question.html:25
 msgid "No relevant voting sessions found."

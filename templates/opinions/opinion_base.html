@@ -11,6 +11,9 @@
       });
     });
     </script>
+{% if fb_enabled %}
+    <meta property="og:image" content="http://{{ fb_host }}/static/images/kamu.png" />
+{% endif %}
 {% endblock %}
 
 {% block sidebar %}

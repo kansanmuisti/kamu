@@ -1,6 +1,6 @@
 {% extends "opinions/opinion_base.html" %}
 {% load i18n thumbnail %}
-{% block title %}{% trans "Question" %}{{question.name}}{% endblock %}
+{% block title %}{{ vote_name }} | {% trans "Voting prediction" %}{% endblock %}
 
 {% block content %}
 <h1>
