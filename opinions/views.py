@@ -19,7 +19,8 @@ from kamu.user_voting import models as user_voting
 from opinions.models import *
 from opinions.forms import VoteOptionCongruenceForm
 from user_voting.models import Vote as UserVote
-from votes.models import Party, Session, PlenarySession, Term, DistrictAssociation
+from votes.models import Party, Session, PlenarySession, Term, \
+    TermMember, DistrictAssociation
 from votes.views import DISTRICT_KEY
 from httpstatus import Http400, Http403
 from httpstatus.decorators import postonly
@@ -128,38 +129,45 @@ def show_question(request, source, question):
 
     return response
 
-def show_hypotetical_vote(request, source, question_no,
-                          vote_name, congruences):
+def show_hypothetical_vote(request, source, question,
+                           vote_name, vote_map, term):
+    term = get_object_or_404(Term, name=term)
     src = get_object_or_404(QuestionSource, url_name=source)
     try:
-        question_no = int(question_no)
+        question_no = int(question)
     except ValueError:
         raise Http404()
     question = get_object_or_404(Question, source=src, order=question_no)
 
-    for foo in congruences.items():
+    for foo in vote_map.items():
         print foo
-    
-    options_for = [opt for opt, cong in congruences.items() if cong > 0]
-    options_against = [opt for opt, cong in congruences.items() if cong < 0]
+
+    mp_list = TermMember.objects.filter(term=term).values_list('member', flat=True)
+
+    options_for = [opt for opt, cong in vote_map.items() if cong > 0]
+    options_against = [opt for opt, cong in vote_map.items() if cong < 0]
 
     answers_for = list(Answer.objects.filter(
                     question=question,
-                    option__order__in=options_for))
+                    option__order__in=options_for,
+                    member__in=mp_list))
 
     answers_against = list(Answer.objects.filter(
                     question=question,
-                    option__order__in=options_against))
+                    option__order__in=options_against,
+                    member__in=mp_list))
+
+    # FIXME: MPs with 'en osaa sanoa' and missing answers
 
     total_votes = len(answers_for)+len(answers_against)
     parliament_percentage = len(answers_for)/float(total_votes)*100
-    
+
     args = dict(answers_for=answers_for,
                 answers_against=answers_against,
                 vote_name=vote_name,
                 question=question,
                 parliament_percentage=parliament_percentage)
-    
+
     args['opinions_page'] = 'show_hypothetical_vote'
     response = render_to_response('opinions/show_hypothetical_vote.html', args,
                                   context_instance=RequestContext(request))

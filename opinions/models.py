@@ -50,7 +50,7 @@ class Option(models.Model):
 
     class Meta:
         unique_together = (('question', 'order'), )
-        ordering = ('-question__order', '-order')
+        ordering = ('question__order', 'order')
 
     def save(self, *args, **kwargs):
         if self.order is None:
