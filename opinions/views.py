@@ -150,17 +150,24 @@ def show_hypothetical_vote(request, source, question,
     answers_for = list(Answer.objects.filter(
                     question=question,
                     option__order__in=options_for,
-                    member__in=mp_list))
+                    member__in=mp_list).order_by('member__party__name',
+                    'member__name').select_related('member'))
 
     answers_against = list(Answer.objects.filter(
                     question=question,
                     option__order__in=options_against,
-                    member__in=mp_list))
+                    member__in=mp_list).order_by('member__party__name',
+                    'member__name').select_related('member'))
 
     # FIXME: MPs with 'en osaa sanoa' and missing answers
 
     total_votes = len(answers_for)+len(answers_against)
     parliament_percentage = len(answers_for)/float(total_votes)*100
+
+    for ans in answers_for + answers_against:
+        mp = ans.member
+        mp.thumbnail = DjangoThumbnail(mp.photo, (30, 40))
+        mp.party_thumbnail = DjangoThumbnail(mp.party.logo, (30, 40))
 
     args = dict(answers_for=answers_for,
                 answers_against=answers_against,

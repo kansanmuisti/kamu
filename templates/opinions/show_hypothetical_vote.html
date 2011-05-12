@@ -5,7 +5,6 @@
 {% block content %}
 <h1>
   {% trans "How members would vote on" %} {{vote_name}}
-  {% trans "based on answers to " %} {{question.text}}
 </h1>
 
 <div style="clear: both; margin-bottom: 2em">
@@ -14,17 +13,17 @@
 {% trans "Nay" %}: {{answers_against|length}}
 </div>
 
-<div style="width: 30%; float: left">
+<div style="width: 35%; float: left;">
 <h3>{% trans "Members for" %}</h3>
 {% for answer in answers_for %}
-    <div>{{answer.member.name}}</div>
+    <div><img style='margin-right: 16px' src='{{ answer.member.party_thumbnail }}' /><img style='margin-right: 8px' src='{{ answer.member.thumbnail }}' /><a href="{{answer.member.get_absolute_url}}">{{answer.member.name}}</a></div>
 {% endfor %}
 </div>
 
-<div style="width: 30%; float: left">
+<div style="width: 35%; float: left">
 <h3>{% trans "Members against" %}</h3>
 {% for answer in answers_against %}
-    <div>{{answer.member.name}}</div>
+    <div><img style='margin-right: 16px' src='{{ answer.member.party_thumbnail }}' /><img style='margin-right: 8px' src='{{ answer.member.thumbnail }}' /><a href="{{answer.member.get_absolute_url}}">{{answer.member.name}}</a></div>
 {% endfor %}
 </div>
 
