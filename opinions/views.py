@@ -139,9 +139,6 @@ def show_hypothetical_vote(request, source, question,
         raise Http404()
     question = get_object_or_404(Question, source=src, order=question_no)
 
-    for foo in vote_map.items():
-        print foo
-
     mp_list = TermMember.objects.filter(term=term).values_list('member', flat=True)
 
     options_for = [opt for opt, cong in vote_map.items() if cong > 0]
