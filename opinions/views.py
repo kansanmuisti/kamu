@@ -331,7 +331,6 @@ def summary(request):
     args['opinions_page'] = 'summary'
     args['content'] = Item.objects.retrieve_content('opinions_about')
     args['no_percentages'] = True
-    args['switch_term'] = True
     args['switch_district'] = True
     return render_to_response('opinions/summary.html', args,
                             context_instance=RequestContext(request))
