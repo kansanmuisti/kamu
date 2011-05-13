@@ -87,7 +87,7 @@ urlpatterns += patterns('opinions.views',
 
     url(r'^opinions/portugal/$', 'show_hypothetical_vote',
         {'source': 'yle2011', 'question': 0, 'vote_name': 'Portugalin tukipaketti',
-         'vote_map': {0: 1, 1: 1, 2: -1, 3: -1}, 'term': '2011-2014'})
+         'vote_map': {0: 1, 1: 0.5, 2: -0.5, 3: -1}, 'term': '2011-2014'})
 )
 
 urlpatterns += patterns('cms.views',

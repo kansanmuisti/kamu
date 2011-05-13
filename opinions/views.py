@@ -2,6 +2,7 @@
 
 import re
 import itertools
+import math
 
 from django.shortcuts import render_to_response, get_list_or_404, \
     get_object_or_404, redirect
@@ -129,6 +130,9 @@ def show_question(request, source, question):
 
     return response
 
+def get_color(val):
+    return math.sqrt(1.0 - val) * 200
+
 def show_hypothetical_vote(request, source, question,
                            vote_name, vote_map, term):
     term = get_object_or_404(Term, name=term)
@@ -142,15 +146,23 @@ def show_hypothetical_vote(request, source, question,
     mp_list = TermMember.objects.filter(term=term).values_list('member', flat=True)
 
     options = Option.objects.filter(question=question)
+    opt_dict = {}
     for opt in options:
         val = vote_map.get(opt.order, 0)
+        color = None
         if val > 0:
             vote_class = 'yes_vote'
+            color = (get_color(val), 200, get_color(val))
         elif val < 0:
             vote_class = 'no_vote'
+            color = (200, get_color(-val), get_color(-val))
         else:
             vote_class = 'empty_vote'
         opt.vote_class = vote_class
+        if color:
+            opt.color_str = "#%02x%02x%02x" % color
+
+        opt_dict[opt.id] = opt
 
     options_for = [opt for opt, cong in vote_map.items() if cong > 0]
     options_against = [opt for opt, cong in vote_map.items() if cong < 0]
@@ -173,6 +185,9 @@ def show_hypothetical_vote(request, source, question,
     parliament_percentage = len(answers_for)/float(total_votes)*100
 
     for ans in answers_for + answers_against:
+        opt = opt_dict[ans.option_id]
+        if opt.color_str:
+            ans.color_str = opt.color_str
         mp = ans.member
         mp.thumbnail = DjangoThumbnail(mp.photo, (30, 40))
         mp.party_thumbnail = DjangoThumbnail(mp.party.logo, (30, 40))
