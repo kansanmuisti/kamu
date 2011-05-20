@@ -7,6 +7,7 @@ import os
 import re
 import operator
 import difflib
+import logging
 from optparse import OptionParser
 
 from BeautifulSoup import BeautifulSoup
@@ -20,6 +21,7 @@ import party_info_parser
 import minutes_parser
 
 import http_cache
+import parse_tools
 from http_cache import create_path_for_file
 
 from django.core.management import setup_environ
@@ -433,57 +435,94 @@ MINUTES_URL = '/triphome/bin/akx3000.sh?kanta=utaptk&LYH=LYH-PTK&haku=PTKSUP&kie
 BEGIN_YEAR = 1999
 END_YEAR = 2010
 
-def read_links(is_minutes, url, new_only=False):
-    if is_minutes:
-        link_type = 'minutes'
+def process_list_element(el_type, el):
+    ret = {}
+
+    special_vote = False
+    children = el.getchildren()
+
+    name_el = children[0]
+    if el_type == 'votes' and name_el.tag != 'b':
+        special_vote = True
     else:
-        link_type = 'votes'
+        assert name_el.tag == 'b'
+        name = name_el.text.strip()
+        m = re.match(r'(\w+)\s(\w+/\d{4})\svp', name, re.U)
+        ret['type'] = m.groups()[0]
+        ret['id'] = m.groups()[1]
+
+        link_el = children[1]
+        assert link_el.tag == 'a'
+        if 'sittelytiedot' in link_el.text:
+            ret['process_link'] = link_el.attrib['href']
+        else:
+            link_el = children[2]
+            assert 'HTML' in link_el.text
+            ret['minutes_link'] = link_el.attrib['href']
+
+    if el_type == 'votes':
+        if not special_vote:
+            assert 'process_link' in ret
+            idx = 2
+        else:
+            idx = 0
+
+        plsess_el = children[idx + 0]
+        assert plsess_el.tag == 'a'
+        s = plsess_el.text.strip()
+        m = re.match(r'PTK (\w+/\d{4}) vp', s)
+        assert m
+        ret['plsess'] = m.groups()[0]
+
+        id_el = children[idx + 1]
+        m = re.search(r'nestys (\d+)', id_el.text)
+        assert m
+        ret['number'] = int(m.groups()[0])
+
+        res_el = children[idx + 2]
+        assert res_el.tag == 'a' and 'Tulos' in res_el.text_content()
+        ret['results_link'] = res_el.attrib['href']
+
+    if el_type == 'docs':
+        links = [e.attrib['href'] for e in el.xpath('.//a')]
+        doc_links = [link for link in links if '/bin/akxhref2.sh?' in link]
+        docs = []
+        for l in doc_links:
+            m = re.search(r'\?\{KEY\}=(\w+)\+(\d+\w*/\d{4})', l)
+            assert m
+            doc = {'type': m.groups()[0], 'id': m.groups()[1]}
+            doc['link'] = l
+            # If it's the list item document just save the link,
+            # otherwise include the associated doc.
+            if doc['type'] == ret['type'] and doc['id'] == ret['id']:
+                ret['doc_link'] = doc['link']
+            else:
+                docs.append(doc)
+        assert 'doc_link' in ret
+        ret['docs'] = docs
+    elif el_type == 'minutes':
+        assert 'minutes_link' in ret
+    return ret
+
+def read_listing(list_type, url, new_only=False):
+    assert list_type in ('minutes', 'votes', 'docs')
 
     ret = []
 
     while True:
-        s = http_cache.open_url(url, link_type, new_only)
+        s = http_cache.open_url(url, list_type, skip_cache=new_only)
         doc = html.fromstring(s)
-        votes = doc.xpath(".//div[@class='listing']/div/p")
+        el_list = doc.xpath(".//div[@class='listing']/div/p")
         doc.make_links_absolute(url)
 
-        for vote in votes:
+        for el in el_list:
             link = {}
 
-            links = vote.xpath('.//a')
-
-            minutes_link = [l for l in links if '/akxptk.sh?' in l.attrib['href']]
-            if len(minutes_link) != 1:
-                print http_cache.get_fname(url, link_type)
-                raise Exception("Unable to find link to minutes")
-            link['minutes'] = minutes_link[0].attrib['href']
-            if is_minutes:
-                pls_name = vote.getchildren()[0].text.strip()
-                m = re.match(r"PTK (\w+/\d{4}) vp", pls_name)
-                link['plsess'] = m.group(1)
-            else:
-                link['plsess'] = minutes_link[0].text.strip()[4:-3]
-                b_elem = minutes_link[0].getnext()
-                if b_elem.tag != 'b':
-                    print http_cache.get_fname(url, link_type)
-                    raise Exception("Unexpected <b> tag")
-                nr = int(b_elem.text.strip()[10:].strip().split()[1])
-                link['number'] = nr
-                link_list = [l for l in links if '=aax/aax5000&' in l.attrib['href']]
-                if len(link_list) != 1:
-                    raise Exception("Unable to find vote results")
-                link['results'] = link_list[0].attrib['href']
-
-                link_list = [l for l in links if '/vex3000.sh?' in l.attrib['href']]
-                if len(link_list) != 1:
-                    print >> sys.stderr, 'Warning: Vote does not have keyword info'
-                else:
-                    link['info'] = link_list[0].attrib['href']
-
-            ret.append(link)
+            parsed_el = process_list_element(list_type, el)
+            ret.append(parsed_el)
 
         # Check if last page of links
-        if len(votes) >= 50:
+        if len(el_list) >= 50:
             fwd_link = doc.xpath(".//input[@name='forward']")
             url = url_base + fwd_link[0].attrib['value']
         else:
@@ -497,7 +536,6 @@ def read_links(is_minutes, url, new_only=False):
 pl_sess_list = {}
 mem_name_list = {}
 
-@transaction.commit_manually
 def process_session_votes(url, pl_sess_name):
     parser = vote_list_parser.Parser()
     s = http_cache.open_url(url, 'votes')
@@ -523,8 +561,6 @@ def process_session_votes(url, pl_sess_name):
         pl_sess.info_link = url_base + desc['session_link']
         pl_sess.save()
 
-    # If the plenary session was deleted, all the child
-    # objects were, too.
     try:
         sess = Session.objects.get(plenary_session=pl_sess, number=desc['nr'])
     except Session.DoesNotExist:
@@ -535,16 +571,18 @@ def process_session_votes(url, pl_sess_name):
     sess.info_link = None
     sess.save()
 
-    sess.sessiondocument_set.clear()
-    for doc in desc['docs']:
-        name = doc[0]
-        try:
-            sd = SessionDocument.objects.get(name=name)
-        except SessionDocument.DoesNotExist:
-            sd = SessionDocument(name=name)
-            sd.info_link = url_base + doc[1]
-            sd.save()
-        sd.sessions.add(sess)
+    sess.docs.clear()
+    sess.keywords.clear()
+    for idx, doc_info in enumerate(desc['docs']):
+        doc = Document.objects.filter(type=doc_info['type'], name=doc_info['id'])
+        if not doc:
+            doc = download_doc(doc_info, None)
+        else:
+            doc = doc[0]
+        sd = SessionDocument(session=sess, doc=doc, order=idx)
+        sd.save()
+        for kw in doc.keywords.all():
+            sess.keywords.add(kw)
 
     sess.vote_set.all().delete()
     for v in votes:
@@ -562,29 +600,9 @@ def process_session_votes(url, pl_sess_name):
     sess.count_votes()
     sess.save()
 
-    transaction.commit()
     db.reset_queries()
 
     return sess
-
-def process_session_keywords(sess, url):
-    s = http_cache.open_url(url, 'votes')
-    doc = html.fromstring(s)
-    kw_list = doc.xpath(".//div[@id='vepsasia-asiasana']//div[@class='linkspace']/a")
-
-    for kw in kw_list:
-        kw = kw.text.strip()
-        print '\t%s' % kw
-        try:
-            kw_obj = Keyword.objects.get(name=kw)
-        except Keyword.DoesNotExist:
-            import codecs
-            f = codecs.open('new-kws.txt', 'a', 'utf-8')
-            f.write(u'%s\n' % kw)
-            f.close()
-            kw_obj = Keyword(name=kw)
-            kw_obj.save()
-        SessionKeyword.objects.get_or_create(session=sess, keyword=kw_obj)
 
 def process_votes(full_update=False, verify=False):
     start_from = from_pl
@@ -595,8 +613,8 @@ def process_votes(full_update=False, verify=False):
     while True:
         if not next_link:
             next_link = url_base + VOTE_URL % year
-        (sess_list, next_link) = read_links(False, next_link, not full_update)
-        print 'Got links for total of %d sessions' % len(sess_list)
+        (sess_list, next_link) = read_listing('votes', next_link, not full_update)
+        logger.debug('got links for %d sessions' % len(sess_list))
         for sess_desc in sess_list:
             sess = Session.objects.filter(plenary_session=sess_desc['plsess'],
                                           number=sess_desc['number'])
@@ -605,7 +623,7 @@ def process_votes(full_update=False, verify=False):
                 sess = sess[0]
 
             idx = sess_list.index(sess_desc)
-            print '%4d. Vote %d / %s' % (idx, sess_desc['number'], sess_desc['plsess'])
+            logger.debug('%4d. vote %d / %s' % (idx, sess_desc['number'], sess_desc['plsess']))
             if start_from:
                 if start_from == sess_desc['plsess']:
                     start_from = None
@@ -617,18 +635,9 @@ def process_votes(full_update=False, verify=False):
             if verify:
                 continue
             if not full_update and sess:
-                # If the session doesn't have keywords, we process only those.
-                if not sess.sessionkeyword_set.all():
-                    if 'info' in sess_desc:
-                        process_session_keywords(sess, sess_desc['info'])
-                        continue
-                else:
-                    return processed_sess_list
+                return processed_sess_list
 
-            sess = process_session_votes(sess_desc['results'], sess_desc['plsess'])
-            # Process keywords
-            if 'info' in sess_desc:
-                process_session_keywords(sess, sess_desc['info'])
+            sess = process_session_votes(sess_desc['results_link'], sess_desc['plsess'])
             if until_pl and sess_desc['plsess'] == until_pl:
                 stop_after = until_pl
 
@@ -636,6 +645,8 @@ def process_votes(full_update=False, verify=False):
             year -= 1
             if year < BEGIN_YEAR:
                 break
+            logger.debug('fetching for year %d' % year)
+
     return processed_sess_list
 
 def process_session_kws():
@@ -728,17 +739,17 @@ def process_minutes(full_update):
 
     next_link = url_base + MINUTES_URL
     while next_link:
-        (links, next_link) = read_links(True, next_link, new_only=not full_update)
-        print 'Got links for total of %d minutes' % len(links)
-        for link in links:
-            url = link['minutes']
-            print '%4d. %s' % (links.index(link), link['plsess'])
+        (info_list, next_link) = read_listing('minutes', next_link, new_only=not full_update)
+        print 'Got links for total of %d minutes' % len(info_list)
+        for idx, info in enumerate(info_list):
+            url = info['minutes_link']
+            print '%4d. %s' % (idx, info['id'])
             if start_from:
-                if link['plsess'] == start_from:
+                if info['id'] == start_from:
                     start_from = None
                 else:
                     continue
-            if stop_after and sess_desc['plsess'] != stop_after:
+            if stop_after and info['id'] != stop_after:
                 return
             s = http_cache.open_url(url, 'minutes')
             tmp_url = 'http://www.eduskunta.fi/faktatmp/utatmp/akxtmp/'
@@ -747,7 +758,7 @@ def process_minutes(full_update):
                 continue
             minutes['url'] = url
             try:
-                mins = Minutes.objects.get(plenary_session__name=link['plsess'])
+                mins = Minutes.objects.get(plenary_session__name=info['id'])
                 if not full_update:
                     return
             except Minutes.DoesNotExist:
@@ -770,20 +781,122 @@ def process_minutes(full_update):
             if until_pl and link['plsess'] == until_pl:
                 stop_after = until_pl
 
+
+DOC_LIST_URL = "http://www.eduskunta.fi/triphome/bin/vex3000.sh?TUNNISTE=%s&PVMVP1=2007"
+#DOC_LIST_URL = "http://www.eduskunta.fi/triphome/bin/vex3000.sh?TUNNISTE=%s&PVMVP1=2003&PVMVP2=2006"
+DOC_DL_URL = "http://www.eduskunta.fi/triphome/bin/akxhref2.sh?{KEY}=%s+%s"
+DOC_PROCESS_URL = "http://www.eduskunta.fi/triphome/bin/vex3000.sh?TUNNISTE=%s+%s"
 HE_URL = "http://217.71.145.20/TRIPviewer/temp/TUNNISTE_HE_%i_%i_fi.html"
+DOC_TYPES = ["HE",
+        "LA", "TPA", "TA", "KA", "LTA",
+        "VK",
+        #"KK", "TAA"
+]
+SKIP_DOCS = ['KA 4/2008', 'KA 6/2007']
 
-def process_doc(doc):
-    hematch = re.compile('HE (\d+)/(\d{4})')
-    match = hematch.match(doc.name)
-    number, year = map(int, match.groups())
+def should_download_doc(doc):
+    if doc['type'] not in DOC_TYPES and not doc['type'].endswith('VM'):
+        return False
+    if "%s %s" % (doc['type'], doc['id']) in SKIP_DOCS:
+        return False
+    return True
+
+def clean_string(s):
+    s = s.strip()
+    s = s.replace('\n', ' ')
+    s = s.replace('\r', '')
+    s = s.replace('&sol;', '/')
+    s = s.replace('&shy;', '')
+
+    return s
+
+def download_processing_info(doc):
+    url = DOC_PROCESS_URL % (doc.type, doc.name)
+    logger.info('updating processing info for %s' % doc)
+    s = http_cache.open_url(url, 'docs')
+    html_doc = html.fromstring(s)
+
+    ret = {}
+
+    subj_el = html_doc.xpath(".//div[@class='listing']/div[1]/div[1]/h3")
+    assert len(subj_el) == 1
+    ret['subject'] = clean_string(subj_el[0].text)
+
+    for box_el in html_doc.xpath(".//div[@class='listborder']"):
+        hdr_el = box_el.xpath("./div[@class='header']")
+        if not hdr_el:
+            continue
+        assert len(hdr_el) == 1
+        hdr = hdr_el[0].text_content().strip()
+        if doc.type == 'VK':
+            date_hdr_str = 'Kysymys j'
+        elif doc.type == 'HE':
+            date_hdr_str = 'Annettu eduskunnalle'
+        else:
+            date_hdr_str = 'Aloite j'
+        if hdr.startswith(date_hdr_str):
+            date_el = box_el.xpath(".//div[.='Pvm']")
+            assert len(date_el) == 1
+            date = date_el[0].tail.strip()
+            (d, m, y) = date.split('.')
+            ret['date'] = '-'.join((y, m, d))
+    assert 'date' in ret
+
+    kw_list = []
+    kw_el_list = html_doc.xpath(".//div[@id='vepsasia-asiasana']//div[@class='linkspace']/a")
+    for kw in kw_el_list:
+        kw = kw.text.strip()
+        kw_list.append(kw)
+    assert len(kw_list)
+    ret['keywords'] = kw_list
+
+    return ret
+
+def attach_keywords(doc, kw_list):
+    doc.keywords.clear()
+    for kw in kw_list:
+        try:
+            kw_obj = Keyword.objects.get(name=kw)
+        except Keyword.DoesNotExist:
+            logger.info('new keyword: %s', kw)
+            kw_obj = Keyword(name=kw)
+            kw_obj.save()
+        doc.keywords.add(kw_obj)
+
+def download_related_docs(doc, rel_doc_list):
+    doc.related_docs.clear()
+    for rel_doc in rel_doc_list:
+        if not should_download_doc(rel_doc):
+            logger.warning("skipping document %s %s" % (rel_doc['type'], rel_doc['id']))
+            continue
+        resp = Document.objects.filter(type=rel_doc['type'], name=rel_doc['id'])
+        if not resp:
+            logger.info('downloading related doc %s %s' % (rel_doc['type'], rel_doc['id']))
+            rd_obj = download_doc(rel_doc, None)
+        else:
+            rd_obj = resp[0]
+        doc.related_docs.add(rd_obj)
+
+def download_he(info, doc):
+    assert doc
+    p_info = download_processing_info(doc)
+    doc.date = p_info['date']
+    doc.subject = p_info['subject']
+    doc.save()
+    logger.info('%s: %s' % (doc, doc.subject))
+
+    m = re.match('(\d+)/(\d{4})', info['id'])
+    number, year = map(int, m.groups())
     url = HE_URL % (number, year)
-
     s = http_cache.open_url(url, 'docs', error_ok=True)
+    if len(s) > 2*1024*1024:
+        logger.warning('response too big (%d bytes)' % len(s))
+        return doc
     if not s:
-        (s, url) = http_cache.open_url(doc.info_link, 'docs', return_url=True)
+        (s, url) = http_cache.open_url(info['doc_link'], 'docs', return_url=True)
         if '<!-- akxereiloydy.thw -->' in s or '<!-- akx5000.thw -->' in s:
             print "\tNot found!"
-            return
+            return doc
         html_doc = html.fromstring(s)
         frames = html_doc.xpath(".//frame")
         link_elem = None
@@ -799,7 +912,7 @@ def process_doc(doc):
     # detect it appears to be the length. *sigh*
     if len(s) < 1500:
         print "\tJust PDF"
-        return
+        return doc
     html_doc = html.fromstring(s)
     elem_list = html_doc.xpath(".//p[@class='Normaali']")
 
@@ -814,7 +927,7 @@ def process_doc(doc):
     if not elem:
         print "\tNo header found: %d" % len(s)
         print http_cache.get_fname(url, 'docs')
-        return
+        return doc
     # Choose the first header. Sometimes they are replicated. *sigh*
     elem = elem[0].getnext()
     p_list = []
@@ -838,13 +951,13 @@ def process_doc(doc):
     if 'class' in elem.attrib and elem.attrib['class'] not in BREAK_CLASS:
         print "\tMystery class: %s" % elem.attrib
         print http_cache.get_fname(url, 'docs')
-        return
+        return doc
     if not p_list:
         print "\tNo summary found"
         print http_cache.get_fname(url, 'docs')
-        return
-    text_list = []
+        return doc
 
+    text_list = []
     def append_text(elem, no_append=False):
         text = ''
         if elem.text:
@@ -860,32 +973,173 @@ def process_doc(doc):
         text = text.strip()
         if text:
             text_list.append(text)
-
     for p in p_list:
         append_text(p)
-    mark = False
-    for t in text_list:
-        if len(t) < 15:
-            mark = True
-            break
-    if mark:
-        print http_cache.get_fname(url, 'docs')
-        for t in text_list:
-            print t
-        return
     doc.summary = '\n'.join(text_list)
+    attach_keywords(doc, p_info['keywords'])
+    if 'docs' in info:
+        download_related_docs(doc, info['docs'])
     doc.save()
 
-def process_session_docs(full_update):
-    doc_list = SessionDocument.objects.filter(name__startswith='HE')
-    doc_list = list(doc_list)
-    for doc in doc_list:
-        if doc.summary and not full_update:
+    return doc
+
+def process_signatures(sign_el):
+    ret = {}
+
+    el_list = sign_el.xpath("./paivays")
+    assert len(el_list) == 1
+    ret['date'] = el_list[0].attrib['pvm']
+    ret['mps'] = []
+    mp_list = sign_el.xpath("./edustaja/henkilo")
+    for mp_el in mp_list:
+        nr = int(mp_el.attrib['numero'])
+        if nr > 10000:
             continue
-        print "%s: %s" % (doc_list.index(doc), doc.name)
-        if not doc.info_link:
+        fname = mp_el.xpath("./etunimi")[0].text.strip()
+        lname = mp_el.xpath("./sukunimi")[0].text.strip()
+        name = "%s %s" % (lname, fname)
+        name = parse_tools.fix_mp_name(name)
+        ret['mps'].append(name)
+    return ret
+
+def process_dissent_signatures(doc, sgml_doc):
+    diss_list = sgml_doc.xpath(".//vlause")
+    if not diss_list:
+        return
+    for diss in diss_list:
+        el_list = diss.xpath(".//allekosa")
+        assert len(el_list) == 1
+        sign_el = el_list[0]
+
+        info = process_signatures(sign_el)
+        if not doc.date:
+            doc.date = info['date']
+            doc.save()
+        for name in info['mps']:
+            mp = Member.objects.get(name=name)
+            act = CommitteeDissentActivity.objects.filter(member=mp, doc=doc)
+            if not act:
+                act = CommitteeDissentActivity(member=mp, doc=doc)
+            else:
+                assert len(act) == 1
+                act = act[0]
+            act.date = doc.date
+            act.save()
+
+def process_doc_signatures(doc, sgml_doc):
+    if doc.type.endswith('VM'):
+        process_dissent_signatures(doc, sgml_doc)
+        return
+
+    el_list = sgml_doc.xpath(".//allekosa")
+    assert len(el_list) == 1
+    sign_el = el_list[0]
+
+    info = process_signatures(sign_el)
+    if not doc.date:
+        doc.date = info['date']
+        doc.save()
+    for name in info['mps']:
+        mp = Member.objects.get(name=name)
+        act = InitiativeActivity.objects.filter(member=mp, doc=doc)
+        if not act:
+            act = InitiativeActivity(member=mp, doc=doc)
+        else:
+            assert len(act) == 1
+            act = act[0]
+        act.date = doc.date
+        act.save()
+
+def download_doc(info, doc):
+    logger.info("downloading %s %s" % (info['type'], info['id']))
+
+    if not doc:
+        assert not Document.objects.filter(type=info['type'], name=info['id'])
+        doc = Document(type=info['type'], name=info['id'])
+
+    url = DOC_DL_URL % (info['type'], info['id'])
+    doc.info_link = url
+
+    if not should_download_doc(info):
+        logger.warning("skipping %s %s" % (info['type'], info['id']))
+        doc.save()
+        return doc
+    if info['type'] == 'HE':
+        return download_he(info, doc)
+    s = http_cache.open_url(url, 'docs')
+    html_doc = html.fromstring(s)
+    html_doc.make_links_absolute(url)
+    el_list = html_doc.xpath(".//a[contains(., 'Rakenteinen asiakirja')]")
+    assert el_list and len(el_list) == 1
+
+    sgml_url = el_list[0].attrib['href']
+
+    s = http_cache.open_url(sgml_url, 'docs')
+    f = open("/tmp/%s%s.xml" % (info['type'], info['id'].replace('/', '-')), "w")
+    f.write(s)
+    f.close()
+
+    sgml_doc = html.fromstring(s)
+
+    el_list = sgml_doc.xpath('.//ident/nimike')
+    assert len(el_list) >= 1
+    el = el_list[0]
+    text = clean_string(el.text)
+    logger.info('%s: %s' % (doc, text))
+    doc.subject = text
+
+    if doc.type.endswith('VM'):
+        el_name_list = ('asianvir', 'emasianv')
+    else:
+        el_name_list = ('peruste', 'paasis', 'yleisper')
+    for el_name in el_name_list:
+        summ_el_list = sgml_doc.xpath('.//%s' % el_name)
+        if not len(summ_el_list):
             continue
-        process_doc(doc)
+        assert len(summ_el_list) == 1
+        break
+    p_list = summ_el_list[0].xpath('//te')
+    summary = []
+    for p_el in p_list:
+        text = clean_string(p_el.text_content())
+        summary.append(text)
+    doc.summary = '\n'.join(summary)
+    doc.save()
+    process_doc_signatures(doc, sgml_doc)
+
+    # no processing info for committee reports
+    if not doc.type.endswith('VM'):
+        p_info = download_processing_info(doc)
+        attach_keywords(doc, p_info['keywords'])
+    if 'docs' in info:
+        download_related_docs(doc, info['docs'])
+
+    return doc
+
+def process_docs(full_update):
+    types = "(%s)" % '+or+'.join(DOC_TYPES)
+    url = DOC_LIST_URL % types
+    while url:
+        ret = read_listing('docs', url, not full_update)
+        doc_list = ret[0]
+        fwd_link = ret[1]
+
+        for idx, info in enumerate(doc_list):
+            assert info['type'] in DOC_TYPES
+            logger.info("[%d/%d] processing document %s %s" %
+                (idx + 1, len(doc_list), info['type'], info['id']))
+            query = Q(type=info['type'], name=info['id'])
+            doc = Document.objects.filter(query)
+            if doc:
+                if not full_update:
+                    return
+                assert len(doc) == 1
+                doc = doc[0]
+            else:
+                doc = None
+            doc = download_doc(info, doc)
+            db.reset_queries()
+        url = fwd_link
 
 def verify_sessions():
     found_sess_list = process_votes(full_update=True, verify=True)
@@ -911,7 +1165,7 @@ parser.add_option('-M', '--minutes', action='store_true', dest='minutes',
 parser.add_option('-k', '--keywords', action='store_true', dest='keywords',
                   help='populate voting keywords database')
 parser.add_option('-d', '--docs', action='store_true', dest='docs',
-                  help='populate session documents')
+                  help='populate documents')
 parser.add_option('--verify-sessions', action='store_true', dest='verify_sessions',
                   help='verify session list')
 parser.add_option('--cache', action='store', type='string', dest='cache',
@@ -922,6 +1176,18 @@ parser.add_option('--until-pl', action='store', type='string', dest='until_pl',
                   help='process until named plenary session reached')
 parser.add_option('--from-pl', action='store', type='string', dest='from_pl',
                   help='process starting from named plenary session')
+
+def init_logging():
+    logger = logging.getLogger("populate")
+    logger.setLevel(logging.DEBUG)
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.DEBUG)
+    formatter = logging.Formatter("%(asctime)s - %(message)s")
+    ch.setFormatter(formatter)
+    logger.addHandler(ch)
+    return logger
+
+logger = init_logging()
 
 (opts, args) = parser.parse_args()
 
@@ -950,6 +1216,6 @@ if opts.minutes:
 if opts.keywords:
     process_keywords()
 if opts.docs:
-    process_session_docs(opts.full_update)
+    process_docs(opts.full_update)
 if opts.verify_sessions:
     verify_sessions()

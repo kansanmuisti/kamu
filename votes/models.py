@@ -2,6 +2,9 @@ from django.db import models
 from django.db.models import Q
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
+
 
 class TermManager(models.Manager):
     def get_for_date(self, date):
@@ -235,12 +238,14 @@ class PlenarySession(models.Model):
         arg['sessions'] = [sess.get_json() for sess in self.session_set.all()]
         return arg
 
+
 class Minutes(models.Model):
     plenary_session = models.ForeignKey(PlenarySession, db_index=True, unique=True)
     html = models.TextField()
 
     def __unicode__(self):
         return str(self.plenary_session) + " minutes"
+
 
 class StatementManager(models.Manager):
     def between(self, begin = None, end = None):
@@ -276,6 +281,38 @@ class Statement(models.Model):
         return name
 
 
+class Keyword(models.Model):
+    name = models.CharField(max_length=128, db_index=True, unique=True)
+    def __unicode__(self):
+        return self.name
+
+
+class Document(models.Model):
+    type = models.CharField(max_length=5, db_index=True)
+    name = models.CharField(max_length=20, db_index=True)
+    url_name = models.SlugField(max_length=20, unique=True)
+    date = models.DateField(blank=True, null=True)
+    info_link = models.URLField(blank=True, null=True)
+    sgml_link = models.URLField(blank=True, null=True)
+    subject = models.TextField()
+    summary = models.TextField(blank=True, null=True)
+
+    related_docs = models.ManyToManyField("self")
+    keywords = models.ManyToManyField(Keyword)
+
+    def save(self, *args, **kwargs):
+        if not self.url_name:
+            # only do this with the first save
+            self.url_name = slugify("%s %s" % (self.type, self.name))
+        super(Document, self).save(*args, **kwargs)
+    def __unicode__(self):
+        return "%s %s" % (self.type, self.name)
+
+    class Meta:
+        unique_together = (('type', 'id'),)
+        ordering = ('date',)
+
+
 class SessionManager(models.Manager):
     def between(self, begin=None, end=None):
         query = Q()
@@ -297,9 +334,10 @@ class Session(models.Model):
     info = models.TextField()
     subject = models.CharField(max_length=100)
     info_link = models.URLField(blank=True, null=True)
-
     vote_counts = models.CommaSeparatedIntegerField(max_length=20, blank=True,
                                                     null=True)
+    docs = models.ManyToManyField(Document, through='SessionDocument')
+    keywords = models.ManyToManyField(Keyword)
 
     objects = SessionManager()
 
@@ -366,21 +404,9 @@ class Session(models.Model):
         ordering = ('plenary_session__date', 'number')
 
 class SessionDocument(models.Model):
-    sessions = models.ManyToManyField(Session)
-    name = models.CharField(max_length=20, db_index=True, unique=True)
-    url_name = models.SlugField(max_length=20, unique=True)
-    info_link = models.URLField(blank=True, null=True)
-
-    summary = models.TextField(blank=True, null=True)
-
-    def save(self, *args, **kwargs):
-        if not self.url_name:
-            # only do this with the first save
-            self.url_name = slugify(self.name)
-        super(SessionDocument, self).save(*args, **kwargs)
-    def __unicode__(self):
-        return self.name
-
+    session = models.ForeignKey(Session)
+    doc = models.ForeignKey(Document)
+    order = models.PositiveIntegerField()
 
 class VoteManager(models.Manager):
     def get_count(self, vote = None, session = None, member = None):
@@ -424,12 +450,8 @@ class Vote(models.Model):
         return str(self.session) + ' / ' + self.member.name
 
 
-class Keyword(models.Model):
-    name = models.CharField(max_length=128, db_index=True, unique=True)
-    def __unicode__(self):
-        return self.name
 
-class SessionKeyword(models.Model):
+"""class SessionKeyword(models.Model):
     session = models.ForeignKey(Session)
     keyword = models.ForeignKey(Keyword)
 
@@ -438,4 +460,71 @@ class SessionKeyword(models.Model):
 
     class Meta:
         ordering = ('keyword__name', )
+"""
 
+class MemberActivityManager(models.Manager):
+    def during(self, begin, end):
+        query = Q()
+        if end:
+            query &= Q(date__lte=end)
+        if begin:
+            query &= Q(date__gte=begin)
+        return self.filter(query)
+    def during_term(self, term):
+        return self.during(term.begin, term.end)
+
+class MemberActivity(models.Model):
+    TYPES = [
+        ('IN', 'Initiative'),
+        ('RV', 'Rebel vote'),
+        ('CD', 'Committee dissent'),
+    ]
+    WEIGHTS = {'IN': 100, 'RV': 10, 'CD': 20}
+
+    member = models.ForeignKey(Member, db_index=True)
+    date = models.DateField(db_index=True)
+    weight = models.PositiveIntegerField()
+    type = models.CharField(max_length=5, db_index=True)
+
+    objects = MemberActivityManager()
+
+    def __unicode__(self):
+        return "%s: %s: %s" % (self.date, self.type, self.member)
+
+    class Meta:
+        ordering = ('date', 'member__name')
+
+class InitiativeActivity(MemberActivity):
+    TYPE = 'IN'
+    doc = models.ForeignKey(Document, db_index=True)
+
+    objects = MemberActivityManager()
+
+    def save(self, *args, **kwargs):
+        self.type = self.TYPE
+        if not self.weight:
+            self.weight = self.WEIGHTS[self.type]
+        super(InitiativeActivity, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        s = super(InitiativeActivity, self).__unicode__()
+        return "%s: %s" % (s, self.doc)
+
+#class RebelVoteActivity(MemberActivity):
+#    session = models.ForeignKey(Session)
+
+class CommitteeDissentActivity(MemberActivity):
+    TYPE = 'CD'
+    doc = models.ForeignKey(Document, db_index=True)
+
+    objects = MemberActivityManager()
+
+    def save(self, *args, **kwargs):
+        self.type = self.TYPE
+        if not self.weight:
+            self.weight = self.WEIGHTS[self.type]
+        super(CommitteeDissentActivity, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        s = super(CommitteeDissentActivity, self).__unicode__()
+        return "%s: %s" % (s, self.doc)

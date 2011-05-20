@@ -86,8 +86,8 @@
   <div id='session_doc_list'>
     <ul>
       <li><a class="action_link" href="{{ psession.info_link }}">{% trans "Plenary session minutes" %}</a>
-{% for doc in session.docs %}
-      <li><a class='action_link' href='{{ doc.info_link }}'>{{ doc.name }}</a></li>
+{% for doc in session.doc_list %}
+      <li><a class='action_link' href='{{ doc.info_link }}'>{{ doc.type }} {{ doc.name }}</a></li>
 {% endfor %}
     </ul>
   </div>

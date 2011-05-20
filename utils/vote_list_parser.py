@@ -138,10 +138,12 @@ class Parser(SGMLParser):
                 if not self.in_docs == 2:
                         return
                 self.info = self.info.rstrip()
-                m = re.match(r'\w+ \d+/\d{4}', self.info)
+                m = re.match(r'(\w+) (\d+/\d{4})', self.info)
                 if not m:
                         raise Exception("Invalid document name")
-                self.desc['docs'].append((m.group(0), self.doc_link))
+                doc = {'type': m.groups()[0], 'id': m.groups()[1]}
+                doc['url'] = self.doc_link
+                self.desc['docs'].append(doc)
                 self.in_docs = 1
 
         def start_tbody(self, attrs):

@@ -267,8 +267,8 @@ def search_by_keyword(request):
     if not 'query' in request.GET:
         raise Http404()
     kw = get_object_or_404(Keyword, name=request.GET['query'])
-    sess_ids = SessionKeyword.objects.filter(keyword=kw).values_list('session', flat=True)
-    sess_list = Session.objects.filter(id__in=sess_ids).order_by('-plenary_session__date')
+    sess_ids = kw.session_set.all().values_list('id', flat=True)
+    sess_list = Session.objects.filter(id__in=sess_ids).order_by('-plenary_session__date', 'number')
 
     args = {'sess_list': sess_list, 'keyword': kw}
 
@@ -366,9 +366,9 @@ def show_session_basic(request, session, psess):
         query = Vote.objects.all()
     query &= query.filter(session = session).order_by(order, 'member__name')
     votes = query.select_related('member', 'member__party')
-    session.docs = SessionDocument.objects.filter(sessions=session)
-    session.kw_list = session.sessionkeyword_set.values_list('keyword__name', flat=True).order_by('keyword__name')
-    for doc in session.docs:
+    session.kw_list = session.keywords.values_list('name', flat=True).order_by('name')
+    session.doc_list = session.docs.order_by('sessiondocument__order')
+    for doc in session.doc_list:
         if doc.summary:
             session.summary = doc.summary.replace('\n', '\n\n')
             break
@@ -894,20 +894,19 @@ def autocomplete_search(request):
 
     members = members[:max_results]
 
-    keywords = word_search(SessionKeyword, 'keyword__name', words,
-                           trailing_space)
+    """keywords = word_search(Keyword, 'name', words, trailing_space)
     if keywords is None:
         return HttpResponseBadRequest()
-    keywords = keywords.values('keyword__name').distinct()[:max_results]
+    keywords = keywords.values('name').distinct()[:max_results]"""
 
     result_list = []
     for x in members:
         tn = DjangoThumbnail(x.photo, (thumbnail_width, thumbnail_height))
         result_list.append((x.name, unicode(tn), x.get_absolute_url()))
 
-    for x in keywords:
+    """for x in keywords:
         result_list.append((x['keyword__name'], "",
-                            "/search/keyword/?query=" + x['keyword__name']))
+                            "/search/keyword/?query=" + x['keyword__name']))"""
 
     result_list.sort(key=lambda n:n[0])
     result_list = result_list[:max_results]
@@ -968,8 +967,8 @@ def tagcloud_keywords(search_depth, max_keywords):
     sess_list = Session.objects.filter(plenary_session__in=pls)
     sess_list = sess_list.order_by('plenary_session__date')
 
-    skw_list = SessionKeyword.objects.              \
-                filter(session__in=sess_list).      \
+    mgr = Session.keywords.through.objects
+    skw_list = mgr.filter(session__in=sess_list).   \
                 values('keyword').                  \
                 annotate(count=Count('keyword')).   \
                 values('keyword__name', 'count').   \
@@ -981,7 +980,7 @@ def tagcloud_keywords(search_depth, max_keywords):
             'name':k['keyword__name'],
             'url':'/search/keyword/?query=' + k['keyword__name'],
             'count':k['count'],
-        };
+        }
         kw_list.append(kw)
 
     kw_list.sort(key=lambda n:n['name'])
@@ -1041,7 +1040,8 @@ def about(request, section):
 	section_name = _('Feedback')
     else:
         raise Http404
-    sess_list = Session.objects.all().order_by('-plenary_session__date', '-number')
+    sess_list = Session.objects.all().order_by('-plenary_session__date',
+                '-plenary_session__name', '-number')
     sess_list = sess_list.select_related('plenary_session')[:5]
     for ses in sess_list:
         ses.count_votes()
