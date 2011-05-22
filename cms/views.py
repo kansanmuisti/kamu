@@ -9,8 +9,8 @@ def show_news(request):
 def render_news(request, date, index):
     date = date.replace('/', '-')
     item = Newsitem.objects.get(date=date)
-    content = item.get_latest()
-    args = {'content': content, 'item': item}
+    revision = item.get_latest()
+    args = {'revision': revision, 'item': item}
 
     return render_to_response('full_news.html', args,
                               context_instance=RequestContext(request))
