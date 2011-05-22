@@ -115,7 +115,7 @@ class Revision(models.Model):
     content = models.ForeignKey(Content)
     subject = models.CharField(max_length=200, null=True, blank=True)
     user = models.ForeignKey(User, null=True, blank=True)
-    data = MarkupField()
+    data = MarkupField(blank=True)
 
     class Meta:
         ordering = ['-date']
