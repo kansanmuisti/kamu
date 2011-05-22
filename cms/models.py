@@ -30,11 +30,14 @@ class Item(models.Model):
     objects = ItemManager()
 
     def get_latest(self, lang=None):
-        if not lang:
+        if lang:
+            explicit_language = True
+        else:
+            explicit_language = False
             lang = get_language()
         # Case of no news
         content_list = list(self.content_set.filter(language=lang))
-        if not content_list:
+        if not content_list and not explicit_language:
             content_list = list(self.content_set.filter(language=DEFAULT_LANGUAGE))
         if not content_list:
             return None
