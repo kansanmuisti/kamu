@@ -2,6 +2,7 @@
 
 import re
 import itertools
+import simplejson
 import math
 
 from django.shortcuts import render_to_response, get_list_or_404, \
@@ -138,6 +139,7 @@ def compare_question_and_session(request, question, vote_map, term):
 
     options = Option.objects.filter(question=question)
     opt_dict = {}
+    opt_json = {}
     for opt in options:
         val = vote_map.get(opt.order, 0)
         color = None
@@ -150,10 +152,13 @@ def compare_question_and_session(request, question, vote_map, term):
         else:
             vote_class = 'empty_vote'
         opt.vote_class = vote_class
+        d = {'congruence': val}
         if color:
             opt.color_str = "#%02x%02x%02x" % color
+            d['color'] = opt.color_str
 
         opt_dict[opt.id] = opt
+        opt_json[opt.order] = d
 
     options_for = [opt for opt, cong in vote_map.items() if cong > 0]
     options_against = [opt for opt, cong in vote_map.items() if cong < 0]
@@ -174,6 +179,7 @@ def compare_question_and_session(request, question, vote_map, term):
     all_members = answers_for + answers_against
     all_members.sort(key=lambda a: a.member.party.name)
     parties = []
+    party_by_id = {}
     for party, answers in itertools.groupby(all_members, lambda a: a.member.party):
         party.answers = list(answers)
         answers = sorted(party.answers, key=lambda a: (vote_map[a.option.order], a.option.order))
@@ -186,7 +192,26 @@ def compare_question_and_session(request, question, vote_map, term):
             options.append(option)
 
         party.options = options
+        party.thumbnail = DjangoThumbnail(party.logo, (40, 40))
         parties.append(party)
+        party_by_id[party.pk] = party
+
+    q = Answer.objects.filter(question=question, member__in=mp_list)
+    answers = list(q.values_list('member', 'option__order'))
+    ans_by_mp = dict((ans[0], ans[1]) for ans in answers)
+    members = Member.objects.filter(id__in=mp_list)
+
+    mp_json = []
+    for mp in members:
+        ans = ans_by_mp.get(mp.id, -1)
+        tn = DjangoThumbnail(mp.photo, (30, 40))
+        party = party_by_id[mp.party_id]
+        d = {'name': mp.name, 'answer': ans}
+        d['url'] = mp.get_absolute_url()
+        d['party'] = party.name
+        d['party_logo'] = party.thumbnail.absolute_url
+        d['portrait'] = tn.absolute_url
+        mp_json.append(d)
 
     total_votes = len(answers_for)+len(answers_against)
     parliament_percentage = len(answers_for)/float(total_votes)*100
@@ -199,11 +224,15 @@ def compare_question_and_session(request, question, vote_map, term):
         mp.thumbnail = DjangoThumbnail(mp.photo, (30, 40))
         mp.party_thumbnail = DjangoThumbnail(mp.party.logo, (30, 40))
 
+    print
+
     args = dict(answers_for=answers_for,
                 answers_against=answers_against,
                 question=question, options=options,
                 parliament_percentage=parliament_percentage,
                 parties=parties)
+    args['mp_json'] = simplejson.dumps(mp_json)
+    args['opt_json'] = simplejson.dumps(opt_json)
     return args
 
 def show_hypothetical_vote(request, source, question,
@@ -249,7 +278,7 @@ def show_question_session(request, source, question_no, plsess, sess_no, party=N
                                                    option__in=question.option_set.all())
     vote_map = dict((c.option.order, c.congruence) for c in vote_map)
     vote_name = session.get_short_summary()
-    
+
     args = compare_question_and_session(request, question, vote_map, term)
 
     votes = Vote.objects.filter(session=session)
@@ -261,11 +290,11 @@ def show_question_session(request, source, question_no, plsess, sess_no, party=N
 
     all_answers.sort(key=lambda a: a.vote)
     answer_groups = itertools.groupby(all_answers, lambda a: a.vote)
-    
+
     sort_key = lambda a: (a.member.party.name, a.member.name)
     answer_groups = ((k, sorted(list(i), key=sort_key)) for k, i in answer_groups) 
     answer_groups = dict(answer_groups)
-    
+
     answers_for_vote = answer_groups.get('Y', [])
     answers_against_vote = answer_groups.get('N', [])
 
@@ -276,8 +305,6 @@ def show_question_session(request, source, question_no, plsess, sess_no, party=N
 
     return render_to_response('opinions/show_question_session.html', args,
                               context_instance=RequestContext(request))
-
-
 
 def list_questions(request):
     term = find_term(request)
