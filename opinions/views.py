@@ -171,6 +171,22 @@ def compare_question_and_session(request, question, vote_map, term):
                     'member__name').select_related('member'))
 
     # FIXME: MPs with 'en osaa sanoa' and missing answers
+    all_members = answers_for + answers_against
+    all_members.sort(key=lambda a: a.member.party.name)
+    parties = []
+    for party, answers in itertools.groupby(all_members, lambda a: a.member.party):
+        party.answers = list(answers)
+        answers = sorted(party.answers, key=lambda a: (vote_map[a.option.order], a.option.order))
+        options = []
+        by_option = itertools.groupby(answers, lambda a: a.option)
+        for option, opt_answers in by_option:
+            option.count = len(list(opt_answers))
+            option.share = option.count/float(len(answers))
+            option.congruence = vote_map[option.order]
+            options.append(option)
+
+        party.options = options
+        parties.append(party)
 
     total_votes = len(answers_for)+len(answers_against)
     parliament_percentage = len(answers_for)/float(total_votes)*100
@@ -186,7 +202,8 @@ def compare_question_and_session(request, question, vote_map, term):
     args = dict(answers_for=answers_for,
                 answers_against=answers_against,
                 question=question, options=options,
-                parliament_percentage=parliament_percentage)
+                parliament_percentage=parliament_percentage,
+                parties=parties)
     return args
 
 def show_hypothetical_vote(request, source, question,
