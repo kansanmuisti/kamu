@@ -281,13 +281,13 @@ def show_question_session(request, source, question_no, plsess, sess_no, party=N
 
     args = compare_question_and_session(request, question, vote_map, term)
 
-    votes = Vote.objects.filter(session=session)
-    votes = dict((vote.member_id, vote.vote) for vote in votes)
+    all_votes = Vote.objects.filter(session=session)
+    votes = dict((vote.member_id, vote.vote) for vote in all_votes)
     all_answers = args['answers_for'] + args['answers_against']
     for answer in all_answers:
         answer.vote = votes.get(answer.member_id, 'A')
 
-
+    
     all_answers.sort(key=lambda a: a.vote)
     answer_groups = itertools.groupby(all_answers, lambda a: a.vote)
 
@@ -298,6 +298,21 @@ def show_question_session(request, source, question_no, plsess, sess_no, party=N
     answers_for_vote = answer_groups.get('Y', [])
     answers_against_vote = answer_groups.get('N', [])
 
+    
+    party_map = dict((p, p) for p in args['parties'])
+    by_party = sorted(all_votes, key=lambda v: v.member.party.name)
+    by_party = itertools.groupby(by_party, lambda v: v.member.party)
+    for party, party_votes in by_party:
+        party = party_map[party]
+        party.votes = list(party_votes)
+        party.votes.sort(key=lambda v: v.vote)
+        by_vote = itertools.groupby(party.votes, lambda v: v.vote)
+        party.vote_counts = dict((vc, len(list(vs))) for vc, vs in by_vote)
+        
+        nvotes = float(len(party.votes))
+        party.vote_shares = dict((vc, vcount/nvotes)
+                                 for vc, vcount in party.vote_counts.items())
+    
     args['answers_for'] = answers_for_vote
     args['answers_against'] = answers_against_vote    
 
