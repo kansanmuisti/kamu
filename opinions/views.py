@@ -175,7 +175,6 @@ def compare_question_and_session(request, question, vote_map, term):
                     member__in=mp_list).order_by('member__party__name',
                     'member__name').select_related('member'))
 
-    # FIXME: MPs with 'en osaa sanoa' and missing answers
     all_members = answers_for + answers_against
     all_members.sort(key=lambda a: a.member.party.name)
     parties = []
@@ -213,6 +212,12 @@ def compare_question_and_session(request, question, vote_map, term):
         d['portrait'] = tn.absolute_url
         mp_json.append(d)
 
+    party_json = {}
+    for party in parties:
+        d = {'name': party.full_name}
+        d['logo'] = party.thumbnail.absolute_url
+        party_json[party.name] = d
+
     total_votes = len(answers_for)+len(answers_against)
     parliament_percentage = len(answers_for)/float(total_votes)*100
 
@@ -224,8 +229,6 @@ def compare_question_and_session(request, question, vote_map, term):
         mp.thumbnail = DjangoThumbnail(mp.photo, (30, 40))
         mp.party_thumbnail = DjangoThumbnail(mp.party.logo, (30, 40))
 
-    print
-
     args = dict(answers_for=answers_for,
                 answers_against=answers_against,
                 question=question, options=options,
@@ -233,6 +236,7 @@ def compare_question_and_session(request, question, vote_map, term):
                 parties=parties)
     args['mp_json'] = simplejson.dumps(mp_json)
     args['opt_json'] = simplejson.dumps(opt_json)
+    args['party_json'] = simplejson.dumps(party_json)
     return args
 
 def show_hypothetical_vote(request, source, question,

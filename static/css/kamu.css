@@ -1409,6 +1409,12 @@ td.party_option_share
     height: 10px;
 }
 
+.opinions_mp_list
+{
+    width: 350px;
+    float: left;
+}
+
 .opinions_mp_list .party_logo
 {
     margin-right: 16px;
