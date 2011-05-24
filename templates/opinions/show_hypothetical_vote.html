@@ -1,7 +1,64 @@
 {% extends "opinions/opinion_base.html" %}
 {% load i18n thumbnail %}
 {% block title %}{{ vote_name }} | {% trans "Voting prediction" %}{% endblock %}
+{% block head %}
+{{ block.super }}
+<script type="text/javascript">
+var mp_list = {{ mp_json|safe }};
+var option_list = {{ opt_json|safe }};
 
+function create_mp_entry(mp) {
+	var row = document.createElement("tr");
+	var cols = []
+
+	html = "<td><img class='party_logo' src='" + mp.party_logo + "' /\></td>";
+	html += "<td><img class='portrait' src='" + mp.portrait + "' /\></td>";
+	html += "<td><a href='" + mp.url + "'>" + mp.name + "</a></td>"
+	if (mp.answer >= 0) {
+		color = option_list[mp.answer].color;
+		if (color) {
+			html += "<span style='color: " + color + "; font-size: 240%;'>";
+			html += "&#x25cf";
+			html += "</span>"
+		}
+	}
+	row.innerHTML = html;
+	return row;
+}
+
+function party_sort(mp_a, mp_b) {
+	return mp_a.party > mp_b.party;
+}
+
+$(document).ready(function() {
+	var table_for = document.getElementById('members_for');
+	var table_against = document.getElementById('members_against');
+	var entries_for = [], entries_against = [];
+
+	for (i in mp_list) {
+		var mp = mp_list[i];
+
+		if (!('answer' in mp)) {
+			continue;
+		}
+		var opt = option_list[mp.answer];
+		if (opt.congruence > 0) {
+			entries_for.push(mp);
+		} else {
+			entries_against.push(mp);
+		}
+	}
+	entries_for.sort(party_sort);
+	entries_against.sort(party_sort);
+	for (i in entries_for) {
+		table_for.appendChild(create_mp_entry(entries_for[i]));
+	}
+	for (i in entries_against) {
+		table_against.appendChild(create_mp_entry(entries_against[i]));
+	}
+});
+</script>
+{% endblock %}
 {% block content %}
 <h1>
   {% trans "How members would vote on" %} {{vote_name}}?
@@ -18,6 +75,21 @@ This page shows how the MPs would vote, if they were to vote according to their 
 {% trans "Nay" %}: {{answers_against|length}}
 </div>
 
-{% include "opinions/question_vote_answer_listing.html" %}
+<div class="opinions_mp_list">
+  <div style="width: 350px; float: left;">
+    <h3>{% trans "Members for" %}</h3>
+    <table id="members_for">
+    </table>
+  </div>
+</div>
+
+<div class="opinions_mp_list">
+  <div style="width: 350px; float: left;">
+    <h3>{% trans "Members against" %}</h3>
+    <table id="members_against">
+    </table>
+  </div>
+</div>
 
 {% endblock %}
+

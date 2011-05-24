@@ -1385,6 +1385,40 @@ td.party_option_share
     width: 1em;
 }
 
+.opinions_party_stats
+{
+    height: 48px;
+}
+
+.opinions_party_stats .logo
+{
+    float: left;
+    width: 32px;
+    margin-right: 20px;
+}
+
+.opinions_party_stats .stats
+{
+    float: left;
+    margin-left: 10px;
+}
+
+.opinions_party_stats .bar
+{
+    width: 220px;
+    height: 10px;
+}
+
+.opinions_mp_list .party_logo
+{
+    margin-right: 16px;
+}
+
+.opinions_mp_list .portrait
+{
+    margin-right: 8px;
+}
+
 /*
  * jNotify
  */

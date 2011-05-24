@@ -192,7 +192,7 @@ def compare_question_and_session(request, question, vote_map, term):
             options.append(option)
 
         party.options = options
-        party.thumbnail = DjangoThumbnail(party.logo, (40, 40))
+        party.thumbnail = DjangoThumbnail(party.logo, (30, 30))
         parties.append(party)
         party_by_id[party.pk] = party
 
@@ -203,10 +203,11 @@ def compare_question_and_session(request, question, vote_map, term):
 
     mp_json = []
     for mp in members:
-        ans = ans_by_mp.get(mp.id, -1)
         tn = DjangoThumbnail(mp.photo, (30, 40))
         party = party_by_id[mp.party_id]
-        d = {'name': mp.name, 'answer': ans}
+        d = {'name': mp.name}
+        if mp.id in ans_by_mp:
+            d['answer'] = ans_by_mp[mp.id]
         d['url'] = mp.get_absolute_url()
         d['party'] = party.name
         d['party_logo'] = party.thumbnail.absolute_url
