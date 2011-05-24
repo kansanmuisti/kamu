@@ -1,0 +1,32 @@
+{% load i18n thumbnail %}
+
+<div style="width: 350px; float: left;">
+<h3>{% trans "Members for" %}</h3>
+<table>
+{% for answer in answers_for %}
+    <tr>
+      <td><img style='margin-right: 16px' src='{{ answer.member.party_thumbnail }}' /></td>
+      <td><img style='margin-right: 8px' src='{{ answer.member.thumbnail }}' /></td>
+      <td><a href="{{answer.member.get_absolute_url}}">{{ answer.member.name }}</a></td>
+      <td>
+	{% if answer.color_str %}<span style="color: {{ answer.color_str }}; font-size: 240%;">&#x25cf;</span>{% endif %}
+      </td>
+{% endfor %}
+</table>
+</div>
+
+<div style="width: 350px; float: left">
+<h3>{% trans "Members against" %}</h3>
+<table>
+{% for answer in answers_against %}
+    <tr>
+      <td><img style='margin-right: 16px' src='{{ answer.member.party_thumbnail }}' /></td>
+      <td><img style='margin-right: 8px' src='{{ answer.member.thumbnail }}' /></td>
+      <td><a href="{{answer.member.get_absolute_url}}">{{ answer.member.name }}</a></td>
+      <td>
+	{% if answer.color_str %}<span style="color: {{ answer.color_str }}; font-size: 240%;">&#x25cf;</span>{% endif %}
+      </td>
+{% endfor %}
+</table>
+</div>
+

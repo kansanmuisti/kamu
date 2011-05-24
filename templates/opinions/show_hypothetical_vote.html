@@ -9,51 +9,15 @@
 <p>{% blocktrans %}
 This page shows how the MPs would vote, if they were to vote according to their stated opinions.
 {% endblocktrans %}</p>
-<h3 style="margin-top: 2em">{% trans "Source" %}</h3>
-<a class="link" href="{{ question.get_absolute_url }}">{{ question.text }}</a> ({{ question.source.name }} {{ question.source.year }})</p>
-<table style="margin-left: 32px; margin-bottom: 2em;">
-  <tr><th style="text-align: left">{% trans "Option" %}</th><th style='width: 50px'></th><th>{% trans "Vote" %}</th></tr>
-{% for opt in options %}
-  <tr style="height: 32px">
-    <td style="width: 250px">{{ opt.name }}</td>
-    <td>{% if opt.color_str %}<span style="color: {{ opt.color_str }}; font-size: 240%;">&#x25cf;</span>{% endif %}<td class="{{ opt.vote_class }}"></td></tr>
-{% endfor %}
-</table>
+
+{% include "opinions/opinion_vote_table.html" %}
+
 <div style="clear: both; margin-bottom: 2em">
 <h3>{% trans "Whole parliament" %}</h2>
 {% trans "Yay" %}: {{answers_for|length}}
 {% trans "Nay" %}: {{answers_against|length}}
 </div>
 
-<div style="width: 350px; float: left;">
-<h3>{% trans "Members for" %}</h3>
-<table>
-{% for answer in answers_for %}
-    <tr>
-      <td><img style='margin-right: 16px' src='{{ answer.member.party_thumbnail }}' /></td>
-      <td><img style='margin-right: 8px' src='{{ answer.member.thumbnail }}' /></td>
-      <td><a href="{{answer.member.get_absolute_url}}">{{ answer.member.name }}</a></td>
-      <td>
-	{% if answer.color_str %}<span style="color: {{ answer.color_str }}; font-size: 240%;">&#x25cf;</span>{% endif %}
-      </td>
-{% endfor %}
-</table>
-</div>
-
-<div style="width: 350px; float: left">
-<h3>{% trans "Members against" %}</h3>
-<table>
-{% for answer in answers_against %}
-    <tr>
-      <td><img style='margin-right: 16px' src='{{ answer.member.party_thumbnail }}' /></td>
-      <td><img style='margin-right: 8px' src='{{ answer.member.thumbnail }}' /></td>
-      <td><a href="{{answer.member.get_absolute_url}}">{{ answer.member.name }}</a></td>
-      <td>
-	{% if answer.color_str %}<span style="color: {{ answer.color_str }}; font-size: 240%;">&#x25cf;</span>{% endif %}
-      </td>
-{% endfor %}
-</table>
-</div>
-
+{% include "opinions/question_vote_answer_listing.html" %}
 
 {% endblock %}

@@ -133,16 +133,7 @@ def show_question(request, source, question):
 def get_color(val):
     return math.sqrt(1.0 - val) * 200
 
-def show_hypothetical_vote(request, source, question,
-                           vote_name, vote_map, term):
-    term = get_object_or_404(Term, name=term)
-    src = get_object_or_404(QuestionSource, url_name=source)
-    try:
-        question_no = int(question)
-    except ValueError:
-        raise Http404()
-    question = get_object_or_404(Question, source=src, order=question_no)
-
+def compare_question_and_session(request, question, vote_map, term):
     mp_list = TermMember.objects.filter(term=term).values_list('member', flat=True)
 
     options = Option.objects.filter(question=question)
@@ -194,9 +185,23 @@ def show_hypothetical_vote(request, source, question,
 
     args = dict(answers_for=answers_for,
                 answers_against=answers_against,
-                vote_name=vote_name,
                 question=question, options=options,
                 parliament_percentage=parliament_percentage)
+    return args
+
+def show_hypothetical_vote(request, source, question,
+                           vote_name, vote_map, term):
+    term = get_object_or_404(Term, name=term)
+    src = get_object_or_404(QuestionSource, url_name=source)
+    try:
+        question_no = int(question)
+    except ValueError:
+        raise Http404()
+    question = get_object_or_404(Question, source=src, order=question_no)
+
+    args = compare_question_and_session(request, question,
+                                        vote_map, term)
+    args['vote_name'] = vote_name
     args['active_page'] = 'opinions'
     args['opinions_page'] = 'show_hypothetical_vote'
     response = render_to_response('opinions/show_hypothetical_vote.html', args,
@@ -219,47 +224,42 @@ def show_question_session(request, source, question_no, plsess, sess_no, party=N
     psess = get_object_or_404(PlenarySession, url_name=plsess)
     session = get_object_or_404(Session, plenary_session=psess, number=sess_no)
 
-
-    filter_args = dict(for_user=request.user,
-                       for_question=question,
-                       for_session=session)
-
-    parties = VoteOptionCongruence.objects.get_party_congruences(
-                    **filter_args)
-
-    members = VoteOptionCongruence.objects.get_member_congruences(
-                    raw_average=True, **filter_args)
-    # A hack to have a unified duck-typing API with "non-average" congruences
-    # TODO: Get rid of this in non-demo code
-    members = list(members)
-        
-    party = request.GET.get('party', None)
-    # This should be done in the query
-    if party is not None:
-        members = [m for m in members if m.party_id == party]
-        party = get_object_or_404(Party, pk=party)
-
-    for m in members:
-        tn = DjangoThumbnail(m.photo, (30, 40))
-        m.thumbnail = tn
-        m.congruence = m.congruence_avg
-
+    term = session.plenary_session.term
+    cong_user = VoteOptionCongruence.objects.get_congruence_user(request.user)
+    vote_map = VoteOptionCongruence.objects.filter(user=cong_user,
+                                                   session=session,
+                                                   vote='Y',
+                                                   option__in=question.option_set.all())
+    vote_map = dict((c.option.order, c.congruence) for c in vote_map)
+    vote_name = session.get_short_summary()
     
-    parties = list(parties)
-    for p in parties:
-        tn = DjangoThumbnail(p.logo, (30, 40))
-        p.thumbnail = tn
-        p.congruence = p.congruence_avg
+    args = compare_question_and_session(request, question, vote_map, term)
+
+    votes = Vote.objects.filter(session=session)
+    votes = dict((vote.member_id, vote.vote) for vote in votes)
+    all_answers = args['answers_for'] + args['answers_against']
+    for answer in all_answers:
+        answer.vote = votes.get(answer.member_id, 'A')
+
+
+    all_answers.sort(key=lambda a: a.vote)
+    answer_groups = itertools.groupby(all_answers, lambda a: a.vote)
     
-    args = dict(parties=parties,
-                members=members,
-                question=question,
-                session=session,
-                party=party,
-                opinions_page='show_question_session')
+    sort_key = lambda a: (a.member.party.name, a.member.name)
+    answer_groups = ((k, sorted(list(i), key=sort_key)) for k, i in answer_groups) 
+    answer_groups = dict(answer_groups)
+    
+    answers_for_vote = answer_groups.get('Y', [])
+    answers_against_vote = answer_groups.get('N', [])
+
+    args['answers_for'] = answers_for_vote
+    args['answers_against'] = answers_against_vote    
+
+    args['opinions_page'] = 'show_question_session'
 
     return render_to_response('opinions/show_question_session.html', args,
                               context_instance=RequestContext(request))
+
 
 
 def list_questions(request):
