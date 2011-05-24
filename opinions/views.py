@@ -183,15 +183,14 @@ def compare_question_and_session(request, question, vote_map, term):
     for party, answers in itertools.groupby(all_members, lambda a: a.member.party):
         party.answers = list(answers)
         answers = sorted(party.answers, key=lambda a: (vote_map[a.option.order], a.option.order))
-        options = []
+        party.options = []
         by_option = itertools.groupby(answers, lambda a: a.option)
         for option, opt_answers in by_option:
             option.count = len(list(opt_answers))
             option.share = option.count/float(len(answers))
             option.congruence = vote_map[option.order]
-            options.append(option)
+            party.options.append(option)
 
-        party.options = options
         party.thumbnail = DjangoThumbnail(party.logo, (30, 30))
         parties.append(party)
         party_by_id[party.pk] = party
