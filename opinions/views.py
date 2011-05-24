@@ -290,7 +290,14 @@ def show_question_session(request, source, question_no, plsess, sess_no, party=N
     all_answers = args['answers_for'] + args['answers_against']
     for answer in all_answers:
         answer.vote = votes.get(answer.member_id, 'A')
-
+        if answer.vote not in 'YN':
+            answer.congruence = 0
+            continue
+        
+        answer.congruence = vote_map[answer.option.order]
+        if answer.vote == 'N':
+            answer.congruence *= -1
+        
     
     all_answers.sort(key=lambda a: a.vote)
     answer_groups = itertools.groupby(all_answers, lambda a: a.vote)
@@ -317,6 +324,20 @@ def show_question_session(request, source, question_no, plsess, sess_no, party=N
         party.vote_shares = dict((vc, vcount/nvotes)
                                  for vc, vcount in party.vote_counts.items())
     
+    by_party = sorted(all_answers, key=lambda a: a.member.party.name)
+    by_party = itertools.groupby(by_party, lambda v: v.member.party)
+    for party, party_answers in by_party:
+        party = party_map[party]
+        congruences = [a.congruence for a in party_answers]
+        congruences.sort()
+        by_congruence = itertools.groupby(congruences)
+        party.congruence_counts = [(congval, len(list(cs)))
+                                   for congval, cs in by_congruence]
+        total_congruences = float(len(congruences))
+        party.congruence_shares = [(congval, cn/total_congruences)
+                                   for congval, cn in party.congruence_counts]
+
+
     args['answers_for'] = answers_for_vote
     args['answers_against'] = answers_against_vote    
 
