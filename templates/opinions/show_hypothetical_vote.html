@@ -29,7 +29,6 @@ function draw_bar(element, segments) {
 			rect.attr("fill", s.color);
 			rect.attr("stroke", s.color);
 		}
-		// rect.attr("title", "{{ question.text }}");
 		x = x_end;
 	}
 }
@@ -101,27 +100,41 @@ $(document).ready(function() {
 		table_against.appendChild(create_mp_entry(entries_against[i]));
 	}
 
-	for (i in party_list) {
-		var party = party_list[i];
+	function draw_opt(id, counts) {
 		var segments = [];
-		var total = 0;
+		var total = 0, yes = 0, no = 0;
 
 		for (j in option_list) {
 			var opt = option_list[j];
 			var seg = [];
 
-			seg.count = party.answer_counts[j];
+			seg.count = counts[j];
 			if (!seg.count) {
 				continue;
 			}
 			if ('color' in opt) {			
 				seg.color = opt.color;
 			}
+			if (opt.congruence > 0) {
+				yes += seg.count;
+			} else if (opt.congruence < 0) {
+				no += seg.count;
+			}
 			segments.push(seg);
 		}
-		var id = "#stats_" + i;
-		var el = $(id + ' .opt_stats .bar');
+		var el = $('#stats_' + id + ' .opt_stats .bar');
 		draw_bar(el, segments);
+		var el = $('#stats_' + id + ' .opt_stats .text');
+		var s = '<span style="float: left">{% trans "Yay" %}: ' + yes + '</span>';
+		s +=    '<span style="float: right">{% trans "Nay" %}: ' + no + '</span>';
+		el[0].innerHTML = s;
+	}
+
+	draw_opt('whole', counts);
+	for (i in party_list) {
+		var party = party_list[i];
+
+		draw_opt(i, party.answer_counts);
 	}
 });
 </script>
@@ -136,10 +149,15 @@ This page shows how the MPs would vote, if they were to vote according to their 
 
 {% include "opinions/opinion_vote_table.html" %}
 
-<div style="clear: both; margin-bottom: 2em">
-<h3>{% trans "Whole parliament" %}</h2>
-{% trans "Yay" %}: {{answers_for|length}}
-{% trans "Nay" %}: {{answers_against|length}}
+<div style="clear: both; margin-bottom: 2em"></div>
+
+<h3>{% trans "Whole parliament" %}</h3>
+<div id="stats_whole" class="opinions_party_stats">
+  <div class="logo"></div>
+  <div class="stats opt_stats">
+    <div class="text"></div>
+    <div class="bar"></div>
+  </div>
 </div>
 
 <h3>{% trans "Parties" %}</h3>
@@ -147,6 +165,7 @@ This page shows how the MPs would vote, if they were to vote according to their 
 <div id="stats_{{ party.name }}" class="opinions_party_stats">
   <div class="logo"><img src="{% thumbnail party.logo 32x32 %}" /></div>
   <div class="stats opt_stats">
+    <div class="text"></div>
     <div class="bar"></div>
   </div>
 </div>

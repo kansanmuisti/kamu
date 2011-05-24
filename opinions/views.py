@@ -160,38 +160,10 @@ def compare_question_and_session(request, question, vote_map, term):
         opt_dict[opt.id] = opt
         opt_json[opt.order] = d
 
-    options_for = [opt for opt, cong in vote_map.items() if cong > 0]
-    options_against = [opt for opt, cong in vote_map.items() if cong < 0]
-
-    answers_for = list(Answer.objects.filter(
-                    question=question,
-                    option__order__in=options_for,
-                    member__in=mp_list).order_by('member__party__name',
-                    'member__name').select_related('member'))
-
-    answers_against = list(Answer.objects.filter(
-                    question=question,
-                    option__order__in=options_against,
-                    member__in=mp_list).order_by('member__party__name',
-                    'member__name').select_related('member'))
-
-    all_members = answers_for + answers_against
-    all_members.sort(key=lambda a: a.member.party.name)
-    parties = []
+    parties = Party.objects.all().order_by('name')
     party_by_id = {}
-    for party, answers in itertools.groupby(all_members, lambda a: a.member.party):
-        party.answers = list(answers)
-        answers = sorted(party.answers, key=lambda a: (vote_map[a.option.order], a.option.order))
-        party.options = []
-        by_option = itertools.groupby(answers, lambda a: a.option)
-        for option, opt_answers in by_option:
-            option.count = len(list(opt_answers))
-            option.share = option.count/float(len(answers))
-            option.congruence = vote_map[option.order]
-            party.options.append(option)
-
+    for party in parties:
         party.thumbnail = DjangoThumbnail(party.logo, (30, 30))
-        parties.append(party)
         party_by_id[party.pk] = party
 
     q = Answer.objects.filter(question=question, member__in=mp_list)
@@ -218,21 +190,7 @@ def compare_question_and_session(request, question, vote_map, term):
         d['logo'] = party.thumbnail.absolute_url
         party_json[party.name] = d
 
-    total_votes = len(answers_for)+len(answers_against)
-    parliament_percentage = len(answers_for)/float(total_votes)*100
-
-    for ans in answers_for + answers_against:
-        opt = opt_dict[ans.option_id]
-        if opt.color_str:
-            ans.color_str = opt.color_str
-        mp = ans.member
-        mp.thumbnail = DjangoThumbnail(mp.photo, (30, 40))
-        mp.party_thumbnail = DjangoThumbnail(mp.party.logo, (30, 40))
-
-    args = dict(answers_for=answers_for,
-                answers_against=answers_against,
-                question=question, options=options,
-                parliament_percentage=parliament_percentage,
+    args = dict(question=question, options=options,
                 parties=parties)
     args['mp_json'] = simplejson.dumps(mp_json)
     args['opt_json'] = simplejson.dumps(opt_json)
