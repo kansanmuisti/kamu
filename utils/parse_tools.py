@@ -13,11 +13,13 @@ MEMBER_NAME_TRANSFORMS = {
     'Virtanen Pertti "Veltto"': 'Virtanen Pertti',
     'Elomaa Kike': 'Elomaa Ritva',
     'Maijala Eeva-Maria': 'Maijala Eeva Maria',
+    'Gästgivars Lars': 'Gästgivars Lars Erik',
 }
 
 def fix_mp_name(name):
     if not isinstance(name, unicode):
 	name = name.decode('utf8')
-    if name in MEMBER_NAME_TRANSFORMS:
-        name = MEMBER_NAME_TRANSFORMS[name].decode('utf8')
+    if name.encode('utf8') in MEMBER_NAME_TRANSFORMS:
+        name = MEMBER_NAME_TRANSFORMS[name.encode('utf8')].decode('utf8')
     return name
+

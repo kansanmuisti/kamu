@@ -156,11 +156,13 @@ def parse():
     src, c = QuestionSource.objects.get_or_create(name='Ylen vaalikone', year=2011,
                                                   url_name='yle2011')
     for district in range(1, 16):
+        print "District %d" % district
         cand_list = parse_district(district)
         for cand in cand_list:
             parse_mp(src, *cand)
     for mp in mp_list:
         if not mp.found:
             da = DistrictAssociation.objects.for_member_in_term(mp, term)
-            print "not found for %s (%s)" % (mp, da[0].name.encode('utf8'))
+            print "not found for %s /%s (%s)" % (mp, mp.party.name.encode('utf8'),
+                da[0].name.encode('utf8'))
 
