@@ -1021,7 +1021,7 @@ def search(request):
 def about(request, section):
     args = {'active_page': 'info', 'section': section}
 
-    args['news'] = Newsitem.objects.newest()
+    args['news'] = Newsitem.objects.newest(amount=5)
 
     if section == 'main':
         args['content'] = Item.objects.retrieve_content('main')
