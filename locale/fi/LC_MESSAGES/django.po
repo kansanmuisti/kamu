@@ -1163,7 +1163,7 @@ msgstr ""
 "\n"
 "Tällä sivulla näet, miten kansanedustajat äänestäisivät, jos he "
 "äänestäisivät vaalikonevastaustensa mukaisesti. Allaolevassa taulukossa "
-"olemme listanneet, miten eri vaalikonevastaukset ovat yhdistetty ääniin.\n"
+"olemme listanneet, miten eri vaalikonevastaukset on yhdistetty ääniin.\n"
 
 #: templates/opinions/show_hypothetical_vote.html:107
 #: templates/opinions/show_question_session.html:175
