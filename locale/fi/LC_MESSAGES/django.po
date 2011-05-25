@@ -1237,11 +1237,11 @@ msgstr "Jakauma äänestystuloksen mukaan"
 
 #: templates/opinions/show_question_session.html:219
 msgid "Members who voted yes"
-msgstr "'Kyllä' äänestäneet"
+msgstr "\"Kyllä\"-äänestäneet"
 
 #: templates/opinions/show_question_session.html:225
 msgid "Members who voted no"
-msgstr "'Ei' äänestäneet"
+msgstr "\"Ei\"-äänestäneet"
 
 #: templates/opinions/summary.html:13
 #, python-format

@@ -133,7 +133,7 @@ $(document).ready(function() {
 				seg.color = vote_dict['Y'].color;
 				yes += seg.count;
 			} else {
-				seg.color = vote_dict['N'].color;
+				seg.color = '#ccc';
 				no += seg.count;
 			}
 			segments.push(seg);
@@ -142,7 +142,7 @@ $(document).ready(function() {
 		draw_bar(el, segments);
 		var el = $('#stats_' + id + ' .cong_stats .text');
 		var percent = Math.round(yes * 100.0 / (yes + no));
-		var s = '<span style="float: right">' + percent + ' %</span>';
+		var s = '<span style="float: left">' + percent + ' %</span>';
 		el[0].innerHTML = s;
 	}
 
@@ -208,7 +208,7 @@ This page shows how the MPs voted compared to their stated opinions.
   </div>
 </div>
 
-<h3>{% trans "Parties" %}</h3>
+<h3 style='margin-top: 16px'>{% trans "Parties" %}</h3>
 {% for party in parties %}
 <div id="stats_{{ party.name }}" class="opinions_party_stats">
   <div class="logo"><img src="{% thumbnail party.logo 32x32 %}" /></div>
@@ -228,14 +228,14 @@ This page shows how the MPs voted compared to their stated opinions.
 {% endfor %}
 
 <div class="opinions_mp_list">
-  <h3>{% trans "Members who voted yes" %}</h3>
   <table id="members_for">
+    <tr class="link"><th colspan="3" style="text-align: left;">{% trans "Members who voted yes" %}</th><th>Vk</th></tr>
   </table>
 </div>
 
 <div class="opinions_mp_list">
-  <h3>{% trans "Members who voted no" %}</h3>
   <table id="members_against">
+    <tr class="link"><th colspan="3" style="text-align: left;">{% trans "Members who voted no" %}</th><th>Vk</th></tr>
   </table>
 </div>
 
