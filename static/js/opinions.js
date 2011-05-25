@@ -39,7 +39,6 @@ function create_mp_entry(mp) {
 	var row = document.createElement("tr");
 	var cols = []
 	var party = party_dict[mp.party];
-
 	var html = "<td><img class='party_logo' src='" + party.logo + "' /\></td>";
 	html += "<td><img class='portrait' src='" + mp.portrait + "' /\></td>";
 	html += "<td class='name'><a href='" + mp.url + "'>" + mp.name + "</a></td>"
@@ -55,13 +54,35 @@ function create_mp_entry(mp) {
 	} else {
 		html += "<td></td>";
 	}
-/*	if ('vote' in mp) {
-		cl_str = vote_dict[mp.vote].class_img;
-		html += "<td><div class='vote " + cl_str + "'></div></td>";
-	} else {
-		html += "<td></td>";
-	} */
 	$(row).append(html);
+
+	var answer_el = $(".answer", row)
+	answer_el.mouseover(function() {
+		var url = "/opinions/yle2011/0/" + mp.id + "/";
+
+		if ('answer_fetched' in this)
+			return;
+		
+		$.ajax({
+			url: url,
+			dataType: 'json',
+			context: this,
+			success: function(json) {
+				this.answer_fetched = true;
+				if (!('explanation' in json))
+					return;
+				$(this).tooltip({
+					bodyHandler: function() {
+						s = "<h3>" + mp.name + "</h3>";
+						s += "<p>" + json.explanation + "</p>";
+						return s;
+					}
+				});
+				$(this).delay(0).mouseenter();
+			}
+		});
+	});
+	
 	return row;
 }
 

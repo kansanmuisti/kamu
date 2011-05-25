@@ -57,7 +57,7 @@
 					// also remove alt attribute to prevent default tooltip in IE
 					this.alt = "";
 				})
-				.mouseover(save)
+				.mouseenter(save)
 				.mouseout(hide)
 				.click(hide);
 		},

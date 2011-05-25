@@ -9,7 +9,7 @@ from django.shortcuts import render_to_response, get_list_or_404, \
     get_object_or_404, redirect
 from django.utils.translation import ugettext as _
 from django.template import RequestContext
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
@@ -22,7 +22,7 @@ from opinions.models import *
 from opinions.forms import VoteOptionCongruenceForm
 from user_voting.models import Vote as UserVote
 from votes.models import Party, Session, PlenarySession, Term, \
-    TermMember, DistrictAssociation
+    TermMember, DistrictAssociation, Member
 from votes.views import DISTRICT_KEY
 from httpstatus import Http400, Http403
 from httpstatus.decorators import postonly
@@ -52,14 +52,32 @@ def _handle_congruence_form(request, form, option, session):
                                 congruence=-value, vote='N', user=request.user)
     item.save(update_if_exists=True)
 
-
-def show_question(request, source, question):
+def find_question(source, question_nr):
     src = get_object_or_404(QuestionSource, url_name=source)
     try:
-        question = int(question)
+        question_nr = int(question_nr)
     except ValueError:
         raise Http404()
-    question = get_object_or_404(Question, source=src, order=question)
+    return get_object_or_404(Question, source=src, order=question_nr)
+
+def get_member_answer(request, source, question, member):
+    question = find_question(source, question)
+    mem = get_object_or_404(Member, url_name=member)
+    ans = Answer.objects.filter(member=mem, question=question)
+    if not ans:
+        raise Http404()
+    ans = ans[0]
+    d = {}
+    if ans.explanation:
+        d['explanation'] = ans.explanation
+    if ans.option:
+        d['option'] = ans.option.order
+        d['option_text'] = ans.option.name
+    json = simplejson.dumps(d, sort_keys=True, indent=4 * ' ')
+    return HttpResponse(json, mimetype='application/javascript')
+
+def show_question(request, source, question):
+    question = find_question(source, question)
     relevant_sessions = \
         QuestionSessionRelevance.get_relevant_sessions(question)
     relevant_sessions = relevant_sessions[:3]
@@ -184,6 +202,7 @@ def compare_question_and_session(request, question, vote_map, term, vote_by_mp=N
         d = {'name': mp.name}
         if mp.id in ans_by_mp:
             d['answer'] = ans_by_mp[mp.id]
+        d['id'] = mp.url_name
         d['url'] = mp.get_absolute_url()
         d['party'] = party.name
         d['party_logo'] = party.thumbnail.absolute_url
