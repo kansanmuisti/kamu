@@ -432,7 +432,7 @@ def process_keywords():
 
 VOTE_URL = '/triphome/bin/aax3000.sh?VAPAAHAKU=aanestysvpvuosi=%i'
 MINUTES_URL = '/triphome/bin/akx3000.sh?kanta=utaptk&LYH=LYH-PTK&haku=PTKSUP&kieli=su&VPVUOSI>=1999'
-BEGIN_YEAR = 1999
+BEGIN_YEAR = 2003
 END_YEAR = 2010
 
 def process_list_element(el_type, el):
@@ -792,7 +792,8 @@ DOC_TYPES = ["HE",
         "VK",
         #"KK", "TAA"
 ]
-SKIP_DOCS = ['KA 4/2008', 'KA 6/2007', 'YmVM 10/2006', 'HE 103/2004']
+SKIP_DOCS = ['KA 4/2008', 'KA 6/2007', 'YmVM 10/2006', 'HE 103/2004',
+             'LA 4/2003']
 
 def should_download_doc(doc):
     if doc['type'] not in DOC_TYPES and not doc['type'].endswith('VM'):
