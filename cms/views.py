@@ -1,5 +1,6 @@
 from django.shortcuts import render_to_response, redirect
 from django.contrib.auth.decorators import login_required
+from httpstatus.decorators import postonly
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseServerError, HttpResponseBadRequest
 from httpstatus import Http403
@@ -65,3 +66,23 @@ def edit_item(request, item_id):
     return render_to_response('edit_item.html', args,
                               context_instance=RequestContext(request))
 
+@postonly
+def preview_markdown(request):
+    try:
+        markdown_data = request.POST['renderable']
+    except (KeyError):
+        return HttpResponseBadRequest()
+
+    try:
+        import markdown
+
+        md = markdown.Markdown()
+        html = md.convert(markdown_data)
+
+        args = {'section': 'background',
+                'content': {'data': mark_safe(html)}}
+
+        return render_to_response('main_page.html', args,
+                                  context_instance=RequestContext(request))
+    except ImportError:
+        return HttpResponseServerError
