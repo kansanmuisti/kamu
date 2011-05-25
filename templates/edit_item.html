@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n markup basic %}
+
+{% block title %}{% trans "Editing:" %} {{ revision.subject }}{% endblock %}
+{% block head %}<script type="text/javascript"src="/static/js/markitup/jquery.markitup.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/js/markitup/skins/markitup/style.css" />
+<link rel="stylesheet" type="text/css" href="/static/js/markitup/sets/markdown/style.css" />
+<script type="text/javascript" src="/static/js/markitup/sets/markdown/set.js"></script>
+<script type="text/javascript" >
+   $(document).ready(function() {
+      $("#id_data").markItUp(mySettings);
+   });
+</script>{% endblock %}
+
+{% block content %}
+<h1>{% trans "Editing -" %} {{ revision.content|default:"New item" }}</h1>
+<form action="{% url cms.views.edit_item item.id %}" method="post">
+{{ form.as_p }}
+<input type="submit" value="Submit" />
+</form>
+{% endblock %}

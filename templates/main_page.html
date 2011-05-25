@@ -91,6 +91,9 @@
 
 <div class="news_items news_links">
   <h1>{% trans "News" %}</h1>
+{% if request.user.is_staff %}
+<a href="{% url cms.views.add_newsitem %}">Add news...</a>
+{% endif %}
 {% for newsitem in news %}
   {% ifchanged %}<span class="news_item_date">{{ newsitem.date|i18n_date:"numeric" }}</span>{% endifchanged %}
   <h2>
@@ -101,6 +104,9 @@
   {% endif %}
   </h2>
   {{ newsitem.content.summary }}
+  {% if request.user.is_staff %}
+  <a href="{% url cms.views.edit_item newsitem.pk %}">{% trans "Edit..." %}</a>
+  {% endif %}
 {% endfor %}
 </div>
 
