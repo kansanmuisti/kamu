@@ -20,6 +20,21 @@ function draw_bar(element, segments) {
 	}
 }
 
+function party_sort(mp_a, mp_b) {
+	if (mp_a.party == mp_b.party) {
+		if (mp_a.name > mp_b.name)
+			return 1;
+		else
+			return -1;
+	}
+	if (mp_a.party > mp_b.party)
+		return 1;
+	else if (mp_a.party < mp_b.party)
+		return -1;
+	else
+		return 0;
+}
+
 function create_mp_entry(mp) {
 	var row = document.createElement("tr");
 	var cols = []

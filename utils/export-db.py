@@ -27,7 +27,7 @@ setup_environ(settings)
 from django.db import connection, transaction
 from django import db
 
-from votes.models import PlenarySession, Session, Vote, Term, SessionKeyword
+from votes.models import PlenarySession, Session, Vote, Term
 from django.contrib.auth.models import User
 
 user_override = None

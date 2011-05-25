@@ -20,13 +20,6 @@ var total_counts = {"opts": [], "votes": [], "cong": []};
 $(document).ready(function() {
 	count_stats();
 
-	function party_sort(mp_a, mp_b) {
-		if (mp_a.party == mp_b.party) {
-			return mp_a.name > mp_b.name;
-		}
-		return mp_a.party > mp_b.party;
-	}
-
 	var table_for = document.getElementById('members_for');
 	var table_against = document.getElementById('members_against');
 	var entries_for = [], entries_against = [];
@@ -44,8 +37,8 @@ $(document).ready(function() {
 		}
 	}
 
-	entries_for.sort(party_sort);
-	entries_against.sort(party_sort);
+	entries_for = entries_for.sort(party_sort);
+	entries_against = entries_against.sort(party_sort);
 	for (i in entries_for) {
 		table_for.appendChild(create_mp_entry(entries_for[i]));
 	}
@@ -178,9 +171,9 @@ $(document).ready(function() {
 This page shows how the MPs voted compared to their stated opinions.
 {% endblocktrans %}</p>
 </div>
-<div style="clear: both; margin-bottom: 2em"></div>
+<div style="clear: both;"></div>
 
-<h3>{% trans "Session" %}</h3>
+<h3 style="margin-top: 16px;">{% trans "Session" %}</h3>
 <div>
   <a href="{{ session.get_absolute_url }}">{{ session.info|linebreaks }}</a>
   {% if session.subject %}
