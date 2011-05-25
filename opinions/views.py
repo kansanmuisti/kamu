@@ -73,7 +73,7 @@ def get_member_answer(request, source, question, member):
     if ans.option:
         d['option'] = ans.option.order
         d['option_text'] = ans.option.name
-    json = simplejson.dumps(d, sort_keys=True, indent=4 * ' ')
+    json = simplejson.dumps(d)
     return HttpResponse(json, mimetype='application/javascript')
 
 def show_question(request, source, question):
