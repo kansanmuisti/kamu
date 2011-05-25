@@ -1,9 +1,243 @@
 {% extends "opinions/opinion_base.html" %}
-{% load i18n thumbnail opinions basic %}
-{% block title %}{% trans "Question" %}{{question.name}}{% endblock %}
+{% load i18n thumbnail assets %}
+{% block title %}{{ vote_name }} | {% trans "Voting results" %}{% endblock %}
+{% block head %}
+{{ block.super }}
+{% assets "raphael" %}
+  <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
+{% assets "opinions_js" %}
+<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
 
+<script type="text/javascript">
+var mp_list = {{ mp_json|safe }};
+var option_dict = {{ opt_json|safe }};
+var party_dict = {{ party_json|safe }};
+var vote_dict = {{ vote_json|safe }};
+var total_counts = {"opts": [], "votes": [], "cong": []};
+
+$(document).ready(function() {
+	count_stats();
+
+	function party_sort(mp_a, mp_b) {
+		if (mp_a.party == mp_b.party) {
+			return mp_a.name > mp_b.name;
+		}
+		return mp_a.party > mp_b.party;
+	}
+
+	var table_for = document.getElementById('members_for');
+	var table_against = document.getElementById('members_against');
+	var entries_for = [], entries_against = [];
+	var counts = [];
+
+	for (i in mp_list) {
+		mp = mp_list[i];
+		if (!('vote' in mp)) {
+			continue;
+		}
+		if (mp.vote == 'Y') {
+			entries_for.push(mp);
+		} else if (mp.vote == 'N') {
+			entries_against.push(mp);
+		}
+	}
+
+	entries_for.sort(party_sort);
+	entries_against.sort(party_sort);
+	for (i in entries_for) {
+		table_for.appendChild(create_mp_entry(entries_for[i]));
+	}
+	for (i in entries_against) {
+		table_against.appendChild(create_mp_entry(entries_against[i]));
+	}
+
+	function draw_opt(id, counts) {
+		var segments = [];
+		var total = 0, yes = 0, no = 0;
+
+		for (var j in option_dict) {
+			var opt = option_dict[j];
+			var seg = [];
+
+			seg.count = counts[j];
+			if (!seg.count) {
+				continue;
+			}
+			if ('color' in opt) {			
+				seg.color = opt.color;
+			}
+			if (opt.congruence > 0) {
+				yes += seg.count;
+			} else if (opt.congruence < 0) {
+				no += seg.count;
+			} else {
+				// Skip
+				continue;
+			}
+			segments.push(seg);
+		}
+		var el = $('#stats_' + id + ' .opt_stats .bar');
+		draw_bar(el, segments);
+		var el = $('#stats_' + id + ' .opt_stats .text');
+		var s = '<span style="float: left">{% trans "Yay" %}: ' + yes + '</span>';
+		s +=    '<span style="float: right">{% trans "Nay" %}: ' + no + '</span>';
+		el[0].innerHTML = s;
+	}
+	function draw_vote(id, counts) {
+		var segments = [];
+		var total = 0, yes = 0, no = 0;
+
+		for (var j in vote_dict) {
+			var vote = vote_dict[j];
+			var seg = [];
+
+			seg.count = counts[j];
+			if (!seg.count) {
+				continue;
+			}
+			if ('color' in vote) {
+				seg.color = vote.color;
+			}
+			if (j == 'Y') {
+				yes += seg.count;
+			} else if (j == 'N') {
+				no += seg.count;
+			} else {
+				// Skip
+				continue;
+			}
+			segments.push(seg);
+		}
+		var el = $('#stats_' + id + ' .vote_stats .bar');
+		draw_bar(el, segments);
+		var el = $('#stats_' + id + ' .vote_stats .text');
+		var s = '<span style="float: left">{% trans "Yay" %}: ' + yes + '</span>';
+		s +=    '<span style="float: right">{% trans "Nay" %}: ' + no + '</span>';
+		el[0].innerHTML = s;
+	}
+	function draw_cong(id, counts) {
+		var segments = [];
+		var total = 0, yes = 0, no = 0;
+		var cong_list = [1, -1];
+		for (var j in cong_list) {
+			var seg = [];
+			var cong = cong_list[j];
+
+			seg.count = counts[cong];
+			if (!seg.count) {
+				continue;
+			}
+			if (cong > 0) {
+				seg.color = vote_dict['Y'].color;
+				yes += seg.count;
+			} else {
+				seg.color = vote_dict['N'].color;
+				no += seg.count;
+			}
+			segments.push(seg);
+		}
+		var el = $('#stats_' + id + ' .cong_stats .bar');
+		draw_bar(el, segments);
+		var el = $('#stats_' + id + ' .cong_stats .text');
+		var percent = Math.round(yes * 100.0 / (yes + no));
+		var s = '<span style="float: right">' + percent + ' %</span>';
+		el[0].innerHTML = s;
+	}
+
+
+	draw_opt('whole', total_counts['opts']);
+	draw_vote('whole', total_counts['votes']);
+	draw_cong('whole', total_counts['cong']);
+	for (i in party_dict) {
+		var party = party_dict[i];
+
+		draw_opt(i, party.answer_counts);
+		draw_vote(i, party.vote_counts);
+		draw_cong(i, party.cong_counts);
+	}
+});
+</script>
+{% endblock %}
 {% block content %}
+<h1>
+  {% trans "How members voted on" %} {{vote_name}}?
+</h1>
+
+{% if fb_enabled %}
+{% include "_facebook.html" %}
+<div style='float: right; margin-right: -5px'>
+    <fb:send href="http://{{ fb_host }}{{ request.get_full_path }}" font="verdana"></fb:send>
+    <fb:like href="http://www.facebook.com/kansanmuisti" send="false" layout="button_count" width="120" show_faces="false" font="verdana"></fb:like>
+</div>
+{% endif %}
+
+<div class="main_col">
+<p>{% blocktrans %}
+This page shows how the MPs voted compared to their stated opinions.
+{% endblocktrans %}</p>
+</div>
+<div style="clear: both;"></div>
+
 {% include "opinions/opinion_vote_table.html" %}
-{% include "opinions/question_vote_answer_listing.html" %}
+
+<div style="clear: both; margin-bottom: 2em"></div>
+
+<h3>{% trans "Whole parliament" %}</h3>
+<div class="opinions_party_stats" style="font-size: 80%; height: 20px;">
+  <div class="logo">&nbsp;</div>
+  <div class="stats"><div class="bar">{% trans "Distribution according to opinions" %}</div></div>
+  <div class="stats"><div class="bar">{% trans "Distribution in reality" %}</div></div>
+  <div class="stats"><div class="bar">{% trans "Congruence" %}</div></div>
+</div>
+
+<div id="stats_whole" class="opinions_party_stats">
+  <div class="logo">&nbsp;</div>
+  <div class="stats opt_stats">
+    <div class="text"></div>
+    <div class="bar"></div>
+  </div>
+  <div class="stats vote_stats">
+    <div class="text"></div>
+    <div class="bar"></div>
+  </div>
+  <div class="stats cong_stats">
+    <div class="text"></div>
+    <div class="bar"></div>
+  </div>
+</div>
+
+<h3>{% trans "Parties" %}</h3>
+{% for party in parties %}
+<div id="stats_{{ party.name }}" class="opinions_party_stats">
+  <div class="logo"><img src="{% thumbnail party.logo 32x32 %}" /></div>
+  <div class="stats opt_stats">
+    <div class="text"></div>
+    <div class="bar"></div>
+  </div>
+  <div class="stats vote_stats">
+    <div class="text"></div>
+    <div class="bar"></div>
+  </div>
+  <div class="stats cong_stats">
+    <div class="text"></div>
+    <div class="bar"></div>
+  </div>
+</div>
+{% endfor %}
+
+<div class="opinions_mp_list">
+  <h3>{% trans "Members who voted yes" %}</h3>
+  <table id="members_for">
+  </table>
+</div>
+
+<div class="opinions_mp_list">
+  <h3>{% trans "Members who voted no" %}</h3>
+  <table id="members_against">
+  </table>
+</div>
+
 {% endblock %}
 

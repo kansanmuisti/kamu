@@ -1400,12 +1400,12 @@ td.party_option_share
 .opinions_party_stats .stats
 {
     float: left;
-    margin-left: 10px;
+    margin-left: 20px;
 }
 
 .opinions_party_stats .bar
 {
-    width: 220px;
+    width: 200px;
     height: 10px;
 }
 
@@ -1423,6 +1423,21 @@ td.party_option_share
 .opinions_mp_list .portrait
 {
     margin-right: 8px;
+}
+
+.opinions_mp_list .answer
+{
+    float: left;
+}
+
+.opinions_mp_list .vote
+{
+    float: left;
+}
+
+.opinions_mp_list .vote
+{
+    float: left;
 }
 
 /*

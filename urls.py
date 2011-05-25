@@ -81,13 +81,17 @@ urlpatterns += patterns('opinions.views',
     url(r'^opinions/$', 'summary'),
     url(r'^opinions/list/$', 'list_questions'),
     url(r'^opinions/(?P<source>\w+)/(?P<question>\d+)/$', 'show_question'),
-    url(r'^opinions/(?P<source>\w+)/(?P<question_no>\d+)/session/(?P<plsess>[\w-]+)/(?P<sess_no>\d+)$', 'show_question_session'),
+    url(r'^opinions/(?P<source>\w+)/(?P<question>\d+)/session/(?P<plsess>[\w-]+)/(?P<session>\d+)$',
+        'show_question_session'),
     url(r'^opinions/match_session/$', 'match_session'),
     url(r'^opinions/party/(?P<party>\w+)/$', 'show_party_congruences'),
 
     url(r'^opinions/portugal/$', 'show_hypothetical_vote',
         {'source': 'yle2011', 'question': 0, 'vote_name': 'Portugalin tukipaketti',
-         'vote_map': {0: 1, 1: 0.5, 2: -0.5, 3: -1}, 'term': '2011-2014'})
+         'vote_map': {0: 1, 1: 0.5, 2: -0.5, 3: -1}, 'term': '2011-2014'}),
+    url(r'^opinions/ydinvoima-vote/$', 'show_question_session',
+        {'source': 'mtv2007', 'question': 14, 'vote_name': 'Kuudes ydinvoimala',
+         'plsess': '77-2010', 'session': 10}),
 )
 
 urlpatterns += patterns('cms.views',

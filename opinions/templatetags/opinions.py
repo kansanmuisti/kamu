@@ -21,7 +21,7 @@ register = template.Library()
                         takes_context=True)
 def promise_statistics_sidebar(context, opinions_page, user, question=None):
     district = context['request'].session.get(DISTRICT_KEY)
-    if opinions_page != 'show_hypothetical_vote':
+    if opinions_page not in ('show_hypothetical_vote', 'show_question_session'):
         args = get_promise_statistics_summary(district, user, question)
     else:
         args = {}

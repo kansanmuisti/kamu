@@ -132,9 +132,15 @@ def show_question(request, source, question):
     return response
 
 def get_color(val):
-    return math.sqrt(1.0 - val) * 200
+    if val > 0:
+        c = math.sqrt(1.0 - val) * 200
+        rgb = (c, 200, c)
+    else:
+        c = math.sqrt(1.0 + val) * 200
+        rgb = (200, c, c)
+    return "#%02x%02x%02x" % rgb
 
-def compare_question_and_session(request, question, vote_map, term):
+def compare_question_and_session(request, question, vote_map, term, vote_by_mp=None):
     mp_list = TermMember.objects.filter(term=term).values_list('member', flat=True)
 
     options = Option.objects.filter(question=question)
@@ -145,16 +151,16 @@ def compare_question_and_session(request, question, vote_map, term):
         color = None
         if val > 0:
             vote_class = 'yes_vote'
-            color = (get_color(val), 200, get_color(val))
+            color = get_color(val)
         elif val < 0:
             vote_class = 'no_vote'
-            color = (200, get_color(-val), get_color(-val))
+            color = get_color(val)
         else:
             vote_class = 'empty_vote'
         opt.vote_class = vote_class
         d = {'congruence': val}
         if color:
-            opt.color_str = "#%02x%02x%02x" % color
+            opt.color_str = color
             d['color'] = opt.color_str
 
         opt_dict[opt.id] = opt
@@ -182,6 +188,8 @@ def compare_question_and_session(request, question, vote_map, term):
         d['party'] = party.name
         d['party_logo'] = party.thumbnail.absolute_url
         d['portrait'] = tn.absolute_url
+        if vote_by_mp and mp.pk in vote_by_mp:
+            d['vote'] = vote_by_mp[mp.pk]
         mp_json.append(d)
 
     party_json = {}
@@ -216,21 +224,21 @@ def show_hypothetical_vote(request, source, question,
                                   context_instance=RequestContext(request))
     return response
 
-def show_question_session(request, source, question_no, plsess, sess_no, party=None):
+def show_question_session(request, source, question, plsess, session, vote_name=None):
     # TODO: Mapping url to the model objects could be a bit more concise
     src = get_object_or_404(QuestionSource, url_name=source)
     try:
-        question_no = int(question_no)
+        question = int(question)
     except ValueError:
         raise Http404()
-    question = get_object_or_404(Question, source=src, order=question_no)
+    question = get_object_or_404(Question, source=src, order=question)
 
     try:
-        number = int(sess_no)
+        number = int(session)
     except ValueError:
-        raise Http404
+        raise Http404()
     psess = get_object_or_404(PlenarySession, url_name=plsess)
-    session = get_object_or_404(Session, plenary_session=psess, number=sess_no)
+    session = get_object_or_404(Session, plenary_session=psess, number=number)
 
     term = session.plenary_session.term
     cong_user = VoteOptionCongruence.objects.get_congruence_user(request.user)
@@ -239,67 +247,25 @@ def show_question_session(request, source, question_no, plsess, sess_no, party=N
                                                    vote='Y',
                                                    option__in=question.option_set.all())
     vote_map = dict((c.option.order, c.congruence) for c in vote_map)
-    vote_name = session.get_short_summary()
 
-    args = compare_question_and_session(request, question, vote_map, term)
+    votes = Vote.objects.filter(session=session)
+    vote_by_mp = dict((vote.member_id, vote.vote) for vote in votes)
+    for vote in votes:
+        vote_by_mp[vote.member_id] = vote.vote
 
-    all_votes = Vote.objects.filter(session=session)
-    votes = dict((vote.member_id, vote.vote) for vote in all_votes)
-    all_answers = args['answers_for'] + args['answers_against']
-    for answer in all_answers:
-        answer.vote = votes.get(answer.member_id, 'A')
-        if answer.vote not in 'YN':
-            answer.congruence = 0
-            continue
-        
-        answer.congruence = vote_map[answer.option.order]
-        if answer.vote == 'N':
-            answer.congruence *= -1
-        
-    
-    all_answers.sort(key=lambda a: a.vote)
-    answer_groups = itertools.groupby(all_answers, lambda a: a.vote)
+    args = compare_question_and_session(request, question, vote_map, term, vote_by_mp)
 
-    sort_key = lambda a: (a.member.party.name, a.member.name)
-    answer_groups = ((k, sorted(list(i), key=sort_key)) for k, i in answer_groups) 
-    answer_groups = dict(answer_groups)
+    vote_json = {}
 
-    answers_for_vote = answer_groups.get('Y', [])
-    answers_against_vote = answer_groups.get('N', [])
+    vote_json['Y'] = {'color': get_color(1), 'class_img': 'yes_vote'}
+    vote_json['N'] = {'color': get_color(-1), 'class_img': 'no_vote'}
+    vote_json['E'] = {'color': (200, 200, 200), 'class_img': 'empty_vote'}
+    vote_json['A'] = {'color': (200, 200, 200), 'class_img': 'absent_vote'}
 
-    
-    party_map = dict((p, p) for p in args['parties'])
-    by_party = sorted(all_votes, key=lambda v: v.member.party.name)
-    by_party = itertools.groupby(by_party, lambda v: v.member.party)
-    for party, party_votes in by_party:
-        party = party_map[party]
-        party.votes = list(party_votes)
-        party.votes.sort(key=lambda v: v.vote)
-        by_vote = itertools.groupby(party.votes, lambda v: v.vote)
-        party.vote_counts = dict((vc, len(list(vs))) for vc, vs in by_vote)
-        
-        nvotes = float(len(party.votes))
-        party.vote_shares = dict((vc, vcount/nvotes)
-                                 for vc, vcount in party.vote_counts.items())
-    
-    by_party = sorted(all_answers, key=lambda a: a.member.party.name)
-    by_party = itertools.groupby(by_party, lambda v: v.member.party)
-    for party, party_answers in by_party:
-        party = party_map[party]
-        congruences = [a.congruence for a in party_answers]
-        congruences.sort()
-        by_congruence = itertools.groupby(congruences)
-        party.congruence_counts = [(congval, len(list(cs)))
-                                   for congval, cs in by_congruence]
-        total_congruences = float(len(congruences))
-        party.congruence_shares = [(congval, cn/total_congruences)
-                                   for congval, cn in party.congruence_counts]
-
-
-    args['answers_for'] = answers_for_vote
-    args['answers_against'] = answers_against_vote    
-
+    args['vote_name'] = vote_name
     args['opinions_page'] = 'show_question_session'
+    args['active_page'] = 'opinions'
+    args['vote_json'] = simplejson.dumps(vote_json)
 
     return render_to_response('opinions/show_question_session.html', args,
                               context_instance=RequestContext(request))

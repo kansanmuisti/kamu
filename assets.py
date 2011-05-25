@@ -13,6 +13,9 @@ register('js_base', js)
 raphael = Bundle('js/raphael.js', filters=js_filters, output='gen/raphael.js')
 register('raphael', raphael)
 
+opinions = Bundle('js/opinions.js', filters=None, output='gen/opinions.js')
+register('opinions_js', opinions)
+
 css = Bundle(Bundle('css/kamu.css', filters='less'),
              Bundle('css/jquery-ui-1.8.1.custom.css', filters='cssrewrite'),
              filters='cssutils', output='gen/packed.css')
