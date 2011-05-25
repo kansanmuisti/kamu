@@ -5,6 +5,7 @@ from cms.markupfield.fields import MarkupField
 from django.utils.translation import get_language
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
+from django.forms import ModelForm
 
 DEFAULT_LANGUAGE = settings.LANGUAGE_CODE
 
@@ -139,3 +140,9 @@ class Cache(models.Model):
     language = models.CharField(max_length=10)
     content = models.ForeignKey(Content)
     revision = models.ForeignKey(Revision)
+
+
+class NewRevisionForm(ModelForm):
+    class Meta:
+        model = Revision
+        exclude = ('content')
