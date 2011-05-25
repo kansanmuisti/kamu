@@ -1429,6 +1429,7 @@ td.party_option_share
 .opinions_mp_list .answer
 {
     float: left;
+    font-size: 240%;
 }
 
 .opinions_mp_list .vote

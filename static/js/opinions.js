@@ -31,8 +31,8 @@ function create_mp_entry(mp) {
 	if ('answer' in mp) {
 		color = option_dict[mp.answer].color;
 		if (color) {
-			html += "<td class='answer' style='color: " + color + "; font-size: 240%;'>";
-			html += "&#x25cf";
+			html += "<td class='answer' style='color: " + color + ";'>";
+			html += "&#x25cf;";
 			html += "</td>"
 		} else {
 			html += "<td></td>";
@@ -46,7 +46,7 @@ function create_mp_entry(mp) {
 	} else {
 		html += "<td></td>";
 	} */
-	row.innerHTML = html;
+	$(row).append(html);
 	return row;
 }
 
