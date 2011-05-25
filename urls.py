@@ -92,6 +92,9 @@ urlpatterns += patterns('opinions.views',
     url(r'^opinions/ydinvoima-vote/$', 'show_question_session',
         {'source': 'mtv2007', 'question': 14, 'vote_name': 'Kuudes ydinvoimala',
          'plsess': '77-2010', 'session': 10}),
+    url(r'^opinions/portugal-vote/$', 'show_question_session',
+        {'source': 'yle2011', 'question': 0, 'vote_name': 'Portugalin tukipaketti',
+         'plsess': '10-2011', 'session': 3}),
 )
 
 urlpatterns += patterns('cms.views',

@@ -433,7 +433,7 @@ def process_keywords():
 VOTE_URL = '/triphome/bin/aax3000.sh?VAPAAHAKU=aanestysvpvuosi=%i'
 MINUTES_URL = '/triphome/bin/akx3000.sh?kanta=utaptk&LYH=LYH-PTK&haku=PTKSUP&kieli=su&VPVUOSI>=1999'
 BEGIN_YEAR = 2003
-END_YEAR = 2010
+END_YEAR = 2011
 
 def process_list_element(el_type, el):
     ret = {}
@@ -789,7 +789,7 @@ DOC_PROCESS_URL = "http://www.eduskunta.fi/triphome/bin/vex3000.sh?TUNNISTE=%s+%
 HE_URL = "http://217.71.145.20/TRIPviewer/temp/TUNNISTE_HE_%i_%i_fi.html"
 DOC_TYPES = ["HE",
         "LA", "TPA", "TA", "KA", "LTA",
-        "VK",
+        "VK", "VNT",
         #"KK", "TAA"
 ]
 SKIP_DOCS = ['KA 4/2008', 'KA 6/2007', 'YmVM 10/2006', 'HE 103/2004',
@@ -833,6 +833,8 @@ def download_processing_info(doc):
             date_hdr_str = 'Kysymys j'
         elif doc.type == 'HE':
             date_hdr_str = 'Annettu eduskunnalle'
+        elif doc.type == 'VNT':
+            date_hdr_str = 'Ilmoitettu saapuneeksi'
         else:
             date_hdr_str = 'Aloite j'
         if hdr.startswith(date_hdr_str):
@@ -1067,6 +1069,14 @@ def download_doc(info, doc):
         return doc
     if info['type'] == 'HE':
         return download_he(info, doc)
+    if info['type'] == 'VNT':
+        p_info = download_processing_info(doc)
+        doc.date = p_info['date']
+        doc.subject = p_info['subject']
+        doc.save()
+        attach_keywords(doc, p_info['keywords'])
+        return doc
+
     s = http_cache.open_url(url, 'docs')
     html_doc = html.fromstring(s)
     html_doc.make_links_absolute(url)

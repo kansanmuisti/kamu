@@ -266,6 +266,8 @@ def show_question_session(request, source, question, plsess, session, vote_name=
     args['opinions_page'] = 'show_question_session'
     args['active_page'] = 'opinions'
     args['vote_json'] = simplejson.dumps(vote_json)
+    session.info = session.info.replace('\n', '\n\n')
+    args['session'] = session
 
     return render_to_response('opinions/show_question_session.html', args,
                               context_instance=RequestContext(request))

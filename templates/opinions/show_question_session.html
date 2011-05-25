@@ -178,14 +178,23 @@ $(document).ready(function() {
 This page shows how the MPs voted compared to their stated opinions.
 {% endblocktrans %}</p>
 </div>
-<div style="clear: both;"></div>
+<div style="clear: both; margin-bottom: 2em"></div>
+
+<h3>{% trans "Session" %}</h3>
+<div>
+  <a href="{{ session.get_absolute_url }}">{{ session.info|linebreaks }}</a>
+  {% if session.subject %}
+    <p><i>{{ session.subject }}</i></p>
+  {% endif %}
+</div>
+
 
 {% include "opinions/opinion_vote_table.html" %}
 
 <div style="clear: both; margin-bottom: 2em"></div>
 
 <h3>{% trans "Whole parliament" %}</h3>
-<div class="opinions_party_stats" style="font-size: 80%; height: 20px;">
+<div class="opinions_party_stats" style="font-size: 70%; height: 20px;">
   <div class="logo">&nbsp;</div>
   <div class="stats"><div class="bar">{% trans "Distribution according to opinions" %}</div></div>
   <div class="stats"><div class="bar">{% trans "Distribution in reality" %}</div></div>
@@ -229,15 +238,14 @@ This page shows how the MPs voted compared to their stated opinions.
 
 <div class="opinions_mp_list">
   <table id="members_for">
-    <tr class="link"><th colspan="3" style="text-align: left;">{% trans "Members who voted yes" %}</th><th style="text-align: left;">Vaali- kone</th></tr>
+    <tr class="link"><th colspan="3" style="text-align: left;">{% trans "Members who voted yes" %}</th><th style="text-align: left;">Vaali-<br />kone</th></tr>
   </table>
 </div>
 
 <div class="opinions_mp_list">
   <table id="members_against">
-    <tr class="link"><th colspan="3" style="text-align: left;">{% trans "Members who voted no" %}</th><th style="text-align: left;">Vaali- kone</th></tr>
+    <tr class="link"><th colspan="3" style="text-align: left;">{% trans "Members who voted no" %}</th><th style="text-align: left;">Vaali-<br />kone</th></tr>
   </table>
 </div>
 
 {% endblock %}
-
