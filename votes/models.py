@@ -30,10 +30,12 @@ class Term(models.Model):
         return self.name
 
 class Party(models.Model):
-    name = models.CharField(max_length = 10, primary_key=True)
-    full_name = models.CharField(max_length = 50)
+    name = models.CharField(max_length=10, primary_key=True)
+    full_name = models.CharField(max_length=50)
     logo = models.ImageField(upload_to = 'images/parties')
     info_link = models.URLField()
+    # Unique color for visualizations, in the RGB #xxyyzz form
+    vis_color = models.CharField(max_length=15, blank=True, null=True)
 
     def __unicode__(self):
         return self.full_name
@@ -164,6 +166,38 @@ class TermMember(models.Model):
     member = models.ForeignKey(Member)
     election_budget = models.DecimalField(max_digits=10, decimal_places=2,
                                           blank=True, null=True)
+
+class Seat(models.Model):
+    row = models.IntegerField()
+    seat = models.IntegerField() # "column"
+    x = models.FloatField()
+    y = models.FloatField()
+
+    def __unicode__(self):
+        return "%d/%d" % (row, seat)
+
+    class Meta:
+        unique_together = (('row', 'seat'),)
+
+class MemberSeatManager(models.Manager):
+    def for_date(self, date):
+        query = Q(begin__lte=date)
+        query &= Q(end__isnull=True) | Q(end__gte=date)
+        return self.filter(query)
+
+class MemberSeat(models.Model):
+    seat = models.ForeignKey(Seat)
+    member = models.ForeignKey(Member, db_index=True)
+    begin = models.DateField()
+    end = models.DateField(blank=True, null=True)
+
+    objects = MemberSeatManager()
+
+    def __unicode__(self):
+        args = (str(self.seat), self.begin, self.end, str(self.member))
+        return "%s (%s..%s): %s" % args
+    class Meta:
+        unique_together = (('member', 'begin', 'end'), ('seat', 'begin', 'end'))
 
 class DistrictAssociationManager(models.Manager):
     def between(self, date_begin, date_end):
