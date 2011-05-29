@@ -50,7 +50,7 @@
 			createHelper(settings);
 			return this.each(function() {
 					$.data(this, "tooltip", settings);
-					this.tOpacity = helper.parent.css("opacity");
+					this.tOpacity = $.tooltip.opacity;
 					// copy tooltip into its own expando and remove the title
 					this.tooltipText = this.title;
 					$(this).removeAttr("title");
@@ -94,7 +94,7 @@
 	
 	function createHelper(settings) {
 		// there can be only one tooltip helper
-		if( helper.parent )
+		if (helper.parent)
 			return;
 		// create the helper, h3 for title, div for url
 		helper.parent = $('<div id="' + settings.id + '"><h3></h3><div class="body"></div><div class="url"></div></div>')
@@ -102,15 +102,16 @@
 			.appendTo(document.body)
 			// hide it at first
 			.hide();
-			
+
 		// apply bgiframe if available
-		if ( $.fn.bgiframe )
+		if ($.fn.bgiframe)
 			helper.parent.bgiframe();
-		
+
 		// save references to title and url elements
 		helper.title = $('h3', helper.parent);
 		helper.body = $('div.body', helper.parent);
 		helper.url = $('div.url', helper.parent);
+		$.tooltip.opacity = helper.parent.css("opacity");
 	}
 	
 	function settings(element) {
@@ -120,7 +121,7 @@
 	// main event handler to start showing tooltips
 	function handle(event) {
 		// show helper, either with timeout or on instant
-		if( settings(this).delay )
+		if (settings(this).delay && !helper.parent.is(":animated"))
 			tID = setTimeout(show, settings(this).delay);
 		else
 			show();
@@ -187,9 +188,9 @@
 	function show() {
 		tID = null;
 		if ((!IE || !$.fn.bgiframe) && settings(current).fade) {
-			if (helper.parent.is(":animated"))
-				helper.parent.stop().show().fadeTo(settings(current).fade, current.tOpacity);
-			else
+			if (helper.parent.is(":animated")) {
+				helper.parent.stop(true).show().fadeTo(settings(current).fade, current.tOpacity);
+			} else
 				helper.parent.is(':visible') ? helper.parent.fadeTo(settings(current).fade, current.tOpacity) : helper.parent.fadeIn(settings(current).fade);
 		} else {
 			helper.parent.show();
@@ -281,9 +282,9 @@
 		}
 		if ((!IE || !$.fn.bgiframe) && tsettings.fade) {
 			if (helper.parent.is(':animated'))
-				helper.parent.stop().fadeTo(tsettings.fade, 0, complete);
+				helper.parent.stop(true).fadeTo(tsettings.fade, 0, complete);
 			else
-				helper.parent.stop().fadeOut(tsettings.fade, complete);
+				helper.parent.stop(true).fadeOut(tsettings.fade, complete);
 		} else
 			complete();
 		

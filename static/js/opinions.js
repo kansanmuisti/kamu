@@ -72,6 +72,8 @@ function create_mp_entry(mp) {
 				if (!('explanation' in json))
 					return;
 				$(this).tooltip({
+					delay: 200,
+					fade: 200,
 					bodyHandler: function() {
 						s = "<h3>" + mp.name + "</h3>";
 						s += "<p>" + json.explanation + "</p>";
