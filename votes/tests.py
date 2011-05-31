@@ -2,6 +2,7 @@
 
 from django.test import TestCase
 from django.core.urlresolvers import reverse
+from django.template.defaultfilters import slugify
 import json
 
 class AutocompleteTestCase(TestCase):
@@ -32,7 +33,7 @@ class AutocompleteTestCase(TestCase):
         self.assertEqual(decoded_res, exp_res, msg=err_msg)
 
 class AutocompleteSearchTest(AutocompleteTestCase):
-    fixtures = ['test_keyword', 'test_session_keyword', 'test_member']
+    fixtures = ['test_keyword', 'test_session', 'test_member']
     req_url = reverse('votes.views.autocomplete_search')
     req_params = {
             u'max_results'      : 6,
@@ -42,35 +43,41 @@ class AutocompleteSearchTest(AutocompleteTestCase):
 
     def setUp(self):
         qpar_str = u'?query='
-        search_kw_url = reverse('votes.views.search_by_keyword') + qpar_str
-        search_mb_url = reverse('votes.views.search') + qpar_str
+
+        def kw_url_res(kw):
+            return reverse(u'votes.views.search_by_keyword') + u'?query=' + kw
+
+        def mb_url_res(mb):
+            return reverse(u'votes.views.show_member',
+                           kwargs={'member':slugify(mb)})
 
         def query_res(name, exp_url):
             return {
                 'name'      : name,
-                'url'       : exp_url + name,
+                'url'       : exp_url,
             }
 
         def kw_res(name):
-            return query_res(name, search_kw_url)
+            return query_res(name, kw_url_res(name))
 
         def mb_res(name):
-            return query_res(name, search_mb_url)
-
-        def query_req(term, exp_url, exp_names):
-            if type(exp_names) is not list:
-                exp_names = [exp_names]
-
-            return {
-                'term'    : term,
-                'exp_res' : [query_res(n, exp_url) for n in exp_names],
-            }
+            return query_res(name, mb_url_res(name))
 
         def kw_req(term, exp_names):
-            return query_req(term, search_kw_url, exp_names)
+            if type(exp_names) is not list:
+                exp_names = [exp_names]
+            return {
+                'term'    : term,
+                'exp_res' : [query_res(n, kw_url_res(n)) for n in exp_names]
+            }
 
         def mb_req(term, exp_names):
-            return query_req(term, search_mb_url, exp_names)
+            if type(exp_names) is not list:
+                exp_names = [exp_names]
+            return {
+                'term'    : term,
+                'exp_res' : [query_res(n, mb_url_res(n)) for n in exp_names]
+            }
 
         def mix_req(term, exp_results):
             return {
@@ -98,8 +105,8 @@ class AutocompleteSearchTest(AutocompleteTestCase):
                                                   u'Ahonen Esko']),
 
                 # keyword queries returning multiple results
-                kw_req('af',                   [u'Afganistan',
-                                                  u'Afrikka']),
+                kw_req('f',                    [u'Finanssivalvonta',
+                                                  u'Fortum']),
 
                 # mixed queries returning both members and keywords
                 mix_req(u'aa',               [mb_res(u'Aaltonen Markus'),
@@ -110,9 +117,9 @@ class AutocompleteSearchTest(AutocompleteTestCase):
                 mix_req(u'',                 [mb_res(u'Aaltonen Markus'),
                                                   kw_res(u'Aasia'),
                                                   kw_res(u'Adoptio'),
-                                                  kw_res(u'Afganistan'),
                                                   kw_res(u'Afrikka'),
-                                                  mb_res(u'Ahde Matti')]),
+                                                  mb_res(u'Ahde Matti'),
+                                                  mb_res(u'Aho Esko')]),
 
                 # query returning nothing
                 mb_req(u'aa ',                []),

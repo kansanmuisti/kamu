@@ -852,13 +852,13 @@ def get_req_param_int(request, param):
         val = 0
     return val
 
-def word_search(data_set, key_name, words, trailing_space):
+def word_search(query_set, key_name, words, trailing_space):
     full_word_cnt = len(words)
 
     if full_word_cnt > 10:
         return None
     if full_word_cnt == 0:
-        return data_set.objects.all().order_by(key_name)
+        return query_set.all().order_by(key_name)
 
     query = Q()
 
@@ -873,7 +873,7 @@ def word_search(data_set, key_name, words, trailing_space):
         re = r'(^| )' + words[-1]
         query &= Q(**{key_name + '__iregex':re})
 
-    return data_set.objects.filter(query).order_by(key_name)
+    return query_set.filter(query).order_by(key_name)
 
 def autocomplete_search(request):
     name = request.GET.get('name', '')
@@ -888,25 +888,26 @@ def autocomplete_search(request):
 
     words = name.split()
     trailing_space = name and name[-1] == ' '
-    members = word_search(Member, 'name', words, trailing_space)
+    members = word_search(Member.objects, 'name', words, trailing_space)
     if members is None:
         return HttpResponseBadRequest()
 
     members = members[:max_results]
 
-    """keywords = word_search(Keyword, 'name', words, trailing_space)
+    keywords = Keyword.objects.filter(session__isnull=False)
+    keywords = word_search(keywords, 'name', words, trailing_space)
     if keywords is None:
         return HttpResponseBadRequest()
-    keywords = keywords.values('name').distinct()[:max_results]"""
+    keywords = keywords.values('name').distinct()[:max_results]
 
     result_list = []
     for x in members:
         tn = DjangoThumbnail(x.photo, (thumbnail_width, thumbnail_height))
         result_list.append((x.name, unicode(tn), x.get_absolute_url()))
 
-    """for x in keywords:
-        result_list.append((x['keyword__name'], "",
-                            "/search/keyword/?query=" + x['keyword__name']))"""
+    for x in keywords:
+        result_list.append((x['name'], "",
+                            "/search/keyword/?query=" + x['name']))
 
     result_list.sort(key=lambda n:n[0])
     result_list = result_list[:max_results]
@@ -923,7 +924,7 @@ def autocomplete_county(request):
         return HttpResponseBadRequest()
 
     trailing_space = name and name[-1] == ' '
-    counties = word_search(County, 'name', name.split(), trailing_space)
+    counties = word_search(County.objects, 'name', name.split(), trailing_space)
     if counties is None:
         return HttpResponseBadRequest()
     counties = counties[:max_results]

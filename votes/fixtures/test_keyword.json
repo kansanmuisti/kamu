@@ -1,86 +1,86 @@
 [
     {
-        "pk": 2870,
-        "model": "votes.keyword",
-        "fields": {
-            "name": "Aalto-yliopisto"
-        }
-    },
-    {
-        "pk": 2871,
+        "pk": 861,
         "model": "votes.keyword",
         "fields": {
             "name": "Aasia"
         }
     },
     {
-        "pk": 2872,
+        "pk": 1287,
         "model": "votes.keyword",
         "fields": {
             "name": "Abortti"
         }
     },
     {
-        "pk": 2873,
+        "pk": 1369,
         "model": "votes.keyword",
         "fields": {
             "name": "Raskaus"
         }
     },
     {
-        "pk": 2874,
+        "pk": 486,
         "model": "votes.keyword",
         "fields": {
             "name": "Adoptio"
         }
     },
     {
-        "pk": 2875,
+        "pk": 508,
         "model": "votes.keyword",
         "fields": {
             "name": "Afganistan"
         }
     },
     {
-        "pk": 2876,
+        "pk": 862,
         "model": "votes.keyword",
         "fields": {
             "name": "Afrikka"
         }
     },
     {
-        "pk": 2877,
-        "model": "votes.keyword",
-        "fields": {
-            "name": "Agenda 2000"
-        }
-    },
-    {
-        "pk": 2878,
+        "pk": 524,
         "model": "votes.keyword",
         "fields": {
             "name": "Ahvenanmaa"
         }
     },
     {
-        "pk": 2879,
+        "pk": 1788,
         "model": "votes.keyword",
         "fields": {
             "name": "Aids"
         }
     },
     {
-        "pk": 2880,
+        "pk": 520,
         "model": "votes.keyword",
         "fields": {
             "name": "Tartuntataudit"
         }
     },
     {
-        "pk": 3074,
+        "pk": 235,
         "model": "votes.keyword",
         "fields": {
             "name": "Asumisen rahoitus- ja kehitt\u00e4miskeskus"
+        }
+    },
+    {
+        "pk": 365,
+        "model": "votes.keyword",
+        "fields": {
+            "name": "Finanssivalvonta"
+        }
+    },
+    {
+        "pk": 1089,
+        "model": "votes.keyword",
+        "fields": {
+            "name": "Fortum"
         }
     }
 ]
