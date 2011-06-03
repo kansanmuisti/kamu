@@ -17,7 +17,11 @@
 {% ifequal section 'main' %}
 {{ content.data }}
 
+
+<div class="tag_cloud">
+    <h1>{% trans "Keywords from the latest votes" %}</h1>
 {% include "tagcloud.html" %}
+</div>
 
 {% if fb_enabled %}
 {% include "_facebook.html" %}

@@ -1471,6 +1471,10 @@ td.party_option_share
 	margin-left:-10px;
 }
 
+#tag_cloud_items a {
+	color: @main_color;
+}
+
 #tag_list li {
 	display:inline-block;
 	margin:0 9px;
