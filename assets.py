@@ -9,7 +9,7 @@ js = Bundle('js/jquery-1.6.1.js', 'js/jquery.cookie.js',
             'js/jquery.example.js', 'js/jquery.tooltip.js',
             'js/jquery.jnotify.js', 'js/ui-uservote.js',
             'js/ui-percentagebar.js', 'js/ui-histogram.js',
-            'js/utils.js',
+            'js/ui-tagcloud.js', 'js/utils.js',
             filters=js_filters, output='gen/packed.js')
 register('js_base', js)
 

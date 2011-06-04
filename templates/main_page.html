@@ -18,9 +18,14 @@
 {% ifequal section 'main' %}
 {{ content.data }}
 
-<div class="tag_cloud">
+<div id="sessions_keyword_tag_cloud" class="tag_cloud">
     <h1>{% trans "Keywords from the latest votes" %}</h1>
-{% include "tagcloud.html" %}
+    <script type="text/javascript">
+        $("#sessions_keyword_tag_cloud").
+            tag_cloud({
+                tags:{{ keyword_tagcloud|safe }}
+            })
+    </script>
 </div>
 
 {% if fb_enabled %}

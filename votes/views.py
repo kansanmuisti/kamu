@@ -1055,7 +1055,7 @@ def about(request, section):
     args['sess_list'] = sess_list
     args['section_name'] = section_name
     args['mp_hall_of_fame'] = mp_hall_of_fame(10)
-    args['keyword_tagcloud'] = tagcloud_keywords(20, 30)
+    args['keyword_tagcloud'] = simplejson.dumps(tagcloud_keywords(20, 30))
     if section == 'feedback':
         return contact_form(request, template_name='main_page.html',
                             extra_context=args)

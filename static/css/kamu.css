@@ -1544,25 +1544,25 @@ div#coalition {
 	margin-top:20px;
 }
 
-#tag_cloud_items {
+.tag_cloud_items {
 	margin-left:-10px;
 }
 
-#tag_cloud_items a {
+.tag_cloud_items a {
 	color: @main_color;
 }
 
-#tag_list li {
+.tag_list li {
 	display:inline-block;
 	margin:0 9px;
 	height:25px;
 }
 
-#tag_list li a {
+.tag_list li a {
 	text-decoration:none;
 }
 
-#tag_list li a:hover {
+.tag_list li a:hover {
 	text-decoration:underline;
 }
 
