@@ -30,6 +30,7 @@ from kamu.cms.models import Item
 from operator import attrgetter
 from sorl.thumbnail.main import DjangoThumbnail
 from votes.views import find_term, find_district
+from django.contrib.csrf.middleware import csrf_exempt
 
 MATCH_PERM = 'opinions.change_questionsessionrelevance'
 LAST_QUESTION_KEY = 'opinions:last_question'
@@ -497,4 +498,125 @@ def show_party_congruences(request, party):
     args['active_page'] = 'opinions'
     args['opinions_page'] = 'party'
     return render_to_response('opinions/show_party_congruences.html', args,
+                              context_instance=RequestContext(request))
+
+import cohesion
+
+coalition_question_list = list(QuestionSource.objects.get(url_name='yle2011').\
+                question_set.all().select_related('source__name'))
+coalition_term = Term.objects.get(name='2011-2014')
+stats_cache = cohesion.cached_all_cabinet_statistics(coalition_question_list, coalition_term)
+
+@csrf_exempt
+@postonly
+def update_coalition(request):
+    if not 'gov_parties[]' in request.POST:
+        request.session['coalition_parties'] = []
+        return HttpResponse(mimetype='application/javascript')
+    party_list = list(Party.objects.all())
+    json = request.POST.getlist('gov_parties[]')
+    if len(json) > len(party_list):
+        raise Http400()
+    gov_list = []
+    for gp in json:
+        for p in party_list:
+            if p.name == gp:
+                gov_list.append(p)
+                break
+        else:
+            raise Http400()
+
+    request.session['coalition_parties'] = gov_list
+
+    q_pk_list = None
+    if 'questions[]' in request.POST:
+        q_list = request.POST.getlist('questions[]')
+        questions = []
+        q_pk_list = []
+        q_names = [str(q) for q in coalition_question_list]
+        for q_name in q_list:
+            if q_name not in q_names:
+                raise Http404()
+            q = coalition_question_list[q_names.index(q_name)]
+            questions.append(q)
+            q_pk_list.append(q.pk)
+
+    cab_stats = stats_cache([p.name for p in gov_list], q_pk_list)
+    chosen_cohesion = cab_stats.cohesion()
+
+    cabinet_cohesions = stats_cache.majority_cohesions(q_pk_list)
+
+    if not q_pk_list:
+        q_pk_list = cab_stats.questions
+        questions = Question.objects.filter(pk__in=cab_stats.questions)
+
+    question_stats = []
+    for q in questions:
+        d = {'id': '%s/%d' % (q.source.url_name, q.order)}
+        d['cohesion'] = round(cab_stats.cohesion(question=q.pk), 4)
+        d['selected'] = q.pk in q_pk_list
+        d['cabinet_answer'] = cab_stats.cabinet_answer(q.pk)
+        question_stats.append(d)
+
+    stats = {}
+    for party in gov_list:
+        stats[party.name] = round(cab_stats.cohesion(party=party.name), 4)
+
+    d = {"party_stats": stats,
+        "question_stats": question_stats,
+        "selected_cohesion": chosen_cohesion,
+        "cabinet_cohesions": cabinet_cohesions}
+    json = simplejson.dumps(d)
+
+    return HttpResponse(json, mimetype='application/javascript')
+
+def display_coalition(request):
+    party_list = list(Party.objects.all())
+    party_json = []
+    term = Term.objects.latest()
+
+    gov_list = request.session.get('coalition_parties', None)
+    if gov_list == None:
+        # six-pack default
+        DEFAULT_PARTIES = ('kok', 'sd', 'vas', 'kd', 'vihr', 'r')
+        gov_list = []
+        for pn in DEFAULT_PARTIES:
+            for p in party_list:
+                if p.name == pn:
+                    gov_list.append(p)
+                    break
+
+    for party in party_list:
+        tn = DjangoThumbnail(party.logo, (38, 38))
+        d = {'id': party.name, 'name': party.full_name}
+        d['logo'] = tn.absolute_url
+        d['logo_dim'] = dict(x=tn.width(), y=tn.height())
+        mp_list = Member.objects.active_in_term(term)
+        seats = mp_list.filter(party=party).count()
+        d['nr_seats'] = seats
+        for gp in gov_list:
+            if party.pk == gp.pk:
+                d['gov'] = True
+                break
+        else:
+            d['gov'] = False
+
+        party_json.append(d)
+
+    q_models = Question.objects.filter(pk__in=stats_cache.questions)
+    q_models = q_models.select_related('source')
+
+    question_json = []
+    for idx, q in enumerate(q_models):
+        name = '%s/%d' % (q.source.url_name, q.order)
+        d = {'id': name, 'text': q.text}
+        d['order'] = idx
+        d['selected'] = True
+        question_json.append(d)
+
+    args = {'party_json': simplejson.dumps(party_json)}
+    args['content'] = Item.objects.retrieve_content('coalition')
+    args['question_json'] = simplejson.dumps(question_json)
+    args['active_page'] = 'opinions'
+    return render_to_response('opinions/coalition.html', args,
                               context_instance=RequestContext(request))

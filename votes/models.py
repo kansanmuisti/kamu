@@ -11,6 +11,8 @@ class TermManager(models.Manager):
         query = Q(begin__lte=date)
         query &= Q(end__isnull=True) | Q(end__gte=date)
         return self.get(query)
+    def latest(self):
+        return self.order_by('-begin')[0]
     def visible(self):
         return self.filter(visible=True)
 

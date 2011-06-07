@@ -17,10 +17,23 @@ class QuestionSource(models.Model):
     def __unicode__(self):
         return self.url_name
 
+class QuestionManager(models.Manager):
+    def get_by_url_name(self, url_name):
+        if not '/' in url_name:
+            raise Question.DoesNotExist()
+        src, order = url_name.split('/')
+        try:
+            order = int(order)
+        except ValueError:
+            raise Question.DoesNotExist()
+        return self.get(order=order, source__url_name=src)
+
 class Question(models.Model):
     text = models.TextField()
     source = models.ForeignKey(QuestionSource)
     order = models.IntegerField()
+
+    objects = QuestionManager()
 
     def save(self, *args, **kwargs):
         if self.order is None:

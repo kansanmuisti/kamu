@@ -1,0 +1,405 @@
+{% extends "base.html" %}
+{% load i18n webdesign assets %}
+{% block title %}{% trans "Government formation" %}{% endblock %}
+
+{% block head %}
+
+{% assets "raphael" %}
+<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
+
+<script>
+"use strict";
+$(function() {
+
+var party_list = {{ party_json|safe }};
+var question_list = {{ question_json|safe }};
+
+function update_faction(target, list, is_gov)
+{
+	var parties = $(".parties", target);
+	var nr_seats = 0;
+
+	for (var i in list) {
+		var party = list[i];
+		var el = party.div;
+		var num_el = $(".number", el);
+
+		el.detach()
+		num_el.hide();
+		parties.append(el);
+		nr_seats += party.nr_seats;
+	}
+	var seats = $(".seats .number", target);
+	seats.text(nr_seats);
+	if (is_gov) {
+		var gradient_opts = {
+			'colors': [[255, 0, 0], [255, 255, 0], [0, 255, 0]],
+			'anchors': [100, 110, 130],
+		};
+		seats.color_gradient(nr_seats, gradient_opts);
+	}
+}
+
+function update_party_stats(stats)
+{
+	var target = $("#government_stats");
+
+	target.empty();
+	for (var i in party_list) {
+		var party = party_list[i];
+		var st, el;
+		var num_el = $(".number", party.div);
+
+		if (!party.gov)
+			continue;
+		st = stats[party.id];
+		if (!st)
+			continue;
+		party.stat = st;
+
+		num_el.text(Math.round(party.stat * 100) + " %");
+		num_el.show();
+	}
+}
+
+function update_histogram(cabinets, selected_cabinet)
+{
+    var data = [];
+    var values = $.map(cabinets, function (c){ return c[0];});
+    var maxc = Math.max.apply(Math, values);
+    var minc = Math.min.apply(Math, values);
+    var nbins = cabinets.length / 2;
+    var stepsize = (maxc-minc)/nbins;
+    var bin_idx = 0;
+    var selected_bin = -1;
+    var selected_item = -1;
+
+    for (var bin = minc + stepsize; bin < maxc; bin += stepsize) {
+        var names = [];
+        var in_bin = $.grep(cabinets, function (c) {
+        	return (c[0] >= bin) && (c[0] < bin+stepsize);
+        });
+        var text;
+        var bin_item_idx = 0;
+        names = $.map(in_bin, function (c) {
+                if (selected_bin == -1 &&
+                    c[1].length == selected_cabinet.length) {
+                out:
+                    for (var i = 0; i < c[1].length; i++) {
+                        for (var j = 0; j < selected_cabinet.length; j++) {
+                            if (c[1][i] == selected_cabinet[j])
+                               break;
+                        }
+                        if (j == selected_cabinet.length)
+                            break;
+                    }
+                    if (i == c[1].length) {
+                        selected_bin = bin_idx;
+                        selected_item = bin_item_idx;
+                    }
+                }
+                bin_item_idx++;
+
+                return [c[1]];
+        });
+        data[bin_idx] = names;
+        bin_idx++;
+    }
+    if (data.length)
+        $("#cabinet_histogram").histogram("update", data, minc * 100,
+                                    maxc * 100, selected_bin, selected_item);
+}
+
+function draw_questions()
+{
+	var target = $("#question_stats");
+	var list;
+
+	target.empty();
+	list = question_list.slice();
+	list.sort(function(a, b) { return a.cohesion - b.cohesion });
+	for (var i in list) {
+		var q = list[i];
+
+		if (!q.selected || (q.cohesion == undefined))
+			continue;
+
+		var el = $("<div>").attr('class', 'question_entry');
+		el.data("question", q);
+		q.div = el;
+		
+		var cohesion = $("<div>").attr('class', 'number');
+		cohesion.append(Math.round(q.cohesion * 100) + "%");
+		el.append(cohesion);
+
+		var q_text = $("<div>").attr('class', 'text');
+		q_text.text(q.text);
+		el.append(q_text);
+
+		var answer_class = 'yes_vote';
+		if (q.cabinet_answer < 0) {
+			answer_class = 'no_vote';
+		}
+		var answer = $("<div>").attr('class', 'cabinet_answer '+answer_class);
+		el.append(answer);
+		el.append("<div style='clear: both'>");
+		target.append(el);
+	}
+}
+
+function update_questions(question_stats)
+{
+	for (var i in question_list) {
+		var q = question_list[i];
+		var st;
+
+		for (var j in question_stats) {
+			st = question_stats[j];
+			if (q.id == st.id)
+				break;
+		}
+		if (!st) {
+			q.cohesion = undefined;
+			q.cabinet_answer = undefined;
+			continue;
+		}
+		q.cohesion = st.cohesion;
+		q.cabinet_answer = st.cabinet_answer;
+	}
+	draw_questions();
+}
+
+function process_stats_response(json, gov_names)
+{
+	var stats = {}, questions = {}, cabinets={};
+	var selected_cohesion;
+	var coh_div;
+
+	if (json) {
+		if ("party_stats" in json)
+			stats = json["party_stats"];
+		if ("question_stats" in json)
+			questions = json["question_stats"];
+		if ("cabinet_cohesions" in json)
+			cabinets = json["cabinet_cohesions"];
+		if ("selected_cohesion" in json) {
+			selected_cohesion = json["selected_cohesion"];
+		}
+	}
+	var coh_div = $("#government .cohesion");
+	if (selected_cohesion != undefined) {
+		var coh_num = $(".number", coh_div);
+		coh_num.text(Math.round(selected_cohesion * 100) + " %");
+		coh_div.show();
+	} else
+		coh_div.hide();
+
+	update_party_stats(stats);
+	update_questions(questions);
+	update_histogram(cabinets, gov_names);
+}
+
+function redraw_parties(is_update)
+{
+	var gov_list = [], opp_list = [], gov_names = [];
+	var list, ajax_args;
+
+	for (var i in party_list) {
+		var party = party_list[i];
+		if (party.gov)
+			gov_list.push(party);
+		else
+			opp_list.push(party);
+	}
+
+	gov_list.sort(function(b, a) { return a.nr_seats - b.nr_seats });
+	opp_list.sort(function(b, a) { return a.nr_seats - b.nr_seats });
+	target = $("#government");
+	update_faction(target, gov_list, true);
+	target = $("#opposition");
+	update_faction(target, opp_list);
+
+	gov_names = [];
+	$.map(gov_list, function(p) { gov_names.push(p.id) });
+
+	var q_names = [];
+	$.map(question_list, function(q) { if (q.selected) q_names.push(q.id) });
+	ajax_args = {'gov_parties': gov_names, 'questions': q_names};
+	$.ajax({
+		type: "POST",
+		url: "{% url opinions.views.update_coalition %}",
+		data: ajax_args,
+		dataType: "json",
+        	success: function(json) { process_stats_response(json, gov_names) },
+	});
+}
+
+for (var i in party_list) {
+	var party = party_list[i];
+	var el, logo, target;
+
+	el = $("<div>").attr({
+		"class": "party",
+		id: "party_" + party.id,
+	});
+
+	var logo_div = $("<div>").attr({
+		"class": "party_logo",
+		title: party.name
+	});
+	logo_div.height(45);
+	logo_div.disableSelection();
+	el.append(logo_div);
+	logo = $("<img>").attr({src: party.logo});
+	logo.width(party.logo_dim.x);
+	logo.height(party.logo_dim.y);
+	logo_div.append(logo);
+	logo.vAlign();
+
+	var num_el = $("<div>").attr('class', 'number');
+	num_el.css("font-size", "100%");
+	el.append(num_el);
+
+	el.data('party', party);
+	el.click(function() {
+		var el = $(this);
+		var party = el.data('party');
+
+		party.gov = !party.gov;
+		redraw_parties();
+	});
+	party.div = el;
+}
+
+function cabinet_tooltip_handler(cabinet)
+{
+    var s = "<div style='background-color:white; padding:0'>";
+
+    var party_dict = [];
+    var cabinet_parties = [];
+
+    $.map(party_list, function(p) { party_dict[p.id] = p; });
+    cabinet_parties = $.map(cabinet, function(pid) {
+        return party_dict[pid];
+    });
+	cabinet_parties.sort(function(b, a) { return a.nr_seats - b.nr_seats });
+    $.map(cabinet_parties, function(p) {
+         s = s + "<img class='cabinet_tooltip_logo' src=";
+         s = s + p.logo + "></img>";
+    });
+
+    s = s + "</div>"
+
+    return s;
+}
+
+function cabinet_click_handler(event, cabinet)
+{
+    for (var pid in party_list) {
+        var p = party_list[pid];
+        p.gov = !!$.grep(cabinet, function(cab_pid) {
+            console.log(cab_pid, p.id, cab_pid == p.id);
+            return p.id == cab_pid;
+        }).length;
+    }
+
+    redraw_parties();
+}
+
+$("#cabinet_histogram").
+    histogram({
+        "selected_color":"#00FF00",
+        "tooltip_handler":cabinet_tooltip_handler,
+        "click_handler":cabinet_click_handler,
+    });
+
+redraw_parties();
+
+var el = $("#modify_questions");
+el.click(function() {
+	var title = '{% trans "Choose which questions to use" %}';
+	var dialog_div = $("#question_selector");
+	var list_div = $("#question_list", dialog_div);
+
+	function redraw_questions() {
+		list_div.empty();
+		function draw_button(el, q) {
+			var icon;
+
+			if (q.selected)
+				icon = "ui-icon-plus";
+			else
+				icon = "ui-icon-minus";
+			el.button({
+				icons: {primary: icon}, 
+				text: false
+			});
+		}
+
+		for (var i in question_list) {
+			var q = question_list[i];
+			var div, text_el, button_td, button_el;
+
+			div = $("<tr style='clear: both; margin-bottom: 8px; height: 4em;'>");
+			button_td = $("<td style='vertical-align: middle'>");
+			button_el = $("<div>").height(16).width(16).data("question", q);
+			button_el.click(function() {
+				var q = $(this).data("question");
+
+				q.selected = !q.selected;
+				draw_button($(this), q);
+				redraw_parties();
+			});
+			draw_button(button_el, q);
+			button_td.append(button_el);
+			div.append(button_td);
+			text_el = $("<td style='padding-left: 8px'>").text(q.text);
+			div.append(text_el);
+			list_div.append(div);
+		}
+	}
+	redraw_questions();
+
+	dialog_div.dialog({height: 400, width: 450, title: title});
+});
+
+});
+</script>
+{% endblock %}
+
+{% block content %}
+{{ content.data }}
+
+<div id="coalition">
+
+<div class="party_selector" id="government">
+  <span style="font-size: 120%">{% trans "Cabinet" %}</span>
+  <div class="parties"></div>
+  <div style="clear: both"></div>
+  <div class="seats"><div class="label">{% trans "Seats" %}:</div> <div class="number"></div></div>
+  <div style="clear: both" class="cohesion"><div class="label">{% trans "Cohesion" %}:</div> <div class="number"></div></div>
+</div>
+<div class="party_selector" id="opposition">
+  <span style="font-size: 120%">{% trans "Opposition" %}</span>
+  <div class="parties"></div>
+  <div style="clear: both"></div>
+  <div class="seats"><div class="label">{% trans "Seats" %}:</div> <div class="number"></div></div>
+</div>
+<div style="clear: both"></div>
+
+<div id="cabinet_histogram" style="width: 80%; height: 190px"></div>
+
+<h2 style="margin-top: 32px">{% trans "Questions" %}</h2>
+<div class="action_link" href="" id="modify_questions">{% trans "(modify)" %}</div>
+
+<div id="question_stats">
+</div>
+
+<div style="display: none" id="question_selector">
+  <table id="question_list"></table>
+</div>
+
+</div>
+{% endblock %}
+

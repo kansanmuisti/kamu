@@ -947,12 +947,12 @@ div#list_orgs {
 {
 	font-weight: bold;
 	color: @main_color;
-    padding-right: 14em;
+	padding-right: 14em;
 }
 
 .question a
 {
-    color: inherit;
+	color: inherit;
 }
 
 .question .source
@@ -1442,6 +1442,83 @@ td.party_option_share
     float: left;
 }
 
+div#coalition {
+	margin-top: 32px;
+}
+
+#coalition .party_selector {
+	float: left;
+	width: 50%;
+}
+
+#coalition .party_selector .parties {
+	margin-top: 8px;
+	min-height: 80px;
+}
+
+#coalition .party_selector .label {
+	float: left;
+	width: 120px;
+	padding-top: 18px;
+}
+
+#coalition .party_selector .number {
+	float: left;
+	font-size: 32px;
+}
+
+#coalition .party_selector .party {
+	width: 40px;
+	height: 80px;
+	margin-right: 8px;
+	float: left;
+	text-align: center;
+	cursor: pointer;
+}
+
+#coalition #question_stats
+{
+	margin-top: 16px;
+	clear: both;
+}
+
+#coalition #question_stats .question_entry
+{
+	clear: both;
+	margin-bottom: 16px;
+}
+
+#coalition #question_stats .question_entry .number
+{
+	font-size: 20px;
+	color: black;
+	padding-right: 4px;
+	float: left;
+	text-align: right;
+	width: 64px;
+}
+
+#coalition #question_stats .question_entry .cabinet_answer
+{
+    float: left;
+}
+
+#coalition #question_stats .question_entry .text
+{
+	color: @main_color;
+	float: left;
+	font-weight: bold;
+	width: 480px;
+	padding-right: 16px;
+    padding-left: 16px;
+}
+
+#coalition #question_stats .question_entry .remove_button
+{
+	cursor: pointer;
+	display: none;
+}
+
 /*
  * jNotify
  */
@@ -1531,6 +1608,11 @@ td.party_option_share
 #mp_cong_show_full.disabled,
 #mp_cong_show_short.disabled {
 	color:gray;
+}
+
+.cabinet_tooltip_logo {
+	margin:5px;
+	vertical-align:middle;
 }
 
 .no_result_text {
