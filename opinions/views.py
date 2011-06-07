@@ -508,13 +508,19 @@ coalition_term = Term.objects.get(name='2011-2014')
 stats_cache = cohesion.cached_all_cabinet_statistics(coalition_question_list, coalition_term)
 
 @csrf_exempt
-@postonly
 def update_coalition(request):
-    if not 'gov_parties[]' in request.POST:
+    try:
+        post = request.POST
+        if not post:
+            raise Http400()
+    except IOError:
+        raise Http400()
+
+    if not 'gov_parties[]' in post:
         request.session['coalition_parties'] = []
         return HttpResponse(mimetype='application/javascript')
     party_list = list(Party.objects.all())
-    json = request.POST.getlist('gov_parties[]')
+    json = post.getlist('gov_parties[]')
     if len(json) > len(party_list):
         raise Http400()
     gov_list = []
@@ -529,8 +535,8 @@ def update_coalition(request):
     request.session['coalition_parties'] = gov_list
 
     q_pk_list = None
-    if 'questions[]' in request.POST:
-        q_list = request.POST.getlist('questions[]')
+    if 'questions[]' in post:
+        q_list = post.getlist('questions[]')
         questions = []
         q_pk_list = []
         q_names = [str(q) for q in coalition_question_list]
