@@ -3,7 +3,9 @@
 {% block title %}{% trans "Government formation" %}{% endblock %}
 
 {% block head %}
-
+{% if fb_enabled %}
+    <meta property="og:image" content="http://{{ fb_host }}/static/images/kamu.png" />
+{% endif %}
 {% assets "raphael" %}
 <script type="text/javascript" src="{{ ASSET_URL }}"></script>
 {% endassets %}
@@ -299,7 +301,6 @@ function cabinet_click_handler(event, cabinet)
     for (var pid in party_list) {
         var p = party_list[pid];
         p.gov = !!$.grep(cabinet, function(cab_pid) {
-            console.log(cab_pid, p.id, cab_pid == p.id);
             return p.id == cab_pid;
         }).length;
     }
@@ -369,6 +370,15 @@ el.click(function() {
 {% endblock %}
 
 {% block content %}
+
+{% if fb_enabled %}
+{% include "_facebook.html" %}
+<div style='float: right; margin-right: -5px'>
+    <fb:send href="http://{{ fb_host }}{{ request.get_full_path }}" font="verdana"></fb:send>
+    <fb:like href="http://www.facebook.com/kansanmuisti" send="false" layout="button_count" width="120" show_faces="false" font="verdana"></fb:like>
+</div>
+{% endif %}
+
 {{ content.data }}
 
 <div id="coalition">
