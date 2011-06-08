@@ -84,6 +84,9 @@ class Newsitem(Item):
         index = 1 # hardcode for now
         return ('cms.views.render_news', (), {'date': date, 'index': index})
 
+    def __unicode__(self):
+        return "News for %s" % self.date
+
     class Meta:
         ordering = ['-date']
 
@@ -92,6 +95,12 @@ class Content(models.Model):
     language = models.CharField(max_length=10)
 
     # FIXME: Sanity check language
+
+    def get_latest_revision(self):
+        latest = self.revision_set.all()[0:1]
+        if not latest:
+            return None
+        return latest[0]
 
     def __unicode__(self):
         revision = self.revision_set.order_by('-date')

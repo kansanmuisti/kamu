@@ -5,7 +5,7 @@
 import sys
 import os
 import codecs
-#from optparse import OptionParser
+from datetime import datetime
 
 from django.core.management import setup_environ
 
@@ -27,7 +27,7 @@ from django import db
 
 from kamu.cms.models import Category, Newsitem, Item, Content, Revision
 
-def process_file(root, filename, category_name, type):
+def process_file(root, filename, category_name, mu_type):
     print "Processing file %s" % os.path.join(root, filename)
 
     #Special case for newsitems
@@ -63,16 +63,22 @@ def process_file(root, filename, category_name, type):
         else:
             item = item[0]
 
+    full_fname = os.path.join(root, filename)
+
     content = Content.objects.filter(item=item, language=language)
     if content.count() == 0:
         print "Creating content for item %s with lang %s" % (item, language)
         content = Content(item=item, language=language)
         content.save()
     else:
-        # FIXME: Compare Revision date to file mtime.
-        return
+        content = content[0]
+        revision = content.get_latest_revision()
+        mtime = datetime.fromtimestamp(os.path.getmtime(full_fname))
+        if revision and revision.date >= mtime:
+            print "\tSkipping based on file mtime"
+            return
 
-    f = codecs.open(os.path.join(root, filename), mode="r", encoding="utf8")
+    f = codecs.open(full_fname, mode="r", encoding="utf8")
 
     if category_name == "news":
         # Newsfiles contain the subject as first line
@@ -95,7 +101,9 @@ def process_file(root, filename, category_name, type):
         content_data += data
     content_data = content_data.strip()
 
-    revision = Revision(content=content, subject=subject, summary=summary, summary_markup_type=type, data=content_data, data_markup_type=type)
+    revision = Revision(content=content, subject=subject, summary=summary,
+                        summary_markup_type=mu_type, data=content_data,
+                        data_markup_type=mu_type)
     revision.save()
     print "Prepared revision %s" % revision
 
@@ -109,11 +117,11 @@ for root, dirs, files in os.walk(content_path):
     language = tail
 
     for filename in files:
-        (category_name, type) = os.path.splitext(filename)
-        type = type[1:]
+        (category_name, mu_type) = os.path.splitext(filename)
+        mu_type = mu_type[1:]
 
-        if type not in allowed_markups:
+        if mu_type not in allowed_markups:
             print "Ignoring file %s" % filename
             continue
 
-        process_file(root, filename, category_name, type)
+        process_file(root, filename, category_name, mu_type)
