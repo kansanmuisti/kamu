@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-07 03:07+0300\n"
+"POT-Creation-Date: 2011-06-08 23:47+0300\n"
 "PO-Revision-Date: 2011-04-14 12:54+0300\n"
 "Last-Translator: Juha Yrjölä <juha.yrjola@iki.fi>\n"
 "Language-Team: Finnish <info@kansanmuisti.fi>\n"
@@ -587,7 +587,7 @@ msgstr ""
 "  <p>Kiitos, että olet kiinnostunut Kamusta. Otamme pian yhteyttä.</p>\n"
 "  "
 
-#: templates/full_news.html:4 templates/main_page.html:86
+#: templates/full_news.html:4 templates/main_page.html:93
 msgid "News"
 msgstr "Uutiset"
 
@@ -649,15 +649,19 @@ msgstr "Etusivu"
 msgid "Background"
 msgstr "Taustaa"
 
-#: templates/main_page.html:9 votes/views.py:1041
+#: templates/main_page.html:9 votes/views.py:1042
+msgid "Rules"
+msgstr "Säännöt"
+
+#: templates/main_page.html:10 votes/views.py:1045
 msgid "Feedback"
 msgstr "Palaute"
 
-#: templates/main_page.html:10 votes/views.py:1038
+#: templates/main_page.html:11 votes/views.py:1038
 msgid "Donate"
 msgstr "Lahjoita"
 
-#: templates/main_page.html:11 votes/views.py:1035
+#: templates/main_page.html:12 votes/views.py:1035
 msgid "Contact"
 msgstr "Yhteystiedot"
 
@@ -665,11 +669,11 @@ msgstr "Yhteystiedot"
 msgid "Keywords from the latest votes"
 msgstr "Uusimpien äänestysten asiasanat"
 
-#: templates/main_page.html:43
+#: templates/main_page.html:49
 msgid "Leave us feedback"
 msgstr "Jätä palautetta"
 
-#: templates/main_page.html:44
+#: templates/main_page.html:50
 msgid ""
 "Please report any errors you find, send us your ideas for improvement, "
 "volunteer for work, or just say hi."
@@ -677,15 +681,15 @@ msgstr ""
 "Raportoi meille löytämistäsi virheistä sivustolla, lähetä ideoitasi "
 "jatkokehitystä varten, tarjoa apuasi tai jätä muuta palautetta."
 
-#: templates/main_page.html:49
+#: templates/main_page.html:55
 msgid "Send"
 msgstr "Lähetä"
 
-#: templates/main_page.html:62
+#: templates/main_page.html:69
 msgid "Most popular"
 msgstr "Suosituimmat"
 
-#: templates/main_page.html:101
+#: templates/main_page.html:108
 msgid "Latest votes"
 msgstr "Uusimmat äänestykset"
 
@@ -1081,32 +1085,32 @@ msgstr "Lähetä"
 msgid "Government formation"
 msgstr "Hallitusneuvottelu"
 
-#: templates/opinions/coalition.html:294
+#: templates/opinions/coalition.html:322
 msgid "Choose which questions to use"
 msgstr "Valitse käytettävät kysymykset"
 
-#: templates/opinions/coalition.html:350
+#: templates/opinions/coalition.html:387
 msgid "Cabinet"
 msgstr "Hallitus"
 
-#: templates/opinions/coalition.html:353 templates/opinions/coalition.html:360
+#: templates/opinions/coalition.html:390 templates/opinions/coalition.html:397
 msgid "Seats"
 msgstr "Paikkamäärä"
 
-#: templates/opinions/coalition.html:354
+#: templates/opinions/coalition.html:391
 msgid "Cohesion"
 msgstr "Yhtenäisyys"
 
-#: templates/opinions/coalition.html:357
+#: templates/opinions/coalition.html:394
 msgid "Opposition"
 msgstr "Oppositio"
 
-#: templates/opinions/coalition.html:366
+#: templates/opinions/coalition.html:403
 #: templates/opinions/promise_statistics_sidebar.html:10
 msgid "Questions"
 msgstr "Kysymykset"
 
-#: templates/opinions/coalition.html:367
+#: templates/opinions/coalition.html:404
 msgid "(modify)"
 msgstr "(muokkaa)"
 

@@ -1618,3 +1618,26 @@ div#coalition {
 .no_result_text {
 	font-style:italic;
 }
+
+#org_rules {
+	ol, ul {
+		margin-left: 32px;
+		list-style-position: outside;
+		ol li {
+			margin-bottom: 2px;
+		}
+		ul li {
+			margin-bottom: 2px;
+		}
+		ol, ul {
+			margin-bottom: 8px;
+		}
+	}
+	ul {
+		list-style-type: disc;
+	}
+	li {
+		margin-bottom: 8px;
+	}
+}
+

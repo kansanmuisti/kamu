@@ -6,17 +6,17 @@
 {% block sidebar %}
 <p><a class="action_link{% ifequal section 'main' %} action_link_active{% endifequal %}" href="{% url votes.views.about section='main' %}">{% trans "Main page" %}</a></p>
 <p><a class="action_link{% ifequal section 'background' %} action_link_active{% endifequal %}" href="{% url votes.views.about section='background' %}">{% trans "Background" %}</a></p>
+<p><a class="action_link{% ifequal section 'rules' %} action_link_active{% endifequal %}" href="{% url votes.views.about section='rules' %}">{% trans "Rules" %}</a></p>
 <p><a class="action_link{% ifequal section 'feedback' %} action_link_active{% endifequal %}" href="/contact/">{% trans "Feedback" %}</a></p>
 <p><a class="action_link{% ifequal section 'donate' %} action_link_active{% endifequal %}" href="{% url votes.views.about section='donate' %}">{% trans "Donate" %}</a></p>
 <p><a class="action_link{% ifequal section 'contact' %} action_link_active{% endifequal %}" href="{% url votes.views.about section='contact' %}">{% trans "Contact" %}</a></p>
 {% endblock %}
 
 {% block content %}
-<div class="main_col">
+<div{% if not full_length_main %} class="main_col"{% endif %}>
 
 {% ifequal section 'main' %}
 {{ content.data }}
-
 
 <div class="tag_cloud">
     <h1>{% trans "Keywords from the latest votes" %}</h1>
@@ -39,6 +39,12 @@
 {{ content.data }}
 {% endifequal %}
 
+{% ifequal section 'rules' %}
+<div id="org_rules">
+{{ content.data }}
+</div>
+{% endifequal %}
+
 {% ifequal section 'feedback' %}
   <h1>{% trans "Leave us feedback" %}</h1>
   <p>{% blocktrans %}Please report any errors you find, send us your ideas for improvement, volunteer for work, or just say hi.{% endblocktrans %}</p>
@@ -56,6 +62,7 @@
 
 </div>
 
+{% if not full_length_main %}
 <div id="news_col">
 
 <div class="news_items">
@@ -109,6 +116,7 @@
 </div>
 
 </div>
+{% endif %}
 
 {% endblock %}
 
