@@ -12,15 +12,14 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-#DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-#DATABASE_NAME = os.path.join(os.path.dirname(__file__), 'kamu.db')
-
-DATABASE_ENGINE = 'mysql'
-DATABASE_NAME = 'kamu'
-DATABASE_USER = 'kamu'
-DATABASE_PASSWORD = 'kamu'
-DATABASE_HOST = ''
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'kamu',
+        'USER': 'kamu',
+        'PASSWORD': 'kamu'
+    }
+}
 
 DJAPIAN_DATABASE_PATH = os.path.dirname(__file__) + '/djapian/'
 
@@ -35,6 +34,10 @@ TIME_ZONE = 'Europe/Helsinki'
 LANGUAGES_EXT=(('en', 'English', 'in English'),
                ('fi', 'Finnish', 'suomeksi'))
 LANGUAGES=[(l[0], l[1]) for l in LANGUAGES_EXT]
+
+LOCALE_PATHS = (
+    os.path.dirname(__file__) + '/locale'
+)
 
 # http://www.i18nguy.com/unicode/language-identifiers.html
 #LANGUAGE_CODE = 'en-us'
