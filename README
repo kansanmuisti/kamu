@@ -15,6 +15,7 @@ Dependencies
 - python-django-south
 - python-cssutils
 - libnode-less
+- python-numpy
 
 LESS (CSS extension)
 ====================
