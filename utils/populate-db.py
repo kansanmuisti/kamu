@@ -108,6 +108,8 @@ def process_parties(db_insert):
     party_list = parser.get_list()
     parser = party_info_parser.Parser()
     for party in party_list:
+        if party['name'] == 'vr':
+            continue
         s = http_cache.open_url(party_url_base + party['info_link'], 'party')
         parser.reset()
         parser.feed(s)
