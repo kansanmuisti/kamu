@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.conf.urls.defaults import *
 from django.conf import settings
 from kamu.users.views import login, logout
@@ -96,6 +98,9 @@ urlpatterns += patterns('opinions.views',
     url(r'^opinions/portugal-vote/$', 'show_question_session',
         {'source': 'yle2011', 'question': 0, 'vote_name': 'Portugalin tukipaketti',
          'plsess': '10-2011', 'session': 3}),
+    url(r'^opinions/errv/$', 'show_question_session',
+        {'source': 'yle2011', 'question': 0, 'vote_name': 'Euroopan rahoitusvakausvälineen takausmäärän korottaminen',
+         'plsess': '42-2011', 'session': 1}),
 
     url(r'^opinions/coalition/$', 'display_coalition'),
     url(r'^opinions/coalition/update/$', 'update_coalition'),
