@@ -266,6 +266,8 @@ def process_mops(party_list, update=False, db_insert=False):
                 end = None
             else:
                 end = assoc['end']
+            if assoc['name'] == 'vr':
+                assoc['name'] = 'vas'
             party = Party.objects.get(name=assoc['name'])
             pa = PartyAssociation()
             pa.member = member
