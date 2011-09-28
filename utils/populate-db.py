@@ -681,7 +681,7 @@ def insert_minutes(minutes):
 
 
 OK_UNKNOWNS = ['Alexander Stubb', u'Petri J\u00e4\u00e4skel\u00e4inen',
-               'Jaakko Jonkka', 'Riitta-Leena Paunio']
+               'Jaakko Jonkka', 'Riitta-Leena Paunio', 'Mikko Puumalainen']
 
 
 def insert_discussion(full_update, pl_sess, disc, dsc_nr, members):
