@@ -4,6 +4,7 @@ from django.core.management import setup_environ
 import sys
 import os
 import operator
+import logging
 
 sys.path.append(os.path.dirname(__file__) + '/../..')
 sys.path.append(os.path.dirname(__file__) + '/..')
@@ -36,8 +37,13 @@ def process_votes(pl, ml, sess):
     # Tally votes
     votes = list(Vote.objects.filter(session=sess))
     for vote in votes:
-        party = pl[vote.party]
+        if vote.member_id not in ml:
+            logger.error("Member %d not found" % vote.member_id)
         member = ml[vote.member_id]
+        if vote.party not in pl:
+            logger.warning("%s: Party '%s' not found" %
+                         (unicode(vote), vote.party))
+        party = pl[member.party.name]
         party.vote_count[vote.vote] += 1
         total_count[vote.vote] += 1
         # Count total votes
@@ -61,7 +67,7 @@ def process_votes(pl, ml, sess):
             member.party_agree = { True: 0, False: 0 }
             member.session_agree = { True: 0, False: 0 }
 
-        party = pl[vote.party]
+        party = pl[member.party.name]
 
         if vote.vote != 'Y' and vote.vote != 'N':
             continue
@@ -127,11 +133,24 @@ def update_stats(party_list, member_list, begin, end):
         ms.statement_count = query.count()
         ms.save()
 
+
+def init_logging():
+    logger = logging.getLogger("calculate_stats")
+    logger.setLevel(logging.DEBUG)
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.DEBUG)
+    formatter = logging.Formatter("%(asctime)s - %(message)s")
+    ch.setFormatter(formatter)
+    logger.addHandler(ch)
+    return logger
+
+logger = init_logging()
+
 for term in Term.objects.all():
     (begin, end) = (term.begin, term.end)
     print "%s to %s" % (begin, end)
 
-    member_list = Member.objects.active_in(term.begin, term.end)
+    member_list = Member.objects.active_in(term.begin, term.end).select_related('party')
     party_list = Party.objects.all()
     tally_votes(party_list, member_list, begin, end)
     update_stats(party_list, member_list, begin, end)
