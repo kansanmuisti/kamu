@@ -664,7 +664,9 @@ def process_session_kws():
         for link in vote_links:
             nr = vote_links.index(link)
 
-def insert_minutes(minutes):
+def insert_minutes(minutes, mins):
+    if mins is not None:
+        mins.delete()
     mins = None
     try:
         pl_sess = PlenarySession.objects.get(name=minutes['id'])
@@ -766,8 +768,9 @@ def process_minutes(full_update):
                 if not full_update:
                     return
             except Minutes.DoesNotExist:
+                mins = None
                 pass
-            pl_sess = insert_minutes(minutes)
+            pl_sess = insert_minutes(minutes, mins)
             try:
                 for l in minutes['cnv_links']:
                     print l
@@ -782,7 +785,7 @@ def process_minutes(full_update):
                 raise
             transaction.commit()
             db.reset_queries()
-            if until_pl and link['plsess'] == until_pl:
+            if until_pl and info['id'] == until_pl:
                 stop_after = until_pl
 
 
