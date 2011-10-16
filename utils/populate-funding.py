@@ -30,7 +30,7 @@ import funding_2007, funding_2011
 parser = OptionParser()
 parser.add_option('--f2007', action='store', type='string', dest='f2007',
                   help='parse 2007 funding from supplied file')
-parser.add_option('--f2011', action='store_true', dest='f2011',
+parser.add_option('--f2011', action='store', type='string', dest='f2011',
                   help='parse 2011 funding')
 parser.add_option('--cache', action='store', type='string', dest='cache',
                   help='use cache in directory CACHE')
@@ -42,4 +42,4 @@ if opts.cache:
 if opts.f2007:
     funding_2007.parse(opts.f2007)
 if opts.f2011:
-    funding_2011.parse()
+    funding_2011.parse(opts.f2011)

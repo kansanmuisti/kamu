@@ -1,14 +1,9 @@
-import re
-from lxml import etree, html
+import csv
 import http_cache, parse_tools
 from votes.models import Member, TermMember, Term, MemberStats
 
-URL_BASE='http://www.puoluerahoitusvalvonta.fi/fi/index/vaalirahailmoituksia/ilmoituslistaus/EV2011/%02d.html'
-
 TERM="2011-2014"
 term = Term.objects.get(name=TERM)
-
-mp_count = 0
 
 def process_mp(mp, url):
     tm = TermMember.objects.filter(member=mp, term=term)
@@ -84,7 +79,54 @@ def process_district(district):
             assert link
             process_mp(mp, link)
 
-def parse():
-    for district in range(1, 16):
-        process_district(district)
-    print "Funding data found for %d MPs" % mp_count
+def parse(input_file):
+    mp_list = Member.objects.active_in_term(term)
+    mp_dict = {}
+    for mp in mp_list:
+        mp_dict[mp.name] = mp
+        mp.found = False
+    f = open(input_file, 'r')
+    reader = csv.reader(f, delimiter=';', quotechar="'")
+    reader.next() # skip header
+    for row in reader:
+        first_names = row[0].strip(" '").decode('utf8').split(' ')
+        last_name = row[1].strip(" '").decode('utf8')
+        last_name = unicode(last_name).replace(u'&eacute;', u'\u00e9')
+        name = '%s %s' % (last_name, first_names[0])
+        name = parse_tools.fix_mp_name(name)
+        try:
+            member = mp_dict[name]
+        except KeyError:
+#            print "MP '%s' not found" % name
+            continue
+        member.found = True
+        funding = float(row[6].replace(',', '.'))
+        print "%30s: %.2f" % (unicode(member), funding)
+        ms = MemberStats.objects.get(begin=term.begin, end=term.end, member=member)
+        ms.election_budget = funding
+        ms.save()
+#        print unicode(member)
+    for mp in mp_list:
+        if mp.found:
+            continue
+        print "Funding data for MP '%s' not found" % unicode(mp)
+
+        """budget = row[4].strip().replace(',', '')
+        name = "%s %s" % (last_name, first_name)
+        name = parse_tools.fix_mp_name(name)
+        print "%-20s %-20s %10s" % (first_name, last_name, budget)
+        try:
+            member = Member.objects.get(name=name)
+            tm = TermMember.objects.get(member=member, term=term)
+        except Member.DoesNotExist:
+            continue
+        except TermMember.DoesNotExist:
+            continue
+        ms = MemberStats.objects.get(begin=term.begin, end=term.end, member=member)
+        tm.election_budget = budget
+        tm.save()
+        ms.election_budget = budget
+        ms.save()"""
+    f.close()
+
+
