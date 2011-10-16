@@ -53,7 +53,7 @@ from_pl = None
 TERM_DASH = u'\u2013'
 TERMS = [
     {'display_name': '2011'+TERM_DASH+'2014', 'begin': '2011-04-20', 'end': None,
-     'name': '2011-2014', 'visible': False},
+     'name': '2011-2014'},
     {'display_name': '2007'+TERM_DASH+'2010', 'begin': '2007-03-21', 'end': '2011-04-19',
      'name': '2007-2010'},
     {'display_name': '2003'+TERM_DASH+'2006', 'begin': '2003-03-19', 'end': '2007-03-20',
