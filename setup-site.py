@@ -1,6 +1,9 @@
 #!/usr/bin/python
 
-import os
+import os, subprocess
+
+print "Running pip..."
+subprocess.call("pip install -r requirements.txt", shell=True)
 
 import settings
 
@@ -17,3 +20,6 @@ for path in all_paths:
     except OSError:
         pass
 
+if not hasattr(settings, 'LESS_PATH') or not os.access(settings.LESS_PATH, os.X_OK):
+    print "LESS_PATH is not set correctly in settings_local.py."
+    print "Make sure it points to a working lessc binary."

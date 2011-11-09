@@ -1,49 +1,58 @@
 Dependencies
 ============
-- python-django (>= 1.2.3)
-- python-lxml
-- python-django-djapian
-- python-mysqldb
+- virtualenvwrapper
 - python-imaging
+- python-lxml
+- python-mysqldb *or* python-psycopg2
 - gettext
-- django-tagging (python-django-tagging on Debian/Ubuntu)
-- python-markdown
-- python-beautifulsoup
-- python-dateutil
-- python-feedparser
-- python-simplejson
-- python-django-south
-- python-cssutils
 - libnode-less
 - python-numpy
+- subversion
+- git
 
 LESS (CSS extension)
 ====================
-# apt-get install rubygems1.8
+
+If you don't have the libnode-less package, you need to install less
+manually:
+
+# apt-get install rubygems1.8 ruby1.8
 # gem install less
 
 Define the path to the lessc binary in settings_local.py, e.g.:
 LESS_PATH='/var/lib/gems/1.8/gems/less-1.2.21/bin/lessc'
 
-mkdir
-=====
-static/images/parties
-static/images/orgs
-static/images/users
-static/tmp
-
 Commands
 ========
-$ ./manage.py compilemessages
-$ ./manage.py index --rebuild
-$ utils/populate-db.py -p
-$ utils/populate-db.py -m
-$ utils/populate-db.py -v --full-update
-$ utils/populate-db.py -M --full-update
-$ utils/populate-db.py -c
 
-SQL
-===
+First, you need to install the .deb dependencies. You can do that by running
+(as root) setup-root.sh.
+
+If you just installed virtualenvwrapper, you need to logout and login for
+the new bash aliases to kick in.
+
+virtualenv
+----------
+$ mkvirtualenv kamu
+$ workon kamu
+$ python setup-site.py
+
+
+Postgres
+========
+
+$ su - postgres
+$ psql
+CREATE USER kamu WITH PASSWORD 'kamu';
+CREATE DATABASE kamu ENCODING 'utf-8' OWNER kamu;
+
+In order to use Postgres, you need to set the right database backend in
+settings_local.py. You can do that by copying the DATABASES setting from
+settings.py and setting the value of ENGINE to
+'django.db.backends.postgresql_psycopq2'.
+
+MySQL
+=====
 
 CREATE DATABASE kamu CHARACTER SET utf8 COLLATE utf8_swedish_ci;
 CREATE USER 'kamu'@'localhost' IDENTIFIED BY 'kamu';
@@ -60,6 +69,20 @@ for a in $(cat /tmp/tables) ; do
 	ALT="alter table $a convert to character set utf8 collate utf8_swedish_ci"
 	echo $ALT | ./manage.py dbshell
 done
+
+The rest
+========
+
+First test your DB connection by:
+$ python manage.py dbshell
+
+If everything goes well, you're ready to download and install the initial
+contents:
+$ ./setup-db.sh
+
+$ ./manage.py compilemessages	# create the compiled locale files
+$ ./manage.py index --rebuild	# generate the search index
+
 
 Unit testing
 ============
@@ -95,4 +118,3 @@ optionally migrate also all other kamu applications besides 'votes' that
 you want to test.
 
 Then run the tests normally as described above.
-
