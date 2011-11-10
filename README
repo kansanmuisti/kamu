@@ -3,6 +3,7 @@ Dependencies
 - virtualenvwrapper
 - python-imaging
 - python-lxml
+- mysql-server or postgresql
 - python-mysqldb *or* python-psycopg2
 - gettext
 - libnode-less
@@ -80,8 +81,8 @@ If everything goes well, you're ready to download and install the initial
 contents:
 $ ./setup-db.sh
 
-$ ./manage.py compilemessages	# create the compiled locale files
-$ ./manage.py index --rebuild	# generate the search index
+$ django-admin.py compilemessages	# create the compiled locale files
+$ django-admin.py index --rebuild	# generate the search index
 
 
 Unit testing
