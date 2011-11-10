@@ -963,7 +963,9 @@ def mp_hall_of_fame(max_results):
     return member_list
 
 def tagcloud_keywords(search_depth, max_keywords):
-    pls = PlenarySession.objects.order_by('-date').values_list('pk', flat=True)
+    pls = PlenarySession.objects.order_by('-date'). \
+                filter(session__isnull=False).      \
+                values_list('pk', flat=True)
     pls = list(pls[0:search_depth])
     sess_list = Session.objects.filter(plenary_session__in=pls)
     sess_list = sess_list.order_by('plenary_session__date')
