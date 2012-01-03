@@ -176,7 +176,7 @@ class Seat(models.Model):
     y = models.FloatField()
 
     def __unicode__(self):
-        return "%d/%d" % (row, seat)
+        return "%d/%d" % (self.row, self.seat)
 
     class Meta:
         unique_together = (('row', 'seat'),)
