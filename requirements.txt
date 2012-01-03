@@ -8,3 +8,4 @@ feedparser
 simplejson
 South
 cssutils
+django-tastypie

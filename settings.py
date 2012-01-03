@@ -141,6 +141,7 @@ INSTALLED_APPS = (
     'user_voting',
     'opinions',
     'south',
+    'tastypie',
 )
 
 AUTH_PROFILE_MODULE="kamu.users.KamuProfile"
