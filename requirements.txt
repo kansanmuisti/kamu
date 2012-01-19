@@ -9,3 +9,4 @@ simplejson
 South
 cssutils
 django-tastypie
+twython

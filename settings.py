@@ -132,6 +132,7 @@ INSTALLED_APPS = (
     'kamu.users',
     'kamu.orgs',
     'kamu.comments',
+    'social',
     'tagging',
     'djapian',
     'facebook',
