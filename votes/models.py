@@ -80,7 +80,6 @@ class Member(models.Model):
     info_link = models.URLField()
     wikipedia_link = models.URLField(blank=True, null=True)
     homepage_link = models.URLField(blank=True, null=True)
-    twitter_account = models.CharField(max_length=30, blank=True, null=True)
 
     objects = MemberManager()
 
@@ -564,3 +563,8 @@ class CommitteeDissentActivity(MemberActivity):
     def __unicode__(self):
         s = super(CommitteeDissentActivity, self).__unicode__()
         return "%s: %s" % (s, self.doc)
+
+from social.models import Feed
+
+class MemberSocialFeed(Feed):
+    member = models.ForeignKey(Member, db_index=True)

@@ -9,16 +9,12 @@ sys.path.append('.')
 import settings
 setup_environ(settings)
 
-from votes.models import Member
+from votes.models import Member, MemberSocialFeed
 
 PICKLE_FILE="mp-twitter.pickle"
 
 
 twitter = Twython()
-
-#args = {'screen_name': 'annisinnemaki', 'count': 10}
-#args['trim_user'] = True
-#results = twitter.getUserTimeline(**args)
 
 def read_twitter_lists():
     twitter_lists = ((24404831, 6970755), (17680567, 3656966))
@@ -32,7 +28,7 @@ def read_twitter_lists():
             users = results['users']
             for user in users:
                 if user['id'] not in mps:
-                    mps[user['id']] = user['name']
+                    mps[user['id']] = user
                 print "%s:%s" % (user['name'], user['id'])
             cursor = results['next_cursor']
             if not cursor:
@@ -61,15 +57,19 @@ print "%d Twitter feeds found" % len(tw_mps.keys())
 
 mp_list = list(Member.objects.all())
 
-for (tw_id, tw_name) in tw_mps.items():
+for (tw_id, tw_info) in tw_mps.items():
     for mp in mp_list:
-        name = tw_name.lower()
+        name = tw_info['name'].lower()
         if name in MP_TRANSFORM:
             name = MP_TRANSFORM[name].lower()
         if mp.get_print_name().lower() == name.lower():
             break
     else:
-        print "%s: no match" % tw_name
+        print "%s: no match" % tw_info['name']
         continue
-    mp.twitter_account = tw_id
-    mp.save()
+    try:
+        feed = MemberSocialFeed.objects.get(member=mp, type='TW', origin_id=tw_id)
+    except MemberSocialFeed.DoesNotExist:
+        feed = MemberSocialFeed(member=mp, type='TW', origin_id=tw_id)
+    feed.account_name = tw_info['screen_name']
+    feed.save()
