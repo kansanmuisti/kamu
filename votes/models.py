@@ -564,7 +564,7 @@ class CommitteeDissentActivity(MemberActivity):
         s = super(CommitteeDissentActivity, self).__unicode__()
         return "%s: %s" % (s, self.doc)
 
-from social.models import Feed
+#from social.models import Feed
 
-class MemberSocialFeed(Feed):
-    member = models.ForeignKey(Member, db_index=True)
+#class MemberSocialFeed(Feed):
+#    member = models.ForeignKey(Member, db_index=True)
