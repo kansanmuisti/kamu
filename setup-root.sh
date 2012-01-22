@@ -3,7 +3,7 @@
 set -e
 
 DEB_DEPENDENCIES="virtualenvwrapper python-imaging python-lxml \
-	python-mysqldb gettext python-numpy subversion git"
+	python-mysqldb gettext python-numpy subversion git opensp"
 
 echo "Installing main dependencies..."
 apt-get install $DEB_DEPENDENCIES

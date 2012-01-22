@@ -1,0 +1,859 @@
+<!-- ************************************************************************* 	-->
+<!-- 										-->
+<!--       			E N T I T E E T I T				-->
+<!-- 										-->
+<!-- 				- 17.6.1998 -					-->
+<!-- 										-->
+<!--										-->
+<!-- 	Public Identifier: "-//Eduskunta//DTD entiteet//FI" (entiteet.dtd)	-->
+<!-- ************************************************************************* 	-->
+<!-- ***************	Merkistot		******************************	-->
+<!ENTITY euro SDATA "&#8364;"--=euromerkki-->
+
+
+<!-- Note 2003-01-13:
+This file 'xml-ISOents.txt' has been patched to reflect edits thought to be necessary,
+based upon conversations with Mike Brown [mike@skew.org] and Rick Jelliffe
+[ricko@allette.com.au].  The contents of the previous version are now at
+http://xml.coverpages.org/xml-ISOents19980721.txt
+Rick Jelliffe is working on a revision of this data to provide standard Unicode
+mappings for the standard ISO entity sets.  From a note of October 30, 2002:
+
+"There are different mappings from DOCBOOK, MathML, HTML,
+Unicode (Cowan), me [Rick Jelliffe], TEI (Rathz), Maler,
+and others. All vary, and some have errors. DOCBOOK and
+MathML have recently reworked their mappings to be much
+closer than each other, however there are a couple of entities
+that are ambiguous.  Furthermore, some entities come from
+several sources: the original 8879 sets, the revised and
+expanded  ISO sets, and from the HTML entity set.  Sometimes
+they seem to have swapped their glyph during transfer.
+I have been in contact, as part of this project, with
+David Carlisle (MathML), Norm Walsh (DOCBOOK), ISO SC34,
+Sebastian Rathz (TEI/Oxford), John Cowan and others (Unicode),
+the W3C I18n WG, and some members of the W3C WG.  The intent
+is to produce a survey on the various entities mappings
+and suggestions for a standardized set of mappings... with
+the hope that *at least* uncontentious sets (Latin1) can
+be agreed on, and people can be warned about variants..."
+
+There are known errors (typographical and otherwise) in the
+documents, and there are discrepancies among the entity sets that have been
+adopted by various standards. Efforts to resolve these issues are ongoing.  (rcc) -->
+<!-- (C) International Organization for Standardization 1986
+Permission to copy in any form is granted for use with
+conforming SGML systems and applications as defined in
+ISO 8879, provided this notice is included in all copies.
+-->
+<!-- Character entity set. Typical invocation:
+<!ENTITY % ISOdia PUBLIC
+"ISO 8879:1986//ENTITIES Diacritical Marks//EN//XML">
+%ISOdia;
+-->
+<!-- This version of the entity set can be used with any SGML document
+which uses ISO 10646 as its document character set.
+This includes XML documents.
+This entity set uses hexadecimal numeric character references.
+
+Creator: Rick Jelliffe, Allette Systems
+
+Version: 1997-07-07
+-->
+
+<!ENTITY acute  "&#180;" ><!--=acute accent-->
+<!ENTITY breve  "&#728;" ><!--=breve-->
+<!ENTITY caron  "&#711;" ><!--=caron-->
+<!ENTITY cedil  "&#184;" ><!--=cedilla-->
+<!ENTITY circ   "^" ><!--=circumflex accent-->
+<!ENTITY dblac  "&#733;" ><!--=double acute accent-->
+<!ENTITY die    "&#168;" ><!--=dieresis-->
+<!ENTITY dot    "&#729;" ><!--=dot above-->
+<!ENTITY grave  "`" ><!--=grave accent-->
+<!ENTITY macr   "&#175;" ><!--=macron-->
+<!ENTITY ogon   "&#731;" ><!--=ogonek-->
+<!ENTITY ring   "&#730;" ><!--=ring-->
+<!ENTITY tilde  "&#732;" ><!--=tilde-->
+<!ENTITY uml    "&#168;" ><!--=umlaut mark-->
+
+<!-- (C) International Organization for Standardization 1986
+Permission to copy in any form is granted for use with
+conforming SGML systems and applications as defined in
+ISO 8879, provided this notice is included in all copies.
+
+Creator: version from ISO 8879:1986
+
+Version: 0.21 1992-12-04
+-->
+<!-- Character entity set. Typical invocation:
+<!ENTITY % ISOGRK1 PUBLIC
+"ISO 9573-15:1993//ENTITIES Greek Letters//EN//XML">
+%ISOGRK1;
+-->
+<!-- This version of the entity set can be used with any SGML document
+which uses ISO 10646 as its document character set.
+This includes XML documents.
+
+Creator: Rick Jelliffe, from HTMLlat1
+
+Version: 1997-07-07
+-->
+
+<!ENTITY agr     "&#945;" ><!--small alpha, Greek, U03B1 -->
+<!ENTITY Agr     "&#913;" ><!--capital Alpha, Greek, U0391 -->
+<!ENTITY bgr     "&#946;" ><!--small beta, Greek, U03B2 -->
+<!ENTITY Bgr     "&#914;" ><!--capital Beta, Greek, U0392 -->
+<!ENTITY ggr     "&#947;" ><!--small gamma, Greek, U03B3 -->
+<!ENTITY Ggr     "&#915;" ><!--capital Gamma, Greek, U0393 -->
+<!ENTITY dgr     "&#948;" ><!--small delta, Greek, U03B4 -->
+<!ENTITY Dgr     "&#916;" ><!--capital Delta, Greek, U0394 -->
+<!ENTITY egr     "&#949;" ><!--small epsilon, Greek, U03B5 -->
+<!ENTITY Egr     "&#917;" ><!--capital Epsilon, Greek, U0395 -->
+<!ENTITY zgr     "&#950;" ><!--small zeta, Greek, U03B6 -->
+<!ENTITY Zgr     "&#918;" ><!--capital Zeta, Greek, U0396 -->
+<!ENTITY eegr    "&#951;" ><!--small eta, Greek, U03B7 -->
+<!ENTITY EEgr    "&#919;" ><!--capital Eta, Greek, U0397 -->
+<!ENTITY thgr    "&#952;" ><!--small theta, Greek, U03B8 -->
+<!ENTITY THgr    "&#920;" ><!--capital Theta, Greek, U0398 -->
+<!ENTITY igr     "&#953;" ><!--small iota, Greek, U03B9 -->
+<!ENTITY Igr     "&#921;" ><!--capital Iota, Greek, U0399 -->
+<!ENTITY kgr     "&#954;" ><!--small kappa, Greek, U03BA -->
+<!ENTITY Kgr     "&#922;" ><!--capital Kappa, Greek, U039A -->
+<!ENTITY lgr     "&#955;" ><!--small lambda, Greek, U03BB -->
+<!ENTITY Lgr     "&#923;" ><!--capital Lambda, Greek, U039B -->
+<!ENTITY mgr     "&#956;" ><!--small mu, Greek, U03BC -->
+<!ENTITY Mgr     "&#924;" ><!--capital Mu, Greek, U039C -->
+<!ENTITY ngr     "&#957;" ><!--small nu, Greek, U03BD -->
+<!ENTITY Ngr     "&#925;" ><!--capital Nu, Greek, U039D -->
+<!ENTITY xgr     "&#958;" ><!--small xi, Greek, U03BE -->
+<!ENTITY Xgr     "&#926;" ><!--capital Xi, Greek, U039E -->
+<!ENTITY ogr     "&#959;" ><!--small omicron, Greek, U03BF -->
+<!ENTITY Ogr     "&#927;" ><!--capital Omicron, Greek, U039F -->
+<!ENTITY pgr     "&#960;" ><!--small pi, Greek, U03C0 -->
+<!ENTITY Pgr     "&#928;" ><!--capital Pi, Greek, U03A0 -->
+<!ENTITY rgr     "&#961;" ><!--small rho, Greek, U03C1 -->
+<!ENTITY Rgr     "&#929;" ><!--capital Rho, Greek, U03A1 -->
+<!ENTITY sfgr    "&#962;" ><!--final small sigma, Greek, U03C2 -->
+<!ENTITY sgr     "&#963;" ><!--small sigma, Greek, U03C3 -->
+<!ENTITY Sgr     "&#931;" ><!--capital Sigma, Greek, U03A3 -->
+<!ENTITY tgr     "&#964;" ><!--small tau, Greek, U03C4 -->
+<!ENTITY Tgr     "&#932;" ><!--capital Tau, Greek, U03A4 -->
+<!ENTITY ugr     "&#965;" ><!--small upsilon, Greek, U03C5 -->
+<!ENTITY Ugr     "&#933;" ><!--capital Upsilon, Greek, U03A5 -->
+<!ENTITY phgr    "&#966;" ><!--small phi, Greek, U03C6 -->
+<!ENTITY PHgr    "&#934;" ><!--capital Phi, Greek, U03A6 -->
+<!ENTITY khgr    "&#967;" ><!--small chi, Greek, U03C7 -->
+<!ENTITY KHgr    "&#935;" ><!--capital Chi, Greek, U03A7 -->
+<!ENTITY psgr    "&#968;" ><!--small psi, Greek, U03C8 -->
+<!ENTITY PSgr    "&#936;" ><!--capital Psi, Greek, U03A8 -->
+<!ENTITY ohgr    "&#969;" ><!--small omega, Greek, U03C9 -->
+<!ENTITY OHgr    "&#937;" ><!--capital Omega, Greek, U03A9 -->
+
+
+
+<!-- (C) International Organization for Standardization 1986
+Permission to copy in any form is granted for use with
+conforming SGML systems and applications as defined in
+ISO 8879, provided this notice is included in all copies.
+
+Creator: updated by Anders Berglund
+
+Version: 0.21 1992-12-04
+-->
+<!-- Character entity set. Typical invocation:
+<!ENTITY % ISOGRK2 PUBLIC
+"ISO 9573-15:1993//ENTITIES Monotoniko Greek//EN//XML">
+%ISOGRK2;
+-->
+<!-- This version of the entity set can be used with any SGML document
+which uses ISO 10646 as its document character set.
+This includes XML documents.
+This entity set uses hexadecimal numeric character references.
+
+Creator: Rick Jelliffe
+
+Version: 1997-07-07
+-->
+
+<!ENTITY aacgr  "&#940;" ><!--=small alpha, accent, Greek-->
+<!ENTITY Aacgr  "&#902;" ><!--=capital Alpha, accent, Greek-->
+<!ENTITY eacgr  "&#941;" ><!--=small epsilon, accent, Greek-->
+<!ENTITY Eacgr  "&#904;" ><!--=capital Epsilon, accent, Greek-->
+<!ENTITY eeacgr "&#942;" ><!--=small eta, accent, Greek-->
+<!ENTITY EEacgr "&#905;" ><!--=capital Eta, accent, Greek-->
+<!ENTITY idigr  "&#970;" ><!--=small iota, dieresis, Greek-->
+<!ENTITY Idigr  "&#938;" ><!--=capital Iota, dieresis, Greek-->
+<!ENTITY iacgr  "&#943;" ><!--=small iota, accent, Greek-->
+<!ENTITY Iacgr  "&#906;" ><!--=capital Iota, accent, Greek-->
+<!ENTITY idiagr "&#912;" ><!--=small iota, dieresis, accent, Greek-->
+<!ENTITY oacgr  "&#972;" ><!--=small omicron, accent, Greek-->
+<!ENTITY Oacgr  "&#908;" ><!--=capital Omicron, accent, Greek-->
+<!ENTITY udigr  "&#971;" ><!--=small upsilon, dieresis, Greek-->
+<!ENTITY Udigr  "&#939;" ><!--=capital Upsilon, dieresis, Greek-->
+<!ENTITY uacgr  "&#973;" ><!--=small upsilon, accent, Greek-->
+<!ENTITY Uacgr  "&#910;" ><!--=capital Upsilon, accent, Greek-->
+<!ENTITY udiagr "&#944;" ><!--=small upsilon, dieresis, accent, Greek-->
+<!ENTITY Udiagr "&#939;&#781;" ><!--=capital Upsilon, dieresis, accent, Greek-->
+<!ENTITY ohacgr "&#974;" ><!--=small omega, accent, Greek-->
+<!ENTITY OHacgr "&#911;" ><!--=capital Omega, accent, Greek-->
+<!-- (C) International Organization for Standardization 1986
+Permission to copy in any form is granted for use with
+conforming SGML systems and applications as defined in
+ISO 8879, provided this notice is included in all copies.
+-->
+<!-- Character entity set. Typical invocation:
+<!ENTITY % ISOgrk3 PUBLIC
+"ISO 8879:1986//ENTITIES Greek Symbols//EN//XML">
+%ISOgrk3;
+-->
+<!-- This version of the entity set can be used with any SGML document
+which uses ISO 10646 as its document character set.
+This includes XML documents.
+This entity set uses hexadecimal numeric character references.
+
+Creator: Rick Jelliffe
+
+Version: 1997-07-07
+-->
+<!ENTITY alpha    "&#945;" ><!--=small alpha, Greek-->
+<!ENTITY beta     "&#946;" ><!--=small beta, Greek-->
+<!ENTITY gamma    "&#947;" ><!--=small gamma, Greek-->
+<!ENTITY Gamma    "&#915;" ><!--=capital Gamma, Greek-->
+<!ENTITY gammad   "&#988;" ><!--/digamma-->
+<!ENTITY delta    "&#948;" ><!--=small delta, Greek-->
+<!ENTITY Delta    "&#916;" ><!--=capital Delta, Greek-->
+<!ENTITY epsi     "&#949;" ><!--=small epsilon, Greek -->
+<!ENTITY epsiv    "&#8455; "><!--/varepsilon ?-->
+<!ENTITY epsis    "&#440;" ><!--/straightepsilon ?-->
+<!ENTITY zeta     "&#950;" ><!--=small zeta, Greek-->
+<!ENTITY eta      "&#951;" ><!--=small eta, Greek-->
+<!ENTITY thetas   "&#952;" ><!--straight theta-->
+<!ENTITY Theta    "&#920;" ><!--=capital Theta, Greek-->
+<!ENTITY thetav   "&#977;" ><!--/vartheta - curly or open theta-->
+<!ENTITY iota     "&#953;" ><!--=small iota, Greek-->
+<!ENTITY kappa    "&#954;" ><!--=small kappa, Greek-->
+<!ENTITY kappav   "&#1008;" ><!--/varkappa-->
+<!ENTITY lambda   "&#955;" ><!--=small lambda, Greek-->
+<!ENTITY Lambda   "&#923;" ><!--=capital Lambda, Greek-->
+<!ENTITY mu       "&#956;" ><!--=small mu, Greek-->
+<!ENTITY nu       "&#957;" ><!--=small nu, Greek-->
+<!ENTITY xi       "&#958;" ><!--=small xi, Greek-->
+<!ENTITY Xi       "&#926;" ><!--=capital Xi, Greek-->
+<!ENTITY pi       "&#960;" ><!--=small pi, Greek-->
+<!ENTITY piv      "&#982;" ><!--/varpi-->
+<!ENTITY Pi       "&#928;" ><!--=capital Pi, Greek-->
+<!ENTITY rho      "&#961;" ><!--=small rho, Greek-->
+<!ENTITY rhov     "&#1009;" ><!--/varrho-->
+<!ENTITY sigma    "&#963;" ><!--=small sigma, Greek-->
+<!ENTITY Sigma    "&#931;" ><!--=capital Sigma, Greek-->
+<!ENTITY sigmav   "&#962;" ><!--/varsigma-->
+<!ENTITY tau      "&#964;" ><!--=small tau, Greek-->
+<!ENTITY upsi     "&#965;" ><!--=small upsilon, Greek-->
+<!ENTITY Upsi     "&#933;" ><!--=capital Upsilon, Greek-->
+<!ENTITY phis     "&#966;" ><!--/straightphi - straight phi-->
+<!ENTITY Phi      "&#934;" ><!--=capital Phi, Greek-->
+<!ENTITY phiv     "&#981;" ><!--/varphi - curly or open phi-->
+<!ENTITY chi      "&#967;" ><!--=small chi, Greek-->
+<!ENTITY psi      "&#968;" ><!--=small psi, Greek-->
+<!ENTITY Psi      "&#936;" ><!--=capital Psi, Greek-->
+<!ENTITY omega    "&#969;" ><!--=small omega, Greek-->
+<!ENTITY Omega    "&#937;" ><!--=capital Omega, Greek-->
+
+
+
+<!-- (C) International Organization for Standardization 1986
+Permission to copy in any form is granted for use with
+conforming SGML systems and applications as defined in
+ISO 8879, provided this notice is included in all copies.
+-->
+<!-- Character entity set. Typical invocation:
+<!ENTITY XML-GRK4-STAG "<BOLD>">
+<!ENTITY XML-GRK4-ETAG "</BOLD>">
+<!ENTITY % ISOgrk4 PUBLIC
+"ISO 8879:1986//ENTITIES Alternative Greek Symbols//EN//XML">
+%ISOgrk4;
+-->
+<!-- This version of the entity set can be used with any SGML document
+which uses ISO 10646 as its document character set.
+This includes XML documents.
+This entity set uses hexadecimal numeric character references.
+
+Creator: Rick Jelliffe
+
+Version: 1997-07-07
+-->
+<!ENTITY XML-GRK4-STAG "">
+<!ENTITY XML-GRK4-ETAG "">
+
+<!ENTITY b.alpha    "&XML-GRK4-STAG;&#945;&XML-GRK4-ETAG;" ><!--=small alpha, Greek-->
+<!ENTITY b.beta     "&XML-GRK4-STAG;&#946;&XML-GRK4-ETAG;" ><!--=small beta, Greek-->
+<!ENTITY b.gamma    "&XML-GRK4-STAG;&#947;&XML-GRK4-ETAG;" ><!--=small gamma, Greek-->
+<!ENTITY b.Gamma    "&XML-GRK4-STAG;&#915;&XML-GRK4-ETAG;" ><!--=capital Gamma, Greek-->
+<!ENTITY b.gammad   "&XML-GRK4-STAG;&#988;&XML-GRK4-ETAG;" ><!--/digamma-->
+<!ENTITY b.delta    "&XML-GRK4-STAG;&#948;&XML-GRK4-ETAG;" ><!--=small delta, Greek-->
+<!ENTITY b.Delta    "&XML-GRK4-STAG;&#916;&XML-GRK4-ETAG;" ><!--=capital Delta, Greek-->
+<!ENTITY b.epsi     "&XML-GRK4-STAG;&#949;&XML-GRK4-ETAG;" ><!--=small epsilon, Greek -->
+<!ENTITY b.epsiv    "&XML-GRK4-STAG;&#8455;&XML-GRK4-ETAG;" ><!--/varepsilon ?-->
+<!ENTITY b.epsis    "&XML-GRK4-STAG;&#440;&XML-GRK4-ETAG;" ><!--/straightepsilon ?-->
+<!ENTITY b.zeta     "&XML-GRK4-STAG;&#950;&XML-GRK4-ETAG;" ><!--=small zeta, Greek-->
+<!ENTITY b.eta      "&XML-GRK4-STAG;&#951;&XML-GRK4-ETAG;" ><!--=small eta, Greek-->
+<!ENTITY b.thetas   "&XML-GRK4-STAG;&#952;&XML-GRK4-ETAG;" ><!--straight theta-->
+<!ENTITY b.Theta    "&XML-GRK4-STAG;&#920;&XML-GRK4-ETAG;" ><!--=capital Theta, Greek-->
+<!ENTITY b.thetav   "&XML-GRK4-STAG;&#977;&XML-GRK4-ETAG;" ><!--/vartheta - curly or open theta-->
+<!ENTITY b.iota     "&XML-GRK4-STAG;&#953;&XML-GRK4-ETAG;" ><!--=small iota, Greek-->
+<!ENTITY b.kappa    "&XML-GRK4-STAG;&#954;&XML-GRK4-ETAG;" ><!--=small kappa, Greek-->
+<!ENTITY b.kappav   "&XML-GRK4-STAG;&#1008;&XML-GRK4-ETAG;" ><!--/varkappa-->
+<!ENTITY b.lambda   "&XML-GRK4-STAG;&#955;&XML-GRK4-ETAG;" ><!--=small lambda, Greek-->
+<!ENTITY b.Lambda   "&XML-GRK4-STAG;&#923;&XML-GRK4-ETAG;" ><!--=capital Lambda, Greek-->
+<!ENTITY b.mu       "&XML-GRK4-STAG;&#956;&XML-GRK4-ETAG;" ><!--=small mu, Greek-->
+<!ENTITY b.nu       "&XML-GRK4-STAG;&#957;&XML-GRK4-ETAG;" ><!--=small nu, Greek-->
+<!ENTITY b.xi       "&XML-GRK4-STAG;&#958;&XML-GRK4-ETAG;" ><!--=small xi, Greek-->
+<!ENTITY b.Xi       "&XML-GRK4-STAG;&#926;&XML-GRK4-ETAG;" ><!--=capital Xi, Greek-->
+<!ENTITY b.pi       "&XML-GRK4-STAG;&#960;&XML-GRK4-ETAG;" ><!--=small pi, Greek-->
+<!ENTITY b.piv      "&XML-GRK4-STAG;&#982;&XML-GRK4-ETAG;" ><!--/varpi-->
+<!ENTITY b.Pi       "&XML-GRK4-STAG;&#928;&XML-GRK4-ETAG;" ><!--=capital Pi, Greek-->
+<!ENTITY b.rho      "&XML-GRK4-STAG;&#961;&XML-GRK4-ETAG;" ><!--=small rho, Greek-->
+<!ENTITY b.rhov     "&XML-GRK4-STAG;&#1009;&XML-GRK4-ETAG;" ><!--/varrho-->
+<!ENTITY b.sigma    "&XML-GRK4-STAG;&#963;&XML-GRK4-ETAG;" ><!--=small sigma, Greek-->
+<!ENTITY b.Sigma    "&XML-GRK4-STAG;&#931;&XML-GRK4-ETAG;" ><!--=capital Sigma, Greek-->
+<!ENTITY b.sigmav   "&XML-GRK4-STAG;&#962;&XML-GRK4-ETAG;" ><!--/varsigma-->
+<!ENTITY b.tau      "&XML-GRK4-STAG;&#964;&XML-GRK4-ETAG;" ><!--=small tau, Greek-->
+<!ENTITY b.upsi     "&XML-GRK4-STAG;&#965;&XML-GRK4-ETAG;" ><!--=small upsilon, Greek-->
+<!ENTITY b.Upsi     "&XML-GRK4-STAG;&#933;&XML-GRK4-ETAG;" ><!--=capital Upsilon, Greek-->
+<!ENTITY b.phis     "&XML-GRK4-STAG;&#966;&XML-GRK4-ETAG;" ><!--/straightphi - straight phi-->
+<!ENTITY b.Phi      "&XML-GRK4-STAG;&#934;&XML-GRK4-ETAG;" ><!--=capital Phi, Greek-->
+<!ENTITY b.phiv     "&XML-GRK4-STAG;&#981;&XML-GRK4-ETAG;" ><!--/varphi - curly or open phi-->
+<!ENTITY b.chi      "&XML-GRK4-STAG;&#967;&XML-GRK4-ETAG;" ><!--=small chi, Greek-->
+<!ENTITY b.psi      "&XML-GRK4-STAG;&#968;&XML-GRK4-ETAG;" ><!--=small psi, Greek-->
+<!ENTITY b.Psi      "&XML-GRK4-STAG;&#936;&XML-GRK4-ETAG;" ><!--=capital Psi, Greek-->
+<!ENTITY b.omega    "&XML-GRK4-STAG;&#969;&XML-GRK4-ETAG;" ><!--=small omega, Greek-->
+<!ENTITY b.Omega    "&XML-GRK4-STAG;&#937;&XML-GRK4-ETAG;" ><!--=capital Omega, Greek-->
+
+
+<!-- (C) International Organization for Standardization 1986
+Permission to copy in any form is granted for use with
+conforming SGML systems and applications as defined in
+ISO 8879, provided this notice is included in all copies.
+-->
+<!-- Character entity set. Typical invocation:
+<!ENTITY % HTMLlat1 PUBLIC
+"ISO 8879-1986//ENTITIES Added Latin 1//EN//XML">
+%ISOlat1;
+-->
+<!-- This version of the entity set can be used with any SGML document
+which uses ISO 8859-1 or ISO 10646 as its document character
+set. This includes XML documents.
+-->
+
+<!ENTITY Agrave  "&#192;" ><!-- capital A, grave accent -->
+<!ENTITY Aacute  "&#193;" ><!-- capital A, acute accent -->
+<!ENTITY Acirc   "&#194;" ><!-- capital A, circumflex accent -->
+<!ENTITY Atilde  "&#195;" ><!-- capital A, tilde -->
+<!ENTITY Auml    "&#196;" ><!-- capital A, dieresis or umlaut mark -->
+<!ENTITY Aring   "&#197;" ><!-- capital A, ring -->
+<!ENTITY AElig   "&#198;" ><!-- capital AE diphthong (ligature) -->
+<!ENTITY Ccedil  "&#199;" ><!-- capital C, cedilla -->
+<!ENTITY Egrave  "&#200;" ><!-- capital E, grave accent -->
+<!ENTITY Eacute  "&#201;" ><!-- capital E, acute accent -->
+<!ENTITY Ecirc   "&#202;" ><!-- capital E, circumflex accent -->
+<!ENTITY Euml    "&#203;" ><!-- capital E, dieresis or umlaut mark -->
+<!ENTITY Igrave  "&#204;" ><!-- capital I, grave accent -->
+<!ENTITY Iacute  "&#205;" ><!-- capital I, acute accent -->
+<!ENTITY Icirc   "&#206;" ><!-- capital I, circumflex accent -->
+<!ENTITY Iuml    "&#207;" ><!-- capital I, dieresis or umlaut mark -->
+<!ENTITY ETH     "&#208;" ><!-- capital Eth, Icelandic -->
+<!ENTITY Ntilde  "&#209;" ><!-- capital N, tilde -->
+<!ENTITY Ograve  "&#210;" ><!-- capital O, grave accent -->
+<!ENTITY Oacute  "&#211;" ><!-- capital O, acute accent -->
+<!ENTITY Ocirc   "&#212;" ><!-- capital O, circumflex accent -->
+<!ENTITY Otilde  "&#213;" ><!-- capital O, tilde -->
+<!ENTITY Ouml    "&#214;" ><!-- capital O, dieresis or umlaut mark -->
+<!ENTITY Oslash  "&#216;" ><!-- capital O, slash -->
+<!ENTITY Ugrave  "&#217;" ><!-- capital U, grave accent -->
+<!ENTITY Uacute  "&#218;" ><!-- capital U, acute accent -->
+<!ENTITY Ucirc   "&#219;" ><!-- capital U, circumflex accent -->
+<!ENTITY Uuml    "&#220;" ><!-- capital U, dieresis or umlaut mark -->
+<!ENTITY Yacute  "&#221;" ><!-- capital Y, acute accent -->
+<!ENTITY THORN   "&#222;" ><!-- capital THORN, Icelandic -->
+<!ENTITY szlig   "&#223;" ><!-- small sharp s, German (sz ligature) -->
+<!ENTITY agrave  "&#224;" ><!-- small a, grave accent -->
+<!ENTITY aacute  "&#225;" ><!-- small a, acute accent -->
+<!ENTITY acirc   "&#226;" ><!-- small a, circumflex accent -->
+<!ENTITY atilde  "&#227;" ><!-- small a, tilde -->
+<!ENTITY auml    "&#228;" ><!-- small a, dieresis or umlaut mark -->
+<!ENTITY aring   "&#229;" ><!-- small a, ring -->
+<!ENTITY aelig   "&#230;" ><!-- small ae diphthong (ligature) -->
+<!ENTITY ccedil  "&#231;" ><!-- small c, cedilla -->
+<!ENTITY egrave  "&#232;" ><!-- small e, grave accent -->
+<!ENTITY eacute  "&#233;" ><!-- small e, acute accent -->
+<!ENTITY ecirc   "&#234;" ><!-- small e, circumflex accent -->
+<!ENTITY euml    "&#235;" ><!-- small e, dieresis or umlaut mark -->
+<!ENTITY igrave  "&#236;" ><!-- small i, grave accent -->
+<!ENTITY iacute  "&#237;" ><!-- small i, acute accent -->
+<!ENTITY icirc   "&#238;" ><!-- small i, circumflex accent -->
+<!ENTITY iuml    "&#239;" ><!-- small i, dieresis or umlaut mark -->
+<!ENTITY eth     "&#240;" ><!-- small eth, Icelandic -->
+<!ENTITY ntilde  "&#241;" ><!-- small n, tilde -->
+<!ENTITY ograve  "&#242;" ><!-- small o, grave accent -->
+<!ENTITY oacute  "&#243;" ><!-- small o, acute accent -->
+<!ENTITY ocirc   "&#244;" ><!-- small o, circumflex accent -->
+<!ENTITY otilde  "&#245;" ><!-- small o, tilde -->
+<!ENTITY ouml    "&#246;" ><!-- small o, dieresis or umlaut mark -->
+
+<!ENTITY oslash  "&#248;" ><!-- small o, slash -->
+<!ENTITY ugrave  "&#249;" ><!-- small u, grave accent -->
+<!ENTITY uacute  "&#250;" ><!-- small u, acute accent -->
+<!ENTITY ucirc   "&#251;" ><!-- small u, circumflex accent -->
+<!ENTITY uuml    "&#252;" ><!-- small u, dieresis or umlaut mark -->
+<!ENTITY yacute  "&#253;" ><!-- small y, acute accent -->
+<!ENTITY thorn   "&#254;" ><!-- small thorn, Icelandic -->
+<!ENTITY yuml    "&#255;" ><!-- small y, dieresis or umlaut mark -->
+
+<!-- (C) International Organization for Standardization 1986
+Permission to copy in any form is granted for use with
+conforming SGML systems and applications as defined in
+ISO 8879, provided this notice is included in all copies.
+-->
+<!-- Character entity set. Typical invocation:
+<!ENTITY % ISOlat2 PUBLIC
+"ISO 8879:1986//ENTITIES Added Latin 2//EN//XML"
+"ISOlat2.pen">
+%ISOlat2;
+-->
+<!-- This version of the entity set can be used with any SGML document
+which uses ISO 10646 as its document character set.
+This includes XML documents.
+This entity set uses hexadecimal numeric character references.
+
+Creator: Rick Jelliffe, Allette Systems
+
+Version: 1997-07-07
+-->
+<!ENTITY abreve "&#259;" ><!--=small a, breve-->
+<!ENTITY Abreve "&#258;" ><!--=capital A, breve-->
+<!ENTITY amacr  "&#257;" ><!--=small a, macron-->
+<!ENTITY Amacr  "&#256;" ><!--=capital A, macron-->
+<!ENTITY aogon  "&#261;" ><!--=small a, ogonek-->
+<!ENTITY Aogon  "&#260;" ><!--=capital A, ogonek-->
+<!ENTITY cacute "&#263;" ><!--=small c, acute accent-->
+<!ENTITY Cacute "&#262;" ><!--=capital C, acute accent-->
+<!ENTITY ccaron "&#269;" ><!--=small c, caron-->
+<!ENTITY Ccaron "&#268;" ><!--=capital C, caron-->
+<!ENTITY ccirc  "&#265;" ><!--=small c, circumflex accent-->
+<!ENTITY Ccirc  "&#264;" ><!--=capital C, circumflex accent-->
+<!ENTITY cdot   "&#267;" ><!--=small c, dot above-->
+<!ENTITY Cdot   "&#266;" ><!--=capital C, dot above-->
+<!ENTITY dcaron "&#271;" ><!--=small d, caron-->
+<!ENTITY Dcaron "&#270;" ><!--=capital D, caron-->
+<!ENTITY dstrok "&#273;" ><!--=small d, stroke-->
+<!ENTITY Dstrok "&#272;" ><!--=capital D, stroke-->
+<!ENTITY ecaron "&#283;" ><!--=small e, caron-->
+<!ENTITY Ecaron "&#282;" ><!--=capital E, caron-->
+<!ENTITY edot   "&#279;" ><!--=small e, dot above-->
+<!ENTITY Edot   "&#278;" ><!--=capital E, dot above-->
+<!ENTITY emacr  "&#275;" ><!--=small e, macron-->
+<!ENTITY Emacr  "&#274;" ><!--=capital E, macron-->
+<!ENTITY eogon  "&#281;" ><!--=small e, ogonek-->
+<!ENTITY Eogon  "&#280;" ><!--=capital E, ogonek-->
+<!ENTITY gacute "&#501;" ><!--=small g, acute accent-->
+<!ENTITY gbreve "&#287;" ><!--=small g, breve-->
+<!ENTITY Gbreve "&#286;" ><!--=capital G, breve-->
+<!ENTITY Gcedil "&#290;" ><!--=capital G, cedilla-->
+<!ENTITY gcirc  "&#285;" ><!--=small g, circumflex accent-->
+<!ENTITY Gcirc  "&#284;" ><!--=capital G, circumflex accent-->
+<!ENTITY gdot   "&#289;" ><!--=small g, dot above-->
+<!ENTITY Gdot   "&#288;" ><!--=capital G, dot above-->
+<!ENTITY hcirc  "&#293;" ><!--=small h, circumflex accent-->
+<!ENTITY Hcirc  "&#292;" ><!--=capital H, circumflex accent-->
+<!ENTITY hstrok "&#295;" ><!--=small h, stroke-->
+<!ENTITY Hstrok "&#294;" ><!--=capital H, stroke-->
+<!ENTITY Idot   "&#304;" ><!--=capital I, dot above-->
+<!ENTITY Imacr  "&#298;" ><!--=capital I, macron-->
+<!ENTITY imacr  "&#299;" ><!--=small i, macron-->
+<!ENTITY ijlig  "&#307;" ><!--=small ij ligature-->
+<!ENTITY IJlig  "&#306;" ><!--=capital IJ ligature-->
+<!ENTITY inodot "&#305;" ><!--=small i without dot-->
+<!ENTITY iogon  "&#303;" ><!--=small i, ogonek-->
+<!ENTITY Iogon  "&#302;" ><!--=capital I, ogonek-->
+<!ENTITY itilde "&#297;" ><!--=small i, tilde-->
+<!ENTITY Itilde "&#296;" ><!--=capital I, tilde-->
+<!ENTITY jcirc  "&#309;" ><!--=small j, circumflex accent-->
+<!ENTITY Jcirc  "&#308;" ><!--=capital J, circumflex accent-->
+<!ENTITY kcedil "&#311;" ><!--=small k, cedilla-->
+<!ENTITY Kcedil "&#310;" ><!--=capital K, cedilla-->
+<!ENTITY kgreen "&#312;" ><!--=small k, Greenlandic-->
+<!ENTITY lacute "&#314;" ><!--=small l, acute accent-->
+<!ENTITY Lacute "&#313;" ><!--=capital L, acute accent-->
+<!ENTITY lcaron "&#318;" ><!--=small l, caron-->
+<!ENTITY Lcaron "&#317;" ><!--=capital L, caron-->
+<!ENTITY lcedil "&#316;" ><!--=small l, cedilla-->
+<!ENTITY Lcedil "&#315;" ><!--=capital L, cedilla-->
+<!ENTITY lmidot "&#320;" ><!--=small l, middle dot-->
+<!ENTITY Lmidot "&#313;" ><!--=capital L, middle dot-->
+<!ENTITY lstrok "&#322;" ><!--=small l, stroke-->
+<!ENTITY Lstrok "&#321;" ><!--=capital L, stroke-->
+<!ENTITY nacute "&#324;" ><!--=small n, acute accent-->
+<!ENTITY Nacute "&#323;" ><!--=capital N, acute accent-->
+<!ENTITY eng    "&#331;" ><!--=small eng, Lapp-->
+<!ENTITY ENG    "&#330;" ><!--=capital ENG, Lapp-->
+<!ENTITY napos  "&#329;" ><!--=small n, apostrophe-->
+<!ENTITY ncaron "&#328;" ><!--=small n, caron-->
+<!ENTITY Ncaron "&#327;" ><!--=capital N, caron-->
+<!ENTITY ncedil "&#326;" ><!--=small n, cedilla-->
+<!ENTITY Ncedil "&#325;" ><!--=capital N, cedilla-->
+<!ENTITY odblac "&#337;" ><!--=small o, double acute accent-->
+<!ENTITY Odblac "&#336;" ><!--=capital O, double acute accent-->
+<!ENTITY Omacr  "&#332;" ><!--=capital O, macron-->
+<!ENTITY omacr  "&#333;" ><!--=small o, macron-->
+<!ENTITY oelig  "&#339;" ><!--=small oe ligature-->
+<!ENTITY OElig  "&#338;" ><!--=capital OE ligature-->
+<!ENTITY racute "&#341;" ><!--=small r, acute accent-->
+<!ENTITY Racute "&#340;" ><!--=capital R, acute accent-->
+<!ENTITY rcaron "&#345;" ><!--=small r, caron-->
+<!ENTITY Rcaron "&#344;" ><!--=capital R, caron-->
+<!ENTITY rcedil "&#343;" ><!--=small r, cedilla-->
+<!ENTITY Rcedil "&#342;" ><!--=capital R, cedilla-->
+<!ENTITY sacute "&#347;" ><!--=small s, acute accent-->
+<!ENTITY Sacute "&#344;" ><!--=capital S, acute accent-->
+<!ENTITY scaron "&#353;" ><!--=small s, caron-->
+<!ENTITY Scaron "&#352;" ><!--=capital S, caron-->
+<!ENTITY scedil "&#351;" ><!--=small s, cedilla-->
+<!ENTITY Scedil "&#350;" ><!--=capital S, cedilla-->
+<!ENTITY scirc  "&#348;" ><!--=small s, circumflex accent-->
+<!ENTITY Scirc  "&#349;" ><!--=capital S, circumflex accent-->
+<!ENTITY tcaron "&#357;" ><!--=small t, caron-->
+<!ENTITY Tcaron "&#356;" ><!--=capital T, caron-->
+<!ENTITY tcedil "&#354;" ><!--=small t, cedilla-->
+<!ENTITY Tcedil "&#355;" ><!--=capital T, cedilla-->
+<!ENTITY tstrok "&#359;" ><!--=small t, stroke-->
+<!ENTITY Tstrok "&#358;" ><!--=capital T, stroke-->
+<!ENTITY ubreve "&#365;" ><!--=small u, breve-->
+<!ENTITY Ubreve "&#364;" ><!--=capital U, breve-->
+<!ENTITY udblac "&#369;" ><!--=small u, double acute accent-->
+<!ENTITY Udblac "&#368;" ><!--=capital U, double acute accent-->
+<!ENTITY umacr  "&#363;" ><!--=small u, macron-->
+<!ENTITY Umacr  "&#362;" ><!--=capital U, macron-->
+<!ENTITY uogon  "&#371;" ><!--=small u, ogonek-->
+<!ENTITY Uogon  "&#370;" ><!--=capital U, ogonek-->
+<!ENTITY uring  "&#367;" ><!--=small u, ring-->
+<!ENTITY Uring  "&#366;" ><!--=capital U, ring-->
+<!ENTITY utilde "&#361;" ><!--=small u, tilde-->
+<!ENTITY Utilde "&#360;" ><!--=capital U, tilde-->
+<!ENTITY wcirc  "&#373;" ><!--=small w, circumflex accent-->
+<!ENTITY Wcirc  "&#372;" ><!--=capital W, circumflex accent-->
+<!ENTITY ycirc  "&#375;" ><!--=small y, circumflex accent-->
+<!ENTITY Ycirc  "&#374;" ><!--=capital Y, circumflex accent-->
+<!ENTITY Yuml   "&#376;" ><!--=capital Y, dieresis or umlaut mark-->
+<!ENTITY zacute "&#378;" ><!--=small z, acute accent-->
+<!ENTITY Zacute "&#377;" ><!--=capital Z, acute accent-->
+<!ENTITY zcaron "&#509;" ><!--=small z, caron-->
+<!ENTITY Zcaron "&#382;" ><!--=capital Z, caron-->
+<!ENTITY zdot   "&#380;" ><!--=small z, dot above-->
+<!ENTITY Zdot   "&#379;" ><!--=capital Z, dot above-->
+
+
+<!-- (C) International Organization for Standardization 1986
+Permission to copy in any form is granted for use with
+conforming SGML systems and applications as defined in
+ISO 8879, provided this notice is included in all copies.
+-->
+<!-- Character entity set. Typical invocation:
+<!ENTITY % ISOnum PUBLIC
+"ISO 8879:1986//ENTITIES Numeric and Special Graphic//EN//XML">
+%ISOnum;
+-->
+<!-- This version of the entity set can be used with any SGML document
+which uses ISO 10646 as its document character set.
+This includes XML documents.
+This entity set uses hexadecimal numeric character references.
+
+Creator: Rick Jelliffe, Allette Systems
+
+Version: 1997-07-07
+-->
+
+<!ENTITY half   "&#189;" ><!--=fraction one-half-->
+<!ENTITY frac12 "&#189;" ><!--=fraction one-half-->
+<!ENTITY frac14 "&#188;" ><!--=fraction one-quarter-->
+<!ENTITY frac34 "&#190;" ><!--=fraction three-quarters-->
+<!ENTITY frac18 "&#8539;" >
+<!-- or "&#177;&#514;&#8260;&#8328;" --><!--=fraction one-eighth-->
+<!ENTITY frac38 "&#8540;" >
+<!-- or "&#179;&#8260;&#8328;" --><!--=fraction three-eighths-->
+<!ENTITY frac58 "&#8541;" >
+<!-- or "&#8309;&#8260;&#8328;" --><!--=fraction five-eighths-->
+<!ENTITY frac78 "&#8542;" >
+<!-- or "&#8311;&#8260;&#8328;" --><!--=fraction seven-eighths-->
+
+<!ENTITY sup1   "&#185;" ><!--=superscript one-->
+<!ENTITY sup2   "&#178;" ><!--=superscript two-->
+<!ENTITY sup3   "&#179;" ><!--=superscript three-->
+
+<!ENTITY plus   "+" ><!--=plus sign B:-->
+<!ENTITY plusmn "&#177;" ><!--/pm B: =plus-or-minus sign-->
+<!ENTITY lt     "<"      ><!--=less-than sign R:-->
+<!ENTITY equals "="      ><!--=equals sign R:-->
+<!ENTITY gt     ">"      ><!--=greater-than sign R:-->
+<!ENTITY divide "&#247;" ><!--/div B: =divide sign-->
+<!ENTITY times  "&#215;" ><!--/times B: =multiply sign-->
+
+<!ENTITY curren "&#164;" ><!--=general currency sign-->
+<!ENTITY pound  "&#165;" ><!--=pound sign-->
+<!ENTITY dollar "$"      ><!--=dollar sign-->
+<!ENTITY cent   "&#162;" ><!--=cent sign-->
+<!ENTITY yen    "&#165;" ><!--/yen =yen sign-->
+
+<!ENTITY num    "#" ><!--=number sign-->
+<!ENTITY percnt "&#37;" ><!--=percent sign-->
+<!ENTITY amp    "&#38;#38;" ><!--=ampersand-->
+<!ENTITY ast    "*" ><!--/ast B: =asterisk-->
+<!ENTITY commat "@" ><!--=commercial at-->
+<!ENTITY lsqb   "[" ><!--/lbrack O: =left square bracket-->
+<!ENTITY bsol   "\" ><!--/backslash =reverse solidus-->
+<!ENTITY rsqb   "]" ><!--/rbrack C: =right square bracket-->
+<!ENTITY lcub   "{" ><!--/lbrace O: =left curly bracket-->
+<!ENTITY horbar "&#8213;" ><!--=horizontal bar-->
+<!ENTITY verbar "|" ><!--/vert =vertical bar-->
+<!ENTITY rcub   "}" ><!--/rbrace C: =right curly bracket-->
+<!ENTITY micro  "&#181;" ><!--=micro sign-->
+<!ENTITY ohm    "&#2126;" ><!--=ohm sign-->
+<!ENTITY deg    "&#176;" ><!--=degree sign-->
+<!ENTITY ordm   "&#186;" ><!--=ordinal indicator, masculine-->
+<!ENTITY ordf   "&#170;" ><!--=ordinal indicator, feminine-->
+<!ENTITY sect   "&#167;" ><!--=section sign-->
+<!ENTITY para   "&#182;" ><!--=pilcrow (paragraph sign)-->
+<!ENTITY middot "&#183;" ><!--/centerdot B: =middle dot-->
+<!ENTITY larr   "&#8592;" ><!--/leftarrow /gets A: =leftward arrow-->
+<!ENTITY rarr   "&#8594;" ><!--/rightarrow /to A: =rightward arrow-->
+<!ENTITY uarr   "&#8593;" ><!--/uparrow A: =upward arrow-->
+<!ENTITY darr   "&#8595;" ><!--/downarrow A: =downward arrow-->
+<!ENTITY copy   "&#169;" ><!--=copyright sign-->
+<!ENTITY reg    "&#174;" ><!--/circledR =registered sign-->
+<!ENTITY trade  "&#8482;" ><!--=trade mark sign-->
+<!ENTITY brvbar "&#166;" ><!--=bren (vertical) bar-->
+<!ENTITY not    "&#172;" ><!--/neg /lnot =not sign-->
+<!ENTITY sung   "&#9834;" ><!--=music note (sung text sign)-->
+
+<!ENTITY excl   "!" ><!--=exclamation mark-->
+<!ENTITY iexcl  "&#161;" ><!--=inverted exclamation mark-->
+<!ENTITY quot   '"' ><!--=quotation mark-->
+<!ENTITY apos   "'" ><!--=apostrophe-->
+<!ENTITY lpar   "(" ><!--O: =left parenthesis-->
+<!ENTITY rpar   ")" ><!--C: =right parenthesis-->
+<!ENTITY comma  "," ><!--P: =comma-->
+<!ENTITY lowbar "_" ><!--=low line-->
+<!ENTITY hyphen "&#8208;" ><!--=hyphen-->
+<!ENTITY period "." ><!--=full stop, period-->
+<!ENTITY sol    "/" ><!--=solidus-->
+<!ENTITY colon  ":" ><!--/colon P:-->
+<!ENTITY semi   ";" ><!--=semicolon P:-->
+<!ENTITY quest  "?" ><!--=question mark-->
+<!ENTITY iquest "&#191;" ><!--=inverted question mark-->
+<!ENTITY laquo  "&#8249;" ><!--=angle quotation mark, left
+But note that Unicode 1 & Maler & el Andaloussi give &#171; -->
+<!ENTITY raquo  "&#8250;" ><!--=angle quotation mark, right
+But note that Unicode 1 & Maler & el Andaloussi give &#187; -->
+<!ENTITY lsquo  "&#8216;" ><!--=single quotation mark, left-->
+<!ENTITY rsquo  "&#8217;" ><!--=single quotation mark, right-->
+<!ENTITY ldquo  "&#8220;" ><!--=double quotation mark, left-->
+<!ENTITY rdquo  "&#8221;" ><!--=double quotation mark, right-->
+<!ENTITY nbsp   "&#160;" ><!--=no break (required) space-->
+<!ENTITY shy    "&#173;" ><!--=soft hyphen-->
+
+
+<!-- (C) International Organization for Standardization 1986
+Permission to copy in any form is granted for use with
+conforming SGML systems and applications as defined in
+ISO 8879, provided this notice is included in all copies.
+-->
+<!-- Character entity set. Typical invocation:
+<!ENTITY % ISOpub PUBLIC
+"ISO 8879:1986//ENTITIES Publishing//EN//XML">
+%ISOpub;
+-->
+<!-- This version of the entity set can be used with any SGML document
+which uses ISO 10646 as its document character set.
+This includes XML documents.
+This entity set uses hexadecimal numeric character references.
+
+Creator: Rick Jelliffe, Allette Systems
+
+Version: 1997-07-07
+-->
+<!ENTITY emsp   "&#8195;" ><!--=em space-->
+<!ENTITY ensp   "&#8194;" ><!--=en space (1/2-em)-->
+<!ENTITY emsp13 "&#8196;" ><!--=1/3-em space-->
+<!ENTITY emsp14 "&#8197;" ><!--=1/4-em space-->
+<!ENTITY numsp  "&#8199;" ><!--=digit space (width of a number)-->
+<!ENTITY puncsp "&#8200;" ><!--=punctuation space (width of comma)-->
+<!ENTITY thinsp "&#8201;" ><!--=thin space (1/6-em)-->
+<!ENTITY hairsp "&#8202;" ><!--=hair space-->
+<!ENTITY mdash  "&#8212;" ><!--=em dash-->
+<!ENTITY ndash  "&#8211;" ><!--=en dash-->
+<!ENTITY dash   "&#8208;" ><!--=hyphen (true graphic)-->
+<!ENTITY blank  "&#9251;" ><!--=significant blank symbol-->
+<!ENTITY hellip "&#8230;" ><!--=ellipsis (horizontal)-->
+<!ENTITY nldr   "&#8229;" ><!--=double baseline dot (en leader)-->
+<!ENTITY frac13 "&#8531;" ><!--=fraction one-third-->
+<!ENTITY frac23 "&#8532;" ><!--=fraction two-thirds-->
+<!ENTITY frac15 "&#8533;" ><!--=fraction one-fifth-->
+<!ENTITY frac25 "&#8534;" ><!--=fraction two-fifths-->
+<!ENTITY frac35 "&#8535;" ><!--=fraction three-fifths-->
+<!ENTITY frac45 "&#8536;" ><!--=fraction four-fifths-->
+<!ENTITY frac16 "&#8537;" ><!--=fraction one-sixth-->
+<!ENTITY frac56 "&#8538;" ><!--=fraction five-sixths-->
+<!ENTITY incare "&#8453;" ><!--=in-care-of symbol-->
+<!ENTITY block  "&#9608;" ><!--=full block-->
+<!ENTITY uhblk  "&#9600;" ><!--=upper half block-->
+<!ENTITY lhblk  "&#9604;" ><!--=lower half block-->
+<!ENTITY blk14  "&#9617;" ><!--=25% shaded block-->
+<!ENTITY blk12  "&#9618;" ><!--=50% shaded block-->
+<!ENTITY blk34  "&#9619;" ><!--=75% shaded block-->
+<!ENTITY marker "&#9646;" ><!--=histogram marker-->
+<!ENTITY cir    "&#9675;" ><!--/circ B: =circle, open-->
+<!ENTITY squ    "&#9633;" ><!--=square, open-->
+<!ENTITY rect   "&#9645;" ><!--=rectangle, open-->
+<!ENTITY utri   "&#9653;" ><!--/triangle =up triangle, open-->
+<!ENTITY dtri   "&#9663;" ><!--/triangledown =down triangle, open-->
+<!ENTITY star   "&#9734;" ><!--=star, open-->
+<!ENTITY bull   "&#8226;" ><!--/bullet B: =round bullet, filled-->
+<!ENTITY squf   "&#9642;" ><!--/blacksquare =sq bullet, filled-->
+<!ENTITY utrif  "&#9652;" ><!--/blacktriangle =up tri, filled-->
+<!ENTITY dtrif  "&#9662;" ><!--/blacktriangledown =dn tri, filled-->
+<!ENTITY ltrif  "&#9666;" ><!--/blacktriangleleft R: =l tri, filled-->
+<!ENTITY rtrif  "&#9656;" ><!--/blacktriangleright R: =r tri, filled-->
+<!ENTITY clubs  "&#9827;" ><!--/clubsuit =club suit symbol-->
+<!ENTITY diams  "&#9826;" ><!--/diamondsuit =diamond suit symbol-->
+<!ENTITY hearts "&#9825;" ><!--/heartsuit =heart suit symbol-->
+<!ENTITY spades "&#9824;" ><!--/spadesuit =spades suit symbol-->
+<!ENTITY malt   "&#10016;" ><!--/maltese =maltese cross-->
+<!ENTITY dagger "&#8224;" ><!--/dagger B: =dagger-->
+<!ENTITY Dagger "&#8225;" ><!--/ddagger B: =double dagger-->
+<!ENTITY check  "&#10003;" ><!--/checkmark =tick, check mark-->
+<!ENTITY cross  "&#10007;" ><!--=ballot cross-->
+<!ENTITY sharp  "&#9839;" ><!--/sharp =musical sharp-->
+<!ENTITY flat   "&#9837;" ><!--/flat =musical flat-->
+<!ENTITY male   "&#9794;" ><!--=male symbol-->
+<!ENTITY female "&#9792;" ><!--=female symbol-->
+<!ENTITY phone  "&#9952;" ><!--=telephone symbol-->
+<!ENTITY telrec "&#8981;" ><!--=telephone recorder symbol-->
+<!ENTITY copysr "&#8471;" ><!--=sound recording copyright sign-->
+<!ENTITY caret  "&#8257;" ><!--=caret (insertion mark)-->
+<!ENTITY lsquor "&#8218;" ><!--=rising single quote, left (low)-->
+<!ENTITY ldquor "&#8222;" ><!--=rising dbl quote, left (low)-->
+
+<!ENTITY fflig  "&#64256;" ><!--small ff ligature-->
+<!ENTITY filig  "&#64257;" ><!--small fi ligature-->
+<!ENTITY fjlig  "fj" ><!--small fj ligature-->
+<!ENTITY ffilig "&#64259;" ><!--small ffi ligature-->
+<!ENTITY ffllig "&#64260;" ><!--small ffl ligature-->
+<!ENTITY fllig  "&#64258;" ><!--small fl ligature-->
+
+<!ENTITY mldr   "&#8229;" ><!--em leader-->
+<!ENTITY rdquor "&#8221;" ><!--rising dbl quote, right (high)-->
+<!ENTITY rsquor "&#8217;" ><!--rising single quote, right (high)-->
+<!ENTITY vellip "&#8942;" ><!--vertical ellipsis-->
+
+<!ENTITY hybull "&#8259;" ><!--rectangle, filled (hyphen bullet)-->
+<!ENTITY loz    "&#10023;" ><!--/lozenge - lozenge or total mark-->
+<!ENTITY lozf   "&#10022;" ><!--/blacklozenge - lozenge, filled-->
+<!ENTITY ltri   "&#9667;" ><!--/triangleleft B: l triangle, open-->
+<!ENTITY rtri   "&#9657;" ><!--/triangleright B: r triangle, open-->
+<!ENTITY starf  "&#9733;" ><!--/bigstar - star, filled-->
+
+<!ENTITY natur  "&#9838;" ><!--/natural - music natural-->
+<!ENTITY rx     "&#8478;" ><!--pharmaceutical prescription (Rx)-->
+<!ENTITY sext   "&#10038;" ><!--sextile (6-pointed star)-->
+
+<!ENTITY target "&#8982;" ><!--register mark or target-->
+<!ENTITY dlcrop "&#8973;" ><!--downward left crop mark -->
+<!ENTITY drcrop "&#8972;" ><!--downward right crop mark -->
+<!ENTITY ulcrop "&#8975;" ><!--upward left crop mark -->
+<!ENTITY urcrop "&#8974;" ><!--upward right crop mark -->
+
+
+
+<!-- (C) International Organization for Standardization 1986
+Permission to copy in any form is granted for use with
+conforming SGML systems and applications as defined in
+ISO 8879, provided this notice is included in all copies.
+-->
+<!-- Character entity set. Typical invocation:
+<!ENTITY % ISOtech PUBLIC
+"ISO 8879:1986//ENTITIES General Technical//EN//XML"
+"ISOtech.pen">
+%ISOtech;
+-->
+<!-- This version of the entity set can be used with any SGML document
+which uses ISO 10646 as its document character set.
+This includes XML documents.
+This entity set uses hexadecimal numeric character references.
+
+Creator: Rick Jelliffe, Allette Systems
+
+Version: 1997-07-07
+-->
+<!ENTITY aleph  "&#8501;" ><!--/aleph =aleph, Hebrew-->
+<!ENTITY and    "&#8743;" ><!--/wedge /land B: =logical and-->
+<!ENTITY ang90  "&#8735;" ><!--=right (90 degree) angle-->
+<!ENTITY angsph "&#8738;" ><!--/sphericalangle =angle-spherical-->
+<!ENTITY ap     "&#8777;" ><!--/approx R: =approximate-->
+<!ENTITY becaus "&#8757;" ><!--/because R: =because-->
+<!ENTITY bottom "&#8869;" ><!--/bot B: =perpendicular-->
+<!ENTITY cap    "&#8745;" ><!--/cap B: =intersection-->
+<!ENTITY cong   "&#8773;" ><!--/cong R: =congruent with-->
+<!ENTITY conint "&#8750;" ><!--/oint L: =contour integral operator-->
+<!ENTITY cup    "&#8746;" ><!--/cup B: =union or logical sum-->
+<!ENTITY equiv  "&#8801;" ><!--/equiv R: =identical with-->
+<!ENTITY exist  "&#8707;" ><!--/exists =at least one exists-->
+<!ENTITY forall "&#8704;" ><!--/forall =for all-->
+<!ENTITY fnof   "&#402;" ><!--=function of (italic small f)-->
+<!ENTITY ge     "&#8805;" ><!--/geq /ge R: =greater-than-or-equal-->
+<!ENTITY iff    "&#8660;" ><!--/iff =if and only if-->
+<!ENTITY infin  "&#8734;" ><!--/infty =infinity-->
+<!ENTITY int    "&#8747;" ><!--/int L: =integral operator-->
+<!ENTITY isin   "&#8712;" ><!--/in R: =set membership-->
+<!ENTITY lang   "&#9001;" ><!--/langle O: =left angle bracket-->
+<!ENTITY lArr   "&#8656;" ><!--/Leftarrow A: =is implied by-->
+<!ENTITY le     "&#8804;" ><!--/leq /le R: =less-than-or-equal-->
+<!ENTITY minus  "-" ><!--B: =minus sign-->
+<!ENTITY mnplus "&#8723;" ><!--/mp B: =minus-or-plus sign-->
+<!ENTITY nabla  "&#8711;" ><!--/nabla =del, Hamilton operator-->
+<!ENTITY ne     "&#8800;" ><!--/ne /neq R: =not equal-->
+<!ENTITY ni     "&#8715;" ><!--/ni /owns R: =contains-->
+<!ENTITY or     "&#8744;" ><!--/vee /lor B: =logical or-->
+<!ENTITY par    "&#8741;" ><!--/parallel R: =parallel-->
+<!ENTITY part   "&#8706;" ><!--/partial =partial differential-->
+<!ENTITY permil "&#8240;" ><!--=per thousand-->
+<!ENTITY perp   "&#8869;" ><!--/perp R: =perpendicular-->
+<!ENTITY prime  "&#8242;" ><!--/prime =prime or minute-->
+<!ENTITY Prime  "&#8243;" ><!--=double prime or second-->
+<!ENTITY prop   "&#8733;" ><!--/propto R: =is proportional to-->
+<!ENTITY radic  "&#8730;" ><!--/surd =radical-->
+<!ENTITY rang   "&#9002;" ><!--/rangle C: =right angle bracket-->
+<!ENTITY rArr   "&#8658;" ><!--/Rightarrow A: =implies-->
+<!ENTITY sim    "&#8764;" ><!--/sim R: =similar-->
+<!ENTITY sime   "&#8771;" ><!--/simeq R: =similar, equals-->
+<!ENTITY square "&#9633;" ><!--/square B: =square-->
+<!ENTITY sub    "&#8834;" ><!--/subset R: =subset or is implied by-->
+<!ENTITY sube   "&#8838;" ><!--/subseteq R: =subset, equals-->
+<!ENTITY sup    "&#8835;" ><!--/supset R: =superset or implies-->
+<!ENTITY supe   "&#8839;" ><!--/supseteq R: =superset, equals-->
+<!ENTITY there4 "&#8756;" ><!--/therefore R: =therefore-->
+<!ENTITY Verbar "&#8214;" ><!--/Vert =dbl vertical bar-->
+
+<!ENTITY angst  "&#8491;" ><!--Angstrom =capital A, ring-->
+<!ENTITY bernou "&#8492;" ><!--Bernoulli function (script capital B)-->
+<!ENTITY compfn "&#8728;" ><!--B: composite function (small circle)-->
+<!ENTITY Dot    "&#168;" ><!--=dieresis or umlaut mark-->
+<!ENTITY DotDot "&#8412;" ><!--four dots above-->
+<!ENTITY hamilt "&#8459;" ><!--Hamiltonian (script capital H)-->
+<!ENTITY lagran "&#8466;" ><!--Lagrangian (script capital L)-->
+<!ENTITY lowast "&#8727;" ><!--low asterisk-->
+<!ENTITY notin  "&#8713;" ><!--N: negated set membership-->
+<!ENTITY order  "&#8500;" ><!--order of (script small o)-->
+<!ENTITY phmmat "&#8499;" ><!--physics M-matrix (script capital M)-->
+<!ENTITY tdot   "&#8411;" ><!--three dots above-->
+<!ENTITY tprime "&#8244;" ><!--triple prime-->
+<!ENTITY wedgeq "&#8793;" ><!--R: corresponds to (wedge, equals)-->
+
+

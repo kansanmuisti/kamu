@@ -1,0 +1,165 @@
+<!-- ************************************************************************* 	-->
+<!-- 										-->
+<!--       K I R J A L L I N E N  K Y S Y M Y S					-->
+<!-- 										-->
+<!-- 				- 28.9.1998 -					-->
+<!-- 										-->
+<!-- 	Public Identifier:	"-//Eduskunta//DTD kk//FI"	(kk.dtd)	-->
+<!--  ------------------------------------------------------------------------  -->
+
+<!-- ========================================================================= 	-->
+
+<!--
+	Tama DTD sisaltaa kirjallisen kysymyksen kasittelyssa tarvittavat 
+	SGML-standardin mukaiset rakennemaaritykset. Tassa esitetty
+	rakennemaarittely on tarkoitettu erityisesti asiakirjojen tuottamiseen 
+	eli kirjoittamiseen.
+
+	Maaritykset on jaettu useampaan moduliin, joista osaa kaytetaan 
+	hyvaksi myos muiden asiakirjatyyppien kohdalla.
+
+	Ensin on maaritelty kaytettavat merkistot ja muita yleisesti 
+	kaytettavia entiteetteja. Entiteettimaarityksia seuraa 
+	aloitteiden rakennemaaritykset.
+
+	-->
+
+<!-- ========================================================================= 	-->
+
+<!-- Tekstisisaltoelementit -->
+<!ENTITY % sisalto  PUBLIC "-//Eduskunta//DTD sisalto//FI" >
+%sisalto;
+
+<!-- Taulukkomaarittely -->
+<!ENTITY % taulukko   PUBLIC "-//Eduskunta//DTD taulukko//FI" >
+%taulukko;
+
+<!-- Allekirjoitusosa -->
+<!ENTITY % allek    PUBLIC "-//Eduskunta//DTD allek//FI" >
+%allek;
+
+<!-- Identifiointiosa -->
+<!ENTITY % ident PUBLIC "-//Eduskunta//DTD ident//FI" >
+%ident;
+
+<!-- Entiteettimaarittely -->
+<!ENTITY % entiteet PUBLIC "-//Eduskunta//DTD entiteet//FI" >
+%entiteet;
+
+<!-- Liitteet-rakenne-->
+<!ENTITY % liitteet 	PUBLIC "-//Eduskunta//DTD liitteet//FI" >
+%liitteet;
+
+<!-- Saados-rakenne (mukana liiteet-rakenteessa) -->
+<!ENTITY % saados   	PUBLIC "-//Eduskunta//DTD saados//FI" >
+%saados;
+
+<!-- Perusteluissa esiintyvia sisaltoelementteja, jossa on myos lisaotsikoita. -->
+<!ENTITY % PERSIS	"(te|ot3|ot4|ot5|lista|listay|table|kuva|siste|tyhja|tyhjanel)" >
+
+<!-- ========================================================================= 	-->
+<!-- 										-->
+<!--    		 	1. KIRJALLINEN KYSYMYS				-->
+<!-- 										-->
+<!-- 			    	- 28.9.1998 -					-->
+<!-- 										-->
+<!-- ========================================================================= 	-->
+
+<!-- KirjallinenKysymys -->
+<!ELEMENT kk		- - (kysosa+, (vnvast* | kaneetti?))
+				-- Kirjallisen kysymyksen juurielementti, joka sisaltaa
+				   kirjallisen kysymykseen liittyvat paatason
+				   elementit, jotka puolestaan esitellaan 
+				   tarkemmin alempana.
+
+				   Samassa asiakirjassa voi olla sekä suomen että 
+				   ruotsinkielinen kysymys ja vastaus .	-->
+<!ATTLIST kk		Tila (ok | eitark) eitark
+			Versio	CDATA "Versio 1.0"
+			Tunniste CDATA #REQUIRED
+			Alkuper (suomi | ruotsi) suomi
+				-- Alkuper-attribuutti kertoo kk:n alkuperaisen kielen
+				   - jos se on ruotsi, tulee ylatunnisteeseen teksti
+				     'suomennos'				-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Kysymysosa							-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!-- Kysymysosa -->
+<!ELEMENT kysosa	- - (ident, addres, peruste, kysymys, (tyhja|tyhjanel)*, 
+				allekosa, liitteet?) >
+<!ATTLIST kysosa	Kieli (suomi | ruotsi) suomi
+						-- Kysymysosan kieli		-->
+
+<!-- Identifiointi; Valtiopaivaasiakirjojen yleinen identifiointi
+			osan juurielementti				 	-->
+<!ELEMENT ident		- - (%IDENT-KK;) >
+
+<!-- Addresaatti; kysymyksen vastaanottaja, yleensa "Eduskunnalle" 		-->
+<!ELEMENT addres	- - (#PCDATA) >
+
+<!-- Perustelut -->
+<!ELEMENT peruste  	- - (ot2?,(kv|kev|(%PERSIS;))+) >
+
+<!-- Katkoviiva -->
+<!-- tulee saadoksen rakenteesta -->
+<!--ELEMENT kv		- O EMPTY -->
+
+<!-- Keskiviiva -->
+<!ELEMENT kev		- O EMPTY >
+
+<!-- Kysymys; varsinainen kysymys -->
+<!ELEMENT kysymys 	- - (ot2?, ponnet) >
+
+<!-- Ponsiosa -->
+<!ELEMENT ponnet    	- - (johdosa, (ponsi|tyhja|tyhjanel)+) >
+
+<!-- PonsienJohdantoOsa -->
+<!ELEMENT johdosa      	- - (#PCDATA) >
+
+<!-- Ponsikappale -->
+<!ELEMENT ponsi       	- - (%TEKSTI;)+	>
+
+<!-- Allekirjoitusosa; Aloitteiden ja kirjallisen kysymyksen allekirjoitusosa. 
+			Kirjallisen kysymyksen allekirjoitusosa noudattaa valtiopaiva-
+			asiakirjoille maariteltya yleista rakennetta. -->
+<!ELEMENT allekosa 	- - (%ALLEK-KK;) >
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Vastausosa							-->
+<!-- ------------------------------------------------------------------------- 	-->
+
+<!-- ValtioneuvostonVastaus; Valtioneuvoston vastaus kirjalliseen kysymykseen	 -->
+<!ELEMENT vnvast	- - (addres, kysviit+, vastaus, (tyhja|tyhjanel)*, vnvallek, liitteet?) >
+<!ATTLIST vnvast	Kieli (suomi | ruotsi) suomi
+			ylatun CDATA #IMPLIED	-- Ylatunniste			-->
+
+<!-- ViittausKysymykseen; Viittaus kirjallisen kysymyksen kysymykseen -->
+<!ELEMENT kysviit	- - (ot2?, vponnet) >
+
+<!-- VastPonsiosa; vastauksen ponsiosa -->
+<!ELEMENT vponnet    	- - (vjohdosa, (ponsi|tyhja|tyhjanel)+) >
+
+<!-- VastPonnenJohdanto; vastauksen ponnen johdanto-osa -->
+<!ELEMENT vjohdosa      - - (%TEKSTI;)+	>
+
+<!-- Vastaus; ministerin vastaus -->
+<!ELEMENT vastaus	- - (ot2?, johdanto, (%PERSIS;)+) >
+
+<!-- VastauksenJohdanto; ministerin vastauksen johdanto -->
+<!ELEMENT johdanto	- - (#PCDATA) >
+
+<!-- VastauksenAllekirjoitus -->
+<!ELEMENT vnvallek	- - (paivays, sijais?, (minister | tyhja)+) >
+
+<!-- Sijaisuus -->
+<!ELEMENT sijais	- - (#PCDATA) >
+
+<!-- Kappale; Normaali tekstikappale, jossa voidaan kayttaa 
+		erilaisia muotoilumahdollisuuksia. -->
+<!ELEMENT te		- - (%TEKSTI;)+	>
+
+<!-- Paatos; Kirjallisen kysymyksen paatostieto, mikali vastausta ei ole annettu
+		esim. "vastausta ei ole annettu maaraaikaan mennessa".	-->
+<!ELEMENT kaneetti	- - (#PCDATA, akviite?) >
+
+

@@ -1,0 +1,212 @@
+<!-- ************************************************************************* 	-->
+<!-- 										-->
+<!-- 	LAKIALOITE, PUHEMIESNEUVOSTON EHDOTUS JA PUHEMIESNEUVOSTON LUETTELO	-->
+<!-- 		  								-->
+<!-- 				- 4.11.1999 -					-->
+<!-- 										-->
+<!-- 	Public Identifier:	"-//Eduskunta//DTD lal//FI"	(lal.dtd)	-->
+<!-- ************************************************************************* 	-->
+<!--	
+	Tama DTD sisaltaa lakialoitteen, puhemiesneuvoston ehdotuksen ja 
+	puhemiesneuvoston luettelon kasittelyssa tarvittavat SGML-standardin 
+	mukaiset rakennemaaritykset. 
+
+	Maaritykset on jaettu useampaan moduliin, joista osaa kaytetaan 
+	hyvaksi myos muiden asiakirjatyyppien kohdalla.
+
+	Ensin on maaritelty kaytettavat merkistot ja muita yleisesti 
+	kaytettavia entiteetteja. Entiteettimaarityksia seuraa 
+	lakialoitteen rakennemaaritykset ja vastaavat puhemiesneuvoston ehdotuksen
+	ja puhemiesneuvoston luettelon rakennemaaritykset niilta osin kuin ne
+	poikkeavat lakialoitteesta. -->
+<!-- ========================================================================= 	-->
+
+<!ENTITY % sisalto  PUBLIC "-//Eduskunta//DTD sisalto//FI" >
+%sisalto;
+
+<!ENTITY % taulukko   PUBLIC "-//Eduskunta//DTD taulukko//FI" >
+%taulukko;
+
+<!ENTITY % allek    PUBLIC "-//Eduskunta//DTD allek//FI" >
+%allek;
+
+<!ENTITY % ident PUBLIC "-//Eduskunta//DTD ident//FI" >
+%ident;
+
+<!ENTITY % saados   PUBLIC "-//Eduskunta//DTD saados//FI" >
+%saados;
+
+<!ENTITY % entiteet PUBLIC "-//Eduskunta//DTD entiteet//FI" >
+%entiteet;
+
+<!ENTITY % liitteet PUBLIC "-//Eduskunta//DTD liitteet//FI" >
+%liitteet;
+
+<!ENTITY % rlaki   PUBLIC "-//Eduskunta//DTD rlaki//FI" >
+%rlaki;
+
+
+<!ENTITY % PERSIS	"(te|ot2|ot3|ot4|ot5|lista|listay|table|kuva|siste|tyhja|tyhjanel)"
+
+			-- Perusteluissa esiintyvia sisaltoelementteja, jossa
+			   on myos lisaotsikoita, lausumia ja lausunnoissa
+		 	   viela mahdollisia pykalaehdotuksia.			-->
+
+<!ELEMENT te		- - (%TEKSTI;)+ >
+
+<!-- ========================================================================= 	-->
+<!-- 										-->
+<!--    		 	1. LAKIALOITE					-->
+<!-- 										-->
+<!-- 			    	- 4.11.1999 -					-->
+<!-- 										-->
+<!-- ========================================================================= 	-->
+
+<!-- lakialoitteen juurielementti, joka sisaltaa lakialoitteeseen liittyvat paatason
+elementit, jotka puolestaan esitellaan tarkemmin alempana.			-->
+
+<!ELEMENT lal		- - 	(ident, addres, paasis?, 
+				(peruste | (yleisper, (tyhja|tyhjanel)*, yksitper)), 
+				ehdotus, (tyhja|tyhjanel)*, allekosa, (liitteet | rlaki)*)>
+
+<!ATTLIST lal		Tila (ok | eitark) "eitark"
+			Versio	CDATA "Versio 1.0"
+			Kieli (suomi | ruotsi) "suomi"
+			Tunniste CDATA #REQUIRED				  
+			Alkuper (su | ru) "su" >
+<!-- 				Alkuper-attribuutti kertoo LAL:n alkuperaisen
+				kielen. Jos se on ruotsi, tulee ylatunnisteeseen
+				teksti 'suomennos'				-->
+<!-- ========================================================================= 	-->
+<!--		1.1 Identifiointiosa						-->
+<!-- ========================================================================= 	-->
+<!--		Lakialoitteen identifiontiosa (eli tunnistetiedot) noudattaa 
+		valtiopaivaasiakirjoille maariteltya yleista rakennetta, 
+		joka on kuvattu omana moduulinaan.				-->
+<!ELEMENT ident		- - (%IDENT-LA;)>	
+
+
+<!-- ========================================================================= 	-->
+<!--		1.2 Lakialoitteen runko						-->
+<!-- ========================================================================= 	-->
+<!--		Runko-osa koostuu addresaatista, paa-asiallisesta sisallosta,
+		perusteluista ja ehdotuksesta  					-->
+
+<!-- Addresaatti								-->
+<!ELEMENT addres	- - (#PCDATA)>
+<!-- Paaasiallinen sisalto							-->
+<!ELEMENT paasis	- - (ot1, (%PERSIS;)+)>
+
+<!-- Perustelut									-->
+<!ELEMENT peruste  	- - (ot1?, (kv | sv | (%PERSIS;))+)>
+<!-- Yleisperustelut								-->
+<!ELEMENT yleisper  	- - (ot1?, (kv | sv | (%PERSIS;))+)>
+<!-- Yksityiskohtaiset perustelut						-->
+<!ELEMENT yksitper  	- - (ot1?, (kv | sv| (%PERSIS;))+)>
+
+<!-- Lakiehdotus								-->
+<!ELEMENT ehdotus 	- - ((ot1 | ot2)?, ponnet, saadehd?)>
+
+<!-- Saadosehdotus, jonka lakitekstin (la)rakenne on kuvattu omassa yleisessa moduulissaan.-->
+<!ELEMENT saadehd	- - (%LA-LA;) >
+
+<!-- Ponsiosa									-->
+<!ELEMENT ponnet    	- - (johdosa, (ponsi | tyhja | tyhjanel)+) 	>
+<!-- Ponsien johdanto-osa							-->
+<!ELEMENT johdosa      	- - (#PCDATA) >
+<!-- Ponsikappale								-->
+<!ELEMENT ponsi		- - (%TEKSTI;)+ >
+
+<!-- ========================================================================= 	-->
+<!--		1.3 Allekirjoitusosa						-->
+<!-- ========================================================================= 	-->
+<!-- Valtiopaivaasiakirjojen yleinen allekirjoitusosan juurielementti -->
+<!ELEMENT allekosa 	- - (%ALLEK-KK;)>
+
+
+<!-- ========================================================================= 	-->
+<!-- 										-->
+<!--			2. PUHEMIESNEUVOSTON EHDOTUS				-->
+<!-- 										-->
+<!-- 			    	- 4.11.1999 -					-->
+<!-- 										-->
+<!-- ========================================================================= 	-->
+<!-- puhemiesneuvoston ehdotuksen juurielementti, joka sisaltaa paatason
+elementit, jotka puolestaan esitellaan tarkemmin alempana.			-->
+
+<!ELEMENT pne		- - 	(ident, paasis?, (peruste | (yleisper, (tyhja|tyhjanel)*, yksitper)), 
+				ehdotus, (tyhja|tyhjanel)*, allekir, (liitteet | rlaki)*)>
+
+<!ATTLIST pne		Tila (ok | eitark) "eitark"
+			Versio	CDATA "Versio 1.0"
+			Kieli (suomi | ruotsi) "suomi"
+			Tunniste CDATA #REQUIRED >
+<!-- ========================================================================= 	-->
+<!--		2.1 Identifiointiosa						-->
+<!-- ========================================================================= 	-->
+<!--		Puhemiesneuvoston ehdotuksen identifiontiosa (eli tunnistetiedot)
+		noudattaa valtiopaivaasiakirjoille maariteltya yleista rakennetta, 
+		joka on kuvattu omana moduulinaan.				-->
+
+<!-- ========================================================================= 	-->
+<!--		2.2 Puhemiesneuvoston ehdotuksen runko				-->
+<!-- ========================================================================= 	-->
+<!--		Runko-osa vastaa lakialoitteen vastaavaa osaa ja on kuvattu
+		kohdassa 1.2.							-->
+
+
+<!-- ========================================================================= 	-->
+<!--		Allekirjoitusosa						-->
+<!-- ========================================================================= 	-->
+<!-- Valtiopaivaasiakirjojen yleinen allekirjoitusosan juurielementti -->
+<!ELEMENT allekir 	- - (%ALLEK-PNE;)>
+
+<!-- ========================================================================= 	-->
+<!-- 										-->
+<!--			3. PUHEMIESNEUVOSTON LUETTELO				-->
+<!-- 										-->
+<!-- 			    	- 4.11.1999 -					-->
+<!-- 										-->
+<!-- ========================================================================= 	-->
+<!-- puhemiesneuvoston luettelon juurielementti, joka sisaltaa paatason
+elementit, jotka puolestaan esitellaan tarkemmin alempana.			-->
+
+<!ELEMENT pnl		- - 	(ident, perustel, ehdotus, (tyhja|tyhjanel)*, allekir)>
+
+<!ATTLIST pnl		Tila (ok | eitark) "eitark"
+			Versio	CDATA "Versio 1.0"
+			Kieli (suomi | ruotsi) "suomi"
+			Tunniste CDATA #REQUIRED >
+
+<!-- ========================================================================= 	-->
+<!--		3.1 Identifiointiosa						-->
+<!-- ========================================================================= 	-->
+<!--		Puhemiesneuvoston luettelon identifiontiosa (eli tunnistetiedot)
+		noudattaa valtiopaivaasiakirjoille maariteltya yleista rakennetta, 
+		joka on kuvattu omana moduulinaan.				-->
+
+<!-- ========================================================================= 	-->
+<!--		2.2 Puhemiesneuvoston luettelon runko				-->
+<!-- ========================================================================= 	-->
+<!-- Perustelut									-->
+<!ELEMENT perustel  	- - (kv | sv | %PERSIS; | ljl | vjl )+>
+<!-- Lepaamaan jatetyt								-->
+<!ELEMENT ljl	  	- - (jarj, (akviite | muuasiak)+, nimike, alkup?, te*)>
+<!-- Vahvistamatta jatetyt							-->
+<!ELEMENT vjl	  	- - (jarj, (akviite | muuasiak)+, nimike, alkup?, te*) >
+<!-- Jarjestysnumero listassa							-->
+<!ELEMENT jarj  	- - (#PCDATA) >
+<!-- Muu asiakirjaviite, esim. hallituksen kirjelma				-->
+<!ELEMENT muuasiak  	- - (#PCDATA) >
+<!-- Alkuperaiset asiakirjat							-->
+<!ELEMENT alkup  	- - (akviite+) >
+
+<!-- ========================================================================= 	-->
+<!--		Allekirjoitusosa						-->
+<!-- ========================================================================= 	-->
+<!-- Valtiopaivaasiakirjojen yleinen allekirjoitusosan juurielementti. 		-->
+<!-- On vastaava kuin puhemiesneuvoston ehdotuksen allekirjoitusosa.		-->
+
+
+
+

@@ -1,0 +1,180 @@
+<!-- =================================================================	 	-->
+<!-- 										-->
+<!--    		VALIOKUNNAN POYTAKIRJA & ESITYSLISTA			-->
+<!-- 										-->
+<!-- 			(20.4.1998)						-->
+<!-- 				- 10.8.1998 -					-->
+<!-- 										-->
+<!-- 	Public Identifier:	"-//Eduskunta//DTD vkptk//FI"	(vkptk.dtd)	-->
+<!-- ************************************************************************* 	-->
+
+<!ENTITY % entiteet PUBLIC "-//Eduskunta//DTD entiteet//FI" >
+%entiteet;
+
+<!ENTITY % ident PUBLIC "-//Eduskunta//DTD ident//FI" >
+%ident;
+
+<!ENTITY % sisalto PUBLIC "-//Eduskunta//DTD sisalto//FI" >
+%sisalto;
+
+<!ENTITY % allek PUBLIC "-//Eduskunta//DTD allek//FI" >
+%allek;
+
+<!-- ===================================================================-->
+<!-- 									-->
+<!--    	 VALIOKUNTIEN ESITYSLISTA / POYTAKIRJA (vkptk)		-->
+<!-- 									-->
+<!-- 			    - Muutettu 10.8.1998 -			-->
+<!-- 									-->
+<!-- ===================================================================-->
+
+
+<!ENTITY % PTKTEXT  "((#PCDATA)|ku|li|liku|ala|yla|alle|liiviite|akviite)+"	
+				-- Tavallista tekstia, jossa mahdollista 
+				   kayttaa korostuskeinoja 		-->
+
+<!-- ================================================================= 	-->
+<!-- 			P O Y T A K I R J A				-->
+<!-- ================================================================= 	-->
+<!ELEMENT vkptk		- - (erilhuom?, vk, ident, johdanto, teksti)	>
+<!ATTLIST vkptk		TILA	(OK, EiTark)	EiTark
+			VERSIO	CDATA	"luonnos"
+			PVM	CDATA	#IMPLIED
+			TUNNISTE CDATA	#REQUIRED			>
+<!-- ================================================================= 	-->
+<!-- 			S U V I N  P O Y T A K I R J A			-->
+<!-- ================================================================= 	-->
+
+<!ELEMENT svkptk	- - (erilhuom?, (tyhja | tyhjanel | ot1)*, vk, 
+			ident, johdanto, pjteksti?, lasnaolo*, teksti)	>
+<!ATTLIST svkptk	TILA	(OK, EiTark)	EiTark
+			VERSIOPVM	CDATA	#IMPLIED
+			PVM	CDATA	#IMPLIED
+			TUNNISTE CDATA	#REQUIRED			>
+
+<!-- ================================================================= 	-->
+<!-- 			S U V I N  P A I V A J A R J E S T Y S		-->
+<!-- ================================================================= 	-->
+
+<!ELEMENT svkpai	- - ((tyhja | tyhjanel | ot1)*, vk, ident, 
+			johdanto, pjteksti?, lasnaolo*, teksti)	>
+<!ATTLIST svkpai	TILA	(OK, EiTark)	EiTark
+			VERSIOPVM	CDATA	#IMPLIED
+			PVM	CDATA	#IMPLIED
+			TUNNISTE CDATA	#REQUIRED			>
+
+<!-- ================================================================= 	-->
+<!-- 			S U V I N  PJ:n P A I V A J A R J E S T Y S	-->
+<!-- ================================================================= 	-->
+<!-- Sovellus kuten suvin poytakirja, erot ulkoasussa			-->
+<!ELEMENT svkpaipj	- - ( (tyhja | tyhjanel | ot1)*, vk, ident, 
+			johdanto, pjteksti?, lasnaolo*, teksti)		>
+<!ATTLIST svkpaipj	TILA	(OK, EiTark)	EiTark
+			VERSIOPVM	CDATA	#IMPLIED
+			PVM	CDATA	#IMPLIED
+			TUNNISTE CDATA	#REQUIRED			>
+
+<!-- ----------------------------------------------------------------- 	-->
+<!--		Alkutiedot						-->
+<!-- ----------------------------------------------------------------- 	-->
+<!ELEMENT vk		- - (#PCDATA)	-- Valiokunta			-->
+<!ELEMENT ident		- - (%IDENT-EP;)	
+				-- Valtiopaivaasiakirjojen yleinen 
+				identifiointi-osan juurielementti.	-->
+
+<!-- ----------------------------------------------------------------- 	-->
+<!--		Johdanto						-->
+<!-- ----------------------------------------------------------------- 	-->
+<!ELEMENT johdanto	- - (aika, paikka?, lasnaolo?)	
+						-- Ptk:n johdanto-osa	-->
+<!ELEMENT aika	 	- - (#PCDATA) 		-- Kokousajankohta	-->
+<!ELEMENT paikka 	- - (#PCDATA) 		-- Kokouspaikka		-->
+<!ELEMENT lasnaolo 	- - (lasna, osittain?, otsikko?, sihteeri+, poissa?)
+						-- Lasnaolotiedot	--> 
+<!ELEMENT lasna 	- - (otsikko?, edustaja+,te?)  	-- Lasnaolijat	-->  
+<!ELEMENT osittain 	- - (otsikko?, edustaja+,te?)  	-- Osittain lasna-->  
+<!ELEMENT poissa 	- - (otsikko, edustaja+)	-- Poissaolotiedot-->
+
+<!-- ----------------------------------------------------------------- 	-->
+<!--		Tekstiosa						-->
+<!-- ----------------------------------------------------------------- 	-->
+<!ELEMENT teksti	- - ((asiapyka|keskeyt|otsikko|tyhja|tyhjanel|kv)+, 
+			varmenn?, huom?) 	-- Tekstiosa		-->
+<!ATTLIST teksti   VALI (nolla, yksi, kaksi, kolme, nelja, viisi) #IMPLIED
+						-- Asetteluohje		-->
+
+<!ELEMENT asiapyka	- - (pykanro, asiaots, (te|tyhja|tyhjanel|siste|
+			kasitt|jkirjelm|listay|tuntijat|dlista|lasnaolo|otsikko|
+			pjhuom|kesken|akirjat|lausumt|smkokous|kv)*)	  	
+						-- Asiapykala		-->
+<!ELEMENT asiaots 	- - (pykaot | ((akviite|mulviite), aknimike?, alias?, te?,	
+				(eurodoc, te?)*, slisate*)+)
+					 	-- Asian otsikko 	-->
+<!ELEMENT pykanro 	- - (#PCDATA) 		-- Pykalan numero 	-->
+<!ELEMENT pykaot 	- - (#PCDATA) 		-- Pykalan otsikko 	-->
+<!ELEMENT aknimike    	- - (#PCDATA)		-- Asiakirjan nimike	-->
+<!ELEMENT liiviite	- - (#PCDATA)		-- Liiteviittaus	-->
+
+<!--ELEMENT tkappale	- - (%PTKTEXT;)	     Ptk:n tekstikappale pois kaytosta!!-->
+<!ELEMENT kasitt      	- - (#PCDATA, (liiviite)?)+-- Kasittely		-->
+<!ELEMENT jkirjelm      - - (#PCDATA, (liiviite|jkviite)?)+-- Jatkokirjelma	-->
+<!ELEMENT jkviite	- - (#PCDATA)		-- Jatkokirjelmaviittaus-->
+
+<!ELEMENT tuntijat    	- - ((te|tyhja|tyhjanel|asiantun)+)
+						-- Asiantuntijat	-->
+<!ELEMENT asiantun	- - (henkilo?, lisatiet?, org?, (te|tyhja|tyhjanel
+				|liiviite|kello)? )*
+						-- Asiantuntijan tiedot	-->
+
+<!ELEMENT kello		- - (#PCDATA) -- Asiantuntijan kuulemisaika (el)-->
+<!ELEMENT keskeyt	- - ((te|tyhja|tyhjanel)+)-- Kokouksen keskeytys-->
+
+<!ELEMENT dlista	- - (asiaots?, vaiheet*)	-- Diaarilistaus-->
+<!ELEMENT vaiheet	- - (pvm, (te|tyhja|tyhjanel|siste|akirjat)+)
+						-- Vaiheet diaarista	-->
+
+<!ELEMENT varmenn	- - (te, sihteeri) 	-- Ptk:n varmennus	-->
+
+<!ELEMENT huom		- - (te|tyhja|tyhjanel)+
+					-- Huomautusteksti loppuun 	-->
+<!ELEMENT pjhuom	- - (te|tyhja|tyhjanel)+
+					-- Puheenjohtajan huomautus	-->
+
+<!ELEMENT alias		- - (#PCDATA)	-- Asian lyhyempi nimike	-->
+<!ELEMENT eurodoc	- - (#PCDATA)	-- Asian eurodoc-numero		-->
+<!--ELEMENT kom		- - (#PCDATA)	 Asian kom-numero, poistettu 	-->
+
+<!ELEMENT smkokous		- - (sekohta | dlista 
+				| lausumt | pjhuom | kasitt | te | kesken 
+				| tyhja | tyhjanel | kv)+	
+					-- Ministerineuvoston kokous	-->
+<!ELEMENT akirjat	- - (otsikko?, (aknimi)+)	-- Asiakirjat	-->
+<!ELEMENT aknimi	- - (#PCDATA,liiviite?)+	-- Asiakirjan nimi-->
+<!ELEMENT sekohta	- - (otsikko, (te |tyhja|tyhjanel | listay | 
+			dlista | akirjat | lausumt | pjhuom| kasitt | 
+			kesken)*)			-- E-kohta	-->
+<!ELEMENT lausumt	- - (laujohd, lausuma+) 	-- Lausumat	-->
+<!ELEMENT laujohd	- - (%TEKSTI;)+	-- Lausuman johdanto		-->
+<!ELEMENT lausuma	- - (%TEKSTI;)+	-- Lausuma			-->
+
+<!-- ----------------------------------------------------------------- 	-->
+<!--		Yleiset osat						-->
+<!-- ----------------------------------------------------------------- 	-->
+
+<!ELEMENT otsikko	- - (%TEKSTI; | liiviite)+ -- Yleinen otsikko	-->
+<!ELEMENT pvm		- - (#PCDATA)		-- Paivamaara		--> 
+<!ELEMENT te		- - (%TEKSTI;| liiviite)+	
+			-- Normaali tekstikappale, jossa voidaan kayttaa 
+			erilaisia muotoilumahdollisuuksia.		-->
+
+<!-- ----------------------------------------------------------------- 	-->
+<!--		SuVin osat						-->
+<!-- ----------------------------------------------------------------- 	-->
+<!ELEMENT erilhuom	- - (otsikko, te+)	-- Erillishuomautus	-->
+<!ELEMENT pjteksti	- - (paivaj, huom?)		-- 		-->
+<!ELEMENT paivaj	- - (te|tyhja|tyhjanel)+		-- 	-->
+
+<!ELEMENT slisate	- - (%TEKSTI;)+	-- Lisateksti			-->
+<!ELEMENT kesken	- - (keskenps)+ -- Kesken poistuneet ja saapuneet--> 
+<!ELEMENT keskenps	- - (#PCDATA)	-- Kesken poistuneet ja saapuneet--> 
+<!ELEMENT kv		- O EMPTY 	-- Katkoviiva 			-->

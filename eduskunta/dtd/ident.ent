@@ -1,0 +1,77 @@
+<!-- ========================================================================= 	-->
+<!--										-->
+<!--			ASIAKIRJOJEN ALKUTIEDOT (ident)				-->
+<!--										-->
+<!--				- 19.10.1998 -					-->
+<!--										-->
+<!-- 	Public Identifier: "-//Eduskunta//DTD ident//FI"	(ident.dtd)	-->
+<!--										-->
+<!--  ------------------------------------------------------------------------  -->
+<!-- =================================================================================== -->
+<!ENTITY  %  IDENT-VK	"(lyhyttun, vtulo, pitkatun, nimike+, viitteet?)"
+						-- Esim. mietinto, lausunto 	-->
+
+<!ENTITY  %  IDENT-EV	"(lyhyttun, (vtulo|vantaja)?, pitkatun, nimike+, viitteet?)"
+						-- Esim. eduskunnan vastaus ja kirjelma	-->
+
+<!ENTITY  %  IDENT-VN	"(lyhyttun, nimike+)"
+						-- Esim. hallituksen esitys	-->
+
+<!ENTITY  %  IDENT-EK	"(lyhyttun, pitkatun, nimike+)"
+						-- Esim. puhemiesneuvoston ehdotus -->
+
+<!ENTITY  %  IDENT-EP	"(pitkatun)"
+						-- Esim. esityslista ja poytakirja -->
+
+<!ENTITY  %  IDENT-PJ	"(lyhyttun, nimike)"
+						-- Esim. paivajarjestys		-->
+
+<!ENTITY  %  IDENT-KK	"(lyhyttun, evtulo, pitkatun, nimike)"
+						-- Esim. kirjallinen kysymys	-->
+
+<!ENTITY  %  IDENT-AL	"(lyhyttun, evtulo, pitkatun, nimike, viitteet?)"
+						-- Esim. aloitteet		-->
+
+<!ENTITY  %  IDENT-LA	"(lyhyttun, (evtulo|vantaja), pitkatun, nimike, viitteet?)"
+						-- Esim. lakialoite ja pne	-->
+
+<!ENTITY  %  IDENT-SL	"(lyhyttun, (vtulo | evtulo | vantaja)?, pitkatun?, nimike+)"
+						-- Sisallysluettelo	 	-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Lyhyt tunniste (lyhyttun)					-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT lyhyttun	- - (aktyyppi, aknro, vpvuosi)	-- Asiakirjan lyhyt tunniste -->
+<!ELEMENT aktyyppi	- - (#PCDATA)			-- Asiakirjan tyyppi 	-->
+<!ELEMENT aknro		- - (#PCDATA)			-- Asiakirjan numero 	-->
+<!ELEMENT vpvuosi	- - (#PCDATA)			-- Valtiopaivavuosi 	-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Vireilletulo (vtulo)						-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT vtulo		- - (akviite+)		-- Vireilletulo 		-->
+<!ELEMENT evtulo	- - (edustaja)		-- Ensimmainen allekirjoitaja 	-->
+<!ELEMENT vantaja	- - (#PCDATA)		-- Muu allekirjoittaja	 	-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Pitka tunniste (pitkatun)					-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT pitkatun	- - (aktyyppi, aknro, vpvuosi)	-- Asiakirjan pitka tunniste -->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Nimikkeet (nimike)						-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT nimike       	- - (#PCDATA,aukko?)+		-- Ak:n nimike		-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Asiakirjaviitteet (viitteet)					-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT viitteet	- - (#PCDATA) -- Viittaukset kasiteltyihin ak:oihin	-->
+<!ATTLIST viitteet 	viite1	CDATA #IMPLIED
+			viite2	CDATA #IMPLIED
+			viite3	CDATA #IMPLIED
+			viite4	CDATA #IMPLIED
+			viite5	CDATA #IMPLIED
+			viite6	CDATA #IMPLIED 	-- asiakirjaviitteet		-->
+
+

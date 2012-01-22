@@ -1,0 +1,26 @@
+<!-- ***************************************************************************-->
+<!-- 										-->
+<!--	  I S T U N T O P O Y T A K I R J O J A N    P U H E E N V U O R O N    -->
+<!--                            R A K E N T E E T	                	-->
+<!-- 										-->
+<!-- 				- 16.08.1999 -					-->
+<!-- 										-->
+<!-- 	Public Identifier:	"-//Eduskunta//DTD puh//FI"			-->
+<!--				(puh.dtd)					-->
+<!-- ***************************************************************************-->
+<!--
+	DTD istuntopoytakirjojen yhden puheenvuoron rakennetta varten.  Koottu
+	istuntopoytakirjan rakenteesta. 
+-->
+
+<!-- Paivajarjestyksen rakenne -->
+<!ENTITY % ptk PUBLIC "-//Eduskunta//DTD ptk//FI" >
+%ptk;
+
+<!-- ========================================================================= 	-->
+<!--   		 Puheenvuoro-rakenteen ylimmat elementit			-->
+<!-- ========================================================================= 	-->
+<!ELEMENT puh		- - (ot1?, ident, kohta*, ot1?, ot2?, (pvuoro | sktpvuor
+				| pmhuom | pmpuhe | prespuhe | edpuhe ))	>
+
+

@@ -1,0 +1,480 @@
+<!-- ************************************************************************* 	-->
+<!-- 										-->
+<!--       V A L I O K U N N A N   M I E T I N T O   &   L A U S U N T O	-->
+<!-- 										-->
+<!-- 				- 15.4.1999 -					-->
+<!-- 										-->
+<!-- 	Public Identifier:	"-//Eduskunta//DTD vk//FI"	(vk.dtd)	-->
+<!-- ************************************************************************* 	-->
+<!--	
+	Tama DTD sisaltaa valiokunnan mietinnon ja lausunnon kasittelyssa 
+	tarvittavat SGML-standardin mukaiset rakennemaaritykset. 
+
+	Maaritykset on jaettu useampaan moduliin, joista osaa kaytetaan 
+	hyvaksi myos muiden asiakirjatyyppien kohdalla.
+
+	Ensin on maaritelty kaytettavat merkistot ja muita yleisesti 
+	kaytettavia entiteetteja. Entiteettimaarityksia seuraa 
+	mietinnon rakennemaaritykset ja vastaavat lausunnon maaritykset
+	niilta osin kuin ne poikkeavat mietinnosta. Mietinnon ja lausunnon
+	maarityksia seuraa valtiopaivaasiakirjoille maaritetyt yleismodulit.
+		1. Mietinto-runko
+		2. Lausunto-runko
+		3. Identifiointiosa 
+		4. Asiantuntijan ja allekirjoittajan tiedot
+		5. Saados
+		6. Liitteet
+		7. Sisalto-osat
+		8. Cals-taulukko
+-->
+
+<!-- =================================================================================== -->
+
+<!ENTITY % entiteet 	PUBLIC "-//Eduskunta//DTD entiteet//FI" >
+%entiteet;
+
+<!ENTITY % ident 	PUBLIC "-//Eduskunta//DTD ident//FI" >
+%ident;
+
+<!ENTITY % liitteet 	PUBLIC "-//Eduskunta//DTD liitteet//FI" >
+%liitteet;
+
+<!ENTITY % sisalto  	PUBLIC "-//Eduskunta//DTD sisalto//FI" >
+%sisalto;
+
+<!ENTITY % allek    	PUBLIC "-//Eduskunta//DTD allek//FI" >
+%allek;
+
+<!ENTITY % saados   	PUBLIC "-//Eduskunta//DTD saados//FI" >
+%saados;
+
+<!ENTITY % taulukko   	PUBLIC "-//Eduskunta//DTD taulukko//FI" >
+%taulukko;
+
+<!ENTITY % rlaki   PUBLIC "-//Eduskunta//DTD rlaki//FI" >
+%rlaki;
+
+
+<!ENTITY % PERSIS	"(te|ot3|ot4|ot5|lista|listay|table|kuva|lausuma|
+			  pykaehd|siste|tyhja|tyhjanel)"
+			-- Perusteluissa esiintyvia sisaltoelementteja, jossa 
+			   on myos lisaotsikoita, lausumia ja lausunnoissa 
+		 	   viela mahdollisia pykalaehdotuksia.			-->
+<!ENTITY % EMPERSIS	"(te|ot1|svaihto|emotle|ot2|ot3|ot4|ot5|lista|listay|table|kuva|lausuma|
+			  pykaehd|siste|tyhja|tyhjanel|tyhjale)"
+			-- Erikoismietinnon perusteluissa esiintyvia sisaltoelementteja, jossa 
+			   on myos lisaotsikoita, lausumia ja lausunnoissa 
+		 	   viela mahdollisia pykalaehdotuksia. Lisatty OT1 ja OT2.-->
+<!ENTITY % EMSISALT	"te|ot1|svaihto|emotle|ot2|ot3|ot4|ot5|lista|listay|table|kuva|tyhja|tyhjanel|tyhjale"
+			-- Erikoismietinnon kappaleita, otsikoita, listoja,
+			   taulukoita ja kuvia. Lisatty otsikot  1-3.		-->
+
+<!ENTITY % JOHDSIS	"(te|ot3|ot4|ot5|lista|listay|table|kuva|siste|tyhja|tyhjanel)"	
+			-- Johdanto-osassa esiintyvia kappaleita ja listoja.	-->
+
+<!ENTITY % EMJOHDSI	"(te|ot3|ot4|ot5|lista|listay|table|kuva|siste|tyhja|tyhjanel|tyhjale)"	
+			-- Johdanto-osassa esiintyvia kappaleita ja listoja.	-->
+
+<!-- ========================================================================= 	-->
+<!-- 										-->
+<!--    		 1. MIETINTO-RUNKO (vkm)				-->
+<!-- 										-->
+<!-- 			    	- 10.8.1998 -					-->
+<!-- 										-->
+<!-- ========================================================================= 	-->
+
+<!ELEMENT vkm		- - (ident, sishuom?, miejohd, akkuvat?, mkannot,	paatoseh, (tyhja|tyhjanel)*,
+			     allekosa, vlause*, (liitteet|rlaki)*, kuvailu?)
+				-- Erikoisvaliokunnan mietinnon juurielementti,
+				   joka sisaltaa mietintoon liittyvat paatason
+				   elementit, jotka puolestaan esitellaan 
+				   tarkemmin alempana.				-->
+
+<!ATTLIST vkm		Tila (ok | eitark) "eitark"
+			Versio	CDATA "Versio 0.1"
+			Kieli (suomi | ruotsi) "suomi"
+			Tunniste CDATA #REQUIRED
+				-- Asiakirjan tunnisteattribuutit		-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		1.1. Mietinnon identifiointi (ident)				-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Mietinnon identifiontiosa (eli tunnistetiedot) noudattaa 
+		valtiopaivaasiakirjoille maariteltya yleista rakennetta.	-->
+<!ELEMENT ident		- - (%IDENT-VK;)	
+				-- Valtiopaivaasiakirjojen yleinen identifiointi-
+				   osan juurielementti.				-->
+				   
+<!-- Sisainen huomautus; 	-->
+<!ELEMENT sishuom	- - (te | listay | tyhja | tyhjanel)*	>				   
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		1.2. Mietinnon johdanto (miejohd)				-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT miejohd	- - (ot1, asianvir, kasitalo?, saadlaus?, tilappj?,
+			     jaosto?, asiantun?, viitetie?)		
+				  -- Mietinnon johdanto-osa, joka koostuu aina
+				     paatason otsikosta, asian vireilletulosta 
+				     seka kuudesta tilanteen mukaan esiintyvasta 
+				     vapaaehtoisesta alakohdasta.		-->
+
+<!ATTLIST miejohd	ylatun CDATA #IMPLIED	-- Ylatunniste			-->
+<!ELEMENT asianvir 	- - (ot2, ((%JOHDSIS;)|ste)+) 	-- Asian vireilletulo	-->
+<!ELEMENT kasitalo 	- - (ot2, ((%JOHDSIS;)|aloitied)+) 	
+							-- Kasitellyt aloitteet	-->
+<!ELEMENT aloitied	- - (akviite, (nimi|edustaja), nimike, momviite*)
+							-- Aloitteen tiedot	-->
+<!ELEMENT momviite	- - (#PCDATA)			-- Momenttiviittaus	-->
+<!ELEMENT nimi		- - (#PCDATA)			-- Erottelematon nimi	-->
+<!ELEMENT saadlaus 	- - (ot2, (%JOHDSIS;)+)		-- Saadut lausunnot	-->
+<!ELEMENT tilappj 	- - (ot2, (%JOHDSIS;)+)		-- Tilapainen puhjoht.	-->
+<!ELEMENT jaosto 	- - (ot2, (%JOHDSIS;)+)		-- Jaostovalmistelu	-->
+<!ELEMENT asiantun 	- - (ot2, ((%JOHDSIS;)|atuntija|kirjlaus)+) -- Asiantuntijat	--> 
+<!ELEMENT kirjlaus 	- - (ot2?, ((%JOHDSIS;)|atuntija)+) -- Kirjalliset lausunnot	--> 
+<!ELEMENT viitetie 	- - (ot2, (%JOHDSIS;)+)		-- Viitetiedot		-->  
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		1.3. Kasiteltavina olevien asiakirjojen kuvaukset (akkuvat)	-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT akkuvat	- - ((tyhja|tyhjanel)*, ot1, virkuva+, aloikuva*)	
+				-- Asiakirjojen kuvaukset koostuu paatason 
+				   otsikosta, vireilletuloasiakirjojen kuvauksista
+				   seka mahdollisista aloitteiden kuvauksista.	-->
+<!ATTLIST akkuvat	ylatun CDATA #IMPLIED	-- Ylatunniste			-->
+
+<!ELEMENT virkuva  	- - (ot2?, (%JOHDSIS;)+)  -- Vireilletuloak:n kuvaus 	-->
+<!ELEMENT aloikuva 	- - (ot2,  (%JOHDSIS;)+)  -- Aloitteiden kuvaukset 	-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		1.4. Mietinnon kannanotot (mkannot)				-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT mkannot 	- - ((tyhja|tyhjanel)*, ot1, (peruste | (yleisper, yksitper, aloite?)), 
+			     kiiremai?) 
+				-- Mietinnon kannanotot, jossa paatason otsikkoa 
+				   seuraa joko perustelut tai tarkemmin jaoteltuna
+				   yleisperustelut, yksityiskohtaiset perustelut 
+				   ja mahdolliset aloitteet. Lopuksi voi esiintya
+				   viela kiireellisyysmaininta.			-->
+
+<!ELEMENT peruste  	- - (ot2, (%PERSIS;)+) 	-- Jakamattomat perustelut 	-->
+<!ATTLIST peruste	ylatun CDATA #IMPLIED	-- Ylatunniste			-->
+
+<!ELEMENT lausuma	- - (%TEKSTI;)+		-- Lausuma			--> 
+<!ELEMENT yleisper  	- - (ot2, (%PERSIS;)+)  -- Yleisperustelut 		-->
+<!ATTLIST yleisper	ylatun CDATA #IMPLIED	-- Ylatunniste			-->
+
+<!ELEMENT yksitper  	- - (ot2, (%PERSIS;)+) 	-- Yksityiskohtaiset perustelut	-->
+<!ATTLIST yksitper	ylatun CDATA #IMPLIED	-- Ylatunniste			-->
+
+<!ELEMENT aloite  	- - (ot2, (%SISALTO;)+) -- Aloitteet 			-->
+<!ELEMENT kiiremai	- - (ot2, te+)		-- Kiireellisyysmaininta	-->
+<!ELEMENT te		- - (%TEKSTI;)+	-- Normaali tekstikappale, jossa voidaan 
+					   kayttaa erilaisia muotoilu-
+					   mahdollisuuksia.			-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		1.5. Mietinnon paatosehdotukset (paatoseh)			-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT paatoseh      - - (ot2, ponnet, saadehd?, toivomus?, lausumat? )
+				-- Mietinnon paatosehdotukset -osa kuuluisi 
+				   naennaisesti kannanottojen alle, mutta on 
+				   erotettu selvyyden vuoksi rakenteellisesti 
+				   omaksi paatason kokonaisuudekseen.
+				   Paatosehdotukset koostuvat otsikosta, ponsista
+				   seka mahdollisista saadosehdotuksista,
+				   toivomuksista ja lausumista.			-->
+
+<!ATTLIST paatoseh	ylatun CDATA #IMPLIED	-- Ylatunniste			-->
+<!ELEMENT ponnet    	- - (johdosa, (ponsi|tyhja|tyhjanel)+)	-- Ponsiosa			-->
+<!ELEMENT johdosa      	- - (#PCDATA) 		-- Ponsien johdanto-osa		-->
+<!ELEMENT ponsi       	- - (%TEKSTI;)+		-- Ponsikappale			-->
+
+<!ELEMENT saadehd	- - (%LA-VK;)		
+				-- Saadosehdotus, jonka lakitekstin (la)rakenne
+				   on kuvattu omassa yleisessa moduulissaan.	-->
+<!ELEMENT toivomus    	- - (ot4?, (te|tyhja|tyhjanel)+)		-- Toivomus		-->
+<!ELEMENT lausumat	- - (lausumot, (sanro?, (lausuma|tyhja|tyhjanel)+)+)	
+							-- Annetut lausumat	-->
+<!ELEMENT lausumot     	- - (#PCDATA) 		-- Lausumat-osan otsikko	-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		1.6. Mietinnon allekirjoitusosa (allekosa)			-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Mietinnon allekirjoitusosa noudattaa 
+		valtiopaivaasiakirjoille maariteltya yleista rakennetta.	-->
+<!ELEMENT allekosa 	- - (%ALLEK-VK;)	-- Valtiopaivaasiakirjojen yleinen 
+						allekirjoitusosan juurielementti -->
+<!ATTLIST allekosa	ylatun CDATA #IMPLIED	-- Ylatunniste		-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		1.7. Vastalause (vlause)					-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT vlause	- - ((tyhja|tyhjanel)*, ot1, (raketon | (vlkannot, ehdotus)), (tyhja|tyhjanel)*, allekosa)
+			       	-- Vastalause on vapaaehtoinen rakenneosa
+				   mietinnossa, joita voi esiintya myos useampia.
+				   Vastalause koostuu otsikosta, kannanotoista,
+				   ehdotuksesta ja allekirjoitusosasta. 
+				   Vastalause voi olla myos rakenteeltaan
+				   yksinkertaistettu, jolloin kannaotot ja 
+				   ehdotusosa korvataan rakenteettomalla
+				   sisallolla.					-->
+<!ATTLIST vlause	sivutus (uusi | peraan) uusi	-- Asetteluohje		--
+			alkuper (suomi | ruotsi) "suomi" -- Vastalauseen alkuperainen kieli --
+			ylatun CDATA #IMPLIED		-- Ylatunniste		--
+			vali (tyhjaa |tiivis) tyhjaa	-- Aloituskohta		-->
+	
+<!ELEMENT raketon	- - (%SISALTO;)+	-- Rakenteeton vastalause	-->
+<!ELEMENT vlkannot	- - (peruste | (yleisper, yksitper))
+						-- Vastalauseen perustelut	-->
+<!ELEMENT ehdotus     	- - (ot2, ponnet, saadehd?, toivomus?, lausumat?)
+						-- Vastalauseen ehdotus		--> 
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		1.8. Mietinnon liitteet (liitteet)				-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Mietinnon liitteet-osa noudattaa 
+		valtiopaivaasiakirjoille maariteltya yleista rakennetta.	-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		1.9. Kuvailulehti (kuvailu)					-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT kuvailu	- - (ko1, pitkatun, nimike, mtieto, vtieto, lakiehd)	
+				-- Mietinnon kuvailulehti, joka koostuu otsikon
+				   ja nimikkeen lisaksi kolmesta asiaa kuvaavasta
+				   osasta eli mietinnon kuvauksesta, vireilletulo-
+				   asiakirjojen tiedoista seka lakiehdotusten
+				   tiedosita. kuvailulehti on maaritelty ainakin 
+				   viela toistaiseksi vapaaehtoiseksi.		-->
+<!ATTLIST kuvailu	ylatun CDATA #IMPLIED	-- Ylatunniste			-->
+
+<!-- *********  Mietinnon tiedot  ******************************************** 	-->
+<!ELEMENT mtieto	- - (ko2, valmpvm, vkehd, laajuus, liitt?, aloitt?, 
+			     yhteys)		-- Mietinnon kuvaus		-->  
+<!ELEMENT valmpvm	- - (ko3, tieto)	-- Valmistumispaiva		-->
+<!ELEMENT vkehd		- - (ko3, tieto+)	-- Valiokunnan ehdotus		-->
+<!ELEMENT laajuus	- - (ko3, tieto)	-- Laajuus			-->
+<!ELEMENT liitt		- - (ko3, tieto+)	-- Liitteet			-->
+<!ELEMENT aloitt	- - (ko3, tieto+)	-- Aloitteet			-->
+<!ELEMENT yhteys	- - (ko3, tieto+)	-- Yhteystiedot			-->
+
+<!-- *********	Vireilletuloasiakirjojen tiedot	 *****************************	-->
+<!ELEMENT vtieto	- - (ko2, ko2, heak+, muuak+) -- Vireilletuloak:n tiedot-->
+<!ELEMENT heak		- - (aktieto, (ko3, tieto)*)  -- Hallituksen esitys	-->
+<!ELEMENT muuak		- - (aktieto, kanta)	      -- Muu asiakirja		-->
+<!ELEMENT aktieto	- - (#PCDATA)		      -- Asiakirjan tieto	-->
+
+<!-- *********	Lakiehdotusten tiedot  ***************************************	-->
+<!ELEMENT lakiehd	- - (ko2, ko2, ehd+)	      -- Lakiehdotukset		-->
+<!ELEMENT ehd		- - (lenimi, tieto?, kanta)   -- Ehdotuksen tiedot	-->
+<!ELEMENT lenimi	- - (#PCDATA)		      -- Lakiehdotuksen nimi	-->
+
+<!-- *********	Yleiset osat  ************************************************	-->
+<!ELEMENT ko1		- - (#PCDATA)		-- Kuvailulehden paaotsikko	-->
+<!ELEMENT ko2		- - (#PCDATA)		-- Kuvailulehden jaksootsikko	-->
+<!ELEMENT ko3		- - (#PCDATA)		-- Kuvailulehden alaotsikko	-->
+<!ELEMENT tieto		- - (#PCDATA|ku|li|liku|alle)+ -- Tekstitieto		-->
+<!ELEMENT kanta		- - (#PCDATA)		-- Valiokunnan kanta		-->
+
+
+
+<!-- ========================================================================= 	-->
+<!-- 										-->
+<!--    		 2. LAUSUNTO-RUNKO (vkl)				-->
+<!-- 										-->
+<!-- 				- 10.8.1998 -					-->
+<!-- 										-->
+<!-- ========================================================================= 	-->
+<!ELEMENT vkl		- - (ident, lvastott, sishuom?, laujohd, akkuvat?, lkannot,
+			     lausunto,(tyhja|tyhjanel)*, allekosa, erimp*, (liitteet|rlaki)*)
+				-- Erikoisvaliokunnan lausunnon juurielementti,
+				   joka sisaltaa mietintoon liittyvat paatason
+				   elementit, jotka puolestaan esitellaan 
+				   tarkemmin alempana.				-->
+
+<!ATTLIST vkl		Tila (ok | eitark) eitark
+			Versio	CDATA "Versio 0.1"
+			Kieli (suomi | ruotsi) suomi
+			Tunniste CDATA #REQUIRED
+				-- Asiakirjan tunnisteattribuutit		-->
+
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		2.1. Lausunnon identifiointi (ident)				-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Lausunnon identifiontiosa (eli tunnistetiedot) noudattaa 
+		valtiopaivaasiakirjoille maariteltya yleista rakennetta.	-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		2.2. Lausunnon vastaanottaja (lvastott)				-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT lvastott	- - (#PCDATA)		-- Lausunnon vastaanottaja eli
+						   addresaatti.			-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		2.3. Johdanto (laujohd)						-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT laujohd	- - (ot1, asianvir, tilappj?, jaosto?, asiantun?,
+			      viitetie?)	
+				-- Lausunnon johdanto-osa, joka muistuttaa 
+				   suuresti mietinnon vastaavaa osaa. (Kasi-
+				   tellyt aloitteet ja saadut lausunnot -osat
+				   esiintyvat vain mietinnossa.)		-->
+<!ATTLIST laujohd	ylatun CDATA #IMPLIED	-- Ylatunniste			-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		2.4. Kasiteltavina olevien asiakirjojen kuvaukset (akkuvat)	-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Tama osa vastaa taysin mietinnon vastaavaa osaa ja on siten 
+		kuvattu jo mietinnon yhteydessa (kohdassa 1.3.).		-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		2.5. Lausunnon kannanotot (lkannot)				-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT lkannot 	- - ((tyhja|tyhjanel)*, ot1, (peruste | (yleisper, yksitper)) )
+				-- Lausunnon kannanotot, jossa paatason otsikkoa 
+				   seuraa joko perustelut tai tarkemmin jaoteltuna
+				   yleisperustelut ja yksityiskohtaiset perustelut. 
+				   Mietintoon verrattuna lausunnosta puuttuu
+				   aloitteet ja kiireellisyysmaininta -kohdat.
+				   Lausunnossa voi lisaksi esiintya pykala-
+				   ehdotuskappaleita perustelujen seassa.	-->
+
+<!ELEMENT pykaehd	- - (te+)		-- Pykalaehdotus		-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		2.6. Lausunto-osa (lausunto)					-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT lausunto      - - (ot2, ponnet, saadehd?)	
+				-- Lausunto-osa, joka vastaa yksinkertaistettua 
+				   mietinnon paatosehdotukset-osaa.		-->
+<!ATTLIST lausunto	ylatun CDATA #IMPLIED	-- Ylatunniste			-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		2.7. Lausunnon allekirjoitusosa (allekosa)			-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Lausunnon allekirjoitusosa noudattaa 
+		valtiopaivaasiakirjoille maariteltya yleista rakennetta.	-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		2.8. Eriavat mielipiteet (erimp)				-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT erimp		- - ((tyhja|tyhjanel)*, ot1, (raketon | (emkannot, mielpide)), (tyhja|tyhjanel)*, allekosa)
+			       	-- Eriava mielipide on vapaaehtoinen rakenneosa
+				   lausunnossa, joita voi esiintya myos useampia.
+				   Eriava mielipide koostuu otsikosta, kannan-
+				   otoista, mielipiteesta ja allekirjoitusosasta. 
+				   Eriava mielipide voi olla myos rakenteeltaan
+				   yksinkertaistettu, jolloin kannaotot ja 
+				   mielipideosa korvataan rakenteettomalla
+				   sisallolla.					-->
+
+<!ATTLIST erimp		sivutus (uusi | peraan) uusi	-- Asetteluohje --
+			alkuper (suomi | ruotsi) "suomi"  -- alkuperainen kieli --
+			ylatun CDATA #IMPLIED		-- Ylatunniste		--
+			vali (tyhjaa |tiivis) tyhjaa	-- Aloituskohta		-->
+
+<!ELEMENT emkannot	- - (peruste | (yleisper, yksitper)) 
+						-- Mielipiteen perustelut	-->	
+<!ELEMENT mielpide     	- - (ot2, ponnet, saadehd?)
+						-- Mielipide			--> 
+<!ATTLIST mielpide	ylatun CDATA #IMPLIED	-- Ylatunniste			-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		2.9. Lausunnon liitteet (liitteet)				-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Lausunnon liitteet-osa noudattaa 
+		valtiopaivaasiakirjoille maariteltya yleista rakennetta.	-->
+
+
+<!-- ========================================================================= 	-->
+<!-- 										-->
+<!--    		 3. ERIKOISMIETINTO-RUNKO (vkem)			-->
+<!-- 										-->
+<!-- 			    	- 7.12.1999 -					-->
+<!-- 										-->
+<!-- ========================================================================= 	-->
+
+<!ELEMENT vkem		- - (ident, sishuom?, emmiejoh, emakkuva?, emmkanno?, empaatos, 
+			     (tyhja|tyhjanel)*, allekosa, vlause*, (liitteet|rlaki)*, kuvailu?)
+				-- Erikoismietinnon juurielementti,joka sisaltaa 
+				   erikoismietintoon liittyvat paatason
+				   elementit, jotka puolestaan esitellaan 
+				   tarkemmin alempana.				-->
+
+<!ATTLIST vkem		Tila (ok | eitark) "eitark"
+			Versio	CDATA "Versio 0.1"
+			Kieli (suomi | ruotsi) "suomi"
+			Tunniste CDATA #REQUIRED
+				-- Asiakirjan tunnisteattribuutit		-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		3.1. Erikoismietinnon identifiointi (ident)			-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Erikoismietiinnon identifiontiosa (eli tunnistetiedot) noudattaa 
+		valtiopaivaasiakirjoille maariteltya yleista rakennetta.	-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		3.2. Erikoismietinnon johdanto (emmiejoh)			-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT emmiejoh	- - ((ot1|svaihto|ot2|emotle|tyhjale)*, emasianv, emkasita?, emsaadla?, emtilapp?,
+			     emjaosto?, emasiant?, emviitet?)		
+				  -- Erikoismietinnon johdanto-osa, joka koostuu
+				     aina otsikosta, asian vireilletulosta
+				     seka kuudesta tilanteen mukaan esiintyvasta
+				     vapaaehtoisesta alakohdasta.		-->
+
+<!ATTLIST emmiejoh	ylatun CDATA #IMPLIED	-- Ylatunniste			-->
+<!ELEMENT emasianv 	- - (ot2?, ((%EMJOHDSI;)|ste)+) 	-- Asian vireilletulo	-->
+<!ELEMENT emkasita 	- - (ot2?, ((%EMJOHDSI;)|aloitied)+) 	
+							-- Kasitellyt aloitteet	-->
+<!ELEMENT emsaadla 	- - (ot2?, (%EMJOHDSI;)+)	-- Saadut lausunnot	-->
+<!ELEMENT emtilapp 	- - (ot2?, (%EMJOHDSI;)+)	-- Tilapainen puhjoht.	-->
+<!ELEMENT emjaosto 	- - (ot2?, (%EMJOHDSI;)+)	-- Jaostovalmistelu	-->
+<!ELEMENT emasiant 	- - (ot2?, ((%EMJOHDSI;)|atuntija)+) -- Asiantuntijat	--> 
+<!ELEMENT emviitet 	- - (ot2?, (%EMJOHDSI;)+)	-- Viitetiedot		-->  
+<!ELEMENT emotle	- - (#PCDATA)	-- Levea otsikko			-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		3.3. Kasiteltavina olevien asiakirjojen kuvaukset (emakkuva)	-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT emakkuva	- - ((ot1|svaihto|emotle|ot2|tyhjale), virkuva+, emaloiku*)	
+				-- Asiakirjojen kuvaukset koostuu 
+				   otsikosta, vireilletuloasiakirjojen kuvauksista
+				   seka mahdollisista aloitteiden kuvauksista.	-->
+<!ATTLIST emakkuva	ylatun CDATA #IMPLIED	-- Ylatunniste			-->
+
+<!ELEMENT emaloiku 	- - (ot2?,  (%EMJOHDSI;)+)  -- Aloitteiden kuvaukset 	-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		3.4. Mietinnon kannanotot (emmkanno)				-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT emmkanno 	- - ((ot1|svaihto|ot2|ot3|ot4|ot5|emotle|tyhjale)*, (emperust | (emyleisp, 
+			     emyksitp, emaloite?)?), emkiirem?) 
+				-- Erikoismietinnon kannanotot, jossa otsikkoa 
+				   seuraa joko perustelut tai tarkemmin jaoteltuna
+				   yleisperustelut, yksityiskohtaiset perustelut 
+				   ja mahdolliset aloitteet. Lopuksi voi esiintya
+				   viela kiireellisyysmaininta.			-->
+
+<!ELEMENT emperust  	- - ((%EMPERSIS;)+) 	-- Jakamattomat perustelut 	-->
+<!ATTLIST emperust	ylatun CDATA #IMPLIED	-- Ylatunniste			-->
+
+<!ELEMENT emyleisp  	- - ((%EMPERSIS;)+)   -- Yleisperustelut 		-->
+<!ATTLIST emyleisp	ylatun CDATA #IMPLIED	-- Ylatunniste			-->
+
+<!ELEMENT emyksitp  	- - ((%EMPERSIS;)+) 	-- Yksityiskohtaiset perustelut	-->
+<!ATTLIST emyksitp	ylatun CDATA #IMPLIED	-- Ylatunniste			-->
+
+<!ELEMENT emaloite  	- - ((%EMSISALT;)+) -- Aloitteet 			-->
+<!ELEMENT emkiirem	- - ((ot1|svaihto|emotle|ot2|ot3|ot4|ot5|tyhjale)?, (te|tyhja|tyhjanel)+)
+						-- Kiireellisyysmaininta	-->
+
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		3.5. Mietinnon paatosehdotukset (empaatos)			-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT empaatos      - - ((ot1|svaihto|ot2|ot3|ot4|ot5|emotle|tyhjale)*, ponnet, saadehd?, toivomus?, lausumat? )
+				-- Erikoismietinnon paatosehdotukset -osa, lisatty 
+				otsikointimahdollisuuksia	-->
+
+
+
+<!ELEMENT svaihto	- O EMPTY	>
+<!ELEMENT tyhjale	- O EMPTY>

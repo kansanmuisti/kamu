@@ -1,0 +1,559 @@
+<!-- ************************************************************************* 	-->
+<!-- 										-->
+<!--  		T A L O U S A R V I O M I E T I N T O / K I R J E L M A 	-->
+<!-- 										-->
+<!-- 				- 15.10.1999 -					-->
+<!-- 										-->
+<!-- 	Public Identifier:	"-//Eduskunta//DTD vav//FI"			-->
+<!-- ************************************************************************* 	-->
+<!--	
+
+Talousarviomietinnon/kirjelman rakennemaarittely. Rakenne noudattaa 
+kannanottojen osalta VM:n budjettirakennetta, koska mietinnon/kirjelman 
+sisaltona kaytetaan VM:n aineistoa.
+
+Rakenne kayttaa myos yleisia rakenne-entiteetteja, jotka on listattu
+tiedoston alussa.
+
+<!-- ========================================================================= 	-->
+<!-- 		Yleiset entiteettimaaritykset 					-->
+<!-- ========================================================================= 	-->
+
+<!ENTITY % entiteet PUBLIC "-//Eduskunta//DTD entiteet//FI" >
+%entiteet;
+
+<!-- Identifiointiosa -->
+<!ENTITY % ident PUBLIC "-//Eduskunta//DTD ident//FI" >
+%ident;
+
+<!-- Yleiset sisaltoelementit -->
+<!ENTITY % sisalto  PUBLIC "-//Eduskunta//DTD sisalto//FI" >
+%sisalto;
+
+<!-- Allekirjoitusosa -->
+<!ENTITY % allek    PUBLIC "-//Eduskunta//DTD allek//FI" >
+%allek;
+
+<!-- Saados -->
+<!ENTITY % saados   PUBLIC "-//Eduskunta//DTD saados//FI" >
+%saados;
+
+<!-- Taulukkorakenne -->
+<!ENTITY % taulukko   PUBLIC "-//Eduskunta//DTD taulukko//FI" >
+%taulukko;
+
+<!-- Liitteet  -->
+<!ENTITY % liitteet PUBLIC "-//Eduskunta//DTD liitteet//FI" >
+%liitteet;
+
+<!ENTITY % PERSIS	"te|ot3|ot4|ot5|lista|listay|table|kuva|vklausum|
+			  pykaehd|siste|tyhja|tyhjanel"
+			-- Perusteluissa esiintyvia sisaltoelementteja, jossa 
+			   on myos lisaotsikoita, lausumia ja lausunnoissa 
+		 	   viela mahdollisia pykalaehdotuksia.			-->
+
+<!ENTITY % JOHDSIS	"(te|ot3|ot4|ot5|lista|listay|table|kuva|siste|tyhja|tyhjanel)"	
+			-- Johdanto-osassa esiintyvia kappaleita ja listoja.	-->
+
+
+<!-- 	Talousarviomietinnon/kirjelman entiteetit VM:n rakenteesta.		-->
+
+<!-- Yleinen kappaletason rakenne 	-->
+<!ENTITY % parastruct  "(te | lista | table | apltaul | kuva )+"	>
+               			
+<!-- Tulo/menoluvun nimi 		-->
+<!ENTITY % tulomenonimi  "(info-osa?, (#PCDATA), euko?)" >
+
+
+
+<!-- ========================================================================= 	-->
+<!-- 										-->
+<!--    		 TALOUSARVIOMIETINTO-RUNKO (vavm)			-->
+<!-- 										-->
+<!-- 			    	- 21.7.1998 -					-->
+<!-- 										-->
+<!-- ========================================================================= 	-->
+
+<!ELEMENT vavm		- - (ident, miejohd, mkannot, paatoseh, (tyhja | tyhjanel)*, allekosa, 
+			     vlause*, liitteet?, kuvailu?)
+				-- Talousarviomietinnon juurielementti		-->
+
+<!ATTLIST vavm		Tila 	(ok | eitark) 	"eitark"
+			Versio	CDATA 		"Versio 0.1"
+			Kieli 	(suomi | ruotsi) "suomi"
+			Tunniste CDATA 		#REQUIRED
+			Luonne 	(norm | lisa) 	"norm"							
+				-- Tunnisteattribuutit				-->
+
+
+<!-- ========================================================================= 	-->
+<!--			IDENTIFIOINTIOSA (ident)				-->
+<!-- ========================================================================= 	-->
+<!ELEMENT ident		- - (%IDENT-VK;)	
+				-- Identifiointiosa nnoudattaa vp-asiakirjoille
+				   maariteltya yleista rakennetta.		-->
+
+
+<!-- ========================================================================= 	-->
+<!--			JOHDANTO (miejohd)					-->
+<!-- ========================================================================= 	-->
+<!ELEMENT miejohd	- - (ot1, asianvir, kasitalo?, saadlaus?, tilappj?,
+			     jaosto?, asiantun?, viitetie?)		
+				  -- Budjettimietinnon johdanto-osa, joka koostuu 
+				     aina paatason otsikosta, asian vireilletulosta 
+				     seka tilanteen mukaan esiintyvista 
+				     vapaaehtoisista alakohdista.		-->
+<!ATTLIST miejohd	ylatun CDATA #IMPLIED		-- Ylatunniste		-->
+
+<!ELEMENT asianvir 	- - (ot2, (%JOHDSIS;)+) 	-- Asian vireilletulo	-->
+
+<!ELEMENT kasitalo 	- - (ot2, ((%JOHDSIS;)|aloitied)+) 	
+							-- Kasitellyt aloitteet	-->
+<!ELEMENT aloitied	- - (akviite, (nimi|edustaja), nimike, momviite*) 
+							-- Aloitteen tiedot	-->	
+<!ELEMENT momviite	- - (#PCDATA)			-- Momenttiviittaus	-->
+<!ELEMENT nimi		- - (#PCDATA)			-- Erottelematon nimi	-->
+<!ELEMENT saadlaus 	- - (ot2, (%JOHDSIS;)+)		-- Saadut lausunnot	-->
+<!ELEMENT tilappj 	- - (ot2, (%JOHDSIS;)+)		-- Tilapainen puhjoht.	-->
+<!ELEMENT jaosto 	- - (ot2, (%JOHDSIS;)+)		-- Jaostovalmistelu	-->
+<!ELEMENT asiantun 	- - (ot2, ((%JOHDSIS;)|atuntija)+) -- Asiantuntijat	--> 
+<!ELEMENT viitetie 	- - (ot2, (%JOHDSIS;)+)		-- Viitetiedot		-->  
+
+
+<!-- ========================================================================= 	-->
+<!--			   KANNANOTOT (mkannot)					-->
+<!-- ========================================================================= 	-->
+<!ELEMENT mkannot 	- - ((tyhja|tyhjanel)*, ot1?, yleisper?, yksitper)
+				-- Budjettimietinnon kannanotot, jotka koostuu
+				   yleis- ja yksityiskohtaisista perusteluista.	-->
+
+
+<!ELEMENT yleisper  	- - (ot2, ((%PERSIS;) | apltaul | lausuma)+) 
+						-- Yleisperustelut 		-->
+<!ATTLIST yleisper	ylatun CDATA #IMPLIED	-- Ylatunniste			-->
+<!ELEMENT apltaul       - - (table+) 	  	-- APLtaulukko			-->
+
+
+<!ELEMENT yksitper  	- - (ot2?, yleista?, (tulot | menot | yhtveto)+)
+					-- Yksityiskohtaiset perustelut		--
+					-- Yleista-rakenne kirjelmaa varten. 	-->
+<!ATTLIST yksitper	ylatun CDATA #IMPLIED	-- Ylatunniste			-->
+
+<!ELEMENT yleista	- - (otsikko, luku+) 	-- (VM) Yleista, kirjelmassa	-->
+<!ELEMENT luku		- - (otsikko, (luku | (%parastruct;) | aliluku)*) 
+						-- (VM) Yleinen luku, kirjelmassa-->
+<!ELEMENT aliluku	- - (otsikko, (%parastruct;))	-- Aliluku		-->
+
+<!ELEMENT pykaehd	- - (te|tyhja|tyhjanel)+		-- Pykalaehdotus		-->
+
+
+<!ELEMENT vklausum	- - (lausumot, lmviite?, (lausuma|tyhja|tyhjanel)+)	
+					-- Valiokunnan lausumaehdotukset	-->
+<!ATTLIST vklausum	ehdottaja CDATA #IMPLIED	-- lausuman ehdottaja	-->
+<!ELEMENT lausumot	- - (#PCDATA)	-- Lausumaotsikko (Valiokunnan lausumaehdotus n) -->
+<!ELEMENT lmviite	- - (#PCDATA)	-- Luku/momenttiviittaus (kirjelmassa) 	-->
+<!ELEMENT lausuma	- - (%TEKSTI;)+			-- Lausuma		--> 
+
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		 	Menot							-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT menot  	- - (otsikko, (paaluokka|tyhjale|tyhja|tyhjanel)+, sv?)
+							 	-- Menot	-->
+
+<!ELEMENT otsikko  	- - (#PCDATA) 			-- Otsikko		-->
+
+<!ELEMENT paaluokka  	- - (pl.num, pl.nimi, perustelu?, (lukuryhma | menoluku 
+			| tyhjale | tyhja | tyhjanel)*)  -- Menojen paaluokka	-->
+<!ATTLIST paaluokka	plnro  NUMBER    #REQUIRED	-- Paaluokan numero 	--
+			liite  CDATA     #IMPLIED	-- Liite 		--
+			ylatun CDATA	 #IMPLIED	-- Ylatunniste, mietinnossa -->
+
+<!ELEMENT pl.num  	- - (#PCDATA)			-- Paaluokan numero	-->
+<!ELEMENT pl.nimi  	- - (#PCDATA)			-- Paaluokan nimi	-->
+
+<!ELEMENT perustelu  	- - (vkperust?, paatososa?) 
+						-- Vk:n perustelu- ja paatososa -->
+
+<!ELEMENT vkperust	- - (((%PERSIS;) | lausuma)+)	-- Vk:n perustelut 	-->
+<!ELEMENT paatososa	- - (muutosot?, muutmoot?, (%parastruct;)+)
+							-- Paatososa            -->
+<!ELEMENT muutosot	- -  (#PCDATA)			-- Muutososan otsikko	-->
+<!ELEMENT muutmoot	- - ((info-osa?, ((#PCDATA)|ku|li|liku)*, euko?), mrl?)
+							-- Muuttunut momentin nimi-->
+
+
+
+<!ELEMENT lukuryhma  - - (lukuryhmanimi,lukuryhmainfo,perustelu) --lukuryhma	--
+               --Erillinen lsiaselvitysosa. Voi koskea useampia menoluokkia	-->
+<!ELEMENT lukuryhmanimi	- - (#PCDATA) 			-- Lukuryhmanimi	-->
+<!ELEMENT lukuryhmainfo	- - (#PCDATA)	-- Lukuryhmainfo = tieto mita menoluokkia 
+					   lisaselvitys koskee  		-->
+
+<!ELEMENT menoluku  	- - (akt.menoluku) 		-- Menoluku		-->
+<!ATTLIST menoluku	tryhma  CDATA    #IMPLIED 	-- Tehtavaryhma 	--
+			liite   CDATA    #IMPLIED	-- Liitehierarkian ylin dokumentti--
+			mlnro   CDATA    #REQUIRED	-- Menoluokan numero	-->
+
+<!ELEMENT akt.menoluku	- - (menolukunimi, perustelu?, (menomomentti | tyhjale 
+			| tyhja | tyhjanel)*)		-- Aktiivinen menoluku 	-->
+
+<!ELEMENT menolukunimi  - - (%tulomenonimi;) 		-- Menolukunimi		-->
+
+<!ELEMENT menomomentti  - - (akt.menomom) 		-- Menomomentti		-->
+<!ATTLIST menomomentti	liite  CDATA    #IMPLIED 
+	               	toimintamenomom (k,e)  "e"
+			hakukrit1  CDATA    #IMPLIED	-- Hakukriteeri, varattu --
+	                hakukrit2  CDATA    #IMPLIED 	-- Hakukriteeri, vapaa	--
+	                hakukrit3  CDATA    #IMPLIED 
+	                hakukrit4  CDATA    #IMPLIED 
+	                mmnro  	   CDATA    #IMPLIED	-- Menomentin numero	-->
+
+<!ELEMENT akt.menomom  	- - (menomom.nimi, vkperust?, paatososa?) 
+					                -- Aktiivinen menomomentti-->
+
+<!ELEMENT menomom.nimi  - - ((%tulomenonimi;), mrl?)	-- Menomomentin nimi	-->
+
+
+<!ELEMENT mrl  		- - (arvio.mr | siirto.mr2v | siirto.mr3v | kiintea.mr)
+				      -- Maararahalajit, lajiteksti generoituu autom. 
+					 mrl-tyypin mukaan			-->
+<!ELEMENT arvio.mr      - -  (#PCDATA)  -- Arviomaararaha				-->
+<!ELEMENT siirto.mr2v   - -  (#PCDATA)  -- Siirtomaararaha 2 vuotta			-->
+<!ELEMENT siirto.mr3v   - -  (#PCDATA)  -- Siirtomaararaha 3 vuotta			-->
+<!ELEMENT kiintea.mr   - -  (#PCDATA)  -- Kiintea maararaha			-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--			Tulot (tulot)						-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT tulot		- - (otsikko, (osasto | tyhjale | tyhja | tyhjanel)+)	
+								-- Tulot	-->
+
+<!ELEMENT osasto	- - (os.num, os.nimi, perustelu?, (tuloluku | tyhjale 
+			| tyhja | tyhjanel)*) -- Osasto -->
+<!ATTLIST osasto	osnro  NUMBER    #REQUIRED 		-- Osaston nro	--
+			ylatun CDATA	 #IMPLIED   -- Ylatunniste, mietinnossa -->
+
+<!ELEMENT os.num	- - (#PCDATA)	-- Osaston numero			-->
+<!ELEMENT os.nimi	- - (#PCDATA)	-- Osaston nimi. Nimea edeltaa vakio-	--
+					-- teksti "Osasto" ja osnum-attribuutti --
+					-- ja rivinvaihto			-->
+
+<!ELEMENT tuloluku	- - (akt.tuloluku) 	
+					-- Tuloluku, esim. 01. Tulon ja varal-	--
+					-- lisuuden perusteella kannettavat verot -->
+<!ATTLIST tuloluku	tlnum  CDATA    #IMPLIED 	-- Tuloluvun numero	-->
+
+<!ELEMENT akt.tuloluku	- - (tulolukunimi, perustelu?, (tulomomentti | tyhjale 
+			| tyhja | tyhjanel)*) 		-- Aktiivinen tuloluku	-->
+<!ELEMENT tulolukunimi  - - (%tulomenonimi;) 		-- Tulolukunimi		-->
+
+<!ELEMENT tulomomentti  - - (akt.tulomom) 		-- Tulomomentti		--
+			               --Esim, Tulo- ja varallisuusvero		--
+			               --Formatointi: Sisennys + kursivointi	-->
+<!ATTLIST tulomomentti	tmnro  CDATA    #REQUIRED 	-- Tulomomentin nro	-->
+
+<!ELEMENT akt.tulomom	- - (tulomom.nimi, vkperust?, paatososa?)
+							-- Aktiivinen tulomom.	-->
+<!ELEMENT tulomom.nimi  - - (%tulomenonimi;) 	-- Tulomomentin nimi		--
+			                -- Tulomomentin nimi, esim. 01. 	--
+					-- Tulo- ja varallisuusvero		-->
+
+
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		 	Yhteenveto						-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT yhtveto	- - (otsikko, ((%PERSIS;) | apltaul )+ )
+					-- Yhteenveto, sisaltaa perustelut ja   --
+					-- vertailutaulukon. 			-->
+
+
+
+<!-- ========================================================================= 	-->
+<!--			PAATOSEHDOTUKSET					-->
+<!-- ========================================================================= 	-->
+<!ELEMENT paatoseh      - - ((tyhja|tyhjanel)*, ot2, ponnet)
+					-- Budjettimietinnon paatosehdotusosa	-->
+<!ATTLIST paatoseh	ylatun CDATA #IMPLIED	-- Ylatunniste			-->
+
+<!ELEMENT ponnet    	- - (johdosa, (ponsi|tyhja|tyhjanel)+)	-- Ponsiosa			-->
+<!ELEMENT johdosa      	- - (#PCDATA) 		-- Ponsien johdanto-osa		-->
+<!ELEMENT ponsi       	- - (%TEKSTI;)+		-- Ponsikappale			-->
+
+
+<!-- ========================================================================= 	-->
+<!--			ALLEKIRJOITUSOSA (allekosa)				-->
+<!-- ========================================================================= 	-->
+<!ELEMENT allekosa 	- - (%ALLEK-VK;)	-- Valtiopaivaasiakirjojen yleinen 
+						allekirjoitusosan juurielementti -->
+<!ATTLIST allekosa	ylatun CDATA #IMPLIED	-- Ylatunniste		-->
+
+
+<!-- ========================================================================= 	-->
+<!--			VASTALAUSEET (vlause)					-->
+<!-- ========================================================================= 	-->
+<!ELEMENT vlause	- - ((tyhja|tyhjanel)*, ot1, (raketon | (vlkannot, ehdotus?)), (tyhja|tyhjanel)*, allekosa)
+			       	-- Vastalause on vapaaehtoinen rakenneosa
+				   mietinnossa, joita voi esiintya myos useampia.
+				   Vastalause koostuu otsikosta, kannanotoista,
+				   ehdotuksesta ja allekirjoitusosasta. 	-->
+<!ATTLIST vlause	sivutus (uusi | peraan) "uusi"	-- Asetteluohje		--
+			alkuper (suomi | ruotsi) "suomi" -- Vastalauseen alkuperainen kieli --
+                   	ylatun CDATA #IMPLIED		-- Ylatunniste		-->
+
+<!ELEMENT raketon	- - (%SISALTO;)+	-- Rakenteeton vastalause	-->
+	
+<!ELEMENT vlkannot	- - (peruste | (yleisper?, vlyksper)) 
+						-- Vastalauseen perustelut	-->
+<!ELEMENT ehdotus     	- - (ot2, ponnet, toivomus?, lausumat?)
+						-- Vastalauseen ehdotus		--> 
+<!ELEMENT peruste	- - (ot2, ((%PERSIS;) | lausuma)+)
+						-- Jakamattomat perustelut	-->
+<!ELEMENT toivomus    	- - (ot4?, te+)		-- Toivomus			-->
+<!ELEMENT lausumat	- - (ot4?, (lausuma|tyhja|tyhjanel)+)-- Annetut lausumat	-->
+
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--			Vastalauseen yks.koht.perustelut (vlyksper)		-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT vlyksper  	- - (ot2?, vlmenot+)	-- Yksityiskohtaiset perustelut	-->
+
+<!ELEMENT vlmenot  	- - (otsikko, vlpaalk+)		-- Menot		-->
+
+<!ELEMENT vlpaalk  	- - (pl.nro, pl.nimi, ((%PERSIS;) | ponnet | vlluku | lausuma)+) 
+	               					-- Menojen paaluokka	-->
+<!ELEMENT pl.nro	- - (#PCDATA)			-- Paaluokka + numero	-->
+
+<!ELEMENT vlluku	- - (lukunimi, ((%PERSIS;) | ponnet | vlmom | lausuma)+) 
+							-- Luku			-->
+<!ELEMENT lukunimi  	- - ((%TEKSTI;)+)		-- Luvun nimi		-->
+
+<!ELEMENT vlmom		- - (momnimi, ((%PERSIS;) | ponnet | lausuma)+)	-- Momentti -->
+<!ELEMENT momnimi  	- - ((%TEKSTI;)+)		-- Momentin nimi	-->
+
+<!-- ========================================================================= 	-->
+<!--			LIITTEET (liitteet)					-->
+<!-- ========================================================================= 	-->
+<!--		Mietinnon liitteet-osa noudattaa 
+		valtiopaivaasiakirjoille maariteltya yleista rakennetta.	-->
+
+
+<!-- ========================================================================= 	-->
+<!--			KUVAILULEHTI (kuvailu)					-->
+<!-- ========================================================================= 	-->
+<!ELEMENT kuvailu	- - (ko1, pitkatun, nimike, mtieto, vtieto, lakiehd)	
+				-- Mietinnon kuvailulehti, joka koostuu otsikon
+				   ja nimikkeen lisaksi kolmesta asiaa kuvaavasta
+				   osasta eli mietinnon kuvauksesta, vireilletulo-
+				   asiakirjojen tiedoista seka lakiehdotusten
+				   tiedosita. kuvailulehti on maaritelty ainakin 
+				   viela toistaiseksi vapaaehtoiseksi.		-->
+<!ATTLIST kuvailu	ylatun CDATA #IMPLIED	-- Ylatunniste			-->
+
+<!-- *********  Mietinnon tiedot  ******************************************** 	-->
+<!ELEMENT mtieto	- - (ko2, valmpvm, vkehd, laajuus, liitt?, aloitt?, 
+			     yhteys)		-- Mietinnon kuvaus		-->  
+<!ELEMENT valmpvm	- - (ko3, tieto)	-- Valmistumispaiva		-->
+<!ELEMENT vkehd		- - (ko3, tieto+)	-- Valiokunnan ehdotus		-->
+<!ELEMENT laajuus	- - (ko3, tieto)	-- Laajuus			-->
+<!ELEMENT liitt		- - (ko3, tieto+)	-- Liitteet			-->
+<!ELEMENT aloitt	- - (ko3, tieto+)	-- Aloitteet			-->
+<!ELEMENT yhteys	- - (ko3, tieto+)	-- Yhteystiedot			-->
+
+<!-- *********	Vireilletuloasiakirjojen tiedot	 *****************************	-->
+<!ELEMENT vtieto	- - (ko2, ko2, heak+, muuak+) -- Vireilletuloak:n tiedot-->
+<!ELEMENT heak		- - (aktieto, (ko3, tieto)*)  -- Hallituksen esitys	-->
+<!ELEMENT muuak		- - (aktieto, kanta)	      -- Muu asiakirja		-->
+<!ELEMENT aktieto	- - (#PCDATA)		      -- Asiakirjan tieto	-->
+
+<!-- *********	Lakiehdotusten tiedot  ***************************************	-->
+<!ELEMENT lakiehd	- - (ko2, ko2, ehd+)	      -- Lakiehdotukset		-->
+<!ELEMENT ehd		- - (lenimi, tieto?, kanta)   -- Ehdotuksen tiedot	-->
+<!ELEMENT lenimi	- - (#PCDATA)		      -- Lakiehdotuksen nimi	-->
+
+<!-- *********	Yleiset osat  ************************************************	-->
+<!ELEMENT ko1		- - (#PCDATA)		-- Kuvailulehden paaotsikko	-->
+<!ELEMENT ko2		- - (#PCDATA)		-- Kuvailulehden jaksootsikko	-->
+<!ELEMENT ko3		- - (#PCDATA)		-- Kuvailulehden alaotsikko	-->
+<!ELEMENT tieto		- - (#PCDATA|ku|li|liku|alle)+ -- Tekstitieto		-->
+<!ELEMENT kanta		- - (#PCDATA)		-- Valiokunnan kanta		-->
+
+
+
+
+<!-- ========================================================================= 	-->
+<!-- 																			-->
+<!--    		 TALOUSARVIOASIAKIRJAT PAALUOKITTAIN JA OSASTOITTAIN (povm)		-->
+<!-- 																			-->
+<!-- 			    	- 18.02.2000 -											-->
+<!-- 																			-->
+<!-- ========================================================================= 	-->
+<!ELEMENT povm		- - (ident, (paaluokka | osasto)) 
+			-- Talousarvioasiakirja paaluokittain ja osastoittain juurielementti-->
+
+
+
+
+<!-- ========================================================================= 	-->
+<!-- 																			-->
+<!--    		 TALOUSARVIOKIRJELMA (vavk)										-->
+<!-- 																			-->
+<!-- 			    	- 11.11.1998 -											-->
+<!-- 																			-->
+<!-- ========================================================================= 	-->
+<!ELEMENT vavk		- - (ident, kastie, eklausmt?, numerotaulu, yksitper, 
+			     voimtusa, (tyhja|tyhjanel)*, allekir, liitteet?) 
+				-- Talousarviokirjelman juurielementti		-->
+
+<!ATTLIST vavk		Tila 	(ok | eitark) 	"eitark"
+			Versio	CDATA 		#IMPLIED
+			Kieli 	(suomi | ruotsi) "suomi"
+			Tunniste CDATA 		#REQUIRED
+			Luonne 	(norm | lisa) 	"norm"				
+				-- Tunnisteattribuutit				-->
+
+
+<!--ELEMENT vavk	- - (ekkasit, numerotaulu, perustlt)
+				Talousarviokirjelman juurielementti, 
+				kirjarakennetta varten				-->
+
+<!--ELEMENT ekkasit	- - (ident, kastie, eklausmt)	Kirjelman alkuosa	-->
+<!--ELEMENT perustlt	- - (yksitper, voimtusa, allekir, liitteet?)
+							Kirjelma loppuosa	-->
+
+<!-- ========================================================================= 	-->
+<!--			IDENTIFIOINTIOSA (ident)										-->
+<!-- ========================================================================= 	-->
+<!-- ELEMENT ident		- - (%IDENT-VK;)										-->
+<!--				Budjettikirjelman identifiointiosan juurielementti.
+				(Kuten mietinnossa.)				-->
+
+
+<!-- ========================================================================= 	-->
+<!--			KASITTELYTIEDOT (kastie)				-->
+<!-- ========================================================================= 	-->
+<!ELEMENT kastie	- - (ot1, (%JOHDSIS;)+)		-- Kasittelytiedot 	-->
+
+
+<!-- ========================================================================= 	-->
+<!--			   EDUSKUNNAN LAUSUMAT (eklausum)			-->
+<!-- ========================================================================= 	-->
+<!ELEMENT eklausmt	- - (ot1, (%JOHDSIS;)+, vklausum+) -- Ek:n lausumat	-->
+
+
+<!-- ========================================================================= 	-->
+<!--			    NUMEROTAULU (numerotaulu)				-->
+<!--	        (VM:n rakenteesta, lopputagin omitted poistettu)		-->
+<!-- ========================================================================= 	-->
+<!ELEMENT numerotaulu	- - (otsikko, (%JOHDSIS;)?, nt.tulot?, nt.menot?)	
+						-- Numerotaulu			-->
+<!ELEMENT nt.tulot  	- - (otsikko, nt.osasto+, nt.loppusumma) 	
+						-- Nt.tulot			-->
+<!ELEMENT nt.menot	- - (otsikko, nt.paaluokka+, nt.loppusumma)	
+						-- Nt.menot 			-->
+
+<!ELEMENT nt.osasto	- - (otsikko, mkotsikko?, (nt.nro?, nt.nimi, nt.summa), 
+			     nt.tuloluku+) 	-- Nt.osasto			-->
+<!ELEMENT nt.loppusumma	- - (otsikko, nt.markat)  -- Nt.loppusumma		-->
+
+<!ELEMENT nt.paaluokka	- - (otsikko, mkotsikko?, (nt.nro?, nt.nimi, nt.summa), 
+			     nt.menoluku+)	-- Nt.paaluokka			-->
+<!ELEMENT mkotsikko	- - (#PCDATA)		-- Mkotsikko			-->
+
+<!ELEMENT nt.nro	- - (#PCDATA)		-- Nt.nro			-->
+
+<!ELEMENT nt.nimi	- - (#PCDATA)		-- Nt.nimi			-->
+
+<!ELEMENT nt.summa	- - (#PCDATA)		-- Nt.summa			-->
+
+<!ELEMENT nt.tuloluku	- - ((nt.nro?, nt.nimi, nt.summa), nt.tulomom+) 
+						-- Nt.luku			-->
+<!ELEMENT nt.markat	- - (#PCDATA)		-- Nt.markat			-->
+
+<!ELEMENT nt.menoluku	- - ((nt.nro?, nt.nimi, nt.summa), nt.menomom+) 
+						-- Nt.menoluku			-->
+<!ELEMENT nt.tulomom	- - (nt.nro?, nt.nimi, nt.summa)		
+						-- Nt.tulomom			-->
+<!ELEMENT nt.menomom	- - (nt.nro?, nt.nimi, nt.summa)		
+						-- Nt.menomom			-->
+
+<!-- ========================================================================= 	-->
+<!--			   YKSITYISKOHTAISET PERUSTELUT (yksitper)		-->
+<!-- ========================================================================= 	-->
+<!--			Kuten mietinnon puolella.				-->
+
+
+<!-- ========================================================================= 	-->
+<!--			   VOIMAANTULOSAANNOS (voimtusa)			-->
+<!-- ========================================================================= 	-->
+<!ELEMENT voimtusa	- -	(ponsi|tyhja|tyhjanel)+		-- Voimaantulosaannos	-->
+
+
+<!-- ========================================================================= 	-->
+<!--			   ALLEKIRJOITUKSET (allekir)				-->
+<!-- ========================================================================= 	-->
+<!ELEMENT allekir	- -	(%ALLEK-VAV;) 	-- Allekirjoitukset		-->
+<!ATTLIST allekir	sivutus (uusi | peraan) "uusi"	-- Asetteluohje		--
+			ylatun CDATA #IMPLIED	-- Ylatunniste			-->
+
+
+<!-- ========================================================================= 	-->
+<!-- 																			-->
+<!--    		 TALOUSARVIOKIRJELMAN SAADOSKOKOELMAVERSIO (vavksk)	-->
+<!-- 																			-->
+<!-- 			    	- 14.11.2000 -											-->
+<!-- 																			-->
+<!-- ========================================================================= 	-->
+<!ELEMENT vavksk		- - (ident, kastie?, eklausmt?, numerotaulu, yksitper, 
+			     voimtusa, (tyhja|tyhjanel)*, allekir, liitteet?) 
+				-- Talousarviokirjelman saadoskokoelmaversion juurielementti-->
+
+<!ATTLIST vavksk	Tila 	(ok | eitark) 	"eitark"
+			Versio	CDATA 		#IMPLIED
+			Kieli 	(suomi | ruotsi) "suomi"
+			Tunniste CDATA 		#REQUIRED
+			Luonne 	(norm | lisa) 	"norm"				
+				-- Tunnisteattribuutit				-->
+
+
+<!-- ========================================================================= 	-->
+<!--										-->
+<!--			   	VM:N YLEISRAKENTEITA				-->
+<!--										-->
+<!--				- 11.11.1998 -					-->
+<!--										-->
+<!-- ========================================================================= 	-->
+
+<!ELEMENT te   		- - (%TEKSTI; | ha | haku | momraha | muutmomk | poistmk |  
+				summa | viite | valtuus )+ 			>
+
+<!ELEMENT momraha   - - (#PCDATA) -- Momentille myonnetty mk-maara		-->
+<!ELEMENT muutmomk  - - (#PCDATA) -- Momentille myonnetty muuttunut mk-maara	-->
+<!ELEMENT poistmk   - - (#PCDATA) -- Momentilta poistettu markat		-->
+
+
+<!ELEMENT ha  		- -  (#PCDATA) 	-- Harvennettu teksti (EK:ssa kursiivi)	-->
+<!ELEMENT haku 		- -  (#PCDATA) 	-- Harvenettu kursiivi	(EK:ssa lihavoitukursiivi)-->
+
+
+<!ELEMENT summa  - - (#PCDATA) 
+	               --Tekstissa esiintyva luku, joka halutaan merkita summaksi-->
+<!ATTLIST summa	valuutta (ecu,mk)  "mk"		-- Valuutta			-->
+
+<!ELEMENT viite  - O  EMPTY			-- TAE:n sisainen viite		-->
+<!ATTLIST viite	idref	CDATA    #IMPLIED
+		type	CDATA    #IMPLIED	-- Cross refrence format (FM)	--
+			      --Maps to FrameMaker+SGML Cross reference format	--
+			      --Cross reference poistettu EK:n asiakirjasta	-->
+
+<!ELEMENT valtuus  - - (#PCDATA) 		-- Valtuus			-->
+<!ATTLIST valtuus	asia  CDATA    #IMPLIED 				>
+
+<!ELEMENT info-osa	- - (#PCDATA) 		-- Info-osa			-->
+
+<!ELEMENT euko		- - (osaeu | eu) 	-- EU koodaus. EU tai osaEU 	-->
+<!ELEMENT osaeu		- -  (#PCDATA)  	-- Osa EU			-->
+<!ELEMENT eu  		- -  (#PCDATA) 		-- EU				-->
+<!-- Muotoiluelementti leveaa tyhja-elementtia varten				-->
+<!ELEMENT tyhjale	- O EMPTY>

@@ -21,6 +21,8 @@ DATABASES = {
     }
 }
 
+SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
+
 DJAPIAN_DATABASE_PATH = os.path.dirname(__file__) + '/djapian/'
 
 # Local time zone for this installation. Choices can be found here:
@@ -133,6 +135,8 @@ INSTALLED_APPS = (
     'kamu.orgs',
     'kamu.comments',
     'social',
+    'parliament',
+    'eduskunta',
     'tagging',
     'djapian',
     'facebook',

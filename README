@@ -10,6 +10,7 @@ Dependencies
 - python-numpy
 - subversion
 - git
+- opensp
 
 LESS (CSS extension)
 ====================

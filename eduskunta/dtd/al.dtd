@@ -1,0 +1,130 @@
+<!-- ************************************************************************* 	-->
+<!-- 										-->
+<!--	A L O I T T E E T							-->
+<!-- 										-->
+<!-- 				- 1.10.1998 -					-->
+<!-- 										-->
+<!-- 	Public Identifier:	"-//Eduskunta//DTD al//FI"	(al.dtd)	-->
+<!--  ------------------------------------------------------------------------  -->
+<!-- ========================================================================= 	-->
+<!--	
+	Tama DTD sisaltaa aloitteiden (toimenpidealoite TPA, keskustelualoite KA, 
+	talousarvioaloite TAA, lisatalousarvioaloite LTA, toivomusaloite TA) 
+	kasittelyssa tarvittavat SGML-standardin mukaiset rakennemaaritykset. 
+
+	Maaritykset on jaettu useampaan moduliin, joista osaa kaytetaan 
+	hyvaksi myos muiden asiakirjatyyppien kohdalla.
+
+	Ensin on maaritelty kaytettavat merkistot ja muita yleisesti 
+	kaytettavia entiteetteja. Entiteettimaarityksia seuraa 
+	aloitteiden rakennemaaritykset.
+
+	-->
+
+<!-- ========================================================================= 	-->
+
+
+<!-- Tekstisisaltoelementit -->
+<!ENTITY % sisalto  PUBLIC "-//Eduskunta//DTD sisalto//FI" >
+%sisalto;
+
+<!-- Taulukkomaarittely -->
+<!ENTITY % taulukko   PUBLIC "-//Eduskunta//DTD taulukko//FI" >
+%taulukko;
+
+<!-- Allekirjoitusosa -->
+<!ENTITY % allek    PUBLIC "-//Eduskunta//DTD allek//FI" >
+%allek;
+
+<!-- Identifiointiosa -->
+<!ENTITY % ident PUBLIC "-//Eduskunta//DTD ident//FI" >
+%ident;
+
+<!-- Entiteettimaarittely -->
+<!ENTITY % entiteet PUBLIC "-//Eduskunta//DTD entiteet//FI" >
+%entiteet;
+
+<!-- Perusteluissa esiintyvia sisaltoelementteja, jossa on myos lisaotsikoita. -->
+<!ENTITY % PERSIS	"(te|ot3|ot4|ot5|lista|listay|table|kuva|siste|tyhja|tyhjanel)" >
+
+<!-- ========================================================================= 	-->
+<!-- 										-->
+<!--    		 	ALOITTEET					-->
+<!-- 										-->
+<!-- 			    	- 1.10.1998 -					-->
+<!-- 										-->
+<!-- ========================================================================= 	-->
+
+<!-- Aloite; aloitteen juurielementti, joka sisaltaa aloitteeseen liittyvat paatason  elementit. -->
+<!ELEMENT al		- - (ident, addres, peruste, ehdotus,(tyhja|tyhjanel)*, 
+				allekosa, kaneetti?) >
+<!ATTLIST al		Tila (ok | eitark) eitark
+			Versio	CDATA "Versio 1.0"
+			Kieli (suomi | ruotsi) suomi
+			Tunniste CDATA #REQUIRED				  
+			Alkuper (su | ru) su	>
+		      <!-- Tila		Asiakirjan tila --
+			-- Versio 	Asiakirjan versio --
+			-- Kieli 	Asiakirjan kieli --
+			-- Tunniste	Asiakirjan tunniste --
+			-- Alkuper	Asiakirjan alkuperaiskieli. 
+					Jos se on ruotsi, tulee ylatunnisteeseen 
+					teksti 'suomennos'. -->
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Identifiointiosa						-->
+<!-- ------------------------------------------------------------------------- 	-->
+
+<!-- Identifiointi; Aloitteiden identifiontiosa (eli tunnistetiedot) noudattaa valtiopaivaasiakirjoille maariteltya yleista rakennetta. -->
+
+<!ELEMENT ident		- - (%IDENT-AL;) >
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Aloitteen runko							-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!-- Runko-osa koostuu addresaatista, perusteluista ja ehdotuksesta  -->
+
+<!-- Addresaatti; Aloitteen vastaanottaja, yleensa "Eduskunnalle" -->
+<!ELEMENT addres	- - (#PCDATA) >
+
+<!-- Perustelut; Aloitteen perustelut -->
+<!ELEMENT peruste  	- - (ot2?, (kv|kev| (%PERSIS;))+)  >
+
+<!-- Katkoviiva -->
+<!ELEMENT kv		- O EMPTY >
+
+<!-- Keskiviiva -->
+<!ELEMENT kev		- O EMPTY >
+
+<!-- Ehdotus; Aloitteen ehdotusosa -->
+<!ELEMENT ehdotus 	- - (ot2?, ponnet) >
+
+<!-- Ponsiosa; Aloitteen ponnet -->
+<!ELEMENT ponnet    	- - (johdosa, (ponsi | tyhja | tyhjanel)+) >
+
+<!-- PonsienJohdantoOsa; Ponnen (ponsien) johdantoteksti -->
+<!ELEMENT johdosa      	- - (#PCDATA) >
+
+<!-- PonsiKappale -->
+<!ELEMENT ponsi       	- - (%TEKSTI; | momviite)+ >
+
+<!-- MomenttiViittaus; Kaytossa talousarvio- ja lisatalousarvioaloitteissa -->
+<!ELEMENT momviite	- - (#PCDATA) >
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Allekirjoitusosa						-->
+<!-- ------------------------------------------------------------------------- 	-->
+
+<!-- Allekirjoitusosa; Aloitteiden ja kirjallisen kysymyksen allekirjoitusosa -->
+<!ELEMENT allekosa 	- - (%ALLEK-KK;) >
+
+<!-- Kappale; Normaali tekstikappale, jossa voidaan kayttaa erilaisia muotoilu mahdollisuuksia.-->
+<!ELEMENT te		- - (%TEKSTI;)+	-- 			-->
+
+<!-- Paatos; Asiakirjan paatostieto. Erityisesti keskustelualoitteessa voi olla --
+  -- kaytossa ns. loppukaneetti eli paatos, jossa kuvataan asiakirjan kasittely. --
+  -- Sisaltona on tekstin lisaksi myos mahdollinen asiakirjaviite (kuvattu -- 
+  -- yleisissa sisaltoosissa), esim. "Ajankohtaiskeskustelu 15.4.2000 PTK 50/2000 vp" -->
+<!ELEMENT kaneetti	- - (#PCDATA, akviite?) >
+
+
+					
