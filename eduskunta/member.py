@@ -4,6 +4,7 @@ import os
 import logging
 from lxml import etree, html
 from parliament.models.member import Member
+from parliament.models.party import Party
 from eduskunta.importer import Importer, ParseError
 from eduskunta.party import pg_to_party
 
@@ -132,6 +133,18 @@ class MemberImporter(Importer):
 
         return mp_info
 
+    def determine_party(self, mp_info):
+        pa_list = mp_info['parties']
+        latest_pa = pa_list[0]
+        for pa in pa_list[1:]:
+            if pa['begin'] > latest_pa['begin']:
+                latest_pa = pa
+        party_name = pg_to_party(latest_pa['party'])
+        if party_name:
+            party = Party.objects.get(name=party_name)
+            return party
+        return None
+
     def save_member(self, mp_info):
         try:
             mp = Member.objects.get(origin_id=str(mp_info['id']))
@@ -154,6 +167,8 @@ class MemberImporter(Importer):
         else:
             mp.phone = None
         mp.info_link = mp_info['info_url']
+        mp.party = self.determine_party(mp_info)
+
         mp.save()
 
     def import_members(self):
@@ -180,5 +195,3 @@ class MemberImporter(Importer):
 
             mp_info = self.fetch_member(mp_id)
             self.save_member(mp_info)
-    
-

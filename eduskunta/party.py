@@ -6,7 +6,7 @@ from lxml import etree, html
 from eduskunta.importer import Importer
 from parliament.models.party import Party
 
-PG_MAP = '''Kansallisen kokoomuksen eduskuntaryhmä /kok
+PG_MAP = u'''Kansallisen kokoomuksen eduskuntaryhmä /kok
     Sosialidemokraattinen eduskuntaryhmä /sd
     Perussuomalaisten eduskuntaryhmä /ps
     Keskustan eduskuntaryhmä /kesk
@@ -23,7 +23,7 @@ def pg_to_party(pg):
             if l[1] == 'vr':
                 return 'vas'
             return l[1]
-    raise KeyError("Parliamentary group %s not found" % pg)
+    return None
 
 class PartyImporter(Importer):
     FILENAME = 'parties.txt'

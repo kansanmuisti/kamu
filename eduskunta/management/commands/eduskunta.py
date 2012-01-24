@@ -15,6 +15,8 @@ class Command(BaseCommand):
                     default=False, help='Import parties'),
         make_option('--member', action='store_true', dest='member',
                     default=False, help='Import MPs'),
+        make_option('--update', action='store_true', dest='update',
+                    default=False, help='Update values of existing objects'),
     )
 
     def handle(self, *args, **options):
@@ -22,9 +24,11 @@ class Command(BaseCommand):
         http.set_cache_dir(os.path.join(settings.SITE_ROOT, '.cache'))
         if options['party']:
             importer = PartyImporter(http_fetcher=http)
+            importer.replace = options['update']
             importer.import_parties()
         if options['member']:
             importer = MemberImporter(http_fetcher=http)
+            importer.replace = options['update']
             importer.import_members()
         importer = EduskuntaImporter(http_fetcher=http)
         #importer.fetch_minutes()

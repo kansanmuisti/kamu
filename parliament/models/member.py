@@ -177,6 +177,10 @@ class MemberSeat(models.Model):
         unique_together = (('member', 'begin', 'end'), ('seat', 'begin', 'end'))
         app_label = 'parliament'
 
+class District(models.Manager):
+    name = models.CharField(max_length=50)
+    long_name = models.CharField(max_length=50, blank=True, null=True)
+
 class DistrictAssociationManager(models.Manager):
     def between(self, date_begin, date_end):
         query = Q()
@@ -192,9 +196,10 @@ class DistrictAssociationManager(models.Manager):
 
 class DistrictAssociation(models.Model):
     member = models.ForeignKey(Member)
-    name = models.CharField(max_length = 50)
+    district = models.ForeignKey(District, null=True)
+    name = models.CharField(max_length=50, blank=True, null=True)
     begin = models.DateField()
-    end = models.DateField(blank = True, null = True)
+    end = models.DateField(blank=True, null=True)
 
     objects = DistrictAssociationManager()
 
@@ -206,7 +211,7 @@ class PartyAssociation(models.Model):
     member = models.ForeignKey(Member)
     party = models.ForeignKey(Party)
     begin = models.DateField()
-    end = models.DateField(blank = True, null = True)
+    end = models.DateField(blank=True, null=True)
 
     class Meta:
         app_label = 'parliament'
