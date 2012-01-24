@@ -36,7 +36,7 @@ class HttpFetcher(object):
             s = f.read()
             final_url = f.geturl()
             if fname:
-                self.create_path_for_file(fname)
+                self._create_path_for_file(fname)
                 outf = open(fname, 'w')
                 outf.write(s)
                 outf.close()

@@ -1,0 +1,9 @@
+kok	Kokoomus	images/parties/kok.jpg
+kesk	Keskusta	images/parties/kesk.jpg
+sd	Sosialidemokraatit	images/parties/sd.jpg
+vas	Vasemmistoliitto	images/parties/vas.jpg
+vihr	Vihreä liitto	images/parties/vihr.jpg
+r	RKP	images/parties/r.jpg
+kd	Kristillisdemokraatit	images/parties/kd.jpg
+ps	Perussuomalaiset	images/parties/ps.jpg
+

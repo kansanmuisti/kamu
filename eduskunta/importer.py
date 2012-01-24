@@ -5,16 +5,26 @@ from lxml import etree, html
 from utils.http import HttpFetcher
 
 class ParseError(Exception):
-    pass
+    def __init__(self, value):
+         self.value = value
+    def __str__(self):
+         return repr(self.value)
 
-class EduskuntaImporter(object):
+class Importer(object):
     URL_BASE = 'http://www.eduskunta.fi'
-    MINUTES_URL = '/triphome/bin/akx3000.sh?kanta=utaptk&LYH=LYH-PTK&haku=PTKSUP&kieli=su&VPVUOSI>=1999'
-    LATEST_MINUTES_URL = '/triphome/bin/akx3000.sh?kanta=utaptk&uusimmat=k&VAPAAHAKU2=vpvuosi%3E=1999&haku=PTKSUP'
-    VOTE_URL = 'http://www.eduskunta.fi/triphome/bin/thw.cgi/trip/?${html}=aax/aax4000&${base}=aanestysu&aanestysvpvuosi=%(year)s&istuntonro=%(plsess_nr)s&pj_kohta=%(item_nr)s&aanestysnro=%(vote_nr)s&${snhtml}=aax/aaxeiloydy'
-    SGML_TO_XML = 'sgml-to-xml.sh'
+    # regular expressions
+    DATE_MATCH = r'(\d{1,2})\.(\d{1,2})\.(\d{4})'
 
-    def __init__(self, http_fetcher=None, logger=None, sgml_storage=None, xml_storage=None):
+    def convert_date(self, s):
+        m = re.match(self.DATE_MATCH, s)
+        if not m:
+            raise ParseError("Invalid date (%s)" % s)
+        g = m.groups()
+        return '-'.join((g[2], g[1], g[0]))
+
+    replace = False
+
+    def __init__(self, http_fetcher=None, logger=None):
         if not http_fetcher:
             http_fetcher = HttpFetcher()
         self.http = http_fetcher
@@ -27,11 +37,32 @@ class EduskuntaImporter(object):
             ch.setFormatter(formatter)
             logger.addHandler(ch)
         self.logger = logger
+    def open_url(self, *args, **kwargs):
+        return self.http.open_url(*args, **kwargs)
+
+class EduskuntaImporter(Importer):
+    MINUTES_URL = '/triphome/bin/akx3000.sh?kanta=utaptk&LYH=LYH-PTK&haku=PTKSUP&kieli=su&VPVUOSI>=1999'
+    LATEST_MINUTES_URL = '/triphome/bin/akx3000.sh?kanta=utaptk&uusimmat=k&VAPAAHAKU2=vpvuosi%3E=1999&haku=PTKSUP'
+    VOTE_URL = 'http://www.eduskunta.fi/triphome/bin/thw.cgi/trip/?${html}=aax/aax4000&${base}=aanestysu&aanestysvpvuosi=%(year)s&istuntonro=%(plsess_nr)s&pj_kohta=%(item_nr)s&aanestysnro=%(vote_nr)s&${snhtml}=aax/aaxeiloydy'
+    SGML_TO_XML = 'sgml-to-xml.sh'
+
+    def __init__(self, *args, **kwargs):
+        try:
+            sgml_storage = kwargs.pop('sgml_storage')
+        except KeyError:
+            sgml_storage = None
+        try:
+            xml_storage = kwargs.pop('xml_storage')
+        except KeyError:
+            xml_storage = None
+
         my_path = os.path.dirname(os.path.realpath(__file__))
         self.sgml_to_xml = os.path.join(my_path, self.SGML_TO_XML)
 
         self.sgml_storage = sgml_storage
         self.xml_storage = xml_storage
+
+        super(EduskuntaImporter, self).__init__(*args, **kwargs)
 
     def process_list_element(self, el_type, el):
         ret = {}
@@ -107,7 +138,7 @@ class EduskuntaImporter(object):
 
         ret = []
 
-        s = self.http.open_url(url, list_type)
+        s = self.open_url(url, list_type)
         doc = html.fromstring(s)
         el_list = doc.xpath(".//div[@class='listing']/div/p")
         doc.make_links_absolute(url)
@@ -141,8 +172,42 @@ class EduskuntaImporter(object):
         if item.tag not in ACCEPT_ITEMS:
             raise ParseError("Unknown item tag encountered: %s" % item.tag)
             return
+
+        q = item.xpath("kohta")
+        if len(q) != 1:
+            # WORKAROUND
+            if info['id'] == '19/2000':
+                return
+            raise ParseError("No item info found")
+        q = q[0]
+        desc_item = q.xpath("asia")
+        if not len(desc_item):
+            raise ParseError("No item description found" % nr)
+        if len(desc_item) > 1:
+            # FIXME: What to do if more than one item specified...
+            pass
+        desc_item = desc_item[0]
+        desc_text = self.clean_text(desc_item.text)
+
+        nr_el = q.xpath("knro")
+        if len(nr_el) == 0:
+            # WORKAROUND
+            m = re.match(r"(\d+)\)\s+", desc_text)
+            if not m:
+                raise ParseError("Item number not found")
+            nr = m.groups()[0]
+            desc_text = re.sub(r"(\d+)\)\s+", "", desc_text)
+            print nr
+            print desc_text
+        else:
+            nr = int(nr_el[0].text)
+
+            desc = self.clean_text(desc_item.text)
+            #print "\tITM: %s" % desc
+
+
         if item.tag == 'sktrunko':
-            process
+            self.process_question_time()
 
         """ref = sess.xpath("tulos/aanviit")
         if len(ref) != 1:
@@ -152,13 +217,13 @@ class EduskuntaImporter(object):
         self.process_votes(session_id)"""
 
     def clean_text(self, text):
-        # remove consecutive whitespaces
         text = text.replace('\u00a0', ' ')
+        # remove consecutive whitespaces
         return re.sub('\s\s+', ' ', text).strip()
 
     def process_minutes(self, info):
         self.logger.info("processing minutes for plenary session %s/%s", info['type'], info['id'])
-        s = self.http.open_url(info['minutes_link'], 'minutes')
+        s = self.open_url(info['minutes_link'], 'minutes')
         doc = html.fromstring(s)
         doc.make_links_absolute(info['minutes_link'])
         # Find the link to the SGML
@@ -179,7 +244,7 @@ class EduskuntaImporter(object):
             pass
         else:
             self.logger.debug("downloading SGML file")
-            s = self.http.open_url(link, 'minutes')
+            s = self.open_url(link, 'minutes')
             f = open(stored_ptk_fn, 'w')
             f.write(s)
             f.close()
@@ -207,38 +272,6 @@ class EduskuntaImporter(object):
         # paalk, pjkohta, valta -> keskust -> pvuoro
         # kyskesk -> sktkesk -> sktpvuor
         item_list = root.xpath(".//pjkohta")
-        for item in item_list:
-            q = item.xpath("kohta")
-            if len(q) != 1:
-                # WORKAROUND
-                if info['id'] == '19/2000':
-                    continue
-                raise ParseError("No item info found")
-            q = q[0]
-            desc_item = q.xpath("asia")
-            if not len(desc_item):
-                raise ParseError("No item description found" % nr)
-            if len(desc_item) > 1:
-                # FIXME: What to do if more than one item specified...
-                pass
-            desc_item = desc_item[0]
-            desc_text = self.clean_text(desc_item.text)
-
-            nr_el = q.xpath("knro")
-            if len(nr_el) == 0:
-                # WORKAROUND
-                m = re.match(r"(\d+)\)\s+", desc_text)
-                if not m:
-                    raise ParseError("Item number not found")
-                nr = m.groups()[0]
-                desc_text = re.sub(r"(\d+)\)\s+", "", desc_text)
-                print nr
-                print desc_text
-            else:
-                nr = int(nr_el[0].text)
-
-            desc = self.clean_text(desc_item.text)
-            #print "\tITM: %s" % desc
 
         item_list = root.xpath(".//kyskesk")
         for item in item_list:

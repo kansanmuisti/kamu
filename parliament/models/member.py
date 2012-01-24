@@ -31,13 +31,15 @@ class MemberManager(models.Manager):
 
 class Member(models.Model):
     name = models.CharField(max_length=50, unique=True)
+    origin_id = models.CharField(max_length=20, unique=True, db_index=True, blank=True, null=True)
     url_name = models.SlugField(max_length=50, unique=True)
-    birth_date = models.DateField(blank=True, null=True)
+    birth_date = models.DateField(null=True, blank=True)
+    birth_place = models.CharField(max_length=50, null=True, blank=True)
     given_names = models.CharField(max_length=50)
     surname = models.CharField(max_length=50)
 
-    email = models.EmailField()
-    phone = models.CharField(max_length=20)
+    email = models.EmailField(null=True, blank=True)
+    phone = models.CharField(max_length=20, null=True, blank=True)
 
     party = models.ForeignKey(Party, blank=True, null=True)
     photo = models.ImageField(upload_to='images/members')
