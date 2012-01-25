@@ -177,9 +177,12 @@ class MemberSeat(models.Model):
         unique_together = (('member', 'begin', 'end'), ('seat', 'begin', 'end'))
         app_label = 'parliament'
 
-class District(models.Manager):
-    name = models.CharField(max_length=50)
+class District(models.Model):
+    name = models.CharField(max_length=50, db_index=True)
     long_name = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        app_label = 'parliament'
 
 class DistrictAssociationManager(models.Manager):
     def between(self, date_begin, date_end):
