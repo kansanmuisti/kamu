@@ -13,15 +13,13 @@ PG_MAP = u'''Kansallisen kokoomuksen eduskuntaryhmä /kok
     Vasemmistoliiton eduskuntaryhmä /vas
     Ruotsalainen eduskuntaryhmä /r
     Vihreä eduskuntaryhmä /vihr
-    Kristillisdemokraattinen eduskuntaryhmä /kd
-    Vasenryhmän eduskuntaryhmä /vr'''
+    Kristillisdemokraattinen eduskuntaryhmä /kd'''
+#    Vasenryhmän eduskuntaryhmä /vr'''
 
 def pg_to_party(pg):
     lines = [l.strip().split(' /') for l in PG_MAP.split('\n')]
     for l in lines:
         if l[0] == pg:
-            if l[1] == 'vr':
-                return 'vas'
             return l[1]
     return None
 
@@ -32,7 +30,7 @@ class PartyImporter(Importer):
         path = os.path.dirname(os.path.realpath(__file__))
         f = open(os.path.join(path, self.FILENAME))
         for line in f.readlines():
-            line = line.strip()
+            line = line.strip().decode('utf8')
             if not line:
                 continue
             (name, long_name, logo) = line.split('\t')
@@ -43,6 +41,6 @@ class PartyImporter(Importer):
             except Party.DoesNotExist:
                 party = Party(name=name)
             party.full_name = long_name
-            self.logger.info("importing party %s/%s" % (party.full_name, party.name))
+            self.logger.info(u"importing party %s/%s" % (party.full_name, party.name))
             party.logo = logo
             party.save()

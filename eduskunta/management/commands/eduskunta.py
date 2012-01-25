@@ -15,6 +15,8 @@ class Command(BaseCommand):
                     default=False, help='Import parties'),
         make_option('--member', action='store_true', dest='member',
                     default=False, help='Import MPs'),
+        make_option('--minutes', action='store_true', dest='minutes',
+                    default=False, help='Import plenary session minutes'),
         make_option('--update', action='store_true', dest='update',
                     default=False, help='Update values of existing objects'),
     )
@@ -29,7 +31,8 @@ class Command(BaseCommand):
         if options['member']:
             importer = MemberImporter(http_fetcher=http)
             importer.replace = options['update']
+            importer.import_districts()
             importer.import_members()
-        importer = EduskuntaImporter(http_fetcher=http)
-        #importer.fetch_minutes()
-
+        if options['minutes']:
+            importer = EduskuntaImporter(http_fetcher=http)
+            importer.fetch_minutes()

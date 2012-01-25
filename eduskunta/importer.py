@@ -4,6 +4,7 @@ import logging
 from lxml import etree, html
 from utils.http import HttpFetcher
 
+
 class ParseError(Exception):
     def __init__(self, value):
          self.value = value
@@ -31,11 +32,12 @@ class Importer(object):
         if not logger:
             logger = logging.getLogger("eduskunta import")
             logger.setLevel(logging.DEBUG)
-            ch = logging.StreamHandler()
-            ch.setLevel(logging.DEBUG)
-            formatter = logging.Formatter("%(asctime)s - %(message)s")
-            ch.setFormatter(formatter)
-            logger.addHandler(ch)
+            if not logger.handlers:
+                ch = logging.StreamHandler()
+                ch.setLevel(logging.DEBUG)
+                formatter = logging.Formatter("%(asctime)s - %(message)s")
+                ch.setFormatter(formatter)
+                logger.addHandler(ch)
         self.logger = logger
     def open_url(self, *args, **kwargs):
         return self.http.open_url(*args, **kwargs)
@@ -50,17 +52,17 @@ class EduskuntaImporter(Importer):
         try:
             sgml_storage = kwargs.pop('sgml_storage')
         except KeyError:
-            sgml_storage = None
+            sgml_storage = 'ptk'
         try:
             xml_storage = kwargs.pop('xml_storage')
         except KeyError:
-            xml_storage = None
+            xml_storage = 'ptkxml'
 
         my_path = os.path.dirname(os.path.realpath(__file__))
         self.sgml_to_xml = os.path.join(my_path, self.SGML_TO_XML)
 
-        self.sgml_storage = sgml_storage
-        self.xml_storage = xml_storage
+        self.sgml_storage = os.path.join(my_path, sgml_storage)
+        self.xml_storage = os.path.join(my_path, xml_storage)
 
         super(EduskuntaImporter, self).__init__(*args, **kwargs)
 
@@ -237,19 +239,20 @@ class EduskuntaImporter(Importer):
         if not m:
             raise ParseError("SGML filename invalid")
         fname_base = m.groups()[0]
-        stored_ptk_fn = 'ptk/%s' % fname
+        stored_ptk_fn = '%s/%s' % (self.sgml_storage, fname)
 
         if os.path.exists(stored_ptk_fn):
             #self.logger.debug("SGML file found, not downloading")
             pass
         else:
             self.logger.debug("downloading SGML file")
+            print link
             s = self.open_url(link, 'minutes')
             f = open(stored_ptk_fn, 'w')
             f.write(s)
             f.close()
 
-        xml_fn = 'ptkxml/%s.xml' % fname_base
+        xml_fn = '%s/%s.xml' % (self.xml_storage, fname_base)
         if not os.path.exists(xml_fn):
             ret = os.spawnv(os.P_WAIT, self.sgml_to_xml,
                             [self.SGML_TO_XML, stored_ptk_fn, xml_fn])
@@ -290,6 +293,7 @@ class EduskuntaImporter(Importer):
                     self.process_minutes(el)
                 except Exception:
                     print "Exception!"
-                    #cache_fn = http_cache.get_fname(el['minutes_link'], 'minutes')
-                    #os.remove(cache_fn)
+                    print el['minutes_link']
+                    cache_fn = self.http.get_fname(el['minutes_link'], 'minutes')
+                    os.remove(cache_fn)
                     raise

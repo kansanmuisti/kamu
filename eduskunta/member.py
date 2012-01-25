@@ -3,7 +3,7 @@ import re
 import os
 import logging
 from lxml import etree, html
-from parliament.models.member import Member
+from parliament.models.member import *
 from parliament.models.party import Party
 from eduskunta.importer import Importer, ParseError
 from eduskunta.party import pg_to_party
@@ -34,6 +34,28 @@ class MemberImporter(Importer):
     LIST_URL= '/triphome/bin/thw/trip/?${base}=hetekaue&${maxpage}=10001&${snhtml}=hex/hxnosynk&${html}=hex/hx4600&${oohtml}=hex/hx4600&${sort}=lajitnimi&nykyinen=$+and+vpr_alkutepvm%3E=22.03.1991'
     MP_INFO_URL = '/triphome/bin/hex5000.sh?hnro=%d&kieli=su'
     DATE_MATCH = r'(\d{1,2})\.(\d{1,2})\.(\d{4})'
+    DISTRICTS_FILE = 'districts.txt'
+
+
+    def import_districts(self):
+        path = os.path.dirname(os.path.realpath(__file__))
+        f = open(os.path.join(path, self.DISTRICTS_FILE))
+        for line in f.readlines():
+            line = line.strip().decode('utf8')
+            if not line or line[0] == '#':
+                continue
+            m = re.match(r'(\d+)\s+([\w \-]+)$', line, re.U)
+            nr = m.groups()[0]
+            district = m.groups()[1]
+            try:
+                d = District.objects.get(name=district)
+                if not self.replace:
+                    continue
+            except District.DoesNotExist:
+                self.logger.debug("creating district '%s'" % district)
+                d = District(name=district)
+            d.long_name = "%s vaalipiiri" % district
+            d.save()
 
     def fetch_member(self, mp_id):
         url = self.URL_BASE + self.MP_INFO_URL % mp_id
@@ -92,7 +114,7 @@ class MemberImporter(Importer):
             dates = date_range.split(' - ')
             da = {'district': district, 'begin': self.convert_date(dates[0])}
             if len(dates) > 1:
-                da['end'] = dates[1]
+                da['end'] = self.convert_date(dates[1])
             da_list.append(da)
         mp_info['districts'] = da_list
 
@@ -168,8 +190,35 @@ class MemberImporter(Importer):
             mp.phone = None
         mp.info_link = mp_info['info_url']
         mp.party = self.determine_party(mp_info)
-
         mp.save()
+
+        DistrictAssociation.objects.filter(member=mp).delete()
+        for da in mp_info['districts']:
+            d_name = da['district'].replace(' vaalipiiri', '')
+            try:
+                district = District.objects.get(long_name=da['district'])
+            except District.DoesNotExist:
+                district = None
+            da_obj = DistrictAssociation(member=mp, begin=da['begin'])
+            da_obj.district = district
+            da_obj.name = d_name
+            if 'end' in da:
+                da_obj.end = da['end']
+            da_obj.save()
+
+        PartyAssociation.objects.filter(member=mp).delete()
+        for pa in mp_info['parties']:
+            p_name = pg_to_party(pa['party'])
+            if p_name:
+                party = Party.objects.get(name=p_name)
+            else:
+                party = None
+            pa_obj = PartyAssociation(member=mp, begin=pa['begin'])
+            pa_obj.party = party
+            pa_obj.name = pa['party']
+            if 'end' in pa:
+                pa_obj.end = pa['end']
+            pa_obj.save()
 
     def import_members(self):
         self.logger.debug("fetching MP list")

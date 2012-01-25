@@ -198,7 +198,8 @@ class DistrictAssociationManager(models.Manager):
         return self.between(date_begin, date_end).order_by('name').values_list('name', flat=True).distinct()
 
 class DistrictAssociation(models.Model):
-    member = models.ForeignKey(Member)
+    member = models.ForeignKey(Member, db_index=True)
+    # either district or name must be defined
     district = models.ForeignKey(District, null=True)
     name = models.CharField(max_length=50, blank=True, null=True)
     begin = models.DateField()
@@ -208,11 +209,13 @@ class DistrictAssociation(models.Model):
 
     class Meta:
         app_label = 'parliament'
-
+        unique_together = (('member', 'begin'),)
 
 class PartyAssociation(models.Model):
-    member = models.ForeignKey(Member)
-    party = models.ForeignKey(Party)
+    member = models.ForeignKey(Member, db_index=True)
+    # either party or name must be defined
+    party = models.ForeignKey(Party, null=True)
+    name = models.CharField(max_length=50, blank=True, null=True)
     begin = models.DateField()
     end = models.DateField(blank=True, null=True)
 
