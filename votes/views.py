@@ -23,6 +23,7 @@ from sorl.thumbnail.main import DjangoThumbnail
 from kamu.contact_form.views import contact_form
 from httpstatus import Http400
 from user_voting.models import Vote as UserVote
+from coffin.shortcuts import render_to_response as render_jinja
 from kamu.opinions.models import Answer, VoteOptionCongruence
 
 from kamu.cms.models import Item, Newsitem
@@ -1063,3 +1064,8 @@ def about(request, section):
                             extra_context=args)
     return render_to_response('main_page.html', args,
                               context_instance=RequestContext(request))
+
+def new_main(request):
+    args = {}
+    return render_jinja('new_main.html', args,
+                        context_instance=RequestContext(request))

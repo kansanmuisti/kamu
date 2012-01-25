@@ -46,6 +46,7 @@ urlpatterns += patterns('votes.views',
     url(r'^contact/sent/$', direct_to_template, {'template': 'contact_form/contact_form_sent.html'},
         name='contact_form_sent'),
     url(r'^about/(?P<section>[\w-]+)/$', 'about'),
+    url(r'^new-main/', 'new_main'),
     url(r'^$', 'about', {'section': 'main'}),
 )
 

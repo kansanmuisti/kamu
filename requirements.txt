@@ -10,3 +10,6 @@ South
 cssutils
 django-tastypie
 twython
+Coffin
+Jinja2
+pygments
