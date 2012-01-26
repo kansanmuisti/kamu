@@ -128,6 +128,55 @@ class MinutesImporter(Importer):
     def process_votes(self, info):
         pass
 
+    def process_statement(self, st_el):
+        st_info = {}
+        sp_id = None
+        text = []
+        for ch_el in st_el.getchildren():
+            if ch_el.tag in ('edustaja', 'minister'):
+                e = ch_el.xpath('henkilo')[0]
+                if sp_id:
+                    raise ParseError("too many speaker ids")
+                if 'numero' in e.attrib:
+                    sp_id = int(e.attrib['numero'])
+                if e.xpath('asema'):
+                    st_info['role'] = e.xpath('asema')[0].text.strip()
+                if not sp_id:
+                    st_info['surname'] = e.xpath('sukunimi')[0].text.strip()
+                    # WORKAROUND
+                    if st_info['surname'] == 'Mikko Puumalainen':
+                        st_info['surname'] = 'Puumalainen'
+                        st_info['first_name'] = 'Mikko'
+                    if not 'first_name' in st_info:
+                        st_info['first_name'] = e.xpath('etunimi')[0].text.strip()
+            elif ch_el.tag in ('te', 'rte', 'siste'):
+                if not ch_el.text:
+                    assert not ch_el.getchildren()
+                    continue
+                s = self.clean_text(ch_el.text)
+                for e in ch_el.getchildren():
+                    if e.tag not in ('ala', 'li', 'yla', 'ku', 'aukko', 'alle'):
+                        raise ParseError("unknown child tag: %s" % e.tag)
+                    if e.tag not in ('li',) and e.text:
+                        s += self.clean_text(e.text)
+                    if e.tail:
+                        s += self.clean_text(e.tail)
+                    if e.getchildren():
+                        raise ParseError("children's children, uh oh")
+                text.append(s)
+            elif ch_el.tag in ('pmvali', 'puhuja', 'tyhja', 'tyhjanel',
+                               'istuntot', 'vieraili', 'katkos', 'aukko', 'valiots'):
+                continue
+            elif ch_el.tag == 'listay':
+                #FIXME
+                continue
+            else:
+                raise ParseError("unknown tag: %s" % ch_el.tag)
+
+        st_info['speaker_id'] = sp_id
+        st_info['text'] = '\n'.join(text)
+        return st_info
+
     def process_question(self, question_el):
         el = question_el.xpath('kysym')
         if len(el) != 1:
@@ -138,45 +187,9 @@ class MinutesImporter(Importer):
         st_list = question_el.xpath('sktkesk/sktpvuor')
         statements = []
         for st_el in st_list:
-            st_info = {}
-            sp_id = None
-            text = []
-            for ch_el in st_el.getchildren():
-                if ch_el.tag in ('edustaja', 'minister'):
-                    e = ch_el.xpath('henkilo')[0]
-                    if sp_id:
-                        raise ParseError("too many speaker ids")
-                    if 'numero' in e.attrib:
-                        sp_id = int(e.attrib['numero'])
-                    if e.xpath('asema'):
-                        st_info['role'] = e.xpath('asema')[0].text.strip()
-                    if not sp_id:
-                        st_info['first_name'] = e.xpath('etunimi')[0].text.strip()
-                        st_info['surname'] = e.xpath('sukunimi')[0].text.strip()
-                elif ch_el.tag == 'te':
-                    if not ch_el.text:
-                        assert not ch_el.getchildren()
-                        continue
-                    s = self.clean_text(ch_el.text)
-                    for e in ch_el.getchildren():
-                        if e.tag not in ('ala', 'li'):
-                            raise ParseError("unknown child tag: %s" % e.tag)
-                        if e.tag != 'li':
-                            s += self.clean_text(e.text)
-                        s += self.clean_text(e.tail)
-                        if e.getchildren():
-                            raise ParseError("children's children, uh oh")
-                    text.append(s)
-                    if ch_el.getchildren():
-                        print s
-                elif ch_el.tag in ('pmvali', 'puhuja', 'rte', 'tyhja', 'tyhjanel'):
-                    continue
-                else:
-                    raise ParseError("unknown tag: %s" % ch_el.tag)
-
-            st_info['speaker_id'] = sp_id
-            st_info['text'] = '\n'.join(text)
-
+            st_info = self.process_statement(st_el)
+            statements.append(st_info)
+        info['statements'] = statements
         return info
 
     def process_minutes_item(self, pl_sess_info, item):
@@ -277,9 +290,22 @@ class MinutesImporter(Importer):
         item_info['votes'] = votes
 
         if item.tag == 'sktrunko':
-            q_list = item.xpath('//kyskesk')
-            for q in q_list:
-                q_info = self.process_question(q)
+            item_info['type'] = 'question_time'
+            q_list = []
+            q_el_list = item.xpath('//kyskesk')
+            for q in q_el_list:
+                q_list.append(self.process_question(q))
+            item_info['questions'] = q_list
+        elif item.tag == 'pjkohta':
+            item_info['type'] = 'agenda_item'
+            st_list = []
+            disc_el_list = item.xpath('keskust')
+            for disc_el in disc_el_list:
+                for st_el in disc_el.xpath('pvuoro'):
+                    st_info = self.process_statement(st_el)
+                    st_list.append(st_info)
+            if st_list:
+                item_info['discussion'] = st_list
 
     def clean_text(self, text):
         text = text.replace('\n', ' ')
@@ -377,7 +403,7 @@ class MinutesImporter(Importer):
             el_list, next_link = self.read_listing('minutes', next_link)
             for el in el_list:
                 year = int(el['id'].split('/')[1])
-                if year > 2006:
+                if year > 2002:
                     continue
                 try:
                     self.process_minutes(el)
