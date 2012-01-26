@@ -48,6 +48,8 @@ class PlenarySession(models.Model):
     info_link = models.URLField()
     url_name = models.SlugField(max_length=20, unique=True, db_index=True)
     origin_id = models.CharField(max_length=50, null=True, blank=True, db_index=True)
+    origin_version = models.CharField(max_length=10, null=True, blank=True)
+    import_time = models.DateTimeField()
 
     objects = PlenarySessionManager()
 

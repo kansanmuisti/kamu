@@ -2,9 +2,9 @@ import os
 from optparse import make_option
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
-from ...importer import EduskuntaImporter
 from ...party import PartyImporter
 from ...member import MemberImporter
+from ...minutes import MinutesImporter
 from utils.http import HttpFetcher
 
 class Command(BaseCommand):
@@ -34,5 +34,5 @@ class Command(BaseCommand):
             importer.import_districts()
             importer.import_members()
         if options['minutes']:
-            importer = EduskuntaImporter(http_fetcher=http)
-            importer.fetch_minutes()
+            importer = MinutesImporter(http_fetcher=http)
+            importer.import_minutes()
