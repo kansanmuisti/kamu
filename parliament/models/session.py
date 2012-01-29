@@ -118,6 +118,7 @@ class PlenaryVoteManager(models.Manager):
 
 class PlenaryVote(models.Model):
     plsess = models.ForeignKey(PlenarySession, db_index=True)
+    plsess_item = models.ForeignKey(PlenarySessionItem, db_index=True, null=True, blank=True)
     number = models.IntegerField()
     time = models.DateTimeField()
     subject = models.TextField()

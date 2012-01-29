@@ -80,7 +80,7 @@ class VoteImporter(Importer):
         n = 0
         for v in counts:
             n += v
-        assert n in (197, 198, 199):
+        assert n in (197, 198, 199)
         pv.save()
         return
 

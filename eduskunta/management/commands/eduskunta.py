@@ -28,6 +28,7 @@ class Command(BaseCommand):
         http = HttpFetcher()
         http.set_cache_dir(os.path.join(settings.SITE_ROOT, '.cache'))
         min_importer = MinutesImporter(http_fetcher=http)
+        min_importer.replace = options['update']
         min_importer.import_terms()
 
         if options['party']:

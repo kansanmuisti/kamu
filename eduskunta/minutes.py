@@ -4,9 +4,11 @@ import os
 import logging
 import datetime
 from lxml import etree, html
+from django import db
 from parliament.models.member import Member
 from parliament.models.session import *
 from eduskunta.importer import Importer, ParseError
+from eduskunta.vote import VoteImporter
 
 
 # paalk, pjkohta, valta -> keskust -> pvuoro
@@ -337,6 +339,16 @@ class MinutesImporter(Importer):
         st.text = st_info['text']
         st.save()
 
+    def add_item_vote(self, item, vote):
+        try:
+            plv = PlenaryVote.objects.get(plsess=item.plsess, number=vote[2])
+        except PlenaryVote.DoesNotExist:
+            plv = self.vote_importer.import_one('%d/%s/%d' % vote)
+        if plv.plsess_item != item:
+            plv.plsess_item = item
+            plv.save()
+        return
+
     def save_item(self, pl_sess, item_info):
         try:
             item = PlenarySessionItem.objects.get(plsess=pl_sess, number=item_info['nr'],
@@ -350,6 +362,10 @@ class MinutesImporter(Importer):
         elif item_info['type'] == 'agenda_item':
             item.type = 'agenda'
         item.save()
+
+        if 'votes' in item_info:
+            for vote in item_info['votes']:
+                self.add_item_vote(item, vote)
 
         if item_info['type'] == 'question_time':
             for q_info in item_info['questions']:
@@ -420,18 +436,13 @@ class MinutesImporter(Importer):
         self.mp_by_name = mpd
 
     def import_minutes(self):
+        self.vote_importer = VoteImporter(http_fetcher=self.http, logger=self.logger)
         self._make_mp_dicts()
         next_link = self.URL_BASE + self.LATEST_MINUTES_URL
         while next_link:
             el_list, next_link = self.read_listing('minutes', next_link)
             for el in el_list:
-                year = int(el['id'].split('/')[1])
-                try:
-                    self.process_minutes(el)
-                except Exception:
-                    #print "Exception!"
-                    #print el['minutes_link']
-                    #cache_fn = self.http.get_fname(el['minutes_link'], 'minutes')
-                    #os.remove(cache_fn)
-                    raise
+                #year = int(el['id'].split('/')[1])
+                self.process_minutes(el)
+                db.reset_queries()
 
