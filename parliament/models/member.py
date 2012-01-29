@@ -295,10 +295,10 @@ class CommitteeDissentActivity(MemberActivity):
     class Meta:
         app_label = 'parliament'
 
-from social.models import Feed
+#from social.models import Feed
 
-class MemberSocialFeed(Feed):
-    member = models.ForeignKey(Member, db_index=True)
+#class MemberSocialFeed(Feed):
+#    member = models.ForeignKey(Member, db_index=True)
 
-    class Meta:
-        app_label = 'parliament'
+#    class Meta:
+#        app_label = 'parliament'

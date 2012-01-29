@@ -1065,7 +1065,25 @@ def about(request, section):
     return render_to_response('main_page.html', args,
                               context_instance=RequestContext(request))
 
+from social.models import Update
+
 def new_main(request):
     args = {}
+    q = Update.objects.filter(feed__in=MemberSocialFeed.objects.all())
+    some_updates = q.select_related('feed__membersocialfeed')[0:5]
+    update_list = []
+    for upd in some_updates:
+        d = {}
+        feed = upd.feed.membersocialfeed
+        mp = feed.member
+        d['time'] = upd.created_time
+        d['text'] = upd.text
+        d['mp_name'] = mp.get_print_name()
+        tn = DjangoThumbnail(mp.photo, (24, 36))
+        d['mp_portrait'] = unicode(tn)
+        d['mp_link'] = mp.get_absolute_url()
+        update_list.append(d)
+    args['some_updates'] = update_list
+
     return render_jinja('new_main.html', args,
                         context_instance=RequestContext(request))

@@ -4,4 +4,15 @@
 {% endblock %}
 
 {% block content %}
+<div>
+{% for upd in some_updates %}
+  <div class="some-update">
+    <small>{{ upd.time }}</small>
+    <a href="{{ upd.mp_link }}"><img src="{{ upd.mp_portrait }}" /></a>
+    <span class="mp-name">{{ upd.mp_name }}</span>
+    <p>{{ upd.text }}</p>
+  </div>
+{% endfor %}
+</div>
+
 {% endblock %}

@@ -22,3 +22,7 @@ class Update(models.Model):
 
     class Meta:
         unique_together = (('feed', 'origin_id'),)
+        ordering = ['-created_time']
+
+    def __unicode__(self):
+        return '%s: %s (%s)' % (self.feed.type, self.created_time, self.feed.account_name)
