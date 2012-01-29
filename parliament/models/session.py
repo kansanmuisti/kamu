@@ -69,10 +69,10 @@ class PlenarySessionItem(models.Model):
     number = models.PositiveIntegerField()
     sub_number = models.PositiveIntegerField(null=True, blank=True)
     type = models.CharField(max_length=15, choices=TYPES)
-    description = models.CharField(max_length=150)
+    description = models.CharField(max_length=1000)
 
     class Meta:
-        unique_together = (('plsess', 'number'),)
+        unique_together = (('plsess', 'number', 'sub_number'),)
         ordering = ('number', 'sub_number')
         app_label = 'parliament'
 
@@ -89,8 +89,9 @@ class PlenarySessionItem(models.Model):
 class Statement(models.Model):
     item = models.ForeignKey(PlenarySessionItem, db_index=True)
     index = models.PositiveIntegerField(db_index=True)
-    member = models.ForeignKey('Member', db_index=True)
-    member_role = models.CharField(max_length=40, null=True, blank=True)
+    member = models.ForeignKey('Member', db_index=True, null=True)
+    speaker_name = models.CharField(max_length=40, null=True, blank=True)
+    speaker_role = models.CharField(max_length=40, null=True, blank=True)
     text = models.TextField()
 
     class Meta:
@@ -101,7 +102,7 @@ class Statement(models.Model):
     def __unicode__(self):
         return "%s/%d (%s)" % (self.item.get_short_id(), self.index, self.member)
 
-class VotingSessionManager(models.Manager):
+class PlenaryVoteManager(models.Manager):
     def between(self, begin=None, end=None):
         query = Q()
         if begin:
@@ -115,19 +116,19 @@ class VotingSessionManager(models.Manager):
         pls_name = '/'.join(f[1:])
         return self.get(Q(plenary_session__name=pls_name) & Q(number=nr))
 
-class VotingSession(models.Model):
-    plenary_session = models.ForeignKey(PlenarySession)
+class PlenaryVote(models.Model):
+    plsess = models.ForeignKey(PlenarySession, db_index=True)
     number = models.IntegerField()
-    time = models.TimeField()
-    info = models.TextField()
-    subject = models.CharField(max_length=100)
+    time = models.DateTimeField()
+    subject = models.TextField()
+    setting = models.CharField(max_length=100)
     info_link = models.URLField(blank=True, null=True)
     vote_counts = models.CommaSeparatedIntegerField(max_length=20, blank=True,
                                                     null=True)
-    docs = models.ManyToManyField(Document, through='VotingSessionDocument')
+    docs = models.ManyToManyField(Document, through='PlenaryVoteDocument')
     keywords = models.ManyToManyField(Keyword)
 
-    objects = VotingSessionManager()
+    objects = PlenaryVoteManager()
 
     def count_votes(self):
         if self.vote_counts:
@@ -152,7 +153,7 @@ class VotingSession(models.Model):
 #        query = Q(begin__lte=self.plenary_session.date)
 #        query &= Q(end__isnull=True) | Q(end__gte=self.plenary_session.date)
 #        MemberStats.objects.filter(query).delete()
-        super(Session, self).save(args, kwargs)
+        super(PlenaryVote, self).save(args, kwargs)
 
     def get_short_summary(self):
         lines = []
@@ -186,14 +187,14 @@ class VotingSession(models.Model):
         return arg
 
     def __unicode__(self):
-        return str(self.number) + '/' + self.plenary_session.name
+        return str(self.number) + '/' + self.plsess.name
 
     class Meta:
-        ordering = ('plenary_session__date', 'number')
+        ordering = ('plsess__date', 'number')
         app_label = 'parliament'
 
-class VotingSessionDocument(models.Model):
-    session = models.ForeignKey(VotingSession)
+class PlenaryVoteDocument(models.Model):
+    session = models.ForeignKey(PlenaryVote)
     doc = models.ForeignKey(Document)
     order = models.PositiveIntegerField()
 
@@ -228,7 +229,7 @@ class Vote(models.Model):
         ('E', u'Empty'),
         ('S', u'Speaker')
     ]
-    session = models.ForeignKey(VotingSession)
+    session = models.ForeignKey(PlenaryVote)
     vote = models.CharField(max_length=1, choices=VOTE_CHOICES, db_index=True)
     member = models.ForeignKey('Member', db_index=True)
     party = models.CharField(max_length=10)

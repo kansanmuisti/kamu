@@ -65,7 +65,7 @@ class Member(models.Model):
 
     def get_print_name(self):
         names = self.name.split()
-        names = list((names[-1],)) + names[0:-1]
+        names = list(names[1:]) + names[0:1]
         name = ' '.join(names)
         return name
 

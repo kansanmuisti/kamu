@@ -5,6 +5,7 @@ from django.conf import settings
 from ...party import PartyImporter
 from ...member import MemberImporter
 from ...minutes import MinutesImporter
+from ...vote import VoteImporter
 from utils.http import HttpFetcher
 
 class Command(BaseCommand):
@@ -17,6 +18,8 @@ class Command(BaseCommand):
                     default=False, help='Import MPs'),
         make_option('--minutes', action='store_true', dest='minutes',
                     default=False, help='Import plenary session minutes'),
+        make_option('--vote', action='store_true', dest='vote',
+                    default=False, help='Import plenary session votes'),
         make_option('--update', action='store_true', dest='update',
                     default=False, help='Update values of existing objects'),
     )
@@ -24,6 +27,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         http = HttpFetcher()
         http.set_cache_dir(os.path.join(settings.SITE_ROOT, '.cache'))
+        min_importer = MinutesImporter(http_fetcher=http)
+        min_importer.import_terms()
+
         if options['party']:
             importer = PartyImporter(http_fetcher=http)
             importer.replace = options['update']
@@ -34,5 +40,8 @@ class Command(BaseCommand):
             importer.import_districts()
             importer.import_members()
         if options['minutes']:
-            importer = MinutesImporter(http_fetcher=http)
-            importer.import_minutes()
+            min_importer.import_minutes()
+        if options['vote']:
+            importer = VoteImporter(http_fetcher=http)
+            importer.replace = options['update']
+            importer.import_votes()

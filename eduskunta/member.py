@@ -31,11 +31,10 @@ def get_field_el(doc, field):
     return None
 
 class MemberImporter(Importer):
-    LIST_URL= '/triphome/bin/thw/trip/?${base}=hetekaue&${maxpage}=10001&${snhtml}=hex/hxnosynk&${html}=hex/hx4600&${oohtml}=hex/hx4600&${sort}=lajitnimi&nykyinen=$+and+vpr_alkutepvm%3E=22.03.1991'
+    LIST_URL = '/triphome/bin/thw/trip/?${base}=hetekaue&${maxpage}=10001&${snhtml}=hex/hxnosynk&${html}=hex/hx4600&${oohtml}=hex/hx4600&${sort}=lajitnimi&nykyinen=$+and+(VPR_LOPPUTEPVM+%3E=24.03.1999)'
     MP_INFO_URL = '/triphome/bin/hex5000.sh?hnro=%d&kieli=su'
     DATE_MATCH = r'(\d{1,2})\.(\d{1,2})\.(\d{4})'
     DISTRICTS_FILE = 'districts.txt'
-
 
     def import_districts(self):
         path = os.path.dirname(os.path.realpath(__file__))

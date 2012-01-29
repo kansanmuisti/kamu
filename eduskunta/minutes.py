@@ -2,9 +2,15 @@
 import re
 import os
 import logging
+import datetime
 from lxml import etree, html
 from parliament.models.member import Member
+from parliament.models.session import *
 from eduskunta.importer import Importer, ParseError
+
+
+# paalk, pjkohta, valta -> keskust -> pvuoro
+# kyskesk -> sktkesk -> sktpvuor
 
 class MinutesImporter(Importer):
     MINUTES_URL = '/triphome/bin/akx3000.sh?kanta=utaptk&LYH=LYH-PTK&haku=PTKSUP&kieli=su&VPVUOSI>=1999'
@@ -12,6 +18,23 @@ class MinutesImporter(Importer):
     VOTE_URL = 'http://www.eduskunta.fi/triphome/bin/thw.cgi/trip/?${html}=aax/aax4000&${base}=aanestysu&aanestysvpvuosi=%(year)s&istuntonro=%(plsess_nr)s&pj_kohta=%(item_nr)s&aanestysnro=%(vote_nr)s&${snhtml}=aax/aaxeiloydy'
     DOC_ID_MATCH = r'(\w+)\s(\w+/\d{4})\svp'
     SGML_TO_XML = 'sgml-to-xml.sh'
+
+    NON_MP_NAMES = (u'Mikko Puumalainen', u'Raimo Tammilehto', u'Kalevi Hemilä',
+    		    u'Kari Häkämies')
+    NON_MP_ROLES = ('Eduskunnan oikeusasiamies',
+                    'Valtioneuvoston oikeuskansleri')
+
+    TERM_DASH = u'\u2013'
+    TERMS = [
+        {'display_name': '2011'+TERM_DASH+'2014', 'begin': '2011-04-20', 'end': None,
+         'name': '2011-2014'},
+        {'display_name': '2007'+TERM_DASH+'2010', 'begin': '2007-03-21', 'end': '2011-04-19',
+         'name': '2007-2010'},
+        {'display_name': '2003'+TERM_DASH+'2006', 'begin': '2003-03-19', 'end': '2007-03-20',
+         'name': '2003-2006'},
+        {'display_name': '1999'+TERM_DASH+'2002', 'begin': '1999-03-24', 'end': '2003-03-18',
+         'name': '1999-2002'},
+    ]
 
     def __init__(self, *args, **kwargs):
         try:
@@ -31,100 +54,6 @@ class MinutesImporter(Importer):
 
         super(MinutesImporter, self).__init__(*args, **kwargs)
 
-    def process_list_element(self, el_type, el):
-        ret = {}
-
-        special_vote = False
-        children = el.getchildren()
-
-        name_el = children[0]
-        if el_type == 'votes' and name_el.tag != 'b':
-            special_vote = True
-        else:
-            assert name_el.tag == 'b'
-            name = name_el.text.strip()
-            m = re.match(r'(\w+)\s(\w+/\d{4})\svp', name, re.U)
-            ret['type'] = m.groups()[0]
-            ret['id'] = m.groups()[1]
-
-            link_el = children[1]
-            assert link_el.tag == 'a'
-            if 'sittelytiedot' in link_el.text:
-                ret['process_link'] = link_el.attrib['href']
-            else:
-                link_el = children[2]
-                assert 'HTML' in link_el.text
-                ret['minutes_link'] = link_el.attrib['href']
-
-        if el_type == 'votes':
-            if not special_vote:
-                assert 'process_link' in ret
-                idx = 2
-            else:
-                idx = 0
-
-            plsess_el = children[idx + 0]
-            assert plsess_el.tag == 'a'
-            s = plsess_el.text.strip()
-            m = re.match(r'PTK (\w+/\d{4}) vp', s)
-            assert m
-            ret['plsess'] = m.groups()[0]
-
-            id_el = children[idx + 1]
-            m = re.search(r'nestys (\d+)', id_el.text)
-            assert m
-            ret['number'] = int(m.groups()[0])
-
-            res_el = children[idx + 2]
-            assert res_el.tag == 'a' and 'Tulos' in res_el.text_content()
-            ret['results_link'] = res_el.attrib['href']
-
-        if el_type == 'docs':
-            links = [e.attrib['href'] for e in el.xpath('.//a')]
-            doc_links = [link for link in links if '/bin/akxhref2.sh?' in link]
-            docs = []
-            for l in doc_links:
-                m = re.search(r'\?\{KEY\}=(\w+)\+(\d+\w*/\d{4})', l)
-                assert m
-                doc = {'type': m.groups()[0], 'id': m.groups()[1]}
-                doc['link'] = l
-                # If it's the list item document just save the link,
-                # otherwise include the associated doc.
-                if doc['type'] == ret['type'] and doc['id'] == ret['id']:
-                    ret['doc_link'] = doc['link']
-                else:
-                    docs.append(doc)
-            assert 'doc_link' in ret
-            ret['docs'] = docs
-        elif el_type == 'minutes':
-            assert 'minutes_link' in ret
-        return ret
-
-    def read_listing(self, list_type, url):
-        assert list_type in ('minutes', 'votes', 'docs')
-
-        ret = []
-
-        s = self.open_url(url, list_type)
-        doc = html.fromstring(s)
-        el_list = doc.xpath(".//div[@class='listing']/div/p")
-        doc.make_links_absolute(url)
-
-        for el in el_list:
-            link = {}
-
-            parsed_el = self.process_list_element(list_type, el)
-            ret.append(parsed_el)
-
-        # Check if last page of links
-        if len(el_list) >= 50:
-            fwd_link = doc.xpath(".//input[@name='forward']")
-            url = self.URL_BASE + fwd_link[0].attrib['value']
-        else:
-            url = None
-
-        return (ret, url)
-
     def process_votes(self, info):
         pass
 
@@ -140,15 +69,17 @@ class MinutesImporter(Importer):
                 if 'numero' in e.attrib:
                     sp_id = int(e.attrib['numero'])
                 if e.xpath('asema'):
-                    st_info['role'] = e.xpath('asema')[0].text.strip()
-                if not sp_id:
-                    st_info['surname'] = e.xpath('sukunimi')[0].text.strip()
+                    st_info['role'] = self.clean_text(e.xpath('asema')[0].text)
+                el_list = e.xpath('sukunimi')
+                if el_list:
+                    st_info['surname'] = self.clean_text(el_list[0].text)
                     # WORKAROUND
                     if st_info['surname'] == 'Mikko Puumalainen':
                         st_info['surname'] = 'Puumalainen'
                         st_info['first_name'] = 'Mikko'
-                    if not 'first_name' in st_info:
-                        st_info['first_name'] = e.xpath('etunimi')[0].text.strip()
+                el_list = e.xpath('etunimi')
+                if el_list and not 'first_name' in st_info:
+                    st_info['first_name'] = self.clean_text(el_list[0].text)
             elif ch_el.tag in ('te', 'rte', 'siste'):
                 if not ch_el.text:
                     assert not ch_el.getchildren()
@@ -183,7 +114,7 @@ class MinutesImporter(Importer):
             raise ParseError("question id not found")
         el = el[0]
         info = {'id': int(el.attrib['knro'])}
-        info['subject'] = el.text.strip()
+        info['subject'] = self.clean_text(el.text)
         st_list = question_el.xpath('sktkesk/sktpvuor')
         statements = []
         for st_el in st_list:
@@ -202,7 +133,6 @@ class MinutesImporter(Importer):
         ACCEPT_ITEMS = ('sktrunko', 'pjkohta')
         if item.tag not in ACCEPT_ITEMS:
             raise ParseError("Unknown item tag encountered: %s" % item.tag)
-            return
 
         hdr_el = item.xpath("kohta")
         if len(hdr_el) != 1:
@@ -265,13 +195,6 @@ class MinutesImporter(Importer):
             docs.append(doc)
         item_info['docs'] = docs
 
-        if item.tag == 'sktrunko':
-            print "SK: %d, %s" % (nr, desc)
-            pass
-        elif item.tag == 'pjkohta':
-            print "PJ: %d. %s" % (nr, desc)
-            pass
-
         votes = []
         vote_list = item.xpath('.//aanestys')
         for vote_el in vote_list:
@@ -287,7 +210,8 @@ class MinutesImporter(Importer):
                     attr['aannro'] = attr['aannro'].replace(u'\xa8', '')
                 (year, sess, idx) = (int(attr['vpvuosi']), attr['istnro'], int(attr['aannro']))
                 votes.append((year, sess, idx))
-        item_info['votes'] = votes
+        if votes:
+            item_info['votes'] = votes
 
         if item.tag == 'sktrunko':
             item_info['type'] = 'question_time'
@@ -306,11 +230,7 @@ class MinutesImporter(Importer):
                     st_list.append(st_info)
             if st_list:
                 item_info['discussion'] = st_list
-
-    def clean_text(self, text):
-        text = text.replace('\n', ' ')
-        # remove consecutive whitespaces
-        return re.sub(r'\s\s+', ' ', text, re.U).strip()
+        return item_info
 
     def process_minutes(self, info):
         self.logger.info("processing minutes for plenary session %s/%s", info['type'], info['id'])
@@ -377,34 +297,135 @@ class MinutesImporter(Importer):
         if not m:
             raise ParseError("Invalid time: %s" % time_str)
 
+        items = []
         VALID_ITEM_CONTAINERS = ('pjasiat', 'upjasiat')
         for tag in VALID_ITEM_CONTAINERS:
             container_list = root.xpath('.//%s' % tag)
             for con in container_list:
                 item_list = con.getchildren()
                 for item in item_list:
-                    self.process_minutes_item(info, item)
+                    item_info = self.process_minutes_item(info, item)
+                    if item_info:
+                        items.append(item_info)
+        if items:
+            info['items'] = items
+        self.save_minutes(info)
 
-        # paalk, pjkohta, valta -> keskust -> pvuoro
-        # kyskesk -> sktkesk -> sktpvuor
-        item_list = root.xpath('.//pjkohta')
+    def save_statement(self, item, idx, st_info):
+        mp = self.mp_by_hnro.get(st_info['speaker_id'])
+        if 'first_name' in st_info and 'surname' in st_info:
+            name = "%s %s" % (st_info['first_name'], st_info['surname'])
+        else:
+            name = None
+        if name and not mp:
+            mp = self.mp_by_name.get(name)
+        if not mp:
+            if name not in self.NON_MP_NAMES:
+                if st_info.get('role') in self.NON_MP_ROLES:
+                    name = st_info['role']
+                else:
+                    print st_info
+                    raise ParseError("MP not found")
 
-        item_list = root.xpath('.//kyskesk')
-        for item in item_list:
-            q = item.xpath('kysym')
-            if len(q) != 1:
-                raise ParseError("No question info found")
-            q = q[0]
-            #print "\tKYS: %s" % self.clean_text(q.text)
+        try:
+            st = Statement.objects.get(item=item, index=idx)
+        except Statement.DoesNotExist:
+            st = Statement(item=item, index=idx)
+        st.member = mp
+        st.speaker_name = name
+        st.speaker_role = st_info.get('role')
+        st.text = st_info['text']
+        st.save()
+
+    def save_item(self, pl_sess, item_info):
+        try:
+            item = PlenarySessionItem.objects.get(plsess=pl_sess, number=item_info['nr'],
+                                                  sub_number__isnull=True)
+        except PlenarySessionItem.DoesNotExist:
+            item = PlenarySessionItem(plsess=pl_sess, number=item_info['nr'])
+        item.description = item_info['desc']
+
+        if item_info['type'] == 'question_time':
+            item.type = 'question'
+        elif item_info['type'] == 'agenda_item':
+            item.type = 'agenda'
+        item.save()
+
+        if item_info['type'] == 'question_time':
+            for q_info in item_info['questions']:
+                try:
+                    q_item = PlenarySessionItem.objects.get(plsess=pl_sess, number=item_info['nr'],
+                                                            sub_number=q_info['id'])
+                except PlenarySessionItem.DoesNotExist:
+                    q_item = PlenarySessionItem(plsess=pl_sess, number=item_info['nr'],
+                                                sub_number=q_info['id'])
+                q_item.type = 'question_time'
+                q_item.description = q_info['subject']
+                q_item.save()
+                for idx, st in enumerate(q_info['statements']):
+                    self.save_statement(q_item, idx, st)
+        elif item_info['type'] == 'agenda_item':
+            if 'discussion' in item_info:
+                for idx, st in enumerate(item_info['discussion']):
+                    self.save_statement(item, idx, st)
+
+
+    def save_minutes(self, info):
+        try:
+            pl_sess = PlenarySession.objects.get(origin_id=info['id'])
+            if not self.replace and pl_sess.origin_version == info['version']:
+                return
+        except PlenarySession.DoesNotExist:
+            pl_sess = PlenarySession(origin_id=info['id'])
+        pl_sess.name = info['id']
+        term = Term.objects.get_for_date(info['date'])
+        pl_sess.term = term
+        pl_sess.date = info['date']
+        pl_sess.info_link = info['minutes_link']
+        pl_sess.url_name = pl_sess.origin_id.replace('/', '-')
+        pl_sess.import_time = datetime.datetime.now()
+        pl_sess.origin_version = info['version']
+        pl_sess.save()
+
+        if 'items' in info:
+            for item_info in info['items']:
+                self.save_item(pl_sess, item_info)
+
+    def import_terms(self):
+        for term in self.TERMS:
+            try:
+                nt = Term.objects.get(name=term['name'])
+                if not self.replace:
+                    continue
+            except Term.DoesNotExist:
+                self.logger.info(u'Adding term %s' % term['display_name'])
+                nt = Term()
+            nt.name = term['name']
+            nt.begin = term['begin']
+            nt.end = term['end']
+            nt.display_name = term['display_name']
+            if 'visible' in term:
+                nt.visible = term['visible']
+            nt.save()
+
+    def _make_mp_dicts(self):
+        mp_list = Member.objects.all()
+        mpd = {}
+        for mp in mp_list:
+            mpd[int(mp.origin_id)] = mp
+        self.mp_by_hnro = mpd
+        mpd = {}
+        for mp in mp_list:
+            mpd[mp.get_print_name()] = mp
+        self.mp_by_name = mpd
 
     def import_minutes(self):
+        self._make_mp_dicts()
         next_link = self.URL_BASE + self.LATEST_MINUTES_URL
         while next_link:
             el_list, next_link = self.read_listing('minutes', next_link)
             for el in el_list:
                 year = int(el['id'].split('/')[1])
-                if year > 2002:
-                    continue
                 try:
                     self.process_minutes(el)
                 except Exception:
@@ -413,3 +434,4 @@ class MinutesImporter(Importer):
                     #cache_fn = self.http.get_fname(el['minutes_link'], 'minutes')
                     #os.remove(cache_fn)
                     raise
+
