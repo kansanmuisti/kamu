@@ -15,4 +15,17 @@
 {% endfor %}
 </div>
 
+<hr />
+
+<div>
+{% for item in pl_items %}
+  <div style="margin-top: 16px; margin-bottom: 16px;" class="plenary-item">
+    <small>{{ item.plsess.date }}</small>
+    <p>{{ item.description }}</p>
+    <small>{{ item.plenaryvote_set.count() }} votes</small><br />
+    <small>{{ item.statement_set.count() }} statements</small>
+  </div>
+{% endfor %}
+</div>
+
 {% endblock %}

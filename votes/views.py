@@ -1066,6 +1066,7 @@ def about(request, section):
                               context_instance=RequestContext(request))
 
 from social.models import Update
+from parliament.models import PlenarySessionItem
 
 def new_main(request):
     args = {}
@@ -1084,6 +1085,13 @@ def new_main(request):
         d['mp_link'] = mp.get_absolute_url()
         update_list.append(d)
     args['some_updates'] = update_list
+
+    q = Q(num_votes__gt=0) | Q(num_statements__gt=0)
+    mgr = PlenarySessionItem.objects
+    mgr = mgr.annotate(num_votes=Count('plenaryvote'), num_statements=Count('statement'))
+    pl_items = list(mgr.filter(q)[0:5])
+
+    args['pl_items'] = pl_items
 
     return render_jinja('new_main.html', args,
                         context_instance=RequestContext(request))
