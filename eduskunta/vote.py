@@ -82,7 +82,7 @@ class VoteImporter(Importer):
             n += v
         assert n in (197, 198, 199)
         pv.save()
-        return
+        return pv
 
     def import_session(self, info):
         plsess = self.plsess_by_id[info['plsess']]
@@ -114,9 +114,9 @@ class VoteImporter(Importer):
         s = self.clean_text(el.text)
         step = PROCESSING_STEP[s]
 
-	el = doc.xpath("//th[contains(., 'nestysasettelu')]")[0]
-	s = self.clean_text(el.getnext().text)
-	info['setting'] = s
+        el = doc.xpath("//th[contains(., 'nestysasettelu')]")[0]
+        s = self.clean_text(el.getnext().text)
+        info['setting'] = s
 
         vote_list_el = doc.xpath('//table[@class="statistics"]/tbody/tr')
         if len(vote_list_el) < 196/2 or len(vote_list_el) > 200/2:
@@ -130,9 +130,8 @@ class VoteImporter(Importer):
             if td_list[3].text:
                 votes.append(parse_vote(td_list[3].text, td_list[4].text))
         info['votes'] = votes
-        self.save_session(pv, info)
 
-        return
+        return self.save_session(pv, info)
 
     def _make_obj_lists(self):
         mp_list = Member.objects.all()
@@ -146,6 +145,20 @@ class VoteImporter(Importer):
         for pl in plsess_list:
             psd[pl.origin_id] = pl
         self.plsess_by_id = psd
+
+    def import_one(self, vote_id):
+        self._make_obj_lists()
+        (year, plsess, nr) = vote_id.split('/')
+        url = self.URL_BASE + self.VOTE_URL % (int(year), plsess, int(nr))
+        el_list, next_link = self.read_listing('votes', url)
+        if len(el_list) != 1:
+            raise ParseError("vote with id %s not found" % vote_id)
+        el = el_list[0]
+        info = {'plsess': el['plsess'], 'number': el['number']}
+        info['link'] = el['results_link']
+        plv = self.import_session(info)
+        db.reset_queries()
+        return plv
 
     def import_votes(self):
         self._make_obj_lists()
