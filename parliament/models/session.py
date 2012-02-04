@@ -104,7 +104,7 @@ class Statement(models.Model):
         unique_together = (('item', 'index'),)
 
     def __unicode__(self):
-        return "%s/%d (%s)" % (self.item.get_short_id(), self.index, self.member)
+        return "%s/%d (%s)" % (self.item.get_short_id(), self.index, unicode(self.member))
 
 class PlenaryVoteManager(models.Manager):
     def between(self, begin=None, end=None):
