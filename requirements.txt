@@ -13,3 +13,4 @@ twython
 Coffin
 Jinja2
 pygments
+django-compressor
