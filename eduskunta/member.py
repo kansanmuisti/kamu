@@ -3,6 +3,7 @@ import re
 import os
 import logging
 from lxml import etree, html
+from django.conf import settings
 from parliament.models.member import *
 from parliament.models.party import Party
 from eduskunta.importer import Importer, ParseError
@@ -189,6 +190,20 @@ class MemberImporter(Importer):
             mp.phone = None
         mp.info_link = mp_info['info_url']
         mp.party = self.determine_party(mp_info)
+
+        url = mp_info['portrait']
+        ext = url.split('.')[-1]
+        fname = slugify(mp.name) + '.' + ext
+        dir_name = os.path.join(mp.photo.field.upload_to, fname)
+        path = os.path.join(settings.MEDIA_ROOT, dir_name)
+        mp.photo = dir_name
+        if not os.path.exists(path):
+            self.logger.debug("getting MP portrait")
+            s = self.open_url(url, 'members')
+            f = open(path, 'wb')
+            f.write(s)
+            f.close()
+
         mp.save()
 
         DistrictAssociation.objects.filter(member=mp).delete()
