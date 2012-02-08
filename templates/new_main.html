@@ -56,7 +56,7 @@
       <h4>{{ item.description }}</h4>
       <div class="content">
         <strong>{{ item.statement.member.get_print_name }}</strong> ({{ item.statement.member.party.name }}): "{{ item.statement.text|truncatewords:50 }}"
-        <a href="#" class="readmore">{{ item.num_statements }} puheenvuoroa, {{ item.num_votes }} äänestystä &gt;</a>
+        <a href="#" class="readmore">{{ item.nr_statements }} puheenvuoroa, {{ item.nr_votes }} äänestystä &gt;</a>
       </div>
       <div class="time">{{ item.plsess.date }}</div>
     </div>

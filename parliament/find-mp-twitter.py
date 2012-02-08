@@ -9,7 +9,7 @@ sys.path.append('.')
 import settings
 setup_environ(settings)
 
-from votes.models import Member, MemberSocialFeed
+from parliament.models import Member, MemberSocialFeed
 
 PICKLE_FILE="mp-twitter.pickle"
 
