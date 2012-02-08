@@ -71,14 +71,18 @@ class PlenarySessionItem(models.Model):
     type = models.CharField(max_length=15, choices=TYPES)
     description = models.CharField(max_length=1000)
 
-    # for caching
-    #nr_votes = models.IntegerField(null=True, blank=True, db_index=True)
-    #nr_statements = models.IntegerField(null=True, blank=True, db_index=True)
+    # cache the counts here for faster SELECTs
+    nr_votes = models.IntegerField(null=True, blank=True, db_index=True)
+    nr_statements = models.IntegerField(null=True, blank=True, db_index=True)
 
     class Meta:
         unique_together = (('plsess', 'number', 'sub_number'),)
         ordering = ('-plsess__date', '-number', '-sub_number')
         app_label = 'parliament'
+
+    def count_related_objects(self):
+        self.nr_votes = self.plenaryvote_set.count()
+        self.nr_statements = self.statement_set.count()
 
     def get_short_id(self):
         if self.sub_number >= 0:

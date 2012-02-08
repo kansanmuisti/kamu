@@ -384,7 +384,8 @@ class MinutesImporter(Importer):
             if 'discussion' in item_info:
                 for idx, st in enumerate(item_info['discussion']):
                     self.save_statement(item, idx, st)
-
+        item.count_related_objects()
+        item.save()
 
     def save_minutes(self, info):
         try:
