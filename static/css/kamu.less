@@ -1,5 +1,5 @@
 // colors
-@orange: #ffa140;
+@primary: #aaa52d;
 @violet: #9933d6;
 @lightorange: #ffd9b3;
 
@@ -100,14 +100,11 @@
 		color: @black;
 
 		&:hover {
-			color: @violet;
+			color: @primary;
 		}
 
 		&.extra {
-			color: @orange;
-			&:hover {
-				color: @violet;
-			}
+			color: @primary;
 		}
 	}
 }
@@ -145,7 +142,7 @@
 
 	input[type=submit] {
 		color: @white;
-		background: @orange;
+		background: @primary;
 		height: 25px;
 		width: 30px;
 
@@ -199,7 +196,7 @@
 			margin-top: 5px;
 		}
 
-		div {
+		div, abbr {
 			margin-left: 45px; // image width
 		}
 
@@ -221,7 +218,7 @@
 		font-size: 19px;
 		line-height: 24px;
 
-		color: @orange;
+		color: @primary;
 		font-weight: 400;
 
 		.readmore {
@@ -238,11 +235,11 @@
 	}
 
 	h3 {
-		color: @violet;
+		color: @grey;
 		font-size: 10px;
 		line-height: 20px;
 		font-style: italic;
-		font-weight: 400;
+		font-weight: 600;
 		margin: 0;
 		margin-bottom: 10px;
 
@@ -253,7 +250,7 @@
 
 .post {
 	.readmore {
-		color: @orange;
+		color: @primary;
 
 		&:hover {
 			color: @violet;
@@ -262,20 +259,25 @@
 	}
 
 	h4 {
-		font-size: 15px;
+		font-size: 18px;
 		line-height: 20px;
-		font-weight: normal;
+		font-weight: 600;
+		margin-bottom: 8px;
 	}
 	
 	.content {
-		font-size: 11px;
+		font-size: 12px;
 		line-height: 16px;
 	}
 
+	.name {
+		font-weight: 600;
+	}
 	.time {
 		color: @grey;
-		font-size: 8px;
+		font-size: 10px;
 		font-style: italic;
+		font-weight: 600;
 	}
 
 	.party {
@@ -316,14 +318,14 @@
 	a:hover {
 		text-decoration: none;
 		.caption {
-			background: @orange;
+			background: @primary;
 		}
 	}
 
 	img {
 		display: block;
-		height: 197px;
-		width: 184px;
+		height: 200px;
+		width: @naviboxwidth;
 		padding: 0;
 		margin: 0;
 	}

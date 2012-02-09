@@ -22,6 +22,13 @@
   {% compress css %}
   <link type="text/less" href="{{ MEDIA_URL }}css/kamu.less" rel="stylesheet" />
   {% endcompress %}
+
+  {% compress js %}
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.6.1.js"></script>
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/moment.js"></script>
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/moment.fi.js"></script>
+  {% endcompress %}
+
   {% block head %}{% endblock %}
 </head>
 
@@ -47,7 +54,7 @@
 					<li class="sep">/</li>
 					<li><a href="#">Aihepiirit</a></li>
 					<li class="sep">/</li>
-					<li><a class="extra" href="#">Yleistä</a></li>
+					<li><a href="#">Yleistä</a></li>
 
 				</ul>
 			</div>

@@ -2,51 +2,56 @@
 {% load i18n %}
 {% block title %}{% trans "Front page" %}{% endblock %}
 {% block head %}
+<script type="text/javascript">
+
+$(function() {
+	moment.lang('fi');
+	$(".time[title]").each(function() {
+		time = $(this).attr('title');
+		mom = moment(time);
+		$(this).text(mom.fromNow());
+	});
+	var now = moment();
+});
+
+</script>
 {% endblock %}
 
 {% block content %}
 <div id="left-column">
-  <h2>Presidenttivaalien ennakkoäänestys käynnissä nyt, löydä oma ehdokkaasi vaalikoneella! <a href="#" class="readmore">Lue lisää &gt;</a></h2>
-
   <div id="navigation">
-          <h3 class="grey">Navigaatio</h3>
-
-          <div class="row">
-                  <div class="navibox">
-                          <a href="#">
-                                  <img alt="Puolueet" src="{{ MEDIA_URL }}images/puolueet.png" />
-                                  <span class="caption">Puolueet</span>
-                          </a>
-                  </div>
-
-                  <div class="navibox">
-
-                          <a href="#">
-                                  <img alt="Kansanedustajat" src="{{ MEDIA_URL }}images/puolueet.png" />
-                                  <span class="caption">Kansanedustajat</span>
-                          </a>
-                  </div>
-
-                  <div class="navibox">
-                          <a href="#">
-                                  <img alt="Ajankohtaista" src="{{ MEDIA_URL }}images/puolueet.png" />
-
-                                  <span class="caption">Ajankohtaista</span>
-                          </a>
-                  </div>
-          </div>
+    <h3>Navigaatio</h3>
+    <div class="row">
+      <div class="navibox">
+        <a href="#">
+          <img alt="Puolueet" src="{{ MEDIA_URL }}images/puolueet.jpg" />
+          <span class="caption">Puolueet</span>
+        </a>
+      </div>
+      <div class="navibox">
+        <a href="#">
+          <img alt="Kansanedustajat" src="{{ MEDIA_URL }}images/marikiviniemi.jpg" />
+          <span class="caption">Kansanedustajat</span>
+        </a>
+      </div>
+      <div class="navibox">
+        <a href="#">
+          <img alt="Ajankohtaista" src="{{ MEDIA_URL }}images/ajankohtaista.jpg" />
+          <span class="caption">Ajankohtaista</span>
+        </a>
+      </div>
+    </div>
   </div>
 
   <div id="news">
-          <h3>Ajankohtaista</h3>
-  
-          <div class="post">
-                  <h4>Hallitustyökalu avattu</h4>
-                  <div class="content">
-                  Millaiset hallituspohjat toimisivat oikeasti? Missä tapauksissa jouduttaisiin tekemään eniten kompromisseja? Kamun hallitussuunnittelutyökalu tietää.
-                  <a href="#" class="readmore">Lue lisää &gt;</a>
-                  </div>
-          </div>
+    <h3>Ajankohtaista</h3>
+    <div class="post">
+      <h4>Hallitustyökalu avattu</h4>
+      <div class="content">
+        Millaiset hallituspohjat toimisivat oikeasti? Missä tapauksissa jouduttaisiin tekemään eniten kompromisseja? Kamun hallitussuunnittelutyökalu tietää.
+        <a href="#" class="readmore">Lue lisää &gt;</a>
+      </div>
+    </div>
   </div>
 
   <div id="kepposet">
@@ -55,26 +60,26 @@
     <div class="post">
       <h4>{{ item.description }}</h4>
       <div class="content">
-        <strong>{{ item.statement.member.get_print_name }}</strong> ({{ item.statement.member.party.name }}): "{{ item.statement.text|truncatewords:50 }}"
+        <span class="name">{{ item.statement.member.get_print_name }}</span> ({{ item.statement.member.party.name }}): "{{ item.statement.text|truncatewords:50 }}"
         <a href="#" class="readmore">{{ item.nr_statements }} puheenvuoroa, {{ item.nr_votes }} äänestystä &gt;</a>
       </div>
-      <div class="time">{{ item.plsess.date }}</div>
+      <abbr class="time" title="{{ item.plsess.date|date:'c' }}">{{ item.plsess.date }}</abbr>
     </div>
 {% endfor %}
-    <div id="kepposet-showmore"><a href="#">Näytä lisää kepposia</a></div>
+    <div id="kepposet-showmore"><a href="#">Näytä lisää kepposia &or;</a></div>
   </div>
 </div>
 
 <div id="right-column">
 
   <div id="livefeed">
-  <h3 class="grey">Live-feedi</h3>
+  <h3 class="grey">Sosiaalinen media</h3>
 {% for upd in some_updates %}
     <div class="post">
       <a href="{{ upd.mp_link }}"><img src="{{ upd.mp_portrait }}" alt="FIXME" /></a>
       <div class="name">{{ upd.mp_name }}</div>
       <div class="content">{{ upd.text }}</div>
-      <div class="time">{{ upd.time }}</div>
+      <div class="time" title="{{ upd.time|date:"c" }}">{{ upd.time }}</div>
     </div>
 {% endfor %}
   </div>
