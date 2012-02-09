@@ -18,8 +18,6 @@ def new_main(request):
         d['time'] = upd.created_time
         d['text'] = upd.text
         d['mp_name'] = mp.get_print_name()
-        print mp
-        print mp.photo
         tn = DjangoThumbnail(mp.photo, (32, 48))
         d['mp_portrait'] = unicode(tn)
         d['mp_link'] = mp.get_absolute_url()
