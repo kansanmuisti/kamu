@@ -53,7 +53,7 @@ class Command(BaseCommand):
             mp_tw = Update(feed=feed)
             mp_tw.origin_id = tw['id']
             text = tw['text']
-            mp_tw.text = text.replace('&gt;', '>').replace('&lt;', '<')
+            mp_tw.text = text.replace('&gt;', '>').replace('&lt;', '<').replace('&#39;', "'")
             date = calendar.timegm(email.utils.parsedate(tw['created_at']))
             mp_tw.created_time = datetime.datetime.fromtimestamp(date)
             try:
