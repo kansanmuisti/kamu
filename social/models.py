@@ -1,4 +1,5 @@
 from django.db import models
+from twitter_text import TwitterText
 
 class Feed(models.Model):
     TYPE_CHOICES = (
@@ -23,6 +24,11 @@ class Update(models.Model):
     class Meta:
         unique_together = (('feed', 'origin_id'),)
         ordering = ['-created_time']
+
+    def render_html(self):
+        assert self.feed.type == 'TW'
+        tt = TwitterText(self.text)
+        return tt.autolink.auto_link()
 
     def __unicode__(self):
         return '%s: %s (%s)' % (self.feed.type, self.created_time, self.feed.account_name)

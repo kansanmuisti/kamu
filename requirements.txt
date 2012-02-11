@@ -14,3 +14,4 @@ Coffin
 Jinja2
 pygments
 django-compressor
+twitter-text-py

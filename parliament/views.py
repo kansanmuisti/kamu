@@ -17,6 +17,7 @@ def new_main(request):
         mp = feed.member
         d['time'] = upd.created_time
         d['text'] = upd.text
+        d['html'] = upd.render_html()
         d['mp_name'] = mp.get_print_name()
         tn = DjangoThumbnail(mp.photo, (32, 48))
         d['mp_portrait'] = unicode(tn)
