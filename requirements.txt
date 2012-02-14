@@ -13,3 +13,4 @@ pygments
 django-compressor
 twitter-text-py
 sorl-thumbnail
+django-extensions
