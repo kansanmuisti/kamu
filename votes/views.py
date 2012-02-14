@@ -19,7 +19,6 @@ from tagging.utils import parse_tag_input
 from kamu.votes.models import *
 from kamu.orgs.models import Organization, SessionScore
 from kamu.votes.index import complete_indexer
-from sorl.thumbnail.main import DjangoThumbnail
 from kamu.contact_form.views import contact_form
 from httpstatus import Http400
 from user_voting.models import Vote as UserVote

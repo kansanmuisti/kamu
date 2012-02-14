@@ -10,8 +10,7 @@ South
 cssutils
 django-tastypie
 twython
-Coffin
-Jinja2
 pygments
 django-compressor
 twitter-text-py
+sorl-thumbnail
