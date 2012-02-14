@@ -149,7 +149,6 @@ INSTALLED_APPS = (
     'social',
     'parliament',
     'eduskunta',
-    'tagging',
     'djapian',
     'facebook',
     'registration',

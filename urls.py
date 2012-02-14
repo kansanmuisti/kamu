@@ -25,7 +25,6 @@ urlpatterns = patterns('',
 
 urlpatterns += patterns('votes.views',
     url(r'^session/$', 'list_sessions'),
-    url(r'^session/(?P<plsess>[\w-]+)/(?P<sess>\d+)/tag/$', 'tag_session'),
     url(r'^session/(?P<plsess>[\w-]+)/(?P<sess>\d+)/user-vote/$', 'set_session_user_vote'),
     url(r'^session/(?P<plsess>[\w-]+)/(?P<sess>\d+)/(?P<section>[\w]+)/$', 'show_session'),
     url(r'^session/(?P<plsess>[\w-]+)/(?P<sess>\d+)/$', 'show_session'),

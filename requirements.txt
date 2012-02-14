@@ -1,6 +1,5 @@
 Django
 djapian
-svn+http://django-tagging.googlecode.com/svn/trunk/
 Markdown
 BeautifulSoup
 python-dateutil

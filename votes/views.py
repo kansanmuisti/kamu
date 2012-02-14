@@ -14,7 +14,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.csrf.middleware import csrf_exempt
 from django.contrib.contenttypes.models import ContentType
 from httpstatus.decorators import postonly
-from tagging.models import Tag
 from tagging.utils import parse_tag_input
 from kamu.votes.models import *
 from kamu.orgs.models import Organization, SessionScore
@@ -429,7 +428,7 @@ def show_session_basic(request, session, psess):
     user_votes = get_user_votes(request.user, session)
 
     args = {'vote_list': votes, 'tables': tables, 'score_table': score_table,
-            'tags': Tag.objects.get_for_object(session), 'switch_district': True,
+            'switch_district': True,
             'user_votes': user_votes}
 
     return args
@@ -473,7 +472,7 @@ def set_session_user_vote(request, plsess, sess):
 
     return set_user_vote(request, sess)
 
-@login_required
+"""@login_required
 def tag_session(request, plsess, sess):
     psess = get_object_or_404(PlenarySession, url_name=plsess)
     try:
@@ -492,7 +491,7 @@ def tag_session(request, plsess, sess):
 
     kwargs = { 'plsess': plsess, 'sess': str(number) }
     path = reverse('votes.views.show_session', kwargs=kwargs)
-    return HttpResponseRedirect(path)
+    return HttpResponseRedirect(path)"""
 
 def format_stat_col(request, val, class_name, is_percent=True):
     if val:
