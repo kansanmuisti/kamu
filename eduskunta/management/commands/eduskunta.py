@@ -22,11 +22,14 @@ class Command(BaseCommand):
                     default=False, help='Import plenary session votes'),
         make_option('--update', action='store_true', dest='update',
                     default=False, help='Update values of existing objects'),
+        make_option('--cache', action='store', dest='cache',
+                    help='Use cache in supplied director')
     )
 
     def handle(self, *args, **options):
         http = HttpFetcher()
-        http.set_cache_dir(os.path.join(settings.SITE_ROOT, '.cache'))
+        if options['cache']:
+            http.set_cache_dir(options['cache'])
         min_importer = MinutesImporter(http_fetcher=http)
         min_importer.replace = options['update']
         min_importer.import_terms()

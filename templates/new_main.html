@@ -61,7 +61,7 @@ $(function() {
       <h4>{{ item.description }}</h4>
       <div class="content">
         <span class="name">{{ item.statement.member.get_print_name }}</span> ({{ item.statement.member.party.name }}): "{{ item.statement.text|truncatewords:50 }}"
-        <a href="#" class="readmore">{{ item.nr_statements }} puheenvuoroa, {{ item.nr_votes }} äänestystä &gt;</a>
+        <a href="{{ item.get_absolute_url }}" class="readmore">{{ item.nr_statements }} puheenvuoroa, {{ item.nr_votes }} äänestystä &gt;</a>
       </div>
       <abbr class="time" title="{{ item.plsess.date|date:'c' }}">{{ item.plsess.date }}</abbr>
     </div>

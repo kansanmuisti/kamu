@@ -2,6 +2,9 @@ from django.db import models
 from django.db.models import Q
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
+from django.utils.html import linebreaks
+from django.utils.safestring import mark_safe
+from django.core.urlresolvers import reverse
 
 from parliament.models.document import *
 from parliament.models.member import *
@@ -91,6 +94,13 @@ class PlenarySessionItem(models.Model):
         else:
             return "%s/%d" % (str(self.plsess), self.number)
 
+    def get_absolute_url(self):
+        args = {'plsess': self.plsess.url_name,
+                'item_nr': self.number}
+        if self.sub_number is not None:
+            args['subitem_nr'] = self.sub_number
+        return reverse('parliament.views.show_item', kwargs=args)
+
     def __unicode__(self):
         return "%s %s: %s" % (self.get_short_id(), self.type, self.description)
 
@@ -106,6 +116,9 @@ class Statement(models.Model):
         ordering = ('item', 'index')
         app_label = 'parliament'
         unique_together = (('item', 'index'),)
+
+    def get_html_text(self):
+        return mark_safe(linebreaks(self.text.replace('\n', '\n\n')))
 
     def __unicode__(self):
         return "%s/%d (%s)" % (self.item.get_short_id(), self.index, unicode(self.member))

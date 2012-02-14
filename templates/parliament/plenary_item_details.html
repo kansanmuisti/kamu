@@ -1,0 +1,42 @@
+{% extends "base_j.html" %}
+{% load i18n thumbnail %}
+{% block title %}{{ item.description|truncatewords:10 }}{% endblock %}
+{% block head %}
+<script type="text/javascript">
+
+$(function() {
+	moment.lang('fi');
+	$(".time[title]").each(function() {
+		time = $(this).attr('title');
+		mom = moment(time);
+		$(this).text(mom.fromNow());
+	});
+	var now = moment();
+});
+
+</script>
+{% endblock %}
+
+{% block content %}
+
+<h1>{{ item.description }}</h1>
+<div>
+{% for st in item.statement_set.all %}
+  <div class="statement">
+{% with st.member as mp %}
+{% thumbnail mp.photo "64x96" as portrait %}
+    <div class="portrait">
+      <a href="{{ mp.get_absolute_url }}"><img src="{{ portrait.url }}" /></a>
+    </div>
+{% endthumbnail %}
+    <div class="content">
+      <h4>{{ mp.get_print_name }}</h4>
+      <p>{{ st.get_html_text }}</p>
+    </div>
+{% endwith %}
+  </div>
+{% endfor %}
+</div>
+
+{% endblock %}
+
