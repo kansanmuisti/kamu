@@ -33,7 +33,7 @@ class PartyImporter(Importer):
             line = line.strip().decode('utf8')
             if not line:
                 continue
-            (name, long_name, logo) = line.split('\t')
+            (name, long_name, logo, chairman) = line.split('\t')
             try:
                 party = Party.objects.get(name=name)
                 if not self.replace:
