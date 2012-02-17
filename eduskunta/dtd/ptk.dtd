@@ -1,0 +1,1048 @@
+<!-- ***************************************************************************-->
+<!-- 										-->
+<!--	  I S T U N T O P O Y T A K I R J O J E N    R A K E N T E E T		-->
+<!-- 										-->
+<!-- 				- 27.01.1999 -					-->
+<!-- 										-->
+<!-- 	Public Identifier:	"-//Eduskunta//DTD ptk//FI"			-->
+<!--				(ptk.dtd)					-->
+<!-- ***************************************************************************-->
+<!--	
+	DTD istuntopoytakirjojen koottua rakennetta varten. Rakennemaarittely
+	sisaltaa rakenteet taysistuntopoytakirjalle, suulliselle kyselytunnille,
+	valtioneuvoston kyselytunnille ja ruotsinkielisille poytakirjoille
+	protokoll i sammandragille ja muntlig frågetimmelle seka ensimmaiselle 
+	istunnolle, valtiopaivien avajaisille ja paattajaisille ja presidentin 
+	virkavalalle.
+
+	Ajankohtaiskeskusteluun kaytetaan taysistuntopoytakirjan rakennetta. 
+-->
+<!-- ========================================================================= 	-->
+
+<!-- Paivajarjestyksen rakenne -->
+<!ENTITY % pj PUBLIC "-//Eduskunta//DTD pj//FI" >
+%pj;
+
+<!-- Tekstiosien komponentit, esiintyvat puheenvuorossa.	-->
+<!ENTITY % TEKSKOMP	"te | rte | listay | lista | siste | siste2 | tyhja | 
+				tyhjanel | svaihto | valiots" >
+
+<!-- Rakenteet, jotka esiintyvat usealla tasolla	-->
+<!ENTITY % VALIKOMP	"istuntot | vieraili | pmpvuoro | edpvuoro | te | paatokse | 
+				svaihto | tyhja | tyhjanel | viiva" >	
+
+<!-- Ilmoitusasian rakenne -->
+<!ENTITY % ILM		"asiaot?, (ak | aak)*, huom?, (pmpvuoro | lyhkes | 
+			edpvuoro | keskust |  keskviit | askirote | (%TEKSKOMP;) | 
+			paatokse | istuntot | askaskes | vieraili | viiva)*" >
+
+<!-- Lomanpyyntojen rakenteet (sisaltyy ilmoitusasioihin) -->
+<!ENTITY % LOMAILM	"asiaot?, (pmlorep | lomakpl | te | pmpvuoro | lyhkes | 
+			edpvuoro | keskust | keskviit | paatokse | istuntot | 
+			askaskes | vieraili | tyhja | tyhjanel | viiva)*" >
+
+<!-- ========================================================================= 	-->
+<!--   		 TAYSISTUNTOPOYTAKIRJA						-->
+<!-- ========================================================================= 	-->
+
+<!-- Ptk; Istuntopoytakirjan juurielementti.	-->
+<!ELEMENT ptk		- - (sishuom?, ident, ot1, paivajar, sviiva?, liite?, 
+				puhjoht?, ilmasiat?, (upjasiat | pjasiat)*, 
+				pmpsanat?, (kesken | paattam), sviiva, aanliite*, 
+				liite?, sviiva?) >
+
+<!ATTLIST ptk		Tila 		CDATA 				#IMPLIED
+			Versio		CDATA 				#IMPLIED
+			Kieli		(suomi | ruotsi | suomiruotsi)	suomi
+			Tunniste	CDATA				#REQUIRED				
+			Pvm		CDATA				#REQUIRED
+			Ipvm		CDATA				#REQUIRED
+			Inro		CDATA				#REQUIRED
+			Ityyppi		(tavallinen | ak  | keskenerainenak | akskt 
+					| keskenerainenakskt | pi | keskenerainenpi 
+					| piskt | keskenerainenpiskt | tavallinenak 
+					| tavallinenpi | tavallinenskt | keskenerainentavallinenskt
+					| tavallinenakskt | keskenerainentavallinenakskt
+					| tavallinenjuhla | tavjuhlapres 
+					| keskenerainen) tavallinen>
+		      <!-- Ylimman tason attribuutit:	--
+			-- Tila		Poytakirjan tila (tarkistettu, tarkistamaton jne.) --
+			-- Versio	Versio, ei kaytossa ptk:ssa --
+			-- Kieli	Poytakirjan kieli --
+			-- Tunniste	Poytakirjan tunniste --
+			-- Pvm		Ylatunnisteeseen tuleva paivays --
+			-- Ipvm		Istuntopaivays, Fakta-muodossa --
+			-- Inro		Istunnon numero --
+			-- Ityyppi	Istunnon tyyppi, arvot:
+					Tavallinen, Ajankohtaiskeskustelu, 
+					AjankohtaiskeskusteluJaKeskenerainen,
+					AjankohtaiskeskusteluJaSuullinenKyselytunti,
+					AjankohtaiskeskusteluJaSuullinenKyselytuntiJaKeskenerainen,
+					PaaministerinIlmoitus, 
+					PaaministerinIlmoitusJaKeskenerainen,
+					PaaministerinIlmoitusJaSuullinenKyselytunti,
+					PaaministerinIlmoitusJaSuullinenKyselytuntiJaKeskenerainen,
+					TavallinenJaAjankohtaiskeskustelu, 
+					TavallinenJaPaaministerinIlm.,
+					TavallinenJaAjankohtaiskeskusteluJaSuullinenKyselytunti,
+					TavallinenJaAjankohtaiskeskusteluJaSuullinenKyselytuntiJaKeskenerainen,
+					TavallinenJaSuullinenKyselytunti,
+					TavallinenJaSuullinenKyselytuntiJaKeskenerainen,
+					TavallinenJaJuhlaistunto, 
+					TavallinenJaJuhlaistuntoJaPresvakuutus -->
+
+<!-- ========================================================================= 	-->
+<!--   		 SUULLISEN KYSELYTUNNIN POYTAKIRJA				-->
+<!-- ========================================================================= 	-->
+
+<!-- Stk; Suullisen kyselytunnin poytakirjan juurielementti, joka sisaltaa -- 
+  -- paivajarjestykseen liittyvat paatason elementit ja puheenvuororakenteen.	-->
+<!ELEMENT skt		- - (sishuom?, ident, ot1, suulkt, sviiva?, pjoht?, 
+				sktilm*, sktot, (kyskesk | pmhuom | isttapah | 
+				vierilm | svaihto | viiva)*, sktpaat, sviiva) >
+<!ATTLIST skt		Tila 		CDATA				#IMPLIED
+			Versio		CDATA 				#IMPLIED
+			Kieli		(suomi | ruotsi | suomiruotsi)	suomi
+			Tunniste	CDATA				#REQUIRED				
+			Pvm		CDATA				#REQUIRED
+			Ipvm		CDATA				#REQUIRED
+			Inro		CDATA				#REQUIRED
+			Ityyppi		(skt) skt >
+
+		      <!--Ylimman tason attribuutit: --
+			--Tila		Poytakirjan tila (tarkistettu, tarkistamaton, jne.) --
+			--Versio	Versio, ei kaytossa ptk:ssa --
+			--Kieli	Poytakirjan kieli --
+			--Tunniste	Poytakirjan tunniste --
+			--Pvm		Ylatunnisteeseen tuleva paivays --
+			--Ipvm		Istuntopaivays, Fakta-muodossa --
+			--Inro		Istunnon numero --
+			--Ityyppi	Istunnon tyyppi, arvo:
+					SuullinenKyselytunti	-->
+
+
+<!-- ========================================================================= 	-->
+<!--   		 ENSIMMAISEN ISTUNNON ISTUNTOPOYTAKIRJA				-->
+<!-- ========================================================================= 	-->
+
+<!-- Ensimmainen istunto; --
+  -- Ensimmaisen istunnon istuntopoytakirjan juurielementti.-->
+<!ELEMENT eptk		- - (sishuom?, ident, ot1, paivajar, sviiva?, avsanat?, 
+				ilmasiat?, pjasiat, lopunilm?, paattam, sviiva) >
+
+<!ATTLIST eptk		Tila 		CDATA 				#IMPLIED
+			Versio		CDATA 				#IMPLIED
+			Kieli		(suomi | ruotsi | suomiruotsi)	suomi
+			Tunniste	CDATA				#REQUIRED				
+			Pvm		CDATA				#REQUIRED
+			Ipvm		CDATA				#REQUIRED
+			Inro		CDATA				#REQUIRED
+			Ityyppi		(tavallinen | ak | pi | tavallinenak |
+					tavallinenpi | tavallinenjuhla) tavallinen >
+		      <!-- Ylimman tason attribuutit: --
+			-- Tila		Poytakirjan tila (tarkistettu, tarkistamaton, jne.) --
+			-- Versio	Versio, ei kaytossa ptk:ssa --
+			-- Kieli	Poytakirjan kieli --
+			-- Tunniste	Poytakirjan tunniste --
+			-- Pvm		Ylatunnisteeseen tuleva paivays --
+			-- Ipvm		Istuntopaivays, Fakta-muodossa --
+			-- Inro		Istunnon numero --
+			-- Ityyppi	Istunnon tyyppi, arvot: 
+					Tavallinen, Ajankohtaiskeskustelu, 
+					PaaministerinIlmoitus,
+					TavallinenJaAjankohtaiskeskustelu, 
+					TavallinenJaPaaministerinIlm.
+					TavallinenJaJuhlaistunto -->
+
+<!-- ========================================================================= 	-->
+<!--   		 AVAJAISTEN JA PAATTAJAISTEN ISTUNTOPOYTAKIRJA			-->
+<!-- ========================================================================= 	-->
+
+<!-- Avajaiset ja paattajaiset; --
+  -- Avajaisten ja paattajaisten poytakirjan juurielementti.	-->
+<!ELEMENT aptk		- - (sishuom?, ot1, ident, avajais, paattam, 
+				(sviiva|viiva), epavir?, sviiva?) >
+
+<!ATTLIST aptk		Tila 		CDATA 				#IMPLIED
+			Versio		CDATA 				#IMPLIED
+			Kieli		(suomi | ruotsi | suomiruotsi)	suomi
+			Tunniste	CDATA				#REQUIRED				
+			Pvm		CDATA				#REQUIRED
+			Ipvm		CDATA				#REQUIRED
+			Inro		CDATA				#REQUIRED
+			Ityyppi		(avajaisjuhla | paattjuhla) avajaisjuhla >
+		      <!--Ylimman tason attribuutit: --
+			--Tila		Poytakirjan tila (tarkistettu, tarkistamaton, jne.) --
+			--Versio	Versio, ei kaytossa ptk:ssa --
+			--Kieli	Poytakirjan kieli --
+			--Tunniste	Poytakirjan tunniste --
+			--Pvm		Ylatunnisteeseen tuleva paivays --
+			--Ipvm		Istuntopaivays, Fakta-muodossa --
+			--Inro		Istunnon numero --
+			--Ityyppi	Istunnon tyyppi, arvot:
+					AvajaisetJaJuhlaistunto, 
+					PaattajaisetJaJuhlaistunto -->
+
+<!-- ========================================================================= 	-->
+<!--   		 VALTIOPAIVAJUMALANPALVELUS					-->
+<!-- ========================================================================= 	-->
+
+<!-- Valtiopaivajumalanpalvelus; Valtiopaivajumalanpalveluksen juurielementti.	-->
+<!ELEMENT vpjpptk		- - (sishuom?, ot1, ident, vpjp, paattam, sviiva) >
+
+<!ATTLIST vpjpptk	Tila 		CDATA 				#IMPLIED
+			Versio		CDATA 				#IMPLIED
+			Kieli		(suomi | ruotsi | suomiruotsi)	suomi
+			Tunniste	CDATA				#REQUIRED				
+			Pvm		CDATA				#REQUIRED
+			Ipvm		CDATA				#REQUIRED
+			Inro		CDATA				#REQUIRED
+			Ityyppi		(vpjp) vpjp >
+		      <!-- Ylimman tason attribuutit: --
+			-- Tila		Poytakirjan tila (tarkistettu, tarkistamaton, jne.) --
+			-- Versio	Versio, ei kaytossa ptk:ssa --
+			-- Kieli	Poytakirjan kieli --
+			-- Tunniste	Poytakirjan tunniste --
+			-- Pvm		Ylatunnisteeseen tuleva paivays --
+			-- Ipvm		Istuntopaivays, Fakta-muodossa --
+			-- Inro		Istunnon numero --
+			-- Ityyppi	Istunnon tyyppi, 
+					arvo Valtiopaivajumalanpalvelus -->
+
+<!-- ========================================================================= 	-->
+<!--    		 SISAINEN HUOMAUSTUS JA PUHETTA JOHTAA			-->
+<!-- ========================================================================= 	-->
+
+<!-- Sisainen huomautus; 	-->
+<!ELEMENT sishuom	- - (te | listay | tyhja | tyhjanel)*	>
+
+<!-- Puhetta joht; Poytakirjan alkuun tuleva "Puhetta johtaa..."-teksti	-->
+<!ELEMENT puhjoht	- - (#PCDATA)	>
+
+<!-- Puhetta johtaa; Suullisen kyselytunnin ja valtioneuvoston kyselytunnin --
+  -- "Puhetta johtaa..."	-->
+<!ELEMENT pjoht		- - (#PCDATA) >
+<!ATTLIST pjoht		pnro	CDATA	#IMPLIED >
+			<!-- Puheenvuoron numero -->
+
+<!-- ========================================================================= 	-->
+<!-- 				ILMOITUSASIAT					-->
+<!-- ========================================================================= 	-->
+
+<!-- Ilmoitusasiat-runko; rakenteen ylin elementti -->
+<!ELEMENT ilmasiat	- - (nhuuto | virkateh | sairausp | poissaop | muutpjn |
+				ilmasia | edtoim | vkkokp | istuntot | vieraili | 
+				svaihto | pmmuistos | pmhuom | ilmed)* >
+
+<!-- Ilmoituksen otsikko -->
+<!ELEMENT asiaot	- - (#PCDATA)	>
+
+<!-- Virkatehtavissa olevat	-->
+<!ELEMENT virkateh	- - (%LOMAILM;)	>
+<!ATTLIST virkateh	ylatun	CDATA	#IMPLIED >
+			<!-- Ylatunnisteen teksti -->
+
+<!-- Sairauspoissaolot	-->
+<!ELEMENT sairausp	- - (%LOMAILM;)	>
+<!ATTLIST sairausp	ylatun	CDATA	#IMPLIED >
+			<!-- Ylatunnisteen teksti -->
+
+<!-- Poissaolopyynnot	-->
+<!ELEMENT poissaop	- - (%LOMAILM;)	>
+<!ATTLIST poissaop	ylatun	CDATA	#IMPLIED >
+			<!-- Ylatunnisteen teksti -->
+
+<!-- Puhemiehen lomarepliikki	-->
+<!ELEMENT pmlorep	- - (puhemies, (te | ajankoht | svaihto)+)	>
+
+<!-- Puhemiehen lomakappale	-->
+<!ELEMENT lomakpl	- - (te, (te | ajankoht | svaihto)+)	>
+
+<!-- Ajankohta; Poissaoloajankohta ja edustaja(t)	-->
+<!ELEMENT ajankoht	- - (aika, edustaja+)	>
+
+<!-- Aika; Ajankohta, esim. "3.-9.6."	-->
+<!ELEMENT aika		- - (#PCDATA)	>
+
+<!-- Muutos paivajarjestykseen	-->
+<!ELEMENT muutpjn	- - (ot2?, (pmpvuoro | te | tyhja | tyhjanel | viiva)*)	>
+
+<!-- Ilmoitusasia	-->
+<!ELEMENT ilmasia	- - (((%ILM;)|edpuhe)+)	>
+<!ATTLIST ilmasia	ylatun	CDATA	#IMPLIED >
+			<!-- Ylatunnisteen teksti -->
+
+<!-- Edustajantoimi	-->
+<!ELEMENT edtoim	- - (%ILM;)	>
+<!ATTLIST edtoim	ylatun	CDATA	#IMPLIED >
+			<!-- Ylatunnisteen teksti -->
+
+<!-- Toimielinten kokoonpano	-->
+<!ELEMENT vkkokp	- - (%ILM;)	>
+<!ATTLIST vkkokp	ylatun	CDATA	#IMPLIED >
+			<!-- Ylatunnisteen teksti -->
+
+<!-- Asiakirjan ote; esim. Sihteeri lukee: ja ote asiakirjasta	-->
+<!ELEMENT askirote	- - (johdanto?, kirjelma)	>
+
+<!-- Kirjelma; asiakirjan otteena oleva kirjelma -->
+<!ELEMENT kirjelma	- - (te*, addres, (%TEKSKOMP;)+, ponsi*, allekirj)	>
+<!ATTLIST kirjelma	kieli	(suomi | ruotsi) suomi >
+			<!-- Kirjelman kieli -->
+
+<!-- Addresaatti; Kirjelman vastaanottaja	-->
+<!ELEMENT addres	- - (#PCDATA)	>
+
+<!-- Allekirjoitus; kirjelman allekirjoitusosa	-->
+<!ELEMENT allekirj 	- - ((edustaja | allenimi | te | tyhja | tyhjanel | paivays)+)	>
+
+<!-- Valikysymys	-->
+<!ELEMENT valikys	- - (kysosa) >
+<!ATTLIST valikys	tunniste	CDATA	#IMPLIED	>
+			<!-- Asiakirjan tunniste -->
+
+<!-- Kysymysosa; valikysymyksen kysymysosa -->
+<!ELEMENT kysosa	- - (addres, peruste, kysymys, allekosa)	>
+<!ATTLIST kysosa	kieli	(suomi | ruotsi) suomi >
+			<!-- Kysymysosan kieli -->
+
+<!-- Perustelut; Valikysymyksen perustelut -->
+<!ELEMENT peruste  	- - (ot2?, (ot3 | ot4 | ot5 | table | kv | kev | %TEKSKOMP;)+) >
+
+<!-- Kysymys; Valikysymyksen kysymys	-->
+<!ELEMENT kysymys 	- - (ot2?, ponnet)	>
+
+<!-- Ponsiosa; Valikysymyksen ponsisosa	-->
+<!ELEMENT ponnet    	- - (johdosa, ponsi+)	>
+
+<!-- PonnenJohdanto; valikysymyksen ponsien johdanto-osa -->
+<!ELEMENT johdosa      	- - (%TEKSTI;)+		>
+
+<!-- Ponsikappale; valikysymyksen ponsikappale -->
+<!ELEMENT ponsi       	- - (%TEKSTI;)+		>
+
+<!-- Allekirjoittaja	-->
+<!ELEMENT allenimi	- - (#PCDATA)		>
+
+<!-- Allekirjoitusosa; Valtiopaivaasiakirjojen yleinen  allekirjoitusosa -->
+<!ELEMENT allekosa 	- - (%ALLEK-KK;) 	>
+
+<!-- Katkoviiva  -->
+<!ELEMENT kv		- O EMPTY	>
+
+<!-- Keskiviiva -->
+<!ELEMENT kev		- O EMPTY	>
+
+<!-- ========================================================================= 	-->
+<!--    		SUULLISEN KYSELYTUNNIN  ILMOITUSASIA	(SKTILM)	-->
+<!-- ========================================================================= 	-->
+
+<!-- Skt Ilmoitusasiat; Suullisen kyselytunnin Ilmoitusasiat-rakenne	-->
+<!ELEMENT sktilm	- - (((asiaot?, (ak | aak)*, huom?, (pmpvuoro | lyhkes |  
+				edpvuoro | askirote | (%TEKSKOMP;) | paatokse)*, 
+				viiva?)| edpuhe)+)	>
+<!ATTLIST sktilm	ylatun	CDATA	#IMPLIED >
+			<!-- Ylatunnisteen teksti -->
+
+<!-- ========================================================================= 	-->
+<!-- 				Nimenhuuto					-->
+<!-- ========================================================================= 	-->
+
+<!-- Nimenhuuto; rakenteen ylin elementti -->
+<!ELEMENT nhuuto	- - (nhots?, (poissa | jalkiilm | paatokse | edistunt | 
+				lyhkes | edpvuoro | pmpvuoro | te | keskust | 
+				keskviit | kviit | svaihto | tyhja | tyhjanel | 
+				viiva)*)	>
+<!ATTLIST nhuuto	ylatun	CDATA	#IMPLIED >
+			<!-- Ylatunnisteen teksti -->
+
+<!-- Nimenhuuto-otsikko		-->
+<!ELEMENT nhots		- - (#PCDATA)	>
+
+<!-- Poissa; Poissaolijat -->
+<!ELEMENT poissa	- - ((johdanto|pmpvuoro), edustaja+)	>
+
+<!-- Viittaus edelliseen istuntoon; viittaus ed. istunnon nimenhuutoon -->
+<!ELEMENT edistunt	- - (johdanto, edustaja*, te?)	>
+
+<!-- Jalki-ilmoittautujat; nimenhuudossa jalki-ilmoittautuneiden luettelo -->
+<!ELEMENT jalkiilm	- - (johdanto, edustaja+)	>
+
+<!-- Lyhyt keskustelu	-->
+<!ELEMENT lyhkes	- - (otsis, lisatiet?, (pmpvuoro | edpvuoro | te)+) >
+
+
+<!-- ========================================================================= 	-->
+<!--    		 PTK VALIIN 						-->
+<!-- ========================================================================= 	-->
+
+<!-- Poytakirja valiin; Rakennetta kaytetaan sellaisissa tapauksissa, jolloin --
+  -- poytakirjaa pitaa voida kirjoittaa rikkomatta jotain ylemman tason rakenne- --
+  -- kokonaisuutta. Tallainen tapaus on esimerkiksi aanestys asian asiallisen --
+  -- kasittelyn jatkamisesta. -->
+<!ELEMENT ptkvali	- - ((%VALIKOMP; | lyhkes | istkesk | istjatk | kohta 
+				| askaskes| ilmasia | ilmed)+) >
+
+<!-- ========================================================================= 	-->
+<!--    		 Ulkopuolella pj:n olevat asiat				-->
+<!-- ========================================================================= 	-->
+
+<!-- Ulkopuolella paivajarjestyksen; Rakenteen ylin elementti -->
+<!ELEMENT upjasiat	- - (upjots, (pjkohta | istuntot | vieraili | muutpjn 
+				| istjatk | istkesk | viiva | svaihto )*)	>
+
+<!-- Ulkopuolella pjn -otsikko; Ulkopuolella paivajarjestyksen -otsikko -->
+<!ELEMENT upjots	- - (#PCDATA)	>
+
+<!-- ========================================================================= 	-->
+<!--    		 Pj:ssa olevat asiat					-->
+<!-- ========================================================================= 	-->
+
+<!-- Paivajarjestyksessa olevat asiat; Rakenteen ylin elementti -->
+<!ELEMENT pjasiat	- - (pjots, (pjkohta | sktrunko | valta | istuntot | vieraili | 
+				muutpjn | istjatk | pmvaalit | istkesk | viiva | ilmasia |
+				svaihto)*)	>
+
+<!-- Pjssa olevat asiat -otsikko; Paivajarjestyksessa olevat asiat -otsikko	-->
+<!ELEMENT pjots		- - (#PCDATA) >
+
+<!-- Asiakohta; Paivajarjestyksen kohta	-->
+<!ELEMENT pjkohta	- - (kohta+, ((edpuhe|ptkviitt) | askirote | keskust | 
+				kviit | keskviit | pjpoisto | %VALIKOMP; | 
+				ilmasia | istkesk | istjatk | askaskes | ilmed)+) >
+<!ATTLIST pjkohta	ylatun		CDATA	#IMPLIED	>
+			<!-- Ylatunnisteen teksti -->
+
+<!-- Skt-runko; Suullisen kyselytunnin runko taysistunnossa	-->
+<!ELEMENT sktrunko	- - (kohta+, pmpvuoro?, (kyskesk | pmhuom | isttapah | 
+				vierilm)+, pmpvuoro?, 
+				(ilmasia | istkesk | istjatk | 
+				istuntot | vieraili | svaihto | 
+				tyhja | tyhjanel | viiva)*)
+			--	((edpuhe|ptkviitt) | askirote | keskust | 
+				kviit | keskviit | pjpoisto | %VALIKOMP; | 
+				ilmasia | istkesk | istjatk | askaskes | ilmed)+)-- >
+<!--ELEMENT sktrunko	- - (kohta+, pmpvuoro, kyskesk+, te*, (tyhja | tyhjanel | viiva)*)-->
+<!ATTLIST sktrunko	ylatun		CDATA	#IMPLIED	>
+
+<!-- Keskustelua ei synny; Viittaus mahdollisesti muussa asiayhteydessa --
+  -- kaytyyn keskusteluun.-->
+<!ELEMENT kviit		- - (#PCDATA) >
+
+<!-- Poistettu pjsta		-->
+<!ELEMENT pjpoisto	- - ((pmpvuoro | te | edpvuoro)*) >
+
+<!-- ========================================================================= 	-->
+<!--    		 Ensimmaisen istunnon rakenteet				-->
+<!-- ========================================================================= 	-->
+
+<!-- Avajaissanat; 1. istunto: Puhemiehen avajaissanat	-->
+<!ELEMENT avsanat	- - (ot2,(te|pmpvuoro)*)>
+
+<!-- Pm. vaalit ja pres. virkavala; Puhemiesten vaalit ja presidentin virkavala --
+  -- -rakenteiden ylin elementti. Kootussa poytakirjassa vaihtoehtoinen ptkviitt- --
+  -- rakenne ruotsinkielista poytakirjaa varten. -->
+<!ELEMENT pmvaalit	- - (kohta+, (askirote | pjpoisto | ilmed | ilmasia | 
+				istkesk | pmpvuoro | istjatk | askaskes | pmpuhe 
+				| prespuhe | ptkviitt | pmpuot | vaalit | vakuutuk 
+				| istuntot | vieraili | te | svaihto | tyhja | 
+				tyhjanel | viiva)+) >
+<!ATTLIST pmvaalit	ylatun		CDATA	#IMPLIED	>
+			<!-- Ylatunnisteen teksti -->
+
+<!-- Vaalit; Puhemiesten vaalien rakenne. -->
+<!ELEMENT vaalit	- - ((pmpvuoro | edpvuoro | te | lyhkes | ilmed | istuntot 
+				| vieraili | viiva)*) >
+
+<!--Puhemiehen puhe ja otsikko	-->
+<!ELEMENT pmpuot	- - (ot2, (pmpuhe|ptkviitt)) >
+
+<!-- Puhemiehen puhe; Koottu rakenne sisaltaa seka johdannon etta puheen -->
+<!ELEMENT pmpuhe	- - (pmpjohd?, puhemies?, (pmpterv|%TEKSKOMP;|
+				viiva|katkos)*) >
+<!ATTLIST pmpuhe	puhnimi	CDATA	#IMPLIED
+			pnro	CDATA	#IMPLIED
+			kieli (suomi | ruotsi | suomiruotsi) suomi
+			tyyppi (PuhemiehenPuhe) PuhemiehenPuhe
+			pjnro	CDATA	#REQUIRED 
+			ptkviite	CDATA	#IMPLIED >
+		      <!-- puhnimi	Puhujan nimi --
+			-- pnro		Puheenvuoron numero --
+			-- kieli	Puheenvuoron kieli --
+			-- tyyppi	Puheenvuoron tyyppi --
+			-- pjnro	Puheenvuoron jarjestysnumero, 
+					tuotetaan koostamisohjelmalla --
+			-- ptkviite	Ylatunnisteeseen tuleva poytakirjaviittaus -->
+
+<!-- Puheen johdanto		-->
+<!ELEMENT pmpjohd	- - ((#PCDATA)?, henkilo, (#PCDATA)?) >
+
+<!-- Tervehdys			-->
+<!ELEMENT pmpterv	- - (%TEKSTI;)+ >
+
+<!-- Presidentin puhe; Rakenteen ylin elementti. Koottu rakenne sisaltaa seka --
+  -- johdannon etta varsinaisen puheen. Se koostetaan laadinnan pmpuh- ja --
+  -- levykkeen pmpuhe-rakenteesta. Lisaksi kaytossa on kaksi uutta atribuuttia	-->
+<!ELEMENT prespuhe	- - (pmpjohd, (pmpterv|%TEKSKOMP;|viiva|katkos)*) >
+<!ATTLIST prespuhe	puhnimi	CDATA	#IMPLIED
+			pnro	CDATA	#IMPLIED
+			kieli (suomi | ruotsi | suomiruotsi) suomi
+			tyyppi (prespuhe) prespuhe
+			pjnro	CDATA	#REQUIRED 
+			ptkviite	CDATA	#IMPLIED >
+		      <!-- puhnimi	Puhujan nimi (ylatunnistetta varten) --
+			-- pnro		Puheenvuoron numero --
+			-- kieli	Puheenvuoron kieli --
+			-- tyyppi	Puheenvuoron tyyppi --
+			-- pjnro	Puheenvuoron jarjestysnumero,
+					tuotetaan koostamisohjelmalla --
+			-- ptkviite	Ylatunnisteeseen tuleva poytakirjaviittaus -->
+
+<!-- Edustajan puhe		-->
+<!ELEMENT edpuhe	- - (edustaja?, (%TEKSKOMP;|valikys|viiva|pmvali|puhuja)*) >
+<!ATTLIST edpuhe	puhnimi	CDATA	#IMPLIED
+			pnro	CDATA	#IMPLIED
+			kieli (suomi | ruotsi | suomiruotsi) suomi
+			tyyppi (varsinainen) varsinainen 
+			pjnro	CDATA	#REQUIRED 
+			ptkviite	CDATA	#IMPLIED >
+		      <!-- puhnimi	Puhujan nimi (ylatunnistetta varten) --
+			-- pnro		Puheenvuoron numero --
+			-- kieli	Puheenvuoron kieli --
+			-- tyyppi	Puheenvuoron tyyppi --
+			-- pjnro	Puheenvuoron jarjestysnumero,
+					tuotetaan koostamisohjelmalla --
+			-- ptkviite	Ylatunnisteeseen tuleva poytakirjaviittaus -->
+
+<!-- Vakuutukset; Puhemiesten ja presidentin vakuutusten ylin elementti. -->
+<!ELEMENT vakuutuk	- - ((ot2|valiots)?, (pmpvuoro | te | vakuutus | viiva)*) >
+
+<!-- Vakuutus; Puhemiehen tai presidentin vakuutus -->
+<!ELEMENT vakuutus	- - (henkilo,johdanto?, (te|rte)+) >
+
+<!-- Puhemiehen muistosanat; Kootussa poytakirjassa vaihtoehtoinen ptkviitt-rakenne --
+  -- ruotsinkielista poytakirjaa varten.	-->
+<!ELEMENT pmmuistos	- - (ot2?, (pmpuhe|ptkviitt), (te|rte)*, viiva?) >
+<!ATTLIST pmmuistos	ylatun		CDATA	#IMPLIED >
+			<!-- Ylatunnisteen teksti -->
+
+<!-- Ilmoittautunut edustaja; Rakenteeseen kirjoitetaan edustajan --
+  -- ilmoittautuminen valtiopaiville -->
+<!ELEMENT ilmed		- - (ot2?, ((%TEKSKOMP;)|pmpvuoro)+, viiva?)	>
+
+<!-- Lopun ilmoitusasiat; Ensimmaisen istunnon lopun ilmoitusasiat	-->
+<!ELEMENT lopunilm	- - ((ilmed | edtoim | ilmasia | viiva)*)	>
+
+<!-- ========================================================================= 	-->
+<!--    		 Avajaisten ja paattajaisten rakenteet			-->
+<!-- ========================================================================= 	-->
+
+<!-- Avajaiset/Paattajaiset; Kootussa poytakirjassa vaihtoehtoinen ptkviitt-rakenne --
+  -- ruotsinkielista poytakirjaa varten. -->
+<!ELEMENT avajais	- - ((te | siste | prespuhe | pmpuhe | ptkviitt)+) >
+<!ATTLIST avajais	ylatun		CDATA	#IMPLIED	
+			kohtanro	CDATA	#REQUIRED >
+			<!-- ylatun 	Ylatunnisteen teksti -->
+
+
+<!-- Epavir. paattajaistilaisuus; Epavirallisen paattajaistilaisuuden ylimman tason --
+  -- elementti. Kootussa poytakirjassa vaihtoehtoinen ptkviitt-rakenne --
+  -- ruotsinkielista poytakirjaa varten.	-->
+<!ELEMENT epavir	- - ((pmpuhe | te | ptkviitt | viiva)+)	>
+<!ATTLIST epavir	ylatun		CDATA	#IMPLIED	
+			kohtanro	CDATA	#REQUIRED >
+			<!-- Ylatunnisteen teksti -->
+
+<!-- ========================================================================= 	-->
+<!--    		Valtiopaivajumalanpalveluksen rakenteet			-->
+<!-- ========================================================================= 	-->
+
+<!-- Valtiopaivajumalanpalvelus	-->
+<!ELEMENT vpjp	- - (( te |saarna | ptkviitt | viiva | svaihto)+) >
+<!ATTLIST vpjp		ylatun		CDATA	#IMPLIED	
+			kohtanro	CDATA	#REQUIRED  >
+			<!-- ylatun	Ylatunnisteen teksti -->
+
+<!-- Saarna; Rakenteen ylin elementti	-->
+<!ELEMENT saarna	- - (johdanto, (%TEKSKOMP; | viiva)+)	>
+<!ATTLIST saarna	kieli (suomi | ruotsi | suomiruotsi) suomi
+			ptkviite	CDATA	#IMPLIED  >
+		      <!-- kieli		--
+			-- ptkviite		-->
+
+<!-- ========================================================================= 	-->
+<!--    		 Valtion talousarvion kasittely				-->
+<!-- ========================================================================= 	-->
+
+<!-- Budjetti; Rakenteen ylin elementti -->
+<!ELEMENT valta		- - (kohta+, (keskust | kviit | keskviit | pjpoisto | 
+				%VALIKOMP; | paalk | osasto | ykperust | 
+				ylperust | ponsipaa | tasaplau | istkesk | 
+				istjatk | askaskes | ilmasia)+) >
+<!ATTLIST valta		ylatun		CDATA	#IMPLIED >
+			<!-- Ylatunnisteen teksti -->
+
+<!-- Paaluokka; Budjettikasittelyssa oleva paaluokka. --
+  -- Kootussa rakenteessa kaytossa keskusteluviittaus.		-->
+<!ELEMENT paalk		- - (plnimi?, hallinal?, (keskust | keskviit | askaskes | 
+				kviit | %VALIKOMP; | ilmasia)+) >
+<!ATTLIST paalk		ylatun		CDATA	#IMPLIED >
+			<!-- Ylatunnisteen teksti -->
+
+<!-- Paaluokan nimi	-->
+<!ELEMENT plnimi	- O EMPTY >
+<!ATTLIST plnimi	nro	CDATA	#REQUIRED	>
+			<!-- Paaluokan numero, tulostuu nimen jalkeen -->
+
+<!-- Osasto		-->
+<!ELEMENT osasto	- - (osnimi?, hallinal?, (askaskes | %VALIKOMP;)+) >
+<!ATTLIST osasto		ylatun		CDATA	#IMPLIED >
+			<!-- Ylatunnisteen teksti -->
+
+<!-- Osaston nimi		-->
+<!ELEMENT osnimi	- O EMPTY >
+<!ATTLIST osnimi	nro	CDATA	#REQUIRED	>
+			<!-- Osaston numero, tulostuu nimen jalkeen -->
+
+<!-- Hallinnonala; Budjettikasittelyssa olevan paaluokan tai osaston hallinnonala -->
+<!ELEMENT hallinal	- - (#PCDATA)	>
+
+<!-- Yks.koht.perustelut; Yksityisohtaiset perustelut -rakenteen ylin elementti -->
+<!ELEMENT ykperust	- - (ykots?, (askaskes | %VALIKOMP;)+) >
+<!ATTLIST ykperust		ylatun		CDATA	#IMPLIED >
+			<!-- Ylatunnisteen teksti -->
+
+<!-- Yks.koht.perustelut-otsikko -->
+<!ELEMENT ykots		- - (#PCDATA) >
+
+<!-- Yleisperustelut -->
+<!ELEMENT ylperust	- - (ylots?, (askaskes | %VALIKOMP;)+) >
+<!ATTLIST ylperust		ylatun		CDATA	#IMPLIED >
+			<!-- Ylatunnisteen teksti -->
+
+<!-- Yleisperustelut-otsikko -->
+<!ELEMENT ylots		- - (#PCDATA) >
+
+<!-- Ponsipaatokset -->
+<!ELEMENT ponsipaa	- - ((%VALIKOMP;)+) >
+<!ATTLIST ponsipaa		ylatun		CDATA	#IMPLIED >
+			<!-- Ylatunnisteen teksti -->
+
+<!-- Tasapainolausuma -->
+<!ELEMENT tasaplau	- - ((%VALIKOMP;)+) >
+<!ATTLIST tasaplau		ylatun		CDATA	#IMPLIED >
+			<!-- Ylatunnisteen teksti -->
+
+
+<!-- ========================================================================= 	-->
+<!--    		 	Paatokset					-->
+<!-- ========================================================================= 	-->
+
+<!-- Paatokset;  Kootussa paatokset-rakenteessa on kaytossa keskustelu-rakenteiden --
+  -- rinnalla keskusteluviittaus. -->
+<!ELEMENT paatokse	- - ((%TEKSKOMP; | pmpvuoro | pmhuom | edpvuoro | aanots | 
+				aanestys | viiva | istuntot | vieraili | keskviit | 
+				aspoydp |(otsis, lisatiet?) | ehdtkset | edlista)+) >
+
+<!-- Asian poydallepano; Elementin avulla muodostetaan HTML-sivulla --
+  -- kaksisuuntainen linkki elementin Asian kasittelyn jatkaminen (askasjat) kanssa. -->
+<!ELEMENT aspoydp	- - (te) >
+<!ATTLIST aspoydp	viittaus  CDATA  #IMPLIED 
+			vpvuosi	  CDATA	 #IMPLIED>
+		      <!-- viittaus	Viittaus poytakirjaan, jossa kasittely jatkuu. --
+			-- vpvuosi	Valtiopaivavuosi -->
+
+
+<!-- Ehdotukset -->
+<!ELEMENT ehdtkset	- - (ehdots?, (te | ehdotus)+) >
+
+<!-- Ehdotukset-otsikko; Paaluokkaa/osastoa koskevat ehdotukset -otsikko -->
+<!ELEMENT ehdots	- - (#PCDATA) >
+
+<!-- Ehdotus -->
+<!ELEMENT ehdotus	- - (edustaja?, kannatta?, (%TEKSKOMP;)+) >
+<!ATTLIST ehdotus	nro	CDATA	#IMPLIED	>
+			<!-- Ehdotuksen numero, joka tulostuu ehdotuksen alkuun -->
+
+<!-- Kannattaja; Ehdotuksen kannattajatieto. Kaytossa ruotsinkielisessa poytakirjassa. -->
+<!ELEMENT kannatta	- - (te, edustaja) >
+			
+<!-- Edustajalista -->
+<!ELEMENT edlista	- - (te, (edustaja|henkilo|tyhja | tyhjanel)+) >
+
+<!-- ========================================================================= 	-->
+<!--    		 	Aanestys					-->
+<!-- ========================================================================= 	-->
+
+<!-- Aan. ja paat. ots; Aanestys ja paatos -otsikko -->
+<!ELEMENT aanots	- - ((%TEKSTI;)+) >
+
+<!-- Aanestys; Aanestys ja paatos -->
+<!ELEMENT aanestys	- - ((te | tulos | pmpvuoro | edpvuoro | istuntot | 
+				vieraili | tyhja | tyhjanel |viiva | svaihto)+)	>
+
+<!-- Tulos; aanestyksen tulos -->
+<!ELEMENT tulos		- - (puhemies?, te+, aanviit?)	-- Aanestyksen tulos	-->
+
+<!-- Aanestystulosviittaukset -->
+<!ELEMENT aanviit	- - (avnro, vliite?, avliite?) >
+<!ATTLIST aanviit	vpvuosi	CDATA	#IMPLIED	
+			istnro	CDATA	#IMPLIED	
+			aannro	CDATA	#IMPLIED	>
+		      <!-- vpvuosi	Valtiopaivavuosi --
+			-- istnro	Istunnon numero --
+			-- aannro	Aanestyksen numero -->
+
+<!-- Viittaus aanestysjarjestelmaan	-->
+<!ELEMENT avnro		- - (#PCDATA)	>
+
+<!-- Viittaus aanestysliitteeseen; kasin kirjoitettava viiteteksti. Tarvitaan	--
+  -- laadintavaiheessa, jolloin automaattisen viittauksen tekeminen liitteeseen	--
+  -- ei ole mahdollista. 							-->
+<!ELEMENT vliite	- - (#PCDATA)	>
+
+<!-- Linkki aanestysliitteeseen. Maaritelty Omittag, koska Frame tallentaa 	-->
+<!-- viittauselementin ilman lopputagia.					-->
+<!ELEMENT avliite	- O (#PCDATA)	>
+<!ATTLIST avliite	aannro	IDREF 	#IMPLIED >
+
+<!-- ========================================================================= 	-->
+<!--    		 Keskustelu-rakenne					-->
+<!-- ========================================================================= 	-->
+
+<!-- Keskustelu-rakenne; Pitkan, numeroidun keskustelun ylin elementti. --
+  -- Rakenne aloitetaan otsikolla.	-->
+<!ELEMENT keskust	- - (otsis, lisatiet?, ((pvuoro | isttapah | vierilm 
+				| svaihto | pmhuom | pmpvuoro | ptkvali | istuntot | 
+				vieraili | viiva | tyhja | tyhjanel)*), 
+				(kespaat | askaskes)) >
+
+<!-- Keskustelu-otsikko		-->
+<!ELEMENT otsis		- - ((%TEKSTI;)+) >	
+
+<!-- Keskustelun paatos 	-->
+<!ELEMENT kespaat	- - ((pmpvuoro | te)+) >
+
+<!-- Asian kasittelyn keskeyttaminen; Elementin avulla muodostetaan HTML-sivulla --
+  -- kaksisuuntainen linkki elementin Asian kasittelyn jatkaminen (askasjat) kanssa. -->
+<!ELEMENT askaskes	- - (te | pmpvuoro) >
+<!ATTLIST askaskes	viittaus  CDATA  #IMPLIED 
+			vpvuosi	  CDATA	 #IMPLIED>
+		      <!-- viittaus	Viittaus poytakirjaan, jossa kasittely jatkuu. --
+			-- vpvuosi	Valtiopaivavuosi -->
+
+
+<!-- Puheenvuor;  Kootussa rakenteessa on kaytossa katkos-elementti, joka kertoo, --
+  -- etta puheenvuoro on katkennut keskelta. Koostamisohjelma lisaa taman elementin. --
+  -- Lisaksi kootussa rakenteessa on kaytossa kaksi uutta attribuuttia: --
+  -- pjnro ja ptkviite.-->
+<!ELEMENT pvuoro	- - ((edustaja | minister), (%TEKSKOMP; | pmvali | puhuja | 
+				istuntot | vieraili | katkos)+) >
+<!ATTLIST pvuoro	puhnimi	CDATA	#IMPLIED
+			pnro	CDATA	#IMPLIED
+			kieli (suomi | ruotsi | suomiruotsi) suomi
+			tyyppi (varsinainen | vastaus | ryhma | ministesittvarsin
+				| mietinesittvarsin | pi 
+				| nopeavarsinainen) varsinainen
+			pjnro	CDATA	#REQUIRED 
+			ptkviite	CDATA	#IMPLIED >
+		      <!-- puhnimi	Puhujan nimi (ylatunnistetta varten) --
+			-- pnro		Puheenvuoron numero --
+			-- kieli	Puheenvuoron kieli --
+			-- tyyppi	Puheenvuoron tyyppi, arvot:
+						Varsinainen, Vastaus, Ryhma, 
+						Ministerin esittely ja varsinainen,
+						Mietinnon esittely ja varsinainen, 
+						PaaministerinIlmoitus,
+						Varsinainen ja nopeatahtinen--
+			-- pjnro	Puheenvuoron jarjestysnumero,
+					tuotetaan koostamisohjelmalla --
+			-- ptkviite	Ylatunnisteeseen tuleva poytakirjaviittaus -->
+
+
+<!-- Katkos; Elementti, joka kertoo, etta puheenvuoro on katkennut keskelta. --
+  -- Koostamisohjelma lisaa taman elementin. -->
+<!ELEMENT katkos	- O EMPTY >
+
+<!-- Puhemiehen repliikki	-->
+<!ELEMENT pmpvuoro	- - (puhemies?, ((%TEKSKOMP;)|askasjat)+)	>
+
+
+<!-- Asian kasittelyn jatkaminen; Elementin avulla muodostetaan HTML-sivulla --
+  -- kaksisuuntainen linkki elementin Asian kasittelyn keskeyttaminen (askaskes) --
+  -- tai Asian poydallepano (aspoydp) kanssa. -->
+<!ELEMENT askasjat	- O EMPTY >
+<!ATTLIST askasjat	viittaus  CDATA  #IMPLIED 
+			vpvuosi	  CDATA	 #IMPLIED>
+		      <!-- viittaus	Viittaus poytakirjaan, jossa kasittely 
+					keskeytynyt. --
+			-- vpvuosi	Valtiopaivavuosi -->
+
+<!-- Edustajan puheenvuoro; lyhyt, numeroimaton puheenvuoro	-->
+<!ELEMENT edpvuoro	- - (edustaja?, (%TEKSKOMP;)+)	>
+
+<!-- Valiotsikko -->
+<!ELEMENT valiots	- - (#PCDATA) >
+
+<!-- ========================================================================= 	-->
+<!--    		 Istunnon keskeyttaminen ja jatkaminen			-->
+<!-- ========================================================================= 	-->
+
+<!-- Istunnon keskeyttaminen; rakenne sisaltaa puhemiehen repliikin ja ajan, --
+  -- jolloin istunto keskeytettiin	-->
+<!ELEMENT istkesk	- - (pmpvuoro, aika) >
+
+<!-- Istunnon jatkaminen	-->
+<!ELEMENT istjatk	- - (jatkots, aika, puhjoht?) >
+
+<!-- Istuntoa jatketaan -otsikko	-->
+<!ELEMENT jatkots	- - (#PCDATA) >
+
+<!-- ========================================================================= 	-->
+<!--    		 Aanestyksen liite					-->
+<!-- ========================================================================= 	-->
+
+<!-- Aanestyksen liite -->
+<!ELEMENT aanliite	- - (liitenro, kohta, (te | aanet)*) 	>
+<!ATTLIST aanliite	ylatun		CDATA	#IMPLIED >
+
+<!-- Liitteen numero	-->
+<!ELEMENT liitenro	- O EMPTY >
+<!ATTLIST liitenro	aannro	ID	#IMPLIED	
+	  		ptkviite	CDATA	#IMPLIED	>
+
+<!-- Annetut aanet -->
+<!ELEMENT aanet		- - (jaa?, ei?, tyhj?, pois?)	>
+
+<!-- Jaa; jaa-aanet -->
+<!ELEMENT jaa		- - (johdanto, edustaja*)	>
+
+<!-- Ei; ei-aanet -->
+<!ELEMENT ei		- - (johdanto, edustaja*)	>
+
+<!-- Tyhjaa; Annetut tyhjat aanet -->
+<!ELEMENT tyhj		- - (johdanto, edustaja*)	>
+
+<!-- Poissa aanestyksesta -->
+<!ELEMENT pois		- - (johdanto, edustaja*)	>
+
+<!-- ========================================================================= 	-->
+<!-- Suullisen kyselytunnin otsikko						-->
+<!-- ========================================================================= 	-->
+
+<!-- Suullinen kyselytunti -otsikko	-->
+<!ELEMENT sktot		- - (#PCDATA) >		
+<!ATTLIST sktot		ylatun	CDATA	#IMPLIED >
+			<!-- Ylatunnisteen teksti -->
+
+<!-- ========================================================================= 	-->
+<!-- Suullisen ja valtioneuvoston kyselytunnin kysymys ja keskustelu -rakenteet	-->
+<!-- ========================================================================= 	-->
+
+<!-- Kysymys ja keskustelu; 	Suullisen kyselytunnin kysymys - ja --
+  -- keskustelurakenteen ylin elementti. Rakenne kokoaa laadintavaiheen --
+  -- kysymys- ja keskusteluelementit.	-->
+<!ELEMENT kyskesk	- - (kysym, ((sktkesk, kyspaat) | keskviit), (tyhja|tyhjanel)*) >
+
+<!-- SKTKeskustelu; Suullisen kyselytunnin keskustelu -->
+<!ELEMENT sktkesk	- - ((sktpvuor | isttapah | vierilm | svaihto | pmhuom
+				| viiva | tyhja | tyhjanel | pmpvuoro | otsis)*) >
+
+<!-- Kysymyksen otsikko; Kootussa rakenteessa mukana ptkviite-attribuutti -->
+<!ELEMENT kysym		- - (#PCDATA) >	
+<!ATTLIST kysym		knro		CDATA	#IMPLIED 
+			ptkviite	CDATA	#IMPLIED >
+		      <!-- knro 	Kysymyksen numero --
+			-- ptkviite	Ylatunnisteeseen tuleva poytakirjaviittaus 
+					(ist.nro/kysym.nro) -->
+
+<!-- ========================================================================= 	-->
+<!-- Viittaus keskusteluun (Muntlig fragetimme ja Protokoll i sammandrag)	-->
+<!-- ========================================================================= 	-->
+
+<!-- Keskusteluviittaus; Keskustelurakenteiden rinnalla kootussa rakenteessa on --
+  -- keskviit-elementti ruotsinkielisen poytakirjan keskusteluviittausta varten -->
+<!ELEMENT keskviit	- - (viitteks+) >		
+
+<!-- Keskusteluviittauksen teksti -->
+<!ELEMENT viitteks	- - ((%TEKSTI; | edustaja | minister | ptkviite)+) >
+
+<!-- Viittaus poytakirjaan 	-->
+<!ELEMENT ptkviite	- - (#PCDATA) >
+
+<!-- ========================================================================= 	-->
+<!--    		 PUHEENVUORO						-->
+<!-- ========================================================================= 	-->
+
+<!-- Puheenvuoro; Suullisen kyselytunnin puheenvuoro-rakenne. Kootussa rakenteessa --
+  -- kaytossa katkos-elementti ja uusia attribuutteja.	-->
+<!ELEMENT sktpvuor	- - ((edustaja | minister), (%TEKSKOMP; | pmvali | puhuja |
+				istuntot | vieraili | katkos)+)	>	
+<!ATTLIST sktpvuor	pnro	CDATA	#IMPLIED
+			puhnimi	CDATA	#IMPLIED
+			kieli (suomi | ruotsi | suomiruotsi) suomi
+			tyyppi (SKTpuheenvuoro) SKTpuheenvuoro
+			pjnro	CDATA	#REQUIRED 
+			ptkviite	CDATA	#IMPLIED >
+		<!-- Attribuutit: --
+			-- pnro		Puheenvuoron numero --
+			-- puhnimi	Puhujan nimi --
+			-- kieli	Puheenvuoron kieli --
+			-- tyyppi	Puheenvuoron tyyppi --
+			-- pjnro	Puheenvuoron jarjestysnumero, 
+					tuotetaan koostamisohjelmalla. --	
+			-- ptkviite 	Ylatunnisteeseen tuleva poytakirjaviittaus 
+					(ist.nro/kysym.nro) -->
+
+<!-- Puhuja-rakenne, kaytetaan jos puheenvuoro jatkuu puhemiehen huomautuksen jalkeen. -->
+<!ELEMENT puhuja	- - (puhots, lisatiet?) >
+
+<!-- Puhujaotsikko, Puhuja:	-->
+<!ELEMENT puhots	- - (#PCDATA)	>
+
+<!-- Puhemies valiin; Puhemiehen huomautus puheenvuoron valissa -->
+<!ELEMENT pmvali	- - (puhemies, lisatiet?, te+) >
+
+<!-- Ruotsinkielinen kappale; 	Tekstikappale, johon kirjoitetaan ruotsinkieliset --
+  -- tekstiosuudet. Kappaleet on eroteltu kielikohtaisiksi, jotta tavutus toimii --
+  -- oikein eri kielivaihtoehdoissa. Ruotsinkielisessa poytakirjassa kaytetaan --
+  -- kuitenkin normaalia kappaletta, kun koko asiakirjan kieli on ruotsi. -->
+<!ELEMENT rte		- - ((%TEKSTI;)+) >
+
+
+<!-- ========================================================================= 	-->
+<!--    		 KYSYMYKSEN PAATOS					-->
+<!-- ========================================================================= 	-->
+
+<!-- Paatos; Puhemiehen julistama paatos -->
+<!ELEMENT kyspaat	- - (puhemies?, te+) >
+
+<!-- Puhemies			-->
+<!ELEMENT puhemies	- - (#PCDATA) >
+
+<!-- ========================================================================= 	-->
+<!--    		 ISTUNTOTAPAHTUMA JA VIERAILUILMOITUS			-->
+<!-- ========================================================================= 	-->
+
+<!-- Istuntotapahtuma; Istuntotapahtuma, jolle voi maaritella taustakoodeiksi --
+  -- puheenvuoron numeron ja puhujan nimen. Varsinainen istuntotapahtuma -- 
+  -- kirjoitetaan Kappale-elementteihin. Istuntotapahtuman yla- ja alapuolelle -- 
+  -- tulostuu automaattisesti keskiviivat. 	-->
+<!ELEMENT isttapah	- - (te+) >
+<!ATTLIST isttapah	pnro	CDATA	#IMPLIED
+			puhnimi	CDATA	#IMPLIED >
+			<!-- Attribuutit: --
+			-- pnro		Puheenvuoron numero --
+			-- puhnimi	Puhujan nimi 
+					(nakyy ylatunnisteessa paperilla) -->
+
+<!-- Vierailuilmoitus; 	Vierailuilmoitus, joka koostuu otsikosta, --
+  -- puhemies- ja kappale-elementeista. Ilmoituksen yla- ja alapuolelle --
+  -- tulostuu automaattisesti keskiviivat.	-->
+<!ELEMENT vierilm	- - (vierilot, puhemies, te+) >
+<!ATTLIST vierilm	pnro	CDATA	#IMPLIED
+			puhnimi	CDATA	#IMPLIED >
+			<!-- Attribuutit: --
+			-- pnro		Puheenvuoron numero --
+			-- puhnimi	Puhujan nimi 
+					(nakyy ylatunnisteessa paperilla)	-->
+		
+<!-- Vierailuilmoituksen otsikko  -->
+<!ELEMENT vierilot	- - (#PCDATA) >
+
+<!-- Samat rakenteet, mutta ilman attribuutteja, joita ei tarvita poytakirja-	--
+  -- osuuksisa.	-->
+
+<!-- Istuntotapaht -->	
+<!ELEMENT istuntot	- - (te+) >
+
+<!-- Vierailuilm -->
+<!ELEMENT vieraili	- - (vierilot, puhemies, te+) >
+
+<!-- ========================================================================= 	-->
+<!--    		 PUHEMIEHEN HUOMAUTUS					-->
+<!-- ========================================================================= 	-->
+
+<!-- Puhemiehen huomautus	-->
+<!ELEMENT pmhuom	- - (puhemies, lisatiet?, te+) >
+<!ATTLIST pmhuom	pnro	CDATA	#IMPLIED
+			puhnimi	CDATA	#IMPLIED >
+			<!-- Attribuutit: --
+			-- pnro		Puheenvuoron numero --
+			-- puhnimi	Puhujan nimi 
+					(nakyy ylatunnisteessa paperilla) -->
+
+<!-- ========================================================================= 	-->
+<!--    		 PUHEMIEHEN PAATOSSANAT					-->
+<!-- ========================================================================= 	-->
+
+<!-- Puhemiehen paatossanat	-->
+<!ELEMENT pmpsanat	- - (ot2, (pmpuhe|ptkviitt)) >
+<!ATTLIST pmpsanat	ylatun		CDATA	#IMPLIED	
+			kohtanro	CDATA	#REQUIRED>
+			<!-- Ylatunnisteen teksti -->
+
+<!-- Poytakirjaviittaus -->
+<!ELEMENT ptkviitt	- - (%TEKSTI;|ptkviite|viiva)+ >
+
+<!-- ========================================================================= 	-->
+<!--    		 ISTUNNON PAATTAMINEN					-->
+<!-- ========================================================================= 	-->
+
+<!-- Istunnon paattam; Seuraava istunto, lopetusaika, vakuusteksti	-->
+<!ELEMENT paattam	- - (te*, seur?, pmpvuoro?, tyhjanel*, lopetus?, tyhja*, vakuus?)	>
+<!ATTLIST paattam 	pnro	CDATA	#IMPLIED
+			puhnimi	CDATA	#IMPLIED 
+			ylatun	CDATA	#IMPLIED 
+			ptkviite	CDATA	#IMPLIED >
+
+			<!-- Attribuutit: --
+			-- pnro		Puheenvuoron numero --
+			-- puhnimi	Puhujan nimi 
+					(kaytetaan ylatunnisteen tyhjentamiseen) --
+			-- ylatun	Ylatunnisteen teksti -->
+
+<!-- Istunnon paattaminen; Suullisen kyselytunnin paattaminen. --
+  -- Seuraava istunto, lopetusaika, vakuusteksti -->
+<!ELEMENT sktpaat	- - (seur?, tyhjanel*, lopetus, tyhja*, vakuus?) 	>
+<!ATTLIST sktpaat	pnro	CDATA	#IMPLIED
+			puhnimi	CDATA	#IMPLIED 
+			ylatun	CDATA	#IMPLIED 
+			ptkviite	CDATA	#IMPLIED >
+			<!-- Attribuutit: --
+			-- pnro		Puheenvuoron numero --
+			-- puhnimi	Puhujan nimi 
+					(nakyy ylatunnisteessa paperilla) --
+			-- ylatun	Ylatunnisteen teksti -->
+
+<!-- Seuraava istunto; "Puhemies: Eduskunnan seuraava..." 	-->
+<!ELEMENT seur		- - (puhemies, te+) 	>
+
+<!-- Lopetus; "Taysistunto lopetetaan klo.."		-->
+<!ELEMENT lopetus	- - ((%TEKSTI;)+) 	>
+
+<!-- Vakuus; "Poytakirjan vakuudeksi:  -->
+<!ELEMENT vakuus	- - (johdanto, allekir?) >
+
+<!-- Johdanto; Kappale johdantotekstia varten	-->
+<!ELEMENT johdanto	- - ((%TEKSTI;)+) >
+
+<!-- Ptk:n allekirjoittaja	-->
+<!ELEMENT allekir	- - (#PCDATA) >
+
+
+<!-- Keskenerainen poytakirja	-->
+<!ELEMENT kesken	- - (te | tyhja | tyhjanel)*	>
+
+
+<!-- ========================================================================= 	-->
+<!--    		 TEKSTIN MUOTOILU					-->
+<!-- ========================================================================= 	-->
+
+<!-- Sivunvaihto; Elementilla voidaan lisata pakotettu sivunvaihto poytakirjaan  -->
+<!ELEMENT svaihto	- O EMPTY >		
+
+<!-- Keskiviiva -->
+<!ELEMENT viiva		- O EMPTY >
+
+

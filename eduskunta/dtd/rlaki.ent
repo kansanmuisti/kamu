@@ -1,0 +1,82 @@
+<!-- ************************************************************************* 	-->
+<!-- 										-->
+<!--       		R I N N A K K A I S L A K I - 				-->
+<!-- 										-->
+<!-- 				- 3.1.2000 -					-->
+<!-- 										-->
+<!-- 	Public Identifier:	"-//Eduskunta//DTD rlaki//FI"	(rlaki.ent)	-->
+<!-- ************************************************************************* 	-->
+
+<!-- Rinnakkaislakiosasto	-->
+<!ELEMENT rlaki  	- - ((ot4|ylot4)?,rla+) 						>
+<!ATTLIST rlaki	ylatun CDATA #IMPLIED		-- Ylatunniste			-->
+
+<!-- Rinnakkaislaki		-->
+<!ELEMENT rla    	- - (sanro?, sni?, jl?, mni?, rste, (pv|sv)?) 
+							-- Saadoksen lakiosa	-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!-- 		Pykalisto-taulukko						-->
+<!-- ------------------------------------------------------------------------- 	-->
+
+
+<!ENTITY  % yesorno  "NUMBER"							>
+
+<!-- RPykalisto-taulukko. Karsittu CALS-taulukosta ylimaaraiset osat	-->
+<!ELEMENT rste  	- - (rhead?, rbody) 					>
+<!ATTLIST rste
+ 		colsep  	%yesorno;    	#IMPLIED                     
+		frame 		(all|top|bottom|topbot|sides|none) #IMPLIED 
+		pgwide  	%yesorno;    	#IMPLIED 
+		rowsep  	%yesorno;    	#IMPLIED 
+		tabstyle 	CDATA	 	#IMPLIED  
+		cols  		NUMBER    	#REQUIRED >
+
+
+<!ELEMENT rhead  	- O (rrow+) 						>
+
+<!ELEMENT rbody  	- O (rrow+) 						>
+
+<!-- RRivi		-->
+<!ELEMENT rrow  		- O (rpy+|taulot+|rlu+|ros+|rvopy+|rvs+|rvo+)		>
+<!ATTLIST rrow
+               rowsep 		%yesorno;    	#IMPLIED 			>
+
+<!-- RLuku		-->
+<!ELEMENT rlu		- - (nu?, ot?) >
+
+<!-- ROsa		-->
+<!ELEMENT ros         	- - (nu?, ot?) >
+
+<!-- RPykala		-->               
+<!ELEMENT rpy  	- - (nu?, ot?, (mo|rkohdat|kv|vertaus|tyhja|tyhjanel)*, pv?)	>
+
+<!-- RVoimaantulopykala (nimi tarkentuu myohemmin)		-->               
+<!ELEMENT rvopy  	- - (nu?, ot?, (mo|rkohdat|kv|vertaus|tyhja|tyhjanel)*, pv?)	>
+
+<!-- Kohtiin jakautuva momentti, vrt lakiosaston KOHDAT-elementti			-->
+<!ELEMENT rkohdat      	- - (johtl?, (ko|kv|vertaus|rkohdat|tyhja|tyhjanel)+, johtl?) >
+
+<!-- RVoimaantulo		-->
+<!ELEMENT rvs		- - (ot?, (mo|kv|vertaus|vo)*) >
+
+<!-- RValiotsikko		-->
+<!ELEMENT rvo       	- - (%SATEKS;)+ >
+
+<!-- Sarakeotsikko		-->
+<!ELEMENT taulot	- -  (#PCDATA) >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

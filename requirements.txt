@@ -1,6 +1,5 @@
 Django
 djapian
-svn+http://django-tagging.googlecode.com/svn/trunk/
 Markdown
 BeautifulSoup
 python-dateutil
@@ -10,3 +9,10 @@ South
 cssutils
 django-tastypie
 twython
+pygments
+django-compressor
+twitter-text-py
+sorl-thumbnail
+django-extensions
+jinja2
+coffin

@@ -1,0 +1,86 @@
+
+<!-- ========================================================================= 	-->
+<!--														-->
+<!--			C A L S - T A U L U K K O   (table)						-->
+<!--														-->
+<!--				- 26.5.1997 -								-->
+<!--														-->
+<!-- ========================================================================= 	-->
+
+<!ENTITY  % yesorno  "NUMBER"							>
+
+<!ELEMENT table  	- - (title? , tgroup+) 					>
+<!ATTLIST table
+ 		colsep  	%yesorno;    	#IMPLIED                     
+		frame 		(all|top|bottom|topbot|sides|none) #IMPLIED 
+		pgwide  	%yesorno;    	#IMPLIED 
+		rowsep  	%yesorno;    	#IMPLIED 
+		tabstyle 	CDATA	 	#IMPLIED 			>
+
+<!--ELEMENT title  	- - (#PCDATA) 						-->
+<!ELEMENT title  	- - (#PCDATA|ku|li|liku|ala|yla|alle|akviite|mulviite|
+			skviite|ylviite|aukko)+			>
+<!ELEMENT tgroup  	- O (colspec*, spanspec*, thead?, tfoot?, tbody)	>
+<!ATTLIST tgroup
+               align 		(left|center|right|justify|char) #IMPLIED 
+               char  		CDATA    	#IMPLIED 
+               charoff  	NUTOKEN    	#IMPLIED 
+               colsep  		%yesorno;   	#IMPLIED 
+               cols  		NUMBER    	#REQUIRED 
+               rowsep   	%yesorno;    	#IMPLIED 
+               tgroupstyle  	NMTOKEN    	#IMPLIED    			>
+
+<!ELEMENT colspec  	- O  EMPTY  						>
+<!ATTLIST colspec
+               align (left|center|right|justify|char) #IMPLIED 
+               char  		CDATA    	#IMPLIED 
+               charoff  	NUTOKEN    	#IMPLIED 
+               colname  	NMTOKEN    	#IMPLIED 
+               colnum   	NUMBER    	#IMPLIED 
+               colsep   	%yesorno;    	#IMPLIED 
+               colwidth 	CDATA    	#IMPLIED 
+               rowsep   	%yesorno;   	#IMPLIED  			>
+
+<!ELEMENT spanspec  	- O  EMPTY  						>
+<!ATTLIST spanspec
+               align 		(left|center|right|justify|char) #IMPLIED 
+               char  		CDATA    	#IMPLIED 
+               charoff  	NUTOKEN    	#IMPLIED 
+               colsep   	%yesorno;    	#IMPLIED 
+               nameend  	NMTOKEN    	#REQUIRED 
+               namest   	NMTOKEN    	#REQUIRED 
+               rowsep   	%yesorno;   	#IMPLIED 
+               spanname 	NMTOKEN    	#REQUIRED     			>
+
+<!ELEMENT thead  	- O (colspec* , row+) 					>
+<!ATTLIST thead
+               valign 		(top|middle|bottom)  "bottom"  			>
+
+<!ELEMENT tfoot  	- O (colspec* , row+) 					>
+<!ATTLIST tfoot
+               valign 		(top|middle|bottom)  "top"			>
+
+<!ELEMENT tbody  	- O (row+) 						>
+<!ATTLIST tbody
+               valign 		(top|middle|bottom)  "top" 			>
+
+<!ELEMENT row  		- O (entry+) 						>
+<!ATTLIST row
+               rowsep 		%yesorno;    	#IMPLIED 
+               valign 		(top|middle|bottom)  "top"			>
+
+<!ELEMENT entry  	- O ((te | lista | kuva)+ | (%TEKSTI)+)			>
+<!ATTLIST entry
+               align 		(left|center|right|justify|char)  #IMPLIED 
+               char  		CDATA    	#IMPLIED 
+               charoff  	NUTOKEN    	#IMPLIED 
+               colname  	NMTOKEN    	#IMPLIED 
+               colsep   	%yesorno;  	#IMPLIED 
+               morerows 	NUMBER    	#IMPLIED 
+               nameend  	NMTOKEN    	#IMPLIED 
+               namest   	NMTOKEN    	#IMPLIED 
+               rotate   	%yesorno;  	#IMPLIED 
+               rowsep   	%yesorno;    	#IMPLIED 
+               spanname 	NMTOKEN    	#IMPLIED 
+               valign 		(top|middle|bottom) #IMPLIED 			>
+

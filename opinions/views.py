@@ -28,7 +28,6 @@ from httpstatus import Http400, Http403
 from httpstatus.decorators import postonly
 from kamu.cms.models import Item
 from operator import attrgetter
-from sorl.thumbnail.main import DjangoThumbnail
 from votes.views import find_term, find_district
 from django.contrib.csrf.middleware import csrf_exempt
 

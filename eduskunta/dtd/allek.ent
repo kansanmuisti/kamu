@@ -1,0 +1,74 @@
+<!-- ========================================================================= 	-->
+<!--										-->
+<!--			  ASIANTUNTIJAN & ALLEKIRJOITUSOSAN TIEDOT		-->
+<!--				(atuntija) & (allekosa)				-->
+<!--										-->
+<!--				- 21.10.1998 -					-->
+<!--										-->
+<!-- 	Public Identifier: "-//Eduskunta//DTD allek//FI" (allek.dtd)		-->
+<!-- ========================================================================= 	-->
+<!-- 		Tassa osassa ylimpana elementtina voi olla joko atuntija tai
+		allekosa. Nama molemmat vaihtoehdot kayttavat lisaksi niille 
+		yhteista henkilo-elementtia, joka on maaritelty taman 
+		modulin lopussa.						-->
+<!-- =================================================================================== -->
+<!-- Kirjallisen kysymyksen ja aloitteen allekirjoitusosa -->
+<!ENTITY  %  ALLEK-KK	"paivays, (edustaja | tyhja)+, yhtyneet?" >
+
+<!-- Puhemiesneuvoston ehdotuksen allekirjoitusosa -->
+<!ENTITY  %  ALLEK-PNE	"paivays, allejohd*, puhemall?, paasiht?" >
+
+<!-- Mietinnon allekirjoitusosa -->
+<!ENTITY  %  ALLEK-VK	"paivays, allejohd?, (edustaja | tyhja)+, (yhtyneet|vksiht)?" >
+
+<!-- VAVin allekirjoitusosa -->
+<!ENTITY  %  ALLEK-VAV	"paivays, allejohd*, puhemall?, paasiht?" >
+
+
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Asiantuntija (atuntija)						-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT atuntija	- - (henkilo*, org?)	-- Asiantuntijan tiedot		-->
+<!ELEMENT org	  	- - (#PCDATA) 		-- Organisaatio			-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Allekirjoitusosan elementit					-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT paivays  	- - (#PCDATA|aukko)+	-- Allekirjoitusten paivays	-->
+<!ATTLIST paivays	PVM   CDATA   #REQUIRED	-- Paivays muodossa 
+						   "vvvv-kk-pp"			-->
+<!ELEMENT allejohd	- - (#PCDATA)		-- Johdantokappale	 	-->
+<!ELEMENT yhtyneet	- - (allejohd+, (edustaja | tyhja)*) 
+						-- Erillinen yhteyneet-osa   	-->
+<!ELEMENT vksiht	- - (allejohd+, (sihteeri|tyhja)*) 
+						-- Valiokuntasihteerit   	-->
+<!ELEMENT sihteeri	- - (henkilo+, lisatiet*)
+						-- Sihteeritiedot	-->
+<!ELEMENT puhemall	- - (pallek?, asema)	-- Puhemiehen allekirjoitus	-->
+<!ELEMENT pallek	- - (#PCDATA)		-- Allekirjoitus 		-->
+<!ELEMENT paasiht	- - (pallek?, asema)	-- Paasihteerin allekirjoitus	-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Edustajatiedot (edustaja)					-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT edustaja	- - (henkilo, ekryhma, lisatiet?)
+						-- Allekirjoittajan tiedot	-->
+<!ELEMENT ekryhma  	- - (#PCDATA) 		-- Eduskuntaryhma		-->
+<!ELEMENT lisatiet	- - (#PCDATA)		-- Lisatietokentta		-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Ministeritiedot (minister)					-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT minister	- - (henkilo, lisatiet?) -- Ministerin tiedot		-->
+
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Henkilotiedot (henkilo)						-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT henkilo  	- - (asema?, etunimi?, sukunimi)   -- Henkilotiedot	-->
+<!ATTLIST henkilo	numero NUMBER #IMPLIED	-- Henkilon yksiloiva numero	-->
+<!ELEMENT asema		- - (#PCDATA)		-- Henkilon asema/titteli	-->
+<!ELEMENT etunimi  	- - (#PCDATA)		-- Etunimi			-->
+<!ELEMENT sukunimi 	- - (#PCDATA)		-- Sukunimi			-->
+

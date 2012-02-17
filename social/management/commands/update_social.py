@@ -19,7 +19,16 @@ class Command(BaseCommand):
                 'trim_user': True}
         tw_list = []
         while True:
-            tweets = twitter.getUserTimeline(**args)
+            # retry two times if the twitter call fails
+            for i in range(3):
+                try:
+                    tweets = twitter.getUserTimeline(**args)
+                except ValueError:
+                    if i == 2:
+                        raise
+                    self.stderr.write("\tGot exception, retrying.\n")
+                    continue
+                break
             if 'error' in tweets:
                 self.stderr.write("\tERROR: %s\n" % tweets['error'])
                 if not 'Rate limit exceeded' in tweets['error']:
@@ -44,7 +53,7 @@ class Command(BaseCommand):
             mp_tw = Update(feed=feed)
             mp_tw.origin_id = tw['id']
             text = tw['text']
-            mp_tw.text = text.replace('&gt;', '>').replace('&lt;', '<')
+            mp_tw.text = text.replace('&gt;', '>').replace('&lt;', '<').replace('&#39;', "'")
             date = calendar.timegm(email.utils.parsedate(tw['created_at']))
             mp_tw.created_time = datetime.datetime.fromtimestamp(date)
             try:

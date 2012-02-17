@@ -1,0 +1,17 @@
+# source: http://www.vaalit.fi/34846.htm
+01 Helsingin
+02 Uudenmaan
+03 Varsinais-Suomen
+04 Satakunnan
+05 Ahvenanmaan maakunnan
+06 Hämeen
+07 Pirkanmaan
+08 Kymen
+09 Etelä-Savon
+10 Pohjois-Savon
+11 Pohjois-Karjalan
+12 Vaasan
+13 Keski-Suomen
+14 Oulun
+15 Lapin
+

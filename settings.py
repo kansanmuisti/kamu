@@ -6,6 +6,8 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 JS_DEBUG = False
 
+COMPRESS_ENABLED = True
+
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
@@ -20,6 +22,8 @@ DATABASES = {
         'PASSWORD': 'kamu'
     }
 }
+
+SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
 DJAPIAN_DATABASE_PATH = os.path.dirname(__file__) + '/djapian/'
 
@@ -67,6 +71,15 @@ MEDIA_URL = '/static/'
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/admin_media/'
+
+# Subdirectory of COMPRESS_ROOT to store the cached media files in
+COMPRESS_OUTPUT_DIR = "cache"
+
+COMPRESS_PRECOMPILERS = (
+    ('text/less', 'lessc {infile} {outfile}'),
+    ('text/coffeescript', 'coffee --compile --stdio'),
+)
+COMPRESS_JS_FILTERS = []
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'ljqf))w56l68l26zgtn**2u198y0j5$82o^ac%m0x23l=hq_75'
@@ -128,12 +141,14 @@ INSTALLED_APPS = (
     'django_extensions',
     'django_assets',
     'sorl.thumbnail',
+    'compressor',
     'kamu.votes',
     'kamu.users',
     'kamu.orgs',
     'kamu.comments',
     'social',
-    'tagging',
+    'parliament',
+    'eduskunta',
     'djapian',
     'facebook',
     'registration',

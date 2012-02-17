@@ -1,0 +1,84 @@
+{% load i18n compress %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:og="http://opengraphprotocol.org/schema/"
+      xmlns:fb="http://www.facebook.com/2008/fbml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>{% block title %}{% endblock %} | KAMU</title>
+  <meta property="og:site_name" content="Kansan muisti" />
+  <meta property="fb:app_id" content="107387482616243" />
+
+  <link rel="shortcut icon" href="/static/images/icons/favicon.ico" />
+
+  <!-- twitter bootstrap -->
+  <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css" />
+
+  <!-- open sans -->
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet" type="text/css" />
+
+  <!-- own css -->
+  {% compress css %}
+  <link type="text/less" href="{{ MEDIA_URL }}css/kamu.less" rel="stylesheet" />
+  {% endcompress %}
+
+  {% compress js %}
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.6.1.js"></script>
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/moment.js"></script>
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/moment.fi.js"></script>
+  {% endcompress %}
+
+  {% block head %}{% endblock %}
+</head>
+
+<body>
+	<div id="full_page">
+		<div id="loginbar">
+			<div id="logged-user">
+				Saana Sekakäyttäjä / <a href="#">Kirjaudu ulos</a>
+			</div>
+		</div>
+		<div id="header">
+			<div id="logo">
+				<h1><a href="#">KAMU</a></h1>
+			</div>
+			<div id="navbar">
+				<ul class="unstyled">
+					<li><a href="#">Täysistunnot</a></li>
+					<li class="sep">/</li>
+					<li><a href="#">Puolueet</a></li>
+
+					<li class="sep">/</li>
+					<li><a href="#">Kansanedustajat</a></li>
+					<li class="sep">/</li>
+					<li><a href="#">Aihepiirit</a></li>
+					<li class="sep">/</li>
+					<li><a href="#">Yleistä</a></li>
+
+				</ul>
+			</div>
+			<div id="search">
+				<form action="#" method="post">
+					<div>
+					<input type="text" value="Hae Kansan muistista..." /><input type="submit" value="&gt;" />
+					</div>
+				</form>
+			</div>
+
+		</div>
+
+		<div id="content">
+		{% block content %}{% endblock %}
+		</div>
+
+		<div id="footer" class="row">
+			<div class="span16">
+				Copyright &copy; 2010–2012 Kansan muisti ry. Palvelun ylläpitäjä ei vastaa tietojen oikeellisuudesta.
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
+

@@ -1,0 +1,253 @@
+<!-- ************************************************************************* 	-->
+<!-- 										-->
+<!--       P A I V A J A R J E S T Y S						-->
+<!-- 										-->
+<!-- 				- 1.9.1998 -					-->
+<!-- 										-->
+<!-- 	Public Identifier:	"-//Eduskunta//DTD pj//FI"	(pj.dtd)	-->
+<!--  ------------------------------------------------------------------------  -->
+
+<!-- ========================================================================= 	-->
+<!--	
+	Tama DTD sisaltaa paivajarjestyksen kasittelyssa tarvittavat 
+	SGML-standardin mukaiset rakennemaaritykset. 
+
+	Maaritykset on jaettu useampaan moduliin, joista osaa kaytetaan 
+	hyvaksi myos muiden asiakirjatyyppien kohdalla.
+
+	Ensin on maaritelty kaytettavat merkistot ja muita yleisesti 
+	kaytettavia entiteetteja. Entiteettimaarityksia seuraa 
+	paivajarjestyksen rakennemaaritykset.
+
+-->
+
+<!-- ========================================================================= 	-->
+
+<!-- Entiteettimaarittelyt -->
+<!ENTITY % entiteet PUBLIC "-//Eduskunta//DTD entiteet//FI" >
+%entiteet;
+
+<!-- Identifiointiosa -->
+<!ENTITY % ident	PUBLIC "-//Eduskunta//DTD ident//FI" >
+%ident;
+
+<!-- Tekstisisaltoelementit -->
+<!ENTITY % sisalto  PUBLIC "-//Eduskunta//DTD sisalto//FI" >
+%sisalto;
+
+<!-- Taulukkorakenne -->
+<!ENTITY % taulukko   PUBLIC "-//Eduskunta//DTD taulukko//FI" >
+%taulukko;
+
+<!-- Allekirjoitusosa -->
+<!ENTITY % allek    PUBLIC "-//Eduskunta//DTD allek//FI" >
+%allek;
+
+<!-- Attribuuttikokoelmia	-->
+<!ENTITY % tunniste.attr "tunniste CDATA #IMPLIED">	
+<!ENTITY % tunnistelista.attr " tunnistelista (pmvaali | sktunti | vaali 
+		| presvv | lta | taa | ilm1 | ilm2) #IMPLIED">	
+<!ENTITY % kasittelyvaihe.attr " kasittelyvaihe (1k | 2k | 2kak | lk | vkpp | j1k  
+		| yk | ak | jak | o2oak | oao2k | ak2k | tik | pal | kes | va | skt | ilm) #IMPLIED">	
+<!ENTITY % kasittelyotsikko.attr " kasittelyotsikko (upj | 1k | 2k | 2kak | lk | vkpp | j1k  
+		| yk | ak | jak | o2oak | oao2k | ak2k | tik | pal | kes | akes | va | skt | ilm) #IMPLIED">
+<!-- ========================================================================= 	-->
+<!-- 										-->
+<!--    		 	1. PAIVAJARJESTYS				-->
+<!-- 										-->
+<!-- 			    	- 1.9.1998 -					-->
+<!-- 										-->
+<!-- ========================================================================= 	-->
+
+<!-- Paivajarjestys; Paivajarjestyksen juurielementti, joka sisaltaa --
+  -- paivajarjestykseen liittyvat paatason elementit, jotka  maaritellaan alempana. -->
+<!ELEMENT pj		- - (lisaysot?, ident, ot1?, (paivajar|suulkt), sviiva?, 
+			hanta?, liite?) >
+<!ATTLIST pj		tila 		(ennakkotieto | ennakkotieto2 | ennakkotieto3 | ennakkotieto4 |
+						forhandsinfo | forhandsinfo2 | forhandsinfo3 | forhandsinfo4) #IMPLIED
+			versio		CDATA "Versio 1.0"
+			kieli 		(suomi | ruotsi) suomi
+			tunniste 	CDATA #REQUIRED
+			lisays 		(lisayspj | pj) pj
+			pvm   		CDATA   #IMPLIED
+			istpvm   	CDATA   #REQUIRED
+			faktasel 	CDATA #IMPLIED	
+			attr.nakyma (kylla|ei) ei
+			pjtyyppi  	(testi) #IMPLIED>			
+		      <!-- tila		Asiakirjan tila --
+			-- versio	Asiakirjan versio --
+			-- kieli	Asiakirjan kieli --
+			-- tunniste	Asiakirjan tunniste --
+			-- lisayspj	Attribuutti kuvaa lisayksen jatkokasittelya --
+			-- pvm		Asiakirjan laadintapaivays --
+			-- istpvm	Taysistunnon paivays --
+			-- faktasel	Attribuuttiin kirjoitetaan huomautus 
+					paivajarjestyksesta, joka halutaan nakyviin 
+					Faktan paivajarjestyksen tulevien istuntojen 
+					luetteloon --
+			-- pjtyyppi	Arvolla testi, luodaan 
+					saliin testi-istunto -->
+
+<!-- LisaysPJOtsikko; Lisays paivajarjestykseen -otsikko. Otsikkoa ei kayteta tavallisessa --
+  -- paivajarjestyksessa. -->
+<!ELEMENT lisaysot	- - (#PCDATA)		-- Lisays pj:een -otsikko	-->
+
+<!-- Keskiviiva; Paivajarjestyksen lopun (ulkoasullinen) viiva -->
+<!ELEMENT sviiva	- O EMPTY >
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		1.1. Paivajarjestyksen identifiointi (ident)			-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!-- Identifiointi; Paivajarjestyksen identifiontiosa (eli tunnistetiedot) noudattaa --
+  -- valtiopaivaasiakirjoille maariteltya yleista rakennetta. -- 
+  -- Lisaksi mukana on kellonaika -->
+<!ELEMENT ident		- - ((%IDENT-PJ;), kaika) >
+
+
+<!-- Istunnon alkamisajankohta -->
+<!ELEMENT kaika		- - (#PCDATA) >
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		1.2. Paivajarjestyksen runko					-->
+<!-- ------------------------------------------------------------------------- 	-->
+
+<!-- Paivajarjestyksen runko, joka koostuu aina paatason otsikosta, --
+  -- kasittelyvaiheista seka vapaaehtoisista huomautuksista.-->
+<!ELEMENT paivajar	- - (ilmoit?, pjasia*, huom*)	>
+<!ATTLIST paivajar	ylatun	CDATA	#IMPLIED >
+			<!-- Ylatunnisteen teksti, kaytossa poytakirjoissa -->
+
+<!-- Ilmoituksia-->
+<!ELEMENT ilmoit 	- - (ot2, (te|tyhja|tyhjanel)*)	>
+<!ATTLIST ilmoit	%tunnistelista.attr; 
+			%kasittelyotsikko.attr;>
+
+<!-- Kappale; Normaali tekstikappale, jossa voidaan kayttaa erilaisia --
+  -- muotoilumahdollisuuksia.	-->
+<!ELEMENT te		- - (%TEKSTI;)+	>
+
+<!-- PaivajarjestyksenAsia; Asian kasittelyvaihe, esimerkiksi "Ensimmainen kasittely".	-->
+<!ELEMENT pjasia 	- - (ot2, huom?, (kohta|tyhja|tyhjanel)+)>
+<!ATTLIST pjasia	%kasittelyotsikko.attr;>
+
+<!-- Kohta; Kasittelyyn kuuluva asiakohta. -->
+<!ELEMENT kohta 	- - (knro?, asia+, aliitev?, snro?, (te?, ministerit?), kasvaihe?, 
+				(ak|aak)*, huom*, paaluokat*)	>
+<!ATTLIST kohta		ptkviite	CDATA	#IMPLIED 
+			snoviite	ID	#IMPLIED 		
+			kasvaihe	(lahetekeskustelu | mietpoydallepano |
+					ensimmainen | toinen | toinenainoa | 
+					kolmas | kolmasainoa | ainoa |vaalit | 
+					keskustelu | palautekeskustelu | taysistuntokasittely | 
+					yksikasittely)	#IMPLIED 
+			%tunniste.attr;
+			%tunnistelista.attr;
+			%kasittelyvaihe.attr;>
+		       <!-- Attribuutit, tarvitaan poytakirjoissa --
+			-- ptkviite	poytakirjaviite --
+			-- snoviite	Sivunumeroviite --
+			-- kasvaihe	Kasittelyvaihe -->
+
+<!-- KohtaNumero; Kohdan juokseva numero - kaytetaan autonumerointia	-->
+<!ELEMENT knro		- - (#PCDATA) >
+
+<!-- KohdanAsia; Asian otsikko -->
+<!ELEMENT asia		- - (#PCDATA)	>
+
+
+<!ELEMENT aliitev	- - (aliite)	>
+<!ELEMENT aliite	- O (#PCDATA)	>
+<!ATTLIST aliite	alnumero	IDREF 	#IMPLIED >
+			<!--  Attribuutti kaytossa poytakirjassa-->
+
+<!-- Kasittelyvaihe; Kasittelyvaiheen elementti, jota tarvitaan poytakirjoissa. -->
+<!ELEMENT kasvaihe	- - (#PCDATA)						>
+
+<!-- Asiakirja; Asiaan liittyvat asiakirjan tiedot -->
+<!ELEMENT ak		- - (aktyyppi, (akviite | mulviite))	>
+
+<!-- Asiakirja Aloite; Asiaan liittyvat aloiteasiakirjan tiedot -->
+<!ELEMENT aak		- - (aktyyppi, (akviite | mulviite), (nimi | edustaja)?) >
+<!--ELEMENT aak		- - (aktyyppi, (akviite | mulviite), edustaja?) -->
+
+<!-- Sivunumero; kaytetaan poytakirjassa	-->
+<!ELEMENT snro		- - (snroviit)			>
+
+<!-- Sivunumeroviittaus; kaytetaan poytakirjassa	-->
+<!ELEMENT snroviit	- O (#PCDATA) >
+<!ATTLIST snroviit	kohtanro	IDREF	#IMPLIED >
+
+<!-- Huomautus; Kasittelyyn liittyva huomautus	-->
+<!ELEMENT huom		- - (te)+	>
+
+<!-- Alikohtien päärakenne -->
+<!ELEMENT paaluokat	- - (ot3, (alikohta | huom | tyhja | tyhjanel)+) >
+<!ATTLIST paaluokat	ajankohta ( nyt | tuleva ) #IMPLIED >
+
+<!ELEMENT alikohta 	- - (pl.num, pl.nimi, huom*)>
+<!ATTLIST alikohta	tunniste CDATA #IMPLIED >
+
+<!ELEMENT pl.num		- - (#PCDATA)	>
+<!ELEMENT pl.nimi		- - (#PCDATA)	>
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		1.3. Suullisen kyselytunnin runko				-->
+<!-- ------------------------------------------------------------------------- 	-->
+
+	
+<!-- Suullinen kyselytunti; Suullisen kyselytunnin paivajarjestys -->
+<!ELEMENT suulkt		- - (ot2, (te|tyhja|tyhjanel)*, ministerit)>
+
+<!-- Ministerit; Lasnaolevat valtioneuvoston ministerit. Alielementti yleisissa rakenneosissa -->
+<!ELEMENT ministerit	- - ((minister|tyhja|tyhjanel)+)	>
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		1.4. Paivajarjestyksen hanta					-->
+<!-- ------------------------------------------------------------------------- 	-->
+
+<!-- Ennakkotietoa; Ennakkotietoa tulevista istunnoista. -->
+<!ELEMENT hanta		- - (huom*, tyhja*, ot1, paiva+, huom*) >
+
+<!-- PaivanTiedot; Istuntopaivan tiedot -->
+<!ELEMENT paiva		- - (pvm, istunto+) >
+
+<!-- Paivamaara; Istunnon paivamaara -->
+<!ELEMENT pvm		- - (#PCDATA) >
+
+<!-- Istunto; Istunnon ajankohta -->
+<!ELEMENT istunto	- - (iaika, te+)>
+
+<!-- IstunnonAika; Istunnon kellonaika -->
+<!ELEMENT iaika		- - (#PCDATA) >
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		1.5. Paivajarjestyksen 	liite					-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!-- Kasitellyt aloitteet; Paivajarjestyksen liiteosaan tulee lista paivajarjestyksessa --
+  -- esiintyneista asiakirjoita asiakirjaviittauksin. Liite tuotetaan --
+  -- automaattisesti ja sita kaytetaan myos mm. budjettimietinnossa. --
+  -- Rakenne on sama kuin mietinnon ja budjettimietinnon aloitied-elementilla -->
+<!ELEMENT liite		- - (aliitenr?, ot2*, (aloitied|tyhja|tyhjanel)+)+ >
+<!ATTLIST liite		palsta 		(1-palsta | 2-palsta) "2-palsta"
+			ylatun		CDATA	#IMPLIED
+			ptkviite	CDATA	#IMPLIED  >
+		      <!-- palsta	Liiteen palstoitus 1- tai 2-palstainen aloiteliite
+					Kaytossa vain 2-palstaisessa paivajarjestyksessa --
+			-- ylatun	Ylatunnisteen teksti, kaytossa poytakirjoissa --
+			-- ptkviite	Poytakirjaviittaus, kaytossa poytakirjoissa -->
+
+<!-- Aloiteliitteen numero; kaytopssa poytakirjoissa	-->
+<!ELEMENT aliitenr	- O EMPTY >
+<!ATTLIST aliitenr	alnumero	ID	#IMPLIED >
+
+<!-- Aloitteen tiedot; -->
+<!ELEMENT aloitied	- - (akviite, (nimi|edustaja), nimike, momviite*) >
+<!--ELEMENT aloitied	- - (akviite, edustaja, nimike, momviite*) -->
+
+<!-- MomenttiViittaus; Viittaus momenttiin. Automaattisesti tuotettaessa poimitaan --
+  -- aloitteen ehdotusosasta.	-->
+<!ELEMENT momviite	- - (#PCDATA)			>
+
+<!-- Aloitteen tekija; Aloitteen tekijan erottelematon nimi. -->
+<!ELEMENT nimi		- - (#PCDATA) >
+
+
+

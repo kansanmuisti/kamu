@@ -1,0 +1,134 @@
+<!-- ************************************************************************* 	-->
+<!-- 										-->
+<!-- 		      Eduskunnan vastaus & kirjelma				-->
+<!-- 										-->
+<!-- 				- 13.3.2000 -					-->
+<!-- 										-->
+<!-- 	Public Identifier:	"-//Eduskunta//DTD evek//FI"	(evek.dtd)	-->
+<!-- ************************************************************************* 	-->
+
+<!ENTITY % entiteet 	PUBLIC "-//Eduskunta//DTD entiteet//FI" >
+%entiteet;
+
+<!ENTITY % ident 	PUBLIC "-//Eduskunta//DTD ident//FI" >
+%ident;
+
+<!ENTITY % liitteet 	PUBLIC "-//Eduskunta//DTD liitteet//FI" >
+%liitteet;
+
+<!ENTITY % sisalto  	PUBLIC "-//Eduskunta//DTD sisalto//FI" >
+%sisalto;
+
+<!ENTITY % allek    	PUBLIC "-//Eduskunta//DTD allek//FI" >
+%allek;
+
+<!ENTITY % saados   	PUBLIC "-//Eduskunta//DTD saados//FI" >
+%saados;
+
+<!ENTITY % taulukko   	PUBLIC "-//Eduskunta//DTD taulukko//FI" >
+%taulukko;
+
+<!ENTITY % EVTEKSTI	"#PCDATA|ku|li|liku|ala|yla|alle|avi|akviite|skviite|mulviite|ylviite|aukko"
+			<!-- Normaalia tekstia, jossa muotoilumahdollisuuksia	--> 
+
+<!ENTITY % PERSIS	"(te|ot3|ot4|ot5|lista|listay|table|kuva|lausuma|
+			  pykaehd|siste)"
+			<!-- Perusteluissa esiintyvia sisaltoelementteja, jossa 
+			   on myos lisaotsikoita, lausumia ja lausunnoissa 
+		 	   viela mahdollisia pykalaehdotuksia.			-->
+<!ENTITY % EMPERSIS	"(te|ot1|ot2|ot3|ot4|ot5|lista|listay|table|kuva|lausuma|
+			  pykaehd|siste)"
+			<!-- Erikoismietinnon perusteluissa esiintyvia sisaltoelementteja, jossa 
+			   on myos lisaotsikoita, lausumia ja lausunnoissa  viela mahdollisia pykalaehdotuksia. -->
+<!ENTITY % EMSISALT	"te|ot1|ot2|ot3|ot4|ot5|lista|listay|table|kuva"
+			<!-- Erikoismietinnon kappaleita, otsikoita, listoja, taulukoita ja kuvia. -->
+
+<!ENTITY % JOHDSIS	"(te|ot1|ot2|ot3|ot4|ot5|lista|listay|table|kuva|siste)"	
+			<!-- Johdanto-osassa esiintyvia kappaleita ja listoja.	-->
+
+
+<!-- ========================================================================= 	-->
+<!-- 										-->
+<!--    		 1. VASTAUS-RUNKO 					-->
+<!-- 										-->
+<!-- 			    	- 10.8.1998 -					-->
+<!-- 										-->
+<!-- ========================================================================= 	-->
+
+<!ELEMENT evek		- - (ident, (tyhja|tyhjanel)*, addresa?, johd, saadehd?, sv?, allekosa )>
+
+<!ATTLIST evek		Tila (ok | eitark) "Ok"
+			Versio	CDATA #IMPLIED
+			Kieli (suomi | ruotsi) "suomi"
+			Tunniste CDATA #REQUIRED
+			Tyyppi (A | HE | K | LA | LJL | PI | PNE | Talousarvio 
+				| Talousarviol | TPA |  Vaalit | VJL | VNS | Muu ) "HE"
+				<!-- Asiakirjan tunnisteattribuutit		-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Eduskunnan vastauksen ja kirjelman identifiointi (ident)	-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		EVEK:n identifiontiosa (eli tunnistetiedot) noudattaa 
+		valtiopaivaasiakirjoille maariteltya yleista rakennetta.	-->
+<!ELEMENT ident		- - (%IDENT-EV;) >
+<!-- Valtiopaivaasiakirjojen yleinen identifiointiosan juurielementti.-->
+
+<!-- ========================================================================= 	-->
+<!--			Johdanto-osa (johd, vrt. VK:n kastie)			-->
+<!-- ========================================================================= 	-->
+<!ELEMENT johd	- - ((%JOHDSIS;|lausumat|ponnet|tyhja|tyhjanel)+)	-- Kasittelytiedot -->
+
+<!-- ========================================================================= 	-->
+<!--			   EDUSKUNNAN LAUSUMAT (eklausum)			-->
+<!-- ========================================================================= 	-->
+<!ELEMENT lausumat	- - (lausumot?, (sanro?, (lausuma|tyhja)+)+)	
+							-- Annetut lausumat	-->
+
+<!ELEMENT te		- - (%EVTEKSTI;)+	-- Normaali tekstikappale, jossa voidaan 
+					   kayttaa erilaisia muotoilu-
+					   mahdollisuuksia.			-->
+
+<!ELEMENT lausumot     	- - (#PCDATA) 		-- Lausumat-osan otsikko	-->
+<!ELEMENT lausuma	- - (%TEKSTI;)+		-- Lausuma			--> 
+<!ATTLIST lausuma		ehdottaja	CDATA	#IMPLIED	--	-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!--			Ponnet							-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT ponnet    	- - (johdosa, ponsi+)	-- Ponsiosa			-->
+<!ELEMENT johdosa      	- - (#PCDATA) 		-- Ponsien johdanto-osa		-->
+<!ELEMENT ponsi       	- - (%TEKSTI;)+		-- Ponsikappale			-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--			Saadosehdotus (saadehd)					-->
+<!-- ------------------------------------------------------------------------- 	-->
+
+<!ELEMENT saadehd	- - ((ot1|ot2|ot3)?, (%LA-VK;))		
+				-- Saadosehdotus, jonka lakitekstin (la)rakenne
+				   on kuvattu omassa yleisessa moduulissaan.	-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		EVEK:n allekirjoitusosa (allekosa)				-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		EVEK:n allekirjoitusosa noudattaa valtiopaivaasiakirjoille 
+		maariteltya yleista rakennetta.	-->
+
+<!ELEMENT allekosa 	- - (%ALLEK-VAV;)	-- Valtiopaivaasiakirjojen yleinen
+						allekirjoitusosan juurielementti -->
+
+<!-- ========================================================================= 	-->
+<!-- 										-->
+<!--    		 VASTAUS-RUNKO, saadoskokoelman versio			-->
+<!-- 										-->
+<!-- 			    	- 15.9.2000 -					-->
+<!-- 										-->
+<!-- ========================================================================= 	-->
+
+<!ELEMENT eveksk	- - (ident, (tyhja|tyhjanel)*, addresa?, johd, saadehd?, sv?, allekosa )>
+
+<!ATTLIST eveksk	Tila (ok | eitark) "Ok"
+			Versio	CDATA #IMPLIED
+			Kieli (suomi | ruotsi) "suomi"
+			Tunniste CDATA #IMPLIED
+			Tyyppi (A | HE | K | LA | LJL | PI | PNE | Talousarvio 
+				| Talousarviol | TPA |  Vaalit | VJL | VNS | Muu ) "HE"
+				-- Asiakirjan tunnisteattribuutit		-->

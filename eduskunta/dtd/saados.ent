@@ -1,0 +1,107 @@
+<!-- ========================================================================= 	-->
+<!-- 										-->
+<!--    			SAADOS (la) 					-->
+<!-- 										-->
+<!-- 				(17.6.1998)					-->
+<!-- 										-->
+<!-- 	Public Identifier: "-//Eduskunta//DTD saados//FI" (saados.dtd)		-->
+<!-- ========================================================================= 	-->
+<!--		Tama saadoksen lakiosan rakenne noudattelee paapiirteissaan
+		Editan oikeusministerion saadospankille kehittelemaa DTD:ta.
+		Kyseista maarittelya on kuitenkin tiukennettu ohjaamaan ja 
+		helpottamaan valiokunnissa tapahtuvaa kirjoitustyota.		-->
+<!-- =================================================================================== -->
+<!-- Mietinnon saadososa							-->
+<!ENTITY  %  LA-VK	"((ot4|ylot4)?, la)+" >
+
+<!-- Lakialoitteen ja pne:n saadososa						-->
+<!ENTITY  %  LA-LA	"((ot4|ylot4)?, la)+" >
+
+<!ENTITY % SATEKS  	"(#PCDATA)|ku|li|liku|ala|yla|avi|akviite|mulviite|skviite|ylviite|aukko|oikaistu"	>
+
+<!-- Saadoksen lakiosa								-->
+<!ELEMENT la    	- - ((tyhja|tyhjanel)*,sanro?, sni?, jl?, mni?, ot4a?, ste, sliite*, (pv|sv)?) >
+
+
+
+<!-- =========================================================================  -->
+<!-- 		Saadoksen nimiosa (sni)						-->
+<!-- ========================================================================= 	-->
+<!-- Saadoksen nimiosa								-->
+<!ELEMENT sni		- - (st, sn?) >
+<!-- Saadoksen tyyppi (LAKI)							-->	
+<!ELEMENT st    	- - (%SATEKS;)+ >
+<!-- Saadoksen nimike								-->
+<!ELEMENT sn    	- - (%SATEKS;)+	>
+<!-- Johtolauseet								-->
+<!ELEMENT jl      	- - (lte+,(tyhja|tyhjanel)*) >
+<!-- Muutos saadoksen nimiosa							-->
+<!ELEMENT mni		- - (st, sn?) >
+
+<!-- ========================================================================= 	-->
+<!-- 		Saadosteksti (ste)						-->
+<!-- ========================================================================= 	-->
+<!-- Saadosteksti								-->
+<!ELEMENT ste		- - ((os | lu | py | vo | vopy | tyhja | tyhjanel | pv | ot1)*, vs?) >
+<!-- Osa									-->
+<!ELEMENT os         	- - (nu, ot?, (lu|ot1)+ ) >
+<!-- Luku									-->
+<!ELEMENT lu        	- - (nu, ot, (py|vo|vopy|tyhja|tyhjanel|ot1)*) >
+
+
+
+<!-- Pykala									-->
+<!ELEMENT py      	- - (nu?, ot?, (mo|kohdat|kv|table|kuva|vertaus)*) >
+<!-- Voimaantulopykala									-->
+<!ELEMENT vopy      	- - (nu?, ot?, (mo|kohdat|kv|table|kuva|vertaus)+) >
+<!-- Momentti									-->
+<!ELEMENT mo	    	- - (%SATEKS;)+ >
+<!-- Kohtiin jakautuva momentti 						-->
+<!ELEMENT kohdat       	- - (johtl?, (ko|kv|vertaus|kohdat|table)+, johtl?) >
+<!-- Kohta									-->
+<!ELEMENT ko		- - ((%SATEKS;)+|kohdat) >
+<!-- Kohtiin liittyva johdanto-osa						-->
+<!ELEMENT johtl		- - (%SATEKS;)+ >
+<!-- Voimaantulokappale								-->
+<!ELEMENT vs		- - (ot?, (mo|kv|vertaus|vo|kohdat|table|tyhja|tyhjanel)+) >
+
+<!-- ========================================================================= 	-->
+<!-- 		Saadoksen liite (sliite)					-->
+<!-- ========================================================================= 	-->
+<!-- Saadoksen liite								-->
+<!ELEMENT sliite  	- - (lot,(ot|vo|kv|lte|table|akviite|skviite|mulviite|ylviite|kuva|vertaus)+)  >
+<!ATTLIST sliite		sivutus (uusi | peraan) uusi			>
+
+<!-- ========================================================================= 	-->
+<!-- 		Saadoksen sisaltoelementit					-->
+<!-- ========================================================================= 	-->
+<!-- Lain tekstikappale								-->
+<!ELEMENT lte		- - (%SATEKS;)+ >
+<!-- Numero									-->
+<!ELEMENT nu       	- - (%SATEKS;)+ >
+<!-- Otsikko									-->
+<!ELEMENT ot       	- - (%SATEKS;)+ >
+<!-- Valiotsikko								-->
+<!ELEMENT vo       	- - (%SATEKS;)+ >
+<!-- Vertaus HE:n muotoon, esim. (Kuten HE) tai (poist.)			-->
+<!ELEMENT vertaus    	- - (%SATEKS;)+ >
+<!-- Katkoviiva									-->
+<!ELEMENT kv		- O EMPTY >
+<!-- Saadosehdotuksen numero							-->
+<!ELEMENT sanro		- - (%TEKSTI;)+ >
+<!-- Sivuviiva									-->
+<!ELEMENT sv		- O EMPTY >
+<!-- Palstaviiva								-->
+<!ELEMENT pv		- O EMPTY >
+
+<!-- Mietinnon palstan ylittava erikoisotsikko 					-->
+<!ELEMENT ylot4		- - (#PCDATA)						  >
+
+<!-- Erikoisotsikko			 					-->
+<!ELEMENT ot4a		- - (#PCDATA)						  >
+
+<!ELEMENT oikaistu         - - (#PCDATA) 	-- Oikaistu		-->
+
+
+
+

@@ -1,0 +1,110 @@
+<!-- ========================================================================= 	-->
+<!--										-->
+<!--				S I S A L T O - O S A T				-->
+<!--										-->
+<!--				- 23.2.1999 -					-->
+<!--										-->
+<!-- 	Public Identifier: "-//Eduskunta//DTD sisalto//FI" (sisalto.dtd)	-->
+<!-- ========================================================================= 	-->
+<!--		Tassa kuvataan erilaisia sisaltoelementteja, joita esiintyy
+		kaikissa valtiopaivaasiakirjoissa alimmantasoisina elementteina,
+		joilla ei ole omaa nk. loogista merkistysta. 
+		Tassa moduulissa ei ole mitaan varsinaista ylinta juurielementtia
+		eika esiteltavilla kokonaisuuksilla ole tiettya jarjestysta.	-->
+
+<!-- =================================================================================== -->
+
+<!ENTITY % TEKSTI	"#PCDATA|ku|li|liku|ala|yla|alle|avi|akviite|mulviite|
+			skviite|ylviite|aukko"
+			-- Normaalia tekstia, jossa muotoilumahdollisuuksia	--> 
+
+<!ENTITY % SISALTO	"te|ot4|ot5|lista|listay|table|kuva"
+			-- Kappaleita, otsikoita, listoja,
+			   taulukoita ja kuvia.					-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Tekstikappaleet 						-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!-- ELEMENT te		- - (%TEKSTI;)+	 Maaritellaan kussakin asiakirjakohtaisessa
+					 DTD:ssa. Maaritys siirretty asiakirjakohtaisiin dtd:hin -->
+
+<!ELEMENT tyhja		- O EMPTY	-- Elementti tekstin muotoilua varten	-->
+<!ELEMENT tyhjanel	- O EMPTY	-- Muotoiluelementti tyhjaa neljannesrivia varten -->
+<!ELEMENT siste		- - (%TEKSTI;)+ -- Sisennetty tekstikappale		-->
+<!ELEMENT siste2	- - (%TEKSTI;)+ -- 2. sisennetty tekstikappale		-->
+<!ELEMENT ku       	- - (#PCDATA|aukko)+  -- Kursivoitu tekstia		-->
+<!ELEMENT li       	- - (#PCDATA)  	-- Lihavoitua tekstia			-->
+<!ELEMENT liku     	- - (#PCDATA) 	-- Lihavoitua ja kursivoitua tekstia	-->
+<!ELEMENT ala      	- - (#PCDATA) 	-- Alaindeksi				-->
+<!ELEMENT yla      	- - (#PCDATA) 	-- Ylaindeksi				-->
+<!ELEMENT alle      	- - (#PCDATA) 	-- Alleviivattua tekstia		-->
+<!ELEMENT avi      	- - (#PCDATA|ku|li|liku|ala|yla|alle|akviite|mulviite|skviite|ylviite|aukko)+ 	
+					-- Alaviite				-->
+<!ELEMENT aukko		- O EMPTY	-- Aukko kiinteille valilyonneille	--> 
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Otsikot								-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT ot1		- - (#PCDATA)	-- Jakson otsikko			-->
+<!ELEMENT ot2		- - (#PCDATA)	-- Alajakson otsikko			-->
+<!ELEMENT ot3       	- - (#PCDATA) 	-- Perustelujen lisaotsikko		-->
+<!ELEMENT ot4       	- - (#PCDATA) 	-- Valiotsiko				-->
+<!ELEMENT ot5       	- - (#PCDATA) 	-- Riviotsikko				-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Listat								-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT listay   	- - (lykohta+)		-- Yksinkertainen lista 	-->
+<!ATTLIST listay	tyyppi (viiva, tasav, numeros, numerop, kirjain, tyhja) viiva >
+<!ELEMENT lykohta 	- - (%TEKSTI;)+		-- Yksinkertaisen listan kohta	-->
+
+<!ELEMENT lista   	- - (liskohta+) 	-- Monipuolinen lista		-->
+<!ATTLIST lista		tyyppi (viiva, tasav, numeros, numerop, kirjain, luett) viiva >
+<!ELEMENT liskohta 	- - (te | tyhja | lista)+  -- Monipuolisen listan kohta	-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Kuvat								-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT kuva		- - (kuvaot?, kuvatied, kuvaot?) -- Kuvamaaritykset	-->
+<!ELEMENT kuvaot	- - (%TEKSTI;)+			 -- Kuvaotsikko		-->
+
+<!ELEMENT kuvatied    	- O  EMPTY 			 -- Kuvatiedosto	-->
+<!ATTLIST kuvatied
+	-- ENTITEETTI- JA TIEDOSTOATTRIBUUTIT --   
+	entity    ENTITY    #IMPLIED 	-- Maarittelevan entiteetin nimi 	--
+	file      CDATA     #IMPLIED	-- Tiedoston nimi			--
+
+	-- ANKKUROIDUN KEHYKSEN OMINAISUUDET --
+	align     NAME      #IMPLIED	-- Keskitys (aleft|acenter|
+					   aright|ainside|aoutside)		--
+	angle     CDATA     #IMPLIED	-- Kulma asteina (0|90|180|270)		--
+ 	bloffset  CDATA     #IMPLIED	-- Peruslinjan offset			--
+	cropped   NUMBER    #IMPLIED	-- Marginaalien ylitys (0|1)		--
+	float     NUMBER    #IMPLIED	-- Kappaleen ylitys (0|1)		--
+	height    CDATA     #IMPLIED	-- Korkeus				--
+	nsoffset  CDATA     #IMPLIED 	-- Etaisyys ymparoivasta tekstista 	--
+	position  NAME      #IMPLIED	-- Sijainti (inline|top|below|bottom|
+					   sleft|sright|snear|sfar|sinside|
+					   soutside|tleft|tright|tnear|
+   					   tfar|tinside|toutside|runin) 	--
+	width     CDATA     #IMPLIED	-- Leveys				--
+
+	-- MUUT GRAAFISET OMINAISUUDET --
+	dpi       NUMBER    #IMPLIED	-- Importatun kohteen skaalaus		--
+	impang    CDATA     #IMPLIED	-- Kulma kehyksen sisalla		--
+	impby     (ref|copy)  #IMPLIED	-- Viittaus/kopio			--
+	impsize   CDATA     #IMPLIED	-- Kuvan koko				--
+	sideways  NUMBER    #IMPLIED	-- Kaanto pystyakselin ympari		--
+	xoffset   CDATA     #IMPLIED	-- Etaisyys kehyksen sivurajoista 	--
+	yoffset   CDATA     #IMPLIED	-- Etaisyys kehyksen yla- ja
+					   alarajoista 				-->
+
+<!-- ------------------------------------------------------------------------- 	-->
+<!--		Linkit								-->
+<!-- ------------------------------------------------------------------------- 	-->
+<!ELEMENT akviite         - - (#PCDATA) 	-- Asiakirjaviite		-->
+<!ELEMENT mulviite        - - (#PCDATA) 	-- Yhdistelmaviittaus		-->
+<!ELEMENT skviite         - - (#PCDATA) 	-- saadoskokoelmaviite		-->
+<!ELEMENT ylviite         - - (#PCDATA) 	-- Yleinen viittauselementti	-->
+<!ATTLIST ylviite	LINKKI	CDATA	#IMPLIED			>
+

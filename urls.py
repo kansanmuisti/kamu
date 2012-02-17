@@ -25,7 +25,6 @@ urlpatterns = patterns('',
 
 urlpatterns += patterns('votes.views',
     url(r'^session/$', 'list_sessions'),
-    url(r'^session/(?P<plsess>[\w-]+)/(?P<sess>\d+)/tag/$', 'tag_session'),
     url(r'^session/(?P<plsess>[\w-]+)/(?P<sess>\d+)/user-vote/$', 'set_session_user_vote'),
     url(r'^session/(?P<plsess>[\w-]+)/(?P<sess>\d+)/(?P<section>[\w]+)/$', 'show_session'),
     url(r'^session/(?P<plsess>[\w-]+)/(?P<sess>\d+)/$', 'show_session'),
@@ -47,6 +46,17 @@ urlpatterns += patterns('votes.views',
         name='contact_form_sent'),
     url(r'^about/(?P<section>[\w-]+)/$', 'about'),
     url(r'^$', 'about', {'section': 'main'}),
+)
+
+new_patterns = patterns('parliament.views',
+    url(r'^$', 'main'),
+    url(r'^session/(?P<plsess>[\w-]+)/(?P<item_nr>\d+)/$', 'show_item'),
+    url(r'^session/(?P<plsess>[\w-]+)/(?P<item_nr>\d+)/(?P<subitem_nr>\d+)/$', 'show_item'),
+    url(r'^member/(?P<member>[-\w]+)/$', 'show_member'),
+)
+
+urlpatterns += patterns('',
+    url(r'^new/', include(new_patterns)),
 )
 
 from tastypie.api import Api

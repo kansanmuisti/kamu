@@ -1,0 +1,27 @@
+<!-- ========================================================================= 	-->
+<!--										-->
+<!--				L I I T T E E T (liitteet)			-->
+<!--										-->
+<!--				- 8.11.1997 -					-->
+<!--										-->
+<!-- 	Public Identifier: "-//Eduskunta//DTD liitteet//FI" (liitteet.dtd)	-->
+<!-- ========================================================================= 	-->
+<!--		Valtiopaivaasiakirjassa oleva liite voi olla joko viittaus
+		johonkin erilliseen tiedostoon, saados tai rakenteeton
+		yleisia sisaltoelementteja kayttava liiteosa.			-->
+
+<!ELEMENT liitteet	- - (tiedosto | liite)+ 				>
+
+<!ELEMENT tiedosto     	- O EMPTY 						>
+<!ATTLIST tiedosto     	NIMI  CDATA    #REQUIRED 				>
+
+<!ELEMENT liite		- - (lot?, (te|siste|ot1|ot2|ot3|ot4|ot5|lista|listay|
+			     table|kuva|la|allekosa|addresa|tyhja|tyhjanel|lainaus)+)	
+						-- Rakenteeton liite		-->
+<!ATTLIST liite	sivutus (uusi | peraan) uusi				
+		ylatun CDATA #IMPLIED		-- Ylatunniste			-->
+<!ELEMENT lot		- - (#PCDATA)		-- "Liite"-otsikko		-->
+<!ELEMENT addresa	- - (#PCDATA)		-- Addresaatti			-->
+<!ELEMENT lainaus	- - (#PCDATA|ku|li|liku|ala|yla|alle|avi|akviite|
+			     mulviite|skviite|ylviite|aukko)+	-- Lainaus			-->
+

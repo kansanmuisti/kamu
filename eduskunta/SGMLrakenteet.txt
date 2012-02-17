@@ -1,0 +1,45 @@
+SGML-rakennemääritykset
+=======================
+
+Aloite al.dtd
+- toimenpidealoite, 
+- keskustelualoite, 
+- talousarvioaloite, 
+- lisätalousarvioaloite , 
+- toivomusaloite
+
+Eduskunnan vastaus ja kirjelmä evek.dtd
+- Eduskunnan vastaus
+- Eduskunnan kirjelmä
+
+Kysymys kk.dtd
+- kirjallinen kysymys (+ vastaus kysymykseen)
+- välikymys
+
+Lakialoite ja puhemiesneuvoston ehdotus lal.dtd
+- lakialoite
+- puhemiesneuvoston ehdotus
+- puhemiesneuvoston luettelo
+
+Talousarviomietintö ja -kirjelmä vav.dtd
+- talousarviomietintö
+- talousarviokirjelmä
+- Talousarvioasiakirja pääluokittain ja osastoittain 
+
+Täysistunnon päiväjärjestys pj.dtd
+- päiväjärjestys
+
+Täysistunnon pöytäkirja ptk.dtd
+- täysistunnon pöytäkirja
+- protokoll i sammandrag
+- puheenvuoro (puh.dtd)
+
+Valiokunnan esityslista ja pöytäkirja vkptk.dtd
+- valiokunnan esityslista
+- valiokunnan pöytäkirja
+- Suuren valiokunnan päiväjärjestys
+- Suuren valiokunnan pöytäkirja
+
+Valiokunnan mietintö ja lausunto vk.dtd
+- valiokunnan mietintö
+- valiokunnan lausunto
