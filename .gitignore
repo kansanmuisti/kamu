@@ -6,8 +6,13 @@
 files
 tags
 kamu.db
+cache
 settings_local.py
+mp-twitter.pickle
 utils/cache
+eduskunta/ptk
+eduskunta/ptkxml
+static/cache
 static/images/parties
 static/images/members
 static/images/orgs
