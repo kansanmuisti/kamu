@@ -36,6 +36,7 @@ def main(request):
         tn = get_thumbnail(mp.photo, '32x48')
         d['mp_portrait'] = tn.url
         d['mp_link'] = mp.get_absolute_url()
+        d['mp_party'] = mp.party.name
         update_list.append(d)
     args['some_updates'] = update_list
 
