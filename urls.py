@@ -60,15 +60,18 @@ urlpatterns += patterns('',
 )
 
 from tastypie.api import Api
-from votes.api import PartyResource, SessionResource, VoteResource, \
-        MemberResource, PlenarySessionResource
+from parliament.api import *
 
 v1_api = Api(api_name='v1')
 v1_api.register(MemberResource())
 v1_api.register(VoteResource())
 v1_api.register(PlenarySessionResource())
-v1_api.register(SessionResource())
+v1_api.register(PlenaryVoteResource())
 v1_api.register(PartyResource())
+v1_api.register(FundingSourceResource())
+v1_api.register(FundingResource())
+v1_api.register(SeatResource())
+v1_api.register(MemberSeatResource())
 
 urlpatterns += patterns('',
     (r'^api/', include(v1_api.urls)),

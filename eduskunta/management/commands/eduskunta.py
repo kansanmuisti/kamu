@@ -7,6 +7,7 @@ from ...member import MemberImporter
 from ...minutes import MinutesImporter
 from ...vote import VoteImporter
 from ...seat import SeatImporter
+from ...funding import FundingImporter
 from utils.http import HttpFetcher
 
 class Command(BaseCommand):
@@ -23,6 +24,8 @@ class Command(BaseCommand):
                     default=False, help='Import plenary session minutes'),
         make_option('--vote', action='store_true', dest='vote',
                     default=False, help='Import plenary session votes'),
+        make_option('--funding', action='store_true', dest='funding',
+                    default=False, help='Import election funding'),
         make_option('--update', action='store_true', dest='update',
                     default=False, help='Update values of existing objects'),
         make_option('--cache', action='store', dest='cache',
@@ -56,3 +59,7 @@ class Command(BaseCommand):
             importer = VoteImporter(http_fetcher=http)
             importer.replace = options['update']
             importer.import_votes()
+        if options['funding']:
+            importer = FundingImporter(http_fetcher=http)
+            importer.replace = options['update']
+            importer.import_funding()
