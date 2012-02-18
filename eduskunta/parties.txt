@@ -1,9 +1,9 @@
-kok	Kokoomus	images/parties/kok.jpg	Katainen Jyrki
-kesk	Keskusta	images/parties/kesk.jpg	Kiviniemi Mari
-sd	Sosialidemokraatit	images/parties/sd.jpg	Urpilainen Jutta
-vas	Vasemmistoliitto	images/parties/vas.jpg	Arhinmäki Paavo
-vihr	Vihreä liitto	images/parties/vihr.jpg	Niinistö Ville
-r	RKP	images/parties/r.jpg	Wallin Stefan
-kd	Kristillisdemokraatit	images/parties/kd.jpg	Räsänen Päivi
-ps	Perussuomalaiset	images/parties/ps.jpg	Soini Timo
-
+# short	long	logo	vis_color
+kd	Kristillisdemokraatit	images/parties/kd.jpg	#cccccc
+kesk	Keskusta	images/parties/kesk.jpg	#9fd18b
+kok	Kokoomus	images/parties/kok.jpg	#c7ddf3
+ps	Perussuomalaiset	images/parties/ps.jpg	#69b3e3
+r	RKP	images/parties/r.jpg	#ffd87d
+sd	Sosialidemokraatit	images/parties/sd.jpg	#f9c0c7
+vas	Vasemmistoliitto	images/parties/vas.jpg	#ec008c
+vihr	Vihreä liitto	images/parties/vihr.jpg	#dde89a

@@ -6,6 +6,7 @@ from ...party import PartyImporter
 from ...member import MemberImporter
 from ...minutes import MinutesImporter
 from ...vote import VoteImporter
+from ...seat import SeatImporter
 from utils.http import HttpFetcher
 
 class Command(BaseCommand):
@@ -16,6 +17,8 @@ class Command(BaseCommand):
                     default=False, help='Import parties'),
         make_option('--member', action='store_true', dest='member',
                     default=False, help='Import MPs'),
+        make_option('--seat', action='store_true', dest='seat',
+                    default=False, help='Import MP seatings'),
         make_option('--minutes', action='store_true', dest='minutes',
                     default=False, help='Import plenary session minutes'),
         make_option('--vote', action='store_true', dest='vote',
@@ -43,6 +46,10 @@ class Command(BaseCommand):
             importer.replace = options['update']
             importer.import_districts()
             importer.import_members()
+        if options['seat']:
+            importer = SeatImporter(http_fetcher=http)
+            importer.replace = options['update']
+            importer.import_seats()
         if options['minutes']:
             min_importer.import_minutes()
         if options['vote']:
