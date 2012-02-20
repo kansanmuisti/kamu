@@ -11,6 +11,7 @@ Dependencies
 - subversion
 - git
 - opensp
+- libmalaga7
 
 LESS (CSS extension)
 ====================
