@@ -37,6 +37,12 @@ class Stemmer(object):
         self.lib.terminate_libmalaga()
 
     def convert_word(self, word):
+        if word[-1] == ':':
+            word = word[0:-1]
+        if not word:
+            return list()
+        if word[0] == '-':
+            word = word[1:]
         self.lib.analyse_item(word.encode('utf-8'), 0)
         result = self.lib.first_analysis_result()
         ret = []
@@ -57,4 +63,7 @@ class Stemmer(object):
     def convert_string(self, s):
         words = string_to_words(s)
         ret = map(self.convert_word, words)
+        """for idx, w in enumerate(ret):
+            if len(w) == 0:
+                print words[idx]"""
         return ret
