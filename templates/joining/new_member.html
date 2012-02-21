@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Join Kansan muisti ry" %}{% endblock %}
+{% block content %}
+  <div id="support_register">
+  {{ content.data }}
+  <form action="" method="post">
+    <table id="new_member_form">
+      {{ form.as_table }}
+    </table>
+    <input type="submit" name="new_member" value="{% trans 'Send application' %}">
+  </form>
+  </div>
+{% endblock %}

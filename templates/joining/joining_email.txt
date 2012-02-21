@@ -1,0 +1,6 @@
+{% load i18n %}
+{{ content.raw }}
+
+{% trans "Account:" %} FI54 5780 0720 3888 62
+{% trans "Sum:" %} {{ sum }} €
+{% trans "Reference number:" %} {{ reference }}
