@@ -499,12 +499,13 @@ def show_party_congruences(request, party):
     return render_to_response('opinions/show_party_congruences.html', args,
                               context_instance=RequestContext(request))
 
-import cohesion
+"""import cohesion
 
 coalition_question_list = list(QuestionSource.objects.get(url_name='yle2011').\
                 question_set.all().select_related('source__name'))
 coalition_term = Term.objects.get(name='2011-2014')
 stats_cache = cohesion.cached_all_cabinet_statistics(coalition_question_list, coalition_term)
+"""
 
 @csrf_exempt
 def update_coalition(request):
