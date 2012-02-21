@@ -20,31 +20,31 @@ $(function() {
 {% block content %}
 <div id="left-column">
   <div id="navigation">
-    <h3>Navigaatio</h3>
+    <h3>{% trans "Navigation" %}</h3>
     <div class="row">
       <div class="navibox">
         <a href="#">
-          <img alt="Puolueet" src="{{ MEDIA_URL }}images/puolueet.jpg" />
-          <span class="caption">Puolueet</span>
+          <img alt="{% trans "Parties" %}" src="{{ MEDIA_URL }}images/puolueet.jpg" />
+          <span class="caption">{% trans "Parties" %}</span>
         </a>
       </div>
       <div class="navibox">
         <a href="#">
-          <img alt="Kansanedustajat" src="{{ MEDIA_URL }}images/marikiviniemi.jpg" />
-          <span class="caption">Kansanedustajat</span>
+          <img alt="{% trans "MPs" %}" src="{{ MEDIA_URL }}images/marikiviniemi.jpg" />
+          <span class="caption">{% trans "MPs" %}</span>
         </a>
       </div>
       <div class="navibox">
         <a href="#">
-          <img alt="Ajankohtaista" src="{{ MEDIA_URL }}images/ajankohtaista.jpg" />
-          <span class="caption">Ajankohtaista</span>
+          <img alt="{% trans "News" %}" src="{{ MEDIA_URL }}images/ajankohtaista.jpg" />
+          <span class="caption">{% trans "News" %}</span>
         </a>
       </div>
     </div>
   </div>
 
   <div id="news">
-    <h3>Ajankohtaista</h3>
+    <h3>{% trans "News" %}</h3>
     <div class="post">
       <h4>Hallitustyökalu avattu</h4>
       <div class="content">
@@ -55,24 +55,42 @@ $(function() {
   </div>
 
   <div id="kepposet">
-    <h3>Eduskunnan uusimmat kepposet</h3>
+    <h3>{% trans "Parliament activity feed" %}</h3>
 {% for item in pl_items %}
     <div class="post">
       <h4>{{ item.description }}</h4>
       <div class="content">
         <span class="name">{{ item.statement.member.get_print_name }}</span> ({{ item.statement.member.party.name }}): "{{ item.statement.text|truncatewords:50 }}"
-        <a href="{{ item.get_absolute_url }}" class="readmore">{{ item.nr_statements }} puheenvuoroa, {{ item.nr_votes }} äänestystä &gt;</a>
+        <a href="{{ item.get_absolute_url }}" class="readmore">
+{% if item.nr_statements %}
+{% blocktrans count nr_statements=item.nr_statements %}
+1 statement
+{% plural %}
+{{ nr_statements }} statements
+{% endblocktrans %}
+{% if item.nr_votes %},{% endif %}
+{% endif %}
+
+{% if item.nr_votes %}
+{% blocktrans count nr_votes=item.nr_votes %}
+1 vote
+{% plural %}
+{{ nr_votes }} votes
+{% endblocktrans %}
+{% endif %}
+        &gt;
+        </a>
       </div>
       <abbr class="time" title="{{ item.plsess.date|date:'c' }}">{{ item.plsess.date }}</abbr>
     </div>
 {% endfor %}
-    <div id="kepposet-showmore"><a href="#">Näytä lisää kepposia &or;</a></div>
+    <div id="kepposet-showmore"><a href="#">{% trans "Show more items" %} &or;</a></div>
   </div>
 </div>
 
 <div id="right-column">
   <div id="livefeed">
-  <h3 class="grey">Sosiaalinen media</h3>
+  <h3 class="grey">{% trans "Social media" %}</h3>
 {% for upd in some_updates %}
     <div class="post">
       <a href="{{ upd.mp_link }}"><img src="{{ upd.mp_portrait }}" alt="FIXME" /></a>
@@ -83,22 +101,9 @@ $(function() {
 {% endfor %}
   </div>
   <div id="socialmedia">
-    <h3 class="grey">Jaa sosiaalisessa mediassa</h3>
+    <h3 class="grey">{% trans "Share in social media" %}</h3>
   </div>
 </div>
-
-{% comment %}
-<div>
-{% for item in pl_items %}
-  <div style="margin-top: 16px; margin-bottom: 16px;" class="plenary-item">
-    <small>{{ item.plsess.date }}</small>
-    <p>{{ item.description }}</p>
-    <small>{{ item.plenaryvote_set.count }} votes</small><br />
-    <small>{{ item.statement_set.count }} statements</small>
-  </div>
-{% endfor %}
-</div>
-{% endcomment %}
 
 {% endblock %}
 
