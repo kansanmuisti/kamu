@@ -10,6 +10,21 @@ from parliament.models.session import *
 from eduskunta.importer import Importer, ParseError
 from eduskunta.vote import VoteImporter
 
+SPEAKER_ADDRESSING = (
+    'Herra puhemies', 'Arvoisa puhemies',
+    'Arvoisa herra puhemies', 'Puhemies',
+    'Herr talman',
+    'Rouva puhemies', 'Arvoisa rouva puhemies',
+    u'Ärade talman', u'Värderade talman',
+    u'Ärade herr talman', 'Fru talman',
+    u'Värderade herr talman',
+    'Arvoisa eduskunnan puhemies',
+    'Kunnioitettu puhemies', 'Arvoisa puhemies',
+    u'Värderade fru talman',
+    'Arvoisa puheenjohtaja', 'Arvon puhemies',
+    'Arvoisa herra puheenjohtaja',
+    'Arvostettu puhemies', 'Talman',
+)
 
 # paalk, pjkohta, valta -> keskust -> pvuoro
 # kyskesk -> sktkesk -> sktpvuor
@@ -96,6 +111,10 @@ class MinutesImporter(Importer):
                         s += self.clean_text(e.tail)
                     if e.getchildren():
                         raise ParseError("children's children, uh oh")
+	        for adr in SPEAKER_ADDRESSING:
+	            if s.startswith(adr + '!'):
+	                s = s[len(adr) + 2:]
+                        break
                 text.append(s)
             elif ch_el.tag in ('pmvali', 'puhuja', 'tyhja', 'tyhjanel',
                                'istuntot', 'vieraili', 'katkos', 'aukko', 'valiots'):
