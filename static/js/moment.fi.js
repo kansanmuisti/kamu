@@ -4,10 +4,11 @@ moment.lang('fi', {
     weekdays : "maanantai_tiistai_keskiviikko_torstai_perjantai_lauantai_sunnuntai".split("_"),
     weekdaysShort : "ma_ti_ke_to_pe_la_su".split("_"),
     longDateFormat : {
+    LT : "HH:mm",
     L : "DD.MM.YYYY",
-    LL : "D MMMM YYYY",
-    LLL : "D MMMM YYYY HH:mm",
-    LLLL : "dddd, D MMMM YYYY HH:mm"
+    LL : "D. MMMM[ta] YYYY",
+    LLL : "D. MMMM[ta] YYYY HH:mm",
+    LLLL : "dddd, D. MMMM[ta] YYYY HH:mm"
     },
     meridiem : {
     AM : 'AM',
@@ -18,9 +19,9 @@ moment.lang('fi', {
     calendar : {
     sameDay: "[tänään] LT",
     nextDay: '[huomenna] LT',
-    nextWeek: 'dddd [kello] LT',
+    nextWeek: 'dddd[na] LT',
     lastDay: '[eilen] LT',
-    lastWeek: '[viime] dddd[na kello] LT',
+    lastWeek: '[viime] dddd[na] LT',
     sameElse: 'L'
     },
     relativeTime : {
@@ -42,4 +43,3 @@ moment.lang('fi', {
     return '.';
     }
 });
-
