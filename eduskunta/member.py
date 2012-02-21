@@ -208,6 +208,8 @@ class MemberImporter(Importer):
         latest_pa = pa_list[0]
         for pa in pa_list[1:]:
             if pa['begin'] > latest_pa['begin']:
+                if not pg_to_party(pa['party']):
+                    continue
                 latest_pa = pa
         party_name = pg_to_party(latest_pa['party'])
         if party_name:
