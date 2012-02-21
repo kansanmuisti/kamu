@@ -1,36 +1,50 @@
 {% extends "base_j.html" %}
-{% load i18n %}
+{% load i18n compress %}
 {% block title %}{% trans "Front page" %}{% endblock %}
 {% block head %}
-<script type="text/javascript">
 
-$(function() {
-	var parliament_activity_offset = 5;
+{% compress js inline %}
+<script type="text/coffeescript">
+$ ->
+    activity_feeds = [{
+        url: "{% url parliament.views.get_parliament_activity %}"
+        more_link: "#parliament-showmore a"
+        target_el: "#parliament-activity .post-list"
+        offset: {{ parl_act_offset }}
+    }, {
+        url: "{% url parliament.views.get_mp_some_activity %}"
+        more_link: "#livefeed-showmore a"
+        target_el: "#livefeed .post-list"
+        offset: {{ some_offset }}
+    }]
 
-	moment.lang('fi');
-	function set_timestamps() {
-		$(".time[title]").each(function() {
-			time = $(this).attr('title');
-			mom = moment(time);
-			$(this).text(mom.fromNow());
-		});
-	}
-	set_timestamps();
-	$("#parliament-showmore a").click(function() {
-		var url = "{% url parliament.views.get_parliament_activity %}";
+    moment.lang 'fi'
+    set_timestamps = ->
+        $(".time[title]").each ->
+            time = $(this).attr 'title'
+            mom = moment time
+            $(@).text mom.fromNow()
 
-		url += "?offset=" + parliament_activity_offset;
-		$.ajax(url, {success: function(data) {
-			var html = $(data.html);
-			$("#kepposet .post-list").append($(data.html));
-			parliament_activity_offset = data.offset;
-			set_timestamps();
-		}});
-		return false;
-	});
-});
-
+    set_timestamps()
+    for act in activity_feeds
+        $(act.more_link).click act, (ev) ->
+            act = ev.data
+            url = act.url + "?offset=" + act.offset
+            $.ajax url,
+            	type: 'GET',
+            	success: (data) ->
+                    html = $("<div>")
+                    html.append $(data.html)
+                    html.hide()
+                    $(act.target_el).append html
+                    act.offset = data.offset
+                    set_timestamps()
+                    html.slideDown()
+            return false
+    setInterval set_timestamps, 60*1000
 </script>
+{% endcompress %}
+
 {% endblock %}
 
 {% block content %}
@@ -70,55 +84,20 @@ $(function() {
     </div>
   </div>
 
-  <div id="kepposet">
+  <div id="parliament-activity">
     <h3>{% trans "Parliament activity feed" %}</h3>
     <div class="post-list">
-    {{ parl_act_html|safe }}
-{% for item in pl_items %}
-    <div class="post">
-      <h4>{{ item.description }}</h4>
-      <div class="content">
-        <span class="name">{{ item.statement.member.get_print_name }}</span> ({{ item.statement.member.party.name }}): "{{ item.statement.text|truncatewords:50 }}"
-        <a href="{{ item.get_absolute_url }}" class="readmore">
-{% if item.nr_statements %}
-{% blocktrans count nr_statements=item.nr_statements %}
-1 statement
-{% plural %}
-{{ nr_statements }} statements
-{% endblocktrans %}
-{% if item.nr_votes %},{% endif %}
-{% endif %}
-
-{% if item.nr_votes %}
-{% blocktrans count nr_votes=item.nr_votes %}
-1 vote
-{% plural %}
-{{ nr_votes }} votes
-{% endblocktrans %}
-{% endif %}
-        &gt;
-        </a>
-      </div>
-      <abbr class="time" title="{{ item.plsess.date|date:'c' }}">{{ item.plsess.date }}</abbr>
+      <div>{{ parl_act_html|safe }}</div>
     </div>
-{% endfor %}
-    </div>
-    <div id="parliament-showmore"><a href="#">{% trans "Show more items" %} &or;</a></div>
+    <div id="parliament-showmore" class="showmore-link"><a href="#">{% trans "Show more items" %} &or;</a></div>
   </div>
 </div>
 
 <div id="right-column">
   <div id="livefeed">
-  <h3 class="grey">{% trans "Social media" %}</h3>
-{% for upd in some_updates %}
-    <div class="post">
-      <a href="{{ upd.mp_link }}"><img src="{{ upd.mp_portrait }}" alt="FIXME" /></a>
-      <div class="name">{{ upd.mp_name }} <span class="party">{{ upd.mp_party }}</span></div>
-      <div class="content">{{ upd.html|safe }}</div>
-      <div class="time" title="{{ upd.time|date:"c" }}">{{ upd.time }}</div>
-    </div>
-{% endfor %}
-  </div>
+    <h3 class="grey">{% trans "Social media" %}</h3>
+    <div class="post-list"><div>{{ some_html|safe }}</div></div>
+    <div id="livefeed-showmore" class="showmore-link"><a href="#">{% trans "Show more updates" %} &or;</a></div>
   <div id="socialmedia">
     <h3 class="grey">{% trans "Share in social media" %}</h3>
   </div>

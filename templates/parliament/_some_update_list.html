@@ -1,0 +1,10 @@
+{% load i18n %}
+{% for upd in some_updates %}
+    <div class="post">
+      <a href="{{ upd.mp_link }}"><img src="{{ upd.mp_portrait }}" alt="FIXME" /></a>
+      <div class="name">{{ upd.mp_name }} <span class="party">{{ upd.mp_party }}</span></div>
+      <div class="content">{{ upd.html|safe }}</div>
+      <div class="time" title="{{ upd.time|date:"c" }}">{{ upd.time }}</div>
+    </div>
+{% endfor %}
+

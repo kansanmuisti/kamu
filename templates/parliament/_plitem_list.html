@@ -4,7 +4,9 @@
     <div class="post">
       <h4>{{ item.description }}</h4>
       <div class="content">
+{% if item.statement %}
         <span class="name">{{ item.statement.member.get_print_name }}</span> ({{ item.statement.member.party.name }}): "{{ item.statement.text|truncatewords:50 }}"
+{% endif %}
         <a href="{{ item.get_absolute_url }}" class="readmore">
 {% if item.nr_statements %}
 {% blocktrans count nr_statements=item.nr_statements %}
