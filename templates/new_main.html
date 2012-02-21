@@ -5,13 +5,29 @@
 <script type="text/javascript">
 
 $(function() {
+	var parliament_activity_offset = 5;
+
 	moment.lang('fi');
-	$(".time[title]").each(function() {
-		time = $(this).attr('title');
-		mom = moment(time);
-		$(this).text(mom.fromNow());
+	function set_timestamps() {
+		$(".time[title]").each(function() {
+			time = $(this).attr('title');
+			mom = moment(time);
+			$(this).text(mom.fromNow());
+		});
+	}
+	set_timestamps();
+	$("#parliament-showmore a").click(function() {
+		var url = "{% url parliament.views.get_parliament_activity %}";
+
+		url += "?offset=" + parliament_activity_offset;
+		$.ajax(url, {success: function(data) {
+			var html = $(data.html);
+			$("#kepposet .post-list").append($(data.html));
+			parliament_activity_offset = data.offset;
+			set_timestamps();
+		}});
+		return false;
 	});
-	var now = moment();
 });
 
 </script>
@@ -56,6 +72,8 @@ $(function() {
 
   <div id="kepposet">
     <h3>{% trans "Parliament activity feed" %}</h3>
+    <div class="post-list">
+    {{ parl_act_html|safe }}
 {% for item in pl_items %}
     <div class="post">
       <h4>{{ item.description }}</h4>
@@ -84,7 +102,8 @@ $(function() {
       <abbr class="time" title="{{ item.plsess.date|date:'c' }}">{{ item.plsess.date }}</abbr>
     </div>
 {% endfor %}
-    <div id="kepposet-showmore"><a href="#">{% trans "Show more items" %} &or;</a></div>
+    </div>
+    <div id="parliament-showmore"><a href="#">{% trans "Show more items" %} &or;</a></div>
   </div>
 </div>
 

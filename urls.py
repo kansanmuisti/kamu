@@ -50,6 +50,7 @@ urlpatterns += patterns('votes.views',
 
 new_patterns = patterns('parliament.views',
     url(r'^$', 'main'),
+    url(r'^ajax/parliament-activity/$', 'get_parliament_activity'),
     url(r'^session/(?P<plsess>[\w-]+)/(?P<item_nr>\d+)/$', 'show_item'),
     url(r'^session/(?P<plsess>[\w-]+)/(?P<item_nr>\d+)/(?P<subitem_nr>\d+)/$', 'show_item'),
     url(r'^member/(?P<member>[-\w]+)/$', 'show_member'),
