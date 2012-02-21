@@ -11,6 +11,8 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
+# This is used at least for new supporting members
+NOTIFICATIONS = ADMINS
 
 DATABASES = {
     'default': {
@@ -141,6 +143,7 @@ INSTALLED_APPS = (
     'user_voting',
     'opinions',
     'south',
+    'joining',
 )
 
 AUTH_PROFILE_MODULE="kamu.users.KamuProfile"

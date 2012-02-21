@@ -114,6 +114,11 @@ urlpatterns += patterns('cms.views',
     url(r'^cms/preview/markdown/$', 'preview_markdown'),
 )
 
+urlpatterns += patterns('joining.views',
+    url(r'^joining/$', 'register'),
+    url(r'^joining/thankyou/$', 'thankyou'),
+)
+
 if settings.DEBUG:
     urlpatterns += patterns('',
         (r'^static/(?P<path>.*)$', 'django.views.static.serve',

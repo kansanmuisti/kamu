@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Thank you for your application" %}{% endblock %}
+{% block content %}
+  <div id="member_register">
+  {{ content.data }}
+  <dl>
+  <dt>{% trans "Recipient" %}</dt>
+  <dd>Kansan muisti KAMU ry</dd>
+  <dt>{% trans "Account number" %}</dt>
+  <dd>FI54 5780 0720 3888 62</dd>
+  <dt>{% trans "Reference number" %}</dt>
+  <dd>{{ reference }}</dd>
+  <dt>{% trans "Sum" %}</dt>
+  <dd>{{ sum }} €</dd>
+  </dl>
+  <p>{% trans "All this has been e-mailed to you as well to address" %} {{ email }}.</p>
+  <p>{% trans "Thank you again." %}</p>
+  </div>
+{% endblock %}

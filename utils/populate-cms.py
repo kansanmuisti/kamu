@@ -17,7 +17,7 @@ content_path = os.path.normpath(my_path + '/../Content/cms')
 sys.path.insert(1, kamu_path)
 sys.path.insert(2, os.path.normpath(kamu_path + '/..'))
 
-allowed_markups = ['html', 'markdown']
+allowed_markups = ['html', 'markdown', 'plain']
 
 from kamu import settings
 
