@@ -71,9 +71,6 @@ class MinutesImporter(Importer):
 
         super(MinutesImporter, self).__init__(*args, **kwargs)
 
-    def process_votes(self, info):
-        pass
-
     def process_statement(self, st_el):
         st_info = {}
         sp_id = None
@@ -144,14 +141,38 @@ class MinutesImporter(Importer):
         info['statements'] = statements
         return info
 
+    def process_budget_item(self, budget_el):
+        el = budget_el.xpath('plnimi')
+        if len(el) != 1:
+            raise ParseError("budget class id not found")
+        el = el[0]
+        info = {'id': int(el.attrib['nro'])}
+
+        el = budget_el.xpath('hallinal')
+        if len(el) != 1:
+            raise ParseError("budget class name not found")
+        el = el[0]
+        info['area'] = self.clean_text(el.text)
+
+        st_list = []
+        disc_el_list = budget_el.xpath('keskust')
+        for disc_el in disc_el_list:
+            for st_el in disc_el.xpath('pvuoro'):
+                st_info = self.process_statement(st_el)
+                st_list.append(st_info)
+        info['statements'] = st_list
+        return info
+
     def process_minutes_item(self, pl_sess_info, item):
         IGNORE_ITEMS = ('pjots', 'istkesk', 'istjatk', 'istuntot', 'viiva',
-                        'valta', 'pmvaalit', 'ilmasia', 'muutpjn', 'vieraili',
+                        'pmvaalit', 'ilmasia', 'muutpjn', 'vieraili',
                         'upjots')
         # FIXME: add support for valtion talousarvio 'valta'
         if item.tag in IGNORE_ITEMS:
+            if item.xpath(".//aanestys"):
+                raise ParseError("vote found in an unlikely item")
             return
-        ACCEPT_ITEMS = ('sktrunko', 'pjkohta')
+        ACCEPT_ITEMS = ('sktrunko', 'pjkohta', 'valta')
         if item.tag not in ACCEPT_ITEMS:
             raise ParseError("Unknown item tag encountered: %s" % item.tag)
 
@@ -216,28 +237,10 @@ class MinutesImporter(Importer):
             docs.append(doc)
         item_info['docs'] = docs
 
-        votes = []
-        vote_list = item.xpath('.//aanestys')
-        for vote_el in vote_list:
-            vote_ref_list = vote_el.xpath('tulos/aanviit')
-            if len(vote_ref_list) == 0:
-                if pl_sess_info['id'] == '88/2007':
-                    continue
-                raise ParseError("No vote reference found")
-            for ref_el in vote_ref_list:
-                attr = ref_el.attrib
-                # WORKAROUND
-                if u'\xa8' in attr['aannro']:
-                    attr['aannro'] = attr['aannro'].replace(u'\xa8', '')
-                (year, sess, idx) = (int(attr['vpvuosi']), attr['istnro'], int(attr['aannro']))
-                votes.append((year, sess, idx))
-        if votes:
-            item_info['votes'] = votes
-
         if item.tag == 'sktrunko':
             item_info['type'] = 'question_time'
             q_list = []
-            q_el_list = item.xpath('//kyskesk')
+            q_el_list = item.xpath('.//kyskesk')
             for q in q_el_list:
                 q_list.append(self.process_question(q))
             item_info['questions'] = q_list
@@ -251,6 +254,77 @@ class MinutesImporter(Importer):
                     st_list.append(st_info)
             if st_list:
                 item_info['discussion'] = st_list
+        elif item.tag == 'valta':
+            item_info['type'] = 'budget'
+
+            # sanity check
+            el_list = item.xpath('.//keskust')
+            for disc_el in el_list:
+                p = disc_el.getparent()
+                pp = p.getparent()
+                if p != item and pp != item:
+                    raise ParseError("aieeee!")
+
+            disc_el_list = item.xpath('keskust')
+            st_list = []
+            for disc_el in disc_el_list:
+                subject = disc_el.xpath('otsis')[0]
+                if pl_sess_info['id'] == '51/2007':
+                    if not subject.text:
+                        subject.text = 'Keskustelu'
+                s = self.clean_text(subject.text).strip(':')
+                if s not in ('Yleiskeskustelu', 'Keskustelu'):
+                    print s
+                    assert False
+                item_info['sub_desc'] = 'Yleiskeskustelu'
+                for st_el in disc_el.xpath('pvuoro'):
+                    st_info = self.process_statement(st_el)
+                    st_list.append(st_info)
+                if st_list:
+                    item_info['discussion'] = st_list
+
+            cl_el_list = item.xpath('paalk')
+            budget_list = []
+            for el in cl_el_list:
+                b_info = self.process_budget_item(el)
+                for bi in budget_list:
+                    if bi['id'] == b_info['id']:
+                        bi['statements'].extend(b_info['statements'])
+                        break
+                else:
+                    budget_list.append(b_info)
+            item_info['budget_items'] = budget_list
+
+        votes = []
+        vote_list = item.xpath('.//aanestys')
+        for vote_el in vote_list:
+            gp = vote_el.getparent().getparent()
+            if gp.tag == 'paalk':
+                cl_id = int(gp.xpath('plnimi')[0].attrib['nro'])
+                for b_item in budget_list:
+                    if b_item['id'] == cl_id:
+                        break
+                else:
+                    raise ParseError("vote in unknown budget item")
+                sub_number = cl_id
+            else:
+                sub_number = None
+
+            vote_ref_list = vote_el.xpath('tulos/aanviit')
+            if len(vote_ref_list) == 0:
+                if pl_sess_info['id'] == '88/2007':
+                    continue
+                raise ParseError("No vote reference found")
+            for ref_el in vote_ref_list:
+                attr = ref_el.attrib
+                # WORKAROUND
+                if u'\xa8' in attr['aannro']:
+                    attr['aannro'] = attr['aannro'].replace(u'\xa8', '')
+                vote_id = (int(attr['vpvuosi']), attr['istnro'], int(attr['aannro']))
+                votes.append({'sub_number': sub_number, 'vote_id': vote_id})
+        if votes:
+            item_info['votes'] = votes
+
         return item_info
 
     def process_minutes(self, info):
@@ -358,7 +432,12 @@ class MinutesImporter(Importer):
         st.text = st_info['text']
         st.save()
 
-    def add_item_vote(self, item, vote):
+    def add_item_vote(self, item, sub_items, info):
+        vote = info['vote_id']
+        sub_number = info['sub_number']
+        if sub_number is not None:
+            item = sub_items[sub_number]
+
         try:
             plv = PlenaryVote.objects.get(plsess=item.plsess, number=vote[2])
         except PlenaryVote.DoesNotExist:
@@ -382,9 +461,8 @@ class MinutesImporter(Importer):
             item.type = 'agenda'
         item.save()
 
-        if 'votes' in item_info:
-            for vote in item_info['votes']:
-                self.add_item_vote(item, vote)
+        sub_item_by_id = {}
+        sub_items = []
 
         if item_info['type'] == 'question_time':
             for q_info in item_info['questions']:
@@ -403,8 +481,35 @@ class MinutesImporter(Importer):
             if 'discussion' in item_info:
                 for idx, st in enumerate(item_info['discussion']):
                     self.save_statement(item, idx, st)
+        elif item_info['type'] == 'budget':
+            if 'discussion' in item_info:
+                for idx, st in enumerate(item_info['discussion']):
+                    self.save_statement(item, idx, st)
+            for b_info in item_info['budget_items']:
+                try:
+                    b_item = PlenarySessionItem.objects.get(plsess=pl_sess, number=item_info['nr'],
+                                                            sub_number=b_info['id'])
+                except PlenarySessionItem.DoesNotExist:
+                    b_item = PlenarySessionItem(plsess=pl_sess, number=item_info['nr'],
+                                                sub_number=b_info['id'])
+                b_item.type = 'budget'
+                b_item.description = item.description
+                b_item.sub_description = b_info['area']
+                b_item.save()
+                for idx, st in enumerate(b_info['statements']):
+                    self.save_statement(b_item, idx, st)
+                sub_item_by_id[b_item.sub_number] = b_item
+                sub_items.append(b_item)
+
+        if 'votes' in item_info:
+            for vote in item_info['votes']:
+                self.add_item_vote(item, sub_item_by_id, vote)
+
         item.count_related_objects()
         item.save()
+        for sub_item in sub_items:
+            sub_item.count_related_objects()
+            sub_item.save()
 
     def save_minutes(self, info):
         try:
@@ -462,7 +567,9 @@ class MinutesImporter(Importer):
         while next_link:
             el_list, next_link = self.read_listing('minutes', next_link)
             for el in el_list:
-                #year = int(el['id'].split('/')[1])
+                year = int(el['id'].split('/')[1])
+                if year > 2006:
+                    continue
                 self.process_minutes(el)
                 db.reset_queries()
 

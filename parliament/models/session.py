@@ -73,6 +73,7 @@ class PlenarySessionItem(models.Model):
     sub_number = models.PositiveIntegerField(null=True, blank=True)
     type = models.CharField(max_length=15, choices=TYPES)
     description = models.CharField(max_length=1000)
+    sub_description = models.CharField(max_length=100, null=True, blank=True)
 
     # cache the counts here for faster SELECTs
     nr_votes = models.IntegerField(null=True, blank=True, db_index=True)
