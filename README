@@ -13,17 +13,22 @@ Dependencies
 - opensp
 - libmalaga7
 
-LESS (CSS extension)
+LESS and Coffee Script
 ====================
 
 If you don't have the libnode-less package, you need to install less
-manually:
+manually. First we need to install node.js, fetch source package
+from http://nodejs.org/
 
-# apt-get install rubygems1.8 ruby1.8
-# gem install less
+Then you could install it with
+./configure --prefix=/usr/local
+make
+make install
 
-Define the path to the lessc binary in settings_local.py, e.g.:
-LESS_PATH='/var/lib/gems/1.8/gems/less-1.2.21/bin/lessc'
+After that we can install less and coffee
+
+# sudo npm install -g less
+# sudo npm install -g coffee-script
 
 Commands
 ========
