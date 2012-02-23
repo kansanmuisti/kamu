@@ -11,6 +11,7 @@ Dependencies
 - subversion
 - git
 - opensp
+- tidy
 - libmalaga7
 
 LESS and Coffee Script
