@@ -22,14 +22,16 @@ manually. First we need to install node.js, fetch source package
 from http://nodejs.org/
 
 Then you could install it with
-./configure --prefix=/usr/local
-make
-make install
+
+    ./configure --prefix=/usr/local
+    make
+    make install
+
 
 After that we can install less and coffee
 
-# sudo npm install -g less
-# sudo npm install -g coffee-script
+    # sudo npm install -g less
+    # sudo npm install -g coffee-script
 
 Commands
 ========
@@ -42,18 +44,19 @@ the new bash aliases to kick in.
 
 virtualenv
 ----------
-$ mkvirtualenv kamu
-$ workon kamu
-$ python setup-site.py
+
+    $ mkvirtualenv kamu
+    $ workon kamu
+    $ python setup-site.py
 
 
 Postgres
 ========
 
-$ su - postgres
-$ psql
-CREATE USER kamu WITH PASSWORD 'kamu';
-CREATE DATABASE kamu ENCODING 'utf-8' OWNER kamu;
+    $ su - postgres
+    $ psql
+    CREATE USER kamu WITH PASSWORD 'kamu';
+    CREATE DATABASE kamu ENCODING 'utf-8' OWNER kamu;
 
 In order to use Postgres, you need to set the right database backend in
 settings_local.py. You can do that by copying the DATABASES setting from
@@ -63,35 +66,36 @@ settings.py and setting the value of ENGINE to
 MySQL
 =====
 
-CREATE DATABASE kamu CHARACTER SET utf8 COLLATE utf8_swedish_ci;
-CREATE USER 'kamu'@'localhost' IDENTIFIED BY 'kamu';
-GRANT ALL PRIVILEGES ON kamu.* TO 'kamu'@'localhost';
+    CREATE DATABASE kamu CHARACTER SET utf8 COLLATE utf8_swedish_ci;
+    CREATE USER 'kamu'@'localhost' IDENTIFIED BY 'kamu';
+    GRANT ALL PRIVILEGES ON kamu.* TO 'kamu'@'localhost';
 
 If your existing database is in latin1, you can convert to utf-8
 like this:
 
 ALTER DATABASE kamu DEFAULT CHARACTER SET utf8 COLLATE utf8_swedish_ci;
 
-echo "show tables" | ./manage.py dbshell > /tmp/tables
-for a in $(cat /tmp/tables) ; do
-	echo $a
-	ALT="alter table $a convert to character set utf8 collate utf8_swedish_ci"
-	echo $ALT | ./manage.py dbshell
-done
+    echo "show tables" | ./manage.py dbshell > /tmp/tables
+    for a in $(cat /tmp/tables) ; do
+    	echo $a
+    	ALT="alter table $a convert to character set utf8 collate utf8_swedish_ci"
+    	echo $ALT | ./manage.py dbshell
+    done
 
 The rest
 ========
 
 First test your DB connection by:
-$ python manage.py dbshell
+
+    $ python manage.py dbshell
 
 If everything goes well, you're ready to download and install the initial
 contents:
-$ ./setup-db.sh
 
-$ django-admin.py compilemessages	# create the compiled locale files
-$ django-admin.py index --rebuild	# generate the search index
-
+    $ ./setup-db.sh
+    
+    $ django-admin.py compilemessages	# create the compiled locale files
+    $ django-admin.py index --rebuild	# generate the search index
 
 Unit testing
 ============
@@ -99,11 +103,11 @@ Unit testing
 To run the integrated unit tests make sure the access rights are set up
 for the test framework:
 
-GRANT ALL PRIVILEGES ON `test_kamu`.* TO 'kamu'@'localhost';
+    GRANT ALL PRIVILEGES ON `test_kamu`.* TO 'kamu'@'localhost';
 
 Then just run
 
-./manage.py test votes
+    ./manage.py test votes
 
 or specify any of the other kamu applications instead of 'votes'.
 
@@ -114,14 +118,14 @@ syncdb method instead of south migration.
 
 Add to settings_local.py:
 
-FAST_TEST = True
+    FAST_TEST = True
 
 Create an sqlite3 database and bring its tables synchronized to the
 django models. The test framework will clone and populate this database
 during test execution:
 
-./manage.py syncdb
-./manage.py migrate votes
+    ./manage.py syncdb
+    ./manage.py migrate votes
 
 optionally migrate also all other kamu applications besides 'votes' that
 you want to test.
