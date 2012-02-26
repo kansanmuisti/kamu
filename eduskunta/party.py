@@ -31,7 +31,7 @@ class PartyImporter(Importer):
         f = open(os.path.join(path, self.FILENAME))
         for line in f.readlines():
             line = line.strip().decode('utf8')
-            if not line:
+            if not line or line[0] == '#':
                 continue
             (name, long_name, logo, vis_color) = line.split('\t')
             try:

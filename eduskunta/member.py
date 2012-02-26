@@ -127,7 +127,7 @@ class MemberImporter(Importer):
         if '(' in given_names:
             given_names = given_names.split('(')[0].strip()
         mp_info['surname'] = surname
-        mp_info['given_names'] = given_names
+        mp_info['given_names'] = given_names.strip()
 
         td = get_field_el(doc, 'phone')
         if td != None:
