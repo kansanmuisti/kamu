@@ -60,6 +60,7 @@ class VoteImporter(Importer):
     VOTE_LIST_URL = '/triphome/bin/aax3000.sh?VAPAAHAKU=aanestysvpvuosi=%i'
     BEGIN_YEAR = 1999
     END_YEAR = 2012
+    CACHE_DIR = 'votes'
 
     def save_session(self, pv, info):
         dt = datetime.strptime('%s %s' % (str(pv.plsess.date), info['time']),
@@ -94,7 +95,7 @@ class VoteImporter(Importer):
             pv = PlenaryVote(plsess=plsess, number=info['number'])
 
         self.logger.info('processing plenary vote %s/%d' % (plsess.name, info['number']))
-        s = self.open_url(info['link'], 'votes')
+        s = self.open_url(info['link'], self.CACHE_DIR)
 
         doc = html.fromstring(s)
 
@@ -146,26 +147,49 @@ class VoteImporter(Importer):
             psd[pl.origin_id] = pl
         self.plsess_by_id = psd
 
-    def import_one(self, vote_id):
-        self._make_obj_lists()
+    def _import_one(self, vote_id):
         (year, plsess, nr) = vote_id.split('/')
         url = self.URL_BASE + self.VOTE_URL % (int(year), plsess, int(nr))
-        el_list, next_link = self.read_listing('votes', url)
+        el_list, next_link = self.read_listing(self.CACHE_DIR, url)
         if len(el_list) != 1:
-            raise ParseError("vote with id %s not found" % vote_id)
+            raise ParseError("vote with id %s not found" % vote_id, url=url)
         el = el_list[0]
+        vote_id_str = "%s/%s/%s" % (plsess, year, nr)
+        got_id = "%s/%d" % (el['plsess'], el['number'])
+        if vote_id_str != got_id:
+            raise ParseError("invalid vote returned (wanted %s, got %s)" % (vote_id_str, got_id), url=url)
         info = {'plsess': el['plsess'], 'number': el['number']}
         info['link'] = el['results_link']
-        plv = self.import_session(info)
+        try:
+            plv = self.import_session(info)
+        except ParseError as e:
+            e.url = url
+            raise
         db.reset_queries()
         return plv
+
+    def import_one(self, vote_id):
+        self._make_obj_lists()
+        try:
+            plv = self._import_one(vote_id)
+        except ParseError as e:
+            if e.url:
+                # nuke the cache if we have one
+                fname = self.http.get_fname(e.url, self.CACHE_DIR)
+                if fname:
+                    os.unlink(fname)
+            self.logger.error("exception: %s" % e)
+            # retry
+            plv = self._import_one(vote_id)
+        return plv
+
 
     def import_votes(self):
         self._make_obj_lists()
         for year in range(self.END_YEAR, self.BEGIN_YEAR-1, -1):
             next_link = self.URL_BASE + self.VOTE_LIST_URL % year
             while next_link:
-                el_list, next_link = self.read_listing('votes', next_link)
+                el_list, next_link = self.read_listing(self.CACHE_DIR, next_link)
                 for el in el_list:
                     if el['plsess'] == '85/1999':
                     	next_link = None

@@ -15,6 +15,8 @@ class HttpFetcher(object):
             os.makedirs(dirname)
 
     def get_fname(self, url, prefix):
+        if not self.cache_dir:
+            return None
         hash = hashlib.sha1(url.replace('/', '-')).hexdigest()
         fname = '%s/%s/%s' % (self.cache_dir, prefix, hash)
         return fname

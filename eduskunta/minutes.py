@@ -294,7 +294,8 @@ class MinutesImporter(Importer):
                 else:
                     budget_list.append(b_info)
             item_info['budget_items'] = budget_list
-
+        else:
+            raise ParseError("unknown tag %s" % item.tag)
         votes = []
         vote_list = item.xpath('.//aanestys')
         for vote_el in vote_list:
@@ -321,6 +322,13 @@ class MinutesImporter(Importer):
                 if u'\xa8' in attr['aannro']:
                     attr['aannro'] = attr['aannro'].replace(u'\xa8', '')
                 vote_id = (int(attr['vpvuosi']), attr['istnro'], int(attr['aannro']))
+                # WORKAROUND
+                vote_pl_id = "%s/%d" % (vote_id[1], vote_id[0])
+                if vote_pl_id != pl_sess_info['id']:
+                    self.logger.warning("mismatch %s != %s (vote #%d)" % (vote_pl_id, pl_sess_info['id'], vote_id[2]))
+                    (pid, y) = pl_sess_info['id'].split('/')
+                    vote_id = (int(y), pid, vote_id[2])
+
                 votes.append({'sub_number': sub_number, 'vote_id': vote_id})
         if votes:
             item_info['votes'] = votes
@@ -350,7 +358,6 @@ class MinutesImporter(Importer):
             pass
         else:
             self.logger.debug("downloading SGML file")
-            print link
             s = self.open_url(link, 'minutes')
             f = open(stored_ptk_fn, 'w')
             f.write(s)
@@ -459,6 +466,10 @@ class MinutesImporter(Importer):
             item.type = 'question'
         elif item_info['type'] == 'agenda_item':
             item.type = 'agenda'
+        elif item_info['type'] == 'budget':
+            item.type = 'budget'
+        else:
+                raise ParseError('invalid item type: %s' % item_info['type'])
         item.save()
 
         sub_item_by_id = {}
@@ -472,7 +483,7 @@ class MinutesImporter(Importer):
                 except PlenarySessionItem.DoesNotExist:
                     q_item = PlenarySessionItem(plsess=pl_sess, number=item_info['nr'],
                                                 sub_number=q_info['id'])
-                q_item.type = 'question_time'
+                q_item.type = 'question'
                 q_item.description = q_info['subject']
                 q_item.save()
                 for idx, st in enumerate(q_info['statements']):
@@ -567,9 +578,9 @@ class MinutesImporter(Importer):
         while next_link:
             el_list, next_link = self.read_listing('minutes', next_link)
             for el in el_list:
-                year = int(el['id'].split('/')[1])
+                """year = int(el['id'].split('/')[1])
                 if year > 2006:
-                    continue
+                    continue"""
                 self.process_minutes(el)
                 db.reset_queries()
 

@@ -6,8 +6,9 @@ from utils.http import HttpFetcher
 
 
 class ParseError(Exception):
-    def __init__(self, value):
+    def __init__(self, value, url=None):
          self.value = value
+         self.url = url
     def __str__(self):
          return repr(self.value)
 
