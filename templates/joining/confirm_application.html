@@ -1,7 +1,24 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block title %}{% trans "Thank you for your application" %}{% endblock %}
+{% block head %}
+<style type="text/css">
+  dt {
+    font-weight: bold;
+    float: left;
+  }
+  dd {
+    margin-left: 200px;
+  }
+  dl {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+</style>
+
+{% endblock %}
 {% block content %}
+  <h1>{% trans "Membership application received" %}</h1>
   <div id="member_register">
   {{ content.data }}
   <dl>
@@ -15,6 +32,5 @@
   <dd>{{ sum }} €</dd>
   </dl>
   <p>{% trans "All this has been e-mailed to you as well to address" %} {{ email }}.</p>
-  <p>{% trans "Thank you again." %}</p>
   </div>
 {% endblock %}

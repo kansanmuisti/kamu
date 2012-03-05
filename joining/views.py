@@ -45,7 +45,6 @@ def thankyou(request):
     if not 'joining_newmember' in request.session:
         return HttpResponseRedirect('/')
     newmember = request.session['joining_newmember']
-    del request.session['joining_newmember']
     arg_dict = {}
     arg_dict['content'] = Item.objects.retrieve_content('joining_thankyou')
     arg_dict['reference'] =  newmember.get_reference()
