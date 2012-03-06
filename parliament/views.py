@@ -10,6 +10,7 @@ from sorl.thumbnail import get_thumbnail
 from parliament.models import *
 from social.models import Update
 from httpstatus import Http400
+from datetime import date
 
 def show_item(request, plsess, item_nr, subitem_nr=None):
     query = Q(plsess__url_name=plsess) & Q(number=item_nr)
@@ -95,3 +96,17 @@ def main(request):
 
     return render_to_response('new_main.html', args,
                               context_instance=RequestContext(request))
+
+def list_sessions(request, year=None, month=None):
+    args = {}
+
+    today = date.today()
+
+    if year is None:
+      year = today.year
+      month = today.month
+
+    args["year"] = year
+    args["month"] = month
+
+    return render_to_response('new_sessions.html', args, context_instance=RequestContext(request))
