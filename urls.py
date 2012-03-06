@@ -23,7 +23,7 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
 )
 
-urlpatterns += patterns('votes.views',
+old_urlpatterns = patterns('votes.views',
     url(r'^session/$', 'list_sessions'),
     url(r'^session/(?P<plsess>[\w-]+)/(?P<sess>\d+)/user-vote/$', 'set_session_user_vote'),
     url(r'^session/(?P<plsess>[\w-]+)/(?P<sess>\d+)/(?P<section>[\w]+)/$', 'show_session'),
@@ -48,7 +48,7 @@ urlpatterns += patterns('votes.views',
     url(r'^$', 'about', {'section': 'main'}),
 )
 
-new_patterns = patterns('parliament.views',
+urlpatterns += patterns('parliament.views',
     url(r'^$', 'main'),
     url(r'^ajax/parliament-activity/$', 'get_parliament_activity'),
     url(r'^ajax/mp-some-activity/$', 'get_mp_some_activity'),
@@ -58,7 +58,7 @@ new_patterns = patterns('parliament.views',
 )
 
 urlpatterns += patterns('',
-    url(r'^new/', include(new_patterns)),
+    url(r'^old/', include(old_urlpatterns)),
 )
 
 from tastypie.api import Api
