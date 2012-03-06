@@ -3,7 +3,21 @@
 {% block title %}{% trans "Plenary sessions" %}{% endblock %}
 {% block content %}
 <div id="sessions">
-	{{ year }} {{ month }}
+  <div class="header">
+    <h2>{{ current|date:"F Y"}}</h2>
+    <div class="prev"><a href="{% url parliament.views.list_sessions year=prevmonth.year month=prevmonth.month %}">&lt;</a></div>
+    <div class="next"><a href="{% url parliament.views.list_sessions year=nextmonth.year month=nextmonth.month %}">&gt;</a></div>
+  </div>
+  {% for week in weeks %}
+  <div class="week">
+    {% for day in week %}
+    <div class="day {{ day.weekdayclass }}{% if day.today %} today{% endif %}{% if day.offmonth %} offmonth{%endif%}">
+      <span class="weekday">{{ day.date|date:"l" }}</span>
+      <span class="dayofmonth">{{ day.date|date:"j" }}</span>
+    </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
 </div>
 {% endblock %}
 

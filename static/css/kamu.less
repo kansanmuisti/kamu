@@ -296,7 +296,7 @@
 
 }
 
-#main-page {
+#main-page, #sessions {
 	margin-top: 50px;
 }
 
@@ -365,4 +365,115 @@
         .content {
         	margin-left: 100px;
         }
+}
+
+#sessions {
+	// TODO: variables!
+
+	.header {
+		position: relative;
+		text-align: center;
+		padding: 10px;
+		margin-right: 5px;
+		margin-bottom: 5px;
+		border-top: 1px solid @lightgrey;
+
+		h2 {
+			color: @black;
+			margin-bottom: 0;
+		}
+
+		.prev {
+			position: absolute;
+			top: 10px;
+			left: 10px;
+		}
+
+		.next {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+		}
+
+		.prev, .next {
+			font-size: 20px;
+			font-weight: 700;
+
+			a {
+				color: @grey;
+
+				&:hover {
+					color: @violet;
+					text-decoration: none;
+				}
+			}
+		}
+	}
+
+	width: 120px * 6;
+
+	.week {
+		height: 120px;
+		.clearfix();
+		overflow: hidden;
+	}
+
+	.day {
+		margin-right: 5px;
+		margin-bottom: 5px;
+
+		width: 115px;
+		height: 115px;
+		float: left;
+
+		overflow: hidden;
+		background: @lightgrey;
+
+		&:hover {
+			background: @white;
+		}
+	}
+
+	.today {
+		background: fade(@primary, 30%);
+
+		.dayofmonth {
+			color: @violet;
+		}
+	}
+
+	.offmonth {
+		.dayofmonth {
+			color: @darkgrey;
+		}
+	}
+
+	.weekday {
+		display: block;
+
+		 font-size: 10px;
+		 line-height: 17px;
+		 margin-left: 5px;
+
+		 font-style: italic;
+		 font-weight: normal;
+	}
+
+	.dayofmonth {
+		display: block;
+
+		 font-size: 45px;
+		 line-height: 50px;
+		 font-weight: lighter;
+		 margin-left: 5px;
+	}
+
+	.small {
+		height: 55px;
+
+		.dayofmonth {
+			font-size: 24px;
+			line-height: 30px;
+		}
+	}
 }

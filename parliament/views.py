@@ -10,7 +10,9 @@ from sorl.thumbnail import get_thumbnail
 from parliament.models import *
 from social.models import Update
 from httpstatus import Http400
+from calendar import Calendar
 from datetime import date
+from dateutil.relativedelta import relativedelta
 
 def show_item(request, plsess, item_nr, subitem_nr=None):
     query = Q(plsess__url_name=plsess) & Q(number=item_nr)
@@ -103,10 +105,33 @@ def list_sessions(request, year=None, month=None):
     today = date.today()
 
     if year is None:
-      year = today.year
-      month = today.month
+        year = today.year
+        month = today.month
+    else:
+        year = int(year)
+        month = int(month)
+
+    current = date(year, month, 1)
+    nextmonth = current + relativedelta(months=1)
+    prevmonth = current - relativedelta(months=1)
 
     args["year"] = year
     args["month"] = month
+    args["current"] = current
+    args["prevmonth"] = prevmonth
+    args["nextmonth"] = nextmonth
+
+    cal = Calendar()
+    days = cal.monthdatescalendar(year, month)
+
+    def _date_to_info(d):
+        info = {}
+        info['date'] = d
+        info['weekdayclass'] = "small" if d.weekday() in [5, 6] else "normal"
+        info['today'] = d == today
+        info['offmonth'] = d.month != current.month or d.year != current.year
+        return info
+
+    args["weeks"] = map(lambda w: map(_date_to_info, w), days)
 
     return render_to_response('new_sessions.html', args, context_instance=RequestContext(request))
