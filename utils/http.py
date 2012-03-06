@@ -2,6 +2,7 @@
 import os
 import urllib2
 import hashlib
+from urllib2 import HTTPError
 
 class HttpFetcher(object):
     cache_dir = None
@@ -21,7 +22,13 @@ class HttpFetcher(object):
         fname = '%s/%s/%s' % (self.cache_dir, prefix, hash)
         return fname
 
-    def open_url(self, url, prefix, error_ok=False, return_url=False):
+    def nuke_cache(self, url, prefix):
+        fname = self.get_fname(url, prefix)
+        if not fname:
+            return
+        os.unlink(fname)
+
+    def open_url(self, url, prefix, error_ok=False, return_url=False, force_load=False):
         final_url = None
         fname = None
         if self.cache_dir:

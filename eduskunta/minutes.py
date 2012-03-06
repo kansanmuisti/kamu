@@ -9,6 +9,7 @@ from parliament.models.member import Member
 from parliament.models.session import *
 from eduskunta.importer import Importer, ParseError
 from eduskunta.vote import VoteImporter
+from utils.http import HTTPError
 
 SPEAKER_ADDRESSING = (
     'Herra puhemies', 'Arvoisa puhemies',
@@ -353,12 +354,16 @@ class MinutesImporter(Importer):
         fname_base = m.groups()[0]
         stored_ptk_fn = '%s/%s' % (self.sgml_storage, fname)
 
-        if os.path.exists(stored_ptk_fn):
-            #self.logger.debug("SGML file found, not downloading")
-            pass
-        else:
+        if not os.path.exists(stored_ptk_fn):
             self.logger.debug("downloading SGML file")
-            s = self.open_url(link, 'minutes')
+            try:
+                s = self.open_url(link, 'minutes')
+            except HTTPError:
+                # retry after nuking the cache
+                self.http.nuke_cache(info['minutes_link'], 'minutes')
+                self.open_url(info['minutes_link'], 'minutes')
+                s = self.open_url(link, 'minutes')
+
             f = open(stored_ptk_fn, 'w')
             f.write(s)
             f.close()
