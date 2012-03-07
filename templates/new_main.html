@@ -48,60 +48,61 @@ $ ->
 {% endblock %}
 
 {% block content %}
-<div id="left-column">
-  <div id="navigation">
-    <h3>{% trans "Navigation" %}</h3>
-    <div class="row">
-      <div class="navibox">
-        <a href="#">
-          <img alt="{% trans "Parties" %}" src="{{ MEDIA_URL }}images/puolueet.jpg" />
-          <span class="caption">{% trans "Parties" %}</span>
-        </a>
+<div id="main-page">
+  <div id="left-column">
+    <div id="navigation">
+      <h3>{% trans "Navigation" %}</h3>
+      <div class="row">
+        <div class="navibox">
+          <a href="#">
+            <img alt="{% trans "Parties" %}" src="{{ MEDIA_URL }}images/puolueet.jpg" />
+            <span class="caption">{% trans "Parties" %}</span>
+          </a>
+        </div>
+        <div class="navibox">
+          <a href="#">
+            <img alt="{% trans "MPs" %}" src="{{ MEDIA_URL }}images/marikiviniemi.jpg" />
+            <span class="caption">{% trans "MPs" %}</span>
+          </a>
+        </div>
+        <div class="navibox">
+          <a href="#">
+            <img alt="{% trans "News" %}" src="{{ MEDIA_URL }}images/ajankohtaista.jpg" />
+            <span class="caption">{% trans "News" %}</span>
+          </a>
+        </div>
       </div>
-      <div class="navibox">
-        <a href="#">
-          <img alt="{% trans "MPs" %}" src="{{ MEDIA_URL }}images/marikiviniemi.jpg" />
-          <span class="caption">{% trans "MPs" %}</span>
-        </a>
+    </div>
+
+    <div id="news">
+      <h3>{% trans "News" %}</h3>
+      <div class="post">
+        <h4>Hallitustyökalu avattu</h4>
+        <div class="content">
+          Millaiset hallituspohjat toimisivat oikeasti? Missä tapauksissa jouduttaisiin tekemään eniten kompromisseja? Kamun hallitussuunnittelutyökalu tietää.
+          <a href="#" class="readmore">Lue lisää &gt;</a>
+        </div>
       </div>
-      <div class="navibox">
-        <a href="#">
-          <img alt="{% trans "News" %}" src="{{ MEDIA_URL }}images/ajankohtaista.jpg" />
-          <span class="caption">{% trans "News" %}</span>
-        </a>
+    </div>
+
+    <div id="parliament-activity">
+      <h3>{% trans "Parliament activity feed" %}</h3>
+      <div class="post-list">
+        <div>{{ parl_act_html|safe }}</div>
       </div>
+      <div id="parliament-showmore" class="showmore-link"><a href="#">{% trans "Show more items" %} &or;</a></div>
     </div>
   </div>
 
-  <div id="news">
-    <h3>{% trans "News" %}</h3>
-    <div class="post">
-      <h4>Hallitustyökalu avattu</h4>
-      <div class="content">
-        Millaiset hallituspohjat toimisivat oikeasti? Missä tapauksissa jouduttaisiin tekemään eniten kompromisseja? Kamun hallitussuunnittelutyökalu tietää.
-        <a href="#" class="readmore">Lue lisää &gt;</a>
+  <div id="right-column">
+    <div id="livefeed">
+      <h3 class="grey">{% trans "Social media" %}</h3>
+      <div class="post-list"><div>{{ some_html|safe }}</div></div>
+      <div id="livefeed-showmore" class="showmore-link"><a href="#">{% trans "Show more updates" %} &or;</a></div>
+      <div id="socialmedia">
+        <h3 class="grey">{% trans "Share in social media" %}</h3>
       </div>
     </div>
-  </div>
-
-  <div id="parliament-activity">
-    <h3>{% trans "Parliament activity feed" %}</h3>
-    <div class="post-list">
-      <div>{{ parl_act_html|safe }}</div>
-    </div>
-    <div id="parliament-showmore" class="showmore-link"><a href="#">{% trans "Show more items" %} &or;</a></div>
-  </div>
 </div>
-
-<div id="right-column">
-  <div id="livefeed">
-    <h3 class="grey">{% trans "Social media" %}</h3>
-    <div class="post-list"><div>{{ some_html|safe }}</div></div>
-    <div id="livefeed-showmore" class="showmore-link"><a href="#">{% trans "Show more updates" %} &or;</a></div>
-  <div id="socialmedia">
-    <h3 class="grey">{% trans "Share in social media" %}</h3>
-  </div>
-</div>
-
 {% endblock %}
 
