@@ -14,6 +14,9 @@
     <div class="day {{ day.weekdayclass }}{% if day.today %} today{% endif %}{% if day.offmonth %} offmonth{%endif%}">
       <span class="weekday">{{ day.date|date:"l" }}</span>
       <span class="dayofmonth">{{ day.date|date:"j" }}</span>
+      {% if day.statements > 0 or day.votes > 0 %}<span class="link"><a href="{% url parliament.views.show_session plsess=day.plsess %}">&gt;</a></span>{% endif %}
+      {% if day.statements > 0 %}<span class="statements">{{ day.statements }} puheenvuoroa</span>{% endif %}
+      {% if day.votes > 0 %} <span class="votes">{{ day.votes }} äänestystä</span>{% endif %}
     </div>
     {% endfor %}
   </div>

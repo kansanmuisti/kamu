@@ -124,14 +124,40 @@ def list_sessions(request, year=None, month=None):
     cal = Calendar()
     days = cal.monthdatescalendar(year, month)
 
+    q = Q(nr_votes__gt=0) | Q(nr_statements__gt=0)
+    date_q = Q(plsess__date__gte=current, plsess__date__lte=nextmonth)
+    pl_items = PlenarySessionItem.objects.filter(q & date_q).select_related('plsess').order_by('plsess__date')
+
+    acc = {}
+
+    for pl_item in pl_items:
+        statements, votes, plsess = acc.setdefault(pl_item.plsess.date, (0, 0, None))
+
+        statements += pl_item.nr_statements
+        votes += pl_item.nr_votes
+        plsess = pl_item.plsess.url_name
+
+        acc[pl_item.plsess.date] = statements, votes, plsess
+
     def _date_to_info(d):
         info = {}
         info['date'] = d
         info['weekdayclass'] = "small" if d.weekday() in [5, 6] else "normal"
         info['today'] = d == today
         info['offmonth'] = d.month != current.month or d.year != current.year
+
+        statements, votes, plsess = acc.setdefault(d, (0, 0, None))
+        info["statements"] = statements
+        info["votes"] = votes
+        info["plsess"] = plsess
+
         return info
 
     args["weeks"] = map(lambda w: map(_date_to_info, w), days)
 
     return render_to_response('new_sessions.html', args, context_instance=RequestContext(request))
+
+def show_session(request, plsess):
+    args = {}
+    return render_to_response('new_session.html', args, context_instance=RequestContext(request))
+
