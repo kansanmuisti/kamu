@@ -13,27 +13,32 @@
 @darkgrey: #8e8e8e;
 
 // some helping constants
-@naviboxwidth: 184px;
-@naviboxgutter: 20px;
+@navibox-width: 184px;
+@navibox-gutter: 20px;
 
-@leftcolumnwidth: 3*@naviboxwidth + 2*@naviboxgutter;
-@rightcolumnwidth: 280px;
+// main page columns
+@mainpage-left-column-width: 3*@navibox-width + 2*@navibox-gutter;
+@mainpage-right-column-width: 280px;
 
-@columngutter: 40px;
+// default space between columns
+@column-gutter: 40px;
+
+// page width
+@container-width: @mainpage-left-column-width + @mainpage-right-column-width + @column-gutter;
 
 // default font everywhere
 *, input { font-family: 'Open Sans', Verdana, sans-serif; }
 
 // 
-#full_page {
-	width: @leftcolumnwidth + @rightcolumnwidth + @columngutter;
+#container {
+	width: @container-width;
 	padding: 0 10px;
 	margin: 0 auto;
 }
 
-// TODO: use mixin
-#content:before,#content:after{display:table;content:"";zoom:1;}
-#content:after{clear:both;}
+#main-page {
+	.clearfix();
+}
 
 #loginbar {
 	margin-top: 40px;
@@ -156,14 +161,14 @@
 	}
 }
 
-#left-column {
+#main-page #left-column {
 	float: left;
-	width: @leftcolumnwidth;
+	width: @mainpage-left-column-width;
 }
 
-#right-column {
+#main-page #right-column {
 	float: right;
-	width: @rightcolumnwidth;
+	width: @mainpage-right-column-width;
 }
 
 
@@ -204,12 +209,11 @@
 		padding-bottom: 5px;
 		margin-bottom: 5px;
 		border-bottom: 1px solid @lightgrey;
+
+		.clearfix();
 	}
 
 	margin-bottom: 20px;
-
-	.post:before,.post:after{display:table;content:"";zoom:1;}
-	.post:after{clear:both;}
 }
 
 
@@ -292,8 +296,7 @@
 
 }
 
-// content
-#content {
+#main-page, #sessions {
 	margin-top: 50px;
 }
 
@@ -301,8 +304,8 @@
 	float: left;
 	display: inline;
 
-	width: @naviboxwidth;
-	margin-left: @naviboxgutter;
+	width: @navibox-width;
+	margin-left: @navibox-gutter;
 
 	background: @violet;
 	color: @white;
@@ -327,7 +330,7 @@
 	img {
 		display: block;
 		height: 200px;
-		width: @naviboxwidth;
+		width: @navibox-width;
 		padding: 0;
 		margin: 0;
 	}
@@ -362,4 +365,151 @@
         .content {
         	margin-left: 100px;
         }
+}
+
+#sessions {
+	// TODO: variables!
+
+	.header {
+		position: relative;
+		text-align: center;
+		padding: 10px;
+		margin-right: 5px;
+		margin-bottom: 5px;
+		border-top: 1px solid @lightgrey;
+
+		h2 {
+			color: @black;
+			margin-bottom: 0;
+		}
+
+		.prev {
+			position: absolute;
+			top: 10px;
+			left: 10px;
+		}
+
+		.next {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+		}
+
+		.prev, .next {
+			font-size: 20px;
+			font-weight: 700;
+
+			a {
+				color: @grey;
+
+				&:hover {
+					color: @violet;
+					text-decoration: none;
+				}
+			}
+		}
+	}
+
+	width: 120px * 6;
+
+	.week {
+		height: 120px;
+		.clearfix();
+		overflow: hidden;
+	}
+
+	.day {
+		position: relative;
+
+		margin-right: 5px;
+		margin-bottom: 5px;
+
+		width: 115px;
+		height: 115px;
+		float: left;
+
+		overflow: hidden;
+		background: @lightgrey;
+
+		&:hover {
+			background: @white;
+		}
+	}
+
+	.today {
+		background: fade(@primary, 30%);
+
+		.dayofmonth {
+			color: @violet;
+		}
+	}
+
+	.offmonth {
+		.dayofmonth {
+			color: @darkgrey;
+		}
+	}
+
+	.weekday {
+		display: block;
+
+		font-size: 10px;
+		line-height: 17px;
+		margin-left: 5px;
+
+		font-style: italic;
+		font-weight: normal;
+	}
+
+	.dayofmonth {
+		display: block;
+
+		font-size: 45px;
+		line-height: 50px;
+		font-weight: lighter;
+		margin-left: 5px;
+	}
+
+	.link {
+		display: block;
+
+		position: absolute;
+		width: 40px;
+		height: 30px;
+		top: 0px;
+		right: 0px;
+
+		background: @primary;
+
+		text-align: center;
+		font-size: 20px;
+		line-height: 30px;
+
+		a {
+			color: @white;
+
+			&:hover {
+				text-decoration: none;
+				color: @violet;
+			}
+		}
+	}
+
+	.statements, .votes {
+		display: block;
+
+		font-size: 10px;
+		line-height: 14px;
+		font-weight: normal;
+		margin-left: 5px;
+	}
+
+	.small {
+		height: 55px;
+
+		.dayofmonth {
+			font-size: 24px;
+			line-height: 30px;
+		}
+	}
 }
