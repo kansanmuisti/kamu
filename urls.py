@@ -148,8 +148,8 @@ urlpatterns += patterns('cms.views',
 )
 
 urlpatterns += patterns('joining.views',
-    url(r'^joining/$', 'register'),
-    url(r'^joining/thankyou/$', 'thankyou'),
+    url(r'^liity/$', 'register'),
+    url(r'^liity/kiitos/$', 'thankyou'),
 )
 
 if settings.DEBUG:
