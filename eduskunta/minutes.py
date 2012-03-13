@@ -191,6 +191,9 @@ class MinutesImporter(Importer):
             # FIXME: What to do if more than one item specified...
             pass
         desc_item = desc_item[0]
+        if not desc_item.text and not hdr_el.xpath("knro"):
+            # WORKAROUND
+            return
         desc = self.clean_text(desc_item.text)
 
         nr_el = hdr_el.xpath("knro")
@@ -222,7 +225,7 @@ class MinutesImporter(Importer):
                     # FIXME: add support for multiple references
                     continue
                 raise ParseError("document reference not found")
-            s = ref_el[0].text.strip()
+            s = self.clean_text(ref_el[0].text)
             m = re.match(self.DOC_ID_MATCH, s, re.U)
             if not m:
                 if s == 'HE 37/2009':
@@ -314,7 +317,7 @@ class MinutesImporter(Importer):
 
             vote_ref_list = vote_el.xpath('tulos/aanviit')
             if len(vote_ref_list) == 0:
-                if pl_sess_info['id'] == '88/2007':
+                if pl_sess_info['id'] in ('84/2001', '88/2007', '130/1999'):
                     continue
                 raise ParseError("No vote reference found")
             for ref_el in vote_ref_list:
@@ -329,7 +332,9 @@ class MinutesImporter(Importer):
                     self.logger.warning("mismatch %s != %s (vote #%d)" % (vote_pl_id, pl_sess_info['id'], vote_id[2]))
                     (pid, y) = pl_sess_info['id'].split('/')
                     vote_id = (int(y), pid, vote_id[2])
-
+                vote_full_id = "%d/%s/%d" % vote_id
+                if vote_full_id in ('2006/43/2', '2005/130/11', '2004/78/1'):
+                    continue
                 votes.append({'sub_number': sub_number, 'vote_id': vote_id})
         if votes:
             item_info['votes'] = votes
@@ -340,11 +345,19 @@ class MinutesImporter(Importer):
         self.logger.info("processing minutes for plenary session %s/%s", info['type'], info['id'])
         s = self.open_url(info['minutes_link'], 'minutes')
         doc = html.fromstring(s)
-        doc.make_links_absolute(info['minutes_link'])
         # Find the link to the SGML
         el = doc.xpath(".//a[contains(., 'Rakenteinen asiakirja')]")
         if len(el) != 1:
+            # retry
+            self.http.nuke_cache(info['minutes_link'], 'minutes')
+            s = self.open_url(info['minutes_link'], 'minutes')
+            doc = html.fromstring(s)
+        # Find the link to the SGML
+        el = doc.xpath(".//a[contains(., 'Rakenteinen asiakirja')]")
+
+        if len(el) != 1:
             raise ParseError("No link to SGML file found")
+        doc.make_links_absolute(info['minutes_link'])
         link = el[0].attrib['href']
 
         fname = link.split('/')[-1]
