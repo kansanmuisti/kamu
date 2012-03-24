@@ -12,11 +12,13 @@
 
   <link rel="shortcut icon" href="/static/images/icons/favicon.ico" />
 
-  <!-- twitter bootstrap -->
-  <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css" />
-
   <!-- open sans -->
   <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" type="text/css" />
+
+  <!-- twitter bootstrap -->
+  {% compress css %}
+  <link type="text/less" href="{{ MEDIA_URL }}css/bootstrap.less" rel="stylesheet" />
+  {% endcompress %}
 
   <!-- own css -->
   {% compress css %}
