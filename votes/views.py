@@ -23,6 +23,7 @@ from httpstatus import Http400
 from user_voting.models import Vote as UserVote
 from coffin.shortcuts import render_to_response as render_jinja
 from kamu.opinions.models import Answer, VoteOptionCongruence
+from sorl.thumbnail import get_thumbnail
 
 from kamu.cms.models import Item, Newsitem
 
@@ -110,8 +111,8 @@ def generate_row_html(row):
         if 'link' in val:
             html += '<a href="%s">' % (val['link'])
         if 'img' in val:
-            tn = DjangoThumbnail(val['img'], val['img_dim'].split('x'))
-            html += '<img src="%s" alt="%s" />' % (unicode(tn), val['img_alt'])
+            tn = get_thumbnail(val['img'], val['img_dim'])
+            html += '<img src="%s" alt="%s" />' % (tn.url, val['img_alt'])
         elif 'value' in val:
             html += val['value']
         if 'link' in val:
