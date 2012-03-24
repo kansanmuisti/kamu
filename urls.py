@@ -57,6 +57,7 @@ urlpatterns += patterns('parliament.views',
     url(r'^session/(?P<plsess>[\w-]+)/$', 'show_session'),
     url(r'^session/(?P<plsess>[\w-]+)/(?P<item_nr>\d+)/$', 'show_item'),
     url(r'^session/(?P<plsess>[\w-]+)/(?P<item_nr>\d+)/(?P<subitem_nr>\d+)/$', 'show_item'),
+    url(r'^member/$', 'list_members'),
     url(r'^member/(?P<member>[-\w]+)/$', 'show_member'),
 )
 
