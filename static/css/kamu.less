@@ -41,7 +41,7 @@
 }
 
 // Columns
-#main-page, #sessions {
+#main-page, .two-column-subpage {
 	margin-top: 50px;
 }
 
@@ -59,7 +59,7 @@
 	}
 }
 
-#sessions {
+.two-column-subpage {
 	.clearfix();
 
 	#left-column {
@@ -215,6 +215,10 @@
 			color: @violet;
 		}
 	}
+}
+
+small {
+	font-size: 10px;
 }
 
 h2 {
@@ -518,6 +522,20 @@ h3 {
 		.dayofmonth {
 			font-size: 24px;
 			line-height: 30px;
+		}
+	}
+}
+
+// Members
+#members {
+	.header {
+		h2 {
+			margin-bottom: 10px;
+		}
+
+		small.legend {
+			display: block;
+			margin-bottom: 20px;
 		}
 	}
 }
