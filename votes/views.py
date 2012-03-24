@@ -617,7 +617,7 @@ def list_members(request):
         row_list.append(generate_row_html(col_vals))
     table_html = "".join(row_list)
 
-    return render_to_response('members.html',
+    return render_to_response('new_members.html',
                              {'member_page': member_page, 'switch_term': True,
                               'switch_district': True, 'switch_county': True,
                               'hdr': hdr_html,
