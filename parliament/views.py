@@ -14,7 +14,7 @@ from calendar import Calendar
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
-import votes.views
+import parliament.member_views
 
 def show_item(request, plsess, item_nr, subitem_nr=None):
     query = Q(plsess__url_name=plsess) & Q(number=item_nr)
@@ -164,4 +164,4 @@ def show_session(request, plsess):
     return render_to_response('new_session.html', args, context_instance=RequestContext(request))
 
 def list_members(request):
-    return votes.views.list_members(request)
+    return parliament.member_views.list_members(request)

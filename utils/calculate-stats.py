@@ -15,7 +15,7 @@ setup_environ(settings)
 
 from django import db
 from django.db import connection
-from kamu.votes.models import *
+from parliament.models import *
 
 def get_vote_choice(count):
         if count['Y'] > count['N']:
@@ -40,10 +40,10 @@ def process_votes(pl, ml, sess):
         if vote.member_id not in ml:
             logger.error("Member %d not found" % vote.member_id)
         member = ml[vote.member_id]
-        if vote.party not in pl:
-            logger.warning("%s: Party '%s' not found" %
-                         (unicode(vote), vote.party))
-        party = pl[member.party.name]
+        #if vote.party.pk not in pl:
+        #    logger.warning("%s: Party '%s' not found" %
+        #                 (unicode(vote), vote.party))
+        party = pl[member.party.pk]
         party.vote_count[vote.vote] += 1
         total_count[vote.vote] += 1
         # Count total votes
@@ -67,7 +67,7 @@ def process_votes(pl, ml, sess):
             member.party_agree = { True: 0, False: 0 }
             member.session_agree = { True: 0, False: 0 }
 
-        party = pl[member.party.name]
+        party = pl[member.party.pk]
 
         if vote.vote != 'Y' and vote.vote != 'N':
             continue
@@ -84,7 +84,7 @@ def process_votes(pl, ml, sess):
 
 def tally_votes(party_list, member_list, begin, end):
     ps_list = PlenarySession.objects.between(begin, end).values_list('pk', flat=True)
-    session_list = Session.objects.filter(plenary_session__in=ps_list)
+    session_list = PlenaryVote.objects.filter(plsess__in=ps_list)
 
     pl = {}
     for party in party_list:
@@ -129,7 +129,8 @@ def update_stats(party_list, member_list, begin, end):
         ms.vote_counts = ','.join(vcnt)
         ms.party_agreement = "%d,%d" % (m.party_agree[True], m.party_agree[False])
         ms.session_agreement = "%d,%d" % (m.session_agree[True], m.session_agree[False])
-        query = Statement.objects.between(begin, end).filter(member=m)
+        plsess = PlenarySession.objects.between(begin, end)
+        query = Statement.objects.filter(item__plsess__in=plsess, member=m)
         ms.statement_count = query.count()
         ms.save()
 
