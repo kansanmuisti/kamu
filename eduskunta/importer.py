@@ -142,3 +142,50 @@ class Importer(object):
             url = None
 
         return (ret, url)
+
+    def download_sgml_doc(self, html_url):
+        s = self.open_url(html_url, self.doc_type)
+        doc = html.fromstring(s)
+        # Find the link to the SGML
+        el = doc.xpath(".//a[contains(., 'Rakenteinen asiakirja')]")
+        if len(el) != 1:
+            # retry
+            self.http.nuke_cache(html_url, self.doc_type)
+            s = self.open_url(html_url, self.doc_type)
+            doc = html.fromstring(s)
+        # Find the link to the SGML
+        el = doc.xpath(".//a[contains(., 'Rakenteinen asiakirja')]")
+
+        if len(el) != 1:
+            raise ParseError("No link to SGML file found")
+        doc.make_links_absolute(html_url)
+        link = el[0].attrib['href']
+
+        fname = link.split('/')[-1]
+        m = re.match(r'^([a-z0-9_]+)\.sgm$', fname)
+        if not m:
+            raise ParseError("SGML filename invalid")
+        fname_base = m.groups()[0]
+        stored_sgml_fn = '%s/%s' % (self.sgml_storage, fname)
+
+        if not os.path.exists(stored_sgml_fn):
+            self.logger.debug("downloading SGML file")
+            try:
+                s = self.open_url(link, self.doc_type)
+            except HTTPError:
+                # retry after nuking the cache
+                self.http.nuke_cache(html_url, self.doc_type)
+                self.open_url(html_url, self.doc_type)
+                s = self.open_url(link, self.doc_type)
+            f = open(stored_sgml_fn, 'w')
+            f.write(s)
+            f.close()
+
+        xml_fn = '%s/%s.xml' % (self.xml_storage, fname_base)
+        if not os.path.exists(xml_fn):
+            ret = os.spawnv(os.P_WAIT, self.sgml_to_xml,
+                            [self.SGML_TO_XML, stored_sgml_fn, xml_fn])
+            if ret:
+                raise ParseError("SGML-to-XML conversion failed")
+
+        return xml_fn

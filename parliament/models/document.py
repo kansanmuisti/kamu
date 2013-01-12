@@ -22,18 +22,24 @@ class Document(models.Model):
     subject = models.TextField()
     summary = models.TextField(blank=True, null=True)
 
+    version = models.CharField(max_length=10, null=True)
+    update_time = models.DateTimeField(blank=True, null=True)
+    error = models.CharField(max_length=50, blank=True, null=True)
+
     related_docs = models.ManyToManyField("self")
     keywords = models.ManyToManyField(Keyword)
 
     def save(self, *args, **kwargs):
         if not self.url_name:
             # only do this with the first save
-            self.url_name = slugify("%s %s" % (self.type, self.name))
+            s = "%s %s" % (self.type, self.name)
+            s = s.replace('/', '-')
+            self.url_name = slugify(s)
         super(Document, self).save(*args, **kwargs)
     def __unicode__(self):
         return "%s %s" % (self.type, self.name)
 
     class Meta:
         app_label = 'parliament'
-        unique_together = (('type', 'id'),)
+        unique_together = (('type', 'name'),)
         ordering = ('date',)

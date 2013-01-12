@@ -1,13 +1,13 @@
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
         # Adding model 'Keyword'
         db.create_table('parliament_keyword', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -20,17 +20,20 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('type', self.gf('django.db.models.fields.CharField')(max_length=5, db_index=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=20, db_index=True)),
-            ('url_name', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=20, db_index=True)),
+            ('url_name', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=20)),
             ('date', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
             ('info_link', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
             ('sgml_link', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
             ('subject', self.gf('django.db.models.fields.TextField')()),
             ('summary', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('version', self.gf('django.db.models.fields.CharField')(max_length=10, null=True)),
+            ('update_time', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('error', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
         ))
         db.send_create_signal('parliament', ['Document'])
 
-        # Adding unique constraint on 'Document', fields ['type', 'id']
-        db.create_unique('parliament_document', ['type', 'id'])
+        # Adding unique constraint on 'Document', fields ['type', 'name']
+        db.create_unique('parliament_document', ['type', 'name'])
 
         # Adding M2M table for field related_docs on 'Document'
         db.create_table('parliament_document_related_docs', (
@@ -77,7 +80,7 @@ class Migration(SchemaMigration):
             ('term', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['parliament.Term'])),
             ('date', self.gf('django.db.models.fields.DateField')(db_index=True)),
             ('info_link', self.gf('django.db.models.fields.URLField')(max_length=200)),
-            ('url_name', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=20, db_index=True)),
+            ('url_name', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=20)),
             ('origin_id', self.gf('django.db.models.fields.CharField')(db_index=True, max_length=50, null=True, blank=True)),
             ('origin_version', self.gf('django.db.models.fields.CharField')(max_length=10, null=True, blank=True)),
             ('import_time', self.gf('django.db.models.fields.DateTimeField')()),
@@ -92,6 +95,9 @@ class Migration(SchemaMigration):
             ('sub_number', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
             ('type', self.gf('django.db.models.fields.CharField')(max_length=15)),
             ('description', self.gf('django.db.models.fields.CharField')(max_length=1000)),
+            ('sub_description', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
+            ('nr_votes', self.gf('django.db.models.fields.IntegerField')(db_index=True, null=True, blank=True)),
+            ('nr_statements', self.gf('django.db.models.fields.IntegerField')(db_index=True, null=True, blank=True)),
         ))
         db.send_create_signal('parliament', ['PlenarySessionItem'])
 
@@ -159,7 +165,7 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=50)),
             ('origin_id', self.gf('django.db.models.fields.CharField')(db_index=True, max_length=20, unique=True, null=True, blank=True)),
-            ('url_name', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=50, db_index=True)),
+            ('url_name', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=50)),
             ('birth_date', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
             ('birth_place', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
             ('given_names', self.gf('django.db.models.fields.CharField')(max_length=50)),
@@ -259,23 +265,63 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('parliament', ['PartyAssociation'])
 
+        # Adding model 'MemberActivity'
+        db.create_table('parliament_memberactivity', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('member', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['parliament.Member'])),
+            ('date', self.gf('django.db.models.fields.DateField')(db_index=True)),
+            ('weight', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('type', self.gf('django.db.models.fields.CharField')(max_length=5, db_index=True)),
+        ))
+        db.send_create_signal('parliament', ['MemberActivity'])
+
         # Adding model 'InitiativeActivity'
         db.create_table('parliament_initiativeactivity', (
-            ('memberactivity_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['models.MemberActivity'], unique=True, primary_key=True)),
+            ('memberactivity_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['parliament.MemberActivity'], unique=True, primary_key=True)),
             ('doc', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['parliament.Document'])),
         ))
         db.send_create_signal('parliament', ['InitiativeActivity'])
 
         # Adding model 'CommitteeDissentActivity'
         db.create_table('parliament_committeedissentactivity', (
-            ('memberactivity_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['models.MemberActivity'], unique=True, primary_key=True)),
+            ('memberactivity_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['parliament.MemberActivity'], unique=True, primary_key=True)),
             ('doc', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['parliament.Document'])),
         ))
         db.send_create_signal('parliament', ['CommitteeDissentActivity'])
 
+        # Adding model 'MemberSocialFeed'
+        db.create_table('parliament_membersocialfeed', (
+            ('feed_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['social.Feed'], unique=True, primary_key=True)),
+            ('member', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['parliament.Member'])),
+        ))
+        db.send_create_signal('parliament', ['MemberSocialFeed'])
+
+        # Adding model 'FundingSource'
+        db.create_table('parliament_fundingsource', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=120, null=True, blank=True)),
+        ))
+        db.send_create_signal('parliament', ['FundingSource'])
+
+        # Adding model 'Funding'
+        db.create_table('parliament_funding', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('type', self.gf('django.db.models.fields.CharField')(max_length=6)),
+            ('member', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['parliament.Member'])),
+            ('term', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['parliament.Term'])),
+            ('source', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['parliament.FundingSource'], null=True, blank=True)),
+            ('amount', self.gf('django.db.models.fields.DecimalField')(max_digits=10, decimal_places=2)),
+        ))
+        db.send_create_signal('parliament', ['Funding'])
+
+        # Adding unique constraint on 'Funding', fields ['member', 'term', 'type', 'source']
+        db.create_unique('parliament_funding', ['member_id', 'term_id', 'type', 'source_id'])
+
 
     def backwards(self, orm):
-        
+        # Removing unique constraint on 'Funding', fields ['member', 'term', 'type', 'source']
+        db.delete_unique('parliament_funding', ['member_id', 'term_id', 'type', 'source_id'])
+
         # Removing unique constraint on 'DistrictAssociation', fields ['member', 'begin']
         db.delete_unique('parliament_districtassociation', ['member_id', 'begin'])
 
@@ -294,8 +340,8 @@ class Migration(SchemaMigration):
         # Removing unique constraint on 'PlenarySessionItem', fields ['plsess', 'number', 'sub_number']
         db.delete_unique('parliament_plenarysessionitem', ['plsess_id', 'number', 'sub_number'])
 
-        # Removing unique constraint on 'Document', fields ['type', 'id']
-        db.delete_unique('parliament_document', ['type', 'id'])
+        # Removing unique constraint on 'Document', fields ['type', 'name']
+        db.delete_unique('parliament_document', ['type', 'name'])
 
         # Deleting model 'Keyword'
         db.delete_table('parliament_keyword')
@@ -360,26 +406,30 @@ class Migration(SchemaMigration):
         # Deleting model 'PartyAssociation'
         db.delete_table('parliament_partyassociation')
 
+        # Deleting model 'MemberActivity'
+        db.delete_table('parliament_memberactivity')
+
         # Deleting model 'InitiativeActivity'
         db.delete_table('parliament_initiativeactivity')
 
         # Deleting model 'CommitteeDissentActivity'
         db.delete_table('parliament_committeedissentactivity')
 
+        # Deleting model 'MemberSocialFeed'
+        db.delete_table('parliament_membersocialfeed')
+
+        # Deleting model 'FundingSource'
+        db.delete_table('parliament_fundingsource')
+
+        # Deleting model 'Funding'
+        db.delete_table('parliament_funding')
+
 
     models = {
-        'models.memberactivity': {
-            'Meta': {'ordering': "('date', 'member__name')", 'object_name': 'MemberActivity'},
-            'date': ('django.db.models.fields.DateField', [], {'db_index': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'member': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['parliament.Member']"}),
-            'type': ('django.db.models.fields.CharField', [], {'max_length': '5', 'db_index': 'True'}),
-            'weight': ('django.db.models.fields.PositiveIntegerField', [], {})
-        },
         'parliament.committeedissentactivity': {
-            'Meta': {'ordering': "('date', 'member__name')", 'object_name': 'CommitteeDissentActivity', '_ormbases': ['models.MemberActivity']},
+            'Meta': {'ordering': "('date', 'member__name')", 'object_name': 'CommitteeDissentActivity', '_ormbases': ['parliament.MemberActivity']},
             'doc': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['parliament.Document']"}),
-            'memberactivity_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['models.MemberActivity']", 'unique': 'True', 'primary_key': 'True'})
+            'memberactivity_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['parliament.MemberActivity']", 'unique': 'True', 'primary_key': 'True'})
         },
         'parliament.district': {
             'Meta': {'object_name': 'District'},
@@ -397,8 +447,9 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'})
         },
         'parliament.document': {
-            'Meta': {'ordering': "('date',)", 'unique_together': "(('type', 'id'),)", 'object_name': 'Document'},
+            'Meta': {'ordering': "('date',)", 'unique_together': "(('type', 'name'),)", 'object_name': 'Document'},
             'date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
+            'error': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'info_link': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'keywords': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['parliament.Keyword']", 'symmetrical': 'False'}),
@@ -408,12 +459,28 @@ class Migration(SchemaMigration):
             'subject': ('django.db.models.fields.TextField', [], {}),
             'summary': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'type': ('django.db.models.fields.CharField', [], {'max_length': '5', 'db_index': 'True'}),
-            'url_name': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '20', 'db_index': 'True'})
+            'update_time': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'url_name': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '20'}),
+            'version': ('django.db.models.fields.CharField', [], {'max_length': '10', 'null': 'True'})
+        },
+        'parliament.funding': {
+            'Meta': {'unique_together': "(('member', 'term', 'type', 'source'),)", 'object_name': 'Funding'},
+            'amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '10', 'decimal_places': '2'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'member': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['parliament.Member']"}),
+            'source': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['parliament.FundingSource']", 'null': 'True', 'blank': 'True'}),
+            'term': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['parliament.Term']"}),
+            'type': ('django.db.models.fields.CharField', [], {'max_length': '6'})
+        },
+        'parliament.fundingsource': {
+            'Meta': {'object_name': 'FundingSource'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '120', 'null': 'True', 'blank': 'True'})
         },
         'parliament.initiativeactivity': {
-            'Meta': {'ordering': "('date', 'member__name')", 'object_name': 'InitiativeActivity', '_ormbases': ['models.MemberActivity']},
+            'Meta': {'ordering': "('date', 'member__name')", 'object_name': 'InitiativeActivity', '_ormbases': ['parliament.MemberActivity']},
             'doc': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['parliament.Document']"}),
-            'memberactivity_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['models.MemberActivity']", 'unique': 'True', 'primary_key': 'True'})
+            'memberactivity_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['parliament.MemberActivity']", 'unique': 'True', 'primary_key': 'True'})
         },
         'parliament.keyword': {
             'Meta': {'object_name': 'Keyword'},
@@ -435,8 +502,16 @@ class Migration(SchemaMigration):
             'phone': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True', 'blank': 'True'}),
             'photo': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
             'surname': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'url_name': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'}),
+            'url_name': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50'}),
             'wikipedia_link': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
+        },
+        'parliament.memberactivity': {
+            'Meta': {'ordering': "('date', 'member__name')", 'object_name': 'MemberActivity'},
+            'date': ('django.db.models.fields.DateField', [], {'db_index': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'member': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['parliament.Member']"}),
+            'type': ('django.db.models.fields.CharField', [], {'max_length': '5', 'db_index': 'True'}),
+            'weight': ('django.db.models.fields.PositiveIntegerField', [], {})
         },
         'parliament.memberseat': {
             'Meta': {'unique_together': "(('member', 'begin', 'end'), ('seat', 'begin', 'end'))", 'object_name': 'MemberSeat'},
@@ -445,6 +520,11 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'member': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['parliament.Member']"}),
             'seat': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['parliament.Seat']"})
+        },
+        'parliament.membersocialfeed': {
+            'Meta': {'object_name': 'MemberSocialFeed', '_ormbases': ['social.Feed']},
+            'feed_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['social.Feed']", 'unique': 'True', 'primary_key': 'True'}),
+            'member': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['parliament.Member']"})
         },
         'parliament.memberstats': {
             'Meta': {'object_name': 'MemberStats'},
@@ -486,14 +566,17 @@ class Migration(SchemaMigration):
             'origin_id': ('django.db.models.fields.CharField', [], {'db_index': 'True', 'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'origin_version': ('django.db.models.fields.CharField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
             'term': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['parliament.Term']"}),
-            'url_name': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '20', 'db_index': 'True'})
+            'url_name': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '20'})
         },
         'parliament.plenarysessionitem': {
             'Meta': {'ordering': "('-plsess__date', '-number', '-sub_number')", 'unique_together': "(('plsess', 'number', 'sub_number'),)", 'object_name': 'PlenarySessionItem'},
             'description': ('django.db.models.fields.CharField', [], {'max_length': '1000'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'nr_statements': ('django.db.models.fields.IntegerField', [], {'db_index': 'True', 'null': 'True', 'blank': 'True'}),
+            'nr_votes': ('django.db.models.fields.IntegerField', [], {'db_index': 'True', 'null': 'True', 'blank': 'True'}),
             'number': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'plsess': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['parliament.PlenarySession']"}),
+            'sub_description': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'sub_number': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'type': ('django.db.models.fields.CharField', [], {'max_length': '15'})
         },
@@ -559,6 +642,15 @@ class Migration(SchemaMigration):
             'party': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
             'session': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['parliament.PlenaryVote']"}),
             'vote': ('django.db.models.fields.CharField', [], {'max_length': '1', 'db_index': 'True'})
+        },
+        'social.feed': {
+            'Meta': {'unique_together': "(('type', 'origin_id'),)", 'object_name': 'Feed'},
+            'account_name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'last_update': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'db_index': 'True'}),
+            'origin_id': ('django.db.models.fields.CharField', [], {'max_length': '25', 'db_index': 'True'}),
+            'type': ('django.db.models.fields.CharField', [], {'max_length': '2'}),
+            'update_error_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'})
         }
     }
 

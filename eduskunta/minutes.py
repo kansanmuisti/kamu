@@ -69,6 +69,7 @@ class MinutesImporter(Importer):
 
         self.sgml_storage = os.path.join(my_path, sgml_storage)
         self.xml_storage = os.path.join(my_path, xml_storage)
+        self.doc_type = "minutes"
 
         super(MinutesImporter, self).__init__(*args, **kwargs)
 
@@ -343,55 +344,11 @@ class MinutesImporter(Importer):
 
     def process_minutes(self, info):
         self.logger.info("processing minutes for plenary session %s/%s", info['type'], info['id'])
-        s = self.open_url(info['minutes_link'], 'minutes')
-        doc = html.fromstring(s)
-        # Find the link to the SGML
-        el = doc.xpath(".//a[contains(., 'Rakenteinen asiakirja')]")
-        if len(el) != 1:
-            # retry
-            self.http.nuke_cache(info['minutes_link'], 'minutes')
-            s = self.open_url(info['minutes_link'], 'minutes')
-            doc = html.fromstring(s)
-        # Find the link to the SGML
-        el = doc.xpath(".//a[contains(., 'Rakenteinen asiakirja')]")
 
-        if len(el) != 1:
-            raise ParseError("No link to SGML file found")
-        doc.make_links_absolute(info['minutes_link'])
-        link = el[0].attrib['href']
-
-        fname = link.split('/')[-1]
-        m = re.match(r'^([a-z0-9_]+)\.sgm$', fname)
-        if not m:
-            raise ParseError("SGML filename invalid")
-        fname_base = m.groups()[0]
-        stored_ptk_fn = '%s/%s' % (self.sgml_storage, fname)
-
-        if not os.path.exists(stored_ptk_fn):
-            self.logger.debug("downloading SGML file")
-            try:
-                s = self.open_url(link, 'minutes')
-            except HTTPError:
-                # retry after nuking the cache
-                self.http.nuke_cache(info['minutes_link'], 'minutes')
-                self.open_url(info['minutes_link'], 'minutes')
-                s = self.open_url(link, 'minutes')
-
-            f = open(stored_ptk_fn, 'w')
-            f.write(s)
-            f.close()
-
-        xml_fn = '%s/%s.xml' % (self.xml_storage, fname_base)
-        if not os.path.exists(xml_fn):
-            ret = os.spawnv(os.P_WAIT, self.sgml_to_xml,
-                            [self.SGML_TO_XML, stored_ptk_fn, xml_fn])
-            if ret:
-                raise ParseError("SGML-to-XML conversion failed")
-
+        xml_fn = self.download_sgml_doc(info['minutes_link'])
         f = open(xml_fn, 'r')
-        s = f.read()
+        root = etree.fromstring(f.read())
         f.close()
-        root = etree.fromstring(s)
 
         # process ident info
         el = root

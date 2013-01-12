@@ -52,3 +52,7 @@ class MemberSeatResource(ModelResource):
     member = fields.ForeignKey(MemberResource, 'member')
     class Meta:
         queryset = MemberSeat.objects.all()
+
+class DocumentResource(ModelResource):
+    class Meta:
+        queryset = Document.objects.all()

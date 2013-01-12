@@ -1,0 +1,380 @@
+# -*- coding: utf-8 -*-
+import os
+import re
+from lxml import etree, html
+from django import db
+from eduskunta.importer import Importer, ParseError
+from eduskunta.vote import VoteImporter
+from utils.http import HTTPError
+from parliament.models import Document
+
+DOC_LIST_URL = "http://www.eduskunta.fi/triphome/bin/vex3000.sh?TUNNISTE=%s&PVMVP1=1999"
+#DOC_LIST_URL = "http://www.eduskunta.fi/triphome/bin/vex3000.sh?TUNNISTE=%s&PVMVP1=2003&PVMVP2=2006"
+DOC_DL_URL = "http://www.eduskunta.fi/triphome/bin/akxhref2.sh?{KEY}=%s+%s"
+DOC_PROCESS_URL = "http://www.eduskunta.fi/triphome/bin/vex3000.sh?TUNNISTE=%s+%s"
+HE_URL = "http://217.71.145.20/TRIPviewer/temp/TUNNISTE_HE_%i_%i_fi.html"
+DOC_TYPES = ["HE", "LA",
+        #"TPA", "TA", "KA", "LTA",
+        #"VK", "VNT",
+        #"KK", "TAA"
+]
+SKIP_DOCS = [
+    'KA 4/2008', 'KA 6/2007', 'YmVM 10/2006', 'HE 103/2004',
+    'LA 4/2003',
+    'HE 113/2011', # corrupt HTML representation
+    'HE 149/2012', # temporarily
+    'LA 21/2011', # 'Ilmoitus peruuttamisesta' missing
+    'LA 48/2012', # missing date of committee hearing
+]
+
+def should_download_doc(doc):
+    if doc['type'] not in DOC_TYPES and not doc['type'].endswith('VM'):
+        return False
+    if "%s %s" % (doc['type'], doc['id']) in SKIP_DOCS:
+        return False
+    return True
+
+class DocImporter(Importer):
+    SGML_TO_XML = 'sgml-to-xml.sh'
+
+    def __init__(self, *args, **kwargs):
+        try:
+            sgml_storage = kwargs.pop('sgml_storage')
+        except KeyError:
+            sgml_storage = 'doc_sgml'
+        try:
+            xml_storage = kwargs.pop('xml_storage')
+        except KeyError:
+            xml_storage = 'doc_xml'
+
+        my_path = os.path.dirname(os.path.realpath(__file__))
+        self.sgml_to_xml = os.path.join(my_path, self.SGML_TO_XML)
+
+        self.sgml_storage = os.path.join(my_path, sgml_storage)
+        self.xml_storage = os.path.join(my_path, xml_storage)
+        self.doc_type = "docs"
+
+        super(DocImporter, self).__init__(*args, **kwargs)
+
+    def fetch_processing_info(self, info):
+        url = DOC_PROCESS_URL % (info['type'], info['id'])
+        doc_name = "%s %s" % (info['type'], info['id'])
+        self.logger.info('updating processing info for %s %s' % (info['type'], info['id']))
+        s = self.open_url(url, 'docs')
+        html_doc = html.fromstring(s)
+
+        subj_el = html_doc.xpath(".//div[@class='listing']/div[1]/div[1]/h3")
+        assert len(subj_el) == 1
+        info['subject'] = self.clean_text(subj_el[0].text)
+
+        names = {'vireil': ('intro', (u'Annettu eduskunnalle', u'Aloite jätetty')),
+                 'lahete': ('debate', u'Lähetekeskustelu'),
+                 'valiok': ('committee', u'Valiokuntakäsittely'),
+                 'poydal': ('agenda', u'Valiokunnan mietinnön pöydällepano'),
+                 '1kasit': ('1stread', u'Ensimmäinen käsittely'),
+                 '2kasit': ('2ndread', u'Toinen käsittely'),
+                 '3kasit': ('3ndread', u'Kolmas käsittely'),
+                 'paat': ('finished', None),
+                 'akasit': ('onlyread', u'Ainoa käsittely'),
+                 'akja2k': ('only2read', u'Ainoa ja toinen käsittely'),
+                 '3kjaak': ('only3read', u'Kolmas ja ainoa käsittely'),
+                 'peru': ('cancelled', u'Ilmoitus peruuttamisesta'),
+                 'rauennut': ('lapsed', None),
+                 'raue': ('lapsed', None),
+                 'jatlep': ('suspended', None),
+        }
+
+        img_els = html_doc.xpath("//div[@id='vepsasia-kasittely']/img")
+        assert len(img_els)
+        phases = []
+        for img in img_els:
+            s = img.attrib['src']
+            m = re.match('/thwfakta/yht/kuvat/palkki/ve([a-z0-9]+)_(\d)\.gif', s)
+            phase = m.groups()[0]
+            status = int(m.groups()[1])
+            if not phase in names:
+                raise ParseError("unknown processing phase %s" % phase)
+            assert status in (1, 2, 3)
+            l = names[phase]
+            phase = l[0]
+            phases.append((phase, status, l[1]))
+
+        last_phase = phases[-1][0]
+        phase_list = []
+        for idx, (phase, status, el_name) in enumerate(phases):
+            if not el_name or status != 3:
+                continue
+            box_el_list = html_doc.xpath("//div[@class='listborder']//h2")
+            # quirks
+            if doc_name == 'HE 25/2009' and phase == '2ndread':
+                el_name = names['akja2k'][1]
+            if doc_name == 'HE 112/2011':
+                if phase == '2ndread':
+                    continue
+                if phase == '1stread':
+                    phase = 'onlyread'
+                    el_name = names['akasit'][1]
+            for box_el in box_el_list:
+                s = box_el.text_content().strip().strip('.')
+                if isinstance(el_name, tuple):
+                    if s not in el_name:
+                        continue
+                else:
+                    if el_name != s:
+                        continue
+                parent_el = box_el.getparent().getparent()
+                break
+            else:
+                if phase == 'committee' and last_phase in ('cancelled', 'lapsed'):
+                    continue
+                self.logger.warning("processing stage '%s' not found" % el_name)
+                continue
+            if phase == 'committee':
+                el_list = parent_el.xpath(".//div[contains(., 'Valmistunut')]")
+                date_list = []
+                for date_el in el_list:
+                    date = date_el.tail.strip()
+                    (d, m, y) = date.split('.')
+                    date = '-'.join((y, m, d))
+                    date_list.append(date)
+                if not date_list and last_phase in ('cancelled', 'lapsed'):
+                    continue
+                date = max(date_list)
+            else:
+                date_el = parent_el.xpath(".//div[.='Pvm']")
+                assert len(date_el) == 1
+                date = date_el[0].tail.strip()
+                (d, m, y) = date.split('.')
+                date = '-'.join((y, m, d))
+            phase_list.append((idx, phase, date))
+            #print "%s: %s" % (phase, date)
+        info['phases'] = phase_list
+
+        kw_list = []
+        kw_el_list = html_doc.xpath(".//div[@id='vepsasia-asiasana']//div[@class='linkspace']/a")
+        for kw in kw_el_list:
+            kw = kw.text.strip()
+            kw_list.append(kw)
+        if not len(kw_list):
+            info['error'] = "No keywords"
+            self.logger.warning("No keywords associated with document")
+        info['keywords'] = kw_list
+
+        return info
+
+    def parse_te_paragraphs(self, root_el):
+        p_list = root_el.xpath('//te')
+        paras = []
+        for p_el in p_list:
+            text = self.clean_text(p_el.text_content())
+            paras.append(text)
+        return '\n'.join(paras)
+
+    def import_sgml_doc(self, info):
+        url = DOC_DL_URL % (info['type'], info['id'])
+        xml_fn = self.download_sgml_doc(url)
+        f = open(xml_fn, 'r')
+        root = html.fromstring(f.read())
+        f.close()
+        
+        el_list = root.xpath('.//ident/nimike')
+        assert len(el_list) >= 1
+        el = el_list[0]
+        text = self.clean_text(el.text)
+        print('%s %s: %s' % (info['type'], info['id'], text))
+        info['subject'] = text
+
+        if info['type'].endswith('VM'):
+            el_name_list = ('asianvir', 'emasianv')
+        else:
+            el_name_list = ('peruste', 'paasis', 'yleisper')
+        for el_name in el_name_list:
+            l = root.xpath('.//%s' % el_name)
+            if not len(l):
+                continue
+            assert len(l) == 1
+            target_el = l[0]
+            break
+        else:
+            raise ParseError('Summary section not found')
+
+        info['summary'] = self.parse_te_paragraphs(target_el)
+        return info
+
+    def parse_he(self, info, he_str):
+        html_doc = html.fromstring(he_str)
+        elem_list = html_doc.xpath(".//p[@class='Normaali']")
+        ELEM_CL = ['LLEsityksenPaaSis',
+                'LLEsityksenp-00e4-00e4asiallinensis-00e4lt-00f6',
+                'LLVSEsityksenp-00e4-00e4asiallinensis-00e4lt-00f6',
+                'LLPaaotsikko']
+        for cl in ELEM_CL:
+            elem = html_doc.xpath(".//p[@class='%s']" % cl)
+            if elem:
+                break
+        if not elem:
+            self.logger.error("no header found (doc len %d)" % len(he_str))
+            info['error'] = "No header found"
+            return info
+        # Choose the first header. Sometimes they are replicated. *sigh*
+        elem = elem[0].getnext()
+        p_list = []
+        if 'class' in elem.attrib and elem.attrib['class'] == 'LLNormaali' and \
+                elem.getnext().attrib['class'] == 'LLKappalejako':
+            elem = elem.getnext()
+        while elem is not None:
+            if elem.tag != 'p':
+                print elem.tag
+                break
+            OK_CLASS = ('LLKappalejako', 'LLJohtolauseKappaleet',
+                        'LLVoimaantulokappale',
+                        'LLKappalejako-0020Char-0020Char-0020Char', # WTF
+            )
+            if not 'class' in elem.attrib or elem.attrib['class'] not in OK_CLASS:
+                break
+            p_list.append(elem)
+            elem = elem.getnext()
+        BREAK_CLASS = ('LLNormaali', 'LLYleisperustelut', 'LLPerustelut',
+                    'LLperustelut', 'LLNormaali-0020Char', 'Normaali', 'LLSisallysluettelo')
+        if 'class' in elem.attrib and elem.attrib['class'] not in BREAK_CLASS:
+            self.logger.error("Mystery class: %s" % elem.attrib)
+            info['error'] = "Invalid CSS class"
+            return info
+        if not p_list:
+            self.logger.error("No summary found")
+            info['error'] = "No summary found"
+            return info
+
+        text_list = []
+        def append_text(elem, no_append=False):
+            text = ''
+            if elem.text:
+                text = elem.text.replace('\r', '').replace('\n', '').strip()
+                text = text.replace('&nbsp;', '')
+            if elem.getchildren():
+                for ch in elem.getchildren():
+                    text += append_text(ch, no_append=True)
+            if len(text) < 15 and u'\u2014' in text:
+                return
+            if no_append:
+                return text
+            text = text.strip()
+            if text:
+                text_list.append(text)
+        for p in p_list:
+            append_text(p)
+        info['summary'] = '\n'.join(text_list)
+        return info
+
+    def import_he(self, info):
+        (num, year) = info['id'].split('/')
+        url = HE_URL % (int(num), int(year))
+        s = self.http.open_url(url, self.doc_type, error_ok=True)
+        # If opening the doc failed, we try some workarounds.
+        if not s:
+            (s, url) = self.open_url(info['info_link'], self.doc_type, return_url=True)
+            if '<!-- akxereiloydy.thw -->' in s or '<!-- akx5000.thw -->' in s:
+                self.logger.error('not found!')
+                return info
+            html_doc = html.fromstring(s)
+            frames = html_doc.xpath(".//frame")
+            link_elem = None
+            for f in frames:
+                if f.attrib['src'].startswith('temp/'):
+                    link_elem = f
+                    break
+            html_doc.make_links_absolute(url)
+            url = link_elem.attrib['src']
+            self.logger.info('HE doc generated and found')
+            s = self.http.open_url(url, self.doc_type)
+        # First check if's not a valid HE doc, the surest way to
+        # detect it appears to be the length. *sigh*
+        if len(s) < 1500:
+            self.logger.warning("just PDF version found (doc len %d)" % len(s))
+            info['error'] = "Only PDF version available"
+            return info
+        if len(s) > 4*1024*1024:
+            self.logger.error('response too big (%d bytes)' % len(s))
+            info['error'] = "Too big response"
+            return info
+        return self.parse_he(info, s)
+
+    def import_doc(self, info):
+        self.logger.info("downloading %s %s" % (info['type'], info['id']))
+        url = DOC_DL_URL % (info['type'], info['id'])
+        info['info_link'] = url
+
+        if not should_download_doc(info):
+            self.logger.warning("skipping %s %s" % (info['type'], info['id']))
+            return None
+
+        try:
+            doc = Document.objects.get(type=info['type'], name=info['id'])
+            if not self.replace:
+                return
+        except Document.DoesNotExist:
+            doc = Document(type=info['type'], name=info['id'])
+
+        info = self.fetch_processing_info(info)
+
+        if info['type'] == 'HE':
+            self.import_he(info)
+        else:
+            self.import_sgml_doc(info)
+        s = "%s %s" % (info['type'], info['id'])
+        doc.subject = info['subject']
+        if 'summary' in info:
+            doc.summary = info['summary']
+        if 'error' in info:
+            doc.error = info['error']
+        else:
+            doc.error = None
+        #doc.date = info['date']
+        doc.info_link = info['info_link']
+        if 'sgml_link' in info:
+            doc.sgml_link = info['sgml_link']
+        doc.save()
+        # attach keywords
+        return doc
+
+    """def output_doc(self, f, info):
+        phases = ('intro', 'debate', 'committee', '1stread', ('2ndread', 'onlyread', 'only2read'))
+        intro_date = info['phases'][0][2]
+        if intro_date < "2002-01-01":
+            return
+        s = ''
+        for p in phases:
+            if type(p) == str:
+                p = (p,)
+            for l in info['phases']:
+                if l[1] in p:
+                    if s:
+                        s += ','
+                    s += l[2]
+                    break
+            else:
+                if '1stread' in p:
+                    s += ','
+                    continue
+                self.skipped += 1
+                print "skip (%d)" % self.skipped
+                return
+        f.write('"%s %s",%s\n' % (info['type'], info['id'], s))
+    """
+    def import_docs(self):
+        types = "(%s)" % '+or+'.join(DOC_TYPES)
+        url = DOC_LIST_URL % types
+        self.skipped = 0
+        while url:
+            print url
+            ret = self.read_listing('docs', url)
+            doc_list = ret[0]
+            fwd_link = ret[1]
+
+            for idx, info in enumerate(doc_list):
+                assert info['type'] in DOC_TYPES
+                self.logger.info("[%d/%d] processing document %s %s" %
+                    (idx + 1, len(doc_list), info['type'], info['id']))
+                doc = self.import_doc(info)
+                db.reset_queries()
+            url = fwd_link

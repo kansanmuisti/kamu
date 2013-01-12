@@ -1,9 +1,10 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 import os
 import re
 import ctypes
+import threading
+from itertools import chain
 
 stripper = re.compile(r'[^\w\-:]', re.U)
 
@@ -32,18 +33,24 @@ class Stemmer(object):
         self.lib = ctypes.CDLL('libmalaga.so.7')
         my_path = os.path.dirname(os.path.abspath(__file__))
         self.lib.init_libmalaga(os.path.join(my_path, self.FI_PROJECT))
+        self.lock = threading.Lock()
+        self.lib.first_analysis_result.restype = ctypes.c_long
 
     def __del__(self):
         self.lib.terminate_libmalaga()
 
-    def convert_word(self, word):
+    def convert_word(self, word, flat=False):
         if word[-1] == ':':
             word = word[0:-1]
         if not word:
             return list()
         if word[0] == '-':
             word = word[1:]
-        self.lib.analyse_item(word.encode('utf-8'), 0)
+
+        self.lock.acquire()
+        we = word.encode('utf-8')
+        st = ctypes.c_char_p(we)
+        self.lib.analyse_item(st, 0)
         result = self.lib.first_analysis_result()
         ret = []
         while result:
@@ -53,16 +60,24 @@ class Stemmer(object):
             ret.append(unicode(s.value, 'utf-8'))
             self.libc.free(s)
             result = self.lib.next_analysis_result()
-        ret = list(set(ret))
-        if len(ret) > 0:
-            trans = self.FI_TRANSFORMS.get(ret[0])
-            if trans and ret == trans[0]:
-                ret = trans[1]
+        self.lock.release()
+
+	if flat:
+            ret = list(set(ret))
+            if len(ret) > 0:
+                trans = self.FI_TRANSFORMS.get(ret[0])
+                if trans and ret == trans[0]:
+                    ret = trans[1]
+        else:
+            if len(ret) == 1:
+                ret = ret[0]
         return ret
 
-    def convert_string(self, s):
+    def convert_string(self, s, flat=False):
         words = string_to_words(s)
-        ret = map(self.convert_word, words)
+        ret = map(lambda x: self.convert_word(x, flat), words)
+        if flat:
+            ret = list(chain.from_iterable(ret))
         """for idx, w in enumerate(ret):
             if len(w) == 0:
                 print words[idx]"""

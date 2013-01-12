@@ -252,6 +252,7 @@ class MemberActivity(models.Model):
         return "%s: %s: %s" % (self.date, self.type, self.member)
 
     class Meta:
+        app_label = 'parliament'
         ordering = ('date', 'member__name')
 
 class InitiativeActivity(MemberActivity):

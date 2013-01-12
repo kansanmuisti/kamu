@@ -8,6 +8,7 @@ from ...minutes import MinutesImporter
 from ...vote import VoteImporter
 from ...seat import SeatImporter
 from ...funding import FundingImporter
+from ...doc import DocImporter
 from utils.http import HttpFetcher
 
 class Command(BaseCommand):
@@ -22,6 +23,8 @@ class Command(BaseCommand):
                     default=False, help='Import MP seatings'),
         make_option('--minutes', action='store_true', dest='minutes',
                     default=False, help='Import plenary session minutes'),
+        make_option('--docs', action='store_true', dest='docs',
+                    default=False, help='Import parliament documents'),
         make_option('--vote', action='store_true', dest='vote',
                     default=False, help='Import plenary session votes'),
         make_option('--funding', action='store_true', dest='funding',
@@ -55,6 +58,10 @@ class Command(BaseCommand):
             importer.import_seats()
         if options['minutes']:
             min_importer.import_minutes()
+        if options['docs']:
+            importer = DocImporter(http_fetcher=http)
+            importer.replace = options['update']
+            importer.import_docs()
         if options['vote']:
             importer = VoteImporter(http_fetcher=http)
             importer.replace = options['update']
