@@ -29,7 +29,7 @@ from httpstatus.decorators import postonly
 from kamu.cms.models import Item
 from operator import attrgetter
 from votes.views import find_term, find_district
-from django.contrib.csrf.middleware import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt
 
 MATCH_PERM = 'opinions.change_questionsessionrelevance'
 LAST_QUESTION_KEY = 'opinions:last_question'

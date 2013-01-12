@@ -92,27 +92,28 @@ CACHE_BACKEND = 'locmem://'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
-    'django.template.loaders.app_directories.load_template_source',
-#     'django.template.loaders.eggs.load_template_source',
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader'
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.core.context_processors.auth',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.request',
-    'django.contrib.messages.context_processors.messages',
-    'facebook.context_processors.facebook',
-    'i18n.context_processors.other_languages',
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+    "django.core.context_processors.request",
+    "facebook.context_processors.facebook",
+    "i18n.context_processors.other_languages",
 )
 
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.contrib.csrf.middleware.CsrfMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'i18n.middleware.SetDefaultLanguageMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -140,7 +141,6 @@ INSTALLED_APPS = (
     'django.contrib.webdesign',
     'django.contrib.markup',
     'django.contrib.messages',
-    'django_extensions',
     'django_assets',
     'sorl.thumbnail',
     'compressor',

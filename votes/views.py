@@ -1,3 +1,10 @@
+import time
+import djapian
+import operator
+import datetime
+import random
+import itertools
+
 from django.http import Http404, HttpResponse
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.conf import settings
@@ -11,28 +18,19 @@ from django.utils.safestring import mark_safe
 from django.utils import simplejson
 from django.utils.http import urlencode, http_date
 from django.contrib.auth.decorators import login_required
-from django.contrib.csrf.middleware import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.contenttypes.models import ContentType
-from httpstatus.decorators import postonly
-from tagging.utils import parse_tag_input
-from kamu.votes.models import *
-from kamu.orgs.models import Organization, SessionScore
-from kamu.votes.index import complete_indexer
-from kamu.contact_form.views import contact_form
-from httpstatus import Http400
-from user_voting.models import Vote as UserVote
-from coffin.shortcuts import render_to_response as render_jinja
-from kamu.opinions.models import Answer, VoteOptionCongruence
 from sorl.thumbnail import get_thumbnail
 
-from kamu.cms.models import Item, Newsitem
-
-import time
-import djapian
-import operator
-import datetime
-import random
-import itertools
+from httpstatus.decorators import postonly
+from httpstatus import Http400
+from votes.models import *
+from orgs.models import Organization, SessionScore
+#from votes.index import complete_indexer
+from contact_form.views import contact_form
+from user_voting.models import Vote as UserVote
+from opinions.models import Answer, VoteOptionCongruence
+from cms.models import Item, Newsitem
 
 TERM_KEY = 'term'
 DISTRICT_KEY = 'district'
@@ -991,6 +989,8 @@ def tagcloud_keywords(search_depth, max_keywords):
     return kw_list
 
 def search(request):
+    return None
+    """
     try:
         page = int(request.GET.get('page', '1'))
     except ValueError:
@@ -1019,7 +1019,7 @@ def search(request):
 
     return render_to_response('search.html', {'result_page': result_page},
                               context_instance = RequestContext(request))
-
+    """
 
 def about(request, section):
     args = {'active_page': 'info', 'section': section}

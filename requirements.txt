@@ -3,10 +3,8 @@ djapian
 Markdown
 BeautifulSoup
 python-dateutil
-feedparser
 simplejson
 South
-cssutils
 django-tastypie
 twython
 pygments
