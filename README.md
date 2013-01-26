@@ -61,7 +61,7 @@ Postgres
 In order to use Postgres, you need to set the right database backend in
 settings_local.py. You can do that by copying the DATABASES setting from
 settings.py and setting the value of ENGINE to
-'django.db.backends.postgresql_psycopq2'.
+'django.db.backends.postgresql_psycopg2'.
 
 MySQL
 =====
