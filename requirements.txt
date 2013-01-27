@@ -5,7 +5,7 @@ BeautifulSoup
 python-dateutil
 simplejson
 South
-django-tastypie
+-e git://github.com/toastdriven/django-tastypie.git#egg=django-tastypie
 twython
 pygments
 django-compressor
