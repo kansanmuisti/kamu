@@ -106,7 +106,6 @@ urlpatterns += patterns('',
     url(r'^comments/', include('django.contrib.comments.urls')),
     url(r'^account/logout/$', logout, name="logout"),
     url(r'^account/login/$', login, name="login"),
-    (r'^account/', include('registration.backends.default.urls')),
 )
 
 urlpatterns += patterns('', (r'^i18n/', include('django.conf.urls.i18n')))

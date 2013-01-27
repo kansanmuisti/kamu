@@ -153,7 +153,6 @@ INSTALLED_APPS = (
     'eduskunta',
     'djapian',
     'facebook',
-    'registration',
     'cms',
     'user_voting',
     'opinions',
