@@ -1,4 +1,4 @@
-Django
+-e git://github.com/django/django.git@1.5b2#egg=django
 djapian
 Markdown
 BeautifulSoup
