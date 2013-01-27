@@ -3,7 +3,8 @@ import itertools
 
 from django import forms
 from django.utils.translation import ugettext as _
-from django.utils.html import conditional_escape, force_unicode, mark_safe
+from django.utils.html import conditional_escape, mark_safe
+from django.utils.encoding import force_unicode
 
 CongruenceChoice = collections.namedtuple('CongruenceChoice', 'value name')
 CONGRUENCE_CHOICES = (
