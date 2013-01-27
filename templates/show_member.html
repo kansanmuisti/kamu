@@ -19,12 +19,12 @@
 {% endblock %}
 
 {% block sidebar %}
-<p><a class="action_link{% ifequal section 'basic' %} action_link_active{% endifequal %}" href="{% url votes.views.show_member member=member.url_name %}">{% trans "General" %}</a></p>
-<p><a class="action_link{% ifequal section 'votes' %} action_link_active{% endifequal %}" href="{% url votes.views.show_member member=member.url_name section='votes' %}">{% trans "Votes" %}</a></p>
+<p><a class="action_link{% ifequal section 'basic' %} action_link_active{% endifequal %}" href="{% url 'votes.views.show_member' member=member.url_name %}">{% trans "General" %}</a></p>
+<p><a class="action_link{% ifequal section 'votes' %} action_link_active{% endifequal %}" href="{% url 'votes.views.show_member' member=member.url_name section='votes' %}">{% trans "Votes" %}</a></p>
 <p class="action_link_disabled">{% trans "Register of interest" %}</p>
-<p><a class="action_link{% ifequal section 'statements' %} action_link_active{% endifequal %}" href="{% url votes.views.show_member member=member.url_name section='statements' %}">{% trans "Statements" %}</a></p>
-{% comment %}<p><a class="action_link{% ifequal section 'comments' %} action_link_active{% endifequal %}" href="{% url votes.views.show_member member=member.url_name section='comments' %}">{% trans "Comments" %}</a></p> {% endcomment %}
-<p><a class="action_link{% ifequal section 'opinions' %} action_link_active{% endifequal %}" href="{% url votes.views.show_member member=member.url_name section='opinions' %}">{% trans "Opinions" %}</a></p>
+<p><a class="action_link{% ifequal section 'statements' %} action_link_active{% endifequal %}" href="{% url 'votes.views.show_member' member=member.url_name section='statements' %}">{% trans "Statements" %}</a></p>
+{% comment %}<p><a class="action_link{% ifequal section 'comments' %} action_link_active{% endifequal %}" href="{% url 'votes.views.show_member' member=member.url_name section='comments' %}">{% trans "Comments" %}</a></p> {% endcomment %}
+<p><a class="action_link{% ifequal section 'opinions' %} action_link_active{% endifequal %}" href="{% url 'votes.views.show_member' member=member.url_name section='opinions' %}">{% trans "Opinions" %}</a></p>
 
 {% endblock %}
 
@@ -74,7 +74,7 @@
             disabled_text:"{% trans 'Please log in first!' %}",
             up_count:{{ user_votes.up }},
             down_count:{{ user_votes.down }},
-            toggle_url:"{% url votes.views.set_member_user_vote member=member.url_name %}"
+            toggle_url:"{% url 'votes.views.set_member_user_vote' member=member.url_name %}"
         });
     </script>
 {% if fb_enabled %}
@@ -101,7 +101,7 @@
     {% for vote in vote_page.object_list %}
     {% with vote.session as sess %}
        <tr>
-          <td class="member_info_session"><a href="{% url votes.views.show_session plsess=sess.plenary_session.url_name,sess=sess.number %}">{{ vote.session.plenary_session.name }}/{{ vote.session.number }}</a></td>
+          <td class="member_info_session"><a href="{% url 'votes.views.show_session' plsess=sess.plenary_session.url_name,sess=sess.number %}">{{ vote.session.plenary_session.name }}/{{ vote.session.number }}</a></td>
     {% ifequal vote.vote 'Y' %}
           <td class="yes_vote member_info_vote" title='{% trans "Yay" %}'></td>
     {% endifequal %}
@@ -155,7 +155,7 @@
 {% ifchanged %}<h3>{{ st.plenary_session }}</h3>
 <span class="news_item_date">{{ st.plenary_session.date|date }}</span>{% endifchanged %}
 <div class="statement">
-<a href="{% url votes.views.show_plsession plsess=st.plenary_session.url_name,dsc=st.dsc_number %}#statement-{{ st.index }}">{{ st.html|safe }}</a>
+<a href="{% url 'votes.views.show_plsession' plsess=st.plenary_session.url_name,dsc=st.dsc_number %}#statement-{{ st.index }}">{{ st.html|safe }}</a>
 </div>
 {% endfor %}
 
@@ -175,7 +175,7 @@
       {{answer.question.source.name}}
       {{answer.question.source.year}}
     </span>
-    <a href="{% url opinions.views.show_question answer.question.source.url_name answer.question.order %}">
+    <a href="{% url 'opinions.views.show_question' answer.question.source.url_name answer.question.order %}">
       {{answer.question.text}}
     </a>
   </div>
@@ -215,7 +215,7 @@
         {% for v in answer.relevant_votes %}
           <tr>
             <td class="relevant_vote_session">
-              <a href="{% url votes.views.show_session plsess=v.session.plenary_session.url_name sess=v.session.number %} ">
+              <a href="{% url 'votes.views.show_session' plsess=v.session.plenary_session.url_name sess=v.session.number %} ">
                 {{v.session.get_short_summary}}
               </a>
             </td>

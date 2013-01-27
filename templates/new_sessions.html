@@ -6,8 +6,8 @@
   <div id="left-column">
     <div class="header">
       <h2>{{ current|date:"F Y"}}</h2>
-      <div class="prev"><a href="{% url parliament.views.list_sessions year=prevmonth.year month=prevmonth.month %}">&lt;</a></div>
-      <div class="next"><a href="{% url parliament.views.list_sessions year=nextmonth.year month=nextmonth.month %}">&gt;</a></div>
+      <div class="prev"><a href="{% url 'parliament.views.list_sessions' year=prevmonth.year month=prevmonth.month %}">&lt;</a></div>
+      <div class="next"><a href="{% url 'parliament.views.list_sessions' year=nextmonth.year month=nextmonth.month %}">&gt;</a></div>
     </div>
     {% for week in weeks %}
     <div class="week">
@@ -15,7 +15,7 @@
       <div class="day {{ day.weekdayclass }}{% if day.today %} today{% endif %}{% if day.offmonth %} offmonth{%endif%}">
         <span class="weekday">{{ day.date|date:"l" }}</span>
         <span class="dayofmonth">{{ day.date|date:"j" }}</span>
-        {% if day.statements > 0 or day.votes > 0 %}<span class="link"><a href="{% url parliament.views.show_session plsess=day.plsess %}">&gt;</a></span>{% endif %}
+        {% if day.statements > 0 or day.votes > 0 %}<span class="link"><a href="{% url 'parliament.views.show_session' plsess=day.plsess %}">&gt;</a></span>{% endif %}
         {% if day.statements > 0 %}
           <span class="statements">
 {% blocktrans count day.statements as count %}

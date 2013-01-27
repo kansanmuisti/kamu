@@ -27,6 +27,6 @@
     {% endblocktrans %}{% endif %}
 {% endif %}
   </div>
-  {% if is_admin %}<a class="action_link" href="{% url orgs.views.modify_org org=org.url_name %}">{% trans "Modify" %}</a>{% endif %}
+  {% if is_admin %}<a class="action_link" href="{% url 'orgs.views.modify_org' org=org.url_name %}">{% trans "Modify" %}</a>{% endif %}
 
 {% endblock %}

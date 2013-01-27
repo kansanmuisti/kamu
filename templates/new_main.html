@@ -7,12 +7,12 @@
 <script type="text/coffeescript">
 $ ->
     activity_feeds = [{
-        url: "{% url parliament.views.get_parliament_activity %}"
+        url: "{% url 'parliament.views.get_parliament_activity' %}"
         more_link: "#parliament-showmore a"
         target_el: "#parliament-activity .post-list"
         offset: {{ parl_act_offset }}
     }, {
-        url: "{% url parliament.views.get_mp_some_activity %}"
+        url: "{% url 'parliament.views.get_mp_some_activity' %}"
         more_link: "#livefeed-showmore a"
         target_el: "#livefeed .post-list"
         offset: {{ some_offset }}

@@ -11,7 +11,7 @@
       {{q.source.name}}
       {{q.source.year}}
     </span>
-    <a href="{% url opinions.views.show_question q.source.url_name q.order %}">
+    <a href="{% url 'opinions.views.show_question' q.source.url_name q.order %}">
       {{q.text}}
     </a>
   </div>

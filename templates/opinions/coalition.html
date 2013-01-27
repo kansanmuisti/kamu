@@ -230,7 +230,7 @@ function redraw_parties(is_update)
 	ajax_args = {'gov_parties': gov_names, 'questions': q_names};
 	$.ajax({
 		type: "POST",
-		url: "{% url opinions.views.update_coalition %}",
+		url: "{% url 'opinions.views.update_coalition' %}",
 		data: ajax_args,
 		dataType: "json",
         	success: function(json) { process_stats_response(json, gov_names) },

@@ -8,8 +8,8 @@
 {% endblock %}
 {% block sidebar %}
 <div style='margin-bottom: 32px'>
-  <p><a class="action_link{% ifequal section 'basic' %} action_link_active{% endifequal %}" href="{% url votes.views.show_session plsess=psession.url_name,sess=session.number %}">{% trans "General" %}</a></p>
-  {% comment %}<p><a class="action_link{% ifequal section 'comments' %} action_link_active{% endifequal %}" href="{% url votes.views.show_session plsess=psession.url_name,sess=session.number,section='comments' %}">{% trans "Comments" %}</a></p>{% endcomment %}
+  <p><a class="action_link{% ifequal section 'basic' %} action_link_active{% endifequal %}" href="{% url 'votes.views.show_session' plsess=psession.url_name,sess=session.number %}">{% trans "General" %}</a></p>
+  {% comment %}<p><a class="action_link{% ifequal section 'comments' %} action_link_active{% endifequal %}" href="{% url 'votes.views.show_session' plsess=psession.url_name,sess=session.number,section='comments' %}">{% trans "Comments" %}</a></p>{% endcomment %}
 </div>
 {% endblock %}
 {% block content %}
@@ -24,7 +24,7 @@
   {% endif %}
   {% if session.kw_list %}
     <ul class='session_keyword'>{% for kw in session.kw_list %}
-      <a class='link' href='{% url votes.views.search_by_keyword %}?query={{ kw|urlencode }}'><li class='session_keyword'>{{ kw }}</li></a>{% if not forloop.last %} |{% endif %}
+      <a class='link' href='{% url 'votes.views.search_by_keyword' %}?query={{ kw|urlencode }}'><li class='session_keyword'>{{ kw }}</li></a>{% if not forloop.last %} |{% endif %}
     {% endfor %}</ul></p>
   {% endif %}
   </div>
@@ -72,7 +72,7 @@
             disabled_text:"{% trans 'Please log in first!' %}",
             up_count:{{ user_votes.up }},
             down_count:{{ user_votes.down }},
-            toggle_url:"{% url votes.views.set_session_user_vote plsess=psession.url_name,sess=session.number %}"
+            toggle_url:"{% url 'votes.views.set_session_user_vote' plsess=psession.url_name,sess=session.number %}"
         });
     </script>
 {% if fb_enabled %}

@@ -21,7 +21,7 @@ Please correct the errors below.
 {% endblocktrans %}
   </p>
 {% endif %}
-  <form enctype="multipart/form-data" action="{% url facebook_register_form %}" method="post">
+  <form enctype="multipart/form-data" action="{% url 'facebook_register_form' %}" method="post">
     <table id="fb_registration_form">
       {{ form.as_p }}
     </table>

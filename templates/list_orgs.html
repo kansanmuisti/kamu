@@ -29,12 +29,12 @@
 {% for org in org_list %}
     <tr>
       <td style="height: 40px; padding-right: 16px;"><img src='{% thumbnail org.logo 40x40 %}' /></td>
-      <td style="min-width: 180px; padding-right: 16px;"><a href='{% url orgs.views.show_org org=org.url_name %}'>{{ org.name }}</a></td>
+      <td style="min-width: 180px; padding-right: 16px;"><a href='{% url 'orgs.views.show_org' org=org.url_name %}'>{{ org.name }}</a></td>
       <td style="font-size: 80%; width: 450px;">{{ org.description|truncatewords:16 }}</td>
     </tr>
 {% endfor %}
   </table>
 
-  <a href="{% url orgs.views.add_org %}"><h3>{% trans "Add an organization" %}</h3></a>
+  <a href="{% url 'orgs.views.add_org' %}"><h3>{% trans "Add an organization" %}</h3></a>
 {% endcomment %}
 {% endblock %}

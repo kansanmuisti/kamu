@@ -4,12 +4,12 @@
 {% block title %}{{ section_name }}{% endblock %}
 
 {% block sidebar %}
-<p><a class="action_link{% ifequal section 'main' %} action_link_active{% endifequal %}" href="{% url votes.views.about section='main' %}">{% trans "Main page" %}</a></p>
-<p><a class="action_link{% ifequal section 'background' %} action_link_active{% endifequal %}" href="{% url votes.views.about section='background' %}">{% trans "Background" %}</a></p>
-<p><a class="action_link{% ifequal section 'rules' %} action_link_active{% endifequal %}" href="{% url votes.views.about section='rules' %}">{% trans "Rules" %}</a></p>
+<p><a class="action_link{% ifequal section 'main' %} action_link_active{% endifequal %}" href="{% url 'votes.views.about' section='main' %}">{% trans "Main page" %}</a></p>
+<p><a class="action_link{% ifequal section 'background' %} action_link_active{% endifequal %}" href="{% url 'votes.views.about' section='background' %}">{% trans "Background" %}</a></p>
+<p><a class="action_link{% ifequal section 'rules' %} action_link_active{% endifequal %}" href="{% url 'votes.views.about' section='rules' %}">{% trans "Rules" %}</a></p>
 <p><a class="action_link{% ifequal section 'feedback' %} action_link_active{% endifequal %}" href="/contact/">{% trans "Feedback" %}</a></p>
-<p><a class="action_link{% ifequal section 'donate' %} action_link_active{% endifequal %}" href="{% url votes.views.about section='donate' %}">{% trans "Donate" %}</a></p>
-<p><a class="action_link{% ifequal section 'contact' %} action_link_active{% endifequal %}" href="{% url votes.views.about section='contact' %}">{% trans "Contact" %}</a></p>
+<p><a class="action_link{% ifequal section 'donate' %} action_link_active{% endifequal %}" href="{% url 'votes.views.about' section='donate' %}">{% trans "Donate" %}</a></p>
+<p><a class="action_link{% ifequal section 'contact' %} action_link_active{% endifequal %}" href="{% url 'votes.views.about' section='contact' %}">{% trans "Contact" %}</a></p>
 {% endblock %}
 
 {% block content %}
@@ -82,7 +82,7 @@
             {% endif %}
 
             <td>
-                <a href="{% url votes.views.show_member member=mp.url_name %}">
+                <a href="{% url 'votes.views.show_member' member=mp.url_name %}">
                 <img src='{{ mp.thumbnail }}'/>
                 </a>
             </td>
@@ -97,7 +97,7 @@
 <div class="news_items news_links">
   <h1>{% trans "News" %}</h1>
 {% if request.user.is_staff %}
-<a href="{% url cms.views.add_newsitem %}">Add news...</a>
+<a href="{% url 'cms.views.add_newsitem' %}">Add news...</a>
 {% endif %}
 {% for newsitem in news %}
   {% ifchanged %}<span class="news_item_date">{{ newsitem.date|i18n_date:"numeric" }}</span>{% endifchanged %}
@@ -110,18 +110,18 @@
   </h2>
   {{ newsitem.content.summary }}
   {% if request.user.is_staff %}
-  <a href="{% url cms.views.edit_item newsitem.pk %}">{% trans "Edit..." %}</a>
+  <a href="{% url 'cms.views.edit_item' newsitem.pk %}">{% trans "Edit..." %}</a>
   {% endif %}
 {% endfor %}
 </div>
 
 <div class="news_items">
-  <h1><a href='{% url votes.views.list_sessions %}'>{% trans "Latest votes" %}</a></h1>
+  <h1><a href='{% url 'votes.views.list_sessions' %}'>{% trans "Latest votes" %}</a></h1>
 {% for session in sess_list %}
 {% with session.plenary_session as ps %}
   {% ifchanged %}<span class="news_item_date">{{ ps.date|i18n_date:"numeric" }}</span>{% endifchanged %}
-  <h2><a href='{% url votes.views.show_session plsess=ps.url_name,sess=session.number %}'>{{ ps.name }}, {{ session.number }}.</a></h2>
-  <p><a href='{% url votes.views.show_session plsess=ps.url_name,sess=session.number %}'>{{ session.get_short_summary }}</a></p>
+  <h2><a href='{% url 'votes.views.show_session' plsess=ps.url_name,sess=session.number %}'>{{ ps.name }}, {{ session.number }}.</a></h2>
+  <p><a href='{% url 'votes.views.show_session' plsess=ps.url_name,sess=session.number %}'>{{ session.get_short_summary }}</a></p>
 {% endwith %}
 {% endfor %}
 </div>

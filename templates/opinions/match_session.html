@@ -1,5 +1,5 @@
 {% load i18n %}
-<form action="{% url opinions.views.match_session %}" method="post">
+<form action="{% url 'opinions.views.match_session' %}" method="post">
 {% if not question %}
 <select name="question">
 {% for src in src_list %}

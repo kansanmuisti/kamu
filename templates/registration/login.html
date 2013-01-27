@@ -10,7 +10,7 @@
 <script>
   FB.Event.subscribe('auth.sessionChange', function(response) {
     if (response.session) {
-      window.location = '{% url facebook_connect %}'
+      window.location = '{% url 'facebook_connect' %}'
     } else {
       // The user has logged out, and the cookie has been cleared
     }
@@ -44,8 +44,8 @@ You can also login using your Kamu account.
   </form>
   <br />
 
-  <p><a class="link" href="{% url auth_password_reset %}">{% trans "Forgot your username or password?" %}</a></p>
-  <p><a class="link" href="{% url registration_register %}">{% trans "Create a new account." %}</a></p>
+  <p><a class="link" href="{% url 'auth_password_reset' %}">{% trans "Forgot your username or password?" %}</a></p>
+  <p><a class="link" href="{% url 'registration_register' %}">{% trans "Create a new account." %}</a></p>
 <br />
 {% blocktrans %}
 <p>The only personal information we will display publicly is your name. Any other information collected about you will remain private unless you choose to allow us to display it.</p>

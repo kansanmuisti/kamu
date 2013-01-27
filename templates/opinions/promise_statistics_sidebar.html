@@ -1,12 +1,12 @@
 {% load i18n opinions thumbnail %}
 <ul class="opinion_navigation">
   <li>
-    <a href="{% url opinions.views.summary %}">
+    <a href="{% url 'opinions.views.summary' %}">
       {% trans "Summary" %}
     </a>
   </li>
   <li style="margin-bottom: 16px;">
-    <a href="{% url opinions.views.list_questions %}">
+    <a href="{% url 'opinions.views.list_questions' %}">
       {% trans "Questions" %}
     </a>
   </li>
@@ -16,14 +16,14 @@
     <ul>
 {% if opinions_page == 'summary' or opinions_page == 'party' %}
     {% for party in parties|dictsort:"full_name" %}
-      <li><a href="{% url opinions.views.show_party_congruences party=party.name %}">
+      <li><a href="{% url 'opinions.views.show_party_congruences' party=party.name %}">
         {{ party.full_name }}
       </a></li>
     {% endfor %}
 {% else %}
     {% for party in parties %}
       <li>
-        <a href="{% url opinions.views.show_party_congruences party=party.name %}"
+        <a href="{% url 'opinions.views.show_party_congruences' party=party.name %}"
            {% if question %}
            title="{% trans "Promise percentage for this question" %}: {{party.congruence_avg|congruence_to_percentage}}%"
            {% else %}

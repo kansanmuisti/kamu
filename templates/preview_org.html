@@ -19,8 +19,8 @@
     </td>
   </table>
   <table id="org_add_form">
-{% if modify %}    <form action="{% url orgs.views.modify_org org.url_name %}" method="GET">
-{% else %}    <form action="{% url orgs.views.add_org %}" method="GET">{% endif %}
+{% if modify %}    <form action="{% url 'orgs.views.modify_org' org.url_name %}" method="GET">
+{% else %}    <form action="{% url 'orgs.views.add_org' %}" method="GET">{% endif %}
       <input type="submit" name="modify" value="{% trans 'Modify' %}">
     </form>
     <form action="" method="POST">

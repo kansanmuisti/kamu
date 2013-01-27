@@ -8,7 +8,7 @@
 {% if 1 %}
 <ol class="search_results">
 {% for sess in sess_list %}
-  <li style="margin-bottom: 8px;"><a href='{% url votes.views.show_session plsess=sess.plenary_session.url_name,sess=sess.number %}'>
+  <li style="margin-bottom: 8px;"><a href='{% url 'votes.views.show_session' plsess=sess.plenary_session.url_name,sess=sess.number %}'>
     <h3 style="display: inline;">{{ sess }}</h3></a>
     <div style="font-size: 80%; width: 480px;">{{ sess.get_short_summary|linebreaks }}</div>
   </li>

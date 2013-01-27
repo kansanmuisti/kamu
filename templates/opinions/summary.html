@@ -21,7 +21,7 @@
             {% for member in members %}
             {
                 "name": "{{ member.name|escapejs }}",
-                "url": "{% url votes.views.show_member member=member.url_name section='opinions' %}",
+                "url": "{% url 'votes.views.show_member' member=member.url_name section='opinions' %}",
                 "cong_percent": "{{ member.congruence|congruence_to_percentage }}",
                 "thumbnail": "{{ member.thumbnail }}",
                 "bg_color": "{{ member.congruence|congruence_to_color }}"
@@ -240,12 +240,12 @@
 {% for party in parties %}
     <tr>
     <td class="promise_label_column">
-      <a href="{% url opinions.views.show_party_congruences party=party.name %}">
+      <a href="{% url 'opinions.views.show_party_congruences' party=party.name %}">
         <img src="{% thumbnail party.logo 50x50 %}" alt="{{party.full_name}}" title="{{party.full_name}}" />
       </a>
     </td>
     <td class="promise_percentage_column">
-      <a href="{% url opinions.views.show_party_congruences party=party.name %}">
+      <a href="{% url 'opinions.views.show_party_congruences' party=party.name %}">
         <div class="promise_percentage_bar" style="width: {{party.congruence_avg|congruence_to_percentage}}%">
           {{party.congruence_avg|congruence_to_percentage}}%
         </div>
@@ -267,13 +267,13 @@
   {% for member in members %}
   <tr>
     <td class="promise_label_column">
-      <a href="{% url votes.views.show_member member=member.url_name section='opinions' %}">
+      <a href="{% url 'votes.views.show_member' member=member.url_name section='opinions' %}">
         <img src="{% thumbnail member.photo 50x50 %}"
            alt="{{member.name}}" title="{{member.name}}" />
       </a>
     </td>
     <td class="promise_percentage_column">
-      <a href="{% url votes.views.show_member member=member.url_name section='opinions' %}">
+      <a href="{% url 'votes.views.show_member' member=member.url_name section='opinions' %}">
         {{member.name}}
         <div class="promise_percentage_bar" style="width: {{member.congruence|congruence_to_percentage}}%; ">
           {{member.congruence|congruence_to_percentage}}%

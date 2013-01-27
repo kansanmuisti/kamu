@@ -43,10 +43,10 @@
 {% for session in ps.sess_list %}
       <tr>
       	<td class="session_name">
-          <a href='{% url votes.views.show_session plsess=ps.url_name,sess=session.number %}'>{{ session.number }}</a>
+          <a href='{% url 'votes.views.show_session' plsess=ps.url_name,sess=session.number %}'>{{ session.number }}</a>
       	</td>
       	<td class="session_desc">
-          <a href='{% url votes.views.show_session plsess=ps.url_name,sess=session.number %}'>
+          <a href='{% url 'votes.views.show_session' plsess=ps.url_name,sess=session.number %}'>
             {{ session.info|linebreaks }}
           </a>
       	</td>
