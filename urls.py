@@ -2,8 +2,8 @@
 
 from django.conf.urls.defaults import *
 from django.conf import settings
+from django.views.generic import TemplateView
 from kamu.users.views import login, logout
-from django.views.generic.simple import direct_to_template
 
 from django.contrib import admin
 admin.autodiscover()
@@ -42,8 +42,7 @@ old_urlpatterns = patterns('votes.views',
     url(r'^search/$', 'search'),
     url(r'^search/keyword/$', 'search_by_keyword'),
     url(r'^contact/$', 'about', {'section': 'feedback'}),
-    url(r'^contact/sent/$', direct_to_template, {'template': 'contact_form/contact_form_sent.html'},
-        name='contact_form_sent'),
+    url(r'^contact/sent/$', TemplateView.as_view(template_name='contact_form/contact_form_sent.html'), name='contact_form_sent'),
     url(r'^about/(?P<section>[\w-]+)/$', 'about'),
     url(r'^$', 'about', {'section': 'main'}),
 )
