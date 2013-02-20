@@ -1,5 +1,4 @@
 import time
-import djapian
 import operator
 import datetime
 import random

@@ -1,4 +1,4 @@
-from djapian import space, Indexer, CompositeIndexer
+"""from djapian import space, Indexer, CompositeIndexer
 
 from kamu.votes.models import *
 
@@ -15,3 +15,4 @@ class StatementIndexer(Indexer):
 space.add_index(Statement, StatementIndexer, attach_as='indexer')
 
 complete_indexer = CompositeIndexer(Member.indexer, Session.indexer, Statement.indexer)
+"""
