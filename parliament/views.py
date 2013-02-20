@@ -27,7 +27,11 @@ def show_item(request, plsess, item_nr, subitem_nr=None):
                               context_instance=RequestContext(request))
 
 def show_member(request, member):
-    pass
+    member = get_object_or_404(Member, url_name=member)
+
+    args = dict(member=member)
+    return render_to_response('member/overview.html', args,
+        context_instance=RequestContext(request))
 
 def _get_parliament_activity(request, offset):
     q = Q(nr_votes__gt=0) | Q(nr_statements__gt=0)
