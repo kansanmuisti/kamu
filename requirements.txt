@@ -1,10 +1,10 @@
--e git://github.com/django/django.git@1.5b2#egg=django
+-e git+http://github.com/django/django.git@stable/1.5.x#egg=django
 Markdown
 BeautifulSoup
 python-dateutil
 simplejson
 South
--e git://github.com/toastdriven/django-tastypie.git#egg=django-tastypie
+-e git+http://github.com/toastdriven/django-tastypie.git#egg=django-tastypie
 twython
 pygments
 django-compressor
