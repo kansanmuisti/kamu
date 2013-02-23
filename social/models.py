@@ -21,7 +21,7 @@ class Feed(models.Model):
         from social.utils import get_facebook_graph
 
         assert(self.type == 'FB')
-        addr = '%s&fields=picture,likes,about,username' % self.origin_id
+        addr = '%s?fields=picture,likes,about,username' % self.origin_id
         feed_info = get_facebook_graph(addr)
         self.picture = feed_info.get('picture', {}).get('data', {}).get('url', None)
         self.interest = feed_info.get('likes', None)

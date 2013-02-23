@@ -283,7 +283,7 @@ class InitiativeActivity(MemberActivity):
 
 class RebelVoteActivity(MemberActivity):
     TYPE = 'RV'
-    vote = models.ForeignKey(Vote)
+    vote = models.ForeignKey(Vote, unique=True)
 
     objects = MemberActivityManager()
 
@@ -319,12 +319,15 @@ class MemberSocialFeed(Feed):
         app_label = 'parliament'
 
 class SocialUpdateActivity(MemberActivity):
-    update = models.ForeignKey(Update)
+    update = models.ForeignKey(Update, unique=True)
 
     objects = MemberActivityManager()
 
     def save(self, *args, **kwargs):
         self.type = self.update.feed.type
+        mf = self.update.feed.membersocialfeed
+        self.member = mf.member
+        self.time = self.update.created_time
         super(SocialUpdateActivity, self).save(*args, **kwargs)
 
     class Meta:
@@ -332,7 +335,7 @@ class SocialUpdateActivity(MemberActivity):
 
 class StatementActivity(MemberActivity):
     TYPE = 'ST'
-    statement = models.ForeignKey(Statement)
+    statement = models.ForeignKey(Statement, unique=True)
 
     objects = MemberActivityManager()
 

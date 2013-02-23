@@ -38,7 +38,7 @@ class MinutesImporter(Importer):
     SGML_TO_XML = 'sgml-to-xml.sh'
 
     NON_MP_NAMES = (u'Mikko Puumalainen', u'Raimo Tammilehto', u'Kalevi Hemilä',
-    		    u'Kari Häkämies')
+    		    u'Kari Häkämies', u'Carl Haglund')
     NON_MP_ROLES = ('Eduskunnan oikeusasiamies',
                     'Valtioneuvoston oikeuskansleri')
 
@@ -58,11 +58,11 @@ class MinutesImporter(Importer):
         try:
             sgml_storage = kwargs.pop('sgml_storage')
         except KeyError:
-            sgml_storage = 'ptk'
+            sgml_storage = 'minutes_sgml'
         try:
             xml_storage = kwargs.pop('xml_storage')
         except KeyError:
-            xml_storage = 'ptkxml'
+            xml_storage = 'minutes_xml'
 
         my_path = os.path.dirname(os.path.realpath(__file__))
         self.sgml_to_xml = os.path.join(my_path, self.SGML_TO_XML)
@@ -318,7 +318,7 @@ class MinutesImporter(Importer):
 
             vote_ref_list = vote_el.xpath('tulos/aanviit')
             if len(vote_ref_list) == 0:
-                if pl_sess_info['id'] in ('84/2001', '88/2007', '130/1999'):
+                if pl_sess_info['id'] in ('84/2001', '88/2007', '130/1999', '132/2012'):
                     continue
                 raise ParseError("No vote reference found")
             for ref_el in vote_ref_list:
@@ -360,9 +360,9 @@ class MinutesImporter(Importer):
         if el.tag != 'ptk':
             raise ParseError("Unknown root tag: %s" % el.tag)
         ver_txt = el.attrib['Versio']
-        m = re.match('\w*\s*(\d\.\d)', ver_txt)
+        m = re.match('\w*[\s\.]*(\d\.\d)', ver_txt)
         if not m:
-            raise ParseError("Version string not found ('%s')" % ver_txt)
+            raise ParseError("Version string invalid ('%s')" % ver_txt)
         info['version'] = m.groups()[0]
         info['date'] = el.attrib['Ipvm']
         time_str = el.xpath('ident/kaika')[0].text

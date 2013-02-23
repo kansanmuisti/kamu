@@ -6,14 +6,14 @@ from django import db
 from eduskunta.importer import Importer, ParseError
 from eduskunta.vote import VoteImporter
 from utils.http import HTTPError
-from parliament.models import Document
+from parliament.models import Document, Keyword, DocumentProcessingStage, Member, DocumentSignature
 
 DOC_LIST_URL = "http://www.eduskunta.fi/triphome/bin/vex3000.sh?TUNNISTE=%s&PVMVP1=1999"
 #DOC_LIST_URL = "http://www.eduskunta.fi/triphome/bin/vex3000.sh?TUNNISTE=%s&PVMVP1=2003&PVMVP2=2006"
 DOC_DL_URL = "http://www.eduskunta.fi/triphome/bin/akxhref2.sh?{KEY}=%s+%s"
 DOC_PROCESS_URL = "http://www.eduskunta.fi/triphome/bin/vex3000.sh?TUNNISTE=%s+%s"
 HE_URL = "http://217.71.145.20/TRIPviewer/temp/TUNNISTE_HE_%i_%i_fi.html"
-DOC_TYPES = ["HE", "LA",
+DOC_TYPES = ["HE", "LA", "KK",
         #"TPA", "TA", "KA", "LTA",
         #"VK", "VNT",
         #"KK", "TAA"
@@ -56,16 +56,8 @@ class DocImporter(Importer):
 
         super(DocImporter, self).__init__(*args, **kwargs)
 
-    def fetch_processing_info(self, info):
-        url = DOC_PROCESS_URL % (info['type'], info['id'])
+    def handle_processing_stages(self, info, html_doc):
         doc_name = "%s %s" % (info['type'], info['id'])
-        self.logger.info('updating processing info for %s %s' % (info['type'], info['id']))
-        s = self.open_url(url, 'docs')
-        html_doc = html.fromstring(s)
-
-        subj_el = html_doc.xpath(".//div[@class='listing']/div[1]/div[1]/h3")
-        assert len(subj_el) == 1
-        info['subject'] = self.clean_text(subj_el[0].text)
 
         names = {'vireil': ('intro', (u'Annettu eduskunnalle', u'Aloite jätetty')),
                  'lahete': ('debate', u'Lähetekeskustelu'),
@@ -150,6 +142,40 @@ class DocImporter(Importer):
             #print "%s: %s" % (phase, date)
         info['phases'] = phase_list
 
+    def handle_question(self, info, html_doc):
+        el_list = html_doc.xpath("//div[@class='listborder']//h2")
+        stages = {}
+        for el in el_list:
+            s = self.clean_text(el.text_content())
+            if s == 'Asiasanat':
+                continue
+            date_el = el.xpath("../..//div[.='Pvm']")
+            assert len(date_el) == 1
+            date = date_el[0].tail.strip()
+            (d, m, y) = date.split('.')
+            date = '-'.join((y, m, d))
+            stages[s] = date
+        phase_list = []
+        phase_list.append((0, 'intro', stages[u'Kysymys jätetty']))
+        if 'Vastaus annettu' in stages:
+            phase_list.append((1, 'finished', stages[u'Vastaus annettu']))
+        info['phases'] = phase_list
+
+    def fetch_processing_info(self, info):
+        url = DOC_PROCESS_URL % (info['type'], info['id'])
+        self.logger.info('updating processing info for %s %s' % (info['type'], info['id']))
+        s = self.open_url(url, 'docs')
+        html_doc = html.fromstring(s)
+
+        subj_el = html_doc.xpath(".//div[@class='listing']/div[1]/div[1]/h3")
+        assert len(subj_el) == 1
+        info['subject'] = self.clean_text(subj_el[0].text)
+
+        if info['type'] == 'KK':
+            self.handle_question(info, html_doc)
+        else:
+            self.handle_processing_stages(info, html_doc)
+
         kw_list = []
         kw_el_list = html_doc.xpath(".//div[@id='vepsasia-asiasana']//div[@class='linkspace']/a")
         for kw in kw_el_list:
@@ -170,6 +196,25 @@ class DocImporter(Importer):
             paras.append(text)
         return '\n'.join(paras)
 
+    def parse_signatures(self, root_el):
+        sign_el = root_el.xpath('//allekosa')
+        assert len(sign_el) in (1, 2)
+        sign_el = sign_el[0]
+        date = sign_el.xpath('paivays')[0].attrib['pvm']
+        signers = sign_el.xpath('edustaja/henkilo')
+        assert len(signers) > 0
+        sign_list = []
+        for signer in signers:
+            d = {}
+            first = signer.xpath('etunimi')[0]
+            last = signer.xpath('sukunimi')[0]
+            d['first_name'] = self.clean_text(first.text_content())
+            d['last_name'] = self.clean_text(last.text_content())
+            d['id'] = signer.attrib['numero']
+            d['date'] = date
+            sign_list.append(d)
+        return sign_list
+
     def import_sgml_doc(self, info):
         url = DOC_DL_URL % (info['type'], info['id'])
         xml_fn = self.download_sgml_doc(url)
@@ -185,11 +230,13 @@ class DocImporter(Importer):
         info['subject'] = text
 
         if info['type'].endswith('VM'):
-            el_name_list = ('asianvir', 'emasianv')
+            xpath_list = ('.//asianvir', './/emasianv')
+        elif info['type'] == 'KK':
+            xpath_list = (".//kysosa[@kieli='suomi']//peruste",)
         else:
-            el_name_list = ('peruste', 'paasis', 'yleisper')
-        for el_name in el_name_list:
-            l = root.xpath('.//%s' % el_name)
+            xpath_list = ('.//peruste', './/paasis', './/yleisper')
+        for xpath in xpath_list:
+            l = root.xpath(xpath)
             if not len(l):
                 continue
             assert len(l) == 1
@@ -199,6 +246,8 @@ class DocImporter(Importer):
             raise ParseError('Summary section not found')
 
         info['summary'] = self.parse_te_paragraphs(target_el)
+        if info['type'] in ('KK', 'LA'):
+            info['signatures'] = self.parse_signatures(root)
         return info
 
     def parse_he(self, info, he_str):
@@ -299,6 +348,38 @@ class DocImporter(Importer):
             return info
         return self.parse_he(info, s)
 
+    def save_stages(self, doc, info):
+        for st in info['phases']:
+            args = {'doc': doc, 'index': st[0]}
+            try:
+                st_obj = DocumentProcessingStage.objects.get(**args)
+            except DocumentProcessingStage.DoesNotExist:
+                st_obj = DocumentProcessingStage(**args)
+            st_obj.stage = st[1]
+            st_obj.date = st[2]
+            st_obj.save()
+
+    def save_keywords(self, doc, info):
+        for kw in info['keywords']:
+            try:
+                kw_obj = Keyword.objects.get(name=kw)
+            except Keyword.DoesNotExist:
+                self.logger.info("Adding new keyword: %s" % kw)
+                kw_obj = Keyword(name=kw)
+                kw_obj.save()
+            doc.keywords.add(kw_obj)
+
+    def save_signatures(self, doc, info):
+        for sign in info['signatures']:
+            member = Member.objects.get(origin_id=sign['id'])
+            assert sign['first_name'] in member.given_names or sign['last_name'] == member.surname
+            try:
+                obj = DocumentSignature(doc=doc, member=member)
+            except DocumentSignature.DoesNotExist:
+                obj = DocumentSignature(doc=doc, member=member)
+            obj.date = sign['date']
+            obj.save()
+
     def import_doc(self, info):
         self.logger.info("downloading %s %s" % (info['type'], info['id']))
         url = DOC_DL_URL % (info['type'], info['id'])
@@ -334,7 +415,11 @@ class DocImporter(Importer):
         if 'sgml_link' in info:
             doc.sgml_link = info['sgml_link']
         doc.save()
-        # attach keywords
+
+        self.save_stages(doc, info)
+        self.save_keywords(doc, info)
+        if 'signatures' in info:
+            self.save_signatures(doc, info)
         return doc
 
     """def output_doc(self, f, info):

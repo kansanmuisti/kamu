@@ -22,6 +22,7 @@ MEMBER_NAME_TRANSFORMS = {
     'Elomaa Kike': 'Elomaa Ritva',
     'Maijala Eeva-Maria': 'Maijala Eeva Maria',
     'Gästgivars Lars': 'Gästgivars Lars Erik',
+    'Gästgivars Lars-Erik': 'Gästgivars Lars Erik',
     # funding 2011
     'Modig Anna': 'Modig Silvia',
     'Wallinheimo Mika': 'Wallinheimo Sinuhe',
@@ -47,6 +48,8 @@ MEMBER_NAME_TRANSFORMS = {
     'Orpo Antti': 'Orpo Petteri',
     'Hiltunen Lea': 'Hiltunen Rakel',
     'Tolppanen Eeva': 'Tolppanen Maria',
+    'Maijala Eeva Maria': 'Maijala Eeva-Maria',
+    'Saarikko Annikka': 'Saarikko Annika',
 }
 
 def fix_mp_name(name):
