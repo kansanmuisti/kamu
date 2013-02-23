@@ -144,7 +144,7 @@ class PlenaryVote(models.Model):
     number = models.IntegerField()
     time = models.DateTimeField()
     subject = models.TextField()
-    setting = models.CharField(max_length=100)
+    setting = models.CharField(max_length=200)
     info_link = models.URLField(blank=True, null=True)
     vote_counts = models.CommaSeparatedIntegerField(max_length=20, blank=True,
                                                     null=True)
