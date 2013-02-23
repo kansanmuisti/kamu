@@ -6,6 +6,12 @@ from django.utils.translation import ugettext as _
 from parliament.models.party import *
 from parliament.models.session import *
 
+# Django bug workaround
+from django.db.models.loading import cache as model_cache
+
+if not model_cache.loaded:
+    model_cache._populate()
+
 class MemberManager(models.Manager):
     def active_in(self, date_begin, date_end):
         query = Q()
@@ -238,22 +244,25 @@ class MemberActivity(models.Model):
         ('IN', 'Initiative'),
         ('RV', 'Rebel vote'),
         ('CD', 'Committee dissent'),
+        ('TW', 'Tweet'),
+        ('FB', 'Facebook update'),
+        ('ST', 'Plenary statement'),
     ]
-    WEIGHTS = {'IN': 100, 'RV': 10, 'CD': 20}
+    # Algorithm for determining weights: Pulling out of the Ass
+    WEIGHTS = {'IN': 100, 'RV': 10, 'CD': 20, 'TW': 1, 'FB': 5, 'ST': 10}
 
     member = models.ForeignKey(Member, db_index=True)
-    date = models.DateField(db_index=True)
-    weight = models.PositiveIntegerField()
-    type = models.CharField(max_length=5, db_index=True)
+    time = models.DateTimeField(db_index=True)
+    type = models.CharField(max_length=5, db_index=True, choices=TYPES)
 
     objects = MemberActivityManager()
 
     def __unicode__(self):
-        return "%s: %s: %s" % (self.date, self.type, self.member)
+        return "%s: %s: %s" % (self.time, self.type, self.member)
 
     class Meta:
         app_label = 'parliament'
-        ordering = ('date', 'member__name')
+        ordering = ('time', 'member__name')
 
 class InitiativeActivity(MemberActivity):
     TYPE = 'IN'
@@ -263,8 +272,6 @@ class InitiativeActivity(MemberActivity):
 
     def save(self, *args, **kwargs):
         self.type = self.TYPE
-        if not self.weight:
-            self.weight = self.WEIGHTS[self.type]
         super(InitiativeActivity, self).save(*args, **kwargs)
 
     def __unicode__(self):
@@ -274,8 +281,18 @@ class InitiativeActivity(MemberActivity):
     class Meta:
         app_label = 'parliament'
 
-#class RebelVoteActivity(MemberActivity):
-#    session = models.ForeignKey(Session)
+class RebelVoteActivity(MemberActivity):
+    TYPE = 'RV'
+    vote = models.ForeignKey(Vote)
+
+    objects = MemberActivityManager()
+
+    def save(self, *args, **kwargs):
+        self.type = self.TYPE
+        super(RebelVoteActivity, self).save(*args, **kwargs)
+
+    class Meta:
+        app_label = 'parliament'
 
 class CommitteeDissentActivity(MemberActivity):
     TYPE = 'CD'
@@ -285,8 +302,6 @@ class CommitteeDissentActivity(MemberActivity):
 
     def save(self, *args, **kwargs):
         self.type = self.TYPE
-        if not self.weight:
-            self.weight = self.WEIGHTS[self.type]
         super(CommitteeDissentActivity, self).save(*args, **kwargs)
 
     def __unicode__(self):
@@ -296,9 +311,36 @@ class CommitteeDissentActivity(MemberActivity):
     class Meta:
         app_label = 'parliament'
 
-from social.models import Feed
+from social.models import Feed, Update
 
 class MemberSocialFeed(Feed):
     member = models.ForeignKey(Member, db_index=True)
+    class Meta:
+        app_label = 'parliament'
+
+class SocialUpdateActivity(MemberActivity):
+    update = models.ForeignKey(Update)
+
+    objects = MemberActivityManager()
+
+    def save(self, *args, **kwargs):
+        self.type = self.update.feed.type
+        super(SocialUpdateActivity, self).save(*args, **kwargs)
+
+    class Meta:
+        app_label = 'parliament'
+
+class StatementActivity(MemberActivity):
+    TYPE = 'ST'
+    statement = models.ForeignKey(Statement)
+
+    objects = MemberActivityManager()
+
+    def save(self, *args, **kwargs):
+        self.type = self.TYPE
+        self.member = self.statement.member
+        self.time = self.statement.item.plsess.date
+        super(StatementActivity, self).save(*args, **kwargs)
+
     class Meta:
         app_label = 'parliament'
