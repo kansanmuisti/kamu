@@ -21,7 +21,8 @@ MEMBER_NAME_TRANSFORMS = {
         'Taberman Tommy': 'Tabermann Tommy',
         'Kumpula Miapetra': 'Kumpula-Natri Miapetra',
         'Forsius-Harkimo Merikukka': 'Forsius Merikukka',
-        'Karttunen-Raiskio Marjukka': 'Karttunen Marjukka'
+        'Karttunen-Raiskio Marjukka': 'Karttunen Marjukka',
+        'Maijala Eeva Maria': 'Maijala Eeva-Maria',
 }
 
 PROCESSING_STEP = {
