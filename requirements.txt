@@ -5,9 +5,13 @@ python-dateutil
 simplejson
 South
 -e git+http://github.com/toastdriven/django-tastypie.git#egg=django-tastypie
-twython
+-e git+http://github.com/ryanmcgrath/twython.git#egg=twython
 pygments
 django-compressor
 twitter-text-py
 sorl-thumbnail
 django-extensions
+# fix pyfaceb link to sproutsocial later
+-e git+https://github.com/jameskeane/pyfaceb.git#egg=pyfaceb
+requests>=1.1.0
+-e git+http://github.com/reclosedev/requests-cache.git@v1.x.x#egg=requests-cache
