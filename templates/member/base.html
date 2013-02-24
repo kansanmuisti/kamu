@@ -1,0 +1,28 @@
+{% extends "base_j.html" %}
+
+{# This could be made part of a "main template" if the UI \
+    is similar for multiple "categories" #}
+
+{% block content %}
+
+
+<div class="row">
+
+<div class="span2">
+{% block member_leftbar %}
+{% endblock %}
+</div>
+
+<div class="span7">
+{% block member_content %}
+{% endblock %}
+</div>
+
+<div class="span2">
+{% block member_rightbar %}
+{% endblock %}
+</div>
+
+</div> <!-- row -->
+
+{% endblock %}
