@@ -21,8 +21,8 @@ class Migration(SchemaMigration):
             ('vote', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['parliament.Vote'])),
         ))
         db.send_create_signal('parliament', ['RebelVoteActivity'])
-
-        # Adding model 'StatementActivity'
+        
+	# Adding model 'StatementActivity'
         db.create_table(u'parliament_statementactivity', (
             (u'memberactivity_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['parliament.MemberActivity'], unique=True, primary_key=True)),
             ('statement', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['parliament.Statement'])),
@@ -37,9 +37,8 @@ class Migration(SchemaMigration):
 
         # Adding field 'MemberActivity.time'
         db.add_column(u'parliament_memberactivity', 'time',
-                      self.gf('django.db.models.fields.DateTimeField')(default=0, db_index=True),
+                      self.gf('django.db.models.fields.DateTimeField')(db_index=True),
                       keep_default=False)
-
 
         # Changing field 'PlenaryVote.setting'
         db.alter_column(u'parliament_plenaryvote', 'setting', self.gf('django.db.models.fields.CharField')(max_length=200))
