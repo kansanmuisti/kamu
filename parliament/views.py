@@ -26,12 +26,25 @@ def show_item(request, plsess, item_nr, subitem_nr=None):
     return render_to_response('parliament/plenary_item_details.html', {'item': item},
                               context_instance=RequestContext(request))
 
-def show_member(request, member):
-    member = get_object_or_404(Member, url_name=member)
+def get_view_member(url_name):
+    member = get_object_or_404(Member, url_name=url_name)
+    current_district = member.districtassociation_set.order_by('-begin')[0].district
+    member.current_district = current_district
+    return member
 
+def show_member(request, member):
+    member = get_view_member(member)
     args = dict(member=member)
     return render_to_response('member/overview.html', args,
         context_instance=RequestContext(request))
+
+def member_basic_info(request, member):
+    member = get_view_member(member)
+    args = dict(member=member)
+    return render_to_response('member/basic_info.html', args,
+        context_instance=RequestContext(request))
+
+
 
 def _get_parliament_activity(request, offset):
     q = Q(nr_votes__gt=0) | Q(nr_statements__gt=0)
