@@ -13,7 +13,7 @@ DOC_LIST_URL = "http://www.eduskunta.fi/triphome/bin/vex3000.sh?TUNNISTE=%s&PVMV
 DOC_DL_URL = "http://www.eduskunta.fi/triphome/bin/akxhref2.sh?{KEY}=%s+%s"
 DOC_PROCESS_URL = "http://www.eduskunta.fi/triphome/bin/vex3000.sh?TUNNISTE=%s+%s"
 HE_URL = "http://217.71.145.20/TRIPviewer/temp/TUNNISTE_HE_%i_%i_fi.html"
-DOC_TYPES = ["HE", "LA", "KK",
+DOC_TYPES = ["HE", "LA",
         #"TPA", "TA", "KA", "LTA",
         #"VK", "VNT",
         #"KK", "TAA"
@@ -25,6 +25,7 @@ SKIP_DOCS = [
     'HE 149/2012', # temporarily
     'LA 21/2011', # 'Ilmoitus peruuttamisesta' missing
     'LA 48/2012', # missing date of committee hearing
+    'HE 273/2009', # ???
 ]
 
 def should_download_doc(doc):
@@ -130,6 +131,9 @@ class DocImporter(Importer):
                     date = '-'.join((y, m, d))
                     date_list.append(date)
                 if not date_list and last_phase in ('cancelled', 'lapsed'):
+                    continue
+                if not date_list:
+                    self.logger.warning("date not found for committee phase")
                     continue
                 date = max(date_list)
             else:
@@ -374,7 +378,7 @@ class DocImporter(Importer):
             member = Member.objects.get(origin_id=sign['id'])
             assert sign['first_name'] in member.given_names or sign['last_name'] == member.surname
             try:
-                obj = DocumentSignature(doc=doc, member=member)
+                obj = DocumentSignature.objects.get(doc=doc, member=member)
             except DocumentSignature.DoesNotExist:
                 obj = DocumentSignature(doc=doc, member=member)
             obj.date = sign['date']

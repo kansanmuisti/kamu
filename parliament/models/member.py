@@ -247,6 +247,7 @@ class MemberActivity(models.Model):
         ('TW', 'Tweet'),
         ('FB', 'Facebook update'),
         ('ST', 'Plenary statement'),
+        ('SI', 'Signature'),
     ]
     # Algorithm for determining weights: Pulling out of the Ass
     WEIGHTS = {'IN': 100, 'RV': 10, 'CD': 20, 'TW': 1, 'FB': 5, 'ST': 10}
@@ -344,6 +345,21 @@ class StatementActivity(MemberActivity):
         self.member = self.statement.member
         self.time = self.statement.item.plsess.date
         super(StatementActivity, self).save(*args, **kwargs)
+
+    class Meta:
+        app_label = 'parliament'
+
+class SignatureActivity(MemberActivity):
+    TYPE = 'SI'
+    signature = models.ForeignKey(DocumentSignature, unique=True)
+
+    objects = MemberActivityManager()
+
+    def save(self, *args, **kwargs):
+        self.type = self.TYPE
+        self.member = self.signature.member
+        self.time = self.signature.date
+        super(SignatureActivity, self).save(*args, **kwargs)
 
     class Meta:
         app_label = 'parliament'

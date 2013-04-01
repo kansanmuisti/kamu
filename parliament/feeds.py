@@ -15,3 +15,8 @@ def create_statement_activity(sender, **kwargs):
 def create_social_update_activity(sender, **kwargs):
     obj = kwargs['instance']
     upd_act, created = SocialUpdateActivity.objects.get_or_create(update=obj)
+
+@receiver(post_save, sender=DocumentSignature, dispatch_uid="document_signature_activity")
+def create_document_signature_activity(sender, **kwargs):
+    obj = kwargs['instance']
+    sign_act, created = SignatureActivity.objects.get_or_create(signature=obj)
