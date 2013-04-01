@@ -74,6 +74,8 @@ ADMIN_MEDIA_PREFIX = '/admin_media/'
 
 # Subdirectory of COMPRESS_ROOT to store the cached media files in
 COMPRESS_OUTPUT_DIR = "cache"
+COMPRESS_URL = '/static/'
+COMPRESS_ROOT = os.path.join(SITE_ROOT, 'static')
 
 COMPRESS_PRECOMPILERS = (
     ('text/less', 'lessc {infile} {outfile}'),
