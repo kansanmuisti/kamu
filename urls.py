@@ -8,9 +8,6 @@ from kamu.users.views import login, logout
 from django.contrib import admin
 admin.autodiscover()
 
-import djapian
-djapian.load_indexes()
-
 # Change the length of EmailFields to accommodate overlong
 # Facebook email addresses.
 from django.db.models.fields import EmailField, CharField
@@ -78,6 +75,7 @@ v1_api.register(FundingSourceResource())
 v1_api.register(FundingResource())
 v1_api.register(SeatResource())
 v1_api.register(MemberSeatResource())
+v1_api.register(DocumentResource())
 
 urlpatterns += patterns('',
     (r'^api/', include(v1_api.urls)),
