@@ -27,8 +27,6 @@ DATABASES = {
 
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
-DJAPIAN_DATABASE_PATH = os.path.dirname(__file__) + '/djapian/'
-
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -151,7 +149,6 @@ INSTALLED_APPS = (
     'social',
     'parliament',
     'eduskunta',
-    'djapian',
     'facebook',
     'cms',
     'user_voting',
