@@ -35,49 +35,53 @@
 </head>
 
 <body>
-	<div id="container">
-		<div id="loginbar">
-			<div id="logged-user">
-				Saana Sekakäyttäjä / <a href="#">Kirjaudu ulos</a>
+	<div class="container">
+		<div class="row" id="header">
+			<div class="span2" id="logospan">
+					<a href="{% url 'parliament.views.main' %} ">
+					</a>
 			</div>
-		</div>
-		<div id="header">
-			<div id="logo">
-				<h1><a href="{% url 'parliament.views.main' %} ">KAMU</a></h1>
-			</div>
-			<div id="navbar">
-				<ul class="unstyled">
-					<li><a href="{% url 'parliament.views.list_sessions' %}">{% trans "Plenary sessions" %}</a></li>
-					<li class="sep">/</li>
-					<li><a href="#">Puolueet</a></li>
-
-					<li class="sep">/</li>
-					<li><a href="{% url 'parliament.views.list_members' %}">{% trans "Members" %}</a></li>
-					<li class="sep">/</li>
-					<li><a href="#">Aihepiirit</a></li>
-					<li class="sep">/</li>
-					<li><a href="#">Yleistä</a></li>
-
-				</ul>
-			</div>
-			<div id="search">
-				<form action="#" method="post">
-					<div>
-					<input type="text" value="Hae Kansan muistista..." /><input type="submit" value="&gt;" />
+			<div class="span10">
+				<div id="navtopbar">
+					<div id="search">
+						<form action="#" method="post">
+							<input type="text" value="Hae Kansan muistista..." /><input type="submit" value="&gt;" />
+						</form>
 					</div>
-				</form>
-			</div>
+					<div class="separator"></div>
+					<div id="logged-user">
+						Saana Sekakäyttäjä / <a href="#">Kirjaudu ulos</a>
+					</div>
 
+				</div>
+
+				<div id="navbottombar">
+					<table><tr> <!-- OMG! A TABLE!!!1 -->
+						<td><a href="{% url 'parliament.views.list_sessions' %}">
+							{% trans "Plenary sessions" %}
+						</a></td>
+						<td><a href="#">
+							{% trans "Parties" %}
+						</a></td>
+						<td><a href="{% url 'parliament.views.list_members' %}">
+							{% trans "Members" %}
+						</a></td>
+						<td><a href="#">
+							{% trans "Topics" %}
+						</a></td>
+						<td><a href="#">
+							{% trans "About" %}
+						</a>
+
+					</tr></table>
+				</div>
+			</div>
 		</div>
+
+		<hr id="headerspacer" />
 
 		{% block content %}{% endblock %}
 
-		<div id="footer" class="row">
-			<div class="span16">
-				Copyright &copy; 2010–2012 Kansan muisti ry. Palvelun ylläpitäjä ei vastaa tietojen oikeellisuudesta.
-			</div>
-		</div>
-	</div>
 </body>
 
 </html>

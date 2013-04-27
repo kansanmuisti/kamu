@@ -33,8 +33,8 @@
 
 // Scaffolding
 // -------------------------
-@bodyBackground:        @white;
-@textColor:             @grayDark;
+@bodyBackground:        #b3b3b3;
+@textColor:             #000;
 
 
 // Links
@@ -48,6 +48,9 @@
 @baseFontSize:          13px;
 @baseFontFamily:        "Open Sans", Verdana, sans-serif;
 @baseLineHeight:        18px;
+
+@navFontSize:		14px;
+
 @altFontFamily:         Georgia, "Times New Roman", Times, serif;
 
 @headingsFontFamily:    inherit; // empty to use BS default, @baseFontFamily
@@ -190,8 +193,8 @@
 // Default 940px grid
 // -------------------------
 @gridColumns:             12;
-@gridColumnWidth:         60px;
-@gridGutterWidth:         20px;
+@gridColumnWidth:         70px;
+@gridGutterWidth:         @majorBlockMargin;
 @gridRowWidth:            (@gridColumns * @gridColumnWidth) + (@gridGutterWidth * (@gridColumns - 1));
 
 

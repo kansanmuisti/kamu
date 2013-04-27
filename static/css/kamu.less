@@ -1,6 +1,20 @@
 @import "variables.less";
 @import "bootstrap/less/mixins.less";
 
+@contentBackground:	@white;
+@spacerColor:		#666;
+
+
+// Content blocks
+@majorBlockMargin:	10px;
+@minorBlockMargin:	5px;
+@contentBlockPadding:	10px;
+@blockMinimumHeight:	40px;
+
+@blockHeaderBackground:	#ddd;
+
+@floatPadding:		10px;
+
 // colors
 @primary: #aaa52d;
 @violet: #9933d6;
@@ -12,50 +26,113 @@
 @lightgrey: #e6e6e6;
 @darkgrey: #8e8e8e;
 
-// some helping constants
-@navibox-width: 184px;
-@navibox-gutter: 20px;
 
-// main page columns
-@mainpage-left-column-width: 3*@navibox-width + 2*@navibox-gutter;
-@mainpage-right-column-width: 280px;
 
-// default space between columns
-@column-gutter: 40px;
-
-// page width
-@container-width: @mainpage-left-column-width + @mainpage-right-column-width + @column-gutter;
-
-// sub page columns
-@subpage-left-column-width: 720px;
-@subpage-right-column-width: @container-width - @subpage-left-column-width - @column-gutter;
+body {
+	margin-top: 2*@blockMinimumHeight;
+	margin-bottom: 2*@blockMinimumHeight;
+}
 
 // default font everywhere
 *, input { font-family: 'Open Sans', Verdana, sans-serif; }
 
-// Container
-#container {
-	width: @container-width;
-	padding: 0 10px;
-	margin: 0 auto;
+// block mixins. Please use these if you want to create a block
+// with some stuff
+.genericBlock {
+	display: block;
+	background-color: @contentBackground;
+	padding: @contentBlockPadding;
 }
 
-// Columns
-#main-page, .two-column-subpage {
-	margin-top: 50px;
+.blockVerticalMargins {
+	margin-top: @minorBlockMargin;
+	margin-bottom: @minorBlockMargin;
+}
+
+.verticalBlock {
+	.blockVerticalMargins;
+	.genericBlock;
+}
+
+.blockColumn {
+	margin-top: -@minorBlockMargin;
+	> * {
+		display: block;
+		.verticalBlock;
+	}
+
+	> h3 {
+		font-size: small;
+		font-weight: normal;
+		text-align: center;
+		padding-top: @contentBlockPadding/4;
+		padding-bottom: @contentBlockPadding/4;
+		background-color: @blockHeaderBackground;
+	}
+
+}
+
+
+
+.navText {
+	font-size: @navFontSize;
+	line-height: 1.5*@navFontSize;
+}
+
+.blockLink {
+	color: @textColor;
+	.navText;
+}
+
+.paddedContent {
+	padding: @floatPadding;
 }
 
 #main-page {
-	.clearfix();
+	position: relative;
 
-	#left-column {
-		float: left;
-		width: @mainpage-left-column-width;
+	#navigation {
+		list-style-type: none;
+		padding: 0;
+		margin-bottom: @minorBlockMargin;
+
+		>* {
+			display: block;
+			float: left;
+			img {
+				display: block;
+				width: 100%;
+				margin: 0 auto;
+				margin-bottom: @contentBlockPadding;
+			}
+
+			@parentWidth: (8*@gridColumnWidth+7*@gridGutterWidth);
+			width: @parentWidth/3 - 2/3*@minorBlockMargin - 2*@contentBlockPadding;
+			margin-left: @minorBlockMargin;
+			&:first-child {
+				margin-left: 0;
+			}
+			text-align: center;
+			padding: @contentBlockPadding;
+			background-color: @contentBackground;
+			color: @textColor;
+			font-size: @navFontSize;
+		}
 	}
 
-	#right-column {
-		float: right;
-		width: @mainpage-right-column-width;
+	#feeds-span {
+		position: absolute;
+		right: 0;
+		top: 0;
+		.blockColumn;
+	}
+
+	#newsbox-span {
+		.blockColumn;
+	}
+
+	#parliament-activity-span {
+		.blockColumn;
 	}
 }
 
@@ -64,12 +141,10 @@
 
 	#left-column {
 		float: left;
-		width: @subpage-left-column-width;
 	}
 
 	#right-column {
 		float: right;
-		width: @subpage-right-column-width;
 	}
 }
 
@@ -106,115 +181,84 @@
 
 // Header
 #header {
-	margin-top: 30px;
-	height: 60px;
 
-	position: relative;
-}
-
-// logo
-#logo {
-	height: 60px;
-	width: 120px;
-
-	position: absolute;
-	left: 0px;
-	top: 0px;
-
-	h1 a {
-		background: url(../images/kamu.png) top left no-repeat;
-		height: 60px;
-		width: 120px;
-		float: left;
-		color: black;
-		font-variant: small-caps;
-		text-indent: -9999px;
-	}
-}
-
-// navbar
-#navbar {
-	position: absolute;
-	left: 200px;
-	bottom: 0px;
-
-	width: 500px;
-	height: 20px;
-
-	li {
-		float: left;
-		margin-right: 10px;
-	}
-
-	a {
-		font-weight: 700;
-		font-size: 13px;
-		text-decoration: none;
-		color: @black;
-
-		&:hover {
-			color: @primary;
-		}
-
-		&.extra {
-			color: @primary;
+	#logospan {
+		background-color: @contentBackground;
+		height: 2*@blockMinimumHeight + @minorBlockMargin;
+		// TODO: SEO hack?
+		a {
+			display: block;
+			height: 100%;
+			// CSS is a nightmare
+			background-image: url('../images/kamu.png');
+			background-repeat: no-repeat;
+			background-position: center center;
 		}
 	}
-}
 
-#search {
-	position: absolute;
-	right: 0px;
-	bottom: 0px;
+	#navtopbar {
+		height: @blockMinimumHeight;
+		background-color: @contentBackground;
+		margin-bottom: @minorBlockMargin;
+		overflow: hidden;
 
-	width: 200px;
-	height: 25px;
+		>* {
+			float: right;
+			line-height: @blockMinimumHeight;
+			margin-right: @contentBlockPadding;
+		}
 
-	text-align: right;
-
-	// overflow: hidden;
-
-	input {
-		margin: 0;
-		padding: 0 4px;
-		border: none;
-	}
-
-	input[type=text] {
-		width: 160px-8px;
-		height: 25px;
-
-		color: @darkgrey;
-		background: @lightgrey;
-		margin-right: 4px;
-
-		font-size: 11px;
-
-		vertical-align: bottom;
-	}
-
-	input[type=submit] {
-		color: @white;
-		background: @primary;
-		height: 25px;
-		width: 30px;
-
-		font-size: 18px;
-		line-height: 20px;
-
-		vertical-align: bottom;
-	}
-}
-
-// Common
-.showmore-link {
-	a {
-		color: @grey;
-		font-size: 13px;
-		&:hover {
-			color: @violet;
+		>.separator {
+			margin-top: @contentBlockPadding;
+			height: 50%;
+			border-left: 2px solid @blockHeaderBackground;
 		}
 	}
+
+	
+	#navbottombar {
+		height: @blockMinimumHeight;
+		width: 100%;
+
+		table {
+			height: 100%;
+			width: 100%;
+			margin: 0;
+			padding: 0;
+		}
+
+		table td {
+		}
+		table td {
+			margin: 0;
+			padding: 0;
+			padding-right: @minorBlockMargin;
+		}
+		
+		table td:last-child {
+			padding-right: 0;
+		}
+
+		table td a {
+				background-color: @contentBackground;
+				display: block;
+				width: 100%;
+				height: 100%;
+				text-align: center;
+				line-height: @blockMinimumHeight;
+				
+				color: @textColor;
+				font-size: @navFontSize;
+			}
+	}
+
+}
+
+#headerspacer {
+	margin: @majorBlockMargin 0 @majorBlockMargin 0;
+	height: @majorBlockMargin;
+	border: 0;
+	background-color: @spacerColor;
 }
 
 small {
@@ -238,35 +282,6 @@ h2 {
 		}
 	}
 
-	margin-bottom: 30px;
-}
-
-h3 {
-	color: @grey;
-	font-size: 10px;
-	line-height: 20px;
-	font-style: italic;
-	font-weight: 600;
-	margin: 0;
-	margin-bottom: 10px;
-
-	&.grey {
-		color: @grey;
-	}
-}
-
-// HOME PAGE
-#navigation {
-	margin-bottom: 30px;
-}
-
-#news {
-	margin-bottom: 20px;
-	border-bottom: 1px solid @lightgrey;
-}
-
-#parliament-activity {
-	margin-bottom: 30px;
 }
 
 .post {
@@ -278,12 +293,18 @@ h3 {
 			text-decoration: underline;
 		}
 	}
-
+	
 	h4 {
 		font-size: 18px;
 		line-height: 20px;
 		font-weight: 600;
 		margin-bottom: 8px;
+	}
+
+	.poster-portrait {
+		display: block;
+		float: left;
+		margin-right: @contentBlockPadding/2;
 	}
 
 	.content {
@@ -312,48 +333,6 @@ h3 {
 
 }
 
-.navibox {
-	float: left;
-	display: inline;
-
-	width: @navibox-width;
-	margin-left: @navibox-gutter;
-
-	background: @violet;
-	color: @white;
-
-	text-transform: uppercase;
-	font-size: 12px;
-	line-height: 25px;
-	font-weight: 800;
-	letter-spacing: 0.08em;
-
-	a {
-		color: @white;
-	}
-
-	a:hover {
-		text-decoration: none;
-		.caption {
-			background: @primary;
-		}
-	}
-
-	img {
-		display: block;
-		height: 200px;
-		width: @navibox-width;
-		padding: 0;
-		margin: 0;
-	}
-
-	.caption {
-		display: block;
-		padding: 0;
-		margin: 0;
-		padding-left: 10px;
-	}
-}
 
 // Livefeed
 #livefeed {
@@ -547,12 +526,17 @@ h3 {
 }
 
 .member-leftbar {
-	padding: 10px;
+	.blockColumn;
 	.member-base-info {
+		.verticalBlock;
+		padding: @contentBlockPadding;
+
 		.member-portrait {
 			display: block;
 			float: left;
-			padding-right: 20px;
+			.paddedContent;
+			padding-top: 0;
+			padding-left: 0;
 		}
 
 		.member-party-logo {
@@ -561,52 +545,35 @@ h3 {
 		}
 
 		.member-name {
-			padding-top: 20px;
 			margin: 0;
 			clear: both;
 			font-weight: bold;
 			color: black;
 		}
 
-		hr {
-			width: 20px;
-			margin: 10px;
-			margin-left: 0;
-			border-width: 2px;
-		}
-		
 		.member-district {
 			margin: 0;
 		}
 	}
 	
-
-
-	.member-nav {
-		list-style-type: none;
-		margin-top: 20px;
-		margin-left: 0;
+	> a {
+		.blockLink;
 	}
+}
 
-	.member-nav li a {
-		display: block;
-		width: 100%;
-		height: 30px;
-		padding: 10px;
-		padding-left: 20px;
-		margin-bottom: 10px;
-		
-		line-height: 30px;
+.member-content-span {
+	background-color: @contentBackground;
+}
 
-		color: black;
-		font-size: large;
-		background-color: #ddd;
-	}
-		
+.member-content {
+	padding: @contentBlockPadding;
+}
+
+.member-rightbar {
+	.blockColumn;
 }
 
 div.member-basic-info {
-	width: 100%;
 	
 	font-size: large;
 	table {
@@ -615,8 +582,7 @@ div.member-basic-info {
 	}
 
 	table td {
-		border: 1px solid #ddd;
-		padding: 5px;
+		padding: @contentBlockPadding;
 		padding-left: 10px;
 		padding-top: 1px;
 	}
@@ -657,3 +623,4 @@ div.member-basic-info {
 		margin-left: 100px;
 	}
 }
+

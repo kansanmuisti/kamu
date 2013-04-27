@@ -15,52 +15,52 @@
 {% endblock %}
 
 {% block content %}
-
 <div class="row">
 
-<div class="span3 member-leftbar">
-{% block member_leftbar %}
+	<div class="span3 member-leftbar">
+		{% block member_leftbar %}
 
-<div class="member-base-info">
-{% thumbnail member.photo "128x192" as photo %}
-<img class="member-portrait" src="{{photo.url}}" />
-{% endthumbnail %}
-{% thumbnail member.party.logo "64x64" as logo %}
-<img class="member-party-logo" src="{{ logo.url }}" />
-{% endthumbnail %}
+		<div class="member-base-info">
+			{% thumbnail member.photo "128x192" as photo %}
+			<img class="member-portrait" src="{{photo.url}}" />
+			{% endthumbnail %}
+			{% thumbnail member.party.logo "50x50" as logo %}
+			<img class="member-party-logo" src="{{ logo.url }}" />
+			{% endthumbnail %}
+		
+			<h2 class="member-name">
+				{{ member.get_print_name }}
+			</h2>
+			<h4 class="member-district">
+				{{ member.current_district.long_name }}
+			</h4>
+		</div>
 
-<h2 class="member-name">
-{{ member.get_print_name }}
-</h2>
-<hr />
-<h4 class="member-district">
-{{ member.current_district.long_name }}
-</h4>
-</div>
+		<a href="{% url 'parliament.views.show_member' member.url_name %}">
+			{% trans "Recent activity" %}
+		</a>
+		<a href="{% url 'parliament.views.member_basic_info' member.url_name %}">
+			{% trans "Basic information" %}
+		</a>
+	</div>
+	{% endblock %}
 
-<ul class="member-nav">
-<li>
-<a href="{% url 'parliament.views.show_member' member.url_name %}">
-{% trans "Recent activity" %}
-</a>
-<a href="{% url 'parliament.views.member_basic_info' member.url_name %}">
-{% trans "Basic information" %}
-</a>
-</li>
+	<div class="span6 member-content-span">
+		<div class="member-content">
+			{% block member_content %}
+			{% endblock %}
+		</div>
+	</div>
 
-</ul>
-{% endblock %}
-</div>
-
-<div class="span6 member-content">
-{% block member_content %}
-{% endblock %}
-</div>
-
-<div class="span2 member-rightbar">
-{% block member_rightbar %}
-{% endblock %}
-</div>
+	<div class="span3 member-rightbar">
+		{% block member_rightbar %}
+		<div>Search here?</div>
+		<div style="height: 200px">
+			Feed?
+		</div>
+		<div>And some some logos?</div>
+		{% endblock %}
+	</div>
 
 </div> <!-- row -->
 
