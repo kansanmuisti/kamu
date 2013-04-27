@@ -24,13 +24,13 @@
 			{% thumbnail member.photo "128x192" as photo %}
 			<img class="member-portrait" src="{{photo.url}}" />
 			{% endthumbnail %}
-			{% thumbnail member.party.logo "50x50" as logo %}
+			{% thumbnail member.party.logo "55x55" as logo %}
 			<img class="member-party-logo" src="{{ logo.url }}" />
 			{% endthumbnail %}
 		
-			<h2 class="member-name">
+			<h4 class="member-name">
 				{{ member.get_print_name }}
-			</h2>
+			</h4>
 			<h4 class="member-district">
 				{{ member.current_district.long_name }}
 			</h4>

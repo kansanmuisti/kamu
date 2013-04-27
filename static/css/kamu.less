@@ -8,8 +8,8 @@
 // Content blocks
 @majorBlockMargin:	10px;
 @minorBlockMargin:	5px;
-@contentBlockPadding:	10px;
-@blockMinimumHeight:	40px;
+@contentBlockPadding:	15px;
+@blockMinimumHeight:	45px;
 
 @blockHeaderBackground:	#ddd;
 
@@ -72,6 +72,9 @@ body {
 
 }
 
+.boxShadow {
+	box-shadow: 0 0 10px #888;
+}
 
 
 .navText {
@@ -104,6 +107,7 @@ body {
 				width: 100%;
 				margin: 0 auto;
 				margin-bottom: @contentBlockPadding;
+				.boxShadow;
 			}
 
 			@parentWidth: (8*@gridColumnWidth+7*@gridGutterWidth);
@@ -305,6 +309,7 @@ h2 {
 		display: block;
 		float: left;
 		margin-right: @contentBlockPadding/2;
+		.boxShadow;
 	}
 
 	.content {
@@ -534,9 +539,11 @@ h2 {
 		.member-portrait {
 			display: block;
 			float: left;
-			.paddedContent;
-			padding-top: 0;
-			padding-left: 0;
+			margin-right: @contentBlockPadding;
+			margin-bottom: @contentBlockPadding*2;
+			margin-left: 0;
+			margin-top: 0;
+			.boxShadow;
 		}
 
 		.member-party-logo {
@@ -545,14 +552,14 @@ h2 {
 		}
 
 		.member-name {
-			margin: 0;
 			clear: both;
+			margin-bottom: @contentBlockPadding/2;
 			font-weight: bold;
 			color: black;
 		}
 
 		.member-district {
-			margin: 0;
+			font-weight: normal;
 		}
 	}
 	
