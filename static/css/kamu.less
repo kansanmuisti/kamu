@@ -29,8 +29,7 @@
 
 
 body {
-	margin-top: 2*@blockMinimumHeight;
-	margin-bottom: 2*@blockMinimumHeight;
+	margin-top: @gridGutterWidth;
 }
 
 // default font everywhere
@@ -38,9 +37,12 @@ body {
 
 // block mixins. Please use these if you want to create a block
 // with some stuff
-.genericBlock {
-	display: block;
+.blockStyling {
 	background-color: @contentBackground;
+	.boxShadow;
+}
+
+.blockPadding {
 	padding: @contentBlockPadding;
 }
 
@@ -51,7 +53,13 @@ body {
 
 .verticalBlock {
 	.blockVerticalMargins;
-	.genericBlock;
+	.blockStyling;
+	.blockPadding;
+}
+
+.onBackgroundText {
+	text-shadow: 0 0 3px #888;
+	color: #eee;
 }
 
 .blockColumn {
@@ -64,10 +72,14 @@ body {
 	> h3 {
 		font-size: small;
 		font-weight: normal;
-		text-align: center;
 		padding-top: @contentBlockPadding/4;
-		padding-bottom: @contentBlockPadding/4;
-		background-color: @blockHeaderBackground;
+		padding-bottom: 0;
+		margin: 0;
+		margin-bottom: -@minorBlockMargin;
+		background-color: transparent;
+		box-shadow: 0 0 0 0;	
+		font-weight: bold;
+		.onBackgroundText;
 	}
 
 }
@@ -85,6 +97,7 @@ body {
 .blockLink {
 	color: @textColor;
 	.navText;
+	.blockStyling;
 }
 
 .paddedContent {
@@ -102,6 +115,7 @@ body {
 		>* {
 			display: block;
 			float: left;
+			.blockStyling;
 			img {
 				display: block;
 				width: 100%;
@@ -118,7 +132,6 @@ body {
 			}
 			text-align: center;
 			padding: @contentBlockPadding;
-			background-color: @contentBackground;
 			color: @textColor;
 			font-size: @navFontSize;
 		}
@@ -140,54 +153,10 @@ body {
 	}
 }
 
-.two-column-subpage {
-	.clearfix();
-
-	#left-column {
-		float: left;
-	}
-
-	#right-column {
-		float: right;
-	}
-}
-
-// Footer
-#footer {
-	margin-top: 30px;
-	margin-bottom: 30px;
-
-	border-top: 1px solid @lightgrey;
-
-	color: @grey;
-	font-size: 10px;
-}
-
-// Login bar, above header
-#loginbar {
-	margin-top: 40px;
-
-	text-align: right;
-	color: @black;
-
-	font-size: 13px;
-	font-weight: 400px;
-
-	a {
-		text-decoration: none;
-		color: @black;
-
-		&:hover {
-			color: @violet;
-		}
-	}
-}
-
-// Header
 #header {
 
 	#logospan {
-		background-color: @contentBackground;
+		.blockStyling;
 		height: 2*@blockMinimumHeight + @minorBlockMargin;
 		// TODO: SEO hack?
 		a {
@@ -202,7 +171,7 @@ body {
 
 	#navtopbar {
 		height: @blockMinimumHeight;
-		background-color: @contentBackground;
+		.blockStyling;
 		margin-bottom: @minorBlockMargin;
 		overflow: hidden;
 
@@ -232,8 +201,6 @@ body {
 		}
 
 		table td {
-		}
-		table td {
 			margin: 0;
 			padding: 0;
 			padding-right: @minorBlockMargin;
@@ -244,8 +211,8 @@ body {
 		}
 
 		table td a {
-				background-color: @contentBackground;
 				display: block;
+				.blockStyling;
 				width: 100%;
 				height: 100%;
 				text-align: center;
@@ -263,6 +230,12 @@ body {
 	height: @majorBlockMargin;
 	border: 0;
 	background-color: @spacerColor;
+}
+
+#footer {
+	margin-top: @blockMinimumHeight;
+	margin-bottom: @majorBlockMargin;
+	.onBackgroundText;
 }
 
 small {
@@ -569,50 +542,15 @@ h2 {
 }
 
 .member-content-span {
-	background-color: @contentBackground;
+	.blockStyling;
 }
 
 .member-content {
-	padding: @contentBlockPadding;
+	.blockPadding;
 }
 
 .member-rightbar {
 	.blockColumn;
-}
-
-div.member-basic-info {
-	
-	font-size: large;
-	table {
-		width: 100%;
-		margin: 0;
-	}
-
-	table td {
-		padding: @contentBlockPadding;
-		padding-left: 10px;
-		padding-top: 1px;
-	}
-	
-	label {
-		margin-left: -5px;
-		margin-bottom: -2px;
-		font-weight: normal;
-	}
-
-	dl {
-		margin: 5px;
-		margin-left: 0;
-
-		dt {
-			font-weight: normal;
-		}
-
-		dd {
-			font-size: small;
-		}
-	}
-
 }
 
 // Other
