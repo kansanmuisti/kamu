@@ -1,6 +1,20 @@
 @import "variables.less";
 @import "bootstrap/less/mixins.less";
 
+@contentBackground:	@white;
+@spacerColor:		#666;
+
+
+// Content blocks
+@majorBlockMargin:	@gridGutterWidth;
+@minorBlockMargin:	@majorBlockMargin/2;
+@contentBlockPadding:	15px;
+@blockMinimumHeight:	45px;
+
+@blockHeaderBackground:	#ddd;
+
+@floatPadding:		10px;
+
 // colors
 @primary: #aaa52d;
 @violet: #9933d6;
@@ -11,210 +25,214 @@
 @grey: #a0a0a0;
 @lightgrey: #e6e6e6;
 @darkgrey: #8e8e8e;
+@kamuBlue: #B9D1C6;
 
-// some helping constants
-@navibox-width: 184px;
-@navibox-gutter: 20px;
 
-// main page columns
-@mainpage-left-column-width: 3*@navibox-width + 2*@navibox-gutter;
-@mainpage-right-column-width: 280px;
-
-// default space between columns
-@column-gutter: 40px;
-
-// page width
-@container-width: @mainpage-left-column-width + @mainpage-right-column-width + @column-gutter;
-
-// sub page columns
-@subpage-left-column-width: 720px;
-@subpage-right-column-width: @container-width - @subpage-left-column-width - @column-gutter;
+body {
+	margin-top: @gridGutterWidth;
+}
 
 // default font everywhere
 *, input { font-family: 'Open Sans', Verdana, sans-serif; }
 
-// Container
-#container {
-	width: @container-width;
-	padding: 0 10px;
-	margin: 0 auto;
+// block mixins. Please use these if you want to create a block
+// with some stuff
+.blockStyling {
+	background-color: @contentBackground;
+	.boxShadow;
 }
 
-// Columns
-#main-page, .two-column-subpage {
-	margin-top: 50px;
+.blockPadding {
+	padding: @contentBlockPadding;
+}
+
+.blockVerticalMargins {
+	margin-top: @minorBlockMargin;
+	margin-bottom: @minorBlockMargin;
+}
+
+.verticalBlock {
+	.blockVerticalMargins;
+	.blockStyling;
+	.blockPadding;
+}
+
+.onBackgroundText {
+	text-shadow: 0 0 3px #888;
+	color: #f5f5f5;
+}
+
+.blockColumn {
+	margin-top: -@minorBlockMargin;
+	> * {
+		display: block;
+		.verticalBlock;
+	}
+
+	> h3 {
+		font-size: small;
+		font-weight: normal;
+		padding-top: @contentBlockPadding/4;
+		padding-bottom: 0;
+		margin: 0;
+		margin-bottom: -@minorBlockMargin;
+		background-color: transparent;
+		box-shadow: 0 0 0 0;	
+		font-weight: bold;
+		.onBackgroundText;
+	}
+
+}
+
+.boxShadow {
+	box-shadow: 0 0 10px #999;
+}
+
+.navText {
+	font-size: @navFontSize;
+	line-height: 1.5*@navFontSize;
+}
+
+.blockLink {
+	color: @textColor;
+	.navText;
+	.blockStyling;
+	font-weight: bold;
+}
+
+.paddedContent {
+	padding: @floatPadding;
 }
 
 #main-page {
-	.clearfix();
-
-	#left-column {
-		float: left;
-		width: @mainpage-left-column-width;
-	}
-
-	#right-column {
-		float: right;
-		width: @mainpage-right-column-width;
-	}
-}
-
-.two-column-subpage {
-	.clearfix();
-
-	#left-column {
-		float: left;
-		width: @subpage-left-column-width;
-	}
-
-	#right-column {
-		float: right;
-		width: @subpage-right-column-width;
-	}
-}
-
-// Footer
-#footer {
-	margin-top: 30px;
-	margin-bottom: 30px;
-
-	border-top: 1px solid @lightgrey;
-
-	color: @grey;
-	font-size: 10px;
-}
-
-// Login bar, above header
-#loginbar {
-	margin-top: 40px;
-
-	text-align: right;
-	color: @black;
-
-	font-size: 13px;
-	font-weight: 400px;
-
-	a {
-		text-decoration: none;
-		color: @black;
-
-		&:hover {
-			color: @violet;
-		}
-	}
-}
-
-// Header
-#header {
-	margin-top: 30px;
-	height: 60px;
-
 	position: relative;
-}
 
-// logo
-#logo {
-	height: 60px;
-	width: 120px;
+	#navigation {
+		list-style-type: none;
+		padding: 0;
+		margin-bottom: @minorBlockMargin;
 
-	position: absolute;
-	left: 0px;
-	top: 0px;
+		>* {
+			display: block;
+			float: left;
+			.blockStyling;
+			img {
+				display: block;
+				width: 100%;
+				margin: 0 auto;
+				margin-bottom: @contentBlockPadding;
+				.boxShadow;
+			}
 
-	h1 a {
-		background: url(../images/kamu.png) top left no-repeat;
-		height: 60px;
-		width: 120px;
-		float: left;
-		color: black;
-		font-variant: small-caps;
-		text-indent: -9999px;
-	}
-}
-
-// navbar
-#navbar {
-	position: absolute;
-	left: 200px;
-	bottom: 0px;
-
-	width: 500px;
-	height: 20px;
-
-	li {
-		float: left;
-		margin-right: 10px;
-	}
-
-	a {
-		font-weight: 700;
-		font-size: 13px;
-		text-decoration: none;
-		color: @black;
-
-		&:hover {
-			color: @primary;
-		}
-
-		&.extra {
-			color: @primary;
+			@parentWidth: (8*@gridColumnWidth+7*@gridGutterWidth);
+			width: @parentWidth/3 - 2/3*@minorBlockMargin - 2*@contentBlockPadding;
+			margin-left: @minorBlockMargin;
+			&:first-child {
+				margin-left: 0;
+			}
+			text-align: center;
+			padding: @contentBlockPadding;
+			.blockLink;
+			color: @textColor;
+			font-size: @navFontSize;
 		}
 	}
-}
 
-#search {
-	position: absolute;
-	right: 0px;
-	bottom: 0px;
-
-	width: 200px;
-	height: 25px;
-
-	text-align: right;
-
-	// overflow: hidden;
-
-	input {
-		margin: 0;
-		padding: 0 4px;
-		border: none;
+	#feeds-span {
+		position: absolute;
+		right: 0;
+		top: 0;
+		.blockColumn;
 	}
 
-	input[type=text] {
-		width: 160px-8px;
-		height: 25px;
-
-		color: @darkgrey;
-		background: @lightgrey;
-		margin-right: 4px;
-
-		font-size: 11px;
-
-		vertical-align: bottom;
+	#newsbox-span {
+		.blockColumn;
 	}
 
-	input[type=submit] {
-		color: @white;
-		background: @primary;
-		height: 25px;
-		width: 30px;
-
-		font-size: 18px;
-		line-height: 20px;
-
-		vertical-align: bottom;
+	#parliament-activity-span {
+		.blockColumn;
 	}
 }
 
-// Common
-.showmore-link {
-	a {
-		color: @grey;
-		font-size: 13px;
-		&:hover {
-			color: @violet;
+#header {
+	#logospan {
+		.blockStyling;
+		height: 2*@blockMinimumHeight + @minorBlockMargin;
+		// TODO: SEO hack?
+		a {
+			display: block;
+			height: 100%;
+			// CSS is a nightmare
+			background-image: url('../images/kamu.png');
+			background-repeat: no-repeat;
+			background-position: center center;
 		}
 	}
+
+	#navtopbar {
+		height: @blockMinimumHeight;
+		.blockStyling;
+		margin-bottom: @minorBlockMargin;
+		overflow: hidden;
+		>* {
+			float: right;
+			line-height: @blockMinimumHeight;
+			margin-right: @contentBlockPadding;
+		}
+
+		>.separator {
+			margin-top: @contentBlockPadding;
+			height: 50%;
+			border-left: 2px solid @blockHeaderBackground;
+		}
+	}
+
+	
+	#navbottombar {
+		height: @blockMinimumHeight;
+		width: 100%;
+
+		table {
+			height: 100%;
+			width: 100%;
+			margin: 0;
+			padding: 0;
+		}
+
+		table td {
+			margin: 0;
+			padding: 0;
+			padding-right: @minorBlockMargin;
+		}
+		
+		table td:last-child {
+			padding-right: 0;
+		}
+
+		table td a {
+				display: block;
+				.blockStyling;
+				width: 100%;
+				height: 100%;
+				text-align: center;
+				.blockLink;
+				line-height: @blockMinimumHeight;
+			}
+	}
+
+}
+
+#headerspacer {
+	margin: @majorBlockMargin 0 @majorBlockMargin 0;
+	height: @majorBlockMargin;
+	border: 0;
+	background-color: @spacerColor;
+}
+
+#footer {
+	margin-top: @blockMinimumHeight;
+	margin-bottom: @majorBlockMargin;
+	.onBackgroundText;
 }
 
 small {
@@ -238,35 +256,6 @@ h2 {
 		}
 	}
 
-	margin-bottom: 30px;
-}
-
-h3 {
-	color: @grey;
-	font-size: 10px;
-	line-height: 20px;
-	font-style: italic;
-	font-weight: 600;
-	margin: 0;
-	margin-bottom: 10px;
-
-	&.grey {
-		color: @grey;
-	}
-}
-
-// HOME PAGE
-#navigation {
-	margin-bottom: 30px;
-}
-
-#news {
-	margin-bottom: 20px;
-	border-bottom: 1px solid @lightgrey;
-}
-
-#parliament-activity {
-	margin-bottom: 30px;
 }
 
 .post {
@@ -278,12 +267,19 @@ h3 {
 			text-decoration: underline;
 		}
 	}
-
+	
 	h4 {
 		font-size: 18px;
 		line-height: 20px;
 		font-weight: 600;
 		margin-bottom: 8px;
+	}
+
+	.poster-portrait {
+		display: block;
+		float: left;
+		margin-right: @contentBlockPadding/2;
+		.boxShadow;
 	}
 
 	.content {
@@ -312,48 +308,6 @@ h3 {
 
 }
 
-.navibox {
-	float: left;
-	display: inline;
-
-	width: @navibox-width;
-	margin-left: @navibox-gutter;
-
-	background: @violet;
-	color: @white;
-
-	text-transform: uppercase;
-	font-size: 12px;
-	line-height: 25px;
-	font-weight: 800;
-	letter-spacing: 0.08em;
-
-	a {
-		color: @white;
-	}
-
-	a:hover {
-		text-decoration: none;
-		.caption {
-			background: @primary;
-		}
-	}
-
-	img {
-		display: block;
-		height: 200px;
-		width: @navibox-width;
-		padding: 0;
-		margin: 0;
-	}
-
-	.caption {
-		display: block;
-		padding: 0;
-		margin: 0;
-		padding-left: 10px;
-	}
-}
 
 // Livefeed
 #livefeed {
@@ -547,12 +501,19 @@ h3 {
 }
 
 .member-leftbar {
-	padding: 10px;
+	.blockColumn;
 	.member-base-info {
+		.verticalBlock;
+		padding: @contentBlockPadding;
+
 		.member-portrait {
 			display: block;
 			float: left;
-			padding-right: 20px;
+			margin-right: @contentBlockPadding;
+			margin-bottom: @contentBlockPadding*2;
+			margin-left: 0;
+			margin-top: 0;
+			.boxShadow;
 		}
 
 		.member-party-logo {
@@ -561,48 +522,32 @@ h3 {
 		}
 
 		.member-name {
-			padding-top: 20px;
-			margin: 0;
 			clear: both;
+			margin-bottom: @contentBlockPadding/2;
 			font-weight: bold;
 			color: black;
 		}
 
-		hr {
-			width: 20px;
-			margin: 10px;
-			margin-left: 0;
-			border-width: 2px;
-		}
-		
 		.member-district {
-			margin: 0;
+			font-weight: normal;
 		}
 	}
 	
-
-
-	.member-nav {
-		list-style-type: none;
-		margin-top: 20px;
-		margin-left: 0;
+	> a {
+		.blockLink;
 	}
+}
 
-	.member-nav li a {
-		display: block;
-		width: 100%;
-		height: 30px;
-		padding: 10px;
-		padding-left: 20px;
-		margin-bottom: 10px;
-		
-		line-height: 30px;
+.member-content-span {
+	.blockStyling;
+}
 
-		color: black;
-		font-size: large;
-		background-color: #ddd;
-	}
-		
+.member-content {
+	.blockPadding;
+}
+
+.member-rightbar {
+	.blockColumn;
 }
 
 // Other
@@ -620,3 +565,9 @@ h3 {
 		margin-left: 100px;
 	}
 }
+
+.currentlink {
+	background-color: @kamuBlue !important;
+}
+
+
