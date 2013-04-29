@@ -1,5 +1,5 @@
 {% extends "base_j.html" %}
-{% load i18n compress %}
+{% load i18n compress static %}
 {% block title %}{% trans "Front page" %}{% endblock %}
 {% block head %}
 
@@ -51,15 +51,15 @@ $ ->
 <div id="main-page" class="row">
 	<div id="navigation" class="span8">
 		<a href="#">
-			<img alt="{% trans "Parties" %}" src="{{ MEDIA_URL }}images/puolueet.jpg" />
+			<img alt="{% trans "Parties" %}" src="{% static "images/puolueet.jpg" %}" />
 			<span class="caption">{% trans "Parties" %}</span>
 		</a>
 		<a href="#">
-			<img alt="{% trans "MPs" %}" src="{{ MEDIA_URL }}images/marikiviniemi.jpg" />
+			<img alt="{% trans "MPs" %}" src="{% static "images/guzenina-richardsson.jpg" %}" />
 			<span class="caption">{% trans "MPs" %}</span>
 		</a>
 		<a href="#">
-			<img alt="{% trans "News" %}" src="{{ MEDIA_URL }}images/ajankohtaista.jpg" />
+			<img alt="{% trans "News" %}" src="{% static "images/ajankohtaista.jpg" %}" />
 			<span class="caption">{% trans "News" %}</span>
 		</a>
 	</div>
