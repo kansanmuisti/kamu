@@ -6,8 +6,8 @@
 
 
 // Content blocks
-@majorBlockMargin:	10px;
-@minorBlockMargin:	5px;
+@majorBlockMargin:	@gridGutterWidth;
+@minorBlockMargin:	@majorBlockMargin/2;
 @contentBlockPadding:	15px;
 @blockMinimumHeight:	45px;
 
@@ -25,7 +25,7 @@
 @grey: #a0a0a0;
 @lightgrey: #e6e6e6;
 @darkgrey: #8e8e8e;
-
+@kamuBlue: #B9D1C6;
 
 
 body {
@@ -59,7 +59,7 @@ body {
 
 .onBackgroundText {
 	text-shadow: 0 0 3px #888;
-	color: #eee;
+	color: #f5f5f5;
 }
 
 .blockColumn {
@@ -85,9 +85,8 @@ body {
 }
 
 .boxShadow {
-	box-shadow: 0 0 10px #888;
+	box-shadow: 0 0 10px #999;
 }
-
 
 .navText {
 	font-size: @navFontSize;
@@ -98,6 +97,7 @@ body {
 	color: @textColor;
 	.navText;
 	.blockStyling;
+	font-weight: bold;
 }
 
 .paddedContent {
@@ -132,6 +132,7 @@ body {
 			}
 			text-align: center;
 			padding: @contentBlockPadding;
+			.blockLink;
 			color: @textColor;
 			font-size: @navFontSize;
 		}
@@ -154,7 +155,6 @@ body {
 }
 
 #header {
-
 	#logospan {
 		.blockStyling;
 		height: 2*@blockMinimumHeight + @minorBlockMargin;
@@ -174,7 +174,6 @@ body {
 		.blockStyling;
 		margin-bottom: @minorBlockMargin;
 		overflow: hidden;
-
 		>* {
 			float: right;
 			line-height: @blockMinimumHeight;
@@ -216,10 +215,8 @@ body {
 				width: 100%;
 				height: 100%;
 				text-align: center;
+				.blockLink;
 				line-height: @blockMinimumHeight;
-				
-				color: @textColor;
-				font-size: @navFontSize;
 			}
 	}
 
@@ -568,4 +565,9 @@ h2 {
 		margin-left: 100px;
 	}
 }
+
+.currentlink {
+	background-color: @kamuBlue !important;
+}
+
 
