@@ -1,5 +1,63 @@
 {% extends "member/base.html" %}
+{% load i18n thumbnail comments opinions %}
 
 {% block member_content %}
-Basic stuff
+<div class="member-basic-info">
+
+<table><tr>
+<td width="50%";>
+<label>{% trans "Surname" %}</label>
+{{ member.surname }}
+</td>
+
+<td width="50%">
+<label>{% trans "Given names" %}</label>
+{{ member.given_names }}
+</td>
+
+</tr></table>
+
+<table><tr>
+<td width="40%">
+<label>{% trans "Birthdate" %}</label>
+{{ member.birth_date|date }}
+</td>
+
+<td width="60%">
+<label>{% trans "Telephone" %}</label>
+{{ member.phone }}
+</td>
+</tr></table>
+
+
+<table><tr>
+<td width="100%">
+<label>{% trans "Email address" %}</label>
+{{ member.email }}
+</td>
+</tr></table>
+
+<table><tr>
+<td width="50%">
+<label>{% trans "Party associations" %}</label>
+<dl>
+{% for pa in member.partyassociation_set.all %}
+<dt>{{ pa.party.full_name }}</dt>
+<dd>{{ pa.begin|date }}&#8211;{% if pa.end %}{{ pa.end|date }}{% endif %}</dd>
+{% endfor %}
+</dl>
+
+<td width="50%">
+<label>{% trans "Electoral districts" %}</label>
+<dl>
+{% for da in member.districtassociation_set.all %}
+<dt>{{ da.district.long_name }}</dt>
+<dd>{{ da.begin|date }}&#8211;{% if da.end %}{{ pa.end|date }}{% endif %}</dd>
+{% endfor %}
+</dl>
+
+</tr></table>
+
+
+</div>
 {% endblock %}
