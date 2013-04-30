@@ -12,6 +12,9 @@
 
   <link rel="shortcut icon" href="{% static 'images/icons/favicon.ico' %}" />
 
+  <!-- font -->
+  <link href='http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
   <!-- twitter bootstrap -->
   {% compress css %}
   <link type="text/less" href="{{ MEDIA_URL }}css/bootstrap/bootstrap.less" rel="stylesheet" />
@@ -32,58 +35,58 @@
 </head>
 
 <body>
-	<div class="container">
-		<div class="row" id="header">
-			<div class="span2" id="logospan">
-					<a class="currentlink" href="{% url 'parliament.views.main' %} ">
-					</a>
-			</div>
-			<div class="span10">
-				<div id="navtopbar">
-					<div id="search">
-						<form action="#" method="post">
-							<input type="text" value="Hae Kansan muistista..." /><input type="submit" value="&gt;" />
-						</form>
-					</div>
-					<div class="separator"></div>
-					<div id="logged-user">
-						Saana Sekakäyttäjä / <a href="#">Kirjaudu ulos</a>
-					</div>
+    <div class="container">
+        <div class="row" id="header">
+            <div class="span2" id="logospan">
+                <a class="currentlink" href="{% url 'parliament.views.main' %} ">
+                </a>
+            </div>
+            <div class="span10">
+                <div id="navtopbar">
+                    <div id="search">
+                        <form class="form-search" action="#" method="post">
+                            <div class="input-append">
+                                <input type="text" class="input-medium search-query" placeholder="Hae Kansan muistista..."/>
+                                <button style="margin-top: 7px" class="btn"><i class="icon-search"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="separator"></div>
+                    <div id="logged-user">
+                        Saana Sekakäyttäjä / <a href="#">Kirjaudu ulos</a>
+                    </div>
+                </div>
 
-				</div>
+                <div id="navbottombar">
+                    <table><tr> <!-- OMG! A TABLE!!!1 -->
+                            <td><a href="{% url 'parliament.views.list_sessions' %}">
+                                    {% trans "Plenary sessions" %}
+                            </a></td>
+                            <td><a href="#">
+                                    {% trans "Parties" %}
+                            </a></td>
+                            <td><a href="{% url 'parliament.views.list_members' %}">
+                                    {% trans "Members" %}
+                            </a></td>
+                            <td><a href="#">
+                                    {% trans "Topics" %}
+                            </a></td>
+                            <td><a href="#">
+                                    {% trans "About" %}
+                            </a>
 
-				<div id="navbottombar">
-					<table><tr> <!-- OMG! A TABLE!!!1 -->
-						<td><a href="{% url 'parliament.views.list_sessions' %}">
-							{% trans "Plenary sessions" %}
-						</a></td>
-						<td><a href="#">
-							{% trans "Parties" %}
-						</a></td>
-						<td><a href="{% url 'parliament.views.list_members' %}">
-							{% trans "Members" %}
-						</a></td>
-						<td><a href="#">
-							{% trans "Topics" %}
-						</a></td>
-						<td><a href="#">
-							{% trans "About" %}
-						</a>
+                    </tr></table>
+                </div>
+            </div>
+        </div>
 
-					</tr></table>
-				</div>
-			</div>
-		</div>
+        <hr id="headerspacer" />
 
-		<hr id="headerspacer" />
+        {% block content %}{% endblock %}
 
-		{% block content %}{% endblock %}
-
-		<div id="footer">
-				Copyright &copy; 2010–2013 Kansan muisti ry. Palvelun ylläpitäjä ei vastaa tietojen oikeellisuudesta.
-		</div>
-
-
+        <div id="footer">
+                        Copyright &copy; 2010–2013 Kansan muisti ry. Palvelun ylläpitäjä ei vastaa tietojen oikeellisuudesta.
+        </div>
 </body>
 
 </html>

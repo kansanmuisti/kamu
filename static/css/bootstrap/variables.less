@@ -32,8 +32,8 @@
 
 // Scaffolding
 // -------------------------
-@bodyBackground:        @white;
-@textColor:             #555;
+@bodyBackground:        #b3b3b3;
+@textColor:             @black;
 
 
 // Links
@@ -44,8 +44,8 @@
 
 // Typography
 // -------------------------
-@sansFontFamily:        "Open Sans", Calibri, Candara, Arial, sans-serif;
-@serifFontFamily:       Georgia, "Times New Roman", Times, serif;
+@sansFontFamily:        "Noto Sans", Calibri, Candara, Arial, sans-serif;
+@serifFontFamily:       "Noto Serif", Georgia, "Times New Roman", Times, serif;
 @monoFontFamily:        Monaco, Menlo, Consolas, "Courier New", monospace;
 
 @baseFontSize:          14px;
@@ -57,6 +57,7 @@
 @headingsFontWeight:    300;    // instead of browser default, bold
 @headingsColor:         @grayDarker; // empty to use BS default, @textColor
 
+@navFontSize:		14px;
 
 // Component sizing
 // -------------------------
@@ -272,8 +273,8 @@
 // Default 940px grid
 // -------------------------
 @gridColumns:             12;
-@gridColumnWidth:         60px;
-@gridGutterWidth:         20px;
+@gridColumnWidth:         70px;
+@gridGutterWidth:         10px;
 @gridRowWidth:            (@gridColumns * @gridColumnWidth) + (@gridGutterWidth * (@gridColumns - 1));
 
 // 1200px min
