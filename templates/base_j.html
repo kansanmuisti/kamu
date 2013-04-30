@@ -1,4 +1,4 @@
-{% load i18n compress %}
+{% load i18n compress static %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -10,14 +10,11 @@
   <meta property="og:site_name" content="Kansan muisti" />
   <meta property="fb:app_id" content="107387482616243" />
 
-  <link rel="shortcut icon" href="/static/images/icons/favicon.ico" />
-
-  <!-- open sans -->
-  <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" type="text/css" />
+  <link rel="shortcut icon" href="{% static 'images/icons/favicon.ico' %}" />
 
   <!-- twitter bootstrap -->
   {% compress css %}
-  <link type="text/less" href="{{ MEDIA_URL }}css/bootstrap.less" rel="stylesheet" />
+  <link type="text/less" href="{{ MEDIA_URL }}css/bootstrap/bootstrap.less" rel="stylesheet" />
   {% endcompress %}
 
   <!-- own css -->
@@ -26,7 +23,7 @@
   {% endcompress %}
 
   {% compress js %}
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.6.1.js"></script>
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.9.1.min.js"></script>
   <script type="text/javascript" src="{{ MEDIA_URL }}js/moment.js"></script>
   <script type="text/javascript" src="{{ MEDIA_URL }}js/moment.fi.js"></script>
   {% endcompress %}
