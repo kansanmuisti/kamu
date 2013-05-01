@@ -5,34 +5,41 @@
       xmlns:og="http://opengraphprotocol.org/schema/"
       xmlns:fb="http://www.facebook.com/2008/fbml">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>{% block title %}{% endblock %} | KAMU</title>
-  <meta property="og:site_name" content="Kansan muisti" />
-  <meta property="fb:app_id" content="107387482616243" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>{% block title %}{% endblock %} | KAMU</title>
+    <meta property="og:site_name" content="Kansan muisti" />
+    <meta property="fb:app_id" content="107387482616243" />
 
-  <link rel="shortcut icon" href="{% static 'images/icons/favicon.ico' %}" />
+    <link rel="shortcut icon" href="{% static 'images/icons/favicon.ico' %}" />
 
-  <!-- font -->
-  <link href='http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <!-- font -->
+    <link href='http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
 
-  <!-- twitter bootstrap -->
-  {% compress css %}
-  <link type="text/less" href="{{ MEDIA_URL }}css/bootstrap/bootstrap.less" rel="stylesheet" />
-  {% endcompress %}
+    <!-- twitter bootstrap -->
+    {% compress css %}
+    <link type="text/less" href="{{ MEDIA_URL }}css/bootstrap/bootstrap.less" rel="stylesheet" />
+    {% endcompress %}
 
-  <!-- own css -->
-  {% compress css %}
-  <link type="text/less" href="{{ MEDIA_URL }}css/kamu.less" rel="stylesheet" />
-  {% endcompress %}
+    <!-- own css -->
+    {% compress css %}
+    <link type="text/less" href="{{ MEDIA_URL }}css/kamu.less" rel="stylesheet" />
+    {% endcompress %}
 
-  {% compress js %}
-  <script type="text/javascript" src="{% static "js/jquery-1.9.1.min.js" %}"></script>
-  <script type="text/javascript" src="{% static "js/moment.js" %}"></script>
-  <script type="text/javascript" src="{% static "js/moment.fi.js" %}"></script>
-  <script type="text/javascript" src="{% static "js/jquery.expander.min.js" %}"></script>
-  {% endcompress %}
+    {% compress js %}
+    <script type="text/javascript" src="{% static "js/jquery-1.9.1.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/moment.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/moment.fi.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/jquery.expander.min.js" %}"></script>
+    <script type="text/coffeescript">
+        expander_defaults =
+            expandText: "{% trans "Read more" %}" + " »"
+            expandEffect: 'fadeIn'
+            userCollapse: false
+        $.extend $.fn.expander.defaults, expander_defaults
+    </script>
+    {% endcompress %}
 
-  {% block head %}{% endblock %}
+    {% block head %}{% endblock %}
 </head>
 
 <body>

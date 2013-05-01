@@ -1,4 +1,5 @@
 {% extends "member/base.html" %}
+{% load compress %}
 
 {% block member_content %}
 <ul class="member-activity-feed media-list">
@@ -14,4 +15,11 @@
     </li>
 {% endfor %}
 </ol>
+
+{% compress js %}
+<script type="text/coffeescript">
+    $(".activity .media-body p").expander {slicePoint: 350}
+</script>
+{% endcompress %}
+
 {% endblock %}
