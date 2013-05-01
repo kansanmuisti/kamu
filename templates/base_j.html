@@ -26,9 +26,10 @@
   {% endcompress %}
 
   {% compress js %}
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.9.1.min.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/moment.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/moment.fi.js"></script>
+  <script type="text/javascript" src="{% static "js/jquery-1.9.1.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "js/moment.js" %}"></script>
+  <script type="text/javascript" src="{% static "js/moment.fi.js" %}"></script>
+  <script type="text/javascript" src="{% static "js/jquery.expander.min.js" %}"></script>
   {% endcompress %}
 
   {% block head %}{% endblock %}
