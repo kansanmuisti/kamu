@@ -32,9 +32,48 @@ def get_view_member(url_name):
     member.current_district = current_district
     return member
 
+def render_member_activity(item):
+    d = {'time': item.time}
+    if item.type == 'FB':
+        # Facebook update
+        d['type'] = _('Facebook update')
+        d['icon'] = 'facebook'
+        o = item.socialupdateactivity.update
+        d['text'] = o.text
+    elif item.type == 'TW':
+        d['type'] = _('Tweet')
+        d['icon'] = 'twitter'
+        o = item.socialupdateactivity.update
+        d['text'] = o.text
+    elif item.type == 'ST':
+        d['type'] = _('Statement')
+        d['icon'] = 'comment-alt'
+        o = item.statementactivity.statement
+        d['text'] = o.text
+    elif item.type == 'IN':
+        d['type'] = _('Initiative')
+        d['icon'] = 'lightbulb'
+        o = initiativeactivity.doc
+        d['text'] = o.summary
+    else:
+        return None
+    return d
+
+def _get_member_activity(member, offset):
+    items = list(MemberActivity.objects.filter(member=member).order_by('-time'))[offset:offset+10]
+    items_out = []
+    for item in items:
+        i = render_member_activity(item)
+        if not i:
+            continue
+        items_out.append(i)
+
+    return items_out
+
 def show_member(request, member):
     member = get_view_member(member)
-    args = dict(member=member)
+    activity = _get_member_activity(member, 0)
+    args = dict(member=member, activity=activity)
     return render_to_response('member/overview.html', args,
         context_instance=RequestContext(request))
 
@@ -43,8 +82,6 @@ def member_basic_info(request, member):
     args = dict(member=member)
     return render_to_response('member/basic_info.html', args,
         context_instance=RequestContext(request))
-
-
 
 def _get_parliament_activity(request, offset):
     q = Q(nr_votes__gt=0) | Q(nr_statements__gt=0)

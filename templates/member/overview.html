@@ -1,5 +1,17 @@
 {% extends "member/base.html" %}
 
 {% block member_content %}
-<h1>TODO</h1>
+<ul class="member-activity-feed media-list">
+{% for item in activity %}
+    <li class="activity media">
+        <a class="pull-left" href="#">
+            <i class="icon-{{item.icon}} media-object" style="font-size: 24px"></i>
+        </a>
+        <div class="media-body">
+            <h4 class="media-heading">{{item.time}}</h4>
+            <p>{{item.text}}</p>
+        </div>
+    </li>
+{% endfor %}
+</ol>
 {% endblock %}
