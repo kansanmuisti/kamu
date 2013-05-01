@@ -63,47 +63,14 @@ urlpatterns += patterns('',
 )
 
 from tastypie.api import Api
-from parliament.api import *
+from parliament.api import all_resources
 
 v1_api = Api(api_name='v1')
-v1_api.register(MemberResource())
-v1_api.register(VoteResource())
-v1_api.register(PlenarySessionResource())
-v1_api.register(PlenaryVoteResource())
-v1_api.register(PartyResource())
-v1_api.register(FundingSourceResource())
-v1_api.register(FundingResource())
-v1_api.register(SeatResource())
-v1_api.register(MemberSeatResource())
-v1_api.register(DocumentResource())
+for res in all_resources:
+    v1_api.register(res())
 
 urlpatterns += patterns('',
     (r'^api/', include(v1_api.urls)),
-)
-
-#urlpatterns += patterns('users.views',
-#    (r'account/register/$', 'register'),
-#)
-
-# Disable organization support for now.
-urlpatterns += patterns('orgs.views',
-#    (r'org/add/$', 'add_org'),
-#    (r'org/add/preview$', 'preview_add_org'),
-    (r'org/$', 'list_orgs'),
-#    (r'org/(?P<org>[-\w]+)/$', 'show_org'),
-#    (r'org/(?P<org>[-\w]+)/modify/$', 'modify_org'),
-#    (r'org/(?P<org>[-\w]+)/modify/preview$', 'preview_modify_org'),
-#    (r'org/(?P<org>[-\w]+)/modify-score/(?P<plsess>[\w-]+)/(?P<sess>\d+)/$', 'modify_score'),
-)
-
-urlpatterns += patterns('',
-    (r'^facebook/', include('facebook.urls')),
-)
-
-urlpatterns += patterns('',
-    url(r'^comments/', include('django.contrib.comments.urls')),
-    url(r'^account/logout/$', logout, name="logout"),
-    url(r'^account/login/$', login, name="login"),
 )
 
 urlpatterns += patterns('', (r'^i18n/', include('django.conf.urls.i18n')))

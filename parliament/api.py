@@ -56,3 +56,7 @@ class MemberSeatResource(ModelResource):
 class DocumentResource(ModelResource):
     class Meta:
         queryset = Document.objects.all()
+
+all_resources = [TermResource, PartyResource, MemberResource, PlenarySessionResource,
+                 PlenaryVoteResource, VoteResource, FundingSourceResource, FundingResource,
+                 SeatResource, MemberSeatResource, DocumentResource]
