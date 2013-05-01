@@ -1,17 +1,16 @@
--e git+http://github.com/django/django.git@stable/1.5.x#egg=django
+Django
 Markdown
 BeautifulSoup
 python-dateutil
 simplejson
 South
--e git+http://github.com/toastdriven/django-tastypie.git#egg=django-tastypie
--e git+http://github.com/ryanmcgrath/twython.git#egg=twython
+django-tastypie
+twython
 pygments
 django-compressor
 twitter-text-py
 sorl-thumbnail
 django-extensions
-# fix pyfaceb link to sproutsocial later
--e git+https://github.com/jameskeane/pyfaceb.git#egg=pyfaceb
+-e git+https://github.com/sproutsocial/pyfaceb.git#egg=pyfaceb
 requests>=1.1.0
--e git+http://github.com/reclosedev/requests-cache.git@v1.x.x#egg=requests-cache
+requests-cache
