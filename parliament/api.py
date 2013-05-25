@@ -1,7 +1,9 @@
 from django.db import models
 from tastypie.resources import ModelResource
+from tastypie.exceptions import BadRequest
 from tastypie import fields
 from parliament.models import *
+from sorl.thumbnail import get_thumbnail
 
 class TermResource(ModelResource):
     class Meta:
@@ -12,6 +14,21 @@ class PartyResource(ModelResource):
         queryset = Party.objects.all()
 
 class MemberResource(ModelResource):
+    def dehydrate(self, bundle):
+        tn_dim = bundle.request.GET.get('thumbnail_dim', None)
+        if tn_dim:
+            arr = tn_dim.strip().split('x')
+            if len(arr) == 2:
+                # Make sure they are numbers.
+                try:
+                    num = [int(x) for x in arr]
+                except ValueError:
+                    arr = []
+            if len(arr) != 2:
+                raise BadRequest("Dimensions not in proper format (e.g. 64x96)")
+            tn_dim = 'x'.join(arr)
+            bundle.data['photo_thumbnail'] = get_thumbnail(bundle.obj.photo, tn_dim).url
+        return bundle
     class Meta:
         queryset = Member.objects.all()
 
