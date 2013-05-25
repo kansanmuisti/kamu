@@ -12,6 +12,7 @@ from django.utils.http import urlencode
 from sorl.thumbnail import get_thumbnail
 
 from parliament.models import *
+from parliament.api import *
 
 TERM_KEY = 'term'
 DISTRICT_KEY = 'district'
@@ -166,116 +167,12 @@ def format_stat_col(request, val, class_name, is_percent=True):
     return col
 
 def list_members(request):
-    (date_begin, date_end) = find_period(request)
-    district = find_district(request, date_begin, date_end)
-    if district:
-        query = Member.objects.in_district(district, date_begin, date_end)
-    else:
-        query = Member.objects.active_in(date_begin, date_end)
+    args = dict()
+    return render_to_response('member/list.html',
+            args,
+            context_instance = RequestContext(request))
 
-    sort_key = request.GET.get('sort')
-    if sort_key and sort_key[0] == '-':
-        sort_key = sort_key[1:]
-        sort_reverse = True
-    else:
-        sort_reverse = False
-    if sort_key not in ['name', 'party', 'att', 'pagree', 'sagree', 'st_cnt', 'el_bud']:
-        sort_key = 'name'
-    calc_keys = ['att', 'pagree', 'sagree', 'st_cnt', 'el_bud']
-    if sort_key in calc_keys:
-        stat_attr = ['attendance', 'party_agree', 'session_agree', 'statement_count',
-                     'election_budget']
-        stat_attr = stat_attr[calc_keys.index(sort_key)]
-        # Some fields are calculated dynamically, so we need
-        # to calculate it for all objects first in order to
-        # sort to work.
-        members = list(query.order_by('name'))
-        for mem in members:
-            mem.stats = mem.get_stats(date_begin, date_end)
-            if not mem.stats:
-                mem.sort_key = float(0)
-            else:
-                mem.sort_key = getattr(mem.stats, stat_attr)
-        members.sort(key=operator.attrgetter('sort_key'), reverse=sort_reverse)
-    else:
-        if sort_reverse:
-            sort_key = '-' + sort_key
-        members = query.select_related('party').order_by(sort_key, 'name')
-
-    paginator = Paginator(members, 15)
-    try:
-        page = int(request.GET.get('page', '1'))
-    except ValueError:
-        page = 1
-    try:
-        member_page = paginator.page(page)
-    except (EmptyPage, InvalidPage):
-        member_page = paginator.page(paginator.num_pages)
-
-    hdr_cols = []
-    hdr_cols.append({ 'name': _('Party'), 'sort_key': 'party' })
-    hdr_cols.append({ 'name': '' })
-    hdr_cols.append({ 'name': _('Name'), 'sort_key': 'name', 'class': 'member_list_name' })
-
-    hdr_cols.append({ 'name': _('ATT'), 'sort_key': 'att', 'class': 'member_list_stat',
-        'title': _('Attendance in voting sessions'), 'img': 'images/icons/attendance.png', 'no_tn': True})
-    hdr_cols.append({ 'name': _('PA'), 'sort_key': 'pagree', 'class': 'member_list_stat',
-        'title': _('Agreement with party majority'), 'img': 'images/icons/party_agr.png', 'no_tn': True})
-    hdr_cols.append({ 'name': _('SA'), 'sort_key': 'sagree', 'class': 'member_list_stat',
-        'title': _('Agreement with session majority'), 'img': 'images/icons/session_agr.png', 'no_tn': True})
-    hdr_cols.append({ 'name': _('St'), 'sort_key': 'st_cnt', 'class': 'member_list_stat',
-        'title': _('Number of statements'), 'img': 'images/icons/nr_statements.png', 'no_tn': True})
-    hdr_cols.append({ 'name': _('ElBud'), 'sort_key': 'el_bud', 'class': 'member_list_stat',
-        'title': _('Election budget'), 'img': 'images/icons/election_budget.png', 'no_tn': True})
-    for col in hdr_cols:
-        if 'img' in col:
-            col['img_alt'] = col['title']
-        if not 'sort_key' in col:
-            continue
-        if sort_key == col['sort_key'] and not sort_reverse:
-            val = '-' + col['sort_key']
-        else:
-            val = col['sort_key']
-        col['link'] = generate_modified_query(request, 'sort', val, remove=['page'])
-    hdr_html = generate_header_html({'cols': hdr_cols, 'id': 'member_list_head'})
-
-    row_list = []
-    for mem in member_page.object_list:
-        col_vals = []
-        if mem.party:
-            col_vals.append({'img': mem.party.logo, 'img_alt': 'logo', 'img_dim': '36x36',
-                    'title': mem.party.full_name, 'class': 'member_list_party' })
-        else:
-            col_vals.append(None)
-        col_vals.append({'img': mem.photo, 'img_alt': 'portrait', 'link': mem.url_name,
-                         'img_dim': '28x42', 'class': 'member_list_portrait'})
-        col_vals.append({'value': mem.name, 'link': mem.url_name, 'class': 'member_list_name'})
-
-        if not hasattr(mem, 'stats'):
-            mem.stats = mem.get_stats(date_begin, date_end)
-        CLASS_NAME = 'member_list_stat'
-        if mem.stats:
-            col_vals.append(format_stat_col(request, mem.stats.attendance, CLASS_NAME))
-            col_vals.append(format_stat_col(request, mem.stats.party_agree, CLASS_NAME))
-            col_vals.append(format_stat_col(request, mem.stats.session_agree, CLASS_NAME))
-            col_vals.append({'value': str(mem.stats.statement_count), 'class': CLASS_NAME + ' member_list_statements'})
-            col_vals.append(format_stat_col(request, mem.stats.election_budget, CLASS_NAME, is_percent=False))
-        else:
-            col_vals.append(None)
-            col_vals.append(None)
-            col_vals.append(None)
-            col_vals.append(None)
-            col_vals.append(None)
-        row_list.append(generate_row_html(col_vals))
-    table_html = "".join(row_list)
-
-    return render_to_response('new_members.html',
-                             {'member_page': member_page, 'switch_term': True,
-                              'switch_district': True, 'switch_county': True,
-                              'hdr': hdr_html,
-                              'rows': table_html, 'active_page': 'members'},
-                              context_instance = RequestContext(request))
-
+    
 def generate_member_stat_table(request, member, stats):
     table = {}
 
