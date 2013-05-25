@@ -42,6 +42,7 @@ class MemberResource(ModelResource):
                 raise BadRequest("Dimensions not in proper format (e.g. 64x96)")
             tn_dim = 'x'.join(arr)
             bundle.data['photo_thumbnail'] = get_thumbnail(bundle.obj.photo, tn_dim).url
+        bundle.data['district_name'] = bundle.obj.get_latest_district().name
         return bundle
     class Meta:
         queryset = Member.objects.all()

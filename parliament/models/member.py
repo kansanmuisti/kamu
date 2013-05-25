@@ -75,6 +75,10 @@ class Member(models.Model):
         name = ' '.join(names)
         return name
 
+    def get_latest_district(self):
+        latest = self.districtassociation_set.order_by('-begin')[0]
+        return latest
+
     @models.permalink
     def get_absolute_url(self):
         return ('votes.views.show_member', (), {'member': self.url_name})
