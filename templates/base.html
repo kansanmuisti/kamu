@@ -1,203 +1,101 @@
+{% load i18n compress static %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:og="http://opengraphprotocol.org/schema/"
       xmlns:fb="http://www.facebook.com/2008/fbml">
 <head>
-{% load basic i18n assets %}
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>{% block title %}{% endblock %} | KAMU</title>
-  <meta property="og:site_name" content="Kansan muisti" />
-  <meta property="fb:app_id" content="107387482616243" />
-{% assets "js_base" %}
-  <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-{% endassets %}
-{% assets "css_base" %}
-  <link type="text/css" href="{{ ASSET_URL }}" rel="stylesheet" />
-{% endassets %}
-  <link rel="shortcut icon" href="{{ MEDIA_URL }}images/icons/favicon.ico" />
-  <script type="text/javascript">
-    $(function() {
-      $("#head-search-button").button({
-        icons: {primary:'ui-icon-search' },
-	text: false
-      });
-      $("#head-search-text").example('{% trans "Search" %}');
-    });
-{% if switch_district %}
-    $(function() {
-      var open = false;
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>{% block title %}{% endblock %} | KAMU</title>
+    <meta property="og:site_name" content="Kansan muisti" />
+    <meta property="fb:app_id" content="107387482616243" />
 
-      $('#district_opener').click(function() {
-        if (open) {
-          $('#district_list .filter_options').hide("blind");
-          open = false;
-        } else {
-          $('#district_list .filter_options').show("blind");
-          open = true;
-        }
-      });
-    });
-{% endif %}
-{% if switch_term %}
-    $(function() {
-      var open = false;
+    <link rel="shortcut icon" href="{% static 'images/icons/favicon.ico' %}" />
 
-      $('#period_opener').click(function() {
-        if (open) {
-          $('#period_list .filter_options').hide("blind");
-          open = false;
-        } else {
-          $('#period_list .filter_options').show("blind");
-          open = true;
-        }
-      });
-    });
-{% endif %}
-  </script>
-  {% block head %}{% endblock %}
+    <!-- font -->
+    <link href='http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
+    <!-- twitter bootstrap -->
+    {% compress css %}
+    <link type="text/less" href="{{ MEDIA_URL }}css/bootstrap/bootstrap.less" rel="stylesheet" />
+    {% endcompress %}
+
+    <!-- own css -->
+    {% compress css %}
+    <link type="text/less" href="{{ MEDIA_URL }}css/kamu.less" rel="stylesheet" />
+    {% endcompress %}
+
+    {% compress js %}
+    <script type="text/javascript" src="{% static "js/jquery-1.9.1.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/moment.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/moment.fi.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/jquery.expander.min.js" %}"></script>
+    <script type="text/coffeescript">
+        expander_defaults =
+            expandText: "{% trans "Read more" %}" + " »"
+            expandEffect: 'fadeIn'
+            userCollapse: false
+        $.extend $.fn.expander.defaults, expander_defaults
+    </script>
+    {% endcompress %}
+
+    {% block head %}{% endblock %}
 </head>
 
 <body>
-{% if messages %}
-<div id="messages">
-  <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.jnotify.js"></script>
-  <script>
-    $(document).ready(function() {
-      $('#message_bars').jnotifyInitialize({
-	oneAtTime: false
-      });
-  {% for msg in messages %}
-    {% if msg.level == 40 %}
-      $('#message_bars').jnotifyAddMessage({
-	text: '{{ msg }}',
-	permanent: true,
-	type: 'error'
-      });
-    {% else %}
-      $('#message_bars').jnotifyAddMessage({
-	text: '{{ msg }}',
-	permanent: false,
-	disappearTime: 10000
-      });
-    {% endif %}
-  {% endfor %}
-    });
-  </script>
-  <div id="message_bars">
-  </div>
-</div>
-{% endif %}
+    <div class="container">
+        <div class="row" id="header">
+            <div class="span2" id="logospan">
+                <a class="currentlink" href="{% url 'parliament.views.main' %} ">
+                </a>
+            </div>
+            <div class="span10">
+                <div id="navtopbar">
+                    <div id="search">
+                        <form class="form-search" action="#" method="post">
+                            <div class="input-append">
+                                <input type="text" class="input-medium search-query" placeholder="Hae Kansan muistista..."/>
+                                <button style="margin-top: 7px" class="btn"><i class="icon-search"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="separator"></div>
+                    <div id="logged-user">
+                        Saana Sekakäyttäjä / <a href="#">Kirjaudu ulos</a>
+                    </div>
+                </div>
 
-<div id="full_page">
+                <div id="navbottombar">
+                    <table><tr> <!-- OMG! A TABLE!!!1 -->
+                            <td><a href="{% url 'parliament.views.list_sessions' %}">
+                                    {% trans "Plenary sessions" %}
+                            </a></td>
+                            <td><a href="#">
+                                    {% trans "Parties" %}
+                            </a></td>
+                            <td><a href="{% url 'parliament.views.list_members' %}">
+                                    {% trans "Members" %}
+                            </a></td>
+                            <td><a href="#">
+                                    {% trans "Topics" %}
+                            </a></td>
+                            <td><a href="#">
+                                    {% trans "About" %}
+                            </a>
 
-<div id="header">
-    <h1><a href="/">Kansan muisti</a></h1>
-    <img id="beta_image" src="{{ MEDIA_URL }}images/beta.png" alt="Beta" />
-  <div id="inputbar">
-    <form action="{% url 'votes.views.search' %}" method="get" id="head-search">
-        <input id="head-search-text" name="query" type="text" maxlength="150" />
-            <script>
-                $("[name=query]").
-                    combobox({
-                        source_url  :
-                                   "{% url 'votes.views.autocomplete_search' %}",
-                        any_text    : true,
-                        button      : false,
-                        thumbnail   : true,
-                        max_results : 20,
-                    }).
-                    bind("comboboxselected", function(event, item) {
-                        location.href=item.url;
-                    });
-            </script>
-      <button type="submit" id="head-search-button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" value="Go">{% trans "Search" %}
-      </button>
-    </form>
-{% if not user.is_authenticated %}
-    <a id="hdr_fb_login" href="{% url 'login' %}?next={{ request.path }}"></a>
-{% endif %}
-    <p id="logged_user">
-{% if user.is_authenticated %}
-      <span id="login_name">{% trans "Logged in" %}: <b>{{ user.username }}</b></span>
-      <a href="{% url 'logout' %}">{% trans "Log out" %}</a>
-{% else %}
-      <a href="{% url 'login' %}?next={{ request.path }}">{% trans "Log in" %}</a>
-{% endif %}
-    </p>
-  </div>
-  <div id="langbar">
-    <form id="langsel" method="post"
-                        action="{% url 'django.views.i18n.set_language' %}">
-        <input type="hidden" name="language">
-        <script>
-            function submit_form(elem, val) {
-                elem.parentNode.language.value = val;
-                elem.parentNode.submit();
-            }
-        </script>
-        {% for lang in OTHER_LANGUAGES %}
-        <a class="langopt" href="#"
-         onClick="javascript:submit_form(this, '{{ lang.0 }}');">
-            {{ lang.2 }}
-        </a>
-        {% endfor %}
-    </form>
-  </div>
-</div>
+                    </tr></table>
+                </div>
+            </div>
+        </div>
 
-<div id="navbar">
-    <ul>
-      <li class="navbar_link{% ifequal active_page "info" %} navbar_link_active{% endifequal %}"><a href="/">{% trans "What is Kamu?" %}</a></li>
-      <li class="navbar_link{% ifequal active_page "sessions" %} navbar_link_active{% endifequal %}"><a href="/session/">{% trans "Plenary Sessions" %}</a></li>
-      <li class="navbar_link{% ifequal active_page "members" %} navbar_link_active{% endifequal %}"><a href="/member/">{% trans "Members" %}</a></li>
-      <li class="navbar_link{% ifequal active_page "opinions" %} navbar_link_active{% endifequal %}"><a href="/opinions/">{% trans "Opinions" %}</a></li>
-    </ul>
-</div>
+        <hr id="headerspacer" />
 
-<div id="wrap">
+        {% block content %}{% endblock %}
 
-<div id="sidebar">
-
-{% if switch_term %}
-<a href="#" id="period_opener" class="opener action_link">{% trans "Select term" %}</a>
-<div class="filter" id="period_list">
-{% generate_option_list "term" %}
-</div>
-{% endif %}
-
-{% if switch_district %}
-<a href="#" id="district_opener" class="opener action_link">{% trans "Select district" %}</a>
-<div class="filter" id="district_list">
-{% generate_option_list "district" %}
-  <div id="county_selector" class="sub_filter filter_options">
-    {% trans "or choose your county" %}
-    {% generate_option_list "county" %}
-  </div>
-</div>
-{% endif %}
-
-{% block sidebar %}{% endblock %}
-
-</div>  {% comment %} id="wrap" {% endcomment %}
-
-<div id="content">
-{% block content %}{% endblock %}
-</div>
-
-<div id="footer">
-{% blocktrans %}
-Copyright &copy; 2010–2011 Kansan muisti ry. The owners and operators of this
-website are not responsible for the accuracy of the information provided.
-{% endblocktrans %}
-</div>
-
-</div>
-
-</div>
-{% if 0 %}
-{% include "debug.html" %}
-{% endif %}
+        <div id="footer">
+                        Copyright &copy; 2010–2013 Kansan muisti ry. Palvelun ylläpitäjä ei vastaa tietojen oikeellisuudesta.
+        </div>
 </body>
+
 </html>
 

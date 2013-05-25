@@ -1,4 +1,4 @@
-{% extends "base_j.html" %}
+{% extends "base.html" %}
 {% load i18n thumbnail %}
 {% block title %}{{ item.description|truncatewords:10 }}{% endblock %}
 {% block head %}
@@ -19,7 +19,7 @@ $(function() {
 
 {% block content %}
 
-<h1>{{ item.description }}</h1>
+<h1 style="margin-top: 32px; margin-bottom: 16px;">{{ item.description }}</h1>
 <div>
 {% for st in item.statement_set.all %}
   <div class="statement">
