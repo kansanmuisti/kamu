@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load compress static %}
+
+{% block content %}
+
+<ul id="member-list" class="row"></ul>
+
+{% compress js %}
+<script type="text/coffeescript" src="{% static "js/models.coffee" %}"></script>
+{% endcompress %}
+
+{% compress js %}
+<script type="text/coffeescript">
+class MemberView extends Backbone.View
+    content_template: """
+    <a class="portrait-link" href="<%= model.get_view_url() %>">
+        <img class="portrait" src="<%= attr.photo_thumbnail %>" />
+    </a>
+    <div class="member-info">
+        <a href="<%= model.get_view_url() %>" class="member-name">
+            <%= attr.name %>
+        </a>
+        <span class="member-district"><%= attr.district_name %></span>
+        <span class="member-party"><%= attr.party.full_name %></span>
+    </div>
+    """
+    
+    initialize: =>
+        attr = @model.attributes
+        @el = $ '<li class="member-list-item span4"></div>'
+        @$el = $ @el
+        html = _.template @content_template, {model: @model, attr: attr}
+        @$el.html html
+
+class MemberListView extends Backbone.View
+    el: $ "#member-list"
+
+    initialize: ->
+        @collection = new MemberList
+        @collection.bind "add", @append_item
+        
+        @collection.fetch
+            data:
+                thumbnail_dim: "64x96"
+                current: true
+                limit: 0
+            processData: true
+        
+    append_item: (model, collection, options) =>
+        item_view = new MemberView model: model
+        $(@el).append item_view.el
+
+member_list_view = new MemberListView
+</script>
+{% endcompress %}
+
+
+
+{% endblock %}

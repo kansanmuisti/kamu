@@ -547,6 +547,39 @@ h2 {
 	.blockColumn;
 }
 
+#member-list {
+    list-style-type: none;
+    > .member-list-item {
+        display: block;
+        .blockStyling;
+        margin-bottom: 10px;
+        
+        img.portrait {
+            display: block;
+            float:left;
+            width: 64px;
+            height: 96px;
+            margin: 10px;
+            .box-shadow(0 0 2px #888);
+			border: 4px solid #fff;
+
+        }
+
+        > .member-info {
+            margin: 10px;
+            > span {
+                display: block;
+            }
+            .member-name {
+                display: block;
+                font-weight: bold;
+            }
+
+            
+        }
+    }
+}
+
 // Other
 .statement {
 	.portrait {

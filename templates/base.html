@@ -39,10 +39,14 @@
     </script>
     {% endcompress %}
     {% compress js %}
-    <script type="text/javascript" src="{% static "js/backbone-min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/underscore-min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/backbone-min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/backbone-tastypie.js" %}"></script>
     {% endcompress %}
+
+    <script type="text/javascript">
+    window.API_PREFIX = '/api/v1/';
+    </script>
 
     {% block head %}{% endblock %}
 </head>
