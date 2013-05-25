@@ -5,6 +5,8 @@ from tastypie import fields
 from parliament.models import *
 from sorl.thumbnail import get_thumbnail
 
+term_list = list(Term.objects.visible())
+
 class TermResource(ModelResource):
     class Meta:
         queryset = Term.objects.all()
@@ -14,6 +16,18 @@ class PartyResource(ModelResource):
         queryset = Party.objects.all()
 
 class MemberResource(ModelResource):
+    party = fields.ForeignKey('parliament.api.PartyResource', 'party', full=True)
+
+    def build_filters(self, filters=None):
+        orm_filters = super(MemberResource, self).build_filters(filters)
+        return orm_filters
+    def apply_filters(self, request, applicable_filters):
+        qset = super(MemberResource, self).apply_filters(request, applicable_filters)
+        if request.GET.get('current', '').lower() in ('1', 'true'):
+            current_term = term_list[0]
+            qset = qset & Member.objects.active_in_term(current_term)
+        return qset
+
     def dehydrate(self, bundle):
         tn_dim = bundle.request.GET.get('thumbnail_dim', None)
         if tn_dim:
