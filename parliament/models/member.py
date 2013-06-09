@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
 
+from parliament.models.committee import *
 from parliament.models.party import *
 from parliament.models.session import *
 from parliament.models.document import Keyword
@@ -246,6 +247,16 @@ class PartyAssociation(models.Model):
 
     class Meta:
         app_label = 'parliament'
+
+class CommitteeAssociation(models.Model):
+    member = models.ForeignKey(Member, db_index=True)
+    committee = models.ForeignKey(Committee)
+    begin = models.DateField()
+    end = models.DateField(blank=True, null=True)
+    role = models.CharField(max_length=15, blank=True, null=True)
+
+    class Meta:
+        app_label = 'committee'
 
 class MemberActivityManager(models.Manager):
     def during(self, begin, end):
