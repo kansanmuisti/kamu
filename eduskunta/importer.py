@@ -7,10 +7,12 @@ from utils.http import HttpFetcher
 
 class ParseError(Exception):
     def __init__(self, value, url=None):
-         self.value = value
-         self.url = url
+        self.value = value
+        self.url = url
+
     def __str__(self):
-         return repr(self.value)
+        return repr(self.value)
+
 
 class Importer(object):
     URL_BASE = 'http://www.eduskunta.fi'
