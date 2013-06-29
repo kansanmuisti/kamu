@@ -45,7 +45,7 @@ class MemberResource(ModelResource):
         bundle.data['district_name'] = bundle.obj.get_latest_district().name
         return bundle
     class Meta:
-        queryset = Member.objects.all()
+        queryset = Member.objects.select_related('party')
 
 class PlenarySessionResource(ModelResource):
     plenary_votes = fields.ToManyField('parliament.api.PlenaryVoteResource', 'plenary_vote_set')
