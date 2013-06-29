@@ -2,7 +2,7 @@
 {% load compress static %}
 
 {% block content %}
-
+<input id="member-search" type="text" />
 <ul id="member-list" class="row"></ul>
 
 {% compress js %}
@@ -11,8 +11,6 @@
 
 {% compress js %}
 <script type="text/coffeescript">
-$ -> $("#member-list").spin top: 0
-
 class MemberView extends Backbone.View
     content_template: """
     <a class="portrait-link" href="<%= model.get_view_url() %>">
@@ -36,10 +34,25 @@ class MemberView extends Backbone.View
 
 class MemberListView extends Backbone.View
     el: $ "#member-list"
+    
 
     initialize: ->
+        $("#member-list").spin top: 0
+
+        @$el = $ @el
+        @children = {}
+
         @collection = new MemberList
         @collection.bind "add", @append_item
+
+        @index = lunr ->
+            @field("name")
+            @field("party")
+            @field("district")
+            @ref("id")
+        
+        @search_el = $("#member-search")
+        @search_el.input @_filter_listing
         
         @collection.fetch
             data:
@@ -47,11 +60,31 @@ class MemberListView extends Backbone.View
                 current: true
                 limit: 0
             processData: true
+
+    _filter_listing: =>
+        @$el.empty()
+        query = @search_el.val()
+        if query == ""
+            for key of @children
+                @$el.append @children[key].el
+            return
+
+        result = @index.search query
+        for hit in result
+            console.log hit
+            @$el.append(@children[hit.ref].el)
         
     append_item: (model, collection, options) =>
         $("#member-list").spin false
         item_view = new MemberView model: model
+        
         $(@el).append item_view.el
+        @children[model.id] = item_view
+        @index.add
+            id: model.id
+            name: model.attributes.name
+            party: model.attributes.party.full_name
+            district: model.attributes.district_name
 
 member_list_view = new MemberListView
 </script>
