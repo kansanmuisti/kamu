@@ -11,6 +11,8 @@
 
 {% compress js %}
 <script type="text/coffeescript">
+$ -> $("#member-list").spin top: 0
+
 class MemberView extends Backbone.View
     content_template: """
     <a class="portrait-link" href="<%= model.get_view_url() %>">
@@ -47,6 +49,7 @@ class MemberListView extends Backbone.View
             processData: true
         
     append_item: (model, collection, options) =>
+        $("#member-list").spin false
         item_view = new MemberView model: model
         $(@el).append item_view.el
 
