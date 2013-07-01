@@ -2,7 +2,7 @@
 {% load compress static %}
 
 {% block content %}
-
+<input id="member-search" type="text" />
 <ul id="member-list" class="row"></ul>
 
 {% compress js %}
@@ -34,10 +34,25 @@ class MemberView extends Backbone.View
 
 class MemberListView extends Backbone.View
     el: $ "#member-list"
+    
 
     initialize: ->
+        $("#member-list").spin top: 0
+
+        @$el = $ @el
+        @children = {}
+
         @collection = new MemberList
         @collection.bind "add", @append_item
+        
+        @index = new lunr.Index
+        @index.field "name"
+        @index.field "party"
+        @index.field "district"
+        @index.ref "id"
+        
+        @search_el = $("#member-search")
+        @search_el.input @_filter_listing
         
         @collection.fetch
             data:
@@ -45,10 +60,30 @@ class MemberListView extends Backbone.View
                 current: true
                 limit: 0
             processData: true
+
+    _filter_listing: =>
+        @$el.empty()
+        query = @search_el.val()
+        if query == ""
+            for key of @children
+                @$el.append @children[key].el
+            return
+
+        result = @index.search query
+        for hit in result
+            @$el.append(@children[hit.ref].el)
         
     append_item: (model, collection, options) =>
+        $("#member-list").spin false
         item_view = new MemberView model: model
+        
         $(@el).append item_view.el
+        @children[model.id] = item_view
+        @index.add
+            id: model.id
+            name: model.attributes.name
+            party: model.attributes.party.full_name
+            district: model.attributes.district_name
 
 member_list_view = new MemberListView
 </script>
