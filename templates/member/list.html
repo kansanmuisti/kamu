@@ -44,12 +44,12 @@ class MemberListView extends Backbone.View
 
         @collection = new MemberList
         @collection.bind "add", @append_item
-
-        @index = lunr ->
-            @field("name")
-            @field("party")
-            @field("district")
-            @ref("id")
+        
+        @index = new lunr.Index
+        @index.field "name"
+        @index.field "party"
+        @index.field "district"
+        @index.ref "id"
         
         @search_el = $("#member-search")
         @search_el.input @_filter_listing
@@ -71,7 +71,6 @@ class MemberListView extends Backbone.View
 
         result = @index.search query
         for hit in result
-            console.log hit
             @$el.append(@children[hit.ref].el)
         
     append_item: (model, collection, options) =>
