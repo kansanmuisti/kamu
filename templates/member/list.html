@@ -1,8 +1,9 @@
 {% extends "base.html" %}
-{% load compress static %}
+{% load compress static i18n %}
 
 {% block content %}
-<input id="member-search" type="text" />
+<input id="member-search" class="input-xxlarge" type="text"
+	placeholder="{% trans "Filter by name/party/district" %}" />
 <ul id="member-list" class="row"></ul>
 
 {% compress js %}
@@ -55,12 +56,26 @@ class MemberListView extends Backbone.View
         @search_el.input @_filter_listing
         
         @collection.fetch
+	        success: (col) =>
+                @_update_search_hint(col)
+                @_filter_listing()
             data:
                 thumbnail_dim: "64x96"
                 current: true
                 limit: 0
             processData: true
 
+    _update_search_hint: (col) =>
+        i = Math.floor(Math.random()*(col.models.length))
+        a = col.models[i].attributes
+        hint = "{% trans ", e.g. " %}" +
+            a.given_names.split(" ", 1)[0].split('-', 1)[0].toLowerCase() + " " +
+            a.party.full_name.toLowerCase()[..2] + " " +
+            a.district_name.toLowerCase()[..3]
+        
+        $el = $ @search_el
+        $el.attr "placeholder", $el.attr("placeholder") + hint
+	    
     _filter_listing: =>
         @$el.empty()
         query = @search_el.val()
