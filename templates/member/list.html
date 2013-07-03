@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load compress static i18n %}
+{% load compress static i18n static %}
 
 {% block content %}
 <input id="member-search" class="input-xxlarge" type="text"
@@ -24,6 +24,30 @@ class MemberView extends Backbone.View
         <span class="member-district"><%= attr.district_name %></span>
         <span class="member-party"><%= attr.party.full_name %></span>
     </div>
+    <ul class="member-stats">
+        <li>
+            <%= Math.round(attr.stats.party_agree*100) %>%
+            <img src="{% static "images/icons/party_agr.png" %}"
+                alt="{% trans "Party agreement" %}"
+                title="{% trans "Party agreement" %}"
+                />
+        </li>
+        
+        <li>
+            <%= Math.round(attr.stats.session_agree*100) %>%
+            <img src="{% static "images/icons/session_agr.png" %}"
+                alt="{% trans "Session agreement" %}"
+                title="{% trans "Session agreement" %}"
+                />
+        </li>
+        <li>
+            <%= Math.round(attr.stats.attendance*100) %>%
+            <img src="{% static "images/icons/attendance.png" %}"
+                alt="{% trans "Attendance" %}"
+                title="{% trans "Attendance" %}"
+                />
+        </li>
+    </ul>
     """
     
     initialize: =>

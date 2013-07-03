@@ -43,6 +43,7 @@ class MemberResource(ModelResource):
             tn_dim = 'x'.join(arr)
             bundle.data['photo_thumbnail'] = get_thumbnail(bundle.obj.photo, tn_dim).url
         bundle.data['district_name'] = bundle.obj.get_latest_district().name
+        bundle.data['stats'] = bundle.obj.get_latest_stats()
         return bundle
     class Meta:
         queryset = Member.objects.select_related('party')

@@ -551,6 +551,7 @@ h2 {
     list-style-type: none;
     > .member-list-item {
         display: block;
+        position: relative;
         .blockStyling;
         margin-bottom: 10px;
         
@@ -574,9 +575,29 @@ h2 {
                 display: block;
                 font-weight: bold;
             }
-
             
+                                
         }
+        
+        .member-stats {
+            position: absolute;
+            list-style-type: none;
+            margin: 10px;
+            bottom: 0;
+            right: 0;
+            > li {
+                text-align: right;
+            }
+
+            > li > img {
+                opacity: 0.3;
+            }
+            
+            > li:hover > img {
+                opacity: 1.0;
+            }
+        }
+
     }
 }
 
