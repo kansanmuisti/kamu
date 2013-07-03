@@ -5,6 +5,7 @@ from django.utils.translation import ugettext as _
 
 from parliament.models.party import *
 from parliament.models.session import *
+from parliament.models.document import Keyword
 
 # Django bug workaround
 from django.db.models.loading import cache as model_cache
@@ -262,12 +263,49 @@ class MemberActivity(models.Model):
 
     objects = MemberActivityManager()
 
+    def save(self, *args, **kwargs):
+        ret = super(MemberActivity, self).save(*args, **kwargs)
+        current_keywords = self.keywordactivity_set.all()
+        kwa_dict = {}
+        for kwa in current_keywords:
+            kwa_dict[kwa.keyword.id] = kwa
+            kwa.found = False
+        # First add the new keywords
+        if hasattr(self, 'keywords'):
+            for kw in self.keywords:
+                if kw.id in kwa_dict:
+                    kwa_dict[kw.id].found = True
+                else:
+                    kwa = KeywordActivity(keyword=kw, activity=self)
+                    #print "Add %s" % unicode(kwa).encode('utf8')
+                    kwa.save()
+        # Then remove the deleted keywords.
+        for kw_id in kwa_dict:
+            if not kwa_dict[kw_id].found:
+                kwa = kwa_dict[kw_id]
+                #print u"remove %s" % unicode(kwa)
+                kwa.delete()
+        return ret
+
     def __unicode__(self):
-        return "%s: %s: %s" % (self.time, self.type, self.member)
+        return u"%s: %s: %s" % (self.time, self.type, unicode(self.member))
 
     class Meta:
         app_label = 'parliament'
         ordering = ('time', 'member__name')
+
+class KeywordActivity(models.Model):
+    activity = models.ForeignKey(MemberActivity, db_index=True)
+    keyword = models.ForeignKey(Keyword, db_index=True)
+
+    def __unicode__(self):
+        kw = unicode(self.keyword)
+        act = unicode(self.activity)
+        return u"Activity on %s: %s" % (kw, act)
+
+    class Meta:
+        app_label = 'parliament'
+        unique_together = (('activity', 'keyword'),)
 
 class InitiativeActivity(MemberActivity):
     TYPE = 'IN'
@@ -277,7 +315,8 @@ class InitiativeActivity(MemberActivity):
 
     def save(self, *args, **kwargs):
         self.type = self.TYPE
-        super(InitiativeActivity, self).save(*args, **kwargs)
+        self.keywords = self.doc.keywords.all()
+        return super(InitiativeActivity, self).save(*args, **kwargs)
 
     def __unicode__(self):
         s = super(InitiativeActivity, self).__unicode__()
@@ -294,7 +333,7 @@ class RebelVoteActivity(MemberActivity):
 
     def save(self, *args, **kwargs):
         self.type = self.TYPE
-        super(RebelVoteActivity, self).save(*args, **kwargs)
+        return super(RebelVoteActivity, self).save(*args, **kwargs)
 
     class Meta:
         app_label = 'parliament'
@@ -307,7 +346,7 @@ class CommitteeDissentActivity(MemberActivity):
 
     def save(self, *args, **kwargs):
         self.type = self.TYPE
-        super(CommitteeDissentActivity, self).save(*args, **kwargs)
+        return super(CommitteeDissentActivity, self).save(*args, **kwargs)
 
     def __unicode__(self):
         s = super(CommitteeDissentActivity, self).__unicode__()
@@ -333,7 +372,7 @@ class SocialUpdateActivity(MemberActivity):
         mf = self.update.feed.membersocialfeed
         self.member = mf.member
         self.time = self.update.created_time
-        super(SocialUpdateActivity, self).save(*args, **kwargs)
+        return super(SocialUpdateActivity, self).save(*args, **kwargs)
 
     class Meta:
         app_label = 'parliament'
@@ -348,7 +387,7 @@ class StatementActivity(MemberActivity):
         self.type = self.TYPE
         self.member = self.statement.member
         self.time = self.statement.item.plsess.date
-        super(StatementActivity, self).save(*args, **kwargs)
+        return super(StatementActivity, self).save(*args, **kwargs)
 
     class Meta:
         app_label = 'parliament'
@@ -363,7 +402,8 @@ class SignatureActivity(MemberActivity):
         self.type = self.TYPE
         self.member = self.signature.member
         self.time = self.signature.date
-        super(SignatureActivity, self).save(*args, **kwargs)
+        self.keywords = self.signature.doc.keywords.all()
+        return super(SignatureActivity, self).save(*args, **kwargs)
 
     class Meta:
         app_label = 'parliament'
