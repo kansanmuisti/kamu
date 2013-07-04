@@ -2,8 +2,20 @@
 {% load compress static i18n static %}
 
 {% block content %}
-<input id="member-search" class="input-xxlarge" type="text"
-	placeholder="{% trans "Filter by name/party/district" %}" />
+<div id="member-filter-bar">
+    <div class="search-container">
+        <span class="field-label">{% trans "Filter by name/party/district" %}</span>
+        <input id="member-search" type="text" placeholder="" />
+    </div>
+    <div id="member-sort-buttons">
+        <span class="field-label">{% trans "Sort by" %}</span>
+        <button class="btn-mini" data-col="name">Name</button>
+        <button class="btn-mini" data-col="attendance">Attendance</button>
+        <button class="btn-mini" data-col="party_agree">Party agreement</button>
+        <button class="btn-mini" data-col="session_agree">Session agreement</button>
+    </div>
+</div>
+
 <ul id="member-list" class="row"></ul>
 
 {% compress js %}
@@ -74,10 +86,13 @@ class MemberListView extends Backbone.View
         @index.field "name"
         @index.field "party"
         @index.field "district"
+        @index.field "party_short"
         @index.ref "id"
-        
+
         @search_el = $("#member-search")
         @search_el.input @_filter_listing
+
+        @_setup_sort()
         
         @collection.fetch
 	        success: (col) =>
@@ -88,11 +103,48 @@ class MemberListView extends Backbone.View
                 current: true
                 limit: 0
             processData: true
+    
+    _setup_sort: =>
+        namesort = (a, b) -> a.model.attributes['name'].localeCompare b.model.attributes['name']
+        statsort = (field) ->
+            (aw, bw) ->
+                a = aw.model.attributes.stats[field]
+                b = bw.model.attributes.stats[field]
+                if a == b
+                    return namesort(aw, bw)
+                if a > b
+                    return -1
+                else
+                    return 1
+
+        @_sort_funcs =
+            name: namesort
+            attendance: statsort('attendance')
+            party_agree: statsort('party_agree')
+            session_agree: statsort('party_agree')
+
+        @_raw_sort_func = @_sort_funcs['name']
+        @sort_order = 1
+        @sort_func = (a, b) =>
+            @sort_order*@_raw_sort_func(a, b)
+
+        $("#member-sort-buttons button").click (ev) =>
+            btn = ev.currentTarget
+            field = $(btn).data "col"
+            func = @_sort_funcs[field]
+            if func == @_raw_sort_func
+                @sort_order *= -1
+            else
+                @sort_order = 1
+
+            @_raw_sort_func = func
+            @_filter_listing()
+
 
     _update_search_hint: (col) =>
         i = Math.floor(Math.random()*(col.models.length))
         a = col.models[i].attributes
-        hint = "{% trans ", e.g. " %}" +
+        hint = "{% trans "e.g. " %}" +
             a.given_names.split(" ", 1)[0].split('-', 1)[0].toLowerCase() + " " +
             a.party.full_name.toLowerCase()[..2] + " " +
             a.district_name.toLowerCase()[..3]
@@ -104,24 +156,25 @@ class MemberListView extends Backbone.View
         @$el.empty()
         query = @search_el.val()
         if query == ""
-            for key of @children
-                @$el.append @children[key].el
-            return
+            result = (@children[key] for key of @children)
+        else
+            result = (@children[hit.ref] for hit in @index.search query)
 
-        result = @index.search query
+        result.sort @sort_func
+
         for hit in result
-            @$el.append(@children[hit.ref].el)
+            @$el.append hit.el
         
     append_item: (model, collection, options) =>
         $("#member-list").spin false
         item_view = new MemberView model: model
         
-        $(@el).append item_view.el
         @children[model.id] = item_view
         @index.add
             id: model.id
             name: model.attributes.name
             party: model.attributes.party.full_name
+            party_short: model.attributes.party.name
             district: model.attributes.district_name
 
 member_list_view = new MemberListView
