@@ -604,7 +604,7 @@ h2 {
 
 #member-filter-bar {
     overflow: hidden;
-
+    
     > div {
         margin: 0;
         padding: 0;
@@ -631,11 +631,40 @@ h2 {
         float: right;
         width: 55%;
         text-align: right;
+
     }
     
     #member-sort-buttons button {
+        display: block;
+        position: relative;
+        margin-left: 1px;
+        float: right;
         min-width: 10em;
         text-align: left;
+        
+        .sort-order {
+            position: absolute;
+            right: 2px;
+            bottom: 2px;
+            width: 0; 
+        	height: 0; 
+            opacity: 0.5;
+        }
+
+        .sort-order-desc {
+            border-left: 5px solid transparent;
+	        border-right: 5px solid transparent;
+	
+	        border-bottom: 5px solid black;
+        }
+
+        .sort-order-asc {
+            border-left: 5px solid transparent;
+        	border-right: 5px solid transparent;
+	
+        	border-top: 5px solid black;
+        }
+
     }
 }
 

@@ -9,10 +9,10 @@
     </div>
     <div id="member-sort-buttons">
         <span class="field-label">{% trans "Sort by" %}</span>
-        <button class="btn-mini" data-col="name">Name</button>
-        <button class="btn-mini" data-col="attendance">Attendance</button>
-        <button class="btn-mini" data-col="party_agree">Party agreement</button>
         <button class="btn-mini" data-col="session_agree">Session agreement</button>
+        <button class="btn-mini" data-col="party_agree">Party agreement</button>
+        <button class="btn-mini" data-col="attendance">Attendance</button>
+        <button class="btn-mini" data-col="name">Name</button>
     </div>
 </div>
 
@@ -123,23 +123,40 @@ class MemberListView extends Backbone.View
             party_agree: statsort('party_agree')
             session_agree: statsort('party_agree')
 
-        @_raw_sort_func = @_sort_funcs['name']
+        @_raw_sort_func = null
         @sort_order = 1
         @sort_func = (a, b) =>
             @sort_order*@_raw_sort_func(a, b)
+        @_set_sort_order "name"
 
         $("#member-sort-buttons button").click (ev) =>
             btn = ev.currentTarget
             field = $(btn).data "col"
+            @_set_sort_order field
+       
+    _set_sort_order: (field) =>
             func = @_sort_funcs[field]
             if func == @_raw_sort_func
                 @sort_order *= -1
             else
                 @sort_order = 1
+            
+            $("#member-sort-buttons button .sort-order").remove()
+            btn = $("#member-sort-buttons button[data-col='#{field}']")
+            console.log btn
+            order_widget = $ '<div class="sort-order"></div>'
+            if @sort_order > 0
+                order_widget.addClass "sort-order-asc"
+            else
+                order_widget.addClass "sort-order-desc"
+
+            console.log order_widget
+            btn.append order_widget
 
             @_raw_sort_func = func
             @_filter_listing()
 
+        
 
     _update_search_hint: (col) =>
         i = Math.floor(Math.random()*(col.models.length))
