@@ -63,6 +63,13 @@ class Member(models.Model):
             return None
         ms.calc()
         return ms
+    
+    __export_stats_fields = ('attendance', 'party_agree', 'session_agree')
+    def get_latest_stats(self):
+        latest = self.memberstats_set.order_by('-begin')[0]
+        latest.calc()
+        latest = {k: getattr(latest, k) for k in self.__export_stats_fields}
+        return latest
 
     def save(self, *args, **kwargs):
         if not self.url_name:
