@@ -26,10 +26,10 @@
     {% endcompress %}
 
     {% compress js %}
-    <script type="text/javascript" src="{% static "js/jquery-1.9.1.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/moment.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/moment.fi.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/jquery.expander.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/vendor/jquery-1.9.1.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/vendor/moment.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/vendor/moment.fi.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/vendor/jquery.expander.min.js" %}"></script>
     <script type="text/coffeescript">
         expander_defaults =
             expandText: "{% trans "Read more" %}" + " »"
@@ -37,15 +37,15 @@
             userCollapse: false
         $.extend $.fn.expander.defaults, expander_defaults
     </script>
-    <script type="text/javascript" src="{% static "js/spin.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/jquery.spin.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/lunr.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/jquery.oninput.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/vendor/spin.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/vendor/jquery.spin.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/vendor/lunr.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/vendor/jquery.oninput.js" %}"></script>
     {% endcompress %}
     {% compress js %}
-    <script type="text/javascript" src="{% static "js/underscore-min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/backbone-min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/backbone-tastypie.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/vendor/underscore-min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/vendor/backbone-min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/vendor/backbone-tastypie.js" %}"></script>
     {% endcompress %}
 
     <script type="text/javascript">
