@@ -17,12 +17,12 @@
 
     <!-- twitter bootstrap -->
     {% compress css %}
-    <link type="text/less" href="{{ MEDIA_URL }}css/bootstrap/bootstrap.less" rel="stylesheet" />
+    <link type="text/less" href="{% static 'css/bootstrap/bootstrap.less' %}" rel="stylesheet" />
     {% endcompress %}
 
     <!-- own css -->
     {% compress css %}
-    <link type="text/less" href="{{ MEDIA_URL }}css/kamu.less" rel="stylesheet" />
+    <link type="text/less" href="{% static 'css/kamu.less' %}" rel="stylesheet" />
     {% endcompress %}
 
     {% compress js %}
