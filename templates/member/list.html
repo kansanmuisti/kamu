@@ -16,6 +16,7 @@
     </div>
 </div>
 
+<div id="spinnercontainer"></div>
 <ul id="member-list" class="row"></ul>
 
 {% compress js %}
@@ -74,7 +75,7 @@ class MemberListView extends Backbone.View
     
 
     initialize: ->
-        $("#member-list").spin top: 0
+        $("#spinnercontainer").spin top: 0
 
         @$el = $ @el
         @children = {}
@@ -138,19 +139,19 @@ class MemberListView extends Backbone.View
             func = @_sort_funcs[field]
             if func == @_raw_sort_func
                 @sort_order *= -1
-            else
-                @sort_order = 1
+            # This is probably more intuitive and allows
+            # for nicer comparisons
+            #else
+            #    @sort_order = 1
             
             $("#member-sort-buttons button .sort-order").remove()
             btn = $("#member-sort-buttons button[data-col='#{field}']")
-            console.log btn
             order_widget = $ '<div class="sort-order"></div>'
             if @sort_order > 0
                 order_widget.addClass "sort-order-asc"
             else
                 order_widget.addClass "sort-order-desc"
 
-            console.log order_widget
             btn.append order_widget
 
             @_raw_sort_func = func
@@ -183,7 +184,7 @@ class MemberListView extends Backbone.View
             @$el.append hit.el
         
     append_item: (model, collection, options) =>
-        $("#member-list").spin false
+        $("#spinnercontainer").spin false
         item_view = new MemberView model: model
         
         @children[model.id] = item_view

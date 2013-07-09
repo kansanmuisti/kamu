@@ -629,7 +629,7 @@ h2 {
 
     #member-sort-buttons {
         float: right;
-        width: 55%;
+        width: 59%;
         text-align: right;
 
     }
@@ -639,8 +639,10 @@ h2 {
         position: relative;
         margin-left: 1px;
         float: right;
-        min-width: 10em;
+        min-width: 11em;
         text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
         
         .sort-order {
             position: absolute;
@@ -651,6 +653,7 @@ h2 {
             opacity: 0.5;
         }
 
+        
         .sort-order-desc {
             border-left: 5px solid transparent;
 	        border-right: 5px solid transparent;
@@ -666,6 +669,7 @@ h2 {
         }
 
     }
+    
 }
 
 // Other
