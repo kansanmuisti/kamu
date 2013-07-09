@@ -38,7 +38,7 @@ class MemberView extends Backbone.View
         <span class="member-party"><%= attr.party.full_name %></span>
     </div>
     <ul class="member-stats">
-        <li>
+        <li class="party_agree">
             <%= Math.round(attr.stats.party_agree*100) %>%
             <img src="{% static "images/icons/party_agr.png" %}"
                 alt="{% trans "Party agreement" %}"
@@ -46,14 +46,14 @@ class MemberView extends Backbone.View
                 />
         </li>
         
-        <li>
+        <li class="session_agree">
             <%= Math.round(attr.stats.session_agree*100) %>%
             <img src="{% static "images/icons/session_agr.png" %}"
                 alt="{% trans "Session agreement" %}"
                 title="{% trans "Session agreement" %}"
                 />
         </li>
-        <li>
+        <li class="attendance">
             <%= Math.round(attr.stats.attendance*100) %>%
             <img src="{% static "images/icons/attendance.png" %}"
                 alt="{% trans "Attendance" %}"
@@ -153,6 +153,9 @@ class MemberListView extends Backbone.View
                 order_widget.addClass "sort-order-desc"
 
             btn.append order_widget
+            
+            $("#member-list .member-stats > li").hide()
+            $("#member-list .member-stats > li.#{field}").show()
 
             @_raw_sort_func = func
             @_filter_listing()
