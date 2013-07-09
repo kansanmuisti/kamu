@@ -4,6 +4,7 @@ from tastypie.exceptions import BadRequest
 from tastypie import fields
 from parliament.models import *
 from sorl.thumbnail import get_thumbnail
+import datetime
 
 term_list = list(Term.objects.visible())
 
@@ -29,6 +30,8 @@ class MemberResource(ModelResource):
         return qset
 
     def dehydrate(self, bundle):
+        n_days = int(bundle.request.GET.get('activity_days', 30))
+        activity_start = datetime.datetime.now() - datetime.timedelta(days=n_days)
         tn_dim = bundle.request.GET.get('thumbnail_dim', None)
         if tn_dim:
             arr = tn_dim.strip().split('x')
@@ -44,6 +47,7 @@ class MemberResource(ModelResource):
             bundle.data['photo_thumbnail'] = get_thumbnail(bundle.obj.photo, tn_dim).url
         bundle.data['district_name'] = bundle.obj.get_latest_district().name
         bundle.data['stats'] = bundle.obj.get_latest_stats()
+        bundle.data['stats']['recent_activity'] = bundle.obj.get_activity_score(activity_start)
         return bundle
     class Meta:
         queryset = Member.objects.select_related('party')

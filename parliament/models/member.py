@@ -71,6 +71,13 @@ class Member(models.Model):
         latest = {k: getattr(latest, k) for k in self.__export_stats_fields}
         return latest
 
+    def get_activity_score(self, begin=None, end=None):
+        activities = self.memberactivity_set
+        if begin: activities = activities.filter(time__gte=begin)
+        if end: activities = activities.filter(time__lte=end)
+        return sum(MemberActivity.WEIGHTS.get(t, 0) for t in
+            activities.values_list('type', flat=True))
+
     def save(self, *args, **kwargs):
         if not self.url_name:
             # only do this with the first save

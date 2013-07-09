@@ -12,7 +12,7 @@
         <button class="btn-mini" data-col="session_agree">Session agreement</button>
         <button class="btn-mini" data-col="party_agree">Party agreement</button>
         <button class="btn-mini" data-col="attendance">Attendance</button>
-        <button class="btn-mini" data-col="name">Name</button>
+        <button class="btn-mini" data-col="recent_activity">Activity</button>
     </div>
 </div>
 
@@ -25,6 +25,22 @@
 
 {% compress js %}
 <script type="text/coffeescript">
+
+@_share_as_stars = (n, max=5) ->
+    str = ""
+    semistars = Math.round n*2*max
+    fullstars = Math.floor semistars/2.0
+    halfstars = semistars%2
+    for i in [0...fullstars]
+        str += '<i class="icon-star media-object" style="font-size: 12px"></i>'
+    if halfstars
+        str += '<i class="icon-star-half-empty media-object" style="font-size: 12px"></i>'
+        i += 1
+    while i < max
+        str += '<i class="icon-star-empty media-object" style="font-size: 12px"></i>'
+        i += 1
+    return str
+
 class MemberView extends Backbone.View
     content_template: """
     <a class="portrait-link" href="<%= model.get_view_url() %>">
@@ -38,6 +54,10 @@ class MemberView extends Backbone.View
         <span class="member-party"><%= attr.party.full_name %></span>
     </div>
     <ul class="member-stats">
+        <li class="recent_activity">
+            <%= window._share_as_stars(attr.stats.activity_ranking) %>
+            <i class="icon-comment media-object" style="font-size: 16px"></i>
+        </li>
         <li class="party_agree">
             <%= Math.round(attr.stats.party_agree*100) %>%
             <img src="{% static "images/icons/party_agr.png" %}"
@@ -45,7 +65,6 @@ class MemberView extends Backbone.View
                 title="{% trans "Party agreement" %}"
                 />
         </li>
-        
         <li class="session_agree">
             <%= Math.round(attr.stats.session_agree*100) %>%
             <img src="{% static "images/icons/session_agr.png" %}"
@@ -97,8 +116,11 @@ class MemberListView extends Backbone.View
         
         @collection.fetch
 	        success: (col) =>
+                @_calculate_rankings(col)
+                @_process_children(col)
                 @_update_search_hint(col)
                 @_filter_listing()
+                @_set_sort_order "recent_activity", false
             data:
                 thumbnail_dim: "64x96"
                 current: true
@@ -120,6 +142,7 @@ class MemberListView extends Backbone.View
 
         @_sort_funcs =
             name: namesort
+            recent_activity: statsort('recent_activity')
             attendance: statsort('attendance')
             party_agree: statsort('party_agree')
             session_agree: statsort('party_agree')
@@ -128,16 +151,29 @@ class MemberListView extends Backbone.View
         @sort_order = 1
         @sort_func = (a, b) =>
             @sort_order*@_raw_sort_func(a, b)
+        
+        # Just to have something in the sort order,
+        # this will be overriden once we get data
         @_set_sort_order "name"
-
+        
         $("#member-sort-buttons button").click (ev) =>
             btn = ev.currentTarget
             field = $(btn).data "col"
             @_set_sort_order field
+
+    _calculate_rankings: (collection) =>
+        activity_scores = (model.attributes.stats['recent_activity'] \
+            for model in collection.models)
+        activity_scores = _.sortBy activity_scores, (x) -> x
+        percentile = (v) ->
+            activity_scores.indexOf(v)/(activity_scores.length-1)
+        for model in collection.models
+            stats = model.attributes.stats
+            stats['activity_ranking'] = percentile stats['recent_activity']
        
-    _set_sort_order: (field) =>
+    _set_sort_order: (field, toggle_order=true) =>
             func = @_sort_funcs[field]
-            if func == @_raw_sort_func
+            if toggle_order and func == @_raw_sort_func
                 @sort_order *= -1
             # This is probably more intuitive and allows
             # for nicer comparisons
@@ -159,8 +195,6 @@ class MemberListView extends Backbone.View
 
             @_raw_sort_func = func
             @_filter_listing()
-
-        
 
     _update_search_hint: (col) =>
         i = Math.floor(Math.random()*(col.models.length))
@@ -186,17 +220,17 @@ class MemberListView extends Backbone.View
         for hit in result
             @$el.append hit.el
         
-    append_item: (model, collection, options) =>
+    _process_children: (collection) =>
         $("#spinnercontainer").spin false
-        item_view = new MemberView model: model
-        
-        @children[model.id] = item_view
-        @index.add
-            id: model.id
-            name: model.attributes.name
-            party: model.attributes.party.full_name
-            party_short: model.attributes.party.name
-            district: model.attributes.district_name
+        for model in collection.models
+            item_view = new MemberView model: model
+            @children[model.id] = item_view
+            @index.add
+                id: model.id
+                name: model.attributes.name
+                party: model.attributes.party.full_name
+                party_short: model.attributes.party.name
+                district: model.attributes.district_name
 
 member_list_view = new MemberListView
 </script>
