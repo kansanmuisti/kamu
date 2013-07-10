@@ -53,7 +53,7 @@ def render_member_activity(item):
     elif item.type == 'IN':
         d['type'] = _('Initiative')
         d['icon'] = 'lightbulb'
-        o = initiativeactivity.doc
+        o = item.initiativeactivity.doc
         d['text'] = o.summary
     else:
         return None
