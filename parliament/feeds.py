@@ -20,3 +20,21 @@ def create_social_update_activity(sender, **kwargs):
 def create_document_signature_activity(sender, **kwargs):
     obj = kwargs['instance']
     sign_act, created = SignatureActivity.objects.get_or_create(signature=obj)
+
+@receiver(post_save, sender=Document, dispatch_uid="document_activity")
+def create_document_activity(sender, **kwargs):
+    # Create the activity record for document authorship.
+    doc = kwargs['instance']
+    if doc.author == None:
+        return
+    if doc.type not in ('mp_prop', 'written_ques'):
+        return
+    act, created = InitiativeActivity.objects.get_or_create(doc=doc)
+    if created:
+        return
+
+    date = act.time.date()
+    if doc.author != act.member or doc.date != date:
+        act.member = doc.author
+        act.time = doc.date
+        act.save()

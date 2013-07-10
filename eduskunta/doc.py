@@ -13,11 +13,15 @@ DOC_LIST_URL = "http://www.eduskunta.fi/triphome/bin/vex3000.sh?TUNNISTE=%s&PVMV
 DOC_DL_URL = "http://www.eduskunta.fi/triphome/bin/akxhref2.sh?{KEY}=%s+%s"
 DOC_PROCESS_URL = "http://www.eduskunta.fi/triphome/bin/vex3000.sh?TUNNISTE=%s+%s"
 HE_URL = "http://217.71.145.20/TRIPviewer/temp/TUNNISTE_HE_%i_%i_fi.html"
-DOC_TYPES = ["HE", "LA",
-        #"TPA", "TA", "KA", "LTA",
-        #"VK", "VNT",
-        #"KK", "TAA"
-]
+DOC_TYPES = {
+    'HE': 'gov_prop',
+    'LA': 'mp_prop',
+    'KK': 'written_ques',
+    #"TPA", "TA", "KA", "LTA",
+    #"VK", "VNT",
+    #"KK", "TAA"
+}
+
 SKIP_DOCS = [
     'KA 4/2008', 'KA 6/2007', 'YmVM 10/2006', 'HE 103/2004',
     'LA 4/2003',
@@ -26,6 +30,7 @@ SKIP_DOCS = [
     'LA 21/2011', # 'Ilmoitus peruuttamisesta' missing
     'LA 48/2012', # missing date of committee hearing
     'HE 273/2009', # ???
+    'KK 180/2012', # SGML doc not found
 ]
 
 def should_download_doc(doc):
@@ -95,7 +100,7 @@ class DocImporter(Importer):
         last_phase = phases[-1][0]
         phase_list = []
         for idx, (phase, status, el_name) in enumerate(phases):
-            if not el_name or status != 3:
+            if not el_name or status not in (2, 3):
                 continue
             box_el_list = html_doc.xpath("//div[@class='listborder']//h2")
             # quirks
@@ -200,6 +205,15 @@ class DocImporter(Importer):
             paras.append(text)
         return '\n'.join(paras)
 
+    def parse_mp(self, mp_el):
+        d = {}
+        first = mp_el.xpath('etunimi')[0]
+        last = mp_el.xpath('sukunimi')[0]
+        d['first_name'] = self.clean_text(first.text_content())
+        d['last_name'] = self.clean_text(last.text_content())
+        d['id'] = mp_el.attrib['numero']
+        return d
+
     def parse_signatures(self, root_el):
         sign_el = root_el.xpath('//allekosa')
         assert len(sign_el) in (1, 2)
@@ -209,15 +223,17 @@ class DocImporter(Importer):
         assert len(signers) > 0
         sign_list = []
         for signer in signers:
-            d = {}
-            first = signer.xpath('etunimi')[0]
-            last = signer.xpath('sukunimi')[0]
-            d['first_name'] = self.clean_text(first.text_content())
-            d['last_name'] = self.clean_text(last.text_content())
-            d['id'] = signer.attrib['numero']
+            d = self.parse_mp(signer)
             d['date'] = date
             sign_list.append(d)
         return sign_list
+
+    def parse_author(self, root_el):
+        author_el = root_el.xpath('.//ident/evtulo/edustaja/henkilo')
+        assert len(author_el) == 1, "Too many 'evtulo' fields (%d)" % len(author_el)
+        author_el = author_el[0]
+        author = self.parse_mp(author_el)
+        return author        
 
     def import_sgml_doc(self, info):
         url = DOC_DL_URL % (info['type'], info['id'])
@@ -225,7 +241,7 @@ class DocImporter(Importer):
         f = open(xml_fn, 'r')
         root = html.fromstring(f.read())
         f.close()
-        
+
         el_list = root.xpath('.//ident/nimike')
         assert len(el_list) >= 1
         el = el_list[0]
@@ -251,7 +267,15 @@ class DocImporter(Importer):
 
         info['summary'] = self.parse_te_paragraphs(target_el)
         if info['type'] in ('KK', 'LA'):
-            info['signatures'] = self.parse_signatures(root)
+            if info['type'] == 'KK':
+                author_root = root.xpath(".//kysosa[@kieli='suomi']")
+                assert len(author_root) == 1
+                author_root = author_root[0]
+            else:
+                author_root = root
+
+            info['author'] = self.parse_author(author_root)
+            info['signatures'] = self.parse_signatures(author_root)
         return info
 
     def parse_he(self, info, he_str):
@@ -393,12 +417,16 @@ class DocImporter(Importer):
             self.logger.warning("skipping %s %s" % (info['type'], info['id']))
             return None
 
+        origin_id = "%s %s" % (info['type'], info['id'])
         try:
-            doc = Document.objects.get(type=info['type'], name=info['id'])
+            doc = Document.objects.get(origin_id=origin_id)
             if not self.replace:
                 return
         except Document.DoesNotExist:
-            doc = Document(type=info['type'], name=info['id'])
+            doc = Document(origin_id=origin_id)
+
+        doc.type = DOC_TYPES[info['type']]
+        doc.name = origin_id
 
         info = self.fetch_processing_info(info)
 
@@ -414,10 +442,20 @@ class DocImporter(Importer):
             doc.error = info['error']
         else:
             doc.error = None
-        #doc.date = info['date']
+        # Figure out the document date through the intro stage.
+        for st in info['phases']:
+            (idx, stage, date) = st
+            if stage == 'intro':
+                doc.date = date
+                break
+        if doc.date is None:
+            raise ParseError("Document date could not be determined")
         doc.info_link = info['info_link']
         if 'sgml_link' in info:
             doc.sgml_link = info['sgml_link']
+        if 'author' in info:
+            doc.author = Member.objects.get(origin_id=info['author']['id'])
+
         doc.save()
 
         self.save_stages(doc, info)
@@ -451,7 +489,7 @@ class DocImporter(Importer):
         f.write('"%s %s",%s\n' % (info['type'], info['id'], s))
     """
     def import_docs(self):
-        types = "(%s)" % '+or+'.join(DOC_TYPES)
+        types = "(%s)" % '+or+'.join(DOC_TYPES.keys())
         url = DOC_LIST_URL % types
         self.skipped = 0
         while url:

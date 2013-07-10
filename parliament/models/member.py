@@ -267,9 +267,10 @@ class MemberActivity(models.Model):
         ('FB', 'Facebook update'),
         ('ST', 'Plenary statement'),
         ('SI', 'Signature'),
+        ('WQ', 'Written question'),
     ]
     # Algorithm for determining weights: Pulling out of the Ass
-    WEIGHTS = {'IN': 100, 'RV': 10, 'CD': 20, 'TW': 1, 'FB': 5, 'ST': 10}
+    WEIGHTS = {'IN': 200, 'RV': 10, 'CD': 20, 'TW': 2, 'FB': 10, 'ST': 5, 'SI': 10, 'WQ': 20}
 
     member = models.ForeignKey(Member, db_index=True)
     time = models.DateTimeField(db_index=True)
@@ -322,14 +323,23 @@ class KeywordActivity(models.Model):
         unique_together = (('activity', 'keyword'),)
 
 class InitiativeActivity(MemberActivity):
-    TYPE = 'IN'
+    # This is both for written questions and law proposals.
+
     doc = models.ForeignKey(Document, db_index=True)
 
     objects = MemberActivityManager()
 
     def save(self, *args, **kwargs):
-        self.type = self.TYPE
+        doc = self.doc
+        assert doc.type in ('mp_prop', 'written_ques'), "Invalid document type: %s" % doc
+        assert doc.author is not None, "Document has no author: %s" % doc
+        if doc.type == 'mp_prop':
+            self.type = 'IN'
+        else:
+            self.type = 'WQ'
         self.keywords = self.doc.keywords.all()
+        self.member = self.doc.author
+        self.time = self.doc.date
         return super(InitiativeActivity, self).save(*args, **kwargs)
 
     def __unicode__(self):

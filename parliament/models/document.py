@@ -13,14 +13,24 @@ class Keyword(models.Model):
         app_label = 'parliament'
 
 class Document(models.Model):
-    type = models.CharField(max_length=5, db_index=True)
-    name = models.CharField(max_length=20, db_index=True)
-    url_name = models.SlugField(max_length=20, unique=True)
+    TYPES = (
+        ('mp_prop', 'MP law proposal'),
+        ('gov_prop', 'Government proposal'),
+        ('written_ques', 'Written question'),
+        ('interpellation', 'Interpellation'),
+    )
+
+    type = models.CharField(max_length=30, db_index=True, choices=TYPES)
+    name = models.CharField(max_length=30, unique=True, db_index=True)
+    origin_id = models.CharField(max_length=30, unique=True, db_index=True)
+    url_name = models.SlugField(max_length=20, unique=True, db_index=True)
     date = models.DateField(blank=True, null=True)
     info_link = models.URLField(blank=True, null=True)
     sgml_link = models.URLField(blank=True, null=True)
     subject = models.TextField()
     summary = models.TextField(blank=True, null=True)
+    author = models.ForeignKey('parliament.Member', null=True, db_index=True,
+        help_text="Set if the document is authored by an MP")
 
     version = models.CharField(max_length=10, null=True)
     update_time = models.DateTimeField(blank=True, null=True)
@@ -32,7 +42,7 @@ class Document(models.Model):
     def save(self, *args, **kwargs):
         if not self.url_name:
             # only do this with the first save
-            s = "%s %s" % (self.type, self.name)
+            s = self.name
             s = s.replace('/', '-')
             self.url_name = slugify(s)
         super(Document, self).save(*args, **kwargs)
