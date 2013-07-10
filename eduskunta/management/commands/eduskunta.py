@@ -29,6 +29,7 @@ class Command(BaseCommand):
                     default=False, help='Import plenary session votes'),
         make_option('--funding', action='store_true', dest='funding',
                     default=False, help='Import election funding'),
+        make_option('--single', metavar='ID', dest='single', help='Import only a single element'),
         make_option('--update', action='store_true', dest='update',
                     default=False, help='Update values of existing objects'),
         make_option('--cache', action='store', dest='cache',
@@ -61,7 +62,10 @@ class Command(BaseCommand):
         if options['docs']:
             importer = DocImporter(http_fetcher=http)
             importer.replace = options['update']
-            importer.import_docs()
+            args = {}
+            if options['single']:
+                args['single'] = options['single']
+            importer.import_docs(**args)
         if options['vote']:
             importer = VoteImporter(http_fetcher=http)
             importer.replace = options['update']

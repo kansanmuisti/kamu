@@ -488,7 +488,16 @@ class DocImporter(Importer):
                 return
         f.write('"%s %s",%s\n' % (info['type'], info['id'], s))
     """
-    def import_docs(self):
+    def import_docs(self, **kw_args):
+        single = kw_args.get('single', None)
+        if single:
+            info = {}
+            arr = single.split(' ')
+            info['type'] = arr[0]
+            info['id'] = arr[1]
+            doc = self.import_doc(info)
+            return
+
         types = "(%s)" % '+or+'.join(DOC_TYPES.keys())
         url = DOC_LIST_URL % types
         self.skipped = 0
