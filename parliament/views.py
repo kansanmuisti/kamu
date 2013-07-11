@@ -1,3 +1,5 @@
+import operator
+
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import HttpResponse
@@ -81,10 +83,26 @@ def _get_member_activity(member, offset):
 
     return items_out
 
+def _get_member_activity_kws(member):
+    kw_act_list = KeywordActivity.objects.filter(activity__member=member).select_related('keyword', 'activity')
+    kw_dict = {}
+    for kwa in kw_act_list:
+        name = kwa.keyword.name
+        score = MemberActivity.WEIGHTS[kwa.activity.type]
+        if name in kw_dict:
+            kw_dict[name] += score
+        else:
+            kw_dict[name] = score
+    kw_list = sorted(kw_dict.iteritems(), key=operator.itemgetter(1), reverse=True)[0:20]
+    return kw_list
+
 def show_member(request, member):
     member = get_view_member(member)
     activity = _get_member_activity(member, 0)
-    args = dict(member=member, activity=activity)
+    kw_act = _get_member_activity_kws(member)
+    kw_act_json = simplejson.dumps(kw_act, ensure_ascii=False)
+    args = dict(member=member, activity=activity, keyword_activity=kw_act_json)
+
     return render_to_response('member/overview.html', args,
         context_instance=RequestContext(request))
 

@@ -2,7 +2,11 @@
 {% load compress %}
 
 {% block member_content %}
-<ul class="member-activity-feed media-list">
+
+<div id="member-tag-cloud" class="tag-cloud">
+</div>
+
+<ul class="feed media-list">
 {% for item in activity %}
     <li class="activity media">
         <a class="pull-left" href="#">
@@ -10,15 +14,23 @@
         </a>
         <div class="media-body">
             <h4 class="media-heading">{{item.time}}</h4>
-            <p>{{item.text}}</p>
+            <div class="text">{{item.text|linebreaks}}</div>
         </div>
     </li>
 {% endfor %}
 </ol>
 
+<script type="text/javascript">
+    keyword_activity = {{keyword_activity|safe}};
+</script>
+
 {% compress js %}
 <script type="text/coffeescript">
-    $(".activity .media-body p").expander {slicePoint: 350}
+    $(".activity .media-body .text").expander
+        slicePoint: 350
+    tags = ({name: x[0], count: x[1], url: '#'} for x in keyword_activity)
+    tags = _.sortBy tags, (x) -> x.name
+    $("#member-tag-cloud").tag_cloud tags
 </script>
 {% endcompress %}
 

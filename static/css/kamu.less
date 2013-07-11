@@ -32,6 +32,23 @@ body {
 	margin-top: @gridGutterWidth;
 }
 
+.tag-cloud {
+    ul {
+        list-style: none;
+        li {
+            a {
+                &:hover {
+                    text-decoration: underline;
+                }
+                text-decoration: none;
+            }
+            display: inline-block;
+            margin: 0 9px;
+            height: 28px;
+        }
+    }
+}
+
 // block mixins. Please use these if you want to create a block
 // with some stuff
 .blockStyling {
@@ -540,7 +557,13 @@ h2 {
 }
 
 .member-content {
-	.blockPadding;
+	.blockColumn;
+        .tag-cloud {
+            .verticalBlock;
+        }
+        .feed {
+            .verticalBlock;
+        }
 }
 
 .member-rightbar {
