@@ -1,4 +1,5 @@
 from django.db import models
+from tastypie.cache import SimpleCache
 from tastypie.resources import ModelResource
 from tastypie.exceptions import BadRequest
 from tastypie import fields
@@ -8,15 +9,22 @@ import datetime
 
 term_list = list(Term.objects.visible())
 
-class TermResource(ModelResource):
+from utils import timing
+
+class KamuResource(ModelResource):
+    def __init__(self, api_name=None):
+        super(KamuResource, self).__init__(api_name)
+        self._meta.cache = SimpleCache(timeout=3600)
+
+class TermResource(KamuResource):
     class Meta:
         queryset = Term.objects.all()
 
-class PartyResource(ModelResource):
+class PartyResource(KamuResource):
     class Meta:
         queryset = Party.objects.all()
 
-class MemberResource(ModelResource):
+class MemberResource(KamuResource):
     party = fields.ForeignKey('parliament.api.PartyResource', 'party', full=True)
 
     def build_filters(self, filters=None):
@@ -52,45 +60,45 @@ class MemberResource(ModelResource):
     class Meta:
         queryset = Member.objects.select_related('party')
 
-class PlenarySessionResource(ModelResource):
+class PlenarySessionResource(KamuResource):
     plenary_votes = fields.ToManyField('parliament.api.PlenaryVoteResource', 'plenary_vote_set')
     class Meta:
         queryset = PlenarySession.objects.all()
         resource_name = 'plenary_session'
 
-class PlenaryVoteResource(ModelResource):
+class PlenaryVoteResource(KamuResource):
     votes = fields.ToManyField('parliament.api.VoteResource', 'vote_set', full=True)
     class Meta:
         queryset = PlenaryVote.objects.all()
         resource_name = 'plenary_vote'
 
-class VoteResource(ModelResource):
+class VoteResource(KamuResource):
     plenary_vote = fields.ForeignKey(PlenaryVoteResource, 'plenary_vote')
     member = fields.ForeignKey(MemberResource, 'member')
     class Meta:
         queryset = Vote.objects.all()
 
-class FundingSourceResource(ModelResource):
+class FundingSourceResource(KamuResource):
     class Meta:
         queryset = FundingSource.objects.all()
 
-class FundingResource(ModelResource):
+class FundingResource(KamuResource):
     member = fields.ForeignKey(MemberResource, 'member')
     source = fields.ForeignKey(FundingSourceResource, 'source', null=True, full=True)
     class Meta:
         queryset = Funding.objects.all()
 
-class SeatResource(ModelResource):
+class SeatResource(KamuResource):
     class Meta:
         queryset = Seat.objects.all()
 
-class MemberSeatResource(ModelResource):
+class MemberSeatResource(KamuResource):
     seat = fields.ForeignKey(SeatResource, 'seat', full=True)
     member = fields.ForeignKey(MemberResource, 'member')
     class Meta:
         queryset = MemberSeat.objects.all()
 
-class DocumentResource(ModelResource):
+class DocumentResource(KamuResource):
     class Meta:
         queryset = Document.objects.all()
 
