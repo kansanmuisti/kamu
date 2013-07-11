@@ -97,6 +97,43 @@ contents:
     $ django-admin.py compilemessages	# create the compiled locale files
     $ django-admin.py index --rebuild	# generate the search index
 
+Varnish configuration
+=====================
+
+During development, it can be useful to apply caching similar to production.
+First, install the `varnish` package. Modify `/etc/default/varnish` as follows:
+
+    DAEMON_OPTS="-a localhost:8100 \
+             -T localhost:6082 \
+             -f /etc/varnish/default.vcl \
+             -S /etc/varnish/secret \
+             -s malloc,256m"
+
+Next, modify `/etc/varnish/default.vcl`:
+
+    backend default {
+        .host = "127.0.0.1";
+        .port = "8000";
+    }
+
+    sub vcl_recv {
+        if (req.url ~ "^/api/") {
+            remove req.http.cookie;
+        }
+    }
+
+    sub vcl_fetch {
+        if (req.url ~ "^/api/") {
+            unset beresp.http.set-cookie;
+        }
+    }
+
+This will instruct Varnish to use your development server as the backend
+and disregard HTTP cookies when accessing the REST API.
+
+You can now point your browser to `http://localhost:8100/` for the cached
+version of the site.
+
 Unit testing
 ============
 
