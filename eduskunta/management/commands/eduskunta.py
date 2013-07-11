@@ -30,6 +30,7 @@ class Command(BaseCommand):
         make_option('--funding', action='store_true', dest='funding',
                     default=False, help='Import election funding'),
         make_option('--single', metavar='ID', dest='single', help='Import only a single element'),
+        make_option('--from-year', metavar='YEAR', dest='from_year', help='Start importing from YEAR'),
         make_option('--update', action='store_true', dest='update',
                     default=False, help='Update values of existing objects'),
         make_option('--cache', action='store', dest='cache',
@@ -65,6 +66,8 @@ class Command(BaseCommand):
             args = {}
             if options['single']:
                 args['single'] = options['single']
+            if options['from_year']:
+                args['from_year'] = options['from_year']
             importer.import_docs(**args)
         if options['vote']:
             importer = VoteImporter(http_fetcher=http)

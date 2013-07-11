@@ -500,6 +500,11 @@ class DocImporter(Importer):
 
         types = "(%s)" % '+or+'.join(DOC_TYPES.keys())
         url = DOC_LIST_URL % types
+
+        from_year = kw_args.get('from_year', None)
+        if from_year:
+            url += '&PVMVP2=%s' % from_year
+
         self.skipped = 0
         while url:
             print url
