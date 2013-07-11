@@ -9,8 +9,6 @@ import datetime
 
 term_list = list(Term.objects.visible())
 
-from utils import timing
-
 class KamuResource(ModelResource):
     def __init__(self, api_name=None):
         super(KamuResource, self).__init__(api_name)
