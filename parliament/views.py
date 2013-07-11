@@ -55,8 +55,19 @@ def render_member_activity(item):
         d['icon'] = 'lightbulb'
         o = item.initiativeactivity.doc
         d['text'] = o.summary
+    elif item.type == 'SI':
+        d['type'] = _('Signature')
+        d['icon'] = 'pencil'
+        o = item.signatureactivity.signature.doc
+        d['text'] = o.summary
+    elif item.type == 'WQ':
+        d['type'] = _('Written question')
+        d['icon'] = 'question'
+        o = item.initiativeactivity.doc
+        d['text'] = o.summary
     else:
         return None
+    d['text'] = d['text'].replace('\n', '\n\n')
     return d
 
 def _get_member_activity(member, offset):
