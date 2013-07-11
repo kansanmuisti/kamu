@@ -156,7 +156,7 @@ class DocImporter(Importer):
         stages = {}
         for el in el_list:
             s = self.clean_text(el.text_content())
-            if s == 'Asiasanat':
+            if unicode(s) in (u'Asiasanat', u'Päätökset'):
                 continue
             date_el = el.xpath("../..//div[.='Pvm']")
             assert len(date_el) == 1
