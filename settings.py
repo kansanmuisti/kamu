@@ -144,9 +144,9 @@ INSTALLED_APPS = (
     'django.contrib.markup',
     'django.contrib.messages',
     
-    'django_assets',
     'sorl.thumbnail',
     'compressor',
+
     'kamu.votes',
     'kamu.users',
     'kamu.orgs',
