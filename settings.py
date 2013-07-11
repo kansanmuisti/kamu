@@ -89,6 +89,8 @@ INTERNAL_IPS = ( '127.0.0.1', )
 
 CACHE_BACKEND = 'locmem://'
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
