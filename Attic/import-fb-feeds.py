@@ -119,18 +119,85 @@ class FeedImporter(object):
         bf.reason = reason
         bf.save()
 
+    def validate_twitter_feed(self, feed_cls, member, feed_name):
+        from social.models import BrokenFeed
+        from twython import TwythonError
+
+        person_name = unicode(member).encode('utf8')
+        feed_name = unicode(feed_name).encode('utf8')
+        self.logger.debug("%s: Validating Twitter feed %s" % (person_name, feed_name))
+
+        twitter = self.feed_updater.twitter
+        if feed_name.isdigit():
+            tw_args = {'user_id': feed_name}
+            orm_args = {'origin_id': feed_name}
+        else:
+            tw_args = {'screen_name': feed_name}
+            orm_args = {'account_name__iexact': feed_name}
+
+        try:
+            mf = feed_cls.objects.get(type='TW', **orm_args)
+            self.logger.debug("%s: Feed %s found" % (person_name, feed_name))
+            if mf.member != member:
+                other_name = unicode(mf.member).encode('utf8')
+                self.logger.warning("%s: Found TW feed (%s) was for %s" %
+                    (person_name, feed_name, other_name))
+            if not self.replace:
+                return
+        except feed_cls.DoesNotExist:
+            mf = None
+            pass
+
+        # Check if the feed was previously marked broken.
+        bf = None
+        if not mf:
+            try:
+                bf = BrokenFeed.objects.get(type='TW', origin_id=feed_name)
+                self.logger.debug("%s: TW feed %s marked broken" % (person_name, feed_name))
+                if not self.replace:
+                    return
+            except BrokenFeed.DoesNotExist:
+                pass
+
+        try:
+            res = twitter.showUser(**tw_args)
+        except TwythonError as e:
+            self.logger.error('Twitter error: %s', e)
+            if e.msg.startswith('Not Found:'):
+                self._mark_broken("TW", feed_name, "not-found")
+            elif e.msg.startswith('Bad Request:') and 'Rate limit exceeded' in e.msg:
+                self.disable_twitter = True
+            return
+        except ConnectionError as e:
+            self.logger.error('Connection error: %s', e)
+            return
+
+        origin_id = str(res['id'])
+        if not mf:
+            feeds = feed_cls.objects.filter(member=member, type='TW')
+            if len(feeds):
+                self.logger.warning("%s: TW feed already found (screen name '%s')" % (person_name, mf.account_name))
+                return
+            mf = feed_cls(member=member, type='TW')
+            self.logger.info("%s: adding TW feed %s" % (person_name, origin_id))
+
+        mf.origin_id = origin_id
+        mf.account_name = res.get('screen_name', None)
+        mf.save()
+
+
 imp = FeedImporter()
 imp.logger = logging.getLogger(__name__)
 imp.feed_updater = FeedUpdater(imp.logger)
 imp.replace = False
 
-reader = csv.reader(open('kansanedustajat-fb.csv', 'r'), delimiter=',')
+reader = csv.reader(open('some-feeds.csv', 'r'), delimiter=',')
 for row in reader:
-    mp_name = row[0].decode('utf8')
+    mp_name = "%s %s" % (row[0].decode('utf8'), row[1].decode('utf8'))
     mp_name = fix_mp_name(mp_name)
     member = Member.objects.get(name=mp_name)
-    print mp_name
-    feed = parse_fb_feed(row[1])
-    if not feed:
-        continue
-    imp.validate_fb_feed(MemberSocialFeed, member, feed)
+    print "%s: %s" % (mp_name, row[2])
+    if row[2] == 'TW':
+        imp.validate_twitter_feed(MemberSocialFeed, member, row[3])
+    else:
+        imp.validate_fb_feed(MemberSocialFeed, member, row[3])
