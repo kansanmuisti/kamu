@@ -159,6 +159,8 @@ class DocImporter(Importer):
             if unicode(s) in (u'Asiasanat', u'Päätökset'):
                 continue
             date_el = el.xpath("../..//div[.='Pvm']")
+            if not date_el:
+                continue
             assert len(date_el) == 1
             date = date_el[0].tail.strip()
             (d, m, y) = date.split('.')
