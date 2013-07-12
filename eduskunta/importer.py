@@ -48,6 +48,8 @@ class Importer(object):
 
     def open_url(self, *args, **kwargs):
         return self.http.open_url(*args, **kwargs)
+    def open_list_url(self, url, list_type, *args, **kwargs):
+        return self.open_url(url, list_type + '-list', *args, **kwargs)
 
     def process_list_element(self, el_type, el):
         ret = {}
@@ -123,7 +125,7 @@ class Importer(object):
 
         ret = []
 
-        s = self.open_url(url, list_type)
+        s = self.open_list_url(url, list_type + '-list')
         doc = html.fromstring(s)
         el_list = doc.xpath(".//div[@class='listing']/div/p")
         doc.make_links_absolute(url)
