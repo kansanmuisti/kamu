@@ -278,7 +278,7 @@ class FeedUpdater(object):
         feed.interest = feed_info.get('likes', None)
         if not feed.picture:
             self.logger.info('Fetching picture info')
-            picture_info = self._fb_get("%s?fields=picture")
+            picture_info = self._fb_get("%s?fields=picture" % feed.origin_id)
             feed.picture = picture_info.get('picture', {}).get('data', {}).get('url', None)
 
         # Limit downloading of personal feeds to last two months.
