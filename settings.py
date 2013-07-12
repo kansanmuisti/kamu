@@ -46,7 +46,6 @@ LOCALE_PATHS = (
 # http://www.i18nguy.com/unicode/language-identifiers.html
 #LANGUAGE_CODE = 'en-us'
 LANGUAGE_CODE = 'fi'
-DJAPIAN_STEMMING_LANG = 'fi'
 DATE_FORMAT = 'd.m.Y'
 TIME_FORMAT = 'H:i'
 
@@ -106,7 +105,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     "django.core.context_processors.request",
-    "facebook.context_processors.facebook",
     "i18n.context_processors.other_languages",
 )
 
@@ -139,7 +137,6 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'django.contrib.comments',
     'django.contrib.webdesign',
     'django.contrib.markup',
     'django.contrib.messages',
@@ -147,26 +144,16 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     'compressor',
 
-    'kamu.votes',
-    'kamu.users',
-    'kamu.orgs',
-    'kamu.comments',
     'social',
     'parliament',
     'eduskunta',
-    'facebook',
     'cms',
-    'user_voting',
-    'opinions',
     'south',
     'tastypie',
-    'joining',
 )
 
-AUTH_PROFILE_MODULE="kamu.users.KamuProfile"
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'kamu.facebook.auth_backends.FacebookBackend',
 )
 
 # Activation window from the sending of the activation e-mail
@@ -178,7 +165,6 @@ LOGIN_URL = '/account/login/'
 DEFAULT_FROM_EMAIL = 'Kansan muisti <noreply@kansanmuisti.fi>'
 SERVER_EMAIL = 'noreply@kansanmuisti.fi'
 
-COMMENTS_APP = 'kamu.comments'
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 FACEBOOK_ENABLED = False

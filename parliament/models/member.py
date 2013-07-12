@@ -96,7 +96,7 @@ class Member(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('votes.views.show_member', (), {'member': self.url_name})
+        return ('parliament.views.show_member', (), {'member': self.url_name})
 
     def __unicode__(self):
         return self.name
