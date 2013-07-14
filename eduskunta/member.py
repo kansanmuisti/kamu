@@ -52,9 +52,10 @@ MEMBER_NAME_TRANSFORMS = {
     'Saarikko Annikka': 'Saarikko Annika',
 }
 
+
 def fix_mp_name(name):
     if not isinstance(name, unicode):
-	name = name.decode('utf8')
+        name = name.decode('utf8')
     if name.encode('utf8') in MEMBER_NAME_TRANSFORMS:
         name = MEMBER_NAME_TRANSFORMS[name.encode('utf8')].decode('utf8')
     return name
@@ -68,19 +69,84 @@ FIELD_MAP = {
     'birth': u'Syntymäaika ja -paikka',
     'home_county': u'Nykyinen kotikunta',
     'districts': u'Vaalipiiri',
-    'parties': u'Eduskuntaryhmät',   
+    'parties': u'Eduskuntaryhmät',
+    'current_posts': u'Nykyiset toimielinjäsenyydet ja tehtävät',
+    'previous_posts': u'Aiemmat jäsenyydet ja tehtävät eduskunnan toimielimissä',
+    'parliament_groups': u'Eduskuntaryhmät',
+    'parliament_group_tasks': u'Tehtävät eduskuntaryhmässä'
 }
 
+
 def get_field_el(doc, field):
+    # Get "doclist-items" elements listed by table headers (th)  
     el_list = doc.xpath('//div[@class="doclist-items"]/div[@class="listborder"]/table//th')
     for el in el_list:
         s = el.text.split(':')[0].strip()
         if s == FIELD_MAP[field]:
+            # td follows th, so positional selection can be used
             td = el.getnext()
             if td.tag != 'td':
-            	raise ParseError('expecting td element')
+                raise ParseError('expecting a td element')
             return td
     return None
+
+# FIXME: should this be a method of MemberImporter?
+    
+def parse_membership(line):
+    def parse_date(s, is_begin):
+        # Filter 'I' and 'II'
+        s = s.strip('I ')
+        DATE_MATCH = r'^(\d{1,2})\.(\d{1,2})\.(\d{4})$'
+        m = re.match(DATE_MATCH, s)
+        if not m:
+            m = re.match(r'^(\d{4})$', s)
+            if not m: 
+                return None
+            if is_begin:
+                day, mon = 1, 1
+            else:
+                day, mon = 31, 12
+            year = int(m.groups()[0])
+        else:
+            day, mon, year = [int(x) for x in m.groups()]
+        return '-'.join([str(x) for x in (year, mon, day)])
+
+    info = {}
+    m = re.match(r'([^0-9(]+)(.+)', line)
+    assert m, "Committee name not found: %s" % line
+    committee_name = m.groups()[0].strip()
+    # Only record committees (valiokunta)
+    if committee_name.endswith('valiokunta'):
+        info['committee'] = committee_name
+        date_line = m.groups()[1].strip()
+        # Check if there are historical committee names in the string.
+        m = re.match(r'\([^)]+\d+[^)]+\) ', date_line)
+        if m is not None:
+            # If match found, strip the historical names.
+            date_line = date_line[date_line.find(')') + 1:].strip()
+        membership_dates = []
+        for m_line in date_line.split(','):
+            d = {}
+            m_line = m_line.strip()
+            m = re.match(r'\((\w+)\) ([0-9. I-]+)', m_line)
+            if m:
+                d['role'] = m.groups()[0]
+                m_line = m.groups()[1]
+            dates = m_line.split(' -')
+            d['begin'] = parse_date(dates[0], True)
+            if len(dates) > 1 and len(dates[1]):
+                d['end'] = parse_date(dates[1].strip(), False)
+            else:
+                d['end'] = None
+            # Exclude cases where both begin and end are None
+            if not d['begin'] and not d['end']:
+                continue
+            else:
+                membership_dates.append(d)
+        info['periods'] = membership_dates
+        return info
+    else:
+        return None
 
 class MemberImporter(Importer):
     LIST_URL = '/triphome/bin/thw/trip/?${base}=hetekaue&${maxpage}=10001&${snhtml}=hex/hxnosynk&${html}=hex/hx4600&${oohtml}=hex/hx4600&${sort}=lajitnimi&nykyinen=$+and+(VPR_LOPPUTEPVM+%3E=24.03.1999)'
@@ -133,11 +199,11 @@ class MemberImporter(Importer):
         mp_info['given_names'] = given_names.strip()
 
         td = get_field_el(doc, 'phone')
-        if td != None:
+        if td is not None:
             mp_info['phone'] = td.text.strip()
 
         td = get_field_el(doc, 'email')
-        if td != None:
+        if td is not None:
             mp_info['email'] = td.text_content().strip().replace('[at]', '@')
 
         td = get_field_el(doc, 'birth')
@@ -153,8 +219,10 @@ class MemberImporter(Importer):
         if len(m.groups()) == 4:
             mp_info['birthplace'] = m.groups()[3]
 
+        # Electorate
+
         td = get_field_el(doc, 'home_county')
-        if td != None:
+        if td is not None:
             mp_info['home_county'] = td.text.strip()
 
         td = get_field_el(doc, 'districts')
@@ -167,7 +235,9 @@ class MemberImporter(Importer):
             if len(dates) > 1:
                 da['end'] = self.convert_date(dates[1])
             da_list.append(da)
-        mp_info['districts'] = da_list
+        mp_info['districts'] = da_list 
+
+        # Party memberships
 
         td = get_field_el(doc, 'parties')
         el_list = td.xpath('ul/li')
@@ -176,7 +246,16 @@ class MemberImporter(Importer):
             a_el = el.xpath('a')
             if not a_el:
                 # Strip text within parentheses
-                m = re.match(r'([^\(]*)\([^\)]+\)(.+)', el.text)
+                m = re.match(r'([^\(]*)\([^\),]+\)(.+)', el.text)
+                if m:
+                    text = ' '.join(m.groups())
+                else:
+                    text = el.text
+                m = re.match(r'(\D+)\s+([\d\.,\s\-]+)$', text.strip())
+                party, date_ranges = (m.groups()[0], m.groups()[1])
+            if not a_el:
+                # Strip text within parentheses
+                m = re.match(r'([^\(]*)\([^\),]+\)(.+)', el.text)
                 if m:
                     text = ' '.join(m.groups())
                 else:
@@ -204,6 +283,9 @@ class MemberImporter(Importer):
         img_el = doc.xpath('//div[@id="submenu"]//img[@class="portrait"]')
         mp_info['portrait'] = img_el[0].attrib['src']
 
+        # Committee memberships
+        mp_info['posts'] = self.resolve_memberships(doc)
+
         return mp_info
 
     def determine_party(self, mp_info):
@@ -221,6 +303,7 @@ class MemberImporter(Importer):
         return None
 
     def save_member(self, mp_info):
+        # Member
         try:
             mp = Member.objects.get(origin_id=str(mp_info['id']))
             if not self.replace:
@@ -259,6 +342,7 @@ class MemberImporter(Importer):
 
         mp.save()
 
+        # Districts
         DistrictAssociation.objects.filter(member=mp).delete()
         for da in mp_info['districts']:
             d_name = da['district'].replace(' vaalipiiri', '')
@@ -273,6 +357,7 @@ class MemberImporter(Importer):
                 da_obj.end = da['end']
             da_obj.save()
 
+        # Parties
         PartyAssociation.objects.filter(member=mp).delete()
         for pa in mp_info['parties']:
             p_name = pg_to_party(pa['party'])
@@ -286,6 +371,63 @@ class MemberImporter(Importer):
             if 'end' in pa:
                 pa_obj.end = pa['end']
             pa_obj.save()
+
+        # Memberships
+
+        if mp_info['posts'] is not None:
+            for post in mp_info['posts']:
+                try:
+                    cqommittee = Committee.objects.get(name=post['committee'])
+                    # Update current committees
+                    if committee.current == False and post['current'] == True:
+                        committee.current = True
+                        committee.save()
+                except Committee.DoesNotExist:
+                    committee = Committee(name=post['committee'],
+                                          current=post['current'])
+                    committee.save()
+                # Delete all the associations already in the db
+                CommitteeAssociation.objects.filter(member=mp,
+                    committee_id = committee.id).delete()
+                # There can be several periods
+                periods = post['periods']
+                for period in periods:
+                    # Role is only optional information
+                    if 'role' in period:
+                        role = period['role']
+                    else:
+                        role = None
+                    ca_obj = CommitteeAssociation(member=mp, committee=committee, 
+                                                  begin=period['begin'], end=period['end'], 
+                                                  role=role)
+                    ca_obj.save()
+
+    def resolve_memberships(self, doc):
+        membership_list = []
+        for period in ['previous_posts', 'current_posts']:
+            td = get_field_el(doc, period)
+            if td is not None:
+                el_list = td.xpath('ul/li')
+                for el in el_list:
+                    a_el = el.xpath('a')
+                    if a_el:
+                        try:
+                            membership_desc = a_el[0].text + a_el[0].tail
+                        except TypeError, e:
+                            self.logger.warning("Problem parsing item")
+                            self.logger.warning(html.tostring(el))
+                    else:
+                        membership_desc = el.text
+                    ms = parse_membership(membership_desc)
+                    if ms is not None:
+                        if period == 'previous_posts':
+                            ms['current'] = False
+                        elif period == 'current_posts':
+                            ms['current'] = True
+                        membership_list.append(ms)
+                    else:
+                        continue
+        return membership_list
 
     def import_members(self):
         self.logger.debug("fetching MP list")
@@ -311,3 +453,4 @@ class MemberImporter(Importer):
 
             mp_info = self.fetch_member(mp_id)
             self.save_member(mp_info)
+        self.logger.info('Imported {0} MPs'.format(len(link_list)))

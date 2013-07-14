@@ -140,7 +140,7 @@ INSTALLED_APPS = (
     'django.contrib.webdesign',
     'django.contrib.markup',
     'django.contrib.messages',
-    
+
     'sorl.thumbnail',
     'compressor',
 
