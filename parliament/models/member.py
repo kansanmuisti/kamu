@@ -256,7 +256,7 @@ class CommitteeAssociation(models.Model):
     role = models.CharField(max_length=15, blank=True, null=True)
 
     class Meta:
-        app_label = 'committee'
+        app_label = 'parliament'
 
 class MemberActivityManager(models.Manager):
     def during(self, begin, end):
