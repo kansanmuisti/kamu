@@ -557,17 +557,49 @@ h2 {
 }
 
 .member-content {
-        .blockColumn;
-        .tag-cloud {
-            .verticalBlock;
-            .selected {
-                color: red;
-                font-weight: 600;
+    .blockColumn;
+    .tag-cloud {
+        .verticalBlock;
+        .selected {
+            color: red;
+            font-weight: 600;
+        }
+    }
+    .feed {
+        list-style: none;
+        .activity {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            a.icon {
+                &:hover {
+                    text-decoration: none
+                }
+                display: block;
+                float: left;
+                font-size: 24px;
+                width: 34px;
+            }
+            .text {
+                overflow: hidden;
+            }
+            header {
+                margin-bottom: 8px;
+            }
+            h4 {
+                font-size: 14px;
+                margin-top: 0px;
+                margin-bottom: 2px;
+                float: left;
+            }
+            .time {
+                float: right;
+                color: gray;
+                font-size: 12px;
+                line-height: 12px;
+                margin-top: 2px;
             }
         }
-        .feed {
-            .verticalBlock;
-        }
+    }
 }
 
 .member-rightbar {

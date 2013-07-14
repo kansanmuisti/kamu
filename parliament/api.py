@@ -74,32 +74,34 @@ class MemberActivityResource(KamuResource):
 
     def get_extra_info(self, item):
         d = {}
+        target = {}
         if item.type == 'FB':
-            d['icon'] = 'facebook'
             o = item.socialupdateactivity.update
-            d['text'] = o.text
+            target['text'] = o.text
         elif item.type == 'TW':
-            d['icon'] = 'twitter'
             o = item.socialupdateactivity.update
-            d['text'] = o.text
+            target['text'] = o.text
         elif item.type == 'ST':
-            d['icon'] = 'comment-alt'
             o = item.statementactivity.statement
-            d['text'] = o.text
+            target['text'] = o.text
         elif item.type == 'IN':
-            d['icon'] = 'lightbulb'
             o = item.initiativeactivity.doc
-            d['text'] = o.summary
+            target['text'] = o.summary
+            target['subject'] = o.subject
+            target['name'] = o.name
         elif item.type == 'SI':
-            d['icon'] = 'pencil'
             o = item.signatureactivity.signature.doc
-            d['text'] = o.summary
+            target['text'] = o.summary
+            target['subject'] = o.subject
+            target['name'] = o.name
         elif item.type == 'WQ':
-            d['icon'] = 'question'
             o = item.initiativeactivity.doc
-            d['text'] = o.summary
+            target['text'] = o.summary
+            target['subject'] = o.subject
+            target['name'] = o.name
         else:
-            return None
+            raise Exception("Invalid type %s" % item.type)
+        d['target'] = target
         return d
 
     def dehydrate(self, bundle):

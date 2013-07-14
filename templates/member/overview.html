@@ -6,7 +6,7 @@
 <div id="member-tag-cloud" class="tag-cloud">
 </div>
 
-<ul id="member-activity-feed" class="feed media-list">
+<ul id="member-activity-feed" class="feed unstyled">
 </ol>
 
 <script type="text/javascript">
@@ -19,8 +19,6 @@
 
 {% compress js %}
 <script type="text/coffeescript">
-    $(".activity .media-body .text").expander
-        slicePoint: 350
     tags = ({name: x[0], count: x[1], url: '#'} for x in keyword_activity)
     tags = _.sortBy tags, (x) -> x.name
     $("#member-tag-cloud").tag_cloud tags

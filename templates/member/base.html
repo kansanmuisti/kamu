@@ -78,15 +78,21 @@ member = new Member({{ member_json|safe }});
 	</div>
 
 <script type="text/template" id="activity-item-template">
-    <li class="activity media">
-        <a class="pull-left" href="#">
-            <i class="icon-<%= icon %> media-object" style="font-size: 24px"></i>
-        </a>
-        <div class="media-body">
-            <h4 class="media-heading"><%= time %></h4>
-            <div class="text"><%= text %></div>
-        </div>
-    </li>
+    <a class="icon" href="#">
+        <i class="icon-<%= icon %>"></i>
+    </a>
+    <div class="text">
+        <header class="clearfix">
+            <h4 class="heading">
+                <%= action %>
+                <% if (target.name) { %>
+                    <%= target.name %>
+                <% } %>
+            </h4>
+            <div class="time"><%= time_ago %></div>
+        </header>
+        <div class="summary"><%= target.text %></div>
+    </div>
 </script>
 
 </div> <!-- row -->

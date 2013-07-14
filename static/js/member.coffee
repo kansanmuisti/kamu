@@ -11,7 +11,7 @@ class @MemberActivityFeedView extends Backbone.View
         @filter()
 
     filter: (filters) ->
-        params = @base_filters
+        params = _.clone @base_filters
         if filters
             _.extend params, filters
         @collection.fetch
