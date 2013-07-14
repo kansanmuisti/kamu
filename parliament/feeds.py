@@ -19,6 +19,11 @@ def create_social_update_activity(sender, **kwargs):
 @receiver(post_save, sender=DocumentSignature, dispatch_uid="document_signature_activity")
 def create_document_signature_activity(sender, **kwargs):
     obj = kwargs['instance']
+    doc = obj.doc
+    # Authors don't sign their own iniatives. There is enough
+    # glory in authorship.
+    if doc.author == obj.member:
+        return
     sign_act, created = SignatureActivity.objects.get_or_create(signature=obj)
 
 @receiver(post_save, sender=Document, dispatch_uid="document_activity")
