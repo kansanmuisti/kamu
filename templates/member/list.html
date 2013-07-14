@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load compress static i18n static %}
 
+{% block title %}{% trans "Members of the Parliament" %}{% endblock %}
+
 {% block content %}
 <div id="member-filter-bar">
     <div class="search-container">
@@ -115,7 +117,7 @@ class MemberListView extends Backbone.View
         @_setup_sort()
         
         @collection.fetch
-	        success: (col) =>
+            success: (col) =>
                 @_calculate_rankings(col)
                 @_process_children(col)
                 @_update_search_hint(col)
@@ -124,6 +126,7 @@ class MemberListView extends Backbone.View
             data:
                 thumbnail_dim: "64x96"
                 current: true
+                stats: true
                 limit: 0
             processData: true
     
@@ -235,7 +238,5 @@ class MemberListView extends Backbone.View
 member_list_view = new MemberListView
 </script>
 {% endcompress %}
-
-
 
 {% endblock %}

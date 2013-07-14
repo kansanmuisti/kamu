@@ -260,14 +260,14 @@ class MemberActivityManager(models.Manager):
 
 class MemberActivity(models.Model):
     TYPES = [
-        ('IN', 'Initiative'),
-        ('RV', 'Rebel vote'),
-        ('CD', 'Committee dissent'),
-        ('TW', 'Tweet'),
-        ('FB', 'Facebook update'),
-        ('ST', 'Plenary statement'),
-        ('SI', 'Signature'),
-        ('WQ', 'Written question'),
+        ('IN', _('Initiative')),
+        ('RV', _('Rebel vote')),
+        ('CD', _('Committee dissent')),
+        ('TW', _('Tweet')),
+        ('FB', _('Facebook update')),
+        ('ST', _('Plenary statement')),
+        ('SI', _('Signature')),
+        ('WQ', _('Written question')),
     ]
     # Algorithm for determining weights: Pulling out of the Ass
     WEIGHTS = {'IN': 200, 'RV': 10, 'CD': 20, 'TW': 2, 'FB': 10, 'ST': 5, 'SI': 10, 'WQ': 20}

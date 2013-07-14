@@ -17,6 +17,7 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 
 import parliament.member_views
+from parliament.api import MemberResource
 
 def show_item(request, plsess, item_nr, subitem_nr=None):
     query = Q(plsess__url_name=plsess) & Q(number=item_nr)
@@ -96,21 +97,27 @@ def _get_member_activity_kws(member):
     kw_list = sorted(kw_dict.iteritems(), key=operator.itemgetter(1), reverse=True)[0:20]
     return kw_list
 
-def show_member(request, member):
+def show_member(request, member, page=None):
     member = get_view_member(member)
-    activity = _get_member_activity(member, 0)
-    kw_act = _get_member_activity_kws(member)
-    kw_act_json = simplejson.dumps(kw_act, ensure_ascii=False)
-    args = dict(member=member, activity=activity, keyword_activity=kw_act_json)
+    res = MemberResource()
+    res_bundle = res.build_bundle(obj=member, request=request)
+    member_json = res.serialize(None, res.full_dehydrate(res_bundle), 'application/json')
+    args = dict(member=member, member_json=member_json)
 
-    return render_to_response('member/overview.html', args,
+    if not page:
+        args['activity'] = _get_member_activity(member, 0)
+        kw_act = _get_member_activity_kws(member)
+        kw_act_json = simplejson.dumps(kw_act, ensure_ascii=False)
+        args['keyword_activity'] = kw_act_json
+        template = 'member/overview.html'
+    elif page == 'basic-info':
+        template = 'member/basic_info.html'
+    else:
+        raise Http404()
+
+    return render_to_response(template, args,
         context_instance=RequestContext(request))
 
-def member_basic_info(request, member):
-    member = get_view_member(member)
-    args = dict(member=member)
-    return render_to_response('member/basic_info.html', args,
-        context_instance=RequestContext(request))
 
 def _get_parliament_activity(request, offset):
     q = Q(nr_votes__gt=0) | Q(nr_statements__gt=0)

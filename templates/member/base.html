@@ -1,8 +1,10 @@
 {% extends "base.html" %}
-{% load i18n thumbnail %}
+{% load i18n thumbnail compress static %}
 
 {# This could be made part of a "main template" if the UI \
     is similar for multiple "categories" #}
+
+{% block title %}{{ member.get_print_name }}{% endblock %}
 
 {% block head %}
 <meta property="og:title" content="{{ member.get_print_name }}" />
@@ -11,10 +13,24 @@
 <meta property="og:image" content="http://{{ fb_host }}{{ photo.url }}" />
 {% endthumbnail %}
 <meta property="og:url" content="http://{{ fb_host }}{{ member.get_absolute_url }}" />
-
 {% endblock %}
 
 {% block content %}
+
+{% compress js %}
+<!-- Backbone models -->
+<script type="text/coffeescript" src="{% static "js/models.coffee" %}"></script>
+{% endcompress %}
+{% compress js %}
+<!-- Feed-specific views etc. -->
+<script type="text/coffeescript" src="{% static "js/feed.coffee" %}"></script>
+{% endcompress %}
+{% compress js inline %}
+<script type="text/javascript">
+member = new Member({{ member_json|safe }});
+</script>
+{% endcompress %}
+
 <div class="row">
 
 	<div class="span3 member-leftbar">
@@ -36,10 +52,10 @@
 			</h4>
 		</div>
 
-		<a href="{% url 'parliament.views.show_member' member.url_name %}">
+		<a href="{% url 'parliament.views.show_member' member=member.url_name %}">
 			{% trans "Recent activity" %}
 		</a>
-		<a href="{% url 'parliament.views.member_basic_info' member.url_name %}">
+		<a href="{% url 'parliament.views.show_member' member=member.url_name page='basic-info' %}">
 			{% trans "Basic information" %}
 		</a>
 	</div>
@@ -61,6 +77,18 @@
 		<div>And some some logos?</div>
 		{% endblock %}
 	</div>
+
+<script type="text/template" id="activity-item-template">
+    <li class="activity media">
+        <a class="pull-left" href="#">
+            <i class="icon-<%= icon %> media-object" style="font-size: 24px"></i>
+        </a>
+        <div class="media-body">
+            <h4 class="media-heading"><%= time %></h4>
+            <div class="text"><%= text %></div>
+        </div>
+    </li>
+</script>
 
 </div> <!-- row -->
 

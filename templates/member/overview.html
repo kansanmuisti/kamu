@@ -1,28 +1,21 @@
 {% extends "member/base.html" %}
-{% load compress %}
+{% load compress static %}
 
 {% block member_content %}
 
 <div id="member-tag-cloud" class="tag-cloud">
 </div>
 
-<ul class="feed media-list">
-{% for item in activity %}
-    <li class="activity media">
-        <a class="pull-left" href="#">
-            <i class="icon-{{item.icon}} media-object" style="font-size: 24px"></i>
-        </a>
-        <div class="media-body">
-            <h4 class="media-heading">{{item.time}}</h4>
-            <div class="text">{{item.text|linebreaks}}</div>
-        </div>
-    </li>
-{% endfor %}
+<ul id="member-activity-feed" class="feed media-list">
 </ol>
 
 <script type="text/javascript">
     keyword_activity = {{keyword_activity|safe}};
 </script>
+
+{% compress js %}
+<script type="text/coffeescript" src="{% static "js/member.coffee" %}"></script>
+{% endcompress %}
 
 {% compress js %}
 <script type="text/coffeescript">
@@ -31,6 +24,8 @@
     tags = ({name: x[0], count: x[1], url: '#'} for x in keyword_activity)
     tags = _.sortBy tags, (x) -> x.name
     $("#member-tag-cloud").tag_cloud tags
+
+    feed_view = new MemberActivityFeedView member
 </script>
 {% endcompress %}
 
