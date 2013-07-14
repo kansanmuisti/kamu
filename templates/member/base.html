@@ -25,11 +25,10 @@
 <!-- Feed-specific views etc. -->
 <script type="text/coffeescript" src="{% static "js/feed.coffee" %}"></script>
 {% endcompress %}
-{% compress js inline %}
+
 <script type="text/javascript">
 member = new Member({{ member_json|safe }});
 </script>
-{% endcompress %}
 
 <div class="row">
 
