@@ -2,20 +2,30 @@
 class @MemberActivityFeedView extends Backbone.View
     el: $("#member-activity-feed")
     initialize: (@member) ->
-        _.bindAll @
         @collection = new MemberActivityList()
         @collection.bind 'add', @add_item
         @collection.bind 'reset', @add_all_items
-        @collection.fetch
-            data:
-                member: @member.get 'id'
-                limit: 20
+        @base_filters =
+            member: @member.get 'id'
+            limit: 20
+        @filter()
 
-    add_item: (item) ->
+    filter: (filters) ->
+        params = @base_filters
+        if filters
+            _.extend params, filters
+        @collection.fetch
+            reset: true
+            data: params
+
+    filter_keyword: (kw) ->
+        @filter
+            keyword: kw
+
+    add_item: (item) =>
         view = new MemberActivityView model: item
         @$el.append view.render().el
 
-    add_all_items: (coll) ->
-        @el.empty()
-        for item in coll
-            @add_item item
+    add_all_items: (coll) =>
+        @$el.empty()
+        coll.each @add_item

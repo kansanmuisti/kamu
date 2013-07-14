@@ -26,6 +26,11 @@
     $("#member-tag-cloud").tag_cloud tags
 
     feed_view = new MemberActivityFeedView member
+
+    $("#member-tag-cloud li a").click (ev) ->
+        ev.preventDefault()
+        kw = $.trim $(@).html()
+        feed_view.filter_keyword kw
 </script>
 {% endcompress %}
 
