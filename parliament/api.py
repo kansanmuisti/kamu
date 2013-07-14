@@ -1,4 +1,6 @@
 from django.db import models
+from django.http import Http404
+
 from tastypie.cache import SimpleCache
 from tastypie.resources import ModelResource
 from tastypie.exceptions import BadRequest
@@ -109,6 +111,17 @@ class MemberActivityResource(KamuResource):
         if d:
             bundle.data.update(d)
         return bundle
+
+    def apply_filters(self, request, applicable_filters):
+        qset = super(MemberActivityResource, self).apply_filters(request, applicable_filters)
+        kw_name = request.GET.get('keyword', None)
+        if kw_name:
+            try:
+                keyword = Keyword.objects.get(name__iexact=kw_name)
+            except Keyword.DoesNotExist:
+                raise Http404("Keyword '%s' does not exist" % kw_name)
+            qset = qset.filter(keywordactivity__keyword=keyword).distinct()
+        return qset
 
     class Meta:
         queryset = MemberActivity.objects.all().order_by('-time').select_related('member')
