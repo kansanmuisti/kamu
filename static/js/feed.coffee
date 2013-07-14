@@ -24,12 +24,20 @@ class @MemberActivityView extends Backbone.View
 
     initialize: ->
 
+    process_summary: (text) ->
+        # TODO: Twitter processing
+        # Wrap text in <p> tags
+        p_list = text.split '\n'
+        p_list = ("<p>#{p}</p>" for p in p_list)
+        return p_list.join('\n')
+
     render: ->
         obj = @model.toJSON()
         act = ACTIVITIES[obj.type]
         obj.action = act.action
         obj.icon = act.icon
         obj.time_ago = moment(obj.time).fromNow()
+        obj.target.text = @process_summary obj.target.text
         html = _.template $("#activity-item-template").html(), obj
         @$el.html html
         @$el.find('.summary').expander
