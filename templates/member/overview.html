@@ -29,8 +29,14 @@
 
     $("#member-tag-cloud li a").click (ev) ->
         ev.preventDefault()
-        kw = $.trim $(@).html()
-        feed_view.filter_keyword kw
+        if $(this).hasClass 'selected'
+            feed_view.filter()
+            $(this).removeClass 'selected'
+        else
+            kw = $.trim $(@).html()
+            feed_view.filter_keyword kw
+            $("#member-tag-cloud li a").removeClass 'selected'
+            $(this).addClass 'selected'
 </script>
 {% endcompress %}
 
