@@ -33,6 +33,8 @@ class Command(BaseCommand):
         make_option('--from-year', metavar='YEAR', dest='from_year', help='Start importing from YEAR'),
         make_option('--update', action='store_true', dest='update',
                     default=False, help='Update values of existing objects'),
+        make_option('--massive', action='store_true', dest='massive',
+                    default=False, help='Optimize for large updates'),
         make_option('--cache', action='store', dest='cache',
                     help='Use cache in supplied director')
     )
@@ -68,6 +70,7 @@ class Command(BaseCommand):
                 args['single'] = options['single']
             if options['from_year']:
                 args['from_year'] = options['from_year']
+            args['massive'] = options['massive']
             importer.import_docs(**args)
         if options['vote']:
             importer = VoteImporter(http_fetcher=http)

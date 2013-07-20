@@ -507,6 +507,14 @@ class DocImporter(Importer):
         if from_year:
             url += '&PVMVP2=%s' % from_year
 
+        if kw_args.get('massive', False):
+            s = self.open_list_url(url, 'docs')
+            root = html.fromstring(s)
+            input_el = root.xpath('//input[@name="backward"]')
+            assert len(input_el) == 1
+            url = 'http://www.eduskunta.fi' + input_el[0].attrib['value']
+            url = url.replace('${MAXPAGE}=51', '${MAXPAGE}=501')
+
         self.skipped = 0
         while url:
             print url
