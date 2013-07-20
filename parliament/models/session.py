@@ -74,6 +74,7 @@ class PlenarySessionItem(models.Model):
     type = models.CharField(max_length=15, choices=TYPES)
     description = models.CharField(max_length=1000)
     sub_description = models.CharField(max_length=100, null=True, blank=True)
+    docs = models.ManyToManyField(Document, through='PlenarySessionItemDocument')
 
     # cache the counts here for faster SELECTs
     nr_votes = models.IntegerField(null=True, blank=True, db_index=True)
@@ -104,6 +105,16 @@ class PlenarySessionItem(models.Model):
 
     def __unicode__(self):
         return "%s %s: %s" % (self.get_short_id(), self.type, self.description)
+
+class PlenarySessionItemDocument(models.Model):
+    item = models.ForeignKey(PlenarySessionItem, db_index=True)
+    doc = models.ForeignKey(Document, db_index=True)
+    order = models.PositiveIntegerField()
+
+    class Meta:
+        app_label = 'parliament'
+        ordering = ('order',)
+        unique_together = (('item', 'doc'),)
 
 class Statement(models.Model):
     item = models.ForeignKey(PlenarySessionItem, db_index=True)

@@ -9,6 +9,7 @@ from parliament.models.member import Member
 from parliament.models.session import *
 from eduskunta.importer import Importer, ParseError
 from eduskunta.vote import VoteImporter
+from eduskunta.doc import DocImporter
 from utils.http import HTTPError
 
 SPEAKER_ADDRESSING = (
@@ -491,6 +492,19 @@ class MinutesImporter(Importer):
             for vote in item_info['votes']:
                 self.add_item_vote(item, sub_item_by_id, vote)
 
+        if 'docs' in item_info:
+            for idx, doc in enumerate(item_info['docs']):
+                doc_obj = self.doc_importer.import_doc(doc)
+                if not doc_obj:
+                    continue
+                args = {'item': item, 'order': idx}
+                try:
+                    item_doc = PlenarySessionItemDocument.objects.get(**args)
+                except PlenarySessionItemDocument.DoesNotExist:
+                    item_doc = PlenarySessionItemDocument(**args)
+                item_doc.doc = doc_obj
+                item_doc.save()
+
         item.count_related_objects()
         item.save()
         for sub_item in sub_items:
@@ -548,6 +562,7 @@ class MinutesImporter(Importer):
 
     def import_minutes(self):
         self.vote_importer = VoteImporter(http_fetcher=self.http, logger=self.logger)
+        self.doc_importer = DocImporter(http_fetcher=self.http, logger=self.logger)
         self._make_mp_dicts()
         next_link = self.URL_BASE + self.LATEST_MINUTES_URL
         while next_link:

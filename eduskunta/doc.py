@@ -36,6 +36,9 @@ SKIP_DOCS = [
 def should_download_doc(doc):
     if doc['type'] not in DOC_TYPES and not doc['type'].endswith('VM'):
         return False
+    # Disable downloading of committee reports for now.
+    if doc['type'].endswith('VM'):
+        return False
     if "%s %s" % (doc['type'], doc['id']) in SKIP_DOCS:
         return False
     return True
@@ -411,19 +414,18 @@ class DocImporter(Importer):
             obj.save()
 
     def import_doc(self, info):
-        self.logger.info("downloading %s %s" % (info['type'], info['id']))
         url = DOC_DL_URL % (info['type'], info['id'])
         info['info_link'] = url
-
         if not should_download_doc(info):
             self.logger.warning("skipping %s %s" % (info['type'], info['id']))
             return None
+        self.logger.info("downloading %s %s" % (info['type'], info['id']))
 
         origin_id = "%s %s" % (info['type'], info['id'])
         try:
             doc = Document.objects.get(origin_id=origin_id)
             if not self.replace:
-                return
+                return doc
         except Document.DoesNotExist:
             doc = Document(origin_id=origin_id)
 
