@@ -422,6 +422,12 @@ class StatementActivity(MemberActivity):
         self.type = self.TYPE
         self.member = self.statement.member
         self.time = self.statement.item.plsess.date
+        docs = self.statement.item.docs.all()
+        kw_dict = {}
+        for doc in docs:
+            for kw in doc.keywords.all():
+                kw_dict[kw.id] = kw
+        self.keywords = kw_dict.values()
         return super(StatementActivity, self).save(*args, **kwargs)
 
     class Meta:
