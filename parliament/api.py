@@ -1,5 +1,7 @@
 from django.db import models
 from django.http import Http404
+from django.conf.urls.defaults import *
+from django.core.exceptions import *
 
 from tastypie.cache import SimpleCache
 from tastypie.resources import ModelResource
@@ -64,8 +66,12 @@ class MemberResource(KamuResource):
         if stats.lower() in ('1', 'true'):
             bundle.data['stats'] = bundle.obj.get_latest_stats()
             bundle.data['stats']['recent_activity'] = bundle.obj.get_activity_score(activity_start)
-
+        
+        activity_counts = bundle.request.GET.get('activity_counts', '')
+        if activity_counts.lower() in ('1', 'true'):
+            bundle.data['activity_counts'] = bundle.obj.get_activity_counts()
         return bundle
+    
     class Meta:
         queryset = Member.objects.select_related('party')
 
