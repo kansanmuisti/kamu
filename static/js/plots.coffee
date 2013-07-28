@@ -80,7 +80,7 @@ class @MultiresStackedGraph
         
         margin =
             top: 0
-            bottom: 20
+            bottom: 30
             left: 30
             right: 0
         margin.x = margin.left + margin.right
@@ -91,8 +91,8 @@ class @MultiresStackedGraph
 
         root = d3.select(el).append("svg")
         .attr("class", "axisplot")
-        .attr("width", width)
-        .attr("height", height)
+        .attr("width", elwidth)
+        .attr("height", elheight)
 
         plot = root.append("g")
         .attr("transform", "translate(#{margin.left}, #{margin.top})")
