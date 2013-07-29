@@ -3,11 +3,62 @@
 
 {% block member_content %}
 
+{% compress css %}
+<link href="{% static "css/plots.less" %}" rel="stylesheet" type="text/less" />
+{% endcompress %}
+{% compress js %}
+<script type="text/javascript" src="{% static "js/vendor/d3.v3.js" %}"></script>
+<script type="text/coffeescript" src="{% static "js/plots.coffee" %}"></script>
+
+<script type="text/coffeescript">
+
+$ ->
+    activity_counts = {{ activity_counts_json|safe }}
+    date = new Date(activity_counts[0].activity_date)
+    end_date = new Date(activity_counts[activity_counts.length-1].activity_date)
+    
+    activity_types = {{ activity_types_json|safe }}
+    activity_weights = {{ activity_type_weights_json|safe }}
+    act_keys = (t[0] for t in activity_types)
+    act_names = (t[1] for t in activity_types)
+    act_histograms = {}
+
+    for key in act_keys
+        act_histograms[key] = {x: [], y: [], key: key}
+
+    data_idx = 0
+    bin_idx = 0
+    while date <= end_date
+        ts = date.getTime()
+        for key of act_histograms
+            act_histograms[key].x.push new Date(ts)
+            act_histograms[key].y.push 0
+        while data_idx < activity_counts.length
+            act = activity_counts[data_idx]
+            if new Date(act.activity_date) > date
+                break
+            score = act.count*activity_weights[act.type]
+            act_histograms[act.type].y[bin_idx] += score
+            data_idx += 1
+        date.setDate(date.getDate()+1)
+        bin_idx += 1
+
+    hist_list = (v for k, v of act_histograms)
+    
+    graph = new MultiresStackedGraph "#member-activity-graph", hist_list
+
+</script>
+{% endcompress %}
+
 <div id="member-tag-cloud" class="tag-cloud">
 </div>
 
+<div id="member-activity-graph" class="activity-graph">
+</div>
+
+
 <ul id="member-activity-feed" class="feed unstyled">
-</ol>
+</ul>
 
 <script type="text/javascript">
     keyword_activity = {{keyword_activity|safe}};
