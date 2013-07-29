@@ -114,8 +114,8 @@ class @MultiresStackedGraph
         x = d3.time.scale()
         .range([0, width])
         x.domain(res_data.extent)
-        #x_origdomain = x.domain()
-
+        
+        # TODO: The axis seems to steal 4 pixels!
         y = d3.scale.linear()
         .range([height, 0])
 

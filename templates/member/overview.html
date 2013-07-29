@@ -18,6 +18,7 @@ $ ->
     end_date = new Date(activity_counts[activity_counts.length-1].activity_date)
     
     activity_types = {{ activity_types_json|safe }}
+    activity_weights = {{ activity_type_weights_json|safe }}
     act_keys = (t[0] for t in activity_types)
     act_names = (t[1] for t in activity_types)
     act_histograms = {}
@@ -36,7 +37,8 @@ $ ->
             act = activity_counts[data_idx]
             if new Date(act.activity_date) > date
                 break
-            act_histograms[act.type].y[bin_idx] += act.count
+            score = act.count*activity_weights[act.type]
+            act_histograms[act.type].y[bin_idx] += score
             data_idx += 1
         date.setDate(date.getDate()+1)
         bin_idx += 1
