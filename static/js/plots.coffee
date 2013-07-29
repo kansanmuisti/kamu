@@ -22,6 +22,8 @@ default_multires_smoother = (data,
         minlevel=1,
         maxlevel=30
         levelstep=1
+        binlevel=1
+        splinelevel=10
         ) ->
     # Don't mangle the argument
     # TODO: Assumes grid-x
@@ -40,15 +42,17 @@ default_multires_smoother = (data,
         level = Math.round(level/levelstep)*levelstep
         level = Math.min(level, maxlevel)
         level = Math.max(level, minlevel)
+        if level <= binlevel
+            level = 1
         
         # TODO: There are a lot faster methods!
         x = datac[0].orig_x
         for i in [0...x.length]
             break if x[i] >= range[0]
-        start = i
+        start = Math.max 0, i-1
         for i in [i...x.length]
             break if x[i] > range[1]
-        end = i
+        end = i+1
 
         for h in datac
             # TODO! Handle the boundaries properly!
@@ -60,7 +64,17 @@ default_multires_smoother = (data,
                     h.cache[level] = smooth(h.orig_y, level)
             h.y = h.cache[level][start...end]
             h.x = h.orig_x[start...end][...h.y.length]
-        return datac
+        
+        opts = {}
+        opts.interpolate = switch
+            when level <= binlevel then "step"
+            when level <= splinelevel then "basis"
+            else "linear"
+        
+        promise = $.Deferred()
+        promise.resolve datac, opts
+        return promise
+
     getter.extent = d3.extent datac[0].x
     getter.keys = (d.key for d in datac)
     return getter
@@ -162,8 +176,10 @@ class @MultiresStackedGraph
 
         #stack = d3.layout.stack()
         #.values((d) -> d.values)
-        draw = ->
-            data = res_data x.domain()
+        draw = -> res_data(x.domain()).done (data, opts) ->
+            opts ?= {}
+            area.interpolate opts.interpolate ? "linear"
+
             d.y0 = [] for d in data
             for ix in [0...data[0].y.length]
                 y0 = 0
