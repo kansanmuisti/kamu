@@ -15,6 +15,10 @@ if not model_cache.loaded:
     model_cache._populate()
 
 class MemberManager(models.Manager):
+    def current(self):
+        mem_list = PartyAssociation.objects.filter(end__isnull=True).distinct().values_list('member', flat=True)
+        return self.filter(id__in=mem_list)
+
     def active_in(self, date_begin, date_end):
         query = Q()
         if date_end:

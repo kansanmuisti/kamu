@@ -1,12 +1,281 @@
-@import "bootstrap/variables.less";
-@import "bootstrap/mixins.less";
+@import "../bootstrap/less/variables.less";
+@import "variables.less";
+@import "../bootstrap/less/mixins.less";
+@import "../bootstrap/less/list-group.less";
+@import "../bootstrap/less/grid.less";
 
+/*------------------------------------*\
+    @MIXINS
+\*------------------------------------*/
+
+@box-padding: 20px;
+
+.boxed(@pad: @box-padding) {
+    background: lighten(@gray-lighter,15%);
+    padding: @pad;
+    min-height: 20px;
+    margin-bottom: 20px;
+}
+
+/*------------------------------------*\
+    @COMMON STYLES
+\*------------------------------------*/
+
+body {
+    #gradient > .vertical-three-colors(lighten(@gray-light,100%);lighten(@gray-light,20%);50%;lighten(@gray-light,10%));
+}
+
+/* ----- Responsive images default from Bootstrap 2 */
+img {
+    /* Responsive images (ensure images don't scale beyond their parents) */
+    max-width: 100%;
+    /* Part 1: Set a maxium relative to the parent */
+    width: auto;
+    /* IE7-8 need help adjusting responsive images */
+    height: auto;
+    /* Part 2: Scale the height according to the width, otherwise you get stretching */
+    vertical-align: middle;
+    border: 0;
+    -ms-interpolation-mode: bicubic;
+}
+
+ul {
+    padding: 0;
+}
+
+/*------------------------------------*\
+    @TYPOGRAPHY (BOOTSTRAP OVERRIDES)
+\*------------------------------------*/
+
+h1,h2,h3,h4,h5,h6 {
+    text-transform: uppercase;
+}
+
+h1 {
+    font-size: 39px;
+    line-height: 40px;
+    font-family: @brand-font-family;
+    color: @electric;
+}
+
+h2 {
+    font-size: 30.94;
+    line-height: 40px;
+}
+
+h3 {
+    &.section-header {
+        color: @pine;
+    }
+    font-size: 25.3px;
+    line-height: 40px;
+}
+
+h4 {
+    &.section-header {
+        color: @mint;
+    }
+    font-size: 20px;
+    line-height: 20px;
+}
+
+h5 {
+    font-size: 14px;
+    line-height: 20px;
+}
+
+h6 {
+    font-size: 12px;
+    line-height: 20px;
+}
+
+.section-heading {
+    margin: 5px 0 5px 0;
+    color: @gray-darker;
+}
+
+.page-heading {
+    border-bottom: @blueberry 1px solid;
+    margin-bottom: 20px;
+    h1 {
+        text-transform: none;
+    }
+}
+
+.full-page-width-element {
+    max-width: 990px;
+    min-width: 400px;
+    margin: 0 auto;
+}
+
+.side-navigation {
+    .boxed();
+    background: @gray;
+}
+
+.box {
+   .boxed();
+}
+
+.shadowboxed {
+    background-color: @gray-lighter;
+    .box-shadow(3px 3px 5px rgba(0,0,0,.66));
+}
+
+.newsfeed {
+    > article {
+        border-top: @gray-light solid 1px;
+        margin-top: 20px;
+        header {
+            h4 {
+                font-family: @headings-font-family;
+                font-size: 1.3em;
+                font-weight: 900;
+                color: @gray-darker;
+                margin-top: 0;
+            }
+            time {
+                color: @gray;
+            }
+        }
+    }
+}
+
+.box--interesting-issues, .box--latest-issues {
+  ul {
+  .list-group;
+    }
+  li {
+   .list-group-item;    
+    }
+}
+
+.box--issue--similars, .box--issue--who-interested {
+      ul {
+  .list-group;
+    }
+  li {
+   .list-group-item;    
+    }
+}
+
+/***************************************************************
+ * Components on all pages
+ ***************************************************************/
+
+.page-head {
+    background-color: @top-header-bg-color;
+    background: url("../images/header-bg.png");
+    padding-top: 20px;
+    padding-bottom: 20px;
+    nav {
+        a {
+            color: @blueberry;
+        }
+        .full-page-width-element;
+        ul {
+            float: right;
+        }
+        h1 img {
+            width: 180px;
+        }
+    }
+}
+
+.main-nav-container {
+    background-color: @navbar-bg;
+    nav {
+        .full-page-width-element;
+        padding-left: 0px;
+        form {
+            margin-top: 5px;
+            float: right;
+        }
+    }
+}
+
+.main-content-container {
+    margin-top: 24px;
+}
+
+main {
+    .full-page-width-element;
+    margin-top: @box-padding;
+    /* background-color: white;
+    padding: 20px;
+    > h1 {
+        margin-top: 0px;
+        color: @accent-color;
+        font-family: "Expletus Sans", sans-serif;
+    }
+    */
+}
+
+.page-footer {
+    text-align: center;
+    padding: 30px 0;
+    margin-top: 70px;
+    border-top: 2px solid @gray-dark;
+    background-color: @gray-light;
+    .copyright {
+        .full-page-width-element;
+    }
+}
+
+
+/***************************************************************
+ * Home page 
+ ***************************************************************/
+main.home-page {
+    .top-feature-box {
+        .box();
+        text-align: center;
+        h3 {
+            font-family: @font-family-base;
+            font-weight: 900;
+            color: #333333;
+            line-height: 20px;
+        }
+        > header {
+            color: @accent-color;
+        }
+        > nav {
+            .nav-button {
+                margin-bottom: @box-padding;
+                padding: 10px;
+                background-color: @lemon;
+                @media (min-width: @screen-small) {
+                    height: 280px;
+                }
+            }
+        }
+    }
+    .most-active-members {
+        ul {
+            list-style: none;
+        }
+        li {
+            display: inline-block;
+            padding-right: 10px;
+            margin-bottom: 10px;
+        }
+        .mp-thumbnail {
+            width: 70px;
+        }
+    }
+}
+
+
+/* ................................................................ */
+/* ................................................................ */
+/* ................................................................ */
+
+/* CHECK BELOW */
 @contentBackground:	@white;
 @spacerColor:		#666;
 
-
 // Content blocks
-@majorBlockMargin:	@gridGutterWidth;
+@majorBlockMargin:	@grid-gutter-width;
 @minorBlockMargin:	@majorBlockMargin/2;
 @contentBlockPadding:	15px;
 @blockMinimumHeight:	45px;
@@ -26,11 +295,7 @@
 @lightgrey: #e6e6e6;
 @darkgrey: #8e8e8e;
 @kamuBlue: #B9D1C6;
-
-
-body {
-	margin-top: @gridGutterWidth;
-}
+/* CHECK ABOVE */
 
 .tag-cloud {
     ul {
@@ -103,12 +368,12 @@ body {
 }
 
 .navText {
-	font-size: @navFontSize;
-	line-height: 1.5*@navFontSize;
+	font-size: @font-size-large;
+	line-height: 1.5*@font-size-large;
 }
 
 .blockLink {
-	color: @textColor;
+	color: @text-color;
 	.navText;
 	.blockStyling;
 	font-weight: bold;
@@ -138,7 +403,7 @@ body {
 				.boxShadow;
 			}
 
-			@parentWidth: (8*@gridColumnWidth+7*@gridGutterWidth);
+			/* @parentWidth: (8*@gridColumnWidth+7*@gridGutterWidth);
 			width: @parentWidth/3 - 2/3*@minorBlockMargin - 2*@contentBlockPadding;
 			margin-left: @minorBlockMargin;
 			&:first-child {
@@ -149,6 +414,7 @@ body {
 			.blockLink;
 			color: @textColor;
 			font-size: @navFontSize;
+			*/
 		}
 	}
 

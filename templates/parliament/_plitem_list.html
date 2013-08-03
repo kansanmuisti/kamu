@@ -1,18 +1,20 @@
 {% load i18n %}
 
 {% for item in items %}
-    <div class="post">
-      <h4>{{ item.description }}</h4>
-      <div class="content">
+<article class="plenary-item">
+    <header>
+        <time>{{item.plsess.date}}</time>
+        <a href="{{item.get_absolute_url}}"><h4>{{ item.description }}</h4></a>
+    <header>
+    <div class="content">
 {% if item.statement %}
-        <span class="name">{{ item.statement.member.get_print_name }}</span> ({{ item.statement.member.party.name }}): "{{ item.statement.text|truncatewords:50 }}"
+        <span class="mp-name">{{ item.statement.member.get_print_name }}</span> ({{ item.statement.member.party.name }}): "{{ item.statement.text|truncatewords:50 }}"
 {% endif %}
-        <a href="{{ item.get_absolute_url }}" class="readmore">
 {% if item.nr_statements %}
 {% blocktrans count nr_statements=item.nr_statements %}
 1 statement
 {% plural %}
-{{ nr_statements }} statements
+{{nr_statements}} statements
 {% endblocktrans %}
 {% if item.nr_votes %},{% endif %}
 {% endif %}
@@ -21,13 +23,10 @@
 {% blocktrans count nr_votes=item.nr_votes %}
 1 vote
 {% plural %}
-{{ nr_votes }} votes
+{{nr_votes}} votes
 {% endblocktrans %}
 {% endif %}
-        &gt;
-        </a>
-      </div>
-      <abbr class="time" title="{{ item.plsess.date|date:'c' }}">{{ item.plsess.date }}</abbr>
+    &gt;
     </div>
+</article>
 {% endfor %}
-

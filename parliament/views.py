@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*-
 import operator
+import datetime
 
 from django.core.urlresolvers import reverse
+from django.core.cache import cache
 from django.db.models import Q
 from django.http import HttpResponse
 from django.utils.translation import ugettext as _
@@ -73,6 +76,7 @@ def render_member_activity(item):
     d['text'] = d['text'].replace('\n', '\n\n')
     return d
 
+"""
 def _get_member_activity(member, offset):
     items = list(MemberActivity.objects.filter(member=member).order_by('-time'))[offset:offset+10]
     items_out = []
@@ -83,6 +87,7 @@ def _get_member_activity(member, offset):
         items_out.append(i)
 
     return items_out
+"""
 
 def _get_member_activity_kws(member):
     kw_act_list = KeywordActivity.objects.filter(activity__member=member).select_related('keyword', 'activity')
@@ -105,7 +110,7 @@ def show_member(request, member, page=None):
     args = dict(member=member, member_json=member_json)
 
     if not page:
-        args['activity'] = _get_member_activity(member, 0)
+        #args['activity'] = _get_member_activity(member, 0)
         kw_act = _get_member_activity_kws(member)
         kw_act_json = simplejson.dumps(kw_act, ensure_ascii=False)
         args['keyword_activity'] = kw_act_json
@@ -177,6 +182,19 @@ def get_mp_some_activity(request):
     data = _get_mp_some_activity(request, offset)
     return HttpResponse(simplejson.dumps(data), mimetype="application/json")
 
+
+def _get_most_active_mps():
+    ret = cache.get('most_active_mps')
+    if ret:
+        return ret[0:8]
+    mp_list = list(Member.objects.current())
+    begin = datetime.date.today() - datetime.timedelta(days=30)
+    for mp in mp_list:
+        mp.score = mp.get_activity_score(begin=begin)
+    mp_list = sorted(mp_list, key=lambda x: x.score, reverse=True)
+    cache.set('most_active_mps', mp_list, 8*60*60)
+    return mp_list[0:8]
+
 def main(request):
     args = {}
 
@@ -188,7 +206,26 @@ def main(request):
     args['parl_act_html'] = parl_data['html']
     args['parl_act_offset'] = parl_data['offset']
 
-    return render_to_response('new_main.html', args,
+    args['most_active_mps'] = _get_most_active_mps()
+
+    navbuttons = [
+        {
+            'title': 'Aiheet',
+            'text': 'Selaa eduskunnan käsittelemiä asioita aihealueittain',
+            'image': 'images/etu-asiat-300x200.png',
+        }, {
+            'title': 'Kansan&shy;edustajat',
+            'text': 'Tutustu kansanedustajiin ja heidän ajamiinsa asioihin',
+            'image': 'images/etu-mpt-300x200.png',
+        }, {
+            'title': 'Puolueet',
+            'text': 'Mistä eri puolueet ovat kiinnostuneet?',
+            'image': 'images/etu-puolueet-300x200.png',
+        }
+    ]
+    args['navbuttons'] = navbuttons
+
+    return render_to_response('home.html', args,
                               context_instance=RequestContext(request))
 
 def list_sessions(request, year=None, month=None):

@@ -1,9 +1,11 @@
 {% extends "base.html" %}
-{% load i18n compress static %}
+{% load i18n compress static thumbnail %}
 {% block title %}{% trans "Front page" %}{% endblock %}
-{% block head %}
 
+{% block head %}
 {% compress js inline %}
+
+
 <script type="text/coffeescript">
 $ ->
     activity_feeds = [{
@@ -44,10 +46,63 @@ $ ->
     setInterval set_timestamps, 60*1000
 </script>
 {% endcompress %}
-
 {% endblock %}
 
+{% block main_class %}home-page{% endblock %}
+
 {% block content %}
+<div class="top-feature-box">
+    <header>
+        <h1>Kyllä kansa muistaa</h1>
+        <p class="lead">Kansan muisti -verkkopalvelussa voit seurata kansanedustajien puheenvuoroja ja äänestyksiä – siis vaalilupausten toteutumista käytännössä.</p>
+    </header>
+    <nav class="row">
+        {% for nb in navbuttons %}
+        <div class="col-lg-4">
+            <div class="nav-button">
+                <div class="row">
+                    <div class="col-6 col-sm-6 col-lg-12">
+                        <a href="#">
+                            <img src="{% static nb.image %}">
+                        </a>
+                    </div>
+                    <div class="col-6 col-sm-6 col-lg-12">
+                        <a href="#"><h3>{{nb.title|safe}}</h3></a>
+                        <span>{{nb.text|safe}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </nav>
+</div>
+
+<div class="row">
+    <div class="col-12 col-lg-7">
+        <section class="parliament-newsfeed newsfeed box">
+            <h3 class="section-header">Viimeisimmät tapahtumat</h3>
+            {{parl_act_html|safe}}
+            <div id="parliament-showmore" class="showmore-link"><a href="#">{% trans "Show more items" %} &or;</a></div>
+        </section>
+    </div>
+    <div class="col-12 col-lg-5">
+        <div class="box">
+            <section class="most-active-members">
+                <h4 class="section-header">Aktiivisimmat kansanedustajat</h3>
+                <ul>{% for mp in most_active_mps %}
+                    <li>
+                {% thumbnail mp.photo '70x105' as tn %}
+                        <a href="{{mp.get_absolute_url}}"><img class="mp-thumbnail" src="{{tn.url}}"></a>
+                {% endthumbnail %}
+                {% endfor %}
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </div>
+</div>
+
+{% comment %}
 <div id="main-page" class="row">
 	<div id="navigation" class="span8">
 		<a href="#">
@@ -84,15 +139,11 @@ $ ->
 	</div>
 	
 	<div id="parliament-activity-span" class="span8">
-			<h3>{% trans "Parliament activity feed" %}</h3>
-			{{ parl_act_html|safe }}
-			<div id="parliament-showmore" class="showmore-link"><a href="#">{% trans "Show more items" %} &or;</a></div>
+            <h3>{% trans "Parliament activity feed" %}</h3>
+            {{ parl_act_html|safe }}
+            <div id="parliament-showmore" class="showmore-link"><a href="#">{% trans "Show more items" %} &or;</a></div>
 	</div>
-
-
-
-<!--
--->
 </div>
+{% endcomment %}
 {% endblock %}
 

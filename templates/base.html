@@ -12,12 +12,12 @@
 
     <link rel="shortcut icon" href="{% static 'images/icons/favicon.ico' %}" />
 
-    <!-- font -->
-    <link href='http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <!-- fonts-->
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,900,400italic|Roboto+Condensed:700|Expletus+Sans:700' rel='stylesheet' type='text/css'>
 
     <!-- twitter bootstrap -->
     {% compress css %}
-    <link type="text/less" href="{% static 'css/bootstrap/bootstrap.less' %}" rel="stylesheet" />
+    <link type="text/less" href="{% static 'bootstrap/less/bootstrap.less' %}" rel="stylesheet" />
     <link type="text/css" href="{% static 'css/bootstrap/font-awesome.css' %}" rel="stylesheet" />
     {% endcompress %}
 
@@ -61,60 +61,50 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="row" id="header">
-            <div class="span2" id="logospan">
-                <a class="currentlink" href="{% url 'parliament.views.main' %} ">
+    <header class="page-head">
+        <nav class="upper-page-nav">
+            <ul class="nav nav-pills">
+                <li><a href="#">FI/ENG</a></li>
+                <li><a href="#">Kansan muisti ry.</a></li>
+                <li><a href="#">Kirjaudu</a></li>
+            </ul>
+            <h1>
+                <a href="/">
+                    <img class="logo" src="{% static 'images/kamu-logo.svg' %}" alt="Kansan muisti -logo">
                 </a>
+            </h1>
+        </nav>
+    </header>
+    <div class="main-nav-container">
+        <nav class="main-nav navbar">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <div class="nav-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Etusivu</a></li>
+                    <li><a href="/">Aiheet</a></li>
+                    <li><a href="{% url 'parliament.views.list_members' %}">Kansanedustajat</a></li>
+                    <li><a href="/">Puolueet</a></li>
+                </ul>
+                <form class="navbar-form">
+                    <input type="text" class="form-control input-small" placeholder="{% trans 'Search' %}">
+                </form>
             </div>
-            <div class="span10">
-                <div id="navtopbar">
-                    <div id="search">
-                        <form class="form-search" action="#" method="post">
-                            <div class="input-append">
-                                <input type="text" class="input-medium search-query" placeholder="Hae Kansan muistista..."/>
-                                <button style="margin-top: 7px" class="btn"><i class="icon-search"></i></button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="separator"></div>
-                    <div id="logged-user">
-                        Saana Sekakäyttäjä / <a href="#">Kirjaudu ulos</a>
-                    </div>
-                </div>
-
-                <div id="navbottombar">
-                    <table><tr> <!-- OMG! A TABLE!!!1 -->
-                            <td><a href="{% url 'parliament.views.list_sessions' %}">
-                                    {% trans "Plenary sessions" %}
-                            </a></td>
-                            <td><a href="#">
-                                    {% trans "Parties" %}
-                            </a></td>
-                            <td><a href="{% url 'parliament.views.list_members' %}">
-                                    {% trans "Members" %}
-                            </a></td>
-                            <td><a href="#">
-                                    {% trans "Topics" %}
-                            </a></td>
-                            <td><a href="#">
-                                    {% trans "About" %}
-                            </a>
-
-                    </tr></table>
-                </div>
-            </div>
-        </div>
-
-        <hr id="headerspacer" />
-
-        {% block content %}{% endblock %}
-
-        <div id="footer">
-                        Copyright &copy; 2010–2013 Kansan muisti ry. Palvelun ylläpitäjä ei vastaa tietojen oikeellisuudesta.
-        </div>
+        </nav>
     </div>
+
+    <main class="container {% block main_class %}generic{% endblock %}">
+    {% block content %}{% endblock %}
+    </main>
+
+    <footer class="page-footer">
+        <div class="copyright">
+            Copyright &copy; 2010–2013 Kansan muisti ry. Palvelun ylläpitäjä ei vastaa tietojen oikeellisuudesta.
+        </div>
+    </footer>
 </body>
 
 </html>
-
