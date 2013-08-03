@@ -98,7 +98,7 @@ class FeedUpdater(object):
             list_slug = "%s-%d" % (base_name, list_idx)
             args = dict(owner_screen_name=owner_name, slug=list_slug)
             try:
-                list_members = self.twitter.getListMembers(**args)
+                list_members = self.twitter.get_list_members(**args)
             except TwythonError as e:
                 if 'Not Found' in e.msg:
                     break
@@ -179,7 +179,7 @@ class FeedUpdater(object):
                 'trim_user': True}
         tw_list = []
         try:
-            info = self.twitter.showUser(**args)
+            info = self.twitter.show_user(**args)
         except TwythonError as e:
             if 'Unauthorized:' in e.msg:
                 raise UpdateError(e.msg, can_continue=True)
@@ -194,7 +194,7 @@ class FeedUpdater(object):
             # retry two times if the twitter call fails
             for i in range(3):
                 try:
-                    tweets = self.twitter.getUserTimeline(**args)
+                    tweets = self.twitter.get_user_timeline(**args)
                 except ValueError:
                     if i == 2:
                         raise

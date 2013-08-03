@@ -5,7 +5,7 @@ python-dateutil
 simplejson
 South
 django-tastypie
-twython
+twython>=3.0.0
 pygments
 django-compressor>=1.3
 twitter-text-py
