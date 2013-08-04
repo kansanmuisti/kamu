@@ -3,240 +3,135 @@
 
 {% block title %}{% trans "Members of the Parliament" %}{% endblock %}
 
+{% block main_class %}member-list{% endblock %}
+
 {% block content %}
-<div id="member-filter-bar">
-    <div class="search-container">
-        <span class="field-label">{% trans "Filter by name/party/district" %}</span>
-        <input id="member-search" type="text" placeholder="" />
-    </div>
-    <div id="member-sort-buttons">
-        <span class="field-label">{% trans "Sort by" %}</span>
-        <button class="btn-mini" data-col="session_agree">Session agreement</button>
-        <button class="btn-mini" data-col="party_agree">Party agreement</button>
-        <button class="btn-mini" data-col="attendance">Attendance</button>
-        <button class="btn-mini" data-col="recent_activity">Activity</button>
+<div class="box">
+    <header class="page-heading">
+        <h1>{% trans "Members of the Parliament" %}</h1>
+    </header>
+    <div class="feed-filters">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="col-lg-2 control-label">{% trans "Search" %}</label>
+                <div class="col-lg-6">
+                    <input type="text" class="text-search" class="form-control" placeholder="{% trans 'Input text' %}...">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-2 control-label">{% trans "Sort" %}</label>
+                <div class="col-lg-10">
+                    <div class="btn-toolbar">
+                        <div class="btn-group" data-toggle="buttons-checkbox">
+                            <button class="btn  btn-default  js-tooltip" type="button" title="Twitter">
+                                <i class="typcn  typcn-social-twitter  typcn--medium"></i>
+                            </button>
+                            <button class="btn  btn-default  js-tooltip" type="button" title="Facebook">
+                                <i class="typcn  typcn-social-facebook  typcn--medium"></i>
+                            </button>
+                        </div>
+                        <div class="btn-group" data-toggle="buttons-checkbox">
+                            <button class="btn  btn-default  js-tooltip" type="button" title="Puheenvuorot">
+                                <i class="typcn  typcn-message  typcn--medium"></i>
+                            </button>
+                            <button class="btn  btn-default  js-tooltip" type="button" title="Allekirjoitukset">
+                                <i class="typcn  typcn-edit  typcn--medium"></i>
+                            </button>
+                            <button class="btn  btn-default  js-tooltip" type="button" title="Omat aloitteet">
+                                <i class="typcn  typcn-document-add  typcn--medium"></i>
+                            </button>
+                            <button class="btn  btn-default  js-tooltip" type="button" title="Kirjalliset kysymykset">
+                                <i class="typcn  typcn-warning  typcn--medium"></i>
+                            </button>
+                            <button class="btn  btn-default  js-tooltip" type="button" title="Äänestykset">
+                                <i class="typcn  typcn-thumbs-down  typcn--medium"></i>
+                            </button>
+                            <button class="btn  btn-default  js-tooltip" type="button" title="Vastalauseet">
+                                <i class="typcn  typcn-flash  typcn--medium"></i>
+                            </button>
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn  btn-default  js-tooltip  active" type="button">Kaikki</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
-<div id="spinnercontainer"></div>
-<ul id="member-list" class="row"></ul>
+<div>
+    <div class="spinner-container"></div>
+    <ul class="member-list row">
+    </ul>
+</div>
 
-{% compress js %}
-<script type="text/coffeescript" src="{% static "js/models.coffee" %}"></script>
-{% endcompress %}
-
-{% compress js %}
-<script type="text/coffeescript">
-
-@_share_as_stars = (n, max=5) ->
-    str = ""
-    semistars = Math.round n*2*max
-    fullstars = Math.floor semistars/2.0
-    halfstars = semistars%2
-    for i in [0...fullstars]
-        str += '<i class="icon-star media-object" style="font-size: 12px"></i>'
-    if halfstars
-        str += '<i class="icon-star-half-empty media-object" style="font-size: 12px"></i>'
-        i += 1
-    while i < max
-        str += '<i class="icon-star-empty media-object" style="font-size: 12px"></i>'
-        i += 1
-    return str
-
-class MemberView extends Backbone.View
-    content_template: """
-    <a class="portrait-link" href="<%= model.get_view_url() %>">
-        <img class="portrait" src="<%= attr.photo_thumbnail %>" />
-    </a>
-    <div class="member-info">
-        <a href="<%= model.get_view_url() %>" class="member-name">
-            <%= attr.name %>
-        </a>
-        <span class="member-district"><%= attr.district_name %></span>
-        <span class="member-party"><%= attr.party.full_name %></span>
+<script id="member-list-item-template" type="text/template">
+<li class="col-lg-4">
+    <div class="member-list-item">
+        <div class="header">
+            <h4 class="name"><a href="<%= view_url %>">
+<%= name %></a></h4>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <a class="portrait-link" href="<%= view_url %>">
+                    <img class="portrait" src="<%= photo_thumbnail %>" />
+                </a>
+            </div>
+            <br/>
+            <div class="col-lg-8">
+                <div class="stats">
+                    <div class="row">
+                        <div class="stat-name col-lg-5">Aktiivisuus:</div>
+                        <div class="col-lg-7">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-info" style="width: <%= stats.activity_ranking*100 %>%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+</li>
+</script>
+
+{% comment %}
     <ul class="member-stats">
         <li class="recent_activity">
-            <%= window._share_as_stars(attr.stats.activity_ranking) %>
+            <%= window._share_as_stars(stats.activity_ranking) %>
             <i class="icon-comment media-object" style="font-size: 16px"></i>
         </li>
         <li class="party_agree">
-            <%= Math.round(attr.stats.party_agree*100) %>%
+            <%= Math.round(stats.party_agree*100) %>%
             <img src="{% static "images/icons/party_agr.png" %}"
                 alt="{% trans "Party agreement" %}"
                 title="{% trans "Party agreement" %}"
                 />
         </li>
         <li class="session_agree">
-            <%= Math.round(attr.stats.session_agree*100) %>%
+            <%= Math.round(stats.session_agree*100) %>%
             <img src="{% static "images/icons/session_agr.png" %}"
                 alt="{% trans "Session agreement" %}"
                 title="{% trans "Session agreement" %}"
                 />
         </li>
         <li class="attendance">
-            <%= Math.round(attr.stats.attendance*100) %>%
+            <%= Math.round(stats.attendance*100) %>%
             <img src="{% static "images/icons/attendance.png" %}"
                 alt="{% trans "Attendance" %}"
                 title="{% trans "Attendance" %}"
                 />
         </li>
     </ul>
-    """
-    
-    initialize: =>
-        attr = @model.attributes
-        @el = $ '<li class="member-list-item span4"></div>'
-        @$el = $ @el
-        html = _.template @content_template, {model: @model, attr: attr}
-        @$el.html html
+{% endcomment %}
 
-class MemberListView extends Backbone.View
-    el: $ "#member-list"
-    
-
-    initialize: ->
-        $("#spinnercontainer").spin top: 0
-
-        @$el = $ @el
-        @children = {}
-
-        @collection = new MemberList
-        @collection.bind "add", @append_item
-        
-        @index = new lunr.Index
-        @index.field "name"
-        @index.field "party"
-        @index.field "district"
-        @index.field "party_short"
-        @index.ref "id"
-
-        @search_el = $("#member-search")
-        @search_el.input @_filter_listing
-
-        @_setup_sort()
-        
-        @collection.fetch
-            success: (col) =>
-                @_calculate_rankings(col)
-                @_process_children(col)
-                @_update_search_hint(col)
-                @_filter_listing()
-                @_set_sort_order "recent_activity", false
-            data:
-                thumbnail_dim: "64x96"
-                current: true
-                stats: true
-                limit: 0
-            processData: true
-    
-    _setup_sort: =>
-        namesort = (a, b) -> a.model.attributes['name'].localeCompare b.model.attributes['name']
-        statsort = (field) ->
-            (aw, bw) ->
-                a = aw.model.attributes.stats[field]
-                b = bw.model.attributes.stats[field]
-                if a == b
-                    return namesort(aw, bw)
-                if a > b
-                    return -1
-                else
-                    return 1
-
-        @_sort_funcs =
-            name: namesort
-            recent_activity: statsort('recent_activity')
-            attendance: statsort('attendance')
-            party_agree: statsort('party_agree')
-            session_agree: statsort('party_agree')
-
-        @_raw_sort_func = null
-        @sort_order = 1
-        @sort_func = (a, b) =>
-            @sort_order*@_raw_sort_func(a, b)
-        
-        # Just to have something in the sort order,
-        # this will be overriden once we get data
-        @_set_sort_order "name"
-        
-        $("#member-sort-buttons button").click (ev) =>
-            btn = ev.currentTarget
-            field = $(btn).data "col"
-            @_set_sort_order field
-
-    _calculate_rankings: (collection) =>
-        activity_scores = (model.attributes.stats['recent_activity'] \
-            for model in collection.models)
-        activity_scores = _.sortBy activity_scores, (x) -> x
-        percentile = (v) ->
-            activity_scores.indexOf(v)/(activity_scores.length-1)
-        for model in collection.models
-            stats = model.attributes.stats
-            stats['activity_ranking'] = percentile stats['recent_activity']
-       
-    _set_sort_order: (field, toggle_order=true) =>
-            func = @_sort_funcs[field]
-            if toggle_order and func == @_raw_sort_func
-                @sort_order *= -1
-            # This is probably more intuitive and allows
-            # for nicer comparisons
-            #else
-            #    @sort_order = 1
-            
-            $("#member-sort-buttons button .sort-order").remove()
-            btn = $("#member-sort-buttons button[data-col='#{field}']")
-            order_widget = $ '<div class="sort-order"></div>'
-            if @sort_order > 0
-                order_widget.addClass "sort-order-asc"
-            else
-                order_widget.addClass "sort-order-desc"
-
-            btn.append order_widget
-            
-            $("#member-list .member-stats > li").hide()
-            $("#member-list .member-stats > li.#{field}").show()
-
-            @_raw_sort_func = func
-            @_filter_listing()
-
-    _update_search_hint: (col) =>
-        i = Math.floor(Math.random()*(col.models.length))
-        a = col.models[i].attributes
-        hint = "{% trans "e.g. " %}" +
-            a.given_names.split(" ", 1)[0].split('-', 1)[0].toLowerCase() + " " +
-            a.party.full_name.toLowerCase()[..2] + " " +
-            a.district_name.toLowerCase()[..3]
-        
-        $el = $ @search_el
-        $el.attr "placeholder", $el.attr("placeholder") + hint
-	    
-    _filter_listing: =>
-        @$el.empty()
-        query = @search_el.val()
-        if query == ""
-            result = (@children[key] for key of @children)
-        else
-            result = (@children[hit.ref] for hit in @index.search query)
-
-        result.sort @sort_func
-
-        for hit in result
-            @$el.append hit.el
-        
-    _process_children: (collection) =>
-        $("#spinnercontainer").spin false
-        for model in collection.models
-            item_view = new MemberView model: model
-            @children[model.id] = item_view
-            @index.add
-                id: model.id
-                name: model.attributes.name
-                party: model.attributes.party.full_name
-                party_short: model.attributes.party.name
-                district: model.attributes.district_name
-
-member_list_view = new MemberListView
-</script>
+{% compress js %}
+<script type="text/coffeescript" src="{% static "js/models.coffee" %}"></script>
+{% endcompress %}
+{% compress js %}
+<script type="text/coffeescript" src="{% static "js/member-list.coffee" %}"></script>
 {% endcompress %}
 
 {% endblock %}

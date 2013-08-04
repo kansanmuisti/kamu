@@ -47,7 +47,7 @@ ul {
     @TYPOGRAPHY (BOOTSTRAP OVERRIDES)
 \*------------------------------------*/
 
-h1,h2,h3,h4,h5,h6 {
+h2,h3,h4,h5,h6 {
     text-transform: uppercase;
 }
 
@@ -102,7 +102,7 @@ h6 {
     }
 }
 
-.full-page-width-element {
+.full-page-width {
     max-width: 990px;
     min-width: 400px;
     margin: 0 auto;
@@ -141,22 +141,14 @@ h6 {
     }
 }
 
-.box--interesting-issues, .box--latest-issues {
-  ul {
-  .list-group;
-    }
-  li {
-   .list-group-item;    
-    }
-}
-
-.box--issue--similars, .box--issue--who-interested {
-      ul {
-  .list-group;
-    }
-  li {
-   .list-group-item;    
-    }
+.feed-filters {
+  .clearfix();
+  margin-bottom: 20px;
+  padding: 10px;
+  background: @gray-lighter;
+  form {
+    margin: 0;
+  }
 }
 
 /***************************************************************
@@ -172,7 +164,7 @@ h6 {
         a {
             color: @blueberry;
         }
-        .full-page-width-element;
+        .full-page-width;
         ul {
             float: right;
         }
@@ -185,7 +177,7 @@ h6 {
 .main-nav-container {
     background-color: @navbar-bg;
     nav {
-        .full-page-width-element;
+        .full-page-width;
         padding-left: 0px;
         form {
             margin-top: 5px;
@@ -199,7 +191,7 @@ h6 {
 }
 
 main {
-    .full-page-width-element;
+    .full-page-width;
     margin-top: @box-padding;
     /* background-color: white;
     padding: 20px;
@@ -218,7 +210,7 @@ main {
     border-top: 2px solid @gray-dark;
     background-color: @gray-light;
     .copyright {
-        .full-page-width-element;
+        .full-page-width;
     }
 }
 
@@ -265,6 +257,51 @@ main.home-page {
     }
 }
 
+/***************************************************************
+ * Member list
+ ***************************************************************/
+
+main.member-list {
+    ul.member-list {
+        list-style: none;
+    }
+    .member-list-item {
+        position: relative;
+        background-color: white;
+        overflow: hidden;
+        padding: 10px;
+        margin-bottom: 20px;
+        //border: 1px solid @gray-light;
+        .box-shadow(rgba(0,0,0,0.22) 2px 2px 4px);
+        @media (max-width: @screen-small) {
+            height: inherit;
+        }
+
+        .name {
+            margin: 0 48px 10px 0;
+            padding: 0;
+            height: 30px;
+            line-height: 20px;
+            border-bottom: 1px solid #eee;
+            a {
+                text-transform: none;
+                color: @electric;
+                font-size: 18px;
+                font-family: @font-family-base;
+            }
+        }
+        .stats {
+            font-size: 12px;
+            line-height: 20px;
+            font-weight: 700;
+            .progress {
+                height: 12px;
+                margin-top: 4px;
+                margin-bottom: 0;
+            }
+        }
+    }
+}
 
 /* ................................................................ */
 /* ................................................................ */
