@@ -377,7 +377,7 @@ class MemberImporter(Importer):
         if mp_info['posts'] is not None:
             for post in mp_info['posts']:
                 try:
-                    cqommittee = Committee.objects.get(name=post['committee'])
+                    committee = Committee.objects.get(name=post['committee'])
                     # Update current committees
                     if committee.current == False and post['current'] == True:
                         committee.current = True
