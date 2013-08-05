@@ -3,7 +3,7 @@
 {% for item in items %}
 <article class="plenary-item">
     <header>
-        <time>{{item.plsess.date}}</time>
+        <time>{{item.plsess.date|date:"SHORT_DATE_FORMAT"}}</time>
         <a href="{{item.get_absolute_url}}"><h4>{{ item.description }}</h4></a>
     <header>
     <div class="content">
