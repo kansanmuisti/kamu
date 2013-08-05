@@ -182,6 +182,13 @@ try:
 except ImportError:
     pass
 
+if 'LOCAL_INSTALLED_APPS' in locals():
+    INSTALLED_APPS += LOCAL_INSTALLED_APPS
+    del LOCAL_INSTALLED_APPS
+if 'LOCAL_MIDDLEWARE_CLASSES' in locals():
+    MIDDLEWARE_CLASSES += LOCAL_MIDDLEWARE_CLASSES
+    del LOCAL_MIDDLEWARE_CLASSES
+
 if FAST_TEST and 'test' in sys.argv:
     DATABASE_NAME = 'kamu.db'
     DATABASE_ENGINE = 'sqlite3'
