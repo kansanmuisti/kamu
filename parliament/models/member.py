@@ -14,6 +14,16 @@ from django.db.models.loading import cache as model_cache
 if not model_cache.loaded:
     model_cache._populate()
 
+# Helper to filter Association objects
+class AssociationQuerySet(models.query.QuerySet):
+    def current(self):
+        return self.filter(end__isnull=True)
+
+class AssociationManager(models.Manager):
+    def current(self):
+        return self.get_query_set().current()
+
+
 class MemberManager(models.Manager):
     def current(self):
         mem_list = PartyAssociation.objects.filter(end__isnull=True).distinct().values_list('member', flat=True)
@@ -68,7 +78,7 @@ class Member(models.Model):
             return None
         ms.calc()
         return ms
-    
+
     __export_stats_fields = ('attendance', 'party_agree', 'session_agree')
     def get_latest_stats(self):
         latest = self.memberstats_set.order_by('-begin')[0]
@@ -82,7 +92,7 @@ class Member(models.Model):
         if end: activities = activities.filter(time__lte=end)
         return sum(MemberActivity.WEIGHTS.get(t, 0) for t in
             activities.values_list('type', flat=True))
-    
+
     def get_activity_counts(self):
         act = self.memberactivity_set
         act = act.extra({'activity_date': 'date(time)'})
@@ -261,6 +271,23 @@ class PartyAssociation(models.Model):
     class Meta:
         app_label = 'parliament'
 
+class CommitteeAssociationManager(AssociationManager):
+    class QuerySet(AssociationQuerySet):
+        def in_print_order(self):
+            def key(ca):
+                if not ca.role:
+                    role = 'member'
+                else:
+                    role = ca.role
+                role_orders = {'vj': 3, 'member': 2, 'vpj': 1, 'pj': 0}
+                # Sort on role first, then on committee name.
+                return "%d-%s" % (role_orders[role], ca.committee.name)
+            qs = self.select_related('committee')
+            return sorted(qs, key=key)
+
+    def get_query_set(self):
+        return CommitteeAssociationManager.QuerySet(self.model, using=self._db)
+
 class CommitteeAssociation(models.Model):
     member = models.ForeignKey(Member, db_index=True)
     committee = models.ForeignKey(Committee)
@@ -268,8 +295,17 @@ class CommitteeAssociation(models.Model):
     end = models.DateField(blank=True, null=True)
     role = models.CharField(max_length=15, blank=True, null=True)
 
+    objects = CommitteeAssociationManager()
+
     class Meta:
         app_label = 'parliament'
+
+    def __unicode__(self):
+        if not self.role:
+            role = 'member'
+        else:
+            role = self.role
+        return u"%s %s in %s from %s to %s" % (self.member, role, self.committee, self.begin, self.end)
 
 class MemberActivityManager(models.Manager):
     def during(self, begin, end):

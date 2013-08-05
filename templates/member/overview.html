@@ -27,7 +27,6 @@ member = new Member({{ member_json|safe }});
 {% endblock %}
 
 {% block content %}
-
 <div class="row">
     <div class="col-lg-4">
         <div class="member-card">
@@ -51,8 +50,9 @@ member = new Member({{ member_json|safe }});
                     <li>peruspalveluministeri</li>
                 </ul>
                 <ul class="committee">
-                    <li>Suuri valiokunta</li>
-                    <li>Kansainvälisten asiain foorumi</li>
+                    {% for ca in member.roles.committee %}
+                    <li>{{ca.committee.name}}{% if ca.role %} (<span class="role-name">{{ca.role}}</span>){% endif %}</li>
+                    {% endfor %}
                 </ul>
             </div>
         </div>

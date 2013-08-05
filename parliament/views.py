@@ -18,6 +18,7 @@ from httpstatus import Http400
 from calendar import Calendar
 from datetime import date
 from dateutil.relativedelta import relativedelta
+from utils import time_func
 
 import parliament.member_views
 from parliament.api import MemberResource
@@ -102,6 +103,12 @@ def _get_member_activity_kws(member):
 
 def show_member(request, member, page=None):
     member = get_view_member(member)
+
+    roles = {}
+    l = member.committeeassociation_set.current().in_print_order()
+    roles['committee'] = l
+    member.roles = roles
+
     res = MemberResource()
     res_bundle = res.build_bundle(obj=member, request=request)
     member_json = res.serialize(None, res.full_dehydrate(res_bundle), 'application/json')
@@ -124,10 +131,8 @@ def show_member(request, member, page=None):
         template = 'member/basic_info.html'
     else:
         raise Http404()
-
     return render_to_response(template, args,
         context_instance=RequestContext(request))
-
 
 def _get_parliament_activity(request, offset):
     q = Q(nr_votes__gt=0) | Q(nr_statements__gt=0)
