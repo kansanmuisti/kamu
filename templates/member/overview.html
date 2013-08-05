@@ -1,7 +1,125 @@
-{% extends "member/base.html" %}
-{% load compress static %}
+{% extends "base.html" %}
+{% load compress static thumbnail i18n %}
 
-{% block member_content %}
+{% block title %}{{ member.get_print_name }}{% endblock %}
+{% block main_class %}member-details{% endblock %}
+
+{% block head %}
+<meta property="og:title" content="{{ member.get_print_name }}" />
+<meta property="og:type" content="politician" />
+{% thumbnail member.photo "64x96" as photo %}
+<meta property="og:image" content="http://{{ fb_host }}{{ photo.url }}" />
+{% endthumbnail %}
+<meta property="og:url" content="http://{{ fb_host }}{{ member.get_absolute_url }}" />
+
+{% compress js %}
+<!-- Backbone models -->
+<script type="text/coffeescript" src="{% static "js/models.coffee" %}"></script>
+{% endcompress %}
+{% compress js %}
+<!-- Feed-specific views etc. -->
+<script type="text/coffeescript" src="{% static "js/feed.coffee" %}"></script>
+{% endcompress %}
+
+<script type="text/javascript">
+member = new Member({{ member_json|safe }});
+</script>
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="member-card">
+            <h1>{{member.get_print_name}}</h1>
+            <div class="party-district">
+                <div class="party-logo">
+                    {% thumbnail member.party.logo "48x48" as logo %}
+                    <img src="{{logo.url}}" style="margin:{{logo|margin:"48x48"}}" />
+                    {% endthumbnail %}
+                </div>
+                <div class="text">
+                    <a href="{{member.party.get_absolute_url}}">{{member.party.full_name}}</a>
+                    <span class="district">{{member.get_latest_district.district.name}} vaalipiiri</span>
+                </div>
+            </div>
+            {% thumbnail member.photo "128x192" as photo %}
+            <img class="portrait" src="{{photo.url}}" />
+            {% endthumbnail %}
+            <div class="roles">
+                <ul class="minister">
+                    <li>peruspalveluministeri</li>
+                </ul>
+                <ul class="committee">
+                    <li>Suuri valiokunta</li>
+                    <li>Kansainvälisten asiain foorumi</li>
+                </ul>
+            </div>
+        </div>
+
+        <nav class="side-navigation">
+            <ul class="nav nav-pills nav-stacked">
+                <li class="active"><a href=#>Perustiedot</a></li>
+                <li><a href=#>Valiokunnat</a></li>
+                <li><a href=#>Luottamustehtävät</a></li>
+                <li><a href=#>Äänestystiedot</a></li>
+                <li><a href=#>Tilastot</a></li>
+                <li><a href=#>Yhteystiedot</a></li>
+                <li><a href=#>Blogi</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="col-lg-8">
+        <div class="filter-feed box">
+            <section>
+                <h4>On kiinnostunut näistä asioista</h4>
+                <div id="member-tag-cloud" class="tag-cloud"></div>
+            </section>
+            <section>
+                <h4>Aktiivisuus</h4>
+                <div id="member-activity-graph" class="activity-graph"></div>
+            </section>
+            <section>
+                <div class="feed-filters">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">{% trans "Search" %}</label>
+                            <div class="col-lg-6">
+                                <input type="text" class="text-search form-control" placeholder="{% trans 'Input text' %}...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">{% trans "Filter" %}</label>
+                            <div class="col-lg-10">
+                            {% include "_feed_filters.html" %}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <ul class="section" id="member-activity-feed" class="feed unstyled">
+                </ul>
+            </section>
+        </div>
+    </div>
+</div>
+
+<script type="text/template" id="activity-item-template">
+    <a class="icon" href="#">
+        <i class="icon-<%= icon %>"></i>
+    </a>
+    <div class="text">
+        <header class="clearfix">
+            <h4 class="heading">
+                <%= action %>
+                <% if (target.name) { %>
+                    <%= target.name %>
+                <% } %>
+            </h4>
+            <div class="time"><%= time_ago %></div>
+        </header>
+        <div class="summary"><%= target.text %></div>
+    </div>
+</script>
 
 {% compress css %}
 <link href="{% static "css/plots.less" %}" rel="stylesheet" type="text/less" />
@@ -16,7 +134,7 @@ $ ->
     activity_counts = {{ activity_counts_json|safe }}
     date = new Date(activity_counts[0].activity_date)
     end_date = new Date(activity_counts[activity_counts.length-1].activity_date)
-    
+
     activity_types = {{ activity_types_json|safe }}
     activity_weights = {{ activity_type_weights_json|safe }}
     act_keys = (t[0] for t in activity_types)
@@ -44,21 +162,11 @@ $ ->
         bin_idx += 1
 
     hist_list = (v for k, v of act_histograms)
-    
+
     graph = new MultiresStackedGraph "#member-activity-graph", hist_list
 
 </script>
 {% endcompress %}
-
-<div id="member-tag-cloud" class="tag-cloud">
-</div>
-
-<div id="member-activity-graph" class="activity-graph">
-</div>
-
-
-<ul id="member-activity-feed" class="feed unstyled">
-</ul>
 
 <script type="text/javascript">
     keyword_activity = {{keyword_activity|safe}};

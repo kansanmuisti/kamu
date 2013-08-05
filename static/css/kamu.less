@@ -118,8 +118,11 @@ h6 {
 }
 
 .shadowboxed {
-    background-color: @gray-lighter;
     .box-shadow(3px 3px 5px rgba(0,0,0,.66));
+}
+.shadowboxed-bg {
+    .shadowboxed;
+    background-color: @gray-lighter;
 }
 
 .newsfeed {
@@ -141,14 +144,42 @@ h6 {
     }
 }
 
+.tag-cloud {
+    padding: 10px;
+    ul {
+        list-style: none;
+        padding-left: 0;
+        font-family: @brand-font-family;
+        text-transform: uppercase;
+        font-weight: 700;
+        li {
+            a {
+                &:hover {
+                    background-color: @lemon;
+                    color: #222;
+                    text-decoration: none;
+                    .shadowboxed;
+                }
+                text-decoration: none;
+                padding: 5px 5px 0 5px;
+                color: @electric;
+            }
+            display: inline-block;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+    }
+}
+
+
 .feed-filters {
-  .clearfix();
-  margin-bottom: 20px;
-  padding: 10px;
-  background: @gray-lighter;
-  form {
-    margin: 0;
-  }
+    .clearfix();
+    margin-bottom: 20px;
+    padding: 10px;
+    background: @gray-lighter;
+    form {
+        margin: 0;
+    }
 }
 
 /***************************************************************
@@ -303,6 +334,84 @@ main.member-list {
     }
 }
 
+/***************************************************************
+ * Member details
+ ***************************************************************/
+main.member-details {
+    .member-card {
+        .boxed;
+        .shadowboxed-bg;
+        background-color: @gray-lighter;
+        h1 {
+            font-size: 28px;
+            line-height: 30px;
+            text-transform: none;
+        }
+        .portrait {
+            padding: 5px;
+            margin: 10px 0 10px 0;
+            background: #ffffff;
+        }
+        .party-district {
+            padding: 5px 0 5px 0;
+            border-top: 1px solid #333333;
+            border-bottom: 1px solid #333333;
+            .clearfix;
+            .party-logo {
+                margin-right: 8px;
+                float: left;
+                height: 48px;
+                width: 48px;
+            }
+            .text {
+                float: left;
+                max-width: 180px;
+                a {
+                    color: #222;
+                    font-weight: 900;
+                }
+            }
+            .district {
+                font-weight: 400;
+                float: left;
+            }
+        }
+        .roles {
+            ul {
+                padding-left: 0;
+                list-style: none;
+            }
+            li {
+                border-radius: 3px;
+                padding: 3px;
+                margin: 2px;
+                background: white;
+                overflow: hidden;
+            }
+            .role(@color) {
+                border-left: 15px solid @color;
+            }
+            .minister li {
+                font-weight: 900;
+                .role(@mint);
+            }
+            .committee li {
+                .role(@blueberry);
+            }
+        }
+    }
+
+    .filter-feed {
+        > section, > .section {
+            margin-bottom: 2 * @box-padding;
+            border-top: 3px solid @blueberry;
+            > h4 {
+                .section-heading;
+            }
+        }
+    }
+}
+
 /* ................................................................ */
 /* ................................................................ */
 /* ................................................................ */
@@ -333,23 +442,6 @@ main.member-list {
 @darkgrey: #8e8e8e;
 @kamuBlue: #B9D1C6;
 /* CHECK ABOVE */
-
-.tag-cloud {
-    ul {
-        list-style: none;
-        li {
-            a {
-                &:hover {
-                    text-decoration: underline;
-                }
-                text-decoration: none;
-            }
-            display: inline-block;
-            margin: 0 9px;
-            height: 28px;
-        }
-    }
-}
 
 // block mixins. Please use these if you want to create a block
 // with some stuff
@@ -576,7 +668,6 @@ h2 {
 			text-decoration: underline;
 		}
 	}
-
 }
 
 .post {

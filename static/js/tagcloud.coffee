@@ -13,9 +13,9 @@
 
         min_count = Math.log(min_count)
         max_count = Math.log(max_count)
-        min_opacity = 0.6
-        min_font_size = 14
-        max_font_size = 24
+        min_opacity = 0.9
+        min_font_size = 10
+        max_font_size = 28
         font_size_delta = max_font_size - min_font_size
         weight_scale = max_count - min_count
 

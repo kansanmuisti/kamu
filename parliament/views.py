@@ -22,6 +22,17 @@ from dateutil.relativedelta import relativedelta
 import parliament.member_views
 from parliament.api import MemberResource
 
+FEED_FILTERS = [
+    [{'name': 'Twitter', 'icon': 'social-twitter', 'type': 'TW'},
+    {'name': 'Facebook', 'icon': 'social-facebook', 'type': 'FB'}],
+    [{'name': _('Statements'), 'icon': 'message', 'type': 'ST'},
+    {'name': _('Allekirjoitukset'), 'icon': 'edit', 'type': 'SI'},
+    {'name': _('Own initiatives'), 'icon': 'document-add', 'type': 'IN'},
+    {'name': _('Written questions'), 'icon': 'warning', 'type': 'WQ'},
+    {'name': _('Votes'), 'icon': 'thumbs-down', 'type': 'RV'},
+    {'name': _('Dissents'), 'icon': 'flash', 'type': 'CD'}]
+]
+
 def show_item(request, plsess, item_nr, subitem_nr=None):
     query = Q(plsess__url_name=plsess) & Q(number=item_nr)
     if subitem_nr is None:
@@ -103,6 +114,7 @@ def show_member(request, member, page=None):
             MemberActivity.TYPES, 'application/json')
         args['activity_type_weights_json'] = res.serialize(None,
             MemberActivity.WEIGHTS, 'application/json')
+        args['feed_filters'] = FEED_FILTERS
 
         kw_act = _get_member_activity_kws(member)
         kw_act_json = simplejson.dumps(kw_act, ensure_ascii=False)
