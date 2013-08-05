@@ -76,19 +76,6 @@ def render_member_activity(item):
     d['text'] = d['text'].replace('\n', '\n\n')
     return d
 
-"""
-def _get_member_activity(member, offset):
-    items = list(MemberActivity.objects.filter(member=member).order_by('-time'))[offset:offset+10]
-    items_out = []
-    for item in items:
-        i = render_member_activity(item)
-        if not i:
-            continue
-        items_out.append(i)
-
-    return items_out
-"""
-
 def _get_member_activity_kws(member):
     kw_act_list = KeywordActivity.objects.filter(activity__member=member).select_related('keyword', 'activity')
     kw_dict = {}
@@ -110,7 +97,6 @@ def show_member(request, member, page=None):
     args = dict(member=member, member_json=member_json)
 
     if not page:
-        args['activity'] = _get_member_activity(member, 0)
         args['activity_counts_json'] = res.serialize(None,
             member.get_activity_counts(), 'application/json')
         args['activity_types_json'] = res.serialize(None,
