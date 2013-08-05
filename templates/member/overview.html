@@ -124,19 +124,24 @@ member = new Member({{ member_json|safe }});
 {% compress css %}
 <link href="{% static "css/plots.less" %}" rel="stylesheet" type="text/less" />
 {% endcompress %}
-{% compress js %}
+
 <script type="text/javascript" src="{% static "js/vendor/d3.v3.js" %}"></script>
+<script type="text/javascript">
+    activity_counts = {{ activity_counts_json|safe }}
+    activity_types = {{ activity_types_json|safe }}
+    activity_weights = {{ activity_type_weights_json|safe }}
+    keyword_activity = {{keyword_activity|safe}};
+</script>
+
+{% compress js %}
 <script type="text/coffeescript" src="{% static "js/plots.coffee" %}"></script>
 
 <script type="text/coffeescript">
 
 $ ->
-    activity_counts = {{ activity_counts_json|safe }}
     date = new Date(activity_counts[0].activity_date)
     end_date = new Date(activity_counts[activity_counts.length-1].activity_date)
 
-    activity_types = {{ activity_types_json|safe }}
-    activity_weights = {{ activity_type_weights_json|safe }}
     act_keys = (t[0] for t in activity_types)
     act_names = (t[1] for t in activity_types)
     act_histograms = {}
@@ -167,10 +172,6 @@ $ ->
 
 </script>
 {% endcompress %}
-
-<script type="text/javascript">
-    keyword_activity = {{keyword_activity|safe}};
-</script>
 
 {% compress js %}
 <script type="text/coffeescript" src="{% static "js/member.coffee" %}"></script>
