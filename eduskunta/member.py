@@ -2,6 +2,7 @@
 import re
 import os
 import logging
+import difflib
 from lxml import etree, html
 from django.conf import settings
 from parliament.models.member import *
@@ -428,6 +429,50 @@ class MemberImporter(Importer):
                     else:
                         continue
         return membership_list
+
+    def get_wikipedia_links(self):
+        MP_LINK = 'http://fi.wikipedia.org/wiki/Luokka:Nykyiset_kansanedustajat'
+
+        print "Populating Wikipedia links to current MPs..."
+        mp_list = list(Member.objects.current())
+        mp_names = [mp.name for mp in mp_list]
+        s = self.http.open_url(MP_LINK, 'wikipedia')
+        doc = html.fromstring(s)
+        links = doc.xpath(".//table//a[starts-with(@href, '/wiki')]")
+        doc.make_links_absolute(MP_LINK)
+        for l in links:
+            href = l.attrib['href']
+            if 'Toiminnot:Haku' in href:
+                continue
+            name = l.text
+            if '(' in name:
+                name = name.split('(')[0].strip()
+            a = name.split()
+            a = list((a[-1],)) + a[0:-1]
+            name = ' '.join(a)
+            for mp in mp_list:
+                if mp.name == name:
+                    break
+            else:
+                matches = difflib.get_close_matches(name, mp_names, cutoff=0.8)
+                if len(matches) > 1:
+                    raise Exception("Multiple matches for '%s'" % name)
+                elif not matches:
+                    print "No match found for '%s'" % name
+                    continue
+                print("Mapping '%s' to %s'" % (name, matches[0]))
+                for mp in mp_list:
+                    if mp.name == matches[0]:
+                        break
+                else:
+                    raise Exception("MP %s not found" % matches[0])
+            mp.wikipedia_link = href
+            mp.found = True
+            #get_mp_homepage_link(mp)
+            mp.save()
+        for mp in mp_list:
+            if not hasattr(mp, 'found'):
+                print "%s not found" % mp
 
     def import_members(self):
         self.logger.debug("fetching MP list")
