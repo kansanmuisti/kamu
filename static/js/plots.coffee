@@ -202,7 +202,7 @@ class @MultiresStackedGraph
             # TODO: Limit the extent somehow!
             #plot.selectAll(".group .area").attr("d", (d) -> area d_and_i d)
             plot.select(".axis.x").call(xAxis)
-            plot.select(".axis.y").call(yAxis)
+            #plot.select(".axis.y").call(yAxis)
         
         
         zoom.on("zoom", draw)
