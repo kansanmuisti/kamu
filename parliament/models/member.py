@@ -82,6 +82,15 @@ class Member(models.Model):
         if end: activities = activities.filter(time__lte=end)
         return sum(MemberActivity.WEIGHTS.get(t, 0) for t in
             activities.values_list('type', flat=True))
+    
+    def get_activity_counts(self):
+        act = self.memberactivity_set
+        act = act.extra({'activity_date': 'date(time)'})
+        act = act.values('activity_date', 'type')
+        act = act.order_by('activity_date', 'type')
+        act = act.annotate(count=models.Count('id'))
+        return list(act)
+
 
     def save(self, *args, **kwargs):
         if not self.url_name:

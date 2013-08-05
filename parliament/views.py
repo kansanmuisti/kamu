@@ -110,7 +110,14 @@ def show_member(request, member, page=None):
     args = dict(member=member, member_json=member_json)
 
     if not page:
-        #args['activity'] = _get_member_activity(member, 0)
+        args['activity'] = _get_member_activity(member, 0)
+        args['activity_counts_json'] = res.serialize(None,
+            member.get_activity_counts(), 'application/json')
+        args['activity_types_json'] = res.serialize(None,
+            MemberActivity.TYPES, 'application/json')
+        args['activity_type_weights_json'] = res.serialize(None,
+            MemberActivity.WEIGHTS, 'application/json')
+
         kw_act = _get_member_activity_kws(member)
         kw_act_json = simplejson.dumps(kw_act, ensure_ascii=False)
         args['keyword_activity'] = kw_act_json
