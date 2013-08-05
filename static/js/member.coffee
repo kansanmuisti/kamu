@@ -1,6 +1,6 @@
 
 class @MemberActivityFeedView extends Backbone.View
-    el: $("#member-activity-feed")
+    el: ".activity-feed"
     initialize: (@member) ->
         @collection = new MemberActivityList()
         @collection.bind 'add', @add_item
@@ -24,7 +24,8 @@ class @MemberActivityFeedView extends Backbone.View
 
     add_item: (item) =>
         view = new MemberActivityView model: item
-        @$el.append view.render().el
+        view.render()
+        @$el.append view.el
 
     add_all_items: (coll) =>
         @$el.empty()

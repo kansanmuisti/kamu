@@ -144,6 +144,100 @@ h6 {
     }
 }
 
+.activity-feed {
+    list-style: none;
+    padding: 0;
+    > .activity-item {
+        border-top: 1px solid @gray-light;
+        padding: 5px 5px 0 0;
+        .clearfix;
+        margin-bottom: 20px;
+        .avatar {
+            width: 48px;
+            float: left;
+            padding: 3px;
+            background-color: @gray-light;
+        }
+        .source {
+            float: left;
+            margin-left: 10px;
+            a {
+                font-family: @headings-font-family;
+                text-transform: uppercase;
+                font-weight: 700;
+                text-decoration: none;
+                color: @gray;
+                &:hover {
+                    color: @mint;
+                }
+            }
+        }
+        .author {
+            font-family: @font-family-base;
+            text-transform: none;
+            font-weight: 900;
+            color: @gray-dark;
+        }
+        .username { 
+            font-weight: 400;
+            color: @gray;
+        }
+        .icon {
+            color: @gray;
+            font-size: 22px !important;
+            display: inline-block;
+            height: 16px;
+            line-height: 16px;
+        }
+        .timestamp {
+            line-height: 20px;
+            font-size: 12px;
+            float: right;
+            a {
+                color: @gray;
+                &:hover {
+                    color: @mint;
+                }
+            }
+        }
+        .content {
+            padding-top: 10px;
+            margin: 25px 0 0 64px;
+            .clearfix;
+            border-top: 1px solid @gray-lighter;
+            h2 {
+                font-family: @font-family-base;
+                font-size: 16px;
+                font-weight: 900;
+                line-height: 20px;
+                text-transform: none;
+                margin: 0;
+            }
+        }
+        .content-image {
+            float: left;
+            border-right: 2px solid @gray-light;
+            padding-right: 5px;
+            margin-right: 5px;
+        }
+        .actions {
+            float: right;
+            a {
+                color: @gray;
+                a:hover {
+                    color: @mint;
+                }
+            }
+        }
+        &.single-actor {
+            .content {
+                margin-left: 0;
+            }
+        }
+
+    }
+}
+
 .tag-cloud {
     padding: 10px;
     ul {

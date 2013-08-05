@@ -39,9 +39,9 @@ LANGUAGES_EXT=(('en', 'English', 'in English'),
                ('fi', 'Finnish', 'suomeksi'))
 LANGUAGES=[(l[0], l[1]) for l in LANGUAGES_EXT]
 
-LOCALE_PATHS = (
-    os.path.dirname(__file__) + '/locale'
-)
+LOCALE_PATHS = [
+    SITE_ROOT + '/locale'
+]
 
 # http://www.i18nguy.com/unicode/language-identifiers.html
 #LANGUAGE_CODE = 'en-us'

@@ -66,12 +66,12 @@ class MemberResource(KamuResource):
         if stats.lower() in ('1', 'true'):
             bundle.data['stats'] = bundle.obj.get_latest_stats()
             bundle.data['stats']['recent_activity'] = bundle.obj.get_activity_score(activity_start)
-        
+
         activity_counts = bundle.request.GET.get('activity_counts', '')
         if activity_counts.lower() in ('1', 'true'):
             bundle.data['activity_counts'] = bundle.obj.get_activity_counts()
         return bundle
-    
+
     class Meta:
         queryset = Member.objects.select_related('party')
 
@@ -100,6 +100,7 @@ class MemberActivityResource(KamuResource):
             target['text'] = o.summary
             target['subject'] = o.subject
             target['name'] = o.name
+            target['type'] = o.type
         elif item.type == 'WQ':
             o = item.initiativeactivity.doc
             target['text'] = o.summary

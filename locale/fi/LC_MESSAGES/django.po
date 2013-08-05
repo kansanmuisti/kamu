@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-05 15:08+0300\n"
+"POT-Creation-Date: 2013-08-05 23:56+0300\n"
 "PO-Revision-Date: 2011-04-14 12:54+0300\n"
 "Last-Translator: Juha Yrjölä <juha.yrjola@iki.fi>\n"
 "Language-Team: Finnish <info@kansanmuisti.fi>\n"
@@ -112,52 +112,92 @@ msgstr "VB"
 msgid "Election budget"
 msgstr "Vaalibudjetti"
 
-#: parliament/views.py:28 templates/show_member.html:25
+#: parliament/views.py:31
+msgid "tweeted"
+msgstr "tweettasi"
+
+#: parliament/views.py:36
+msgid "published in Facebook"
+msgstr "julkaisi Facebookissa"
+
+#: parliament/views.py:38 templates/show_member.html:25
 msgid "Statements"
 msgstr "Puheenvuorot"
 
-#: parliament/views.py:29
-msgid "Allekirjoitukset"
-msgstr "Signatures"
+#: parliament/views.py:41
+msgid "made a plenary statement"
+msgstr "käytti puheenvuoron"
 
-#: parliament/views.py:30
+#: parliament/views.py:43
+msgid "Signatures"
+msgstr "Allekirjoitukset"
+
+#: parliament/views.py:46
+msgid "signed"
+msgstr "allekirjoitti"
+
+#: parliament/views.py:48
+msgid "signed an initiative"
+msgstr "allekirjoitti lakialoitteen"
+
+#: parliament/views.py:49
+msgid "signed a written question"
+msgstr "allekirjoitti kirjallisen kysymyksen"
+
+#: parliament/views.py:52
 msgid "Own initiatives"
 msgstr "Omat aloitteet"
 
-#: parliament/views.py:31
+#: parliament/views.py:55
+msgid "sponsored an initiative"
+msgstr "laati lakialoitteen"
+
+#: parliament/views.py:57
 msgid "Written questions"
 msgstr "Kirjalliset kysymykset"
 
-#: parliament/views.py:32 templates/show_member.html:23
+#: parliament/views.py:60
+msgid "submitted a written question"
+msgstr "laati kirjallisen kysymyksen"
+
+#: parliament/views.py:62 templates/show_member.html:23
 #: templates/show_session.html:3 templates/show_session.html.py:104
 msgid "Votes"
 msgstr "Äänet"
 
-#: parliament/views.py:33
+#: parliament/views.py:65
+msgid "voted against own party"
+msgstr "äänesti puoluettaan vastaan"
+
+#: parliament/views.py:67
 msgid "Dissents"
 msgstr "Vastalauseet"
 
-#: parliament/views.py:56 parliament/models/member.py:291
+#: parliament/views.py:70
+msgid "submitted a committee dissent"
+msgstr "antoi vastalauseen valiokunnassa"
+
+#: parliament/views.py:94 parliament/models/member.py:327
 msgid "Facebook update"
 msgstr "Facebook-päivitys"
 
-#: parliament/views.py:61 parliament/models/member.py:290
+#: parliament/views.py:99 parliament/models/member.py:326
 msgid "Tweet"
 msgstr "Tweetti"
 
-#: parliament/views.py:66
+#: parliament/views.py:104
 msgid "Statement"
 msgstr "Puheenvuoro"
 
-#: parliament/views.py:71 parliament/models/member.py:287
+#: parliament/views.py:109 parliament/models/member.py:323
 msgid "Initiative"
 msgstr "Lakialoite"
 
-#: parliament/views.py:76 parliament/models/member.py:293
+#: parliament/views.py:114 parliament/models/member.py:329
 msgid "Signature"
 msgstr "Allekirjoitus"
 
-#: parliament/views.py:81 parliament/models/member.py:294
+#: parliament/views.py:119 parliament/models/member.py:330
 msgid "Written question"
 msgstr "Kirjallinen kysymys"
 
@@ -193,15 +233,15 @@ msgstr ""
 msgid "Other"
 msgstr "Muu"
 
-#: parliament/models/member.py:288
+#: parliament/models/member.py:324
 msgid "Rebel vote"
 msgstr "Vastaääni"
 
-#: parliament/models/member.py:289
+#: parliament/models/member.py:325
 msgid "Committee dissent"
 msgstr ""
 
-#: parliament/models/member.py:292
+#: parliament/models/member.py:328
 msgid "Plenary statement"
 msgstr "Täysistuntopuheenvuoro"
 
@@ -259,7 +299,7 @@ msgid "Read more"
 msgstr "Lue lisää"
 
 #: templates/base.html:93 templates/member/list.html:16
-#: templates/member/overview.html:86 templates/opinions/summary.html:136
+#: templates/member/overview.html:83 templates/opinions/summary.html:136
 msgid "Search"
 msgstr "Hae"
 
@@ -757,12 +797,12 @@ msgstr "Liity Kansan muisti ry:hyn"
 msgid "Send application"
 msgstr "Lähetä kaavake"
 
-#: templates/member/base.html:32
+#: templates/member/base.html:55
 #, fuzzy
 msgid "Recent activity"
 msgstr "Eduskunnassa käsiteltyjä asioita"
 
-#: templates/member/base.html:35
+#: templates/member/base.html:58
 msgid "Basic information"
 msgstr ""
 
@@ -770,7 +810,7 @@ msgstr ""
 msgid "Members of the Parliament"
 msgstr "Kansanedustajat"
 
-#: templates/member/list.html:18 templates/member/overview.html:88
+#: templates/member/list.html:18 templates/member/overview.html:85
 msgid "Input text"
 msgstr "Syötä teksti"
 
@@ -778,7 +818,7 @@ msgstr "Syötä teksti"
 msgid "Sort"
 msgstr "Lajittele"
 
-#: templates/member/overview.html:92
+#: templates/member/overview.html:89
 msgid "Filter"
 msgstr "Rajaus"
 
@@ -1284,6 +1324,9 @@ msgstr "Luo uusi tunnus"
 #: templates/registration/registration_form.html:10
 msgid "Create the account"
 msgstr "Luo tunnus"
+
+#~ msgid "Allekirjoitukset"
+#~ msgstr "Signatures"
 
 #~ msgid "Will not tell"
 #~ msgstr "En kerro"

@@ -16,13 +16,10 @@
 <!-- Backbone models -->
 <script type="text/coffeescript" src="{% static "js/models.coffee" %}"></script>
 {% endcompress %}
-{% compress js %}
-<!-- Feed-specific views etc. -->
-<script type="text/coffeescript" src="{% static "js/feed.coffee" %}"></script>
-{% endcompress %}
 
 <script type="text/javascript">
 member = new Member({{ member_json|safe }});
+FEED_ACTIONS = {{feed_actions_json|safe }};
 </script>
 {% endblock %}
 
@@ -96,7 +93,7 @@ member = new Member({{ member_json|safe }});
                         </div>
                     </form>
                 </div>
-                <ul class="section" id="member-activity-feed" class="feed unstyled">
+                <ul class="section activity-feed" class="feed unstyled">
                 </ul>
             </section>
         </div>
@@ -104,6 +101,19 @@ member = new Member({{ member_json|safe }});
 </div>
 
 <script type="text/template" id="activity-item-template">
+    <div class="source">
+        <a href="#">
+            <i class="typcn typcn-<%= FEED_ACTIONS[type].icon %> icon"></i>
+            <%= action %>
+        </a>
+    </div>
+    <div class="timestamp"><a href="#"><time datetime="<%= time %>"><%= time_str %></time></a></div>
+    <div class="content summary">
+        <%= target.text %>
+    </div>
+</script>
+
+<script type="text/template" id="activity-item-template2">
     <a class="icon" href="#">
         <i class="icon-<%= icon %>"></i>
     </a>
@@ -137,7 +147,6 @@ member = new Member({{ member_json|safe }});
 <script type="text/coffeescript" src="{% static "js/plots.coffee" %}"></script>
 
 <script type="text/coffeescript">
-
 $ ->
     date = new Date(activity_counts[0].activity_date)
     end_date = new Date(activity_counts[activity_counts.length-1].activity_date)
@@ -171,6 +180,11 @@ $ ->
     graph = new MultiresStackedGraph "#member-activity-graph", hist_list
 
 </script>
+{% endcompress %}
+
+{% compress js %}
+<!-- Feed-specific views etc. -->
+<script type="text/coffeescript" src="{% static "js/feed.coffee" %}"></script>
 {% endcompress %}
 
 {% compress js %}

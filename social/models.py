@@ -26,6 +26,13 @@ class Feed(models.Model):
         self.picture = feed_info.get('picture', {}).get('data', {}).get('url', None)
         self.interest = feed_info.get('likes', None)
         return feed_info
+
+    def get_origin_url(self):
+        if self.type == 'FB':
+            return 'https://www.facebook.com/%s' % self.origin_id
+        elif self.type == 'TW':
+            return 'https://www.twitter.com/%s' % self.account_name
+
     def __unicode__(self):
         if self.account_name:
             acc_str = " (%s)" % self.account_name

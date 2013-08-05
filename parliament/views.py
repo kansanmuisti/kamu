@@ -23,15 +23,52 @@ from utils import time_func
 import parliament.member_views
 from parliament.api import MemberResource
 
-FEED_FILTERS = [
-    [{'name': 'Twitter', 'icon': 'social-twitter', 'type': 'TW'},
-    {'name': 'Facebook', 'icon': 'social-facebook', 'type': 'FB'}],
-    [{'name': _('Statements'), 'icon': 'message', 'type': 'ST'},
-    {'name': _('Allekirjoitukset'), 'icon': 'edit', 'type': 'SI'},
-    {'name': _('Own initiatives'), 'icon': 'document-add', 'type': 'IN'},
-    {'name': _('Written questions'), 'icon': 'warning', 'type': 'WQ'},
-    {'name': _('Votes'), 'icon': 'thumbs-down', 'type': 'RV'},
-    {'name': _('Dissents'), 'icon': 'flash', 'type': 'CD'}]
+FEED_ACTIONS = [
+    {
+        'name': 'Twitter',
+        'icon': 'social-twitter',
+        'type': 'TW',
+        'action': _('tweeted')
+    }, {
+        'name': 'Facebook',
+        'icon': 'social-facebook',
+        'type': 'FB',
+        'action': _('published in Facebook')
+    }, {
+        'name': _('Statements'),
+        'icon': 'message',
+        'type': 'ST',
+        'action': _('made a plenary statement')
+    }, {
+        'name': _('Signatures'),
+        'icon': 'edit',
+        'type': 'SI',
+        'action': _('signed'),
+        'action_with_target': {
+            'mp_prop': _('signed an initiative'),
+            'written_ques': _('signed a written question'),
+        }
+    }, {
+        'name': _('Own initiatives'),
+        'icon': 'document-add',
+        'type': 'IN',
+        'action': _('sponsored an initiative')
+    }, {
+        'name': _('Written questions'),
+        'icon': 'warning',
+        'type': 'WQ',
+        'action': _('submitted a written question')
+    }, {
+        'name': _('Votes'),
+        'icon': 'thumbs-down',
+        'type': 'RV',
+        'action': _('voted against own party')
+    }, {
+        'name': _('Dissents'),
+        'icon': 'flash',
+        'type': 'CD',
+        'action': _('submitted a committee dissent')
+    }
 ]
 
 def show_item(request, plsess, item_nr, subitem_nr=None):
@@ -101,6 +138,24 @@ def _get_member_activity_kws(member):
     kw_list = sorted(kw_dict.iteritems(), key=operator.itemgetter(1), reverse=True)[0:20]
     return kw_list
 
+def make_feed_filters():
+    social = []
+    other = []
+    for a in FEED_ACTIONS:
+        if a['type'] in ('TW', 'FB'):
+            social.append(a)
+        else:
+            other.append(a)
+    return [social, other]
+
+def make_feed_actions():
+    d = {}
+    for a in FEED_ACTIONS:
+        n = a.copy()
+        del n['type']
+        d[a['type']] = n
+    return d
+
 def show_member(request, member, page=None):
     member = get_view_member(member)
 
@@ -121,8 +176,8 @@ def show_member(request, member, page=None):
             MemberActivity.TYPES, 'application/json')
         args['activity_type_weights_json'] = res.serialize(None,
             MemberActivity.WEIGHTS, 'application/json')
-        args['feed_filters'] = FEED_FILTERS
-
+        args['feed_filters'] = make_feed_filters()
+        args['feed_actions_json'] = simplejson.dumps(make_feed_actions(), ensure_ascii=False)
         kw_act = _get_member_activity_kws(member)
         kw_act_json = simplejson.dumps(kw_act, ensure_ascii=False)
         args['keyword_activity'] = kw_act_json
