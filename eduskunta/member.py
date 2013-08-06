@@ -51,6 +51,8 @@ MEMBER_NAME_TRANSFORMS = {
     'Tolppanen Eeva': 'Tolppanen Maria',
     'Maijala Eeva Maria': 'Maijala Eeva-Maria',
     'Saarikko Annikka': 'Saarikko Annika',
+    'Moilanen-Savolainen Riikka': 'Moilanen Riikka',
+    'Mönkäre Sinikka': 'Laisaari Sinikka'
 }
 
 

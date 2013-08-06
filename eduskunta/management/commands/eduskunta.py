@@ -31,6 +31,7 @@ class Command(BaseCommand):
                     default=False, help='Import election funding'),
         make_option('--single', metavar='ID', dest='single', help='Import only a single element'),
         make_option('--from-year', metavar='YEAR', dest='from_year', help='Start importing from YEAR'),
+        make_option('--from-id', metavar='ID', dest='from_id', help='Start importing from ID'),
         make_option('--update', action='store_true', dest='update',
                     default=False, help='Update values of existing objects'),
         make_option('--massive', action='store_true', dest='massive',
@@ -61,7 +62,15 @@ class Command(BaseCommand):
             importer.replace = options['update']
             importer.import_seats()
         if options['minutes']:
-            min_importer.import_minutes()
+            args = {}
+            if options['single']:
+                args['single'] = options['single']
+            if options['from_year']:
+                args['from_year'] = options['from_year']
+            if options['from_id']:
+                args['from_id'] = options['from_id']
+            args['massive'] = options['massive']
+            min_importer.import_minutes(args)
         if options['docs']:
             importer = DocImporter(http_fetcher=http)
             importer.replace = options['update']

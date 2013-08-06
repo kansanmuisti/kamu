@@ -65,6 +65,10 @@ class DocImporter(Importer):
 
         super(DocImporter, self).__init__(*args, **kwargs)
 
+    def fix_quirks(self, info):
+        if info['type'] == 'HE' and info['id'] == '45/1006':
+            info['id'] = '45/2006'
+
     def handle_processing_stages(self, info, html_doc):
         doc_name = "%s %s" % (info['type'], info['id'])
 
@@ -416,6 +420,7 @@ class DocImporter(Importer):
     def import_doc(self, info):
         url = DOC_DL_URL % (info['type'], info['id'])
         info['info_link'] = url
+        self.fix_quirks(info)
         if not should_download_doc(info):
             self.logger.warning("skipping %s %s" % (info['type'], info['id']))
             return None

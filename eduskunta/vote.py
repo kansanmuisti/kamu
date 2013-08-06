@@ -7,22 +7,13 @@ from django import db
 from eduskunta.importer import Importer, ParseError
 from parliament.models.session import *
 from parliament.models.member import Member
+from .member import fix_mp_name
 
 VOTE_MAP = {
     'Jaa': 'Y',
     'Ei': 'N',
     u'Tyhjää': 'E',
     'Poissa': 'A',
-}
-
-MEMBER_NAME_TRANSFORMS = {
-        'Korhonen Timo': 'Korhonen Timo V.',
-        'Saarela Tanja': 'Karpela Tanja',
-        'Taberman Tommy': 'Tabermann Tommy',
-        'Kumpula Miapetra': 'Kumpula-Natri Miapetra',
-        'Forsius-Harkimo Merikukka': 'Forsius Merikukka',
-        'Karttunen-Raiskio Marjukka': 'Karttunen Marjukka',
-        'Maijala Eeva Maria': 'Maijala Eeva-Maria',
 }
 
 PROCESSING_STEP = {
@@ -51,8 +42,7 @@ def parse_vote(mp, vote):
     if 'puhemiehe' in party:
         v = 'S'
         party = party.split()[0]
-    if name in MEMBER_NAME_TRANSFORMS:
-        name = MEMBER_NAME_TRANSFORMS[name]
+    name = fix_mp_name(name)
 
     return {'name': name, 'party': party, 'vote': v}
 

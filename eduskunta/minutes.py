@@ -560,7 +560,7 @@ class MinutesImporter(Importer):
             mpd[mp.get_print_name()] = mp
         self.mp_by_name = mpd
 
-    def import_minutes(self):
+    def import_minutes(self, options={}):
         self.vote_importer = VoteImporter(http_fetcher=self.http, logger=self.logger)
         self.doc_importer = DocImporter(http_fetcher=self.http, logger=self.logger)
         self._make_mp_dicts()
@@ -568,9 +568,16 @@ class MinutesImporter(Importer):
         while next_link:
             el_list, next_link = self.read_listing('minutes', next_link)
             for el in el_list:
-                """year = int(el['id'].split('/')[1])
-                if year > 2006:
-                    continue"""
+                year = int(el['id'].split('/')[1])
+                if 'from_year' in options:
+                    if year > int(options['from_year']):
+                        continue
+                if 'from_id' in options:
+                    if el['id'] == options['from_id']:
+                        del options['from_id']
+                    else:
+                        continue
+
                 self.process_minutes(el)
                 db.reset_queries()
 
