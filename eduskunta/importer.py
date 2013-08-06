@@ -28,12 +28,6 @@ class Importer(object):
         if not logger:
             logger = logging.getLogger("eduskunta import")
             logger.setLevel(logging.DEBUG)
-            if not logger.handlers:
-                ch = logging.StreamHandler()
-                ch.setLevel(logging.DEBUG)
-                formatter = logging.Formatter("%(asctime)s - %(message)s")
-                ch.setFormatter(formatter)
-                logger.addHandler(ch)
         self.logger = logger
 
     def convert_date(self, s):
@@ -127,7 +121,7 @@ class Importer(object):
 
         ret = []
 
-        s = self.open_list_url(url, list_type + '-list')
+        s = self.open_list_url(url, list_type)
         doc = html.fromstring(s)
         el_list = doc.xpath(".//div[@class='listing']/div/p")
         doc.make_links_absolute(url)
