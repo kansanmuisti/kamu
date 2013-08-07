@@ -246,7 +246,9 @@ class DocImporter(Importer):
 
     def import_sgml_doc(self, info):
         url = DOC_DL_URL % (info['type'], info['id'])
-        xml_fn = self.download_sgml_doc(url)
+        xml_fn = self.download_sgml_doc(info, url)
+        if not xml_fn:
+            return None
         f = open(xml_fn, 'r')
         root = html.fromstring(f.read())
         f.close()
@@ -442,7 +444,9 @@ class DocImporter(Importer):
         if info['type'] == 'HE':
             self.import_he(info)
         else:
-            self.import_sgml_doc(info)
+            ret = self.import_sgml_doc(info)
+            if not ret:
+                return None
         s = "%s %s" % (info['type'], info['id'])
         doc.subject = info['subject']
         if 'summary' in info:

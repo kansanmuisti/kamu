@@ -141,7 +141,7 @@ class Importer(object):
 
         return (ret, url)
 
-    def download_sgml_doc(self, html_url):
+    def download_sgml_doc(self, info, html_url):
         s = self.open_url(html_url, self.doc_type)
         doc = html.fromstring(s)
         # Find the link to the SGML
@@ -153,9 +153,11 @@ class Importer(object):
             doc = html.fromstring(s)
         # Find the link to the SGML
         el = doc.xpath(".//a[contains(., 'Rakenteinen asiakirja')]")
-
         if len(el) != 1:
-            raise ParseError("No link to SGML file found")
+            year = info['id'].split('/')[1]
+            if int(year) <= 1999:
+                return None
+            raise ParseError("No link to SGML file found: %s" % html_url)
         doc.make_links_absolute(html_url)
         link = el[0].attrib['href']
 

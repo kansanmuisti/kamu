@@ -346,7 +346,7 @@ class MinutesImporter(Importer):
     def process_minutes(self, info):
         self.logger.info("processing minutes for plenary session %s/%s", info['type'], info['id'])
 
-        xml_fn = self.download_sgml_doc(info['minutes_link'])
+        xml_fn = self.download_sgml_doc(info, info['minutes_link'])
         f = open(xml_fn, 'r')
         root = etree.fromstring(f.read())
         f.close()
