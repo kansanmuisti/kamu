@@ -80,133 +80,145 @@ default_multires_smoother = (data,
     return getter
 
 class @MultiresStackedGraph
-    constructor: (el, res_data) ->
-        if not (res_data instanceof Function)
-            res_data = default_multires_smoother res_data
+    constructor: (el, @res_data) ->
+        if not (@res_data instanceof Function)
+            @res_data = default_multires_smoother res_data
         
         # TODO: Change on resize!
         # TODO: Refactor this mess!
         # TODO: Swap to histogram when the
         #       bin size gets too low
-        $el = $(el)
-        elwidth = $el.width()
-        elheight = $el.height()
+        @$el = $(el)
         
-        margin =
+        @margin =
             top: 0
             bottom: 30
             left: 30
             right: 0
-        margin.x = margin.left + margin.right
-        margin.y = margin.top + margin.bottom
+        @margin.x = @margin.left + @margin.right
+        @margin.y = @margin.top + @margin.bottom
 
-        width = elwidth - margin.x
-        height = elheight - margin.y
-
-        root = d3.select(el).append("svg")
+        @root = d3.select(el).append("svg")
         .attr("class", "axisplot")
-        .attr("width", elwidth)
-        .attr("height", elheight)
+        
+        @x = x = d3.time.scale()
+        .domain(@res_data.extent)
+            
+        @y = y = d3.scale.linear()
+        
+        @area = d3.svg.area()
+            .x(([d, i]) -> x d.x[i])
+            .y0(([d, i]) -> y d.y0[i])
+            .y1(([d, i]) -> y (d.y0[i] + d.y[i]))
+        
+        @zoom = d3.behavior.zoom()
+        
+        color = d3.scale.category20()
+        .domain(@res_data.keys)
+    
+        @plot = @root.append("g")
+        .attr("transform", "translate(#{@margin.left}, #{@margin.top})")
+        
+        @xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom")
+        .ticks(5)
 
-        plot = root.append("g")
-        .attr("transform", "translate(#{margin.left}, #{margin.top})")
+        @xAxisEl = @plot.append("g")
+        .attr("class", "x axis")
         
-        x = d3.time.scale()
-        .range([0, width])
-        x.domain(res_data.extent)
-        
-        # TODO: The axis seems to steal 4 pixels!
-        y = d3.scale.linear()
-        .range([height, 0])
+        @yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left")
+        .ticks(4)
+        @plot.append("g")
+        .attr("class", "y axis")
 
-
-        area = d3.svg.area()
-        .x(([d, i]) -> x d.x[i])
-        .y0(([d, i]) -> y d.y0[i])
-        .y1(([d, i]) -> y (d.y0[i] + d.y[i]))
-        
-        xAxis = d3.svg.axis()
-            .scale(x)
-            .orient("bottom")
-            plot.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0, #{height})")
-        
-        yAxis = d3.svg.axis()
-            .scale(y)
-            .orient("left")
-            .ticks(4)
-            plot.append("g")
-            .attr("class", "y axis")
-        
-        zoom = d3.behavior.zoom()
-        .x(x)
-        
-        plot.append("clipPath")
+        @plot.append("clipPath")
         .attr("id", "plotclip")
         .append("use")
         .attr("xlink:href", "#plotrect")
-       
         
-        color = d3.scale.category20()
-        color.domain(res_data.keys)
-
-        areas = plot.selectAll(".group")
-            .data(res_data.keys)
-            .enter().append('g')
-            .attr("class", "group")
-            .attr("style", "clip-path: url(#plotclip);")
+               
+        areas = @plot.selectAll(".group")
+        .data(@res_data.keys)
+        .enter().append('g')
+        .attr("class", "group")
+        .attr("style", "clip-path: url(#plotclip);")
+        
+        @paths = areas.append("path")
+        .attr("class", "area")
+        .style("fill", (d) -> color(d))
         
         # NOTE: The rect has to after the plots
         # so that it has a higher "z-index" and gets
         # all mouse events.
-        plot.append("rect")
+        @plotrect = @plot.append("rect")
         .attr("id", "plotrect")
         .attr("class", "pane")
+        
+        @zoom.on("zoom", @_draw)
+        
+        $(window).on "resize", =>
+            @_render_base()
+            @_draw()
+
+        @_render_base()
+        @_draw()
+    
+    _render_base: =>
+        elwidth = @$el.width()
+        elheight = @$el.height()
+    
+        @root
+        .attr("width", elwidth)
+        .attr("height", elheight)
+
+        width = elwidth - @margin.x
+        height = elheight - @margin.y
+        
+        @x.range([0, width])
+        # TODO: The axis seems to steal 4 pixels!
+        @y.range([height, 0])
+                
+        @xAxisEl
+        .attr("transform", "translate(0, #{height})")
+       
+                
+        @plotrect
         .attr("width", width)
         .attr("height", height)
-        .call(zoom)
 
-        
-        paths = areas.append("path")
-            .attr("class", "area")
-            .style("fill", (d) -> color(d))
-
-
-
-        #stack = d3.layout.stack()
-        #.values((d) -> d.values)
-        draw = -> res_data(x.domain()).done (data, opts) ->
-            opts ?= {}
-            area.interpolate opts.interpolate ? "linear"
-
-            d.y0 = [] for d in data
-            for ix in [0...data[0].y.length]
-                y0 = 0
-                for d in data
-                    d.y0.push y0
-                    y0 += d.y[ix]
+        @zoom.x(@x)
+        @plotrect.call(@zoom)
     
-                
-            last = data[data.length-1]
-            lasty = (last.y[i] + last.y0[i] for i in [0...last.y0.length])
-            y.domain d3.extent lasty
+    _draw: =>
+        @res_data(@x.domain())
+        .done @_do_draw
+    
+    _do_draw: (data, opts) =>
+        opts ?= {}
+        @area.interpolate opts.interpolate ? "linear"
+
+        d.y0 = [] for d in data
+        for ix in [0...data[0].y.length]
+            y0 = 0
+            for d in data
+                d.y0.push y0
+                y0 += d.y[ix]
+
             
-                        
-            d_and_i = (d) -> ([d, i] for i in [0...d.x.length])
+        last = data[data.length-1]
+        lasty = (last.y[i] + last.y0[i] for i in [0...last.y0.length])
+        @y.domain d3.extent lasty
+        
+        d_and_i = (d) -> ([d, i] for i in [0...d.x.length])
+        
+        @paths.data(data)
+        .attr("d", (d) => @area d_and_i d)
 
-            paths.data(data)
-            .attr("d", (d) -> area d_and_i d)
-    
-                   
-            # TODO: Limit the extent somehow!
-            #plot.selectAll(".group .area").attr("d", (d) -> area d_and_i d)
-            plot.select(".axis.x").call(xAxis)
-            #plot.select(".axis.y").call(yAxis)
-        
-        
-        zoom.on("zoom", draw)
-        draw()
-        #stack color.domain().map (name) ->
-        #    {name: name, values: data[name]}
+        # TODO: Limit the extent somehow!
+        #plot.selectAll(".group .area").attr("d", (d) -> area d_and_i d)
+        @plot.select(".axis.x").call(@xAxis)
+        #plot.select(".axis.y").call(yAxis)
 
