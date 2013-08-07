@@ -117,11 +117,17 @@ class PlenarySessionItemDocument(models.Model):
         unique_together = (('item', 'doc'),)
 
 class Statement(models.Model):
+    TYPES = (('normal', 'Statement'),
+             ('speaker', 'Speaker statement'),)
+
     item = models.ForeignKey(PlenarySessionItem, db_index=True)
     index = models.PositiveIntegerField(db_index=True)
     member = models.ForeignKey('Member', db_index=True, null=True)
     speaker_name = models.CharField(max_length=40, null=True, blank=True)
     speaker_role = models.CharField(max_length=40, null=True, blank=True)
+    # Currently used to differentiate between the speakers and plain MPs
+    statement_type = models.CharField(max_length=15, choices=TYPES)
+
     text = models.TextField()
 
     class Meta:
