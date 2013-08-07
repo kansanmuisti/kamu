@@ -79,20 +79,21 @@ default_multires_smoother = (data,
     getter.keys = (d.key for d in datac)
     return getter
 
+#class @MultiresBarChart
+#    constructor: (el, @res_data
+
 class @MultiresStackedGraph
     constructor: (el, @res_data) ->
         if not (@res_data instanceof Function)
             @res_data = default_multires_smoother res_data
         
-        # TODO: Change on resize!
-        # TODO: Refactor this mess!
-        # TODO: Swap to histogram when the
-        #       bin size gets too low
         @$el = $(el)
         
+        @contextheight = 41
+        @axismargin = 25
         @margin =
             top: 0
-            bottom: 30
+            bottom: @axismargin+@contextheight+@axismargin
             left: 30
             right: 0
         @margin.x = @margin.left + @margin.right
@@ -101,10 +102,14 @@ class @MultiresStackedGraph
         @root = d3.select(el).append("svg")
         .attr("class", "axisplot")
         
-        @x = x = d3.time.scale()
-        .domain(@res_data.extent)
+        getx = =>
+            d3.time.scale()
+            .domain(@res_data.extent)
+        gety = => d3.scale.linear()
+
+        @x = x = getx()
             
-        @y = y = d3.scale.linear()
+        @y = y = gety()
         
         @area = d3.svg.area()
             .x(([d, i]) -> x d.x[i])
@@ -163,9 +168,54 @@ class @MultiresStackedGraph
             @_render_base()
             @_draw()
 
-        @_render_base()
-        @_draw()
-    
+        @context = @root.append("g")
+        @contextX = getx()
+        @contextY = gety()
+        @contextXAxis = d3.svg.axis()
+        .scale(@contextX)
+        .orient("bottom")
+        .ticks(6)
+        @contextXAxisEl = @context.append("g")
+        .attr("class", "x axis")
+        
+        @contextPath = @context.append("path")
+        .attr("class", "area")
+        .style("fill", "gray")
+
+        @brush = d3.svg.brush()
+        .x(@contextX)
+        .on("brush", @_draw)
+
+        @brushEl = @context.append("g")
+        .attr("class", "x brush")
+        
+        @contextArea = d3.svg.area()
+        .x(([d, i]) => @contextX d.x[i])
+        .y0(@contextheight)
+        .y1(([d, i]) => @contextY(d.y0[i] + d.y[i]))
+        
+                
+        @res_data(@res_data.extent).done (data) =>
+            @_stack(data)
+            last = data[data.length-1]
+            d_and_i = (d) -> ([d, i] for i in [0...d.x.length])
+            lasty = (last.y[i] + last.y0[i] for i in [0...last.y0.length])
+            last = d_and_i last
+            @contextY.domain([0, d3.max lasty])
+            @contextPath.datum(last)
+            
+            # We need to first set up the brush..
+            @brushEl.call(@brush)
+            # Then set up the "canvas"
+            @_render_base()
+
+            # Set the extent
+            lastx = @res_data.extent[1]
+            @brush.extent([new Date(lastx-(60*60*60*24*1000)), lastx])
+            # And then call it again, to show the initial brush area
+            @brushEl.call(@brush)
+            @_draw()
+
     _render_base: =>
         elwidth = @$el.width()
         elheight = @$el.height()
@@ -180,6 +230,7 @@ class @MultiresStackedGraph
         @x.range([0, width])
         # TODO: The axis seems to steal 4 pixels!
         @y.range([height, 0])
+
                 
         @xAxisEl
         .attr("transform", "translate(0, #{height})")
@@ -191,15 +242,32 @@ class @MultiresStackedGraph
 
         @zoom.x(@x)
         @plotrect.call(@zoom)
-    
+        
+        @contextX.range([0, width])
+        @contextY.range([@contextheight, 0])
+
+        @context
+        .attr("height", @contextheight)
+        .attr("transform", "translate(#{@margin.left}, #{height+@axismargin})")
+        @contextXAxisEl
+        .attr("transform", "translate(0, #{@contextheight})")
+        .call(@contextXAxis)
+        
+        @brushEl.selectAll('rect')
+        .attr('height', @contextheight)
+        
+        @brushEl.select('.background')
+        .attr('width', width)
+
+        @contextPath
+        .attr('d', @contextArea)
+
     _draw: =>
+        @x.domain @brush.extent()
         @res_data(@x.domain())
         .done @_do_draw
     
-    _do_draw: (data, opts) =>
-        opts ?= {}
-        @area.interpolate opts.interpolate ? "linear"
-
+    _stack: (data) ->
         d.y0 = [] for d in data
         for ix in [0...data[0].y.length]
             y0 = 0
@@ -207,10 +275,16 @@ class @MultiresStackedGraph
                 d.y0.push y0
                 y0 += d.y[ix]
 
+
+    _do_draw: (data, opts) =>
+        opts ?= {}
+        @area.interpolate opts.interpolate ? "linear"
+        
+        @_stack(data)
             
         last = data[data.length-1]
         lasty = (last.y[i] + last.y0[i] for i in [0...last.y0.length])
-        @y.domain d3.extent lasty
+        @y.domain [0, d3.max lasty]
         
         d_and_i = (d) -> ([d, i] for i in [0...d.x.length])
         
