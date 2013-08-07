@@ -74,6 +74,40 @@ class MinutesImporter(Importer):
 
         super(MinutesImporter, self).__init__(*args, **kwargs)
 
+    def process_speaker_statement(self, st_el):
+        """processes a speaker statement and return a reasonable simile of an ordinary statement.
+
+        Speaker statements do not have as much structure in the source as ordinary statements.
+        Thus this method has to do some string manipulation and assumes a simple firstname-surname
+        structure for the speaker name.
+
+        This will return None, if the statement fails to parse. They are not that essential.
+        """
+        spk_statement = {}
+        statement_text = []
+        for spkst_el in st_el.getchildren():
+            if spkst_el.tag == 'puhemies':
+                if speaker_titlename:
+                    raise ParseError('Several titles for the house speaker. Check the source and/or fix importer')
+                speaker_titlename = self.clean_text(spkst_el.text)
+                try:
+                    speaker_name = speaker_titlename.split('uhemies ')[1]
+                except:
+                    # There are a few mistypes without a name for the speaker.
+                    # Lets just ignore those completely, most of the speaker
+                    # statements are pretty morose anyway
+                    return None
+                speaker_name = speaker_name.split(' ')
+                if len(speaker_name) > 2:
+                    raise ParseError('More than two parts to the name of house speaker.\n Title+name was: ' + speaker_titlename)
+                spk_statement['first_name'] = speaker_name[0]
+                spk_statement['surname'] = speaker_name[1]
+            if spkst_el.tag == 'te':
+                 statement_text.append(self.clean_text(spkst_el.text))
+        spk_statement['type'] = "speaker"
+        spk_statement['text'] = '\n'.join(statement_text)
+        return spk_statement
+
     def process_statement(self, st_el):
         st_info = {}
         sp_id = None
@@ -125,6 +159,7 @@ class MinutesImporter(Importer):
             else:
                 raise ParseError("unknown tag: %s" % ch_el.tag)
 
+        st_info['type'] = "normal"
         st_info['speaker_id'] = sp_id
         st_info['text'] = '\n'.join(text)
         return st_info
@@ -253,11 +288,22 @@ class MinutesImporter(Importer):
         elif item.tag == 'pjkohta':
             item_info['type'] = 'agenda_item'
             st_list = []
-            disc_el_list = item.xpath('keskust')
-            for disc_el in disc_el_list:
-                for st_el in disc_el.xpath('pvuoro'):
-                    st_info = self.process_statement(st_el)
-                    st_list.append(st_info)
+            # Speaker statements are special, they may appear both inside
+            # and outside the discussion structure. 
+            for sub_item in item:
+                if sub_item.tag == 'pmpvuoro':
+                    spk_statement = self.process_speaker_statement(sub_item)
+                    if spk_statement:
+                        st_list.append(spk_statement)
+                elif sub_item.tag == 'keskust':
+                    for st_el in sub_item:
+                        if st_el.tag == 'pvuoro':
+                            st_info = self.process_statement(st_el)
+                            st_list.append(st_info)
+                        elif st_el.tag == 'pmpvuoro':
+                            spk_statement = self.process_speaker_statement(st_el)
+                            if spk_statement:
+                                st_list.append(spk_statement)
             if st_list:
                 item_info['discussion'] = st_list
         elif item.tag == 'valta':
@@ -390,7 +436,15 @@ class MinutesImporter(Importer):
         self.save_minutes(info)
 
     def save_statement(self, item, idx, st_info):
-        mp = self.mp_by_hnro.get(st_info['speaker_id'])
+        if st_info['type'] == "normal":
+            mp = self.mp_by_hnro.get(st_info['speaker_id'])
+        elif st_info['type'] == "speaker":
+            speaker_dispname = " ".join([st_info['first_name'], st_info['surname']])
+            mp = self.mp_by_name.get(speaker_dispname)
+            if not mp:
+                raise ParseError('Failed to locate an MP corresponding to name of speaker')
+        else:
+            raise ParseError('Parser returned an unknown type of statement')
         if 'first_name' in st_info and 'surname' in st_info:
             name = "%s %s" % (st_info['first_name'], st_info['surname'])
         else:
@@ -409,6 +463,7 @@ class MinutesImporter(Importer):
             st = Statement.objects.get(item=item, index=idx)
         except Statement.DoesNotExist:
             st = Statement(item=item, index=idx)
+        st.statement_type = st_info['type']
         st.member = mp
         st.speaker_name = name
         st.speaker_role = st_info.get('role')
