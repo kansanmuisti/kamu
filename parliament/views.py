@@ -158,11 +158,7 @@ def make_feed_actions():
 
 def show_member(request, member, page=None):
     member = get_view_member(member)
-
-    roles = {}
-    l = member.committeeassociation_set.current().in_print_order()
-    roles['committee'] = l
-    member.roles = roles
+    member.posts = member.get_posts()
 
     res = MemberResource()
     res_bundle = res.build_bundle(obj=member, request=request)

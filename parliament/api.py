@@ -45,8 +45,6 @@ class MemberResource(KamuResource):
         return qset
 
     def dehydrate(self, bundle):
-        n_days = int(bundle.request.GET.get('activity_days', 30))
-        activity_start = datetime.datetime.now() - datetime.timedelta(days=n_days)
         tn_dim = bundle.request.GET.get('thumbnail_dim', None)
         if tn_dim:
             arr = tn_dim.strip().split('x')
@@ -60,8 +58,11 @@ class MemberResource(KamuResource):
                 raise BadRequest("Dimensions not in proper format (e.g. 64x96)")
             tn_dim = 'x'.join(arr)
             bundle.data['photo_thumbnail'] = get_thumbnail(bundle.obj.photo, tn_dim).url
+
         bundle.data['district_name'] = bundle.obj.get_latest_district().name
 
+        n_days = int(bundle.request.GET.get('activity_days', 30))
+        activity_start = datetime.datetime.now() - datetime.timedelta(days=n_days)
         stats = bundle.request.GET.get('stats', '')
         if stats.lower() in ('1', 'true'):
             bundle.data['stats'] = bundle.obj.get_latest_stats()
@@ -70,6 +71,7 @@ class MemberResource(KamuResource):
         activity_counts = bundle.request.GET.get('activity_counts', '')
         if activity_counts.lower() in ('1', 'true'):
             bundle.data['activity_counts'] = bundle.obj.get_activity_counts()
+
         return bundle
 
     class Meta:

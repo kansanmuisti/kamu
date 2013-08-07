@@ -22,6 +22,8 @@ class AssociationQuerySet(models.query.QuerySet):
 class AssociationManager(models.Manager):
     def current(self):
         return self.get_query_set().current()
+    def get_query_set(self):
+        return AssociationQuerySet(self.model, using=self._db)
 
 
 class MemberManager(models.Manager):
@@ -118,6 +120,21 @@ class Member(models.Model):
     def get_latest_district(self):
         latest = self.districtassociation_set.order_by('-begin')[0]
         return latest
+
+    def get_posts(self, current=True):
+        posts = {}
+        qs = CommitteeAssociation.objects.filter(member=self)
+        if current:
+            qs = qs.current()
+        l = list(qs.in_print_order())
+        posts['committee'] = l
+
+        qs = self.ministryassociation_set
+        if current:
+            qs = qs.current()
+        posts['ministry'] = list(qs)
+
+        return posts
 
     @models.permalink
     def get_absolute_url(self):
@@ -280,7 +297,7 @@ class CommitteeAssociationManager(AssociationManager):
                     role = 'member'
                 else:
                     role = ca.role
-                role_orders = {'vj': 3, 'member': 2, 'vpj': 1, 'pj': 0}
+                role_orders = {'deputy-m': 3, 'member': 2, 'deputy-cm': 1, 'chairman': 0}
                 # Sort on role first, then on committee name.
                 return "%d-%s" % (role_orders[role], ca.committee.name)
             qs = self.select_related('committee')
@@ -324,7 +341,7 @@ class MinistryAssociation(models.Model):
     label = models.CharField(max_length=50)
     role = models.CharField(max_length=20)
 
-    objects = CommitteeAssociationManager()
+    objects = AssociationManager()
 
     class Meta:
         app_label = 'parliament'

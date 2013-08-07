@@ -101,7 +101,7 @@ def get_field_el(doc, field):
 ROLE_MAP = {
     'vj': 'deputy-m',
     'pj': 'chairman',
-    'vpj': 'deputy-c',
+    'vpj': 'deputy-cm',
 }
 
 def parse_date(s, is_begin):
@@ -463,7 +463,7 @@ class MemberImporter(Importer):
         for obj in ca_list + ma_list:
             if not getattr(obj, 'found', False):
                 self.logger.warning("Deleting removed association: %s" % obj)
-                ca.delete()
+                obj.delete()
 
     def resolve_memberships(self, doc):
         membership_list = []

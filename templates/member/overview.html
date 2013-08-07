@@ -44,11 +44,13 @@ FEED_ACTIONS = {{feed_actions_json|safe }};
             {% endthumbnail %}
             <div class="roles">
                 <ul class="minister">
-                    <li>peruspalveluministeri</li>
+                    {% for ma in member.posts.ministry %}
+                    <li>{{ma.label}}</li>
+                    {% endfor %}
                 </ul>
                 <ul class="committee">
-                    {% for ca in member.roles.committee %}
-                    <li>{{ca.committee.name}}{% if ca.role %} (<span class="role-name">{{ca.role}}</span>){% endif %}</li>
+                    {% for ca in member.posts.committee %}
+                    <li>{{ca.committee.name}}{% if ca.role != 'member' %} (<span class="role-name">{{ca.get_role_display}}</span>){% endif %}</li>
                     {% endfor %}
                 </ul>
             </div>
