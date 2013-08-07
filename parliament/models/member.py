@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import Q
 from django.template.defaultfilters import slugify
-from django.utils.translation import ugettext as _
+from django.utils.translation import pgettext, ugettext as _
 
 from parliament.models.committee import *
 from parliament.models.party import *
@@ -59,6 +59,7 @@ class Member(models.Model):
     birth_place = models.CharField(max_length=50, null=True, blank=True)
     given_names = models.CharField(max_length=50)
     surname = models.CharField(max_length=50)
+    summary = models.TextField(null=True)
 
     email = models.EmailField(null=True, blank=True)
     phone = models.CharField(max_length=20, null=True, blank=True)
@@ -289,11 +290,17 @@ class CommitteeAssociationManager(AssociationManager):
         return CommitteeAssociationManager.QuerySet(self.model, using=self._db)
 
 class CommitteeAssociation(models.Model):
+    ROLE_CHOICES = (
+        ('chairman', _('Chairman')),
+        ('deputy-cm', _('Deputy Chairman')),
+        ('member', pgettext('Member', 'organisation')),
+        ('deputy-m', _('Deputy Member')),
+    )
     member = models.ForeignKey(Member, db_index=True)
     committee = models.ForeignKey(Committee)
     begin = models.DateField()
-    end = models.DateField(blank=True, null=True)
-    role = models.CharField(max_length=15, blank=True, null=True)
+    end = models.DateField(db_index=True, blank=True, null=True)
+    role = models.CharField(max_length=15, choices=ROLE_CHOICES, null=True)
 
     objects = CommitteeAssociationManager()
 
@@ -306,6 +313,24 @@ class CommitteeAssociation(models.Model):
         else:
             role = self.role
         return u"%s %s in %s from %s to %s" % (self.member, role, self.committee, self.begin, self.end)
+
+class MinistryAssociation(models.Model):
+    ROLE_CHOICES = (
+        ('minister', _('Minister')),
+    )
+    member = models.ForeignKey(Member, db_index=True)
+    begin = models.DateField()
+    end = models.DateField(db_index=True, blank=True, null=True)
+    label = models.CharField(max_length=50)
+    role = models.CharField(max_length=20)
+
+    objects = CommitteeAssociationManager()
+
+    class Meta:
+        app_label = 'parliament'
+
+    def __unicode__(self):
+        return u"%s %s (%s) from %s to %s" % (self.member, self.label, self.role, self.begin, self.end)
 
 class MemberActivityManager(models.Manager):
     def during(self, begin, end):

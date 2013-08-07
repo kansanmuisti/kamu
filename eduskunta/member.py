@@ -9,6 +9,7 @@ from parliament.models.member import *
 from parliament.models.party import Party
 from eduskunta.importer import Importer, ParseError
 from eduskunta.party import pg_to_party
+from dateutil.parser import parse as dateutil_parse
 
 MEMBER_NAME_TRANSFORMS = {
     'Korhonen Timo': 'Korhonen Timo V.',
@@ -76,6 +77,8 @@ FIELD_MAP = {
     'parties': u'Eduskuntaryhmät',
     'current_posts': u'Nykyiset toimielinjäsenyydet ja tehtävät',
     'previous_posts': u'Aiemmat jäsenyydet ja tehtävät eduskunnan toimielimissä',
+    'prime_ministerships': u'Pääministeri',
+    'ministerships': u'Ministeri',
     'parliament_groups': u'Eduskuntaryhmät',
     'parliament_group_tasks': u'Tehtävät eduskuntaryhmässä'
 }
@@ -94,63 +97,90 @@ def get_field_el(doc, field):
             return td
     return None
 
-# FIXME: should this be a method of MemberImporter?
-    
-def parse_membership(line):
-    def parse_date(s, is_begin):
-        # Filter 'I' and 'II'
-        s = s.strip('I ')
-        DATE_MATCH = r'^(\d{1,2})\.(\d{1,2})\.(\d{4})$'
-        m = re.match(DATE_MATCH, s)
-        if not m:
-            m = re.match(r'^(\d{4})$', s)
-            if not m: 
-                return None
-            if is_begin:
-                day, mon = 1, 1
-            else:
-                day, mon = 31, 12
-            year = int(m.groups()[0])
-        else:
-            day, mon, year = [int(x) for x in m.groups()]
-        return '-'.join([str(x) for x in (year, mon, day)])
 
+ROLE_MAP = {
+    'vj': 'deputy-m',
+    'pj': 'chairman',
+    'vpj': 'deputy-c',
+}
+
+def parse_date(s, is_begin):
+    # Filter 'I' and 'II'
+    s = s.strip('I ')
+    DATE_MATCH = r'^(\d{1,2})\.(\d{1,2})\.(\d{4})$'
+    m = re.match(DATE_MATCH, s)
+    if not m:
+        m = re.match(r'^(\d{4})$', s)
+        if not m: 
+            return None
+        if is_begin:
+            day, mon = 1, 1
+        else:
+            day, mon = 31, 12
+        year = int(m.groups()[0])
+    else:
+        day, mon, year = [int(x) for x in m.groups()]
+    return dateutil_parse('-'.join([str(x) for x in (year, mon, day)])).date()
+
+def parse_committee_membership(line):
     info = {}
     m = re.match(r'([^0-9(]+)(.+)', line)
     assert m, "Committee name not found: %s" % line
     committee_name = m.groups()[0].strip()
     # Only record committees (valiokunta)
-    if committee_name.endswith('valiokunta'):
-        info['committee'] = committee_name
-        date_line = m.groups()[1].strip()
-        # Check if there are historical committee names in the string.
-        m = re.match(r'\([^)]+\d+[^)]+\) ', date_line)
-        if m is not None:
-            # If match found, strip the historical names.
-            date_line = date_line[date_line.find(')') + 1:].strip()
-        membership_dates = []
-        for m_line in date_line.split(','):
-            d = {}
-            m_line = m_line.strip()
-            m = re.match(r'\((\w+)\) ([0-9. I-]+)', m_line)
-            if m:
-                d['role'] = m.groups()[0]
-                m_line = m.groups()[1]
-            dates = m_line.split(' -')
-            d['begin'] = parse_date(dates[0], True)
-            if len(dates) > 1 and len(dates[1]):
-                d['end'] = parse_date(dates[1].strip(), False)
-            else:
-                d['end'] = None
-            # Exclude cases where both begin and end are None
-            if not d['begin'] and not d['end']:
-                continue
-            else:
-                membership_dates.append(d)
-        info['periods'] = membership_dates
-        return info
-    else:
+    if not committee_name.endswith('valiokunta'):
         return None
+
+    info['committee'] = committee_name
+    date_line = m.groups()[1].strip()
+    # Check if there are historical committee names in the string.
+    m = re.match(r'\([^)]+\d+[^)]+\) ', date_line)
+    if m is not None:
+        # If match found, strip the historical names.
+        date_line = date_line[date_line.find(')') + 1:].strip()
+    membership_dates = []
+    for m_line in date_line.split(','):
+        d = {}
+        m_line = m_line.strip()
+        m = re.match(r'\((\w+)\) ([0-9. I-]+)', m_line)
+        if m:
+            role = ROLE_MAP[m.groups()[0]]
+            m_line = m.groups()[1]
+        else:
+            role = 'member'
+        d['role'] = role
+        dates = m_line.split(' -')
+        d['begin'] = parse_date(dates[0], True)
+        if len(dates) > 1 and len(dates[1]):
+            d['end'] = parse_date(dates[1].strip(), False)
+        else:
+            d['end'] = None
+        # Exclude cases where both begin and end are None
+        if not d['begin'] and not d['end']:
+            continue
+        else:
+            membership_dates.append(d)
+    info['periods'] = membership_dates
+    return info
+
+def parse_ministerships(line):
+    d = {}
+    m = re.match(r'([\w\-\s]+) \([\w\s]+\)', line, re.U)
+    assert m, "Malformed string: %s" % line.encode('utf8')
+    role = m.groups()[0]
+    if 'sijainen' in role:
+        return None
+    date_line = line[line.find(')') + 1:].strip().strip(',')
+    dates = date_line.split(' -')
+    assert len(dates) in (1, 2)
+    d['begin'] = parse_date(dates[0], True)
+    if len(dates) > 1:
+        d['end'] = parse_date(dates[1].strip(), False)
+    else:
+        d['end'] = None
+    d['label'] = role
+    d['role'] = 'minister'
+    return d
 
 class MemberImporter(Importer):
     LIST_URL = '/triphome/bin/thw/trip/?${base}=hetekaue&${maxpage}=10001&${snhtml}=hex/hxnosynk&${html}=hex/hx4600&${oohtml}=hex/hx4600&${sort}=lajitnimi&nykyinen=$+and+(VPR_LOPPUTEPVM+%3E=24.03.1999)'
@@ -376,10 +406,23 @@ class MemberImporter(Importer):
                 pa_obj.end = pa['end']
             pa_obj.save()
 
-        # Memberships
 
-        if mp_info['posts'] is not None:
-            for post in mp_info['posts']:
+        def find_with_attrs(obj_list, arg_dict):
+            for o in obj_list:
+                for (key, val) in arg_dict.items():
+                    oattr = getattr(o, key)
+                    if oattr != val:
+                        #print "mismatch: %s (%s) vs. %s (%s)" % (oattr, type(oattr), val, type(val))
+                        break
+                else:
+                    return o
+
+        ca_list = list(CommitteeAssociation.objects.filter(member=mp))
+        ma_list = list(MinistryAssociation.objects.filter(member=mp))
+
+        # Memberships
+        for post in mp_info['posts']:
+            if 'committee' in post:
                 try:
                     committee = Committee.objects.get(name=post['committee'])
                     # Update current committees
@@ -390,9 +433,6 @@ class MemberImporter(Importer):
                     committee = Committee(name=post['committee'],
                                           current=post['current'])
                     committee.save()
-                # Delete all the associations already in the db
-                CommitteeAssociation.objects.filter(member=mp,
-                    committee_id = committee.id).delete()
                 # There can be several periods
                 periods = post['periods']
                 for period in periods:
@@ -401,10 +441,29 @@ class MemberImporter(Importer):
                         role = period['role']
                     else:
                         role = None
-                    ca_obj = CommitteeAssociation(member=mp, committee=committee, 
-                                                  begin=period['begin'], end=period['end'], 
-                                                  role=role)
-                    ca_obj.save()
+                    args = dict(committee_id=committee.id, begin=period['begin'], end=period['end'], 
+                                role=role)
+                    ca_obj = find_with_attrs(ca_list, args)
+                    if not ca_obj:
+                        args['member'] = mp
+                        ca_obj = CommitteeAssociation(**args)
+                        ca_obj.save()
+                    else:
+                        ca_obj.found = True
+            else:
+                args = dict(label=post['label'], role=post['role'], begin=post['begin'], end=post['end'])
+                ma_obj = find_with_attrs(ma_list, args)
+                if not ma_obj:
+                    args['member'] = mp
+                    ma_obj = MinistryAssociation(**args)
+                    ma_obj.save()
+                else:
+                    ma_obj.found = True
+
+        for obj in ca_list + ma_list:
+            if not getattr(obj, 'found', False):
+                self.logger.warning("Deleting removed association: %s" % obj)
+                ca.delete()
 
     def resolve_memberships(self, doc):
         membership_list = []
@@ -422,7 +481,7 @@ class MemberImporter(Importer):
                             self.logger.warning(html.tostring(el))
                     else:
                         membership_desc = el.text
-                    ms = parse_membership(membership_desc)
+                    ms = parse_committee_membership(membership_desc)
                     if ms is not None:
                         if period == 'previous_posts':
                             ms['current'] = False
@@ -431,6 +490,16 @@ class MemberImporter(Importer):
                         membership_list.append(ms)
                     else:
                         continue
+        for role_name in ['prime_ministerships', 'ministerships']:
+            td = get_field_el(doc, role_name)
+            if td:
+                el_list = td.xpath('ul/li')
+                for el in el_list:
+                    text = el.text_content()
+                    m = parse_ministerships(text)
+                    if not m:
+                        continue
+                    membership_list.append(m)
         return membership_list
 
     def get_wikipedia_links(self):
