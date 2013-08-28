@@ -19,7 +19,6 @@ class MemberListItemView extends Backbone.View
     render: ->
         attr = @model.toJSON()
         attr.view_url = @model.get_view_url()
-        console.log "#{attr.name} #{attr.stats.activity_ranking}"
         html = $($.trim(@template attr))
         @$el = html
         @el = @$el[0]
@@ -167,7 +166,6 @@ class MemberListView extends Backbone.View
                 district: model.attributes.district_name
 
     render: ->
-        console.log "render"
         @_calculate_rankings @collection
         @_process_children @collection
         @_update_search_hint @collection
