@@ -209,6 +209,12 @@ class TopicActivityResource(Resource):
     
     def obj_get_list(self, bundle, **kwargs):
         documents = Document.objects.all()
+        
+        since = bundle.request.GET.get('since', None)
+        if since:
+            start_date = datetime.datetime.strptime(since, '%Y-%m-%d')
+            documents = documents.filter(date__gte=start_date)
+
         keywords = Keyword.objects.filter(document__in=documents)
         activity = keywords.annotate(activity=models.Count('id'))
         activity = activity.extra(order_by=['-activity'])
