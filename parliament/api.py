@@ -4,7 +4,7 @@ from django.conf.urls.defaults import *
 from django.core.exceptions import *
 
 from tastypie.cache import SimpleCache
-from tastypie.resources import ModelResource
+from tastypie.resources import ModelResource, Resource
 from tastypie.exceptions import BadRequest
 from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie import fields
@@ -185,6 +185,37 @@ class DocumentResource(KamuResource):
     class Meta:
         queryset = Document.objects.all()
 
+class FakeModel(object):
+    def __init__(self, **initial):
+        self.__dict__['_data'] = {}
+        self.__dict__['_data'].update(initial)
+
+    def __getattr__(self, name):
+        return self.__dict__['_data'].get(name, None)
+
+    def __setattr__(self, name, value):
+        self.__dict__['_data'][name] = value
+
+    def to_dict(self):
+        return self._data
+
+class TopicActivityResource(Resource):
+    topic = fields.CharField(attribute='topic')
+    activity = fields.FloatField(attribute='activity')
+
+    class Meta:
+        resource_name = 'topic_activity'
+        object_class = FakeModel
+    
+    def obj_get_list(self, bundle, **kwargs):
+        documents = Document.objects.all()
+        keywords = Keyword.objects.filter(document__in=documents)
+        activity = keywords.annotate(activity=models.Count('id'))
+        activity = activity.extra(order_by=['-activity'])
+
+        act_list = [FakeModel(topic=a.name, activity=a.activity) for a in activity]
+        return act_list
+
 all_resources = [TermResource, PartyResource, MemberResource, PlenarySessionResource,
                  PlenaryVoteResource, VoteResource, FundingSourceResource, FundingResource,
-                 SeatResource, MemberSeatResource, DocumentResource, MemberActivityResource]
+                 SeatResource, MemberSeatResource, DocumentResource, MemberActivityResource, TopicActivityResource]
