@@ -85,6 +85,7 @@ class MinutesImporter(Importer):
         """
         spk_statement = {}
         statement_text = []
+        speaker_titlename = None
         for spkst_el in st_el.getchildren():
             if spkst_el.tag == 'puhemies':
                 if speaker_titlename:
@@ -99,7 +100,7 @@ class MinutesImporter(Importer):
                     return None
                 speaker_name = speaker_name.split(' ')
                 if len(speaker_name) > 2:
-                    raise ParseError('More than two parts to the name of house speaker.\n Title+name was: ' + speaker_titlename)
+                    raise ParseError('More than two parts to the name of house speaker. Title+name was: ' + speaker_titlename)
                 spk_statement['first_name'] = speaker_name[0]
                 spk_statement['surname'] = speaker_name[1]
             if spkst_el.tag == 'te':
