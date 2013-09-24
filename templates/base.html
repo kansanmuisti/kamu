@@ -62,21 +62,23 @@
 
 <body>
     <header class="page-head">
-        <nav class="upper-page-nav">
-            <ul class="nav nav-pills">
-                <li><a href="#">FI/ENG</a></li>
-                <li><a href="#">Kansan muisti ry.</a></li>
-                <li><a href="#">Kirjaudu</a></li>
-            </ul>
+        <div class="container">
             <h1>
                 <a href="/">
                     <img class="logo" src="{% static 'images/kamu-logo.svg' %}" alt="Kansan muisti -logo">
                 </a>
             </h1>
-        </nav>
+            <nav class="upper-page-nav">
+                <ul class="nav nav-pills">
+                    <li><a href="#">FI/ENG</a></li>
+                    <li><a href="#">Kansan muisti ry.</a></li>
+                    <li><a href="#">Kirjaudu</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
     <div class="main-nav-container">
-        <nav class="main-nav navbar">
+        <nav class="container main-nav navbar">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>

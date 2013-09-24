@@ -1,14 +1,44 @@
-@main-color:              #75d0bf;
-@accent-color:            #3e00c1;
-@top-header-bg-color:     #4d4d4d;
+/* Colors */
+@white:                 #ffffff;
+@electric:              #5230D5;
+@blueberry:             #B5AFE2;
+@pine:                  #1C6262;
+@mint:                  #8ED4CF;
+@lemon:                 #FFF398;
+@lead:                  #3b3b3b;
+
+@gray-darker:            lighten(#000, 12.5%); // #222
+@gray-dark:              lighten(#000, 25%);   // #333
+@gray:                   lighten(#000, 50%); // #555
+@gray-light:             lighten(#000, 75%);   // #999
+@gray-lighter:           lighten(#000, 90%); // #eee
+
+@main-color:              @mint;
+@body-background-color:   @gray-light;
+@accent-color:            @electric;
+@top-header-bg-color:     @lead;
 
 @font-family-sans-serif:  'Lato', Helvetica Neue, Arial, sans-serif;
+@font-family-serif:       Georgia, "Times New Roman", Times, serif;
+@font-family-monospace:   Monaco, Menlo, Consolas, "Courier New", monospace;
 @font-family-base:        @font-family-sans-serif;
 
 @headings-font-family:    'Roboto Condensed';
 @headings-font-weight:    700;
 @headings-line-height:    1.1;
 @brand-font-family:       'Expletus Sans', Verdana, sans-serif;
+@font-family-brand:       'Expletus Sans', Verdana, sans-serif;
+
+@font-size-base:          14px;
+@font-size-large:         ceil(@font-size-base * 1.29); // ~18px
+@font-size-small:         ceil(@font-size-base * 0.724); // ~12px
+@font-size-extra-large:   ceil(@font-size-base * 1.81); // 
+@font-size-extra-extra-large:   ceil(@font-size-base * 2.5); // 
+@font-size-extra-small:   ceil(@font-size-base * 0.4); //
+
+@line-height-base:        1.428571429; // 20/14
+@line-height-computed:    floor(@font-size-base * @line-height-base); // ~20px
+
 
 @navbar-bg:               #222;
 @navbar-link-color:       rgb(224,225,221);
@@ -16,16 +46,25 @@
 @navbar-toggle-border-color: #333;
 @navbar-height:           40px;
 
-/* Colors */
-@electric:              #5230d5;
-@blueberry:             #b5afe2;
-@pine:                  #1c6262;
-@mint:                  #8ed4cf;
-@lemon:                 #fff398;
-@lead:                  #3b3b3b;
 
-@brand-primary:         #74c3be;
+@brand-primary:         @mint;
 @brand-success:         #4cc466;
 @brand-warning:         #e5c100;
 @brand-danger:          #c32c2a;
 @brand-info:            #67afcc;
+
+
+
+// Container sizes
+// --------------------------------------------------
+
+@container-tablet:          728px;
+@container-desktop:         950px;
+@container-large-desktop:   1170px;
+
+
+// Grid system
+// --------------------------------------------------
+@grid-columns:              15;
+@grid-gutter-width:         20px;
+@grid-float-breakpoint:     @screen-tablet;

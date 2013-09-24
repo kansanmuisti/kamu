@@ -1,0 +1,46 @@
+.grid-row {
+    .make-row();
+}
+
+.grid-side-column {
+    @media (min-width: @screen-desktop) {
+        .make-column(4);
+    }
+}
+
+.grid-main-content {
+    @media (min-width: @screen-desktop) {
+        .make-column(8);
+    }
+}
+
+.grid-side-header {
+    @media (min-width: @screen-desktop) {
+        .make-column(12);
+    }
+    @media (min-width: @screen-tablet) and (max-width: @screen-tablet-max) {
+        .make-column(7);
+    }
+}
+
+
+.grid-side-nav {
+    @media (min-width: @screen-desktop) {
+        .make-column(12);
+    }
+    @media (min-width: @screen-tablet) and (max-width: @screen-tablet-max) {
+        .make-column(5);
+    }
+}
+
+
+.grid-listing-box {
+
+    .make-column(12); //extra-small
+    @media (min-width: @screen-desktop) { // large
+        .make-column(4);
+    }
+    @media (min-width: @screen-tablet) and (max-width: @screen-tablet-max) { //small
+        .make-column(4);
+    }
+}
