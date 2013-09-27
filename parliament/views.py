@@ -189,9 +189,11 @@ def _get_parliament_activity(request, offset):
     q = Q(nr_votes__gt=0) | Q(nr_statements__gt=0)
     pl_items = list(PlenarySessionItem.objects.filter(q).select_related('plsess')[offset:offset+5])
     for item in pl_items:
-        if item.nr_statements:
-            st = item.statement_set.all()[0]
-            item.statement = st
+        if not item.nr_statements:
+            continue
+        st_list = item.statement_set.all().exclude(statement_type='speaker')
+        if st_list:
+            item.statement = st_list[0]
     act_html = render_to_string('parliament/_plitem_list.html', {'items': pl_items},
                                 context_instance=RequestContext(request))
 

@@ -87,7 +87,7 @@ class PlenarySessionItem(models.Model):
 
     def count_related_objects(self):
         self.nr_votes = self.plenaryvote_set.count()
-        self.nr_statements = self.statement_set.count()
+        self.nr_statements = self.statement_set.exclude(statement_type='speaker').count()
 
     def get_short_id(self):
         if self.sub_number >= 0:
