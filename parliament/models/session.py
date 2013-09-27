@@ -87,7 +87,7 @@ class PlenarySessionItem(models.Model):
 
     def count_related_objects(self):
         self.nr_votes = self.plenaryvote_set.count()
-        self.nr_statements = self.statement_set.exclude(statement_type='speaker').count()
+        self.nr_statements = self.statement_set.exclude(type='speaker').count()
 
     def get_short_id(self):
         if self.sub_number >= 0:
@@ -126,7 +126,7 @@ class Statement(models.Model):
     speaker_name = models.CharField(max_length=40, null=True, blank=True)
     speaker_role = models.CharField(max_length=40, null=True, blank=True)
     # Currently used to differentiate between the speakers and plain MPs
-    statement_type = models.CharField(max_length=15, choices=TYPES)
+    type = models.CharField(max_length=15, choices=TYPES)
 
     text = models.TextField()
 

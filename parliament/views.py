@@ -191,7 +191,7 @@ def _get_parliament_activity(request, offset):
     for item in pl_items:
         if not item.nr_statements:
             continue
-        st_list = item.statement_set.all().exclude(statement_type='speaker')
+        st_list = item.statement_set.all().exclude(type='speaker')
         if st_list:
             item.statement = st_list[0]
     act_html = render_to_string('parliament/_plitem_list.html', {'items': pl_items},

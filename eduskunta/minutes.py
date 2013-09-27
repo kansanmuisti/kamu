@@ -464,7 +464,7 @@ class MinutesImporter(Importer):
             st = Statement.objects.get(item=item, index=idx)
         except Statement.DoesNotExist:
             st = Statement(item=item, index=idx)
-        st.statement_type = st_info['type']
+        st.type = st_info['type']
         st.member = mp
         st.speaker_name = name
         st.speaker_role = st_info.get('role')
