@@ -52,6 +52,8 @@ class Command(BaseCommand):
             importer = PartyImporter(http_fetcher=http)
             importer.replace = options['update']
             importer.import_parties()
+            importer.import_governments()
+            importer.import_governingparties()
         if options['member']:
             importer = MemberImporter(http_fetcher=http)
             importer.replace = options['update']

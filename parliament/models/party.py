@@ -16,3 +16,31 @@ class Party(models.Model):
 
     class Meta:
         app_label = 'parliament'
+
+class GoverningParty(models.Model):
+    """ Keeps track when the party has been in the government """
+    party = models.ForeignKey(Party, db_index=True)
+    begin = models.DateField(help_text="Beginning of government participation")
+    end = models.DateField(null=True, help_text="End of government participation")
+    government = models.ForeignKey("Government", help_text="Government wherein the party participated")
+    class Meta:
+        app_label = 'parliament'
+
+    def __unicode__(self):
+        return u"%s %s - %s : %s" % (self.party,self.begin,self.end,self.government)
+
+class Government(models.Model):
+    """ Governments of the nation on timeline """
+    begin = models.DateField(help_text="Date when the government began operations")
+    end = models.DateField(null=True, help_text="End date for the government")
+    name = models.CharField(max_length=50, help_text="Descriptive name for this government, depends on national custom")
+    
+    class Meta:
+        app_label = 'parliament'
+
+    def __unicode__(self):
+        if self.end:
+            endyear = self.end.year
+        else:
+            endyear = None
+        return u"%s (%s - %s)" % (self.name,self.begin.year,endyear)

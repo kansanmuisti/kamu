@@ -1,0 +1,18 @@
+#party	#govname	#startdate	#endingdate
+kesk	Vanhanen	2003-06-24	2007-04-19
+sd	Vanhanen	2003-06-24	2007-04-19
+r	Vanhanen	2003-06-24	2007-04-19
+kesk	Vanhanen II	2007-04-19	2010-06-22
+kok	Vanhanen II	2007-04-19	2010-06-22
+r	Vanhanen II	2007-04-19	2010-06-22
+vihr	Vanhanen II	2007-04-19	2010-06-22
+kesk	Kiviniemi	2010-06-22	2011-06-22
+kok	Kiviniemi	2010-06-22	2011-06-22
+r	Kiviniemi	2010-06-22	2011-06-22
+vihr	Kiviniemi	2010-06-22	2011-06-22
+kok	Katainen	2011-06-22	None
+sd	Katainen	2011-06-22	None
+vihr	Katainen	2011-06-22	None
+r	Katainen	2011-06-22	None
+kd	Katainen	2011-06-22	None
+vas	Katainen	2011-06-22	None
