@@ -22,7 +22,7 @@ MEMBER_NAME_TRANSFORMS = {
     'Packalen Tom': 'Packalén Tom',
     'Virtanen Pertti "Veltto"': 'Virtanen Pertti',
     'Elomaa Kike': 'Elomaa Ritva',
-    'Maijala Eeva-Maria': 'Maijala Eeva Maria',
+    'Maijala Eeva Maria': 'Maijala Eeva-Maria',
     'Gästgivars Lars': 'Gästgivars Lars Erik',
     'Gästgivars Lars-Erik': 'Gästgivars Lars Erik',
     # funding 2011
