@@ -206,21 +206,31 @@ class TopicActivityResource(Resource):
     class Meta:
         resource_name = 'topic_activity'
         object_class = FakeModel
+
+    def get_object_list(self, start_date=None, limit=None):
+        documents = Document.objects.all()
+        if start_date:
+            documents = documents.filter(date__gte=start_date)
+        
+        keywords = Keyword.objects.filter(document__in=documents)
+        activity = keywords.annotate(activity=models.Count('id'))
+        activity = activity.extra(order_by=['-activity'])
+        if limit:
+            activity = activity[:limit]
+
+        act_list = [FakeModel(topic=a.name, activity=a.activity) for a in activity]
+        return act_list
+
     
     def obj_get_list(self, bundle, **kwargs):
-        documents = Document.objects.all()
         
         since = bundle.request.GET.get('since', None)
         if since:
             start_date = datetime.datetime.strptime(since, '%Y-%m-%d')
-            documents = documents.filter(date__gte=start_date)
+        else:
+            start_date = None
 
-        keywords = Keyword.objects.filter(document__in=documents)
-        activity = keywords.annotate(activity=models.Count('id'))
-        activity = activity.extra(order_by=['-activity'])
-
-        act_list = [FakeModel(topic=a.name, activity=a.activity) for a in activity]
-        return act_list
+        return self.get_object_list(start_date=start_date)
 
 all_resources = [TermResource, PartyResource, MemberResource, PlenarySessionResource,
                  PlenaryVoteResource, VoteResource, FundingSourceResource, FundingResource,

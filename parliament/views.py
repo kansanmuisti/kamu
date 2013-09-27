@@ -21,7 +21,7 @@ from dateutil.relativedelta import relativedelta
 from utils import time_func
 
 import parliament.member_views
-from parliament.api import MemberResource
+from parliament.api import MemberResource, TopicActivityResource
 
 FEED_ACTIONS = [
     {
@@ -355,3 +355,29 @@ def show_session(request, plsess):
 
 def list_members(request):
     return parliament.member_views.list_members(request)
+
+
+def list_topics(request):
+    args = {}
+    resource = TopicActivityResource()
+    
+    limit = 20
+    
+    def json_topics(**kwargs):
+        topics = resource.get_object_list(**kwargs)
+        topics = [t.to_dict() for t in topics]
+        return simplejson.dumps(topics)
+
+    since = datetime.date.today() - datetime.timedelta(days=30)
+    args['recent_topics_json'] = json_topics(start_date=since, limit=limit)
+    
+    term_start = Term.objects.latest().begin
+    args['term_topics_json'] = json_topics(start_date=term_start, limit=limit)
+    args['all_time_topics_json'] = json_topics(limit=limit)
+    
+    return render_to_response('list_topics.html', args,
+        context_instance=RequestContext(request))
+
+def show_topic(request, topic):
+    # TODO
+    pass
