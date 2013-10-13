@@ -547,6 +547,10 @@ class MemberImporter(Importer):
                 print "%s not found" % mp
 
     def import_members(self, args):
+        if self.replace or not MemberActivityType.objects.count():
+            import_activity_types()
+            self.logger.info("%d activity types imported" % MemberActivityType.objects.count())
+
         self.logger.debug("fetching MP list")
         list_url = self.URL_BASE + self.LIST_URL
         s = self.open_url(list_url, 'member')
@@ -556,7 +560,7 @@ class MemberImporter(Importer):
         for l in link_list:
             name = l.text.strip().replace('&nbsp', '')
             url = l.attrib['href']
-            if args['single'] and not args['single'].lower() in name.lower():
+            if 'single' in args and not args['single'].lower() in name.lower():
                 continue
             self.logger.debug("fetching MP %s" % name)
             s = self.open_url(url, 'member')
@@ -579,18 +583,17 @@ def import_activity_types(model_class=MemberActivityType):
     FILENAME = 'activity_types.txt'
     path = os.path.dirname(os.path.realpath(__file__))
     act_file = open(os.path.join(path, FILENAME))
-    for line in act_file:
+    for idx, line in enumerate(act_file):
         line = line.strip().decode('utf8')
         if not line or line[0] == "#": continue
         (act_id, name, weight) = line.split('\t')
         weight = float(weight)
-        
+
         try:
             act_type = model_class.objects.get(pk=act_id)
         except model_class.DoesNotExist:
             act_type = model_class(pk=act_id)
-        
+
         act_type.name = name
         act_type.weight = weight
         act_type.save()
-
