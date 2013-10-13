@@ -83,39 +83,41 @@ class MemberActivityResource(KamuResource):
     def get_extra_info(self, item):
         d = {}
         target = {}
-        if item.type == 'FB':
+        acttype = item.type.pk
+        if acttype == 'FB':
             o = item.socialupdateactivity.update
             target['text'] = o.text
-        elif item.type == 'TW':
+        elif acttype == 'TW':
             o = item.socialupdateactivity.update
             target['text'] = o.text
-        elif item.type == 'ST':
+        elif acttype == 'ST':
             o = item.statementactivity.statement
             target['text'] = o.text
-        elif item.type == 'IN':
+        elif acttype == 'IN':
             o = item.initiativeactivity.doc
             target['text'] = o.summary
             target['subject'] = o.subject
             target['name'] = o.name
-        elif item.type == 'SI':
+        elif acttype == 'SI':
             o = item.signatureactivity.signature.doc
             target['text'] = o.summary
             target['subject'] = o.subject
             target['name'] = o.name
             target['type'] = o.type
-        elif item.type == 'WQ':
+        elif acttype == 'WQ':
             o = item.initiativeactivity.doc
             target['text'] = o.summary
             target['subject'] = o.subject
             target['name'] = o.name
         else:
-            raise Exception("Invalid type %s" % item.type)
+            raise Exception("Invalid type %s" % acttype)
         d['target'] = target
         return d
 
     def dehydrate(self, bundle):
         obj = bundle.obj
         bundle.data['member_name'] = obj.member.name
+        bundle.data['type'] = obj.type.pk
         if obj.member.party:
             bundle.data['party_name'] = party_dict[obj.member.party.id].name
         d = self.get_extra_info(obj)

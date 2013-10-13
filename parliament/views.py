@@ -126,11 +126,11 @@ def render_member_activity(item):
     return d
 
 def _get_member_activity_kws(member):
-    kw_act_list = KeywordActivity.objects.filter(activity__member=member).select_related('keyword', 'activity')
+    kw_act_list = KeywordActivity.objects.filter(activity__member=member).select_related('keyword', 'activity', 'activity__type')
     kw_dict = {}
     for kwa in kw_act_list:
         name = kwa.keyword.name
-        score = MemberActivity.WEIGHTS[kwa.activity.type]
+        score = kwa.activity.type.weight
         if name in kw_dict:
             kw_dict[name] += score
         else:
@@ -164,14 +164,18 @@ def show_member(request, member, page=None):
     res_bundle = res.build_bundle(obj=member, request=request)
     member_json = res.serialize(None, res.full_dehydrate(res_bundle), 'application/json')
     args = dict(member=member, member_json=member_json)
+    activity_types = list(MemberActivityType.objects.all())
+    types = [[t.type, _(t.name)] for t in activity_types]
+    weights = {t.type: t.weight for t in activity_types}
+
 
     if not page:
         args['activity_counts_json'] = res.serialize(None,
             member.get_activity_counts(), 'application/json')
         args['activity_types_json'] = res.serialize(None,
-            MemberActivity.TYPES, 'application/json')
+            types, 'application/json')
         args['activity_type_weights_json'] = res.serialize(None,
-            MemberActivity.WEIGHTS, 'application/json')
+            weights, 'application/json')
         args['feed_filters'] = make_feed_filters()
         args['feed_actions_json'] = simplejson.dumps(make_feed_actions(), ensure_ascii=False)
         kw_act = _get_member_activity_kws(member)
