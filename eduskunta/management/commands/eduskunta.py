@@ -3,7 +3,7 @@ from optparse import make_option
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 from ...party import PartyImporter
-from ...member import MemberImporter
+from ...member import MemberImporter, import_activity_types
 from ...minutes import MinutesImporter
 from ...vote import VoteImporter
 from ...seat import SeatImporter
@@ -19,6 +19,8 @@ class Command(BaseCommand):
                     default=False, help='Import parties'),
         make_option('--member', action='store_true', dest='member',
                     default=False, help='Import MPs'),
+        make_option('--activitytype', action='store_true', dest='activitytype',
+                    default=False, help="Import MP activity types"),
         make_option('--seat', action='store_true', dest='seat',
                     default=False, help='Import MP seatings'),
         make_option('--minutes', action='store_true', dest='minutes',
@@ -62,6 +64,8 @@ class Command(BaseCommand):
             if options['single']:
                 args['single'] = options['single']
             importer.import_members(args)
+        if options['activitytypes']:
+            import_activity_types()
         if options['seat']:
             importer = SeatImporter(http_fetcher=http)
             importer.replace = options['update']

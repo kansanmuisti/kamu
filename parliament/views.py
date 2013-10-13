@@ -21,7 +21,7 @@ from dateutil.relativedelta import relativedelta
 from utils import time_func
 
 import parliament.member_views
-from parliament.api import MemberResource
+from parliament.api import MemberResource, TopicActivityResource
 
 FEED_ACTIONS = [
     {
@@ -126,11 +126,11 @@ def render_member_activity(item):
     return d
 
 def _get_member_activity_kws(member):
-    kw_act_list = KeywordActivity.objects.filter(activity__member=member).select_related('keyword', 'activity')
+    kw_act_list = KeywordActivity.objects.filter(activity__member=member).select_related('keyword', 'activity', 'activity__type')
     kw_dict = {}
     for kwa in kw_act_list:
         name = kwa.keyword.name
-        score = MemberActivity.WEIGHTS[kwa.activity.type]
+        score = kwa.activity.type.weight
         if name in kw_dict:
             kw_dict[name] += score
         else:
@@ -164,14 +164,18 @@ def show_member(request, member, page=None):
     res_bundle = res.build_bundle(obj=member, request=request)
     member_json = res.serialize(None, res.full_dehydrate(res_bundle), 'application/json')
     args = dict(member=member, member_json=member_json)
+    activity_types = list(MemberActivityType.objects.all())
+    types = [[t.type, _(t.name)] for t in activity_types]
+    weights = {t.type: t.weight for t in activity_types}
+
 
     if not page:
         args['activity_counts_json'] = res.serialize(None,
             member.get_activity_counts(), 'application/json')
         args['activity_types_json'] = res.serialize(None,
-            MemberActivity.TYPES, 'application/json')
+            types, 'application/json')
         args['activity_type_weights_json'] = res.serialize(None,
-            MemberActivity.WEIGHTS, 'application/json')
+            weights, 'application/json')
         args['feed_filters'] = make_feed_filters()
         args['feed_actions_json'] = simplejson.dumps(make_feed_actions(), ensure_ascii=False)
         kw_act = _get_member_activity_kws(member)
@@ -355,3 +359,29 @@ def show_session(request, plsess):
 
 def list_members(request):
     return parliament.member_views.list_members(request)
+
+
+def list_topics(request):
+    args = {}
+    resource = TopicActivityResource()
+    
+    limit = 20
+    
+    def json_topics(**kwargs):
+        topics = resource.get_object_list(**kwargs)
+        topics = [t.to_dict() for t in topics]
+        return simplejson.dumps(topics)
+
+    since = datetime.date.today() - datetime.timedelta(days=30)
+    args['recent_topics_json'] = json_topics(start_date=since, limit=limit)
+    
+    term_start = Term.objects.latest().begin
+    args['term_topics_json'] = json_topics(start_date=term_start, limit=limit)
+    args['all_time_topics_json'] = json_topics(limit=limit)
+    
+    return render_to_response('list_topics.html', args,
+        context_instance=RequestContext(request))
+
+def show_topic(request, topic):
+    # TODO
+    pass

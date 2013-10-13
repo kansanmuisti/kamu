@@ -573,3 +573,24 @@ class MemberImporter(Importer):
             mp_info = self.fetch_member(mp_id)
             self.save_member(mp_info)
         self.logger.info('Imported {0} MPs'.format(len(link_list)))
+
+
+def import_activity_types(model_class=MemberActivityType):
+    FILENAME = 'activity_types.txt'
+    path = os.path.dirname(os.path.realpath(__file__))
+    act_file = open(os.path.join(path, FILENAME))
+    for line in act_file:
+        line = line.strip().decode('utf8')
+        if not line or line[0] == "#": continue
+        (act_id, name, weight) = line.split('\t')
+        weight = float(weight)
+        
+        try:
+            act_type = model_class.objects.get(pk=act_id)
+        except model_class.DoesNotExist:
+            act_type = model_class(pk=act_id)
+        
+        act_type.name = name
+        act_type.weight = weight
+        act_type.save()
+

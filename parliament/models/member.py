@@ -93,8 +93,10 @@ class Member(models.Model):
         activities = self.memberactivity_set
         if begin: activities = activities.filter(time__gte=begin)
         if end: activities = activities.filter(time__lte=end)
-        return sum(MemberActivity.WEIGHTS.get(t, 0) for t in
-            activities.values_list('type', flat=True))
+        
+        act = activities.aggregate(act=models.Sum('type__weight'))['act']
+        if not act: act = 0.0
+        return act
 
     def get_activity_counts(self):
         act = self.memberactivity_set
@@ -360,23 +362,20 @@ class MemberActivityManager(models.Manager):
     def during_term(self, term):
         return self.during(term.begin, term.end)
 
-class MemberActivity(models.Model):
-    TYPES = [
-        ('IN', _('Initiative')),
-        ('RV', _('Rebel vote')),
-        ('CD', _('Committee dissent')),
-        ('TW', _('Tweet')),
-        ('FB', _('Facebook update')),
-        ('ST', _('Plenary statement')),
-        ('SI', _('Signature')),
-        ('WQ', _('Written question')),
-    ]
-    # Algorithm for determining weights: Pulling out of the Ass
-    WEIGHTS = {'IN': 200, 'RV': 10, 'CD': 20, 'TW': 2, 'FB': 10, 'ST': 5, 'SI': 10, 'WQ': 20}
+class MemberActivityType(models.Model):
+    type = models.CharField(max_length=5, primary_key=True)
+    name = models.CharField(max_length=50)
+    weight = models.FloatField()
+    
+    class Meta:
+        app_label = 'parliament'
 
+
+
+class MemberActivity(models.Model):
     member = models.ForeignKey(Member, db_index=True)
     time = models.DateTimeField(db_index=True)
-    type = models.CharField(max_length=5, db_index=True, choices=TYPES)
+    type = models.ForeignKey(MemberActivityType, db_index=True)
 
     objects = MemberActivityManager()
 

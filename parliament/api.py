@@ -83,39 +83,41 @@ class MemberActivityResource(KamuResource):
     def get_extra_info(self, item):
         d = {}
         target = {}
-        if item.type == 'FB':
+        acttype = item.type.pk
+        if acttype == 'FB':
             o = item.socialupdateactivity.update
             target['text'] = o.text
-        elif item.type == 'TW':
+        elif acttype == 'TW':
             o = item.socialupdateactivity.update
             target['text'] = o.text
-        elif item.type == 'ST':
+        elif acttype == 'ST':
             o = item.statementactivity.statement
             target['text'] = o.text
-        elif item.type == 'IN':
+        elif acttype == 'IN':
             o = item.initiativeactivity.doc
             target['text'] = o.summary
             target['subject'] = o.subject
             target['name'] = o.name
-        elif item.type == 'SI':
+        elif acttype == 'SI':
             o = item.signatureactivity.signature.doc
             target['text'] = o.summary
             target['subject'] = o.subject
             target['name'] = o.name
             target['type'] = o.type
-        elif item.type == 'WQ':
+        elif acttype == 'WQ':
             o = item.initiativeactivity.doc
             target['text'] = o.summary
             target['subject'] = o.subject
             target['name'] = o.name
         else:
-            raise Exception("Invalid type %s" % item.type)
+            raise Exception("Invalid type %s" % acttype)
         d['target'] = target
         return d
 
     def dehydrate(self, bundle):
         obj = bundle.obj
         bundle.data['member_name'] = obj.member.name
+        bundle.data['type'] = obj.type.pk
         if obj.member.party:
             bundle.data['party_name'] = party_dict[obj.member.party.id].name
         d = self.get_extra_info(obj)
@@ -206,21 +208,31 @@ class TopicActivityResource(Resource):
     class Meta:
         resource_name = 'topic_activity'
         object_class = FakeModel
+
+    def get_object_list(self, start_date=None, limit=None):
+        documents = Document.objects.all()
+        if start_date:
+            documents = documents.filter(date__gte=start_date)
+        
+        keywords = Keyword.objects.filter(document__in=documents)
+        activity = keywords.annotate(activity=models.Count('id'))
+        activity = activity.extra(order_by=['-activity'])
+        if limit:
+            activity = activity[:limit]
+
+        act_list = [FakeModel(topic=a.name, activity=a.activity) for a in activity]
+        return act_list
+
     
     def obj_get_list(self, bundle, **kwargs):
-        documents = Document.objects.all()
         
         since = bundle.request.GET.get('since', None)
         if since:
             start_date = datetime.datetime.strptime(since, '%Y-%m-%d')
-            documents = documents.filter(date__gte=start_date)
+        else:
+            start_date = None
 
-        keywords = Keyword.objects.filter(document__in=documents)
-        activity = keywords.annotate(activity=models.Count('id'))
-        activity = activity.extra(order_by=['-activity'])
-
-        act_list = [FakeModel(topic=a.name, activity=a.activity) for a in activity]
-        return act_list
+        return self.get_object_list(start_date=start_date)
 
 all_resources = [TermResource, PartyResource, MemberResource, PlenarySessionResource,
                  PlenaryVoteResource, VoteResource, FundingSourceResource, FundingResource,

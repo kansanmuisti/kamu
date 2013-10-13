@@ -32,6 +32,9 @@ urlpatterns += patterns('parliament.views',
     url(r'^member/$', 'list_members'),
     url(r'^member/(?P<member>[-\w]+)/$', 'show_member'),
     url(r'^member/(?P<member>[-\w]+)/(?P<page>[-\w]+)/$', 'show_member'),
+
+    url(r'^topic/$', 'list_topics'),
+    url(r'^topic/(?P<topic>[- \w]+)/$', 'show_topic'),
 )
 
 from tastypie.api import Api
