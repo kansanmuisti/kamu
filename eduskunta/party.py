@@ -13,8 +13,8 @@ PG_MAP = u'''Kansallisen kokoomuksen eduskuntaryhmä /kok
     Vasemmistoliiton eduskuntaryhmä /vas
     Ruotsalainen eduskuntaryhmä /r
     Vihreä eduskuntaryhmä /vihr
-    Kristillisdemokraattinen eduskuntaryhmä /kd'''
-#    Vasenryhmän eduskuntaryhmä /vr'''
+    Kristillisdemokraattinen eduskuntaryhmä /kd
+    Muutos 2011 eduskuntaryhmä /m11'''
 
 def pg_to_party(pg):
     lines = [l.strip().split(' /') for l in PG_MAP.split('\n')]
