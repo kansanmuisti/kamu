@@ -1,10 +1,9 @@
 # id	name	weight
-IN	Initiative	200
+IN	Initiative	240
 RV	Rebel vote	10
 CD	Committee dissent	20
-TW	Tweet	2
-FB	Facebook update	10
-ST	Plenary statement	5
-SI	Signature	10
-WQ	Written question	20
-
+TW	Tweet	1
+FB	Facebook update	2
+ST	Plenary statement	4
+SI	Signature	18
+WQ	Written question	35
