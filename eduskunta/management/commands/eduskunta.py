@@ -58,7 +58,10 @@ class Command(BaseCommand):
             importer = MemberImporter(http_fetcher=http)
             importer.replace = options['update']
             importer.import_districts()
-            importer.import_members()
+            args = {}
+            if options['single']:
+                args['single'] = options['single']
+            importer.import_members(args)
         if options['seat']:
             importer = SeatImporter(http_fetcher=http)
             importer.replace = options['update']

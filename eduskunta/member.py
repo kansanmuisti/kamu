@@ -546,7 +546,7 @@ class MemberImporter(Importer):
             if not hasattr(mp, 'found'):
                 print "%s not found" % mp
 
-    def import_members(self):
+    def import_members(self, args):
         self.logger.debug("fetching MP list")
         list_url = self.URL_BASE + self.LIST_URL
         s = self.open_url(list_url, 'member')
@@ -556,6 +556,8 @@ class MemberImporter(Importer):
         for l in link_list:
             name = l.text.strip().replace('&nbsp', '')
             url = l.attrib['href']
+            if args['single'] and not args['single'].lower() in name.lower():
+                continue
             self.logger.debug("fetching MP %s" % name)
             s = self.open_url(url, 'member')
             doc = html.fromstring(s)
