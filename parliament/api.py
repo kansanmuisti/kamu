@@ -18,6 +18,22 @@ term_list = list(Term.objects.visible())
 party_list = [(p.id, p) for p in Party.objects.all()]
 party_dict = {id: p for id, p in party_list}
 
+def process_api_thumbnail(bundle, image, field_name):
+    tn_dim = bundle.request.GET.get('thumbnail_dim', None)
+    if not tn_dim:
+        return
+    arr = tn_dim.strip().split('x')
+    if len(arr) == 2:
+        # Make sure they are numbers.
+        try:
+            num = [int(x) for x in arr]
+        except ValueError:
+            arr = []
+    if len(arr) != 2:
+        raise BadRequest("Thumbnail dimensions not in proper format (e.g. 64x96)")
+    tn_dim = 'x'.join(arr)
+    bundle.data[field_name] = get_thumbnail(image, tn_dim).url
+
 class KamuResource(ModelResource):
     def __init__(self, api_name=None):
         super(KamuResource, self).__init__(api_name)
@@ -28,12 +44,20 @@ class TermResource(KamuResource):
         queryset = Term.objects.all()
 
 class PartyResource(KamuResource):
+    def dehydrate(self, bundle):
+        process_api_thumbnail(bundle, bundle.obj.logo, 'logo_thumbnail')
+        return bundle
+    def prepend_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/(?P<name>[\w\d_.-]+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
+        ]
+
     class Meta:
         queryset = Party.objects.all()
+        detail_uri_name = 'name'
 
 class MemberResource(KamuResource):
-    party = fields.ForeignKey('parliament.api.PartyResource', 'party', full=True)
-
+    party = fields.ForeignKey('parliament.api.PartyResource', 'party')
     def build_filters(self, filters=None):
         orm_filters = super(MemberResource, self).build_filters(filters)
         return orm_filters
@@ -45,20 +69,7 @@ class MemberResource(KamuResource):
         return qset
 
     def dehydrate(self, bundle):
-        tn_dim = bundle.request.GET.get('thumbnail_dim', None)
-        if tn_dim:
-            arr = tn_dim.strip().split('x')
-            if len(arr) == 2:
-                # Make sure they are numbers.
-                try:
-                    num = [int(x) for x in arr]
-                except ValueError:
-                    arr = []
-            if len(arr) != 2:
-                raise BadRequest("Dimensions not in proper format (e.g. 64x96)")
-            tn_dim = 'x'.join(arr)
-            bundle.data['photo_thumbnail'] = get_thumbnail(bundle.obj.photo, tn_dim).url
-
+        process_api_thumbnail(bundle, bundle.obj.photo, 'photo_thumbnail')
         bundle.data['district_name'] = bundle.obj.get_latest_district().name
 
         n_days = int(bundle.request.GET.get('activity_days', 30))

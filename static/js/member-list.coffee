@@ -131,13 +131,14 @@ class MemberListView extends Backbone.View
 
     _update_search_hint: (col) =>
         i = Math.floor(Math.random()*(col.models.length))
-        a = col.models[i].attributes
+        model = col.models[i]
+        a = model.attributes
         hint = a.given_names.split(" ", 1)[0].split('-', 1)[0].toLowerCase() + " " +
-            a.party.full_name.toLowerCase()[..2] + " " +
+            model.get_party(party_list).get('full_name').toLowerCase()[..2] + " " +
             a.district_name.toLowerCase()[..3]
 
-        $el = @search_el
-        $el.attr "placeholder", $el.attr("placeholder") + hint
+        #$el = @search_el
+        #$el.attr "placeholder", $el.attr("placeholder") + hint
 
     _filter_listing: =>
         @$el.empty()
@@ -158,11 +159,12 @@ class MemberListView extends Backbone.View
             item_view = new MemberListItemView model: model
             item_view.render()
             @children[model.id] = item_view
+            party = model.get_party party_list
             @index.add
                 id: model.id
                 name: model.get('name')
-                party: model.attributes.party.full_name
-                party_short: model.attributes.party.name
+                party: party.get('full_name')
+                party_short: party.get('name')
                 district: model.attributes.district_name
 
     render: ->
@@ -174,3 +176,4 @@ class MemberListView extends Backbone.View
 
 
 member_list_view = new MemberListView
+party_list = new PartyList party_json

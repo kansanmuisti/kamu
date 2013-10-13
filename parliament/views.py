@@ -21,7 +21,7 @@ from dateutil.relativedelta import relativedelta
 from utils import time_func
 
 import parliament.member_views
-from parliament.api import MemberResource, TopicActivityResource
+from parliament.api import MemberResource, TopicActivityResource, PartyResource
 
 FEED_ACTIONS = [
     {
@@ -70,6 +70,25 @@ FEED_ACTIONS = [
         'action': _('submitted a committee dissent')
     }
 ]
+
+party_json = None
+def get_parties(request):
+    global party_json
+
+    if party_json:
+        return party_json
+    res = PartyResource(api_name='v1')
+    request_bundle = res.build_bundle(request=request)
+    queryset = res.obj_get_list(request_bundle)
+
+    bundles = []
+    for obj in queryset:
+        bundle = res.build_bundle(obj=obj, request=request)
+        bundles.append(res.full_dehydrate(bundle, for_list=True))
+    json = res.serialize(None, bundles, "application/json")
+    party_json = json
+    return json
+
 
 def show_item(request, plsess, item_nr, subitem_nr=None):
     query = Q(plsess__url_name=plsess) & Q(number=item_nr)
@@ -163,11 +182,10 @@ def show_member(request, member, page=None):
     res = MemberResource()
     res_bundle = res.build_bundle(obj=member, request=request)
     member_json = res.serialize(None, res.full_dehydrate(res_bundle), 'application/json')
-    args = dict(member=member, member_json=member_json)
+    args = dict(member=member, member_json=member_json, party_json=get_parties(request))
     activity_types = list(MemberActivityType.objects.all())
     types = [[t.type, _(t.name)] for t in activity_types]
     weights = {t.type: t.weight for t in activity_types}
-
 
     if not page:
         args['activity_counts_json'] = res.serialize(None,
@@ -357,9 +375,6 @@ def show_session(request, plsess):
     args = {}
     return render_to_response('new_session.html', args, context_instance=RequestContext(request))
 
-def list_members(request):
-    return parliament.member_views.list_members(request)
-
 
 def list_topics(request):
     args = {}
@@ -385,3 +400,8 @@ def list_topics(request):
 def show_topic(request, topic):
     # TODO
     pass
+
+def list_members(request):
+    args = dict(party_json=get_parties(request))
+    return render_to_response('member/list.html',
+            args, context_instance=RequestContext(request))

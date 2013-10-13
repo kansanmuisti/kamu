@@ -30,3 +30,5 @@ class @MemberActivityFeedView extends Backbone.View
     add_all_items: (coll) =>
         @$el.empty()
         coll.each @add_item
+
+party_list = new PartyList party_json

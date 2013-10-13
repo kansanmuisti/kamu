@@ -166,12 +166,6 @@ def format_stat_col(request, val, class_name, is_percent=True):
         col['class'] = class_name
     return col
 
-def list_members(request):
-    args = dict()
-    return render_to_response('member/list.html',
-            args,
-            context_instance = RequestContext(request))
-
     
 def generate_member_stat_table(request, member, stats):
     table = {}

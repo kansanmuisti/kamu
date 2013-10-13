@@ -18,8 +18,9 @@
 {% endcompress %}
 
 <script type="text/javascript">
-member = new Member({{ member_json|safe }});
-FEED_ACTIONS = {{feed_actions_json|safe }};
+member = new Member({{member_json|safe}});
+party_json = {{party_json|safe}};
+FEED_ACTIONS = {{feed_actions_json|safe}};
 </script>
 {% endblock %}
 
