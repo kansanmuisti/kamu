@@ -589,20 +589,37 @@ class MinutesImporter(Importer):
                 self.save_item(pl_sess, item_info)
 
     def import_terms(self):
-        for term in self.TERMS:
+        path = os.path.dirname(os.path.realpath(__file__))
+        term_file = open(os.path.join(path, "terms.txt"), 'r')
+
+        for idx, line in enumerate(term_file):
+            line = line.strip().decode('utf8')
+            if not line or line[0] == "#": continue
+            arr = line.split('\t')
+            if len(arr) > 2:
+                (name, begin, end) = arr
+            else:
+                (name, begin) = arr
+                end = None
+            begin = '-'.join(begin.split('.')[::-1])
+            if end:
+                end = '-'.join(end.split('.')[::-1])
             try:
-                nt = Term.objects.get(name=term['name'])
+                nt = Term.objects.get(begin=begin)
                 if not self.replace:
                     continue
             except Term.DoesNotExist:
-                self.logger.info(u'Adding term %s' % term['display_name'])
+                self.logger.info(u'Adding term %s' % name)
                 nt = Term()
-            nt.name = term['name']
-            nt.begin = term['begin']
-            nt.end = term['end']
-            nt.display_name = term['display_name']
-            if 'visible' in term:
-                nt.visible = term['visible']
+            nt.name = name
+            nt.begin = begin
+            nt.end = end
+            nt.display_name = name
+            year = int(begin.split('-')[0])
+            if year >= 1999:
+                nt.visible = True
+            else:
+                nt.visible = False
             nt.save()
 
     def _make_mp_dicts(self):
