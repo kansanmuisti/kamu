@@ -221,22 +221,30 @@ class TopicActivityResource(Resource):
         object_class = FakeModel
 
     def get_object_list(self, start_date=None, limit=None):
-        documents = Document.objects.all()
+        activities = KeywordActivity.objects
+
         if start_date:
-            documents = documents.filter(date__gte=start_date)
-        
-        keywords = Keyword.objects.filter(document__in=documents)
-        activity = keywords.annotate(activity=models.Count('id'))
+            activities = activities.filter(activity__time__gte=start_date)
+    
+        activity = activities.values('keyword__name').annotate(
+            activity=models.Sum('activity__type__weight'),
+            last_date=models.Max('activity__time'),
+        )
+
         activity = activity.extra(order_by=['-activity'])
         if limit:
             activity = activity[:limit]
 
-        act_list = [FakeModel(topic=a.name, activity=a.activity) for a in activity]
+        act_list = [
+            FakeModel(
+                topic=a['keyword__name'],
+                activity=a['activity'],
+                last_date=a['last_date'])
+            for a in activity]
         return act_list
 
     
     def obj_get_list(self, bundle, **kwargs):
-        
         since = bundle.request.GET.get('since', None)
         if since:
             start_date = datetime.datetime.strptime(since, '%Y-%m-%d')
