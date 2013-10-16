@@ -382,10 +382,15 @@ def list_topics(request):
     
     limit = 20
     
+    def date_encoder(obj):
+        if hasattr(obj, 'isoformat'):
+            return obj.isoformat()
+        raise TypeError(repr(o) + " is not JSON serializable")
+
     def json_topics(**kwargs):
         topics = resource.get_object_list(**kwargs)
         topics = [t.to_dict() for t in topics]
-        return simplejson.dumps(topics)
+        return simplejson.dumps(topics, default=date_encoder)
 
     since = datetime.date.today() - datetime.timedelta(days=30)
     args['recent_topics_json'] = json_topics(start_date=since, limit=limit)
@@ -393,6 +398,8 @@ def list_topics(request):
     term_start = Term.objects.latest().begin
     args['term_topics_json'] = json_topics(start_date=term_start, limit=limit)
     args['all_time_topics_json'] = json_topics(limit=limit)
+
+    args['all_topics'] = json_topics()
     
     return render_to_response('list_topics.html', args,
         context_instance=RequestContext(request))
