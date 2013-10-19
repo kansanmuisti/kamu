@@ -56,8 +56,17 @@ class PartyResource(KamuResource):
         queryset = Party.objects.all()
         detail_uri_name = 'name'
 
+class Committee(KamuResource):
+    class Meta:
+        queryset = Committee.objects.all()
+
+class CommitteeAssociation(KamuResource):
+    class Meta:
+        queryset = CommitteeAssociation.objects.all()
+
 class MemberResource(KamuResource):
     party = fields.ForeignKey('parliament.api.PartyResource', 'party')
+
     def build_filters(self, filters=None):
         orm_filters = super(MemberResource, self).build_filters(filters)
         return orm_filters
@@ -71,6 +80,13 @@ class MemberResource(KamuResource):
     def dehydrate(self, bundle):
         process_api_thumbnail(bundle, bundle.obj.photo, 'photo_thumbnail')
         bundle.data['district_name'] = bundle.obj.get_latest_district().name
+
+        posts = bundle.obj.get_posts()
+        d = {'ministry': [{'begin': x.begin, 'end': x.end, 'label': x.label, 'role': x.role} for x in posts['ministry']]}
+        d['committee'] = [{'begin': x.begin, 'end': x.end, 'committee': x.committee.name, 'role': x.role} for x in posts['committee']]
+        bundle.data['posts'] = d
+
+        bundle.data['terms'] = [term.name for term in bundle.obj.get_terms()]
 
         n_days = int(bundle.request.GET.get('activity_days', 30))
         activity_start = datetime.datetime.now() - datetime.timedelta(days=n_days)

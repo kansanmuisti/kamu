@@ -18,7 +18,6 @@ class MemberListItemView extends Backbone.View
 
     render: ->
         attr = @model.toJSON()
-        attr.view_url = @model.get_view_url()
         html = $($.trim(@template attr))
         @$el = html
         @el = @$el[0]
@@ -54,7 +53,7 @@ class MemberListView extends Backbone.View
         @collection.fetch
             reset: true
             data:
-                thumbnail_dim: "64x96"
+                thumbnail_dim: "104x156"
                 current: true
                 stats: true
                 limit: 0
@@ -79,6 +78,7 @@ class MemberListView extends Backbone.View
             attendance: statsort('attendance')
             party_agree: statsort('party_agree')
             session_agree: statsort('party_agree')
+            term_count: statsort('term_count')
 
         @_raw_sort_func = null
         @sort_order = 1
@@ -89,7 +89,8 @@ class MemberListView extends Backbone.View
         # this will be overriden once we get data
         @_set_sort_order "name"
 
-        $("#member-sort-buttons button").click (ev) =>
+        $(".member-list-sort-buttons button").click (ev) =>
+            console.log "click"
             btn = ev.currentTarget
             field = $(btn).data "col"
             @_set_sort_order field

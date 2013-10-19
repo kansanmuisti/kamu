@@ -9,6 +9,29 @@ class @Member extends Backbone.Tastypie.Model
     url: -> API_PREFIX + "member/#{@get('id')}/"
     get_view_url: -> "#{@URL_PREFIX}#{@get('url_name')}/"
 
+    initialize: (models, opts) ->
+        # Augment the stats object with some items
+        if not @attributes.stats
+            @attributes.stats = {}
+        @attributes.stats.term_count = @attributes.terms.length
+
+    toJSON: (options) ->
+        ret = super options
+        ret.is_minister = @is_minister()
+        ret.view_url = @get_view_url()
+        ministry_posts = @get('posts').ministry
+        if ministry_posts.length
+            label = ministry_posts[0].label
+            label = label.charAt(0).toUpperCase() + label.slice(1)
+            ret.minister = label
+        else
+            ret.minister = null
+
+        return ret
+
+    is_minister: ->
+        return @get('posts').ministry.length > 0
+
     get_party: (party_list) ->
         return party_list.get @get('party')
 

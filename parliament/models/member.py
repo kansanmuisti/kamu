@@ -97,7 +97,7 @@ class Member(models.Model):
         activities = self.memberactivity_set
         if begin: activities = activities.filter(time__gte=begin)
         if end: activities = activities.filter(time__lte=end)
-        
+
         act = activities.aggregate(act=models.Sum('type__weight'))['act']
         if not act: act = 0.0
         return act
@@ -110,6 +110,22 @@ class Member(models.Model):
         act = act.annotate(count=models.Count('id'))
         return list(act)
 
+    def get_terms(self):
+        da_list = self.districtassociation_set.order_by('begin')
+        term_list = list(Term.objects.filter(begin__gte=da_list[0].begin).order_by('begin'))
+        for term in term_list:
+            term.found = False
+        for da in da_list:
+            for term in term_list:
+                if term.found:
+                    continue
+                if term.end is not None and term.end < da.begin:
+                    continue
+                if da.end is not None and term.begin > da.end:
+                    continue
+                term.found = True
+
+        return filter(lambda x: x.found, term_list)
 
     def save(self, *args, **kwargs):
         if not self.url_name:
@@ -280,6 +296,13 @@ class DistrictAssociation(models.Model):
 
     objects = DistrictAssociationManager()
 
+    def __unicode__(self):
+        if self.district:
+            name = self.district.name
+        else:
+            name = self.name
+        return u"%s in district %s %s - %s" % (self.member, name, self.begin, self.end)
+
     class Meta:
         app_label = 'parliament'
         unique_together = (('member', 'begin'),)
@@ -370,7 +393,7 @@ class MemberActivityType(models.Model):
     type = models.CharField(max_length=5, primary_key=True)
     name = models.CharField(max_length=50)
     weight = models.FloatField()
-    
+
     class Meta:
         app_label = 'parliament'
 
