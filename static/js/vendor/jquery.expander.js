@@ -95,7 +95,7 @@
               $summEl = $([]),
               o = $.extend({}, opts, $this.data('expander') || $.meta && $this.data() || {}),
               hasDetails = !!$this.find('.' + o.detailClass).length,
-              hasBlocks = !!$this.find('*').filter(function() {
+              hasBlocks = !!opts.hasBlocks || !!$this.find('*').filter(function() {
                 var display = $(this).css('display');
                 return (/^block|table|list/).test(display);
               }).length,

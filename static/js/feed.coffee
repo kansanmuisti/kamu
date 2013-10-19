@@ -39,5 +39,6 @@ class @MemberActivityView extends Backbone.View
         @$el.html html
         @$el.find('.summary').expander
             slicePoint: 350
+            hasBlocks: true
 
         return @
