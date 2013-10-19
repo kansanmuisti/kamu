@@ -112,7 +112,9 @@ class Member(models.Model):
 
     def get_terms(self):
         da_list = self.districtassociation_set.order_by('begin')
-        term_list = list(Term.objects.filter(begin__gte=da_list[0].begin).order_by('begin'))
+        first_da = da_list[0]
+        term_filter = Q(begin__gte=first_da.begin) | Q(end__isnull=True)
+        term_list = list(Term.objects.filter(term_filter).order_by('begin'))
         for term in term_list:
             term.found = False
         for da in da_list:
