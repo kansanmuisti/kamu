@@ -2,15 +2,17 @@ from django.db import models
 from django.http import Http404
 from django.conf.urls.defaults import *
 from django.core.exceptions import *
+from django.shortcuts import redirect
 
 from tastypie.cache import SimpleCache
 from tastypie.resources import ModelResource, Resource
 from tastypie.exceptions import BadRequest
 from tastypie.constants import ALL, ALL_WITH_RELATIONS
-from tastypie import fields
+from tastypie import fields, http
 from parliament.models import *
 from sorl.thumbnail import get_thumbnail
 import datetime
+import re
 
 
 # Save these for caching purposes
@@ -44,12 +46,31 @@ class TermResource(KamuResource):
         queryset = Term.objects.all()
 
 class PartyResource(KamuResource):
-    def dehydrate(self, bundle):
-        process_api_thumbnail(bundle, bundle.obj.logo, 'logo_thumbnail')
-        return bundle
+    SUPPORTED_LOGO_WIDTHS = (32, 48, 64)
+
+    def get_logo(self, request, **kwargs):
+        self.method_check(request, allowed=['get'])
+        self.is_authenticated(request)
+        try:
+            party = Party.objects.get(name=kwargs.get('name'))
+        except Party.DoesNotExist:
+            return http.HttpNotFound()
+        dim = request.GET.get('dim', None)
+        if not dim or not re.match(r'[\d]+x[\d]+$', dim):
+            raise BadRequest("You must supply the 'dim' parameter for the image dimensions (e.g. 64x64")
+        width, height = [int(x) for x in dim.split('x')]
+        if width != height:
+            raise BadRequest("Only square dimensions (x=y) supported")
+        if not width in self.SUPPORTED_LOGO_WIDTHS:
+            raise BadRequest("Supported thumbnail widths: %s" % ', '.join([str(x) for x in self.SUPPORTED_LOGO_WIDTHS]))
+        tn_url = get_thumbnail(party.logo, '%dx%d' % (width, height)).url
+        return redirect(tn_url)
+
     def prepend_urls(self):
+        url_base = r"^(?P<resource_name>%s)/(?P<name>[\w\d_.-]+)/" % self._meta.resource_name
         return [
-            url(r"^(?P<resource_name>%s)/(?P<name>[\w\d_.-]+)/$" % self._meta.resource_name, self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
+            url(url_base + '$', self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
+            url(url_base + 'logo/$', self.wrap_view('get_logo'), name="api_get_logo"),
         ]
 
     class Meta:
