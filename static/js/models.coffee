@@ -1,4 +1,7 @@
 class @Party extends Backbone.Tastypie.Model
+    url: -> API_PREFIX + "party/#{@get('name')}/"
+    get_logo_thumbnail: (width, height) ->
+        return @url() + "logo/?dim=#{width}x#{height}"
 
 class @PartyList extends Backbone.Tastypie.Collection
     url: API_PREFIX + 'party/'

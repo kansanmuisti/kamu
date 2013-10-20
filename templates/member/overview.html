@@ -31,7 +31,7 @@ FEED_ACTIONS = {{feed_actions_json|safe}};
             <h1>{{member.get_print_name}}</h1>
             <div class="party-district">
                 <div class="party-logo">
-                    {% thumbnail member.party.logo "48x48" as logo %}
+                    {% thumbnail member.party.logo "48x48" format="PNG" as logo %}
                     <img src="{{logo.url}}" style="margin:{{logo|margin:"48x48"}}" />
                     {% endthumbnail %}
                 </div>

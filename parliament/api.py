@@ -63,7 +63,8 @@ class PartyResource(KamuResource):
             raise BadRequest("Only square dimensions (x=y) supported")
         if not width in self.SUPPORTED_LOGO_WIDTHS:
             raise BadRequest("Supported thumbnail widths: %s" % ', '.join([str(x) for x in self.SUPPORTED_LOGO_WIDTHS]))
-        tn_url = get_thumbnail(party.logo, '%dx%d' % (width, height)).url
+        fmt = 'PNG' if str(party.logo).endswith('.png') else 'JPEG'
+        tn_url = get_thumbnail(party.logo, '%dx%d' % (width, height), format=fmt).url
         return redirect(tn_url)
 
     def prepend_urls(self):

@@ -18,6 +18,7 @@ class MemberListItemView extends Backbone.View
 
     render: ->
         attr = @model.toJSON()
+        attr.party = @model.get_party(party_list)
         html = $($.trim(@template attr))
         @$el = html
         @el = @$el[0]
