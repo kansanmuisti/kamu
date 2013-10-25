@@ -71,6 +71,28 @@ FEED_ACTIONS = [
     }
 ]
 
+MEMBER_LIST_FIELDS = [
+    {
+        'id': 'recent_activity',
+        'name': _('Activity'),
+    }, {
+        'id': 'name',
+        'name': _('Name'),
+    }, {
+        'id': 'attendance',
+        'name': _('Attendance'),
+    }, {
+        'id': 'party_agree',
+        'name': _('Agreement with party'),
+    }, {
+        'id': 'term_count',
+        'name': _('Number of terms'),
+    }, {
+        'id': 'age',
+        'name': _('Age'),
+    }
+]
+
 party_json = None
 def get_parties(request):
     global party_json
@@ -105,44 +127,6 @@ def get_view_member(url_name):
     current_district = member.districtassociation_set.order_by('-begin')[0].district
     member.current_district = current_district
     return member
-
-def render_member_activity(item):
-    d = {'time': item.time}
-    if item.type == 'FB':
-        # Facebook update
-        d['type'] = _('Facebook update')
-        d['icon'] = 'facebook'
-        o = item.socialupdateactivity.update
-        d['text'] = o.text
-    elif item.type == 'TW':
-        d['type'] = _('Tweet')
-        d['icon'] = 'twitter'
-        o = item.socialupdateactivity.update
-        d['text'] = o.text
-    elif item.type == 'ST':
-        d['type'] = _('Statement')
-        d['icon'] = 'comment-alt'
-        o = item.statementactivity.statement
-        d['text'] = o.text
-    elif item.type == 'IN':
-        d['type'] = _('Initiative')
-        d['icon'] = 'lightbulb'
-        o = item.initiativeactivity.doc
-        d['text'] = o.summary
-    elif item.type == 'SI':
-        d['type'] = _('Signature')
-        d['icon'] = 'pencil'
-        o = item.signatureactivity.signature.doc
-        d['text'] = o.summary
-    elif item.type == 'WQ':
-        d['type'] = _('Written question')
-        d['icon'] = 'question'
-        o = item.initiativeactivity.doc
-        d['text'] = o.summary
-    else:
-        return None
-    d['text'] = d['text'].replace('\n', '\n\n')
-    return d
 
 def _get_member_activity_kws(member):
     kw_act_list = KeywordActivity.objects.filter(activity__member=member).select_related('keyword', 'activity', 'activity__type')
@@ -409,6 +393,9 @@ def show_topic(request, topic):
     pass
 
 def list_members(request):
-    args = dict(party_json=get_parties(request))
+    args = {}
+    args['party_json'] = get_parties(request)
+    args['list_fields_json'] = simplejson.dumps(MEMBER_LIST_FIELDS)
+
     return render_to_response('member/list.html',
             args, context_instance=RequestContext(request))

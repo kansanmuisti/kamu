@@ -22,16 +22,7 @@
                 <label class="col-lg-2 control-label">{% trans "Order" %}</label>
                 <div class="col-lg-10">
                     <div class="btn-toolbar">
-                        <div class="btn-group btn-group-sm member-list-sort-buttons" data-toggle="buttons-checkbox">
-                            <button data-col="recent_activity" class="btn btn-default active" type="button">Aktiivisuus</button>
-                            <button data-col="party_agree" class="btn btn-default" type="button">Samanmielisyys</button>
-                            <button class="btn btn-default" type="button">Puheenvuorot</button>
-                            <button class="btn btn-default" type="button">Aloitteet</button>
-                            <button class="btn btn-default" type="button">Läsnäolot</button>
-                            <button class="btn btn-default" type="button">Ikä</button>
-                            <button data-col="term_count" class="btn btn-default" type="button">Kausien lukumäärä</button>
-                        </div>
-                        <div class="btn-group" data-toggle="buttons-checkbox">
+                        <div class="btn-group btn-group-sm member-list-sort-buttons">
                         </div>
                     </div>
                 </div>
@@ -45,6 +36,10 @@
     <ul class="member-list row">
     </ul>
 </div>
+
+<script id="member-list-sort-button-template" type="text/template">
+    <button data-col="<%= id %>" class="btn btn-default" type="button"><%= name %></button>
+</script>
 
 <script id="member-list-item-template" type="text/template">
 <li class="col-lg-5">
@@ -74,8 +69,10 @@
                         <i class="typcn typcn-briefcase"></i>
                     </span>
                     <% } %>
+                    <hr />
                     <div class="row">
-                        <div class="stat-name col-lg-5">Aktiivisuus:</div>
+                        <div class="stat-name col-lg-6">Aktiivisuus:</div>
+                        <div class="stat-value col-lg-2">100</div>
                         <div class="col-lg-7">
                             <div class="progress">
                                 <div class="progress-bar progress-bar-info" style="width: <%= stats.activity_ranking*100 %>%"></div>
@@ -89,38 +86,9 @@
 </li>
 </script>
 
-{% comment %}
-    <ul class="member-stats">
-        <li class="recent_activity">
-            <%= window._share_as_stars(stats.activity_ranking) %>
-            <i class="icon-comment media-object" style="font-size: 16px"></i>
-        </li>
-        <li class="party_agree">
-            <%= Math.round(stats.party_agree*100) %>%
-            <img src="{% static "images/icons/party_agr.png" %}"
-                alt="{% trans "Party agreement" %}"
-                title="{% trans "Party agreement" %}"
-                />
-        </li>
-        <li class="session_agree">
-            <%= Math.round(stats.session_agree*100) %>%
-            <img src="{% static "images/icons/session_agr.png" %}"
-                alt="{% trans "Session agreement" %}"
-                title="{% trans "Session agreement" %}"
-                />
-        </li>
-        <li class="attendance">
-            <%= Math.round(stats.attendance*100) %>%
-            <img src="{% static "images/icons/attendance.png" %}"
-                alt="{% trans "Attendance" %}"
-                title="{% trans "Attendance" %}"
-                />
-        </li>
-    </ul>
-{% endcomment %}
-
 <!-- Embedded resources -->
 <script type="text/javascript">
+    MEMBER_LIST_FIELDS = {{list_fields_json|safe}};
     party_json = {{party_json|safe}};
 </script>
 

@@ -1,24 +1,49 @@
-@_share_as_stars = (n, max=5) ->
-    str = ""
-    semistars = Math.round n*2*max
-    fullstars = Math.floor semistars/2.0
-    halfstars = semistars%2
-    for i in [0...fullstars]
-        str += '<i class="icon-star media-object" style="font-size: 12px"></i>'
-    if halfstars
-        str += '<i class="icon-star-half-empty media-object" style="font-size: 12px"></i>'
-        i += 1
-    while i < max
-        str += '<i class="icon-star-empty media-object" style="font-size: 12px"></i>'
-        i += 1
-    return str
+class MemberListSortButtonsView extends Backbone.View
+    el: ".member-list-sort-buttons"
+    template: _.template $.trim $("#member-list-sort-button-template").html()
+
+    initialize: ->
+        @listenTo member_list_view, 'sort-changed', @sort_changed
+
+    events:
+        'click button': 'handle_sort_button'
+
+    handle_sort_button: (ev) ->
+        btn = $(ev.currentTarget)
+        ascending = true
+        if btn.hasClass('active') and btn.hasClass('ascending')
+            ascending = false
+
+        field = $(btn).data "col"
+        member_list_view.set_sort_order field, ascending
+
+    sort_changed: (field, ascending) ->
+        @$el.find('button').removeClass('active').removeClass('ascending').find('i').remove()
+        active_btn = @$el.find("[data-col='#{field.id}']")
+        active_btn.addClass 'active'
+        if ascending
+            icon = 'arrow-up'
+            active_btn.addClass 'ascending'
+        else
+            icon = 'arrow-down'
+        active_btn.append $("<i class='typcn typcn-#{icon}'></i>")
+
+    render: ->
+        @$el.empty()
+        for f in MEMBER_LIST_FIELDS
+            button_el = $(@template f)
+            if member_list_view.active_sort_field.id == f.id
+                button_el.addClass 'active'
+            @$el.append button_el
+        return @
 
 class MemberListItemView extends Backbone.View
     template: _.template $("#member-list-item-template").html()
 
-    render: ->
+    render: (current_stat) ->
         attr = @model.toJSON()
         attr.party = @model.get_party(party_list)
+        attr.current_stat = current_stat
         html = $($.trim(@template attr))
         @$el = html
         @el = @$el[0]
@@ -57,7 +82,7 @@ class MemberListView extends Backbone.View
                 thumbnail_dim: "104x156"
                 current: true
                 stats: true
-                limit: 0
+                limit: 10
             processData: true
 
     _setup_sort: =>
@@ -80,6 +105,14 @@ class MemberListView extends Backbone.View
             party_agree: statsort('party_agree')
             session_agree: statsort('party_agree')
             term_count: statsort('term_count')
+            age: statsort('age')
+
+        @_sort_fields = []
+        for field in MEMBER_LIST_FIELDS
+            # Copy the original object
+            f = $.extend {}, field
+            f.sort_func = @_sort_funcs[f.id]
+            @_sort_fields.push f
 
         @_raw_sort_func = null
         @sort_order = 1
@@ -88,13 +121,7 @@ class MemberListView extends Backbone.View
 
         # Just to have something in the sort order,
         # this will be overriden once we get data
-        @_set_sort_order "name"
-
-        $(".member-list-sort-buttons button").click (ev) =>
-            console.log "click"
-            btn = ev.currentTarget
-            field = $(btn).data "col"
-            @_set_sort_order field
+        @set_sort_order "name"
 
     _calculate_rankings: (collection) =>
         activity_scores = (model.attributes.stats['recent_activity'] \
@@ -106,30 +133,22 @@ class MemberListView extends Backbone.View
             stats = model.attributes.stats
             stats['activity_ranking'] = percentile stats['recent_activity']
 
-    _set_sort_order: (field, toggle_order=true) =>
-            func = @_sort_funcs[field]
-            if toggle_order and func == @_raw_sort_func
-                @sort_order *= -1
-            # This is probably more intuitive and allows
-            # for nicer comparisons
-            #else
-            #    @sort_order = 1
+    set_sort_order: (field, ascending=true) =>
+            for f in @_sort_fields
+                if f.id == field
+                    break
+            @active_sort_field = f
 
-            $("#member-sort-buttons button .sort-order").remove()
-            btn = $("#member-sort-buttons button[data-col='#{field}']")
-            order_widget = $ '<div class="sort-order"></div>'
-            if @sort_order > 0
-                order_widget.addClass "sort-order-asc"
+            func = f.sort_func
+            if ascending
+                @sort_order = 1
             else
-                order_widget.addClass "sort-order-desc"
-
-            btn.append order_widget
-
-            $("#member-list .member-stats > li").hide()
-            $("#member-list .member-stats > li.#{field}").show()
+                @sort_order = -1
 
             @_raw_sort_func = func
             @_filter_listing()
+
+            @trigger 'sort-changed', f, ascending
 
     _update_search_hint: (col) =>
         i = Math.floor(Math.random()*(col.models.length))
@@ -153,13 +172,13 @@ class MemberListView extends Backbone.View
         result.sort @sort_func
 
         for hit in result
+            hit.render()
             @$el.append hit.el
 
     _process_children: (collection) =>
         @spinner_el.spin false
         for model in collection.models
             item_view = new MemberListItemView model: model
-            item_view.render()
             @children[model.id] = item_view
             party = model.get_party party_list
             @index.add
@@ -174,8 +193,9 @@ class MemberListView extends Backbone.View
         @_process_children @collection
         @_update_search_hint @collection
         @_filter_listing()
-        @_set_sort_order "recent_activity", false
-
+        @set_sort_order "recent_activity", false
 
 member_list_view = new MemberListView
+sort_buttons_view = new MemberListSortButtonsView
+sort_buttons_view.render()
 party_list = new PartyList party_json
