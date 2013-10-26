@@ -46,6 +46,13 @@ class TermResource(KamuResource):
     class Meta:
         queryset = Term.objects.all()
 
+class KeywordResource(KamuResource):
+    class Meta:
+        queryset = Keyword.objects.all()
+        filtering = {
+            'name': ('exact', 'iexact', 'startswith', 'contains', 'icontains')
+        }
+
 class PartyResource(KamuResource):
     SUPPORTED_LOGO_WIDTHS = (32, 48, 64)
 
@@ -127,8 +134,14 @@ class MemberResource(KamuResource):
     class Meta:
         queryset = Member.objects.select_related('party')
 
+class MemberActivityTypeResource(KamuResource):
+    class Meta:
+        resource_name = 'member_activity_type'
+        queryset = MemberActivityType.objects
+
 class MemberActivityResource(KamuResource):
     member = fields.ForeignKey('parliament.api.MemberResource', 'member')
+    type = fields.ForeignKey(MemberActivityTypeResource, 'type')
 
     def get_extra_info(self, item):
         d = {}
@@ -187,12 +200,24 @@ class MemberActivityResource(KamuResource):
         return qset
 
     class Meta:
-        queryset = MemberActivity.objects.all().order_by('-time').select_related('member')
+        queryset = MemberActivity.objects.all().order_by('-time').select_related('member').select_related('type')
         resource_name = 'member_activity'
         filtering = {
-            'type': ('exact', 'in'),
+            'type': ALL_WITH_RELATIONS,
             'time': ALL,
             'member': ALL_WITH_RELATIONS
+        }
+
+class KeywordActivityResource(KamuResource):
+    activity = fields.ForeignKey(MemberActivityResource, 'activity', full=True)
+    keyword = fields.ForeignKey(KeywordResource, 'keyword')
+
+    class Meta:
+        queryset = KeywordActivity.objects.all()
+        resource_name = 'keyword_activity'
+        filtering = {
+            'keyword': ('exact', 'in'),
+            'activity': ALL_WITH_RELATIONS
         }
 
 class PlenarySessionResource(KamuResource):
@@ -287,4 +312,4 @@ class KeywordResource(KamuResource):
 all_resources = [TermResource, PartyResource, MemberResource, PlenarySessionResource,
                  PlenaryVoteResource, VoteResource, FundingSourceResource, FundingResource,
                  SeatResource, MemberSeatResource, DocumentResource, MemberActivityResource,
-                 KeywordResource, CommitteeResource]
+                 KeywordResource, CommitteeResource, KeywordActivityResource, KeywordResource]

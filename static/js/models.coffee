@@ -8,6 +8,8 @@ class @PartyList extends Backbone.Tastypie.Collection
     urlRoot: URL_CONFIG['api_party']
     model: Party
 
+
+
 class @Member extends Backbone.Tastypie.Model
     url: ->
         URL_CONFIG['api_member'] + @get('id')
@@ -44,11 +46,15 @@ class @MemberList extends Backbone.Tastypie.Collection
     urlRoot: URL_CONFIG['api_member']
     model: Member
 
+
+
 class @MemberActivity extends Backbone.Tastypie.Model
 
 class @MemberActivityList extends Backbone.Tastypie.Collection
     urlRoot: URL_CONFIG['api_member_activity']
     model: MemberActivity
+
+
 
 class @Keyword extends Backbone.Tastypie.Model
     get_view_url: ->
@@ -57,3 +63,11 @@ class @Keyword extends Backbone.Tastypie.Model
 class @KeywordList extends Backbone.Tastypie.Collection
     urlRoot: URL_CONFIG['api_keyword']
     model: Keyword
+
+
+
+class @KeywordActivity extends Backbone.Tastypie.Model
+
+class @KeywordActivityList extends Backbone.Tastypie.Collection
+    urlRoot: URL_CONFIG['api_keyword_activity']
+    model: KeywordActivity

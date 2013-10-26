@@ -401,9 +401,9 @@ def list_topics(request):
 
 def show_topic(request, topic, slug=None):
     # We don't use slug for anything.
-    item = get_object_or_404(Keyword, id=topic)
-    print item
-    return HttpResponse()
+    kw = get_object_or_404(Keyword, id=topic)
+    return render_to_response('show_topic.html', {'topic': kw},
+        context_instance=RequestContext(request))
 
 def list_members(request):
     args = {}
