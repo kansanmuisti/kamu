@@ -171,23 +171,19 @@ def show_member(request, member, page=None):
     types = [[t.type, _(t.name)] for t in activity_types]
     weights = {t.type: t.weight for t in activity_types}
 
-    if not page:
-        args['activity_counts_json'] = res.serialize(None,
-            member.get_activity_counts(), 'application/json')
-        args['activity_types_json'] = res.serialize(None,
-            types, 'application/json')
-        args['activity_type_weights_json'] = res.serialize(None,
-            weights, 'application/json')
-        args['feed_filters'] = make_feed_filters()
-        args['feed_actions_json'] = simplejson.dumps(make_feed_actions(), ensure_ascii=False)
-        kw_act = _get_member_activity_kws(member)
-        kw_act_json = simplejson.dumps(kw_act, ensure_ascii=False)
-        args['keyword_activity'] = kw_act_json
-        template = 'member/overview.html'
-    elif page == 'basic-info':
-        template = 'member/basic_info.html'
-    else:
-        raise Http404()
+    args['activity_counts_json'] = res.serialize(None,
+        member.get_activity_counts(), 'application/json')
+    args['activity_types_json'] = res.serialize(None,
+        types, 'application/json')
+    args['activity_type_weights_json'] = res.serialize(None,
+        weights, 'application/json')
+    args['feed_filters'] = make_feed_filters()
+    args['feed_actions_json'] = simplejson.dumps(make_feed_actions(), ensure_ascii=False)
+    kw_act = _get_member_activity_kws(member)
+    kw_act_json = simplejson.dumps(kw_act, ensure_ascii=False)
+    args['keyword_activity'] = kw_act_json
+    template = 'member/details.html'
+
     return render_to_response(template, args,
         context_instance=RequestContext(request))
 
