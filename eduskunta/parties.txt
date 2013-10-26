@@ -1,10 +1,10 @@
 # short	long	logo	vis_color
-kd	Kristillisdemokraatit	images/parties/kd.jpg	#cccccc
-kesk	Keskusta	images/parties/kesk.jpg	#9fd18b
-kok	Kokoomus	images/parties/kok.jpg	#c7ddf3
-ps	Perussuomalaiset	images/parties/ps.jpg	#69b3e3
-r	RKP	images/parties/r.jpg	#ffd87d
-sd	Sosialidemokraatit	images/parties/sd.jpg	#f9c0c7
-vas	Vasemmistoliitto	images/parties/vas.jpg	#ec008c
-vihr	Vihreä liitto	images/parties/vihr.jpg	#dde89a
-m11	Muutos 2011	images/parties/m11.jpg	#a2c7f2
+kd	Kristillisdemokraatit	images/parties/kd.png	#cccccc
+kesk	Keskusta	images/parties/kesk.png	#9fd18b
+kok	Kokoomus	images/parties/kok.png	#c7ddf3
+ps	Perussuomalaiset	images/parties/ps.png	#69b3e3
+r	RKP	images/parties/r.png	#ffd87d
+sd	Sosialidemokraatit	images/parties/sd.png	#f9c0c7
+vas	Vasemmistoliitto	images/parties/vas.png	#ec008c
+vihr	Vihreä liitto	images/parties/vihr.png	#dde89a
+m11	Muutos 2011	images/parties/m11.png	#a2c7f2
