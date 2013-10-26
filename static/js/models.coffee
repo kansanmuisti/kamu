@@ -5,11 +5,10 @@ class @Party extends Backbone.Tastypie.Model
         return @url() + "logo/?dim=#{width}x#{height}"
 
 class @PartyList extends Backbone.Tastypie.Collection
-    url: URL_CONFIG['api_party']
+    urlRoot: URL_CONFIG['api_party']
     model: Party
 
 class @Member extends Backbone.Tastypie.Model
-    URL_PREFIX: '/member/'
     url: ->
         URL_CONFIG['api_member'] + @get('id')
     get_view_url: ->
@@ -42,17 +41,19 @@ class @Member extends Backbone.Tastypie.Model
         return party_list.get @get('party')
 
 class @MemberList extends Backbone.Tastypie.Collection
-    url: URL_CONFIG['api_member']
+    urlRoot: URL_CONFIG['api_member']
     model: Member
 
 class @MemberActivity extends Backbone.Tastypie.Model
 
 class @MemberActivityList extends Backbone.Tastypie.Collection
-    url: URL_CONFIG['api_member_activity']
+    urlRoot: URL_CONFIG['api_member_activity']
     model: MemberActivity
 
 class @Keyword extends Backbone.Tastypie.Model
+    get_view_url: ->
+        URL_CONFIG['topic_details'].replace('999', @get('id')).replace('SLUG', @get('slug'))
 
 class @KeywordList extends Backbone.Tastypie.Collection
-    url: URL_CONFIG['api_keyword']
+    urlRoot: URL_CONFIG['api_keyword']
     model: Keyword
