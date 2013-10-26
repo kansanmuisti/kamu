@@ -24,17 +24,21 @@ urlpatterns += patterns('parliament.views',
     url(r'^$', 'main'),
     url(r'^ajax/parliament-activity/$', 'get_parliament_activity'),
     url(r'^ajax/mp-some-activity/$', 'get_mp_some_activity'),
+
     url(r'^session/$', 'list_sessions'),
     url(r'^session/calendar/(?P<month>\d+)-(?P<year>\d+)/$', 'list_sessions'),
     url(r'^session/(?P<plsess>[\w-]+)/$', 'show_session'),
     url(r'^session/(?P<plsess>[\w-]+)/(?P<item_nr>\d+)/$', 'show_item'),
     url(r'^session/(?P<plsess>[\w-]+)/(?P<item_nr>\d+)/(?P<subitem_nr>\d+)/$', 'show_item'),
+
     url(r'^member/$', 'list_members'),
     url(r'^member/(?P<member>[-\w]+)/$', 'show_member'),
     url(r'^member/(?P<member>[-\w]+)/(?P<page>[-\w]+)/$', 'show_member'),
 
     url(r'^topic/$', 'list_topics'),
     url(r'^topic/(?P<topic>\d+)-(?P<slug>[-\w]+)/$', 'show_topic'),
+
+    url(r'^document/(?P<slug>[-\w]+)/$', 'show_document'),
 )
 
 from tastypie.api import Api

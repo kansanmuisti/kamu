@@ -412,3 +412,9 @@ def list_members(request):
 
     return render_to_response('member/list.html',
             args, context_instance=RequestContext(request))
+
+def show_document(request, slug):
+    doc = get_object_or_404(Document, url_name=slug)
+    return render_to_response('show_document.html', {'doc': doc},
+        context_instance=RequestContext(request))
+
