@@ -278,10 +278,12 @@ def main(request):
             'title': 'Aiheet',
             'text': 'Selaa eduskunnan käsittelemiä asioita aihealueittain',
             'image': 'images/etu-asiat-300x200.png',
+            'url': reverse('parliament.views.list_topics')
         }, {
             'title': 'Kansan&shy;edustajat',
             'text': 'Tutustu kansanedustajiin ja heidän ajamiinsa asioihin',
             'image': 'images/etu-mpt-300x200.png',
+            'url': reverse('parliament.views.list_members')
         }, {
             'title': 'Puolueet',
             'text': 'Mistä eri puolueet ovat kiinnostuneet?',

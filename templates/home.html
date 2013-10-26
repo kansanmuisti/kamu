@@ -62,12 +62,12 @@ $ ->
             <div class="nav-button">
                 <div class="row">
                     <div class="col-6 col-sm-6 col-lg-12">
-                        <a href="#">
+                        <a href="{{nb.url}}">
                             <img src="{% static nb.image %}">
                         </a>
                     </div>
                     <div class="col-6 col-sm-6 col-lg-12">
-                        <a href="#"><h3>{{nb.title|safe}}</h3></a>
+                        <a href="{{nb.url}}"><h3>{{nb.title|safe}}</h3></a>
                         <span>{{nb.text|safe}}</span>
                     </div>
                 </div>
@@ -102,48 +102,5 @@ $ ->
     </div>
 </div>
 
-{% comment %}
-<div id="main-page" class="row">
-	<div id="navigation" class="span8">
-		<a href="#">
-			<img alt="{% trans "Parties" %}" src="{% static "images/puolueet.jpg" %}" />
-			<span class="caption">{% trans "Parties" %}</span>
-		</a>
-		<a href="#">
-			<img alt="{% trans "MPs" %}" src="{% static "images/guzenina-richardsson.jpg" %}" />
-			<span class="caption">{% trans "MPs" %}</span>
-		</a>
-		<a href="#">
-			<img alt="{% trans "News" %}" src="{% static "images/ajankohtaista.jpg" %}" />
-			<span class="caption">{% trans "News" %}</span>
-		</a>
-	</div>
-
-	<div id="feeds-span" class="span4">
-      <h3 class="grey">{% trans "Social media" %}</h3>
-      {{ some_html|safe }}
-      <div id="livefeed-showmore" class="showmore-link"><a href="#">{% trans "Show more updates" %} &or;</a></div>
-      <h3 class="grey">{% trans "Share in social media" %}</h3>
-			<div>All sorts of logos here</div>
-	</div>
-
-	<div id="newsbox-span" class="span8">
-    	<h3 class="grey">{% trans "Site news" %}</h3>
-			<div class="post">
-        <h4>Hallitustyökalu avattu</h4>
-        <div class="content">
-          Millaiset hallituspohjat toimisivat oikeasti? Missä tapauksissa jouduttaisiin tekemään eniten kompromisseja? Kamun hallitussuunnittelutyökalu tietää.
-          <a href="#" class="readmore">Lue lisää &gt;</a>
-        </div>
-			</div>
-	</div>
-	
-	<div id="parliament-activity-span" class="span8">
-            <h3>{% trans "Parliament activity feed" %}</h3>
-            {{ parl_act_html|safe }}
-            <div id="parliament-showmore" class="showmore-link"><a href="#">{% trans "Show more items" %} &or;</a></div>
-	</div>
-</div>
-{% endcomment %}
 {% endblock %}
 
