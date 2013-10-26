@@ -78,11 +78,11 @@ class PartyResource(KamuResource):
         queryset = Party.objects.all()
         detail_uri_name = 'name'
 
-class Committee(KamuResource):
+class CommitteeResource(KamuResource):
     class Meta:
         queryset = Committee.objects.all()
 
-class CommitteeAssociation(KamuResource):
+class CommitteeAssociationResource(KamuResource):
     class Meta:
         queryset = CommitteeAssociation.objects.all()
 
@@ -236,61 +236,47 @@ class DocumentResource(KamuResource):
     class Meta:
         queryset = Document.objects.all()
 
-class FakeModel(object):
-    def __init__(self, **initial):
-        self.__dict__['_data'] = {}
-        self.__dict__['_data'].update(initial)
+def parse_date_from_opts(options, field_name):
+    val = options.get(field_name, None)
+    if not val:
+        return None
+    try:
+        date_val = datetime.datetime.strptime(val, '%Y-%m-%d')
+    except ValueError:
+        raise BadRequest("'%s' must be in ISO date format (yyyy-mm-dd)" % field_name)
 
-    def __getattr__(self, name):
-        return self.__dict__['_data'].get(name, None)
+    return date_val
 
-    def __setattr__(self, name, value):
-        self.__dict__['_data'][name] = value
-
-    def to_dict(self):
-        return self._data
-
-class TopicActivityResource(Resource):
-    topic = fields.CharField(attribute='topic')
-    activity = fields.FloatField(attribute='activity')
-
+class KeywordResource(KamuResource):
     class Meta:
-        resource_name = 'topic_activity'
-        object_class = FakeModel
+        queryset = Keyword.objects.all()
 
-    def get_object_list(self, start_date=None, limit=None):
-        activities = KeywordActivity.objects
+    def dehydrate(self, bundle):
+        obj = bundle.obj
+        if getattr(obj, 'activity_score', None) is not None:
+            bundle.data['activity_score'] = obj.activity_score
+        return bundle
+    def apply_sorting(self, obj_list, options=None):
+        if not 'activity' in options or options['activity'].lower() not in ('true', '1'):
+            return super(KeywordResource, self).apply_sorting(obj_list, options)
 
-        if start_date:
-            activities = activities.filter(activity__time__gte=start_date)
-    
-        activity = activities.values('keyword__name').annotate(
-            activity=models.Sum('activity__type__weight'),
-            last_date=models.Max('activity__time'),
-        )
-
-        activity = activity.extra(order_by=['-activity'])
-        if limit:
-            activity = activity[:limit]
-
-        act_list = [
-            FakeModel(
-                topic=a['keyword__name'],
-                activity=a['activity'],
-                last_date=a['last_date'])
-            for a in activity]
-        return act_list
-
-    
-    def obj_get_list(self, bundle, **kwargs):
-        since = bundle.request.GET.get('since', None)
+        # Activity filtering and sorting
+        since = parse_date_from_opts(options, 'since')
+        q = Q()
         if since:
-            start_date = datetime.datetime.strptime(since, '%Y-%m-%d')
-        else:
-            start_date = None
+            q &= Q(keywordactivity__activity__time__gte=since)
 
-        return self.get_object_list(start_date=start_date)
+        until = parse_date_from_opts(options, 'until')
+        if until:
+            q &= Q(keywordactivity__activity__time__lte=until)
+        obj_list = obj_list.filter(q)
+
+        obj_list = obj_list.annotate(activity_score=models.Sum('keywordactivity__activity__type__weight'))
+        obj_list = obj_list.filter(activity_score__gt=0).order_by('-activity_score')
+
+        return obj_list
 
 all_resources = [TermResource, PartyResource, MemberResource, PlenarySessionResource,
                  PlenaryVoteResource, VoteResource, FundingSourceResource, FundingResource,
-                 SeatResource, MemberSeatResource, DocumentResource, MemberActivityResource, TopicActivityResource]
+                 SeatResource, MemberSeatResource, DocumentResource, MemberActivityResource,
+                 KeywordResource, CommitteeResource]

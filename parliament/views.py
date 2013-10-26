@@ -21,7 +21,7 @@ from dateutil.relativedelta import relativedelta
 from utils import time_func
 
 import parliament.member_views
-from parliament.api import MemberResource, TopicActivityResource, PartyResource
+from parliament.api import MemberResource, KeywordResource, PartyResource
 
 FEED_ACTIONS = [
     {
@@ -360,31 +360,42 @@ def show_session(request, plsess):
     return render_to_response('new_session.html', args, context_instance=RequestContext(request))
 
 
+def get_embedded_resources(request, resource, options={}):
+    old_GET = request.GET
+    request.GET = options
+
+    res = resource(api_name='v1')
+    request_bundle = res.build_bundle(request=request)
+    queryset = res.obj_get_list(request_bundle)
+
+    bundles = []
+    for obj in queryset:
+        bundle = res.build_bundle(obj=obj, request=request)
+        bundles.append(res.full_dehydrate(bundle, for_list=True))
+    json = res.serialize(None, bundles, "application/json")
+
+    request.GET = old_GET
+    return json
+
 def list_topics(request):
     args = {}
-    resource = TopicActivityResource()
-    
-    limit = 20
-    
-    def date_encoder(obj):
-        if hasattr(obj, 'isoformat'):
-            return obj.isoformat()
-        raise TypeError(repr(o) + " is not JSON serializable")
+    resource = KeywordResource()
 
-    def json_topics(**kwargs):
-        topics = resource.get_object_list(**kwargs)
-        topics = [t.to_dict() for t in topics]
-        return simplejson.dumps(topics, default=date_encoder)
+    opts = {'limit': 20, 'activity': 'true'}
 
-    since = datetime.date.today() - datetime.timedelta(days=30)
-    args['recent_topics_json'] = json_topics(start_date=since, limit=limit)
-    
+    since = datetime.date.today() - relativedelta(months=2)
+    opts['since'] = str(since)
+    args['recent_topics_json'] = get_embedded_resources(request, KeywordResource, opts)
+
+    """
     term_start = Term.objects.latest().begin
-    args['term_topics_json'] = json_topics(start_date=term_start, limit=limit)
-    args['all_time_topics_json'] = json_topics(limit=limit)
+    opts['since'] = str(term_start)
+    args['term_topics_json'] = get_embedded_resources(request, KeywordResource, opts)
 
-    args['all_topics'] = json_topics()
-    
+    del opts['since']
+    args['all_time_topics_json'] = get_embedded_resources(request, KeywordResource, opts)
+    """
+
     return render_to_response('list_topics.html', args,
         context_instance=RequestContext(request))
 
