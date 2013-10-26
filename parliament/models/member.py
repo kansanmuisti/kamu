@@ -341,7 +341,7 @@ class CommitteeAssociation(models.Model):
     ROLE_CHOICES = (
         ('chairman', _('Chairman')),
         ('deputy-cm', _('Deputy Chairman')),
-        ('member', pgettext('Member', 'organisation')),
+        ('member', pgettext('organisation', 'Member')),
         ('deputy-m', _('Deputy Member')),
     )
     member = models.ForeignKey(Member, db_index=True)
