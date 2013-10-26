@@ -3,6 +3,7 @@ from django.http import Http404
 from django.conf.urls.defaults import *
 from django.core.exceptions import *
 from django.shortcuts import redirect
+from dateutil.relativedelta import relativedelta
 
 from tastypie.cache import SimpleCache
 from tastypie.resources import ModelResource, Resource
@@ -240,6 +241,11 @@ def parse_date_from_opts(options, field_name):
     val = options.get(field_name, None)
     if not val:
         return None
+    val = val.lower()
+    if val == 'month':
+        return datetime.date.today() - relativedelta(months=2)
+    elif val == 'term':
+        return Term.objects.latest().begin
     try:
         date_val = datetime.datetime.strptime(val, '%Y-%m-%d')
     except ValueError:
@@ -255,7 +261,9 @@ class KeywordResource(KamuResource):
         obj = bundle.obj
         if getattr(obj, 'activity_score', None) is not None:
             bundle.data['activity_score'] = obj.activity_score
+        bundle.data['slug'] = obj.get_slug()
         return bundle
+
     def apply_sorting(self, obj_list, options=None):
         if not 'activity' in options or options['activity'].lower() not in ('true', '1'):
             return super(KeywordResource, self).apply_sorting(obj_list, options)

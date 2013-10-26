@@ -34,7 +34,7 @@
         'member_details': '{% url "parliament.views.show_member" member="MEMBER" %}'
         'member_details_page': '{% url "parliament.views.show_member" member="MEMBER" page="PAGE" %}'
         'topic_list': '{% url "parliament.views.list_topics" %}'
-        'topic_details': '{% url "parliament.views.show_topic" topic="TOPIC" %}'
+        'topic_details': '{% url "parliament.views.show_topic" topic="999" slug="SLUG" %}'
 
         'api_member': '{% url "api_dispatch_list" resource_name="member" api_name="v1" %}'
         'api_member_activity': '{% url "api_dispatch_list" resource_name="member_activity" api_name="v1" %}'
@@ -105,7 +105,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="/">Etusivu</a></li>
-                    <li><a href="/">Aiheet</a></li>
+                    <li><a href="{% url 'parliament.views.list_topics' %}">Aiheet</a></li>
                     <li><a href="{% url 'parliament.views.list_members' %}">Kansanedustajat</a></li>
                     <li><a href="/">Puolueet</a></li>
                 </ul>

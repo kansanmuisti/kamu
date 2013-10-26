@@ -31,6 +31,8 @@
                 href: tag.url
             ).css("opacity", opacity).appendTo $li
             $li.children().css "fontSize", font_size + "px"
+            if tag.id
+                $li.attr 'data-id', tag.id
             $li.appendTo tag_list
 
         this.append tag_list

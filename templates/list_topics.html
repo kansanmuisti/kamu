@@ -10,66 +10,64 @@
         <h1>{% trans "Topics" %}</h1>
     </header>
     <div class="featured-issues">
-        <ul class="nav nav-tabs" id="js-issuetabs">
-            <li class="active">
-                <a href="#recent" data-toggle="tab">{% trans "Active recently" %}</a>
-            </li>
-            <li>
-                <a href="#term" data-toggle="tab">{% trans "Active this term" %}</a>
-            </li>
-            <li>
-                <a href="#alltime" data-toggle="tab">{% trans "All time active" %}</a>
-            </li>
-        </ul>
-        <div class="tab-content">
-            <div class="tab-pane active" id="recent">
-            <div id="recent_tags" class="tagcloud tagcloud-navi">
-            </div>
-            </div>
-            
-            <div class="tab-pane" id="term">
-            <div id="term_tags" class="tagcloud tagcloud-navi">
-            </div>
-            </div>
-            
-            <div class="tab-pane" id="alltime">
-            <div id="alltime_tags" class="tagcloud tagcloud-navi">
-            </div>
-            </div>
-        </div>
     </div>
 </div>
 
-<script type="text/javascript">
-var all_time_topics_json = {{all_time_topics_json|safe}};
-var term_topics_json = {{term_topics_json|safe}};
-var recent_topics_json = {{recent_topics_json|safe}};
+<script type="text/template" id="featured-topics-template">
+    <ul class="nav nav-tabs">
+    <% _.each(tabs, function(tab) { %>
+        <li>
+            <a data-tab="<%= tab.id %>" href="#"><%= tab.name %></a>
+        </li>
+    <% }); %>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active">
+        </div>
+    </div>
+{% comment %}
+    <% _.each(tabs, function(tab) { %>
+        <div data-tab="<%= tab.id %>" class="tab-pane">
+            <div class="tagcloud tagcloud-navi">
+            </div>
+        </div>
+    <% }); %>
+{% endcomment %}
+    </div>
 </script>
+
+<script type="text/javascript">
+
+FEATURED_TABS = [
+    {
+        id: 'recent',
+        name: "{% trans 'Active recently' %}",
+        filters: {
+            since: 'month'
+        },
+        data: {{recent_topics_json|safe}}
+    }, {
+        id: 'term',
+        name: "{% trans 'Active this term' %}",
+        filters: {
+            since: 'term'
+        }
+    }, {
+        id: 'alltime',
+        name: "{% trans 'All time active' %}"
+    }
+];
+
+</script>
+
+<script type="text/javascript" src="{% static "js/vendor/jquery.quicksand.js" %}"></script>
 
 {% compress js %}
 <script type="text/coffeescript" src="{% static "js/models.coffee" %}"></script>
-
-
-<script type="text/coffeescript">
-$ ->
-    render_tags = (el, data) ->
-        tags = []
-        for d in data
-            t =
-                name: d.topic
-                tag: d.topic
-                count: d.activity
-                url: d.topic
-            tags.push t
-        tags = _.sortBy tags, (t) -> t.name
-        $(el).tag_cloud tags
-        $(el).find("ul").addClass "tagcloud__content"
-
-    render_tags $("#recent_tags"), recent_topics_json
-    render_tags $("#term_tags"), term_topics_json
-    render_tags $("#alltime_tags"), all_time_topics_json
-</script>
 {% endcompress %}
 
+{% compress js %}
+<script type="text/coffeescript" src="{% static "js/topics.coffee" %}"></script>
+{% endcompress %}
 
 {% endblock %}

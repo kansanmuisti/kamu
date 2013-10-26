@@ -363,6 +363,9 @@ def get_embedded_resources(request, resource, options={}):
     res = resource(api_name='v1')
     request_bundle = res.build_bundle(request=request)
     queryset = res.obj_get_list(request_bundle)
+    queryset = res.apply_sorting(queryset, options)
+    if 'limit' in options:
+        queryset = queryset[0:int(options['limit'])]
 
     bundles = []
     for obj in queryset:
@@ -379,8 +382,7 @@ def list_topics(request):
 
     opts = {'limit': 20, 'activity': 'true'}
 
-    since = datetime.date.today() - relativedelta(months=2)
-    opts['since'] = str(since)
+    opts['since'] = 'month'
     args['recent_topics_json'] = get_embedded_resources(request, KeywordResource, opts)
 
     """
@@ -395,9 +397,11 @@ def list_topics(request):
     return render_to_response('list_topics.html', args,
         context_instance=RequestContext(request))
 
-def show_topic(request, topic):
-    # TODO
-    pass
+def show_topic(request, topic, slug=None):
+    # We don't use slug for anything.
+    item = get_object_or_404(Keyword, id=topic)
+    print item
+    return HttpResponse()
 
 def list_members(request):
     args = {}

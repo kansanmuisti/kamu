@@ -936,25 +936,28 @@ main.party-list {
 
 
 .tagcloud {
-  //background: @gray-lighter;
-  //padding: 10px;
-  font-size: 1em;
-  line-height: 2 * 1em;
-    
-  .xxs, .xs, .s, .l, .xl, .xxl {
-    line-height: 1.2 * 1em; }
-  .xxs {
-    font-size: 1em / 2; }
-  .xs {
-    font-size: 2 * 1em / 3; }
-  .s {
-    font-size: 3 * 1em / 4; }
-  .l {
-    font-size: 4 * 1em / 3; }
-  .xl {
-    font-size: 3 * 1em / 2; }
-  .xxl {
-    font-size: 2 * 1em
+    //background: @gray-lighter;
+    //padding: 10px;
+    font-size: 1em;
+    line-height: 2 * 1em;
+    .items {
+        .list-inline;
+        font-family: @brand-font-family;
+        text-transform: uppercase;
+        font-weight: 700;
+        li {
+            margin: 10px 5px 5px 0;
+            padding: 0;
+            }
+        a {
+        }
+        a:hover {
+            background: @lemon;
+            color: @gray-darker;
+            text-decoration: none;
+            .shadow-light();
+            z-index: 9999;
+        }
     }
 }
 
@@ -976,26 +979,6 @@ main.party-list {
         }
         
     }
-}
-
-.tagcloud__content {
-  .list-inline;
-  font-family: @brand-font-family;
-  text-transform: uppercase;
-  font-weight: 700;
-  li {
-    margin: 10px 5px 5px 0;
-    padding: 0;
-    }
-  a {
-  }
-  a:hover {
-    background: @lemon;
-    color: @gray-darker;
-    text-decoration: none;
-    .shadow-light();
-    z-index: 9999;
-  }
 }
 
 .tagcloud__actions {

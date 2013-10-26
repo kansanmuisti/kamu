@@ -9,6 +9,11 @@ class Keyword(models.Model):
     def __unicode__(self):
         return self.name
 
+    def get_slug(self):
+        name = self.name
+        name = name.replace(' (hist.)', '')
+        return slugify(name)
+
     class Meta:
         app_label = 'parliament'
 
