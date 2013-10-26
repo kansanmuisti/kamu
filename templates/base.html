@@ -26,6 +26,26 @@
     <link type="text/less" href="{% static 'css/kamu.less' %}" rel="stylesheet" />
     {% endcompress %}
 
+    {% compress js inline %}
+    <script type="text/coffeescript">
+    window.API_PREFIX = '/api/v1/'
+    window.URL_CONFIG =
+        'member_list': '{% url "parliament.views.list_members" %}'
+        'member_details': '{% url "parliament.views.show_member" member="MEMBER" %}'
+        'member_details_page': '{% url "parliament.views.show_member" member="MEMBER" page="PAGE" %}'
+        'topic_list': '{% url "parliament.views.list_topics" %}'
+        'topic_details': '{% url "parliament.views.show_topic" topic="TOPIC" %}'
+
+        'api_member': '{% url "api_dispatch_list" resource_name="member" api_name="v1" %}'
+        'api_member_activity': '{% url "api_dispatch_list" resource_name="member_activity" api_name="v1" %}'
+        'api_party': '{% url "api_dispatch_list" resource_name="party" api_name="v1" %}'
+        'api_term': '{% url "api_dispatch_list" resource_name="term" api_name="v1" %}'
+        'api_committee': '{% url "api_dispatch_list" resource_name="committee" api_name="v1" %}'
+        'api_document': '{% url "api_dispatch_list" resource_name="document" api_name="v1" %}'
+        'api_keyword': '{% url "api_dispatch_list" resource_name="keyword" api_name="v1" %}'
+    </script>
+    {% endcompress %}
+
     {% compress js %}
     <script type="text/javascript" src="{% static "js/vendor/jquery-1.9.1.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/moment.js" %}"></script>
@@ -34,7 +54,6 @@
         moment.lang("fi");
     </script>
     <script type="text/javascript" src="{% static "js/vendor/jquery.expander.js" %}"></script>
-    <script type="text/coffeescript" src="{% static "js/tagcloud.coffee" %}"></script>
     <script type="text/coffeescript">
         expander_defaults =
             expandText: "{% trans "Read more" %}" + " »"
@@ -42,6 +61,7 @@
             userCollapse: false
         $.extend $.fn.expander.defaults, expander_defaults
     </script>
+    <script type="text/coffeescript" src="{% static "js/tagcloud.coffee" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/spin.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/jquery.spin.js" %}"></script>
     <script type="text/javascript" src="{% static "bootstrap/js/tab.js" %}"></script>
@@ -54,10 +74,6 @@
     <script type="text/javascript" src="{% static "js/vendor/backbone.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/backbone-tastypie.js" %}"></script>
     {% endcompress %}
-
-    <script type="text/javascript">
-    window.API_PREFIX = '/api/v1/';
-    </script>
 
     {% block head %}{% endblock %}
 </head>

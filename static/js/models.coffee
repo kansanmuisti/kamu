@@ -1,16 +1,19 @@
 class @Party extends Backbone.Tastypie.Model
-    url: -> API_PREFIX + "party/#{@get('name')}/"
+    url: ->
+        URL_CONFIG['api_party'] + @get('name') + '/'
     get_logo_thumbnail: (width, height) ->
         return @url() + "logo/?dim=#{width}x#{height}"
 
 class @PartyList extends Backbone.Tastypie.Collection
-    url: API_PREFIX + 'party/'
+    url: URL_CONFIG['api_party']
     model: Party
 
 class @Member extends Backbone.Tastypie.Model
     URL_PREFIX: '/member/'
-    url: -> API_PREFIX + "member/#{@get('id')}/"
-    get_view_url: -> "#{@URL_PREFIX}#{@get('url_name')}/"
+    url: ->
+        URL_CONFIG['api_member'] + @get('id')
+    get_view_url: ->
+        URL_CONFIG['member_details'].replace 'MEMBER', @get('url_name')
 
     initialize: (models, opts) ->
         # Augment the stats object with some items
@@ -39,11 +42,17 @@ class @Member extends Backbone.Tastypie.Model
         return party_list.get @get('party')
 
 class @MemberList extends Backbone.Tastypie.Collection
-    url: API_PREFIX + 'member/'
+    url: URL_CONFIG['api_member']
     model: Member
 
 class @MemberActivity extends Backbone.Tastypie.Model
 
 class @MemberActivityList extends Backbone.Tastypie.Collection
-    url: API_PREFIX + 'member_activity/'
+    url: URL_CONFIG['api_member_activity']
     model: MemberActivity
+
+class @Keyword extends Backbone.Tastypie.Model
+
+class @KeywordList extends Backbone.Tastypie.Collection
+    url: URL_CONFIG['api_keyword']
+    model: Keyword
