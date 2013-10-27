@@ -53,8 +53,20 @@ class KeywordResource(KamuResource):
             'name': ('exact', 'iexact', 'startswith', 'contains', 'icontains')
         }
 
+def api_get_thumbnail(request, image, supported_dims):
+    dim = request.GET.get('dim', None)
+    if not dim or not re.match(r'[\d]+x[\d]+$', dim):
+        raise BadRequest("You must supply the 'dim' parameter for the image dimensions (e.g. 64x64")
+    width, height = [int(x) for x in dim.split('x')]
+    if not (width, height) in supported_dims:
+        dims = ', '.join([('%dx%d' % (x[0], x[1])) for x in supported_dims])
+        raise BadRequest("Supported thumbnail dimensions: %s" % dims)
+    fmt = 'PNG' if str(image).endswith('.png') else 'JPEG'
+    tn_url = get_thumbnail(image, '%dx%d' % (width, height), format=fmt).url
+    return redirect(tn_url)
+
 class PartyResource(KamuResource):
-    SUPPORTED_LOGO_WIDTHS = (32, 48, 64)
+    SUPPORTED_LOGO_DIMS = ((32, 32), (48, 48), (64, 64))
 
     def get_logo(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
@@ -63,17 +75,7 @@ class PartyResource(KamuResource):
             party = Party.objects.get(name=kwargs.get('name'))
         except Party.DoesNotExist:
             return http.HttpNotFound()
-        dim = request.GET.get('dim', None)
-        if not dim or not re.match(r'[\d]+x[\d]+$', dim):
-            raise BadRequest("You must supply the 'dim' parameter for the image dimensions (e.g. 64x64")
-        width, height = [int(x) for x in dim.split('x')]
-        if width != height:
-            raise BadRequest("Only square dimensions (x=y) supported")
-        if not width in self.SUPPORTED_LOGO_WIDTHS:
-            raise BadRequest("Supported thumbnail widths: %s" % ', '.join([str(x) for x in self.SUPPORTED_LOGO_WIDTHS]))
-        fmt = 'PNG' if str(party.logo).endswith('.png') else 'JPEG'
-        tn_url = get_thumbnail(party.logo, '%dx%d' % (width, height), format=fmt).url
-        return redirect(tn_url)
+        return api_get_thumbnail(request, party.logo, self.SUPPORTED_LOGO_DIMS)
 
     def prepend_urls(self):
         url_base = r"^(?P<resource_name>%s)/(?P<name>[\w\d_.-]+)/" % self._meta.resource_name
@@ -95,7 +97,24 @@ class CommitteeAssociationResource(KamuResource):
         queryset = CommitteeAssociation.objects.all()
 
 class MemberResource(KamuResource):
+    SUPPORTED_PORTRAIT_DIMS = ((48, 72), (106, 159), (128, 192))
+
     party = fields.ForeignKey('parliament.api.PartyResource', 'party')
+
+    def prepend_urls(self):
+        url_base = r"^(?P<resource_name>%s)/(?P<pk>\d+)/" % self._meta.resource_name
+        return [
+            url(url_base + 'portrait/$', self.wrap_view('get_portrait'), name="api_get_portrait"),
+        ]
+
+    def get_portrait(self, request, **kwargs):
+        self.method_check(request, allowed=['get'])
+        self.is_authenticated(request)
+        try:
+            member = Member.objects.get(pk=kwargs.get('pk'))
+        except Member.DoesNotExist:
+            return http.HttpNotFound()
+        return api_get_thumbnail(request, member.photo, self.SUPPORTED_PORTRAIT_DIMS)
 
     def build_filters(self, filters=None):
         orm_filters = super(MemberResource, self).build_filters(filters)
@@ -140,10 +159,14 @@ class MemberActivityTypeResource(KamuResource):
         queryset = MemberActivityType.objects
 
 class MemberActivityResource(KamuResource):
-    member = fields.ForeignKey('parliament.api.MemberResource', 'member')
+    member = fields.ForeignKey('parliament.api.MemberResource', 'member', null=True)
     type = fields.ForeignKey(MemberActivityTypeResource, 'type')
 
     def get_extra_info(self, item):
+        def get_keywords(doc):
+            keywords = [{'id': kw.id, 'name': kw.name} for kw in doc.keywords.all()]
+            return keywords
+
         d = {}
         target = {}
         acttype = item.type.pk
@@ -156,22 +179,19 @@ class MemberActivityResource(KamuResource):
         elif acttype == 'ST':
             o = item.statementactivity.statement
             target['text'] = o.text
-        elif acttype == 'IN':
+        elif acttype in ('IN', 'WQ', 'GB'):
             o = item.initiativeactivity.doc
             target['text'] = o.summary
             target['subject'] = o.subject
             target['name'] = o.name
+            target['keywords'] = get_keywords(o)
         elif acttype == 'SI':
             o = item.signatureactivity.signature.doc
             target['text'] = o.summary
             target['subject'] = o.subject
             target['name'] = o.name
             target['type'] = o.type
-        elif acttype == 'WQ':
-            o = item.initiativeactivity.doc
-            target['text'] = o.summary
-            target['subject'] = o.subject
-            target['name'] = o.name
+            target['keywords'] = get_keywords(o)
         else:
             raise Exception("Invalid type %s" % acttype)
         d['target'] = target
@@ -179,10 +199,13 @@ class MemberActivityResource(KamuResource):
 
     def dehydrate(self, bundle):
         obj = bundle.obj
-        bundle.data['member_name'] = obj.member.name
+        if obj.member:
+            bundle.data['member_name'] = obj.member.name
+            bundle.data['member_slug'] = obj.member.url_name
+            if obj.member.party:
+                bundle.data['party_name'] = party_dict[obj.member.party.id].name
+
         bundle.data['type'] = obj.type.pk
-        if obj.member.party:
-            bundle.data['party_name'] = party_dict[obj.member.party.id].name
         d = self.get_extra_info(obj)
         if d:
             bundle.data.update(d)
@@ -213,7 +236,7 @@ class KeywordActivityResource(KamuResource):
     keyword = fields.ForeignKey(KeywordResource, 'keyword')
 
     class Meta:
-        queryset = KeywordActivity.objects.all()
+        queryset = KeywordActivity.objects.all().order_by('-activity__time')
         resource_name = 'keyword_activity'
         filtering = {
             'keyword': ('exact', 'in'),

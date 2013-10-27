@@ -68,6 +68,11 @@ FEED_ACTIONS = [
         'icon': 'flash',
         'type': 'CD',
         'action': _('submitted a committee dissent')
+    }, {
+        'name': _('Government bills'),
+        'icon': 'clipboard',
+        'type': 'GB',
+        'action': _('government bill was introduced')
     }
 ]
 
@@ -358,7 +363,7 @@ def show_session(request, plsess):
     return render_to_response('new_session.html', args, context_instance=RequestContext(request))
 
 
-def get_embedded_resources(request, resource, options={}):
+def get_embedded_resource_list(request, resource, options={}):
     old_GET = request.GET
     request.GET = options
 
@@ -378,6 +383,17 @@ def get_embedded_resources(request, resource, options={}):
     request.GET = old_GET
     return json
 
+def get_embedded_resource(request, resource, obj, options={}):
+    old_GET = request.GET
+    request.GET = options
+
+    res = resource(api_name='v1')
+    res_bundle = res.build_bundle(obj=obj, request=request)
+    json = res.serialize(None, res.full_dehydrate(res_bundle), 'application/json')
+
+    request.GET = old_GET
+    return json
+
 def list_topics(request):
     args = {}
     resource = KeywordResource()
@@ -385,7 +401,7 @@ def list_topics(request):
     opts = {'limit': 20, 'activity': 'true'}
 
     opts['since'] = 'month'
-    args['recent_topics_json'] = get_embedded_resources(request, KeywordResource, opts)
+    args['recent_topics_json'] = get_embedded_resource_list(request, KeywordResource, opts)
 
     """
     term_start = Term.objects.latest().begin
@@ -402,7 +418,11 @@ def list_topics(request):
 def show_topic(request, topic, slug=None):
     # We don't use slug for anything.
     kw = get_object_or_404(Keyword, id=topic)
-    return render_to_response('show_topic.html', {'topic': kw},
+    kw_json = get_embedded_resource(request, KeywordResource, kw)
+    args = {'topic': kw, 'keyword_json': kw_json}
+    args['feed_actions_json'] = simplejson.dumps(make_feed_actions(), ensure_ascii=False)
+
+    return render_to_response('show_topic.html', args,
         context_instance=RequestContext(request))
 
 def list_members(request):

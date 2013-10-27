@@ -23,7 +23,7 @@ class @MemberActivityFeedView extends Backbone.View
             keyword: kw
 
     add_item: (item) =>
-        view = new MemberActivityView model: item
+        view = new ActivityView model: item, has_actor: false
         view.render()
         @$el.append view.el
 

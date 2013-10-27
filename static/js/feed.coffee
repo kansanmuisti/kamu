@@ -10,12 +10,13 @@ make_time_string = (time) ->
         format = 'LL'
     return m.format format
 
-class @MemberActivityView extends Backbone.View
+class @ActivityView extends Backbone.View
     tagName: 'li'
-    className: 'activity-item single-actor'
+    className: 'activity-item'
     template: _.template $.trim($("#activity-item-template").html())
 
-    initialize: ->
+    initialize: (options) ->
+        @has_actor = options.has_actor
 
     process_summary: (text) ->
         # TODO: Twitter processing
@@ -26,6 +27,13 @@ class @MemberActivityView extends Backbone.View
 
     render: ->
         obj = @model.toJSON()
+        if @has_actor and obj.member
+            obj.actor =
+                name: obj.member_name
+                url: URL_CONFIG['member_details'].replace 'MEMBER', obj.member_slug
+                thumbnail_url: obj.member + 'portrait/?dim=48x72'
+        else
+            obj.actor = null
         act = FEED_ACTIONS[obj.type]
         # If we have a target-specific action string, use it.
         if act.action_with_target and obj.target.type of act.action_with_target
