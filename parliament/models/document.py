@@ -20,7 +20,7 @@ class Keyword(models.Model):
 class Document(models.Model):
     TYPES = (
         ('mp_prop', 'MP law proposal'),
-        ('gov_prop', 'Government proposal'),
+        ('gov_bill', 'Government bill'),
         ('written_ques', 'Written question'),
         ('interpellation', 'Interpellation'),
     )
@@ -51,6 +51,7 @@ class Document(models.Model):
             s = s.replace('/', '-')
             self.url_name = slugify(s)
         super(Document, self).save(*args, **kwargs)
+
     def __unicode__(self):
         return "%s %s" % (self.type, self.name)
 

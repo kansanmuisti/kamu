@@ -14,7 +14,7 @@ DOC_DL_URL = "http://www.eduskunta.fi/triphome/bin/akxhref2.sh?{KEY}=%s+%s"
 DOC_PROCESS_URL = "http://www.eduskunta.fi/triphome/bin/vex3000.sh?TUNNISTE=%s+%s"
 HE_URL = "http://217.71.145.20/TRIPviewer/temp/TUNNISTE_HE_%i_%i_fi.html"
 DOC_TYPES = {
-    'HE': 'gov_prop',
+    'HE': 'gov_bill',
     'LA': 'mp_prop',
     'KK': 'written_ques',
     #"TPA", "TA", "KA", "LTA",
