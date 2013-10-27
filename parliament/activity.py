@@ -36,9 +36,9 @@ def create_document_signature_activity(sender, **kwargs):
 def create_document_activity(sender, **kwargs):
     # Create the activity record for document authorship.
     obj = kwargs['instance']
-    if obj.author == None:
+    if obj.type not in ('mp_prop', 'written_ques', 'gov_bill'):
         return
-    if obj.type not in ('mp_prop', 'written_ques'):
+    if obj.author == None and obj.type != 'gov_bill':
         return
     act, created = InitiativeActivity.objects.get_or_create(doc=obj)
     if not created and getattr(obj, '_updated', False):

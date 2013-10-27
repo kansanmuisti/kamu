@@ -370,7 +370,7 @@ class MinistryAssociation(models.Model):
     begin = models.DateField()
     end = models.DateField(db_index=True, blank=True, null=True)
     label = models.CharField(max_length=50)
-    role = models.CharField(max_length=20)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
 
     objects = AssociationManager()
 
@@ -396,13 +396,15 @@ class MemberActivityType(models.Model):
     name = models.CharField(max_length=50)
     weight = models.FloatField()
 
+    def __unicode__(self):
+        return u"%s: %s (weight %d)" % (self.type, self.name, self.weight)
+
     class Meta:
         app_label = 'parliament'
 
-
-
 class MemberActivity(models.Model):
-    member = models.ForeignKey(Member, db_index=True)
+    # If member is None, it is activity related to a government bill.
+    member = models.ForeignKey(Member, db_index=True, null=True)
     time = models.DateTimeField(db_index=True)
     type = models.ForeignKey(MemberActivityType, db_index=True)
 
@@ -461,14 +463,20 @@ class InitiativeActivity(MemberActivity):
 
     def save(self, *args, **kwargs):
         doc = self.doc
-        assert doc.type in ('mp_prop', 'written_ques'), "Invalid document type: %s" % doc
-        assert doc.author is not None, "Document has no author: %s" % doc
+        assert doc.type in ('mp_prop', 'written_ques', 'gov_bill'), "Invalid document type: %s" % doc
+        if doc.type != 'gov_bill':
+            assert doc.author is not None, "Document has no author: %s" % doc
         if doc.type == 'mp_prop':
             self.type = MemberActivityType.objects.get(type='IN')
-        else:
+        elif doc.type == 'written_ques':
             self.type = MemberActivityType.objects.get(type='WQ')
+        else:
+            self.type = MemberActivityType.objects.get(type='GB')
         self.keywords = self.doc.keywords.all()
-        self.member = self.doc.author
+        if doc.type != 'gov_bill':
+            self.member = self.doc.author
+        else:
+            self.member = None
         self.time = self.doc.date
         return super(InitiativeActivity, self).save(*args, **kwargs)
 
