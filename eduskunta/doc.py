@@ -419,6 +419,7 @@ class DocImporter(Importer):
             obj.date = sign['date']
             obj.save()
 
+    @db.transaction.commit_on_success
     def import_doc(self, info):
         url = DOC_DL_URL % (info['type'], info['id'])
         info['info_link'] = url

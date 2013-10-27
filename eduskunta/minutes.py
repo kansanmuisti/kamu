@@ -390,6 +390,7 @@ class MinutesImporter(Importer):
 
         return item_info
 
+    @db.transaction.commit_on_success
     def process_minutes(self, info):
         self.logger.info("processing minutes for plenary session %s/%s", info['type'], info['id'])
 
