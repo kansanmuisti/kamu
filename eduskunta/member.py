@@ -4,6 +4,7 @@ import os
 import logging
 import difflib
 from lxml import etree, html
+from django import db
 from django.conf import settings
 from parliament.models.member import *
 from parliament.models.party import Party
@@ -336,6 +337,7 @@ class MemberImporter(Importer):
             return party
         return None
 
+    @db.transaction.commit_on_success
     def save_member(self, mp_info):
         # Member
         try:
