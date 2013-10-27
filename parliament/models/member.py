@@ -464,9 +464,9 @@ class InitiativeActivity(MemberActivity):
         assert doc.type in ('mp_prop', 'written_ques'), "Invalid document type: %s" % doc
         assert doc.author is not None, "Document has no author: %s" % doc
         if doc.type == 'mp_prop':
-            self.type = 'IN'
+            self.type = MemberActivityType.objects.get(type='IN')
         else:
-            self.type = 'WQ'
+            self.type = MemberActivityType.objects.get(type='WQ')
         self.keywords = self.doc.keywords.all()
         self.member = self.doc.author
         self.time = self.doc.date
@@ -499,7 +499,7 @@ class CommitteeDissentActivity(MemberActivity):
     objects = MemberActivityManager()
 
     def save(self, *args, **kwargs):
-        self.type = self.TYPE
+        self.type = MemberActivityType.objects.get(type=self.TYPE)
         return super(CommitteeDissentActivity, self).save(*args, **kwargs)
 
     def __unicode__(self):
@@ -538,7 +538,7 @@ class StatementActivity(MemberActivity):
     objects = MemberActivityManager()
 
     def save(self, *args, **kwargs):
-        self.type = self.TYPE
+        self.type = MemberActivityType.objects.get(type=self.TYPE)
         self.member = self.statement.member
         self.time = self.statement.item.plsess.date
         docs = self.statement.item.docs.all()
@@ -559,7 +559,7 @@ class SignatureActivity(MemberActivity):
     objects = MemberActivityManager()
 
     def save(self, *args, **kwargs):
-        self.type = self.TYPE
+        self.type = MemberActivityType.objects.get(type=self.TYPE)
         self.member = self.signature.member
         self.time = self.signature.date
         self.keywords = self.signature.doc.keywords.all()
