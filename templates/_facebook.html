@@ -1,8 +1,0 @@
-{% if fb_enabled %}
-<div id="fb-root"></div>
-<script src="http://connect.facebook.net/{{ fb_js_lang }}/all.js"></script>
-<script>
-  FB.init({appId: '{{ fb_app_id }}', status: false, cookie: true, xfbml: true});
-</script>
-{% endif %}
-
