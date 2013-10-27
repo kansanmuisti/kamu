@@ -9,12 +9,16 @@ def create_statement_activity(sender, **kwargs):
     # Some statements can be from non-MP speakers
     if not obj.member:
         return
-    st_act, created = StatementActivity.objects.get_or_create(statement=obj)
+    act, created = StatementActivity.objects.get_or_create(statement=obj)
+    if not created and getattr(obj, '_updated', False):
+        act.save()
 
 @receiver(post_save, sender=Update, dispatch_uid="social_update_activity")
 def create_social_update_activity(sender, **kwargs):
     obj = kwargs['instance']
-    upd_act, created = SocialUpdateActivity.objects.get_or_create(update=obj)
+    act, created = SocialUpdateActivity.objects.get_or_create(update=obj)
+    if not created and getattr(obj, '_updated', False):
+        act.save()
 
 @receiver(post_save, sender=DocumentSignature, dispatch_uid="document_signature_activity")
 def create_document_signature_activity(sender, **kwargs):
@@ -24,22 +28,21 @@ def create_document_signature_activity(sender, **kwargs):
     # glory in authorship.
     if doc.author == obj.member:
         return
-    sign_act, created = SignatureActivity.objects.get_or_create(signature=obj)
+    act, created = SignatureActivity.objects.get_or_create(signature=obj)
+    if not created and getattr(obj, '_updated', False):
+        act.save()
 
 @receiver(post_save, sender=Document, dispatch_uid="document_activity")
 def create_document_activity(sender, **kwargs):
     # Create the activity record for document authorship.
-    doc = kwargs['instance']
-    if doc.author == None:
+    obj = kwargs['instance']
+    if obj.author == None:
         return
-    if doc.type not in ('mp_prop', 'written_ques'):
+    if obj.type not in ('mp_prop', 'written_ques'):
         return
-    act, created = InitiativeActivity.objects.get_or_create(doc=doc)
-    if created:
-        return
-
-    date = act.time.date()
-    if doc.author != act.member or doc.date != date:
-        act.member = doc.author
-        act.time = doc.date
+    act, created = InitiativeActivity.objects.get_or_create(doc=obj)
+    if not created and getattr(obj, '_updated', False):
+        date = act.time.date()
+        act.member = obj.author
+        act.time = obj.date
         act.save()

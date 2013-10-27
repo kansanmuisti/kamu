@@ -36,6 +36,8 @@ class Command(BaseCommand):
                     default=False, help='Update values of existing objects'),
         make_option('--massive', action='store_true', dest='massive',
                     default=False, help='Optimize for large updates'),
+        make_option('--refresh', action='store_true', dest='refresh',
+                    help='Refresh existing documents'),
         make_option('--cache', action='store', dest='cache',
                     help='Use cache in supplied director')
     )
@@ -85,7 +87,10 @@ class Command(BaseCommand):
             if options['from_year']:
                 args['from_year'] = options['from_year']
             args['massive'] = options['massive']
-            importer.import_docs(**args)
+            if options['refresh']:
+                importer.refresh_docs(**args)
+            else:
+                importer.import_docs(**args)
         if options['vote']:
             importer = VoteImporter(http_fetcher=http)
             importer.replace = options['update']

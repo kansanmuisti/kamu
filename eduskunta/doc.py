@@ -242,7 +242,7 @@ class DocImporter(Importer):
         assert len(author_el) == 1, "Too many 'evtulo' fields (%d)" % len(author_el)
         author_el = author_el[0]
         author = self.parse_mp(author_el)
-        return author        
+        return author
 
     def import_sgml_doc(self, info):
         url = DOC_DL_URL % (info['type'], info['id'])
@@ -417,6 +417,7 @@ class DocImporter(Importer):
             except DocumentSignature.DoesNotExist:
                 obj = DocumentSignature(doc=doc, member=member)
             obj.date = sign['date']
+            obj._updated = True
             obj.save()
 
     @db.transaction.commit_on_success
@@ -476,6 +477,12 @@ class DocImporter(Importer):
         self.save_keywords(doc, info)
         if 'signatures' in info:
             self.save_signatures(doc, info)
+
+        # The keywords are saved only at this point. We'll save it again in order
+        # to create the proper KeywordActivity objects.
+        doc._updated = True
+        doc.save()
+
         return doc
 
     """def output_doc(self, f, info):
@@ -541,3 +548,12 @@ class DocImporter(Importer):
                 doc = self.import_doc(info)
                 db.reset_queries()
             url = fwd_link
+
+    def refresh_docs(self, **opts):
+        self.replace = True
+        # Go through all the docs that do not have keywords attached yet.
+        doc_list = Document.objects.filter(keywords__isnull=True).order_by('date')
+        for doc in doc_list:
+            arr = doc.name.split(' ')
+            info = {'type': arr[0], 'id': arr[1]}
+            self.import_doc(info)
