@@ -304,6 +304,7 @@ def parse_date_from_opts(options, field_name):
 class KeywordResource(KamuResource):
     class Meta:
         queryset = Keyword.objects.all()
+        max_limit = 5000
 
     def dehydrate(self, bundle):
         obj = bundle.obj
