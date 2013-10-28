@@ -28,17 +28,20 @@ FEED_ACTIONS = [
         'name': 'Twitter',
         'icon': 'social-twitter',
         'type': 'TW',
-        'action': _('tweeted')
+        'action': _('tweeted'),
+        'group': 'social'
     }, {
         'name': 'Facebook',
         'icon': 'social-facebook',
         'type': 'FB',
-        'action': _('published in Facebook')
+        'action': _('published in Facebook'),
+        'group': 'social'
     }, {
         'name': _('Statements'),
         'icon': 'message',
         'type': 'ST',
-        'action': _('made a plenary statement')
+        'action': _('made a plenary statement'),
+        'group': 'parliament'
     }, {
         'name': _('Signatures'),
         'icon': 'edit',
@@ -47,32 +50,38 @@ FEED_ACTIONS = [
         'action_with_target': {
             'mp_prop': _('signed an initiative'),
             'written_ques': _('signed a written question'),
-        }
+        },
+        'group': 'parliament'
     }, {
         'name': _('Own initiatives'),
         'icon': 'document-add',
         'type': 'IN',
-        'action': _('sponsored an initiative')
+        'action': _('sponsored an initiative'),
+        'group': 'parliament'
     }, {
         'name': _('Written questions'),
         'icon': 'warning',
         'type': 'WQ',
-        'action': _('submitted a written question')
+        'action': _('submitted a written question'),
+        'group': 'parliament'
     }, {
         'name': _('Votes'),
         'icon': 'thumbs-down',
         'type': 'RV',
-        'action': _('voted against own party')
+        'action': _('voted against own party'),
+        'group': 'parliament'
     }, {
         'name': _('Dissents'),
         'icon': 'flash',
         'type': 'CD',
-        'action': _('submitted a committee dissent')
+        'action': _('submitted a committee dissent'),
+        'group': 'parliament'
     }, {
         'name': _('Government bills'),
         'icon': 'clipboard',
         'type': 'GB',
-        'action': _('government bill was introduced')
+        'action': _('government bill was introduced'),
+        'group': 'parliament'
     }
 ]
 
@@ -147,14 +156,13 @@ def _get_member_activity_kws(member):
     return kw_list
 
 def make_feed_filters():
-    social = []
-    other = []
+    groups = {}
     for a in FEED_ACTIONS:
-        if a['type'] in ('TW', 'FB'):
-            social.append(a)
-        else:
-            other.append(a)
-    return {'social': social, 'other': other}
+        grp = a['group']
+        d = groups.get(grp, [])
+        d.append(a)
+        groups[grp] = d
+    return groups
 
 def make_feed_actions():
     d = {}
@@ -421,6 +429,7 @@ def show_topic(request, topic, slug=None):
     kw_json = get_embedded_resource(request, KeywordResource, kw)
     args = {'topic': kw, 'keyword_json': kw_json}
     args['feed_actions_json'] = simplejson.dumps(make_feed_actions(), ensure_ascii=False)
+    args['feed_filters_json'] = simplejson.dumps(make_feed_filters(), ensure_ascii=False)
 
     return render_to_response('show_topic.html', args,
         context_instance=RequestContext(request))
