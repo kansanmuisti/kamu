@@ -42,7 +42,8 @@ class @ActivityView extends Backbone.View
             obj.action = act.action
         obj.icon = act.icon
         obj.time_str = make_time_string obj.time
-        obj.target.text = @process_summary obj.target.text
+        if obj.target.text
+            obj.target.text = @process_summary obj.target.text
         html = @template obj
         @$el.html html
         @$el.find('.summary').expander
