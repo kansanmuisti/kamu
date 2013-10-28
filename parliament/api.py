@@ -309,26 +309,29 @@ class KeywordResource(KamuResource):
         obj = bundle.obj
         if getattr(obj, 'activity_score', None) is not None:
             bundle.data['activity_score'] = obj.activity_score
+        if getattr(obj, 'last_date', None) is not None:
+            bundle.data['last_date'] = obj.last_date
         bundle.data['slug'] = obj.get_slug()
         return bundle
 
     def apply_sorting(self, obj_list, options=None):
-        if not 'activity' in options or options['activity'].lower() not in ('true', '1'):
-            return super(KeywordResource, self).apply_sorting(obj_list, options)
+        obj_list = super(KeywordResource, self).apply_sorting(obj_list, options)
+        if options.get('activity', '').lower() in ('true', '1'):
+            # Activity filtering and sorting
+            since = parse_date_from_opts(options, 'since')
+            q = Q()
+            if since:
+                q &= Q(keywordactivity__activity__time__gte=since)
 
-        # Activity filtering and sorting
-        since = parse_date_from_opts(options, 'since')
-        q = Q()
-        if since:
-            q &= Q(keywordactivity__activity__time__gte=since)
+            until = parse_date_from_opts(options, 'until')
+            if until:
+                q &= Q(keywordactivity__activity__time__lte=until)
+            obj_list = obj_list.filter(q)
 
-        until = parse_date_from_opts(options, 'until')
-        if until:
-            q &= Q(keywordactivity__activity__time__lte=until)
-        obj_list = obj_list.filter(q)
-
-        obj_list = obj_list.annotate(activity_score=models.Sum('keywordactivity__activity__type__weight'))
-        obj_list = obj_list.filter(activity_score__gt=0).order_by('-activity_score')
+            obj_list = obj_list.annotate(activity_score=models.Sum('keywordactivity__activity__type__weight'))
+            obj_list = obj_list.filter(activity_score__gt=0).order_by('-activity_score')
+        if options.get('last_date', '').lower() in ('true', '1'):
+            obj_list = obj_list.annotate(last_date=models.Max('keywordactivity__activity__time'))
 
         return obj_list
 
