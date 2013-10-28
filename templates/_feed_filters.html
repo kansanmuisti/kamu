@@ -1,8 +1,8 @@
 <div class="btn-toolbar">
-{% for group in feed_filters %}
-    <div class="btn-group" data-toggle="buttons-checkbox">
-    {% for f in group %}
-        <button class="btn btn-default" date-feed-type="{{f.type}}" type="button" title="{{f.name}}">
+{% for name, items in feed_filters.items %}
+    <div class="btn-group {{name}}" data-toggle="buttons-checkbox">
+    {% for f in items %}
+        <button class="btn btn-default" data-feed-type="{{f.type}}" type="button" title="{{f.name}}">
             <i class="typcn typcn-{{f.icon}} typcn--medium"></i>
         </button>
     {% endfor %}

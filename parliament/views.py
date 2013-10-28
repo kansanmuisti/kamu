@@ -154,7 +154,7 @@ def make_feed_filters():
             social.append(a)
         else:
             other.append(a)
-    return [social, other]
+    return {'social': social, 'other': other}
 
 def make_feed_actions():
     d = {}
