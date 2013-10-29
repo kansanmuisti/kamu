@@ -72,6 +72,7 @@ class DictModel(object):
 class ActivityScoresResource(Resource):
     type=fields.CharField(attribute='type')
     score=fields.FloatField(attribute='score')
+    time=fields.DateTimeField(attribute="activity_date")
 
     def get_list(self, request, **kwargs):
         self.parent_object = kwargs.get('parent_object')
