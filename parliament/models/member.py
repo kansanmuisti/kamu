@@ -102,14 +102,14 @@ class Member(models.Model):
         if not act: act = 0.0
         return act
 
-    def get_activity_count_set(self, resolution=None):
-        return MemberActivity.objects.counts_for_member(self.id, resolution)
+    def get_activity_count_set(self, **kwargs):
+        return MemberActivity.objects.counts_for_member(self.id, **kwargs)
 
-    def get_activity_score_set(self, resolution=None):
-        return MemberActivity.objects.scores_for_member(self.id, resolution)
+    def get_activity_score_set(self, **kwargs):
+        return MemberActivity.objects.scores_for_member(self.id, **kwargs)
 
-    def get_activity_counts(self):
-        act = self.get_activity_count_set()
+    def get_activity_counts(self, **kwargs):
+        act = self.get_activity_count_set(**kwargs)
 
         return list(act)
 
@@ -394,8 +394,16 @@ class MemberActivityManager(models.Manager):
     def during_term(self, term):
         return self.during(term.begin, term.end)
 
-    def aggregates(self, resolution=None):
+    def aggregates(self, **kwargs):
         act = self
+
+        since = kwargs.get('since')
+        until = kwargs.get('until')
+        resolution = kwargs.get('resolution')
+        if since:
+            act = act.filter(time__gte=since)
+        if until:
+            act = act.filter(time__lte=until)
         if resolution:
             truncate_date=connection.ops.date_trunc_sql(resolution, 'time')
             act = act.extra({'activity_date': truncate_date})
@@ -416,26 +424,26 @@ class MemberActivityManager(models.Manager):
 
         return act
 
-    def scores_for_party(self, party, resolution=None):
-        act = self.aggregates(resolution)
+    def scores_for_party(self, party, **kwargs):
+        act = self.aggregates(**kwargs)
         act = act.filter(member__party=party)
 
         return self.scores(act)
 
-    def scores_for_member(self, member, resolution=None):
-        act = self.aggregates(resolution)
+    def scores_for_member(self, member, **kwargs):
+        act = self.aggregates(**kwargs)
         act = act.filter(member=member)
 
         return self.scores(act)
 
-    def counts_for_party(self, party, resolution=None):
-        act = self.aggregates(resolution)
+    def counts_for_party(self, party, **kwargs):
+        act = self.aggregates(**kwargs)
         act = act.filter(member__party=party)
 
         return self.counts(act)
 
-    def counts_for_member(self, member, resolution=None):
-        act = self.aggregates(resolution)
+    def counts_for_member(self, member, **kwargs):
+        act = self.aggregates(**kwargs)
         act = act.filter(member=member)
 
         return self.counts(act)

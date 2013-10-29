@@ -37,6 +37,22 @@ def process_api_thumbnail(bundle, image, field_name):
     tn_dim = 'x'.join(arr)
     bundle.data[field_name] = get_thumbnail(image, tn_dim).url
 
+def parse_date_from_opts(options, field_name):
+    val = options.get(field_name, None)
+    if not val:
+        return None
+    val = val.lower()
+    if val == 'month':
+        return datetime.date.today() - relativedelta(months=2)
+    elif val == 'term':
+        return Term.objects.latest().begin
+    try:
+        date_val = datetime.datetime.strptime(val, '%Y-%m-%d')
+    except ValueError:
+        raise BadRequest("'%s' must be in ISO date format (yyyy-mm-dd)" % field_name)
+
+    return date_val
+
 class KamuResource(ModelResource):
     def __init__(self, api_name=None):
         super(KamuResource, self).__init__(api_name)
@@ -72,6 +88,7 @@ class DictModel(object):
 class ActivityScoresResource(Resource):
     type=fields.CharField(attribute='type')
     score=fields.FloatField(attribute='score')
+    time=fields.DateTimeField(attribute="activity_date")
 
     def get_list(self, request, **kwargs):
         self.parent_object = kwargs.get('parent_object')
@@ -89,8 +106,12 @@ class ActivityScoresResource(Resource):
         if resolution == '':
             resolution = None
 
+        since = parse_date_from_opts(bundle.request.GET, 'since')
+        until = parse_date_from_opts(bundle.request.GET, 'until')
+
         obj = self.parent_object
-        score_list = obj.get_activity_score_set(resolution=resolution)
+        score_list = obj.get_activity_score_set(since=since, until=until,
+                                                resolution=resolution)
         bundle=[]
         for score in score_list:
             score_obj = DictModel(score)
@@ -381,22 +402,6 @@ class MemberSeatResource(KamuResource):
 class DocumentResource(KamuResource):
     class Meta:
         queryset = Document.objects.all()
-
-def parse_date_from_opts(options, field_name):
-    val = options.get(field_name, None)
-    if not val:
-        return None
-    val = val.lower()
-    if val == 'month':
-        return datetime.date.today() - relativedelta(months=2)
-    elif val == 'term':
-        return Term.objects.latest().begin
-    try:
-        date_val = datetime.datetime.strptime(val, '%Y-%m-%d')
-    except ValueError:
-        raise BadRequest("'%s' must be in ISO date format (yyyy-mm-dd)" % field_name)
-
-    return date_val
 
 class KeywordResource(KamuResource):
     class Meta:

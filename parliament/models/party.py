@@ -20,15 +20,15 @@ class Party(models.Model):
             activity = models.get_model('parliament', 'MemberActivity')
             self.activity_objects = activity.objects
 
-        return self.activity_objects.objects
+        return self.activity_objects
 
-    def get_activity_count_set(self, resolution=None):
+    def get_activity_count_set(self, **kwargs):
         activity_objects = self.get_activity_objects()
-        return activity_objects.counts_for_party(self.id)
+        return activity_objects.counts_for_party(self.id, **kwargs)
  
-    def get_activity_score_set(self, resolution=None):
+    def get_activity_score_set(self, **kwargs):
         activity_objects = self.get_activity_objects()
-        return activity_objects.scores_for_party(self.id)
+        return activity_objects.scores_for_party(self.id, **kwargs)
  
     def __unicode__(self):
         return self.full_name
