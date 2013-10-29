@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, connection
 from django.db.models import Q
 from django.template.defaultfilters import slugify
 from django.utils.translation import pgettext, ugettext as _
@@ -102,12 +102,15 @@ class Member(models.Model):
         if not act: act = 0.0
         return act
 
+    def get_activity_count_set(self, resolution=None):
+        return MemberActivity.objects.counts_for_member(self.id, resolution)
+
+    def get_activity_score_set(self, resolution=None):
+        return MemberActivity.objects.scores_for_member(self.id, resolution)
+
     def get_activity_counts(self):
-        act = self.memberactivity_set
-        act = act.extra({'activity_date': 'date(time)'})
-        act = act.values('activity_date', 'type')
-        act = act.order_by('activity_date', 'type')
-        act = act.annotate(count=models.Count('id'))
+        act = self.get_activity_count_set()
+
         return list(act)
 
     def get_terms(self):
@@ -390,6 +393,52 @@ class MemberActivityManager(models.Manager):
         return self.filter(query)
     def during_term(self, term):
         return self.during(term.begin, term.end)
+
+    def aggregates(self, resolution=None):
+        act = self
+        if resolution:
+            truncate_date=connection.ops.date_trunc_sql(resolution, 'time')
+            act = act.extra({'activity_date': truncate_date})
+        else:
+            act = act.extra({'activity_date': 'date(time)'})
+        act = act.values('activity_date', 'type')
+        act = act.order_by('activity_date', 'type')
+
+        return act
+
+    def scores(self, qset):
+        act = qset.annotate(score=models.Sum('type__weight'))
+
+        return act
+
+    def counts(self, qset):
+        act = qset.annotate(count=models.Count('id'))
+
+        return act
+
+    def scores_for_party(self, party, resolution=None):
+        act = self.aggregates(resolution)
+        act = act.filter(member__party=party)
+
+        return self.scores(act)
+
+    def scores_for_member(self, member, resolution=None):
+        act = self.aggregates(resolution)
+        act = act.filter(member=member)
+
+        return self.scores(act)
+
+    def counts_for_party(self, party, resolution=None):
+        act = self.aggregates(resolution)
+        act = act.filter(member__party=party)
+
+        return self.counts(act)
+
+    def counts_for_member(self, member, resolution=None):
+        act = self.aggregates(resolution)
+        act = act.filter(member=member)
+
+        return self.counts(act)
 
 class MemberActivityType(models.Model):
     type = models.CharField(max_length=5, primary_key=True)
