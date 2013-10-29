@@ -78,6 +78,9 @@ feed_filter_buttons = new FeedFilterButtonsView
     feed_view: feed_view
 feed_filter_buttons.render()
 
+#
+# Related keywords
+#
 related_tags = []
 for kw_dict in keyword.get('related')[0..10]
     kw = new Keyword kw_dict
@@ -90,3 +93,23 @@ for kw_dict in keyword.get('related')[0..10]
 
 related_tags = _.sortBy related_tags, (t) -> t.name
 $(".feature-tagcloud .tagcloud").tag_cloud related_tags
+
+#
+# Most active MPs and parties
+#
+most_active = keyword.get 'most_active'
+$ul = $(".most-active-parties ul")
+template = _.template $.trim $("#most-active-party-template").html()
+for p in most_active.parties[0..4]
+    party = new Party p
+    dict = party.toJSON()
+    dict.thumbnail_url = party.get_logo_thumbnail(64, 64)
+    $ul.append $(template(dict))
+
+$ul = $(".most-active-members ul")
+template = _.template $.trim $("#most-active-member-template").html()
+for mp in most_active.members[0..9]
+    member = new Member mp
+    dict = member.toJSON()
+    dict.thumbnail_url = member.get_portrait_thumbnail(64)
+    $ul.append $(template(dict))

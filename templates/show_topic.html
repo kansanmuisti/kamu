@@ -22,14 +22,18 @@
     </div>
     <div class="col-lg-10">
         <div class="content">
-            <div class="col-6">
-                <div class="box">
-                    <h4>{% trans "Which parties are active with this issue?" %}</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="box most-active-parties">
+                        <h4>{% trans "Which parties are active with this issue?" %}</h4>
+                        <ul class="list-unstyled"></ul>
+                    </div>
                 </div>
-            </div>
-            <div class="col-9">
-                <div class="box">
-                    <h4>{% trans "Who are active with this issue?" %}</h4>
+                <div class="col-md-9">
+                    <div class="box most-active-members">
+                        <h4>{% trans "Who are active with this issue?" %}</h4>
+                        <ul class="list-unstyled"></ul>
+                    </div>
                 </div>
             </div>
             <div class="feed-filters">
@@ -88,6 +92,26 @@
     <%= target.text %>
     </div>
     <% } %>
+</script>
+
+<script type="text/template" id="most-active-party-template">
+    <li title="<%= full_name %>">
+        <a href="<%= view_url %>">
+            <div class="party-thumbnail">
+                <img src="<%= thumbnail_url %>">
+            </div>
+        </a>
+    </li>
+</script>
+
+<script type="text/template" id="most-active-member-template">
+    <li title="<%= name %>">
+        <a href="<%= view_url %>">
+            <div class="member-thumbnail">
+                <img src="<%= thumbnail_url %>">
+            </div>
+        </a>
+    </li>
 </script>
 
 <script type="text/javascript">

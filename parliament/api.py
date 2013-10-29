@@ -176,7 +176,7 @@ class CommitteeAssociationResource(KamuResource):
         queryset = CommitteeAssociation.objects.all()
 
 class MemberResource(KamuResource):
-    SUPPORTED_PORTRAIT_DIMS = ((48, 72), (106, 159), (128, 192))
+    SUPPORTED_PORTRAIT_DIMS = ((48, 72), (64, 96), (106, 159), (128, 192))
 
     party = fields.ForeignKey('parliament.api.PartyResource', 'party')
 
@@ -413,12 +413,22 @@ class KeywordResource(KamuResource):
         if getattr(obj, 'last_date', None) is not None:
             bundle.data['last_date'] = obj.last_date
         bundle.data['slug'] = obj.get_slug()
+
         if bundle.request.GET.get('related', '').lower() in ('true', '1'):
             qs = Keyword.objects.filter(document__in=bundle.obj.document_set.all()).distinct()
             qs = qs.annotate(count=models.Count('document')).filter(document__in=bundle.obj.document_set.all())
             qs = qs.order_by('-count')[0:20]
             related_kws = [{'id': kw.id, 'name': kw.name, 'slug': kw.get_slug(), 'count': kw.count} for kw in qs if kw.id != bundle.obj.id]
             bundle.data['related'] = related_kws
+
+        if bundle.request.GET.get('most_active', '').lower() in ('true', '1'):
+            mp_list = Member.objects.filter(memberactivity__keywordactivity__keyword=bundle.obj).annotate(score=models.Sum('memberactivity__type__weight')).order_by('-score')
+            party_list = Party.objects.filter(member__memberactivity__keywordactivity__keyword=bundle.obj).annotate(score=models.Sum('member__memberactivity__type__weight')).order_by('-score')
+            d = {}
+            d['members'] = [{'id': mp.id, 'name': mp.get_print_name(), 'url_name': mp.url_name, 'score': mp.score} for mp in mp_list[0:10]]
+            #FIXME: Party data should be averaged to per-MP values
+            d['parties'] = [{'id': party.id, 'name': party.name, 'full_name': party.full_name, 'score': party.score} for party in party_list]
+            bundle.data['most_active'] = d
 
         return bundle
 
