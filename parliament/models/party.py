@@ -20,7 +20,7 @@ class Party(models.Model):
             activity = models.get_model('parliament', 'MemberActivity')
             self.activity_objects = activity.objects
 
-        return self.activity_objects.objects
+        return self.activity_objects
 
     def get_activity_count_set(self, resolution=None):
         activity_objects = self.get_activity_objects()
