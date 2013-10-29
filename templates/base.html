@@ -30,6 +30,7 @@
         'member_list': '{% url "parliament.views.list_members" %}'
         'member_details': '{% url "parliament.views.show_member" member="MEMBER" %}'
         'member_details_page': '{% url "parliament.views.show_member" member="MEMBER" page="PAGE" %}'
+        'party_details': '{% url "parliament.views.show_party" name="PARTY" %}'
         'topic_list': '{% url "parliament.views.list_topics" %}'
         'topic_details': '{% url "parliament.views.show_topic" topic="999" slug="SLUG" %}'
 
@@ -105,7 +106,7 @@
                     <li><a href="/">Etusivu</a></li>
                     <li><a href="{% url 'parliament.views.list_topics' %}">Aiheet</a></li>
                     <li><a href="{% url 'parliament.views.list_members' %}">Kansanedustajat</a></li>
-                    <li><a href="/">Puolueet</a></li>
+                    <li><a href="{% url 'parliament.views.list_parties' %}">Puolueet</a></li>
                 </ul>
                 <form class="navbar-form">
                     <input type="text" class="form-control input-sm" placeholder="{% trans 'Search' %}">

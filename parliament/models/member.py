@@ -372,8 +372,8 @@ class MinistryAssociation(models.Model):
     member = models.ForeignKey(Member, db_index=True)
     begin = models.DateField()
     end = models.DateField(db_index=True, blank=True, null=True)
-    label = models.CharField(max_length=50)
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    label = models.CharField(max_length=50, help_text='Official descriptive name of the position. eg. minister of of International Development')
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, help_text='Position of the official. eg. minister.')
 
     objects = AssociationManager()
 
