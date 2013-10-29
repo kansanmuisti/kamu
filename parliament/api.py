@@ -106,8 +106,12 @@ class ActivityScoresResource(Resource):
         if resolution == '':
             resolution = None
 
+        since = parse_date_from_opts(bundle.request.GET, 'since')
+        until = parse_date_from_opts(bundle.request.GET, 'until')
+
         obj = self.parent_object
-        score_list = obj.get_activity_score_set(resolution=resolution)
+        score_list = obj.get_activity_score_set(since=since, until=until,
+                                                resolution=resolution)
         bundle=[]
         for score in score_list:
             score_obj = DictModel(score)
