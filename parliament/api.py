@@ -107,13 +107,19 @@ class MemberResource(KamuResource):
             url(url_base + 'portrait/$', self.wrap_view('get_portrait'), name="api_get_portrait"),
         ]
 
-    def get_portrait(self, request, **kwargs):
+    def get_member(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
         self.is_authenticated(request)
+        member_id = kwargs.get('pk')
         try:
-            member = Member.objects.get(pk=kwargs.get('pk'))
+            member = Member.objects.get(pk=member_id)
         except Member.DoesNotExist:
-            return http.HttpNotFound()
+            raise Http404("Member ID '%s' does not exist" % member_id)
+
+        return member
+
+    def get_portrait(self, request, **kwargs):
+        member = self.get_member(request, **kwargs)
         return api_get_thumbnail(request, member.photo, self.SUPPORTED_PORTRAIT_DIMS)
 
     def build_filters(self, filters=None):
