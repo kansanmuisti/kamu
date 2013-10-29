@@ -58,15 +58,15 @@ $ ->
     </header>
     <nav class="row">
         {% for nb in navbuttons %}
-        <div class="col-lg-5">
+        <div class="col-lg-5 col-md-5">
             <div class="nav-button">
                 <div class="row">
-                    <div class="col-6 col-sm-6 col-lg-12">
+                    <div class="col-6 col-sm-6 col-md-12 col-lg-12">
                         <a href="{{nb.url}}">
                             <img src="{% static nb.image %}">
                         </a>
                     </div>
-                    <div class="col-6 col-sm-6 col-lg-12">
+                    <div class="col-6 col-sm-6 col-md-12 col-lg-12">
                         <a href="{{nb.url}}"><h3>{{nb.title|safe}}</h3></a>
                         <span>{{nb.text|safe}}</span>
                     </div>
@@ -78,14 +78,7 @@ $ ->
 </div>
 
 <div class="row">
-    <div class="col-12 col-lg-9">
-        <section class="parliament-newsfeed newsfeed box">
-            <h3 class="section-header">Viimeisimmät tapahtumat</h3>
-            {{parl_act_html|safe}}
-            <div id="parliament-showmore" class="showmore-link"><a href="#">{% trans "Show more items" %} &or;</a></div>
-        </section>
-    </div>
-    <div class="col-15 col-lg-6">
+    <div class="col-15 col-md-6 col-md-push-9">
         <div class="box">
             <section class="most-active-members">
                 <h4 class="section-header">Aktiivisimmat kansanedustajat</h3>
@@ -99,6 +92,13 @@ $ ->
                 </ul>
             </section>
         </div>
+    </div>
+    <div class="col-12 col-md-9 col-md-pull-6">
+        <section class="parliament-newsfeed newsfeed box">
+            <h3 class="section-header">Viimeisimmät tapahtumat</h3>
+            {{parl_act_html|safe}}
+            <div id="parliament-showmore" class="showmore-link"><a href="#">{% trans "Show more items" %} &or;</a></div>
+        </section>
     </div>
 </div>
 
