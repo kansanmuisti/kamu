@@ -45,7 +45,7 @@ class FeaturedTopicListView extends Backbone.View
         tagcloud_el.tag_cloud tags
 
         ul = @$el.find('.tab-pane ul')
-        if ul.length
+        if false and ul.length
             ul.quicksand tagcloud_el.find('li')
         else
             @$el.find('.tab-pane').empty().append tagcloud_el
