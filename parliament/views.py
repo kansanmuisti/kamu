@@ -301,7 +301,8 @@ def main(request):
             'title': 'Puolueet',
             'text': 'Mistä eri puolueet ovat kiinnostuneet?',
             'image': 'images/etu-puolueet-300x200.png',
-        }
+            'url': reverse('parliament.views.list_parties')
+        },
     ]
     args['navbuttons'] = navbuttons
 
@@ -447,3 +448,14 @@ def show_document(request, slug):
     return render_to_response('show_document.html', {'doc': doc},
         context_instance=RequestContext(request))
 
+def list_parties(request):
+    return render_to_response('party/list.html', context_instance=RequestContext(request))
+
+def show_party(request, name):
+    party = get_object_or_404(Party, name=name)
+
+    party_json = get_embedded_resource(request, PartyResource, party)
+    args = dict(party=party, party_json=party_json)
+
+    return render_to_response("party/details.html", args,
+        context_instance=RequestContext(request))

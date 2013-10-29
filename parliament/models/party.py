@@ -11,6 +11,9 @@ class Party(models.Model):
     # Unique color for visualizations, in the RGB #xxyyzz form
     vis_color = models.CharField(max_length=15, blank=True, null=True)
 
+    def is_currently_governing(self):
+        return bool(self.governingparty_set.filter(end__exact=None))
+
     # To avoid recursive imports..
     def get_activity_objects(self):
         if not hasattr(self, 'activity_objects'):

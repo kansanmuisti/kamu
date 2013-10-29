@@ -5,6 +5,7 @@
 @import "../bootstrap/less/grid.less";
 @import "../bootstrap/less/scaffolding.less";
 @import "../bootstrap/less/type.less";
+@import "../bootstrap/less/forms.less";
 
 @image-url: "../images";
 
@@ -659,8 +660,13 @@ main.party-list {
                 font-family: @brand-font-family;
             }
         }
+        // A quick fix for different shapes of logos, what's the right way?
+        .portrait {
+            height: 128px;
+        }
         .location {
             font-weight: 400;
+            text-transform: uppercase;
             color: @gray;
         }
         .stats {
@@ -691,9 +697,9 @@ main.party-list {
 }
 
 .party-opposition {
-   background: @gray-lighter;
+   background: @gray-lighter !important;
    .name a {
-        color: @pine;
+        color: @pine !important;
     }
 }
 
