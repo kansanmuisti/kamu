@@ -46,13 +46,6 @@ class TermResource(KamuResource):
     class Meta:
         queryset = Term.objects.all()
 
-class KeywordResource(KamuResource):
-    class Meta:
-        queryset = Keyword.objects.all()
-        filtering = {
-            'name': ('exact', 'iexact', 'startswith', 'contains', 'icontains')
-        }
-
 def api_get_thumbnail(request, image, supported_dims):
     dim = request.GET.get('dim', None)
     if not dim or not re.match(r'[\d]+x[\d]+$', dim):
@@ -259,7 +252,7 @@ class MemberActivityResource(KamuResource):
 
     def get_extra_info(self, item):
         def get_keywords(doc):
-            keywords = [{'id': kw.id, 'name': kw.name} for kw in doc.keywords.all()]
+            keywords = [{'id': kw.id, 'name': kw.name, 'slug': kw.get_slug()} for kw in doc.keywords.all()]
             return keywords
 
         d = {}
@@ -328,7 +321,7 @@ class MemberActivityResource(KamuResource):
 
 class KeywordActivityResource(KamuResource):
     activity = fields.ForeignKey(MemberActivityResource, 'activity', full=True)
-    keyword = fields.ForeignKey(KeywordResource, 'keyword')
+    keyword = fields.ForeignKey('parliament.api.KeywordResource', 'keyword')
 
     class Meta:
         queryset = KeywordActivity.objects.all().order_by('-activity__time')
@@ -398,6 +391,9 @@ def parse_date_from_opts(options, field_name):
 
 class KeywordResource(KamuResource):
     class Meta:
+        filtering = {
+            'name': ('exact', 'iexact', 'startswith', 'contains', 'icontains')
+        }
         queryset = Keyword.objects.all()
         max_limit = 5000
 
@@ -408,6 +404,13 @@ class KeywordResource(KamuResource):
         if getattr(obj, 'last_date', None) is not None:
             bundle.data['last_date'] = obj.last_date
         bundle.data['slug'] = obj.get_slug()
+        if bundle.request.GET.get('related', '').lower() in ('true', '1'):
+            qs = Keyword.objects.filter(document__in=bundle.obj.document_set.all()).distinct()
+            qs = qs.annotate(count=models.Count('document')).filter(document__in=bundle.obj.document_set.all())
+            qs = qs.order_by('-count')[0:20]
+            related_kws = [{'id': kw.id, 'name': kw.name, 'slug': kw.get_slug(), 'count': kw.count} for kw in qs if kw.id != bundle.obj.id]
+            bundle.data['related'] = related_kws
+
         return bundle
 
     def apply_sorting(self, obj_list, options=None):

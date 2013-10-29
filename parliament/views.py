@@ -426,7 +426,7 @@ def list_topics(request):
 def show_topic(request, topic, slug=None):
     # We don't use slug for anything.
     kw = get_object_or_404(Keyword, id=topic)
-    kw_json = get_embedded_resource(request, KeywordResource, kw)
+    kw_json = get_embedded_resource(request, KeywordResource, kw, {'related': '1'})
     args = {'topic': kw, 'keyword_json': kw_json}
     args['feed_actions_json'] = simplejson.dumps(make_feed_actions(), ensure_ascii=False)
     args['feed_filters_json'] = simplejson.dumps(make_feed_filters(), ensure_ascii=False)

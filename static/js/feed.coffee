@@ -44,6 +44,10 @@ class @ActivityView extends Backbone.View
         obj.time_str = make_time_string obj.time
         if obj.target.text
             obj.target.text = @process_summary obj.target.text
+        if obj.target.keywords
+            for kw in obj.target.keywords
+                kw.view_url = URL_CONFIG['topic_details'].replace('999', kw.id).replace('SLUG', kw.slug)
+
         html = @template obj
         @$el.html html
         @$el.find('.summary').expander

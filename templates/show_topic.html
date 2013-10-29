@@ -73,9 +73,21 @@
         </a>
     </div>
     <div class="timestamp"><a href="#"><time datetime="<%= time %>"><%= time_str %></time></a></div>
-    <div class="content summary">
-        <%= target.text %>
+    <% if (target) { %>
+    <div class="content">
+    <% if (target.keywords.length) { %>
+        <div class="labels">
+        <% _.each(target.keywords, function(kw) { %>
+            <a href='<%= kw.view_url %>'><span class="label"><%= kw.name %></span></a>
+        <% }); %>
+        </div>
+    <% } %>
+    <% if (target.subject) { %>
+        <h2><%= target.subject %></h2>
+    <% } %>
+    <%= target.text %>
     </div>
+    <% } %>
 </script>
 
 <script type="text/javascript">

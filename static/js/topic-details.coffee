@@ -77,3 +77,16 @@ feed_filter_buttons = new FeedFilterButtonsView
     filter_groups: feed_filters
     feed_view: feed_view
 feed_filter_buttons.render()
+
+related_tags = []
+for kw_dict in keyword.get('related')[0..10]
+    kw = new Keyword kw_dict
+    tag =
+        name: kw.get 'name'
+        id: kw.get 'id'
+        count: kw.get 'count'
+        url: kw.get_view_url()
+    related_tags.push tag
+
+related_tags = _.sortBy related_tags, (t) -> t.name
+$(".feature-tagcloud .tagcloud").tag_cloud related_tags
