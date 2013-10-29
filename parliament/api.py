@@ -106,7 +106,7 @@ class ActivityScoresResource(Resource):
         resource_name = 'activity_scores'
 
 class PartyResource(KamuResource):
-    SUPPORTED_LOGO_DIMS = ((32, 32), (48, 48), (64, 64))
+    SUPPORTED_LOGO_DIMS = ((32, 32), (48, 48), (64, 64), (128,128))
 
     def get_logo(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
@@ -153,6 +153,15 @@ class PartyResource(KamuResource):
                 
         return scores_resource.get_list(request, parent_object=obj,
                                         parent_uri=uri_base, **kwargs)
+    def dehydrate(self, bundle):
+        party = bundle.obj
+        bundle.data['logo_128x128'] = get_thumbnail(party.logo, '128x128', format='PNG').url
+        bundle.data['member_count'] = party.member_set.current().count()
+        bundle.data['governing_party'] = party.is_currently_governing()
+        # This tests for whether the member has a ministryassociation that has not ended. (Begin condition
+        # is due to to the null testing on right side of left join)
+        bundle.data['minister_count'] = party.member_set.filter(ministryassociation__isnull=False,ministryassociation__end__isnull=True).count()
+        return bundle
 
     class Meta:
         queryset = Party.objects.all()

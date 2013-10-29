@@ -1,14 +1,17 @@
 class @Party extends Backbone.Tastypie.Model
+    URL_PREFIX: '/party/'
     url: ->
         URL_CONFIG['api_party'] + @get('name') + '/'
     get_logo_thumbnail: (width, height) ->
         return @url() + "logo/?dim=#{width}x#{height}"
+    get_view_url: ->
+        URL_CONFIG['party_details'].replace 'PARTY', @get('name')
 
 class @PartyList extends Backbone.Tastypie.Collection
     urlRoot: URL_CONFIG['api_party']
     model: Party
 
-
+# models for templates/member
 
 class @Member extends Backbone.Tastypie.Model
     url: ->
@@ -54,8 +57,6 @@ class @MemberActivityList extends Backbone.Tastypie.Collection
     urlRoot: URL_CONFIG['api_member_activity']
     model: MemberActivity
 
-
-
 class @Keyword extends Backbone.Tastypie.Model
     get_view_url: ->
         URL_CONFIG['topic_details'].replace('999', @get('id')).replace('SLUG', @get('slug'))
@@ -63,8 +64,6 @@ class @Keyword extends Backbone.Tastypie.Model
 class @KeywordList extends Backbone.Tastypie.Collection
     urlRoot: URL_CONFIG['api_keyword']
     model: Keyword
-
-
 
 class @KeywordActivity extends Backbone.Tastypie.Model
 
