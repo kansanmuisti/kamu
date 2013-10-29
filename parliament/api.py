@@ -65,6 +65,53 @@ def api_get_thumbnail(request, image, supported_dims):
     tn_url = get_thumbnail(image, '%dx%d' % (width, height), format=fmt).url
     return redirect(tn_url)
 
+class DictModel(object):
+    def __init__(self, base_dict):
+        self.__base_dict = base_dict
+
+    def __getattr__(self, key):
+        value = self.__base_dict[key]
+        if type(value) == type({}):
+            return DictModel(value)
+
+        return value
+
+class ActivityScoresResource(Resource):
+    type=fields.CharField(attribute='type')
+    score=fields.FloatField(attribute='score')
+
+    def get_list(self, request, **kwargs):
+        self.parent_object = kwargs.get('parent_object')
+        if self.parent_object is None:
+            raise BadRequest('Missing parent object. Trying to get this as a non-nested resource?')
+
+        self.parent_uri = kwargs.get('parent_uri')
+        if self.parent_uri is None:
+            raise BadRequest('Missing parent uri.')
+
+        return super(ActivityScoresResource, self).get_list(request, **kwargs)
+
+    def obj_get_list(self, bundle, **kwargs):
+        resolution=bundle.request.GET.get('resolution', '').lower()
+        if resolution == '':
+            resolution = None
+
+        obj = self.parent_object
+        score_list = obj.get_activity_score_set(resolution=resolution)
+        bundle=[]
+        for score in score_list:
+            score_obj = DictModel(score)
+            bundle.append(score_obj)
+
+        return bundle
+
+    def get_resource_uri(self, bundle_or_obj=None, url_name='api_dispatch_list'):
+        return self.parent_uri
+
+    class Meta:
+        include_resource_uri = False
+        resource_name = 'activity_scores'
+
 class PartyResource(KamuResource):
     SUPPORTED_LOGO_DIMS = ((32, 32), (48, 48), (64, 64))
 
@@ -105,6 +152,9 @@ class MemberResource(KamuResource):
         url_base = r"^(?P<resource_name>%s)/(?P<pk>\d+)/" % self._meta.resource_name
         return [
             url(url_base + 'portrait/$', self.wrap_view('get_portrait'), name="api_get_portrait"),
+            url(url_base + 'activity_scores/$',
+                self.wrap_view('get_member_activity_scores'),
+                name="api_get_member_activity_scores"),
         ]
 
     def get_member(self, request, **kwargs):
@@ -121,6 +171,15 @@ class MemberResource(KamuResource):
     def get_portrait(self, request, **kwargs):
         member = self.get_member(request, **kwargs)
         return api_get_thumbnail(request, member.photo, self.SUPPORTED_PORTRAIT_DIMS)
+
+    def get_member_activity_scores(self, request, **kwargs):
+        obj = self.get_member(request, **kwargs)
+        scores_resource = ActivityScoresResource()
+        uri_base = self._build_reverse_url('api_get_member_activity_scores',
+                                       kwargs=self.resource_uri_kwargs(obj))
+                
+        return scores_resource.get_list(request, parent_object=obj,
+                                        parent_uri=uri_base, **kwargs)
 
     def build_filters(self, filters=None):
         orm_filters = super(MemberResource, self).build_filters(filters)
@@ -345,4 +404,5 @@ class KeywordResource(KamuResource):
 all_resources = [TermResource, PartyResource, MemberResource, PlenarySessionResource,
                  PlenaryVoteResource, VoteResource, FundingSourceResource, FundingResource,
                  SeatResource, MemberSeatResource, DocumentResource, MemberActivityResource,
-                 KeywordResource, CommitteeResource, KeywordActivityResource, KeywordResource]
+                 KeywordResource, CommitteeResource, KeywordActivityResource, KeywordResource,
+                 ActivityScoresResource]
