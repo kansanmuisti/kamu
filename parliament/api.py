@@ -129,7 +129,37 @@ class PartyResource(KamuResource):
         return [
             url(url_base + '$', self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
             url(url_base + 'logo/$', self.wrap_view('get_logo'), name="api_get_logo"),
+            url(url_base + 'activity_scores/$',
+                self.wrap_view('get_party_activity_scores'),
+                name="api_get_party_activity_scores"),
         ]
+
+    def get_party(self, request, **kwargs):
+        self.method_check(request, allowed=['get'])
+        self.is_authenticated(request)
+        if 'name' in kwargs:
+            party_name = kwargs.get('name')
+            try:
+                party = Party.objects.get(name=party_name)
+            except Party.DoesNotExist:
+                raise Http404("Party '%s' does not exist" % party_name)
+        else:
+            party_id = kwargs.get('pk')
+            try:
+                party = Party.objects.get(pk=party_id)
+            except Party.DoesNotExist:
+                raise Http404("Party ID '%s' does not exist" % party_id)
+
+        return party
+
+    def get_party_activity_scores(self, request, **kwargs):
+        obj = self.get_party(request, **kwargs)
+        scores_resource = ActivityScoresResource()
+        uri_base = self._build_reverse_url('api_get_party_activity_scores',
+                                       kwargs=self.resource_uri_kwargs(obj))
+                
+        return scores_resource.get_list(request, parent_object=obj,
+                                        parent_uri=uri_base, **kwargs)
 
     class Meta:
         queryset = Party.objects.all()
