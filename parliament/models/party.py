@@ -11,6 +11,22 @@ class Party(models.Model):
     # Unique color for visualizations, in the RGB #xxyyzz form
     vis_color = models.CharField(max_length=15, blank=True, null=True)
 
+    # To avoid recursive imports..
+    def get_activity_objects(self):
+        if not hasattr(self, 'activity_objects'):
+            activity = models.get_model('parliament', 'MemberActivity')
+            self.activity_objects = activity.objects
+
+        return self.activity_objects.objects
+
+    def get_activity_count_set(self, resolution=None):
+        activity_objects = self.get_activity_objects()
+        return activity_objects.counts_for_party(self.id)
+ 
+    def get_activity_score_set(self, resolution=None):
+        activity_objects = self.get_activity_objects()
+        return activity_objects.scores_for_party(self.id)
+ 
     def __unicode__(self):
         return self.full_name
 
