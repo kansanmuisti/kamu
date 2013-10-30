@@ -68,10 +68,16 @@
     </div>
     <% } %>
     <div class="source">
+        <% if (actor) { %>
+        <a href="<%= actor.url %>">
+            <span class="author"><%= actor.name %></span>
+        </a>
+        <% } %>
+        <% if (target) { %>
+        <a href="<%= target.url %>">
+        <% } else { %>
         <a href="#">
-            <% if (actor) { %>
-                <span class="author"><%= actor.name %></span>
-            <% } %>
+        <% } %>
             <i class="typcn typcn-<%= FEED_ACTIONS[type].icon %> icon"></i>
             <%= action %>
         </a>
