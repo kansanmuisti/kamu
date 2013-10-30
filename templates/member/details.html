@@ -148,9 +148,6 @@ FEED_ACTIONS = {{feed_actions_json|safe}};
 <script type="text/coffeescript" src="{% static "js/plots.coffee" %}"></script>
 
 <script type="text/coffeescript" src="{% static "js/activity_scores.coffee" %}"></script>
-<script type="text/coffeescript">
-    graph = new ActivityScoresView el:"#member-activity-graph"
-</script>
 {% endcompress %}
 
 {% compress js %}
@@ -160,6 +157,12 @@ FEED_ACTIONS = {{feed_actions_json|safe}};
 
 {% compress js %}
 <script type="text/coffeescript" src="{% static "js/member.coffee" %}"></script>
+{% endcompress %}
+
+{% compress js %}
+<script type="text/coffeescript">
+    graph = new MemberActivityScoresView member:member, el:"#member-activity-graph"
+</script>
 {% endcompress %}
 
 {% compress js %}

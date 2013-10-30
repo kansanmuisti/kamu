@@ -1,3 +1,17 @@
+class @MemberActivityScoresView extends Backbone.View
+    initialize: (options) ->
+        @member = options.member
+        @collection = new MemberActivityScoresList @member.get 'id'
+        @collection.bind 'reset', @add_all_items
+        params =
+            resolution: 'day'
+            limit: 0
+        @collection.fetch
+            reset: true
+            data: params
+
+    add_all_items: (coll) =>
+        @graph = new ActivityScoresView el:@el, scores:coll
 
 class @MemberActivityFeedView extends Backbone.View
     el: ".activity-feed"

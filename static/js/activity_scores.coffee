@@ -1,11 +1,10 @@
 class @ActivityScoresView extends Backbone.View
-    initialize: ->
+    initialize: (options) ->
+        @scores = options.scores
         @render()
 
     render: ->
-        date = new Date(activity_counts[0].activity_date)
-        end_date = new Date(activity_counts[activity_counts.length-1].activity_date)
-
+        scrs = @scores.models
         act_keys = (t[0] for t in activity_types)
         act_names = (t[1] for t in activity_types)
         act_histograms = {}
@@ -15,20 +14,25 @@ class @ActivityScoresView extends Backbone.View
 
         data_idx = 0
         bin_idx = 0
-        while date <= end_date
-            ts = date.getTime()
+        ts = new Date(scrs[0].attributes.time)
+        while data_idx < scrs.length
+            act = scrs[data_idx].attributes
+            this_date = new Date(act.time)
+            while (ts < this_date)
+                for key of act_histograms
+                    act_histograms[key].x.push new Date(ts)
+                    act_histograms[key].y.push 0
+                bin_idx += 1
+                ts.setDate(ts.getDate() + 1)
+
             for key of act_histograms
-                act_histograms[key].x.push new Date(ts)
+                act_histograms[key].x.push this_date
                 act_histograms[key].y.push 0
-            while data_idx < activity_counts.length
-                act = activity_counts[data_idx]
-                if new Date(act.activity_date) > date
-                    break
-                score = act.count*activity_weights[act.type]
-                act_histograms[act.type].y[bin_idx] += score
-                data_idx += 1
-            date.setDate(date.getDate()+1)
+            act_histograms[String(act.type)].y[bin_idx] += act.score
+
+            data_idx += 1
             bin_idx += 1
+            ts.setDate(ts.getDate() + 1)
 
         hist_list = (v for k, v of act_histograms)
 
