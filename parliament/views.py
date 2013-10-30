@@ -443,8 +443,44 @@ def list_members(request):
     return render_to_response('member/list.html',
             args, context_instance=RequestContext(request))
 
+def get_processing_stages(doc):
+    stage_choices = DocumentProcessingStage.STAGE_CHOICES
+    stages = doc.documentprocessingstage_set.all()
+
+    doc_stages = []
+    def add_stage(stage_id, date):
+        d = {'id': stage_id, 'date': date}
+        for c in stage_choices:
+            if c[0] == stage_id:
+                s = c[1]
+                s = s.replace('&shy;', '-<br>')
+                d['name'] = s
+                break
+        else:
+            raise Exception("Processing stage %s invalid" % stage_id)
+        doc_stages.append(d)
+
+    for st in stages:
+        add_stage(st.stage, st.date)
+
+    if not doc.type in doc.PROCESSING_FLOW:
+        return doc_stages
+    flow = doc.PROCESSING_FLOW[doc.type]
+    if st.stage not in flow:
+        return doc_stages
+
+    idx = flow.index(st.stage)
+    for st_id in flow[idx+1:]:
+        add_stage(st_id, None)
+
+    return doc_stages
+
 def show_document(request, slug):
     doc = get_object_or_404(Document, url_name=slug)
+    if doc.summary:
+        doc.summary = doc.summary.replace('\n', '\n\n')
+    doc.processing_stages = get_processing_stages(doc)
+
     return render_to_response('show_document.html', {'doc': doc},
         context_instance=RequestContext(request))
 

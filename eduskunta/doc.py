@@ -175,8 +175,10 @@ class DocImporter(Importer):
             stages[s] = date
         phase_list = []
         phase_list.append((0, 'intro', stages[u'Kysymys jätetty']))
+        if u'Annettu tiedoksi ministeriölle' in stages:
+            phase_list.append((1, 'agenda', stages[u'Annettu tiedoksi ministeriölle']))
         if 'Vastaus annettu' in stages:
-            phase_list.append((1, 'finished', stages[u'Vastaus annettu']))
+            phase_list.append((2, 'finished', stages[u'Vastaus annettu']))
         info['phases'] = phase_list
 
     def fetch_processing_info(self, info):

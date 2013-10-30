@@ -19,11 +19,16 @@ class Keyword(models.Model):
 
 class Document(models.Model):
     TYPES = (
-        ('mp_prop', 'MP law proposal'),
-        ('gov_bill', 'Government bill'),
-        ('written_ques', 'Written question'),
-        ('interpellation', 'Interpellation'),
+        ('mp_prop', _('MP law proposal')),
+        ('gov_bill', _('Government bill')),
+        ('written_ques', _('Written question')),
+        ('interpellation', _('Interpellation')),
     )
+    PROCESSING_FLOW = {
+        'mp_prop': ('intro', 'debate', 'committee', 'agenda', '1stread', '2ndread', 'finished'),
+        'gov_bill': ('intro', 'debate', 'committee', 'agenda', '1stread', '2ndread', 'finished'),
+        'written_ques': ('intro', 'ministry', 'finished'),
+    }
 
     type = models.CharField(max_length=30, db_index=True, choices=TYPES)
     name = models.CharField(max_length=30, unique=True, db_index=True)
@@ -52,6 +57,10 @@ class Document(models.Model):
             self.url_name = slugify(s)
         super(Document, self).save(*args, **kwargs)
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('parliament.views.show_document', (), {'slug': self.url_name})
+
     def __unicode__(self):
         return "%s %s" % (self.type, self.name)
 
@@ -62,19 +71,21 @@ class Document(models.Model):
 
 class DocumentProcessingStage(models.Model):
     STAGE_CHOICES = (
-        ('intro', 'Introduced'),
-        ('debate', 'Debate'),
-        ('agenda', 'Agenda'),
-        ('1stread', 'First reading'),
-        ('2ndread', 'Second reading'),
-        ('3rdread', 'Third reading'),
-        ('finished', 'Finished'),
-        ('onlyread', 'Only reading'),
-        ('only2read', 'Only and 2nd reading'),
-        ('only3read', 'Only and 3rd reading'),
-        ('cancelled', 'Cancelled'),
-        ('lapsed', 'Lapsed'),
-        ('suspended', 'Suspended'),
+        ('intro', _('Introduced')),
+        ('debate', _('Debate')),
+        ('committee', _('In committee')),
+        ('agenda', _('On agenda')),
+        ('1stread', _('First reading')),
+        ('2ndread', _('Second reading')),
+        ('3rdread', _('Third reading')),
+        ('finished', _('Finished')),
+        ('onlyread', _('Only reading')),
+        ('only2read', _('Only and 2nd reading')),
+        ('only3read', _('Only and 3rd reading')),
+        ('cancelled', _('Cancelled')),
+        ('lapsed', _('Lapsed')),
+        ('suspended', _('Suspended')),
+        ('ministry', _('In ministry')),
     )
 
     doc = models.ForeignKey(Document, db_index=True)
@@ -85,6 +96,7 @@ class DocumentProcessingStage(models.Model):
     class Meta:
         app_label = 'parliament'
         unique_together = (('doc', 'stage'), ('doc', 'index'))
+        ordering = ('doc', 'index')
 
 class DocumentSignature(models.Model):
     doc = models.ForeignKey('Document', db_index=True)

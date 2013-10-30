@@ -6,4 +6,41 @@
 {% block main_class %}document-details{% endblock %}
 
 {% block content %}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="box similar-citizens-initiatives">
+            <h4>{% trans "Similar Citizens' Initiatives" %}</h4>
+        </div>
+        <div class="box similar-documents">
+            <h4>{% trans "Similar documents" %}</h4>
+        </div>
+    </div>
+    <div class="col-md-11">
+        <div class="proposal-content content">
+            <header>
+                <h1>{{doc.subject}}</h1>
+                <div class="details">
+                    <span class="type">{{doc.get_type_display}}</span>
+                    <small class="number">{{doc.name}}</small>
+                    <div class="labels">
+                        {% for kw in doc.keywords.all %}
+                        <span class="label label-default">{{kw.name}}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <ol class="proposal-progress">
+                    {% for stage in doc.processing_stages %}
+                    <li class="{% if stage.date %}passed{% else %}unpassed{% endif %}">
+                        <span class="phase">{{stage.name|safe}} <!-- <span class="arrow"></span> --></span>
+                    </li>
+                    {% endfor %}
+                </ol>
+            </header>
+            <h4>{% trans "Proposal content" %}</h4>
+            {{doc.summary|linebreaks}}
+        </div>
+    </div>
+</div>
+
 {% endblock %}

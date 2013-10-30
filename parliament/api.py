@@ -297,19 +297,16 @@ class MemberActivityResource(KamuResource):
         elif acttype == 'ST':
             o = item.statementactivity.statement
             target['text'] = o.text
-        elif acttype in ('IN', 'WQ', 'GB'):
-            o = item.initiativeactivity.doc
+        elif acttype in ('IN', 'WQ', 'GB', 'SI'):
+            if acttype == 'SI':
+                o = item.signatureactivity.signature.doc
+            else:
+                o = item.initiativeactivity.doc
             target['text'] = o.summary
             target['subject'] = o.subject
             target['name'] = o.name
             target['keywords'] = get_keywords(o)
-        elif acttype == 'SI':
-            o = item.signatureactivity.signature.doc
-            target['text'] = o.summary
-            target['subject'] = o.subject
-            target['name'] = o.name
-            target['type'] = o.type
-            target['keywords'] = get_keywords(o)
+            target['url'] = o.get_absolute_url()
         else:
             raise Exception("Invalid type %s" % acttype)
         d['target'] = target
@@ -400,6 +397,10 @@ class MemberSeatResource(KamuResource):
         queryset = MemberSeat.objects.all()
 
 class DocumentResource(KamuResource):
+    def dehydrate(self, bundle):
+        bundle.data['type_name'] = bundle.obj.get_type_display()
+        return bundle
+
     class Meta:
         queryset = Document.objects.all()
 
