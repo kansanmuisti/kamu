@@ -587,7 +587,7 @@ class SocialUpdateActivity(MemberActivity):
     objects = MemberActivityManager()
 
     def save(self, *args, **kwargs):
-        self.type = self.update.feed.type
+        self.type = MemberActivityType.objects.get(type=self.update.feed.type)
         mf = self.update.feed.membersocialfeed
         self.member = mf.member
         self.time = self.update.created_time
