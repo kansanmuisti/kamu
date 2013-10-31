@@ -82,7 +82,7 @@ class MemberListView extends Backbone.View
                 thumbnail_dim: "104x156"
                 current: true
                 stats: true
-                limit: 10
+                limit: 500
             processData: true
 
     _setup_sort: =>

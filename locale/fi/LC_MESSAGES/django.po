@@ -540,43 +540,40 @@ msgstr "Poissaolevien lukumäärä"
 
 #: templates/show_document.html:13
 msgid "Similar Citizens' Initiatives"
-msgstr ""
+msgstr "Samanlaisia kansalaisaloitteita"
 
 #: templates/show_document.html:16
-#, fuzzy
 msgid "Similar documents"
-msgstr "Asiakirjat"
+msgstr "Samanlaisia asiakirjoja"
 
 #: templates/show_document.html:40
 msgid "Proposal content"
-msgstr ""
+msgstr "Esityksen sisältö"
 
 #: templates/show_topic.html:4
-#, fuzzy
 msgid "Topic"
-msgstr "Aiheet"
+msgstr "Aihe"
 
 #: templates/show_topic.html:18
 msgid "Related keywords"
-msgstr ""
+msgstr "Tähän liittyvät aiheet"
 
 #: templates/show_topic.html:28
 msgid "Which parties are active with this issue?"
-msgstr ""
+msgstr "Mitkä puolueet ovat aktiivisimpia tämän asian parissa?"
 
 #: templates/show_topic.html:34
 msgid "Who are active with this issue?"
-msgstr ""
+msgstr "Ketkä ovat aktiivisimpia tämän asian parissa?"
 
 #: templates/show_topic.html:56
 #, python-format
 msgid "Documents related to topic \"%(topic)s\""
-msgstr ""
+msgstr "Asiakirjat, jotka liittyvät aiheeseen \"%(topic)s\""
 
 #: templates/show_topic.html:127
-#, fuzzy
 msgid "All documents"
-msgstr "Asiakirjat"
+msgstr "Kaikki asiakirjat"
 
 #: templates/contact_form/contact_form_sent.html:3
 #: templates/contact_form/contact_form_sent.html:5
@@ -1007,11 +1004,6 @@ msgstr ""
 msgid ""
 "Please note that this link will only be valid for %(expiration_days)s days."
 msgstr ""
-
-#: templates/registration/activation_email_subject.txt:1
-#, fuzzy
-msgid "Activate your account"
-msgstr "Luo uusi tunnus"
 
 #: templates/registration/login.html:3 templates/registration/login.html:42
 msgid "Login"
