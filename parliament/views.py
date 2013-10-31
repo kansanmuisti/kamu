@@ -60,7 +60,7 @@ FEED_ACTIONS = [
         'group': 'parliament'
     }, {
         'name': _('Written questions'),
-        'icon': 'warning',
+        'icon': 'info-outline',
         'type': 'WQ',
         'action': _('submitted a written question'),
         'group': 'parliament'
