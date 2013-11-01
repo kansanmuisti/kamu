@@ -9,11 +9,13 @@
 
 <div class="row">
     <div class="col-md-4">
-        <div class="box similar-citizens-initiatives">
+        <div class="box hide similar-citizens-initiatives">
             <h4>{% trans "Similar Citizens' Initiatives" %}</h4>
+            <ol></ol>
         </div>
-        <div class="box similar-documents">
+        <div class="box hide similar-documents">
             <h4>{% trans "Similar documents" %}</h4>
+            <ol></li>
         </div>
     </div>
     <div class="col-md-11">
@@ -42,5 +44,17 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+document_json = {{document_json|safe}};
+</script>
+
+{% compress js %}
+<script type="text/coffeescript" src="{% static 'js/models.coffee' %}"></script>
+{% endcompress %}
+
+{% compress js %}
+<script type="text/coffeescript" src="{% static 'js/document-details.coffee' %}"></script>
+{% endcompress %}
 
 {% endblock %}

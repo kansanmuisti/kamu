@@ -1,5 +1,4 @@
 class @Party extends Backbone.Tastypie.Model
-    URL_PREFIX: '/party/'
     url: ->
         URL_CONFIG['api_party'] + @get('name') + '/'
     get_logo_thumbnail: (width, height) ->
@@ -73,6 +72,12 @@ class @MemberActivity extends Backbone.Tastypie.Model
 class @MemberActivityList extends Backbone.Tastypie.Collection
     urlRoot: URL_CONFIG['api_member_activity']
     model: MemberActivity
+
+class @Document extends Backbone.Tastypie.Model
+
+class DocumentList extends Backbone.Tastypie.Collection
+    urlRoot: URL_CONFIG['api_document']
+    model: Document
 
 class @Keyword extends Backbone.Tastypie.Model
     get_view_url: ->

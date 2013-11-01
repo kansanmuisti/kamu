@@ -21,7 +21,8 @@ from dateutil.relativedelta import relativedelta
 from utils import time_func
 
 import parliament.member_views
-from parliament.api import MemberResource, KeywordResource, PartyResource
+from parliament.api import MemberResource, KeywordResource, PartyResource, \
+    DocumentResource
 
 FEED_ACTIONS = [
     {
@@ -481,7 +482,10 @@ def show_document(request, slug):
         doc.summary = doc.summary.replace('\n', '\n\n')
     doc.processing_stages = get_processing_stages(doc)
 
-    return render_to_response('show_document.html', {'doc': doc},
+    args = {'doc': doc}
+    args['document_json'] = get_embedded_resource(request, DocumentResource, doc)
+
+    return render_to_response('show_document.html', args,
         context_instance=RequestContext(request))
 
 def list_parties(request):

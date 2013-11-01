@@ -33,6 +33,7 @@
         'party_details': '{% url "parliament.views.show_party" name="PARTY" %}'
         'topic_list': '{% url "parliament.views.list_topics" %}'
         'topic_details': '{% url "parliament.views.show_topic" topic="999" slug="SLUG" %}'
+        'document_details': '{% url "parliament.views.show_document" slug="DOC" %}'
 
         'api_member': '{% url "api_dispatch_list" resource_name="member" api_name="v1" %}'
         'api_member_activity_scores': '{% url "api_get_member_activity_scores" resource_name="member" pk="999" api_name="v1" %}'
