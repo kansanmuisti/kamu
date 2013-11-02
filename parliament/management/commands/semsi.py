@@ -16,6 +16,8 @@ class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
         make_option('--rebuild', action='store_true', dest='rebuild',
                     help='Rebuild index (full refresh)'),
+        make_option('--all', action='store_true', dest='all',
+                    help='Index all documents'),
         make_option('--age', action='store', dest='age', type='int', default=2,
                     help='Index documents older than AGE hours'),
         make_option('--single', action='store', dest='single', type='string',
@@ -25,14 +27,16 @@ class Command(BaseCommand):
     def get_index_url(self):
         return self.semsi_url + "index/" + self.index_name
     def get_doc_url(self):
-        return self.semsi_url + "doc"
+        return self.get_index_url() + "/doc"
 
     def send_doc(self, doc, index=True):
         if not doc.summary:
             return
         url = "http://%s%s" % (self.site.domain, doc.get_absolute_url())
-        data = {'title': doc.subject, 'id': doc.url_name, 'text': doc.summary, 'url': url, 'index': 'kamu'}
-        r = self.session.post(self.get_doc_url(), data=json.dumps(data), headers=headers)
+        data = {'title': doc.subject, 'id': doc.url_name, 'text': doc.summary, 'url': url}
+        if index:
+            data['index'] = True
+        r = self.session.post(self.get_doc_url(), data=json.dumps(data), headers=self.headers)
         if r.status_code != 200:
             raise Exception("Sending document failed with %d: %s" % (r.status_code, r.content))
 
@@ -54,17 +58,17 @@ class Command(BaseCommand):
             ts = datetime.now() - timedelta(hours=age)
             docs = Document.objects.filter(update_time__gte=ts)
 
-        headers = {'Content-Type': 'application/json'}
+        self.headers = {'Content-Type': 'application/json'}
 
         count = docs.count()
         self.site = Site.objects.all()[0]
 
-        index = not options['rebuild']
         if options['single']:
             doc = Document.objects.get(url_name=options['single'])
             self.send_doc(doc, index=True)
             docs = []
 
+        index = not options['rebuild']
         for idx, doc in enumerate(docs):
             self.send_doc(doc, index=index)
             if idx % 100 == 99:
@@ -75,7 +79,11 @@ class Command(BaseCommand):
             print "Training..."
             r = self.session.post(self.get_index_url(), data=json.dumps(data), headers=headers)
             if r.status_code != 200:
-                print "Train failed with %d: %s" % (r.status_code, r.content)
+                raise Exception("Train failed with %d: %s" % (r.status_code, r.content))
                 exit(1)
-
+        else:
+            print "Indexing..."
+            r = self.session.post(self.get_index_url(), data={})
+            if r.status_code != 200:
+                raise Exception("Index failed with %d: %s" % (r.status_code, r.content))
         print "All done."
