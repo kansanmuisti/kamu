@@ -4,19 +4,19 @@ class @ActivityScoresView extends Backbone.View
         @render()
 
     render: ->
-        scrs = @scores.models
+        score_list = @scores.models
         act_histogram = []
 
         data_idx = 0
-        while data_idx < scrs.length
-            act = scrs[data_idx].attributes
+        while data_idx < score_list.length
+            act = score_list[data_idx].attributes
             time = act.time
             score = act.score
 
-            while data_idx + 1 < scrs.length
+            while data_idx + 1 < score_list.length
                 data_idx += 1
 
-                act = scrs[data_idx].attributes
+                act = score_list[data_idx].attributes
 
                 if act.time != time
                     break
