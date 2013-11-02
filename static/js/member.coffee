@@ -4,7 +4,7 @@ class @MemberActivityScoresView extends Backbone.View
         @collection = new MemberActivityScoresList @member.get 'id'
         @collection.bind 'reset', @add_all_items
         params =
-            resolution: 'day'
+            resolution: 'year'
             limit: 0
         @collection.fetch
             reset: true

@@ -5,37 +5,37 @@ class @ActivityScoresView extends Backbone.View
 
     render: ->
         scrs = @scores.models
-        act_keys = (t[0] for t in activity_types)
-        act_names = (t[1] for t in activity_types)
-        act_histograms = {}
-
-        for key in act_keys
-            act_histograms[key] = {x: [], y: [], key: key}
+        act_histogram = []
 
         data_idx = 0
-        bin_idx = 0
-        ts = new Date(scrs[0].attributes.time)
         while data_idx < scrs.length
             act = scrs[data_idx].attributes
-            this_date = new Date(act.time)
-            while (ts < this_date)
-                for key of act_histograms
-                    act_histograms[key].x.push new Date(ts)
-                    act_histograms[key].y.push 0
-                bin_idx += 1
-                ts.setDate(ts.getDate() + 1)
+            time = act.time
+            score = act.score
 
-            for key of act_histograms
-                act_histograms[key].x.push this_date
-                act_histograms[key].y.push 0
-            act_histograms[String(act.type)].y[bin_idx] += act.score
+            while data_idx + 1 < scrs.length
+                data_idx += 1
+
+                act = scrs[data_idx].attributes
+
+                if act.time != time
+                    break
+
+                score += act.score
+
+            time = new Date(time).getTime()
+            column = [ time, score ]
+            act_histogram.push column
 
             data_idx += 1
-            bin_idx += 1
-            ts.setDate(ts.getDate() + 1)
 
-        hist_list = (v for k, v of act_histograms)
-
-        graph = new MultiresStackedGraph @el, hist_list
-
+        $.plot $(@el), [ act_histogram ],
+            series:
+                bars:
+                    show: true
+                    barWidth: 120 * 24 * 60 * 60 * 1000     # milliseconds
+                    align: "center"
+            xaxis:
+                mode: "time"
+    
         return @
