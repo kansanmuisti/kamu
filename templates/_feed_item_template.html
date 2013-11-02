@@ -1,0 +1,40 @@
+<script type="text/template" id="activity-item-template">
+    <% if (actor) { %>
+    <div class="avatar">
+        <a href="<%= actor.url %>">
+            <img src="<%= actor.thumbnail_url %>">
+        </a>
+    </div>
+    <% } %>
+    <div class="source">
+        <% if (actor) { %>
+        <a href="<%= actor.url %>">
+            <span class="author"><%= actor.name %></span>
+        </a>
+        <% } %>
+        <% if (target) { %>
+        <a href="<%= target.url %>">
+        <% } else { %>
+        <a href="#">
+        <% } %>
+            <i class="typcn typcn-<%= FEED_ACTIONS[type].icon %> icon"></i>
+            <%= action %>
+        </a>
+    </div>
+    <div class="timestamp"><a href="#"><time datetime="<%= time %>"><%= time_str %></time></a></div>
+    <% if (target) { %>
+    <div class="content">
+    <% if (target.keywords && target.keywords.length) { %>
+        <div class="labels">
+        <% _.each(target.keywords, function(kw) { %>
+            <a href='<%= kw.view_url %>'><span class="label"><%= kw.name %></span></a>
+        <% }); %>
+        </div>
+    <% } %>
+    <% if (target.subject) { %>
+        <h2><%= target.subject %></h2>
+    <% } %>
+    <%= target.text %>
+    </div>
+    <% } %>
+</script>
