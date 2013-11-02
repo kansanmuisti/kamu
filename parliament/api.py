@@ -230,7 +230,7 @@ class MemberResource(KamuResource):
         scores_resource = ActivityScoresResource()
         uri_base = self._build_reverse_url('api_get_member_activity_scores',
                                        kwargs=self.resource_uri_kwargs(obj))
-                
+
         return scores_resource.get_list(request, parent_object=obj,
                                         parent_uri=uri_base, **kwargs)
 
@@ -254,6 +254,7 @@ class MemberResource(KamuResource):
         bundle.data['posts'] = d
 
         bundle.data['terms'] = [term.name for term in bundle.obj.get_terms()]
+        bundle.data['age'] = bundle.obj.get_age()
 
         n_days = int(bundle.request.GET.get('activity_days', 30))
         activity_start = datetime.datetime.now() - datetime.timedelta(days=n_days)

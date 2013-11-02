@@ -8,6 +8,8 @@ from parliament.models.party import *
 from parliament.models.session import *
 from parliament.models.document import Keyword
 
+import datetime
+
 # Django bug workaround
 from django.db.models.loading import cache as model_cache
 
@@ -131,6 +133,18 @@ class Member(models.Model):
                 term.found = True
 
         return filter(lambda x: x.found, term_list)
+
+    def get_age(self):
+        born = self.birth_date
+        today = datetime.date.today()
+        try: 
+            birthday = born.replace(year=today.year)
+        except ValueError: # raised when birth date is February 29 and the current year is not a leap year
+            birthday = born.replace(year=today.year, day=born.day-1)
+        if birthday > today:
+            return today.year - born.year - 1
+        else:
+            return today.year - born.year
 
     def save(self, *args, **kwargs):
         if not self.url_name:
