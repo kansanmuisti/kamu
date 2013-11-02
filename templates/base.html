@@ -75,6 +75,10 @@
     <script type="text/javascript" src="{% static "js/vendor/backbone.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/backbone-tastypie.js" %}"></script>
     {% endcompress %}
+    {% compress js %}
+    <script type="text/javascript" src="{% static "js/vendor/jquery.flot.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/vendor/jquery.flot.time.js" %}"></script>
+    {% endcompress %}
 
     {% block head %}{% endblock %}
 </head>
