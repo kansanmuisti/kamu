@@ -20,7 +20,6 @@ $ ->
         offset: {{ some_offset }}
     }]
 
-    moment.lang 'fi'
     set_timestamps = ->
         $(".time[title]").each ->
             time = $(this).attr 'title'
@@ -44,6 +43,30 @@ $ ->
                     html.slideDown()
             return false
     setInterval set_timestamps, 60*1000
+
+    most_active_el = $(".most-active-members")
+    most_active_width = 0
+    show_active_mps = ->
+        width = most_active_el.width()
+        if width == most_active_width
+            return
+        most_active_width = width
+        li_list = most_active_el.find('li')
+        tn_width = li_list.outerWidth()
+        cols = Math.floor(width / tn_width)
+        rows = Math.floor(li_list.length / cols)
+        if rows == 0
+            rows = 1
+        if rows > 2
+            rows = 2
+        count = rows * cols
+        for li in li_list[0..count]
+            $(li).show()
+        for li in li_list[count..]
+             $(li).hide()
+
+    $(window).resize show_active_mps
+    show_active_mps()
 </script>
 {% endcompress %}
 {% endblock %}

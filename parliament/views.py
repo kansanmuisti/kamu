@@ -265,14 +265,14 @@ def get_mp_some_activity(request):
 def _get_most_active_mps():
     ret = cache.get('most_active_mps')
     if ret:
-        return ret[0:8]
+        return ret[0:10]
     mp_list = list(Member.objects.current())
     begin = datetime.date.today() - datetime.timedelta(days=30)
     for mp in mp_list:
         mp.score = mp.get_activity_score(begin=begin)
     mp_list = sorted(mp_list, key=lambda x: x.score, reverse=True)
     cache.set('most_active_mps', mp_list, 8*60*60)
-    return mp_list[0:8]
+    return mp_list[0:10]
 
 def main(request):
     args = {}
