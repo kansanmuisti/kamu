@@ -95,7 +95,6 @@
                 <ul class="nav nav-pills">
                     <li><a href="#">FI/ENG</a></li>
                     <li><a href="#">Kansan muisti ry.</a></li>
-                    <li><a href="#">Kirjaudu</a></li>
                 </ul>
             </nav>
         </div>
@@ -114,9 +113,9 @@
                     <li><a href="{% url 'parliament.views.list_members' %}">Kansanedustajat</a></li>
                     <li><a href="{% url 'parliament.views.list_parties' %}">Puolueet</a></li>
                 </ul>
-                <form class="navbar-form">
+                <!-- FIXME <form class="navbar-form">
                     <input type="text" class="form-control input-sm" placeholder="{% trans 'Search' %}">
-                </form>
+                </form> -->
             </div>
         </nav>
     </div>
