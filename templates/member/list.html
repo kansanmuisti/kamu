@@ -42,7 +42,7 @@
 </script>
 
 <script id="member-list-item-template" type="text/template">
-<li class="col-lg-5">
+<li class="col-md-5 col-sm-half">
     <div class="member-list-item">
         <div class="header">
             <h4 class="name"><a href="<%= view_url %>"><%= name %></a></h4>
@@ -53,12 +53,12 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-5 portrait">
+            <div class="col-xs-5 portrait">
                 <a class="portrait-link" href="<%= view_url %>">
                     <img src="<%= photo_thumbnail %>" />
                 </a>
             </div>
-            <div class="col-lg-10">
+            <div class="col-xs-10">
                 <div class="info">
                     <div class="location"><%= district_name %> vaalipiiri</div>
                     <span class="badge badge--terms js-tooltip" title="{% trans 'Number of terms' %}">
@@ -71,9 +71,9 @@
                     <% } %>
                     <hr />
                     <div class="row">
-                        <div class="stat-name col-lg-6">Aktiivisuus:</div>
-                        <div class="stat-value col-lg-2"><%= stats.recent_activity %></div>
-                        <div class="col-lg-7">
+                        <div class="stat-name col-xs-6">Aktiivisuus:</div>
+                        <div class="stat-value col-xs-2"><%= stats.recent_activity %></div>
+                        <div class="col-xs-7">
                             <div class="progress">
                                 <div class="progress-bar progress-bar-info" style="width: <%= stats.activity_ranking*100 %>%"></div>
                             </div>
