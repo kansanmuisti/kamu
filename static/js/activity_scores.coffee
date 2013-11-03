@@ -55,6 +55,14 @@ class @ActivityScoresView extends Backbone.View
             xaxis:
                 mode: "time"
                 tickLength: 5
+                tickFormatter: (val, axis) ->
+                    d = new Date(val)
+
+                    if d.getMonth() == 0
+                        format_str = "YYYY MMM"
+                    else
+                        format_str = "MMM"
+                    return moment(d).format(format_str)
                 min: @start_time.getTime() - 20 * 24 * 60 * 60 * 1000
                 max: @end_time.getTime()
 
