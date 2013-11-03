@@ -20,7 +20,7 @@ class FeedFilterButtonsView extends Backbone.View
         for group in @filter_groups
             grp_el = $('<div class="btn-group" />')
             for f in group.filters
-                el = $("<button class='btn btn-small' type='button' />")
+                el = $("<button class='btn btn-small btn-default' type='button' />")
                 if f.icon
                     el.append $("<i class='typcn typcn-#{f.icon}' />")
                     el.attr 'title', f.name
