@@ -20,7 +20,7 @@
         <div class="form-group">
             <label class="col-lg-2  control-label">{% trans "Search" %}</label>
             <div class="col-lg-10">
-                <input type="text" class="form-control" placeholder="{% trans "Search keywords" %}">
+                <input type="text" id="keyword-filter" class="form-control" placeholder="{% trans "Search keywords" %}">
             </div>
             <p>
         </div>
@@ -137,6 +137,7 @@ class KeywordListView extends Backbone.View
         
         @grouping = @groupings["activity"]
         @tags.comparator = @grouping.sort
+        @filter_string = ""
         
         @$el.spin()
         @tags.on "reset", @_calc_act_percentiles
@@ -149,6 +150,10 @@ class KeywordListView extends Backbone.View
         @tags.comparator = @grouping.sort
         @tags.sort()
 
+    set_filter_string: (str) =>
+        @filter_string = str
+        @render()
+
     _calc_act_percentiles: =>
         sorted_models = _.sortBy @tags.models, (kw) -> -kw.get("activity_score")
         n = sorted_models.length
@@ -157,8 +162,19 @@ class KeywordListView extends Backbone.View
 
     render: =>
         @$el.empty()
+        tags = @tags.models
+        if @filter_string
+            strings = @filter_string.toLowerCase().split(/[ ]+/)
+            console.log strings
+            tags = tags.filter (kw) =>
+                name = kw.get("name").toLowerCase()
+                for string in strings
+                    if name.indexOf(string) < 0
+                        return false
+                return true
+
         grouping = @grouping
-        grouped = @tags.groupBy grouping.group
+        grouped = _.groupBy(tags, grouping.group)
         grouped = ([grp, kws] for grp, kws of grouped)
         # We have to sort these again due to antisynergy in
         # ad-hoc implementations of moment and underscore
@@ -175,6 +191,9 @@ $ ->
         btn.addClass "active"
         order = btn.data("order")
         view.set_sorting order
+
+    $("#keyword-filter").input (args...) ->
+        view.set_filter_string $(@).val()
     
 
 </script>
