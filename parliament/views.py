@@ -501,6 +501,13 @@ def show_document(request, slug):
     session_items = session_items.select_related("statement_set", "plsess")
     session_items = session_items.filter(nr_statements__gt=0)
 
+    # Praise the power of Django's templates!
+    for i in session_items:
+        i.statements = []
+        for s in i.statement_set.all():
+            s.text = s.text.replace('\n', '\n\n')
+            i.statements.append(s)
+
     args = {'doc': doc, 'session_items': session_items}
     args['document_json'] = get_embedded_resource(request, DocumentResource, doc)
 
