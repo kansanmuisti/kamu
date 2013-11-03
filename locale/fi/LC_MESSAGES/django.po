@@ -182,7 +182,7 @@ msgstr "Hallituksen esitykset"
 
 #: parliament/views.py:84
 msgid "government bill was introduced"
-msgstr "hallitusn jätti esityksen"
+msgstr "hallitus esitti"
 
 #: parliament/views.py:92 templates/party/list.html:91
 msgid "Activity"
@@ -282,7 +282,7 @@ msgstr "Jätetty lepäämään"
 
 #: parliament/models/document.py:88
 msgid "In ministry"
-msgstr "ministeri"
+msgstr "Ministeriössä"
 
 #: parliament/models/funding.py:10 parliament/models/funding.py:22
 msgid "Corporation"
