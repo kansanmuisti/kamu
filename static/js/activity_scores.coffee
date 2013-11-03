@@ -16,6 +16,7 @@ class @ActivityScoresView extends Backbone.View
             return @
 
         @act_histogram = []
+        max_score = @avg_bin_score + 20
 
         data_idx = 0
         while data_idx < score_list.length
@@ -37,6 +38,8 @@ class @ActivityScoresView extends Backbone.View
             column = [ time, score ]
             @act_histogram.push column
 
+            max_score = Math.max max_score, score
+
             data_idx += 1
 
         colors = ["#00c0c0"]
@@ -57,7 +60,7 @@ class @ActivityScoresView extends Backbone.View
 
             yaxis:
                 show: false
-                max: @avg_bin_score * 2
+                max: max_score
 
             grid:
                 markings: [
