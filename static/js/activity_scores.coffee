@@ -6,13 +6,16 @@ class @ActivityScoresView extends Backbone.View
         @end_time = options.end_time
         @render()
 
+    draw_plot: ->
+        $.plot $(@el), [ @act_histogram ], @plot_options
+
     render: ->
         score_list = @scores.models
 
         if score_list.length == 0
             return @
 
-        act_histogram = []
+        @act_histogram = []
 
         data_idx = 0
         while data_idx < score_list.length
@@ -32,12 +35,13 @@ class @ActivityScoresView extends Backbone.View
 
             time = new Date(time).getTime()
             column = [ time, score ]
-            act_histogram.push column
+            @act_histogram.push column
 
             data_idx += 1
 
         colors = ["#00c0c0"]
-        $.plot $(@el), [ act_histogram ],
+
+        @plot_options =
             colors: colors
             series:
                 bars:
@@ -66,5 +70,10 @@ class @ActivityScoresView extends Backbone.View
                     bottom: 1
                     left: 0
                     right: 0
+
+        @draw_plot()
+
+        $(window).resize =>
+            @draw_plot()
     
         return @
