@@ -44,30 +44,33 @@
             <h4>{% trans "Proposal content" %}</h4>
             <div class="proposal-summary">{{doc.summary|linebreaks}}</div>
 
-            <h4>{% trans "Statements" %}</h4>
+            {% if session_items %}
+            <h2>{% trans "Statements" %}</h2>
             <div class="proposal-statements">
             {% for item in session_items %}
-              <h5>{% trans "Plenary session" %} {{ item.plsess.date }}</h5>
-              {% for statement in item.statement_set.all %}
-                <div class="proposal-statement media">
-                <a class="pull-left" href="{{statement.member.get_absolute_url}}">
-                  {% thumbnail statement.member.photo "64x64" as tn %}
-                  <img class="media-object" src="{{tn.url}}">
-                  {% endthumbnail %}
-                </a>
-                <div class="media-body proposal-statement-content">
-                <h5 class="media-heading">{{statement.member}} /{{statement.member.party.name}}
-                {% if statement.type == 'speaker' %} ({% trans "speaker" %}) {% endif %}
-                </h5>
-                <div class="proposal-statement-text">
-                  {{statement.text}}
+                <div class="plenary-discussion">
+                    <h4>{% trans "Plenary session" %} {{ item.plsess.date }}</h4>
+                    {% for statement in item.statement_set.all %}
+                    <div class="proposal-statement media">
+                        <a class="pull-left" href="{{statement.member.get_absolute_url}}">
+                            {% thumbnail statement.member.photo "64x64" as tn %}
+                            <img class="media-object" src="{{tn.url}}">
+                            {% endthumbnail %}
+                        </a>
+                        <div class="media-body proposal-statement-content">
+                            <h5 class="media-heading">{{statement.member}} /{{statement.member.party.name}}
+                            {% if statement.type == 'speaker' %} ({% trans "speaker" %}) {% endif %}
+                            </h5>
+                            <div class="proposal-statement-text">
+                                {{statement.text}}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
-                </div>
-                </div>
-              {% endfor %}
             {% endfor %}
-            <h4>
             </div>
+            {% endif %}
         </div>
     </div>
 </div>
