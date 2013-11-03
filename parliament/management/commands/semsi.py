@@ -33,7 +33,7 @@ class Command(BaseCommand):
         if not doc.summary:
             return
         url = "http://%s%s" % (self.site.domain, doc.get_absolute_url())
-        data = {'title': doc.subject, 'id': doc.url_name, 'text': doc.summary, 'url': url}
+        data = {'title': doc.subject, 'id': doc.url_name, 'text': doc.summary, 'url': url, 'name': doc.name}
         if index:
             data['index'] = True
         r = self.session.post(self.get_doc_url(), data=json.dumps(data), headers=self.headers)
