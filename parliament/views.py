@@ -199,6 +199,10 @@ def show_member(request, member, page=None):
     mp_count = 200
     daily_avg_act = agr['type__weight__sum'] / day_delta / mp_count
 
+    max_time = member.memberactivity_set.aggregate(Max("time"))['time__max']
+    member_activity_end_date = max_time.date
+
+    args['member_activity_end_date'] = member_activity_end_date
     args['activity_daily_avg'] = daily_avg_act
     args['activity_counts_json'] = res.serialize(None,
         member.get_activity_counts(), 'application/json')
