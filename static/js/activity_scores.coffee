@@ -16,6 +16,7 @@ class @ActivityScoresView extends Backbone.View
             return @
 
         @act_histogram = []
+        max_score = @avg_bin_score + 20
 
         data_idx = 0
         while data_idx < score_list.length
@@ -37,6 +38,8 @@ class @ActivityScoresView extends Backbone.View
             column = [ time, score ]
             @act_histogram.push column
 
+            max_score = Math.max max_score, score
+
             data_idx += 1
 
         colors = ["#00c0c0"]
@@ -52,12 +55,20 @@ class @ActivityScoresView extends Backbone.View
             xaxis:
                 mode: "time"
                 tickLength: 5
+                tickFormatter: (val, axis) ->
+                    d = new Date(val)
+
+                    if d.getMonth() == 0
+                        format_str = "YYYY MMM"
+                    else
+                        format_str = "MMM"
+                    return moment(d).format(format_str)
                 min: @start_time.getTime() - 20 * 24 * 60 * 60 * 1000
                 max: @end_time.getTime()
 
             yaxis:
                 show: false
-                max: @avg_bin_score * 2
+                max: max_score
 
             grid:
                 markings: [

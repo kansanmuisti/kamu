@@ -1,10 +1,11 @@
 class @MemberActivityScoresView extends Backbone.View
     initialize: (options) ->
         @member = options.member
+        end_date = options.end_date
         @collection = new MemberActivityScoresList @member.get 'id'
         @collection.bind 'reset', @add_all_items
 
-        time = new Date()
+        time = new Date(end_date)
         year = time.getFullYear()
         month = time.getMonth()
         @start_time = new Date(year - 2, month + 1, 1)
