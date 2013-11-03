@@ -34,7 +34,9 @@
     <% if (target.subject) { %>
         <h2><%= target.subject %></h2>
     <% } %>
-    <%= target.text %>
+        <div class="summary">
+            <%= target.text %>
+        </div>
     </div>
     <% } %>
 </script>
