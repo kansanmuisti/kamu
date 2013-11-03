@@ -104,7 +104,9 @@ class MinutesImporter(Importer):
                 spk_statement['first_name'] = speaker_name[0]
                 spk_statement['surname'] = speaker_name[1]
             if spkst_el.tag == 'te':
-                 statement_text.append(self.clean_text(spkst_el.text))
+                if not spkst_el.text:
+                    continue
+                statement_text.append(self.clean_text(spkst_el.text))
         spk_statement['type'] = "speaker"
         spk_statement['text'] = '\n'.join(statement_text)
         return spk_statement
@@ -254,7 +256,7 @@ class MinutesImporter(Importer):
 
         item_info = {'nr': nr, 'desc': desc}
 
-        doc_list = hdr_el.xpath('ak')
+        doc_list = hdr_el.xpath('*[self::ak or self::aak]')
         docs = []
         for doc_el in doc_list:
             ref_el = doc_el.xpath('akviite')
@@ -441,10 +443,15 @@ class MinutesImporter(Importer):
         if st_info['type'] == "normal":
             mp = self.mp_by_hnro.get(st_info['speaker_id'])
         elif st_info['type'] == "speaker":
-            speaker_dispname = " ".join([st_info['first_name'], st_info['surname']])
+            speaker_dispname = (" ".join([st_info['first_name'], st_info['surname']]))
+            speaker_dispname = self.clean_text(speaker_dispname.replace(u"\u00a0", u" "))
+            if speaker_dispname == "Pekka Ravis":
+                speaker_dispname = "Pekka Ravi"
+            if speaker_dispname == "Anssi Jotsenlahti":
+                speaker_dispname = "Anssi Joutsenlahti"
             mp = self.mp_by_name.get(speaker_dispname)
             if not mp:
-                raise ParseError('Failed to locate an MP corresponding to name of speaker')
+                raise ParseError('Failed to locate an MP corresponding to name of speaker %s' % speaker_dispname)
         else:
             raise ParseError('Parser returned an unknown type of statement')
         if 'first_name' in st_info and 'surname' in st_info:
