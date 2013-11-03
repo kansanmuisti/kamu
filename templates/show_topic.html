@@ -40,6 +40,7 @@
                 <form class="form-horizontal">
                     <fieldset>
                         <legend>Aktiivisuus</legend>
+                        <div id="topic-activity-graph" class="activity-graph"></div>
                     </fieldset>
                     <fieldset>
                         <legend>Rajaus</legend>
@@ -81,7 +82,15 @@
     </li>
 </script>
 
+{% compress js %}
+<script type="text/coffeescript" src="{% static "js/feed.coffee" %}"></script>
+{% endcompress %}
+{% compress js %}
+<script type="text/coffeescript" src="{% static "js/models.coffee" %}"></script>
+{% endcompress %}
+
 <script type="text/javascript">
+    topic = new Keyword({{keyword_json|safe}});
     FEED_ACTIONS = {{feed_actions_json|safe}};
     FEED_FILTERS = {{feed_filters_json|safe}};
     FEED_FILTER_ALL = {
@@ -90,16 +99,21 @@
         button_type: "primary"
     }
     keyword_json = {{keyword_json|safe}};
+    topic_activity_end_date = "{{keyword_activity_end_date|safe}}"
 </script>
 
 {% compress js %}
-<script type="text/coffeescript" src="{% static "js/feed.coffee" %}"></script>
-{% endcompress %}
-{% compress js %}
-<script type="text/coffeescript" src="{% static "js/models.coffee" %}"></script>
-{% endcompress %}
-{% compress js %}
+<script type="text/coffeescript" src="{% static "js/plots.coffee" %}"></script>
+<script type="text/coffeescript" src="{% static "js/activity_scores.coffee" %}"></script>
 <script type="text/coffeescript" src="{% static "js/topic-details.coffee" %}"></script>
+{% endcompress %}
+
+{% compress js inline %}
+<script type="text/coffeescript">
+    graph = new TopicActivityScoresView topic, \
+                    end_date:topic_activity_end_date,
+                    el:"#topic-activity-graph"
+</script>
 {% endcompress %}
 
 {% endblock %}
