@@ -395,7 +395,6 @@ def show_session(request, plsess):
 def get_embedded_resource_list(request, resource, options={}):
     old_GET = request.GET
     request.GET = options
-
     res = resource(api_name='v1')
     request_bundle = res.build_bundle(request=request)
     queryset = res.obj_get_list(request_bundle)
@@ -522,3 +521,13 @@ def show_party(request, name):
 
     return render_to_response("party/details.html", args,
         context_instance=RequestContext(request))
+
+def list_party_mps(request, name):
+    party = get_object_or_404(Party, name=name)
+
+    party_json = get_embedded_resource(request, PartyResource, party)
+    args = dict(party=party, party_json=party_json)
+    party_mp_list_json = get_embedded_resource_list(request, MemberResource, {'party': party})
+    args['member_list_json'] = party_mp_list_json
+
+    return render_to_response("party/mps.html", args, context_instance=RequestContext(request))

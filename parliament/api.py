@@ -271,6 +271,9 @@ class MemberResource(KamuResource):
 
     class Meta:
         queryset = Member.objects.select_related('party')
+        filtering = {
+            'party': ('exact',),
+        }
 
 class MemberActivityTypeResource(KamuResource):
     class Meta:

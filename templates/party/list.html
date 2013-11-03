@@ -61,7 +61,7 @@
         </div>
         -->
         <script id="party-list-item-template" type="text/template">
-        <li class="grid-listing-box col-md-5">
+        <li class="col-md-5">
             {% comment %}party_governing_status == opposition / government{% endcomment %}
             <div class="party-list-item <%= party_governing_status %>">
                 <div class="mplist-grid__content">
@@ -71,25 +71,25 @@
                         </h4>
                     </div>
                     <div class="row">
-                        <div class="col-md-5">
+                        <div class="col-sm-5">
                             <div class="portrait">
                                 <a href="<%= view_url %>">
-                                    <img src="<%= logo_128x128 %>">
+                                    <img src="/api/v1/party/<%= name %>/logo?dim=128x128">
                                 </a>
                             </div>
                         </div>
-                        <div class="col-md-10">
+                        <div class="col-sm-10">
                             <div class="stats">
                                 <div class="location"><%= name %></div>
-                                <span class="badge  badge--terms  js-tooltip" title="Kansanedustajia">
+                                <span class="badge  badge--terms  js-tooltip" title="{% trans "MPs" %}">
                                     <i class="typcn  typcn-user  typcn--medium"></i><%= member_count %></span>
-                                <span class="badge  badge--minister  js-tooltip" title="Ministereitä">
+                                <span class="badge  badge--minister  js-tooltip" title="{% trans "ministers" %}">
                                     <i class="typcn  typcn-briefcase  typcn--medium"></i><%= minister_count %></span>
                                 <hr>
                                 <div class="row">
                                     <div class="col-md-6">{% trans "Activity" %}</div>
                                     <div class="col-md-7">
-                                        <div class="progress js-tooltip" title="22 pistettä">
+                                        <div class="progress js-tooltip" title="x {% trans "points" %}">
                                             <div class="progress-bar" style="width:12px"></div>
                                         </div>
                                     </div>

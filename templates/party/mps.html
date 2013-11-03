@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load compress static thumbnail i18n %}
+
+{% block title %}{{ party.full_name }}{% endblock %}
+
+{% block head %}
+<!-- Initial models -->
+    <script type="text/javascript">
+        party_json = {{party_json|safe}};
+        party_list_json = {{member_list_json|safe}};
+    </script>
+<!-- Backbone models -->
+{% compress js %}
+    <script type="text/coffeescript" src="{% static "js/models.coffee" %}"></script>
+{% endcompress %}
+{% endblock %}
+{% block main_class %}container member-list{% endblock %}
+{% block content %}
+<!-- Content ================================================== -->
+    <div class="row">
+        <div class="col-md-5">
+            <div class="row">
+                <div class="col-md-15">
+                    <div class="party-card">
+                        <div class="page-heading">
+                            <h1>{{ party.full_name}}</h1>
+                        </div>
+                        <img src="/api/v1/party/{{ party.name }}/logo?dim=128x128">
+                    </div>
+                </div>
+                <!-- PARTY NAVI BOX -->
+                <div class="col-md-15">
+                    <nav class="side-navigation">
+                        <ul class="nav nav-pills nav-stacked">
+                            <li class="active">
+                                <a href="#">Perustiedot</a>
+                            </li>
+                            <li>
+                                <a href="#">Valiokuntapaikat</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'parliament.views.list_party_mps' name=party.name %}">Kansanedustajat</a>
+                            </li>
+                            <li>
+                                <a href="#">Tilastot</a>
+                            </li>
+                            <li>
+                                <a href="#">Yhteystiedot</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <!-- PARTY NAVI BOX -->
+            </div>
+        </div>
+
+        <div class="col-md-10">    
+            <div class="content  content--party">
+                <h3>{% trans "List of MPs for this party" %}</h3>
+                <ul class="member-list row">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+<script id="member-list-item-template" type="text/template">
+<li class="col-lg-7">
+    <div class="member-list-item">
+        <div class="header">
+            <h4 class="name"><a href="<%= view_url %>"><%= name %></a></h4>
+            <div class="party">
+                <a href="#PLACEHOLDER" class="js-tooltip" title="<%= party %>">
+                    <img src="<%= party %>" height='32' />
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-5 portrait">
+                <a class="portrait-link" href="<%= view_url %>">
+                    <img src="<%= photo %>" />
+                </a>
+            </div>
+            <div class="col-lg-10">
+                <div class="info">
+                    <div class="location"><%= district_name %> vaalipiiri</div>
+                    <span class="badge badge--terms js-tooltip" title="{% trans 'Number of terms' %}">
+                        <i class="typcn typcn-calender"> </i><%= terms.length %>
+                    </span>
+                    <% if (minister) { %>
+                    <span class="badge badge--minister" title="<%= minister %>">
+                        <i class="typcn typcn-briefcase"></i>
+                    </span>
+                    <% } %>
+                    <hr />
+                    <div class="row">
+                        <div class="stat-name col-lg-6">Aktiivisuus:</div>
+                        <div class="stat-value col-lg-2"><%= stats.recent_activity %></div>
+                        <div class="col-lg-7">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-info" style="width: <%= stats.activity_ranking*100 %>%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</li>
+</script>
+{% compress js %}
+    <script type="text/coffeescript" src="{% static "js/party-details.coffee" %}"></script>
+{% endcompress %}
+{% endblock %}
