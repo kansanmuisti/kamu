@@ -6,11 +6,13 @@ doc_list_el = $(".similar-documents ol")
 $(".proposal-summary").expander
     slicePoint: 1000
     hasBlocks: true
-    
+
 $(".proposal-statement-content").expander
     slicePoint: 1000
     hasBlocks: true
 
+
+template = _.template $.trim $("#similar-document-item-template").html()
 
 $.ajax
     type: "GET"
@@ -26,8 +28,8 @@ $.ajax
                 continue
             if d.id == doc.get 'url_name'
                 continue
-            url = URL_CONFIG['document_details'].replace 'DOC', d.id
-            $el = $("<li><a href='#{url}'>#{d.title}</a></li>")
+            d.url = URL_CONFIG['document_details'].replace 'DOC', d.id
+            $el = $(template d)
             doc_list_el.append $el
             count++
             if count == 5

@@ -186,7 +186,7 @@ msgstr "hallitusn jätti esityksen"
 
 #: parliament/views.py:92 templates/party/list.html:91
 msgid "Activity"
-msgstr "Aktiviteetti"
+msgstr "Aktiivisuus"
 
 #: parliament/views.py:95
 msgid "Name"
@@ -546,7 +546,7 @@ msgstr "Samanlaisia kansalaisaloitteita"
 
 #: templates/show_document.html:17
 msgid "Similar documents"
-msgstr "Samanlaisia asiakirjoja"
+msgstr "Samanlaisia esityksiä"
 
 #: templates/show_document.html:44
 msgid "Proposal content"
