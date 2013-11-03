@@ -59,7 +59,7 @@ class @ActivityScoresView extends Backbone.View
                     d = new Date(val)
 
                     if d.getMonth() == 0
-                        format_str = "YYYY MMM"
+                        format_str = "MMM<br>YYYY"
                     else
                         format_str = "MMM"
                     return moment(d).format(format_str)
