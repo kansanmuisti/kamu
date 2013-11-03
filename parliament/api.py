@@ -256,8 +256,8 @@ class MemberResource(KamuResource):
         bundle.data['terms'] = [term.name for term in bundle.obj.get_terms()]
         bundle.data['age'] = bundle.obj.get_age()
 
-        n_days = int(bundle.request.GET.get('activity_days', 30))
-        activity_start = datetime.datetime.now() - datetime.timedelta(days=n_days)
+        opts = {'since': bundle.request.GET.get('activity_days', 'term')}
+        activity_start = parse_date_from_opts(opts, 'since')
         stats = bundle.request.GET.get('stats', '')
         if stats.lower() in ('1', 'true'):
             bundle.data['stats'] = bundle.obj.get_latest_stats()
