@@ -450,6 +450,10 @@ def show_topic(request, topic, slug=None):
     args = {'topic': kw, 'keyword_json': kw_json}
     args['feed_actions_json'] = simplejson.dumps(make_feed_actions(), ensure_ascii=False)
     args['feed_filters_json'] = simplejson.dumps(make_feed_filters(), ensure_ascii=False)
+    agr = kw.keywordactivity_set.aggregate(Max("activity__time")) 
+    max_time = agr['activity__time__max']
+    keyword_activity_end_date = max_time.date
+    args['keyword_activity_end_date'] = keyword_activity_end_date
 
     return render_to_response('show_topic.html', args,
         context_instance=RequestContext(request))

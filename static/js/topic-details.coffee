@@ -1,3 +1,7 @@
+class @TopicActivityScoresView extends @ActivityScoresView
+    initialize: (topic, options) ->
+        super (new KeywordActivityScoresList topic.get 'id'), options
+
 class FeedFilterButtonsView extends Backbone.View
     el: '.feed-filters .btn-toolbar'
     events:
