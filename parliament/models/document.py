@@ -6,6 +6,18 @@ from django.utils.translation import ugettext as _
 class Keyword(models.Model):
     name = models.CharField(max_length=128, db_index=True, unique=True)
 
+    # To avoid recursive imports..
+    def get_activity_objects(self):
+        if not hasattr(self, 'activity_objects'):
+            activity = models.get_model('parliament', 'MemberActivity')
+            self.activity_objects = activity.objects
+
+        return self.activity_objects
+
+    def get_activity_score_set(self, **kwargs):
+        activity_objects = self.get_activity_objects()
+        return activity_objects.scores_for_keyword(self.id, **kwargs)
+
     def __unicode__(self):
         return self.name
 

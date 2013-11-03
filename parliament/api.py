@@ -417,6 +417,34 @@ class KeywordResource(KamuResource):
         queryset = Keyword.objects.all()
         max_limit = 5000
 
+    def get_keyword(self, request, **kwargs):
+        self.method_check(request, allowed=['get'])
+        self.is_authenticated(request)
+        keyword_id = kwargs.get('pk')
+        try:
+            keyword = Keyword.objects.get(pk=keyword_id)
+        except Keyword.DoesNotExist:
+            raise Http404("Keyword ID '%s' does not exist" % keyword_id)
+
+        return keyword
+
+    def prepend_urls(self):
+        url_base = r"^(?P<resource_name>%s)/(?P<pk>\d+)/" % self._meta.resource_name
+        return [
+            url(url_base + 'activity_scores/$',
+                self.wrap_view('get_keyword_activity_scores'),
+                name="api_get_keyword_activity_scores"),
+        ]
+
+    def get_keyword_activity_scores(self, request, **kwargs):
+        obj = self.get_keyword(request, **kwargs)
+        scores_resource = ActivityScoresResource()
+        uri_base = self._build_reverse_url('api_get_keyword_activity_scores',
+                                       kwargs=self.resource_uri_kwargs(obj))
+
+        return scores_resource.get_list(request, parent_object=obj,
+                                        parent_uri=uri_base, **kwargs)
+
     def dehydrate(self, bundle):
         obj = bundle.obj
         if getattr(obj, 'activity_score', None) is not None:

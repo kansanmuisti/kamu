@@ -450,6 +450,12 @@ class MemberActivityManager(models.Manager):
 
         return self.scores(act)
 
+    def scores_for_keyword(self, keyword, **kwargs):
+        act = self.aggregates(**kwargs)
+        act = act.filter(keywordactivity__keyword=keyword)
+
+        return self.scores(act)
+
     def counts_for_party(self, party, **kwargs):
         act = self.aggregates(**kwargs)
         act = act.filter(member__party=party)

@@ -133,8 +133,8 @@ FEED_ACTIONS = {{feed_actions_json|safe}};
 
 {% compress js inline %}
 <script type="text/coffeescript">
-    graph = new MemberActivityScoresView \
-                    member:member,
+    graph = new MemberActivityScoresView member, \
+                    activity_daily_avg:activity_daily_avg,
                     end_date:member_activity_end_date,
                     el:"#member-activity-graph"
 </script>
