@@ -30,7 +30,7 @@
                 <div class="btn-toolbar">
                     <div class="btn-group" id="topic-list-sort-buttons" data-toggle="buttons-checkbox">
                         <button class="btn  btn-default  js-tooltip active" data-order="activity" type="button" title="{% trans "Most active" %}">{% trans "Most active" %}</button>
-                        <button class="btn  btn-default  js-tooltip" data-order="latest_activity" type="button" title="{% trans "With latest activity" %}" id="tag-sort-latest-date">{% trans "With latest activity" %}</button>
+                        <button class="btn  btn-default  js-tooltip" data-order="last_date" type="button" title="{% trans "Latest activity" %}">{% trans "Latest activity" %}</button>
                         <button class="btn  btn-default  js-tooltip" data-order="name" type="button" title="{% trans "Alphabetical" %}" id="tag-sort-name">{% trans "Alphabetical" %}</button>
 
                     </div>
@@ -123,11 +123,17 @@ class KeywordListView extends Backbone.View
             sort: (kw) => kw.get("activity_percentile")
             group: (kw) => Math.ceil((kw.get("activity_percentile"))*100/5)*5
             group_label: (perc) => GROUP_LABEL_I18N_HACK perc
+        last_date:
+            sort: (kw) => -new Date(kw.get("last_date"))
+            group: (kw) => moment(kw.get("last_date")).fromNow()
+            group_label: (letter) -> letter
+
 
     initialize: ->
         @tags = new KeywordList
         @tags.filters.limit = 0
         @tags.filters.activity = true
+        @tags.filters.last_date = true
         
         @grouping = @groupings["activity"]
         @tags.comparator = @grouping.sort
@@ -151,9 +157,14 @@ class KeywordListView extends Backbone.View
 
     render: =>
         @$el.empty()
-        grouped = @tags.groupBy @grouping.group
-        for grp, kws of grouped
-            @$el.append @template section: @grouping.group_label(grp), tags: kws
+        grouping = @grouping
+        grouped = @tags.groupBy grouping.group
+        grouped = ([grp, kws] for grp, kws of grouped)
+        # We have to sort these again due to antisynergy in
+        # ad-hoc implementations of moment and underscore
+        grouped = _.sortBy(grouped, ([grp, kws]) -> grouping.sort kws[0])
+        for [grp, kws] in grouped
+            @$el.append @template section: grouping.group_label(grp), tags: kws
 $ ->
     view = new KeywordListView
     
