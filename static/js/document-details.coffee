@@ -3,6 +3,14 @@ doc = new Document document_json
 SEMSI_BASE = "http://semsi.kansanmuisti.fi:8080/"
 
 doc_list_el = $(".similar-documents ol")
+$(".proposal-summary").expander
+    slicePoint: 1000
+    hasBlocks: true
+    
+$(".proposal-statement-content").expander
+    slicePoint: 1000
+    hasBlocks: true
+
 
 $.ajax
     type: "GET"

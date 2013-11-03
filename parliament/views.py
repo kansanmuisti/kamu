@@ -489,7 +489,11 @@ def show_document(request, slug):
         doc.summary = doc.summary.replace('\n', '\n\n')
     doc.processing_stages = get_processing_stages(doc)
 
-    args = {'doc': doc}
+    session_items = doc.plenarysessionitem_set
+    session_items = session_items.select_related("statement_set", "plsess")
+    session_items = session_items.filter(nr_statements__gt=0)
+
+    args = {'doc': doc, 'session_items': session_items}
     args['document_json'] = get_embedded_resource(request, DocumentResource, doc)
 
     return render_to_response('show_document.html', args,
