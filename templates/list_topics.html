@@ -28,10 +28,11 @@
             <label class="col-lg-2  control-label">{% trans "Sort" %}</label>
             <div class="col-lg-10">
                 <div class="btn-toolbar">
-                    <div class="btn-group" data-toggle="buttons-checkbox">
-                        <button class="btn  btn-default  js-tooltip  active" type="button" title="{% trans "Alphabetical" %}">{% trans "Alphabetical" %}</button>
-                        <button class="btn  btn-default  js-tooltip" type="button" title="{% trans "With latest activity" %}">{% trans "With latest activity" %}</button>
-                        <button class="btn  btn-default  js-tooltip" type="button" title="{% trans "Most interesting" %}">{% trans "Most interesting" %}</button>
+                    <div class="btn-group" id="topic-list-sort-buttons" data-toggle="buttons-checkbox">
+                        <button class="btn  btn-default  js-tooltip active" data-order="activity" type="button" title="{% trans "Most active" %}">{% trans "Most active" %}</button>
+                        <button class="btn  btn-default  js-tooltip" data-order="latest_activity" type="button" title="{% trans "With latest activity" %}" id="tag-sort-latest-date">{% trans "With latest activity" %}</button>
+                        <button class="btn  btn-default  js-tooltip" data-order="name" type="button" title="{% trans "Alphabetical" %}" id="tag-sort-name">{% trans "Alphabetical" %}</button>
+
                     </div>
                 </div>
             </div>
@@ -89,6 +90,10 @@ FEATURED_TABS = [
     }
 ];
 
+function GROUP_LABEL_I18N_HACK(perc) {
+    return "{% trans "Most active #{perc}%" %}".replace("#{perc}", perc)
+}
+
 </script>
 
 <script type="text/template" id="tag-section-template">
@@ -113,28 +118,53 @@ class KeywordListView extends Backbone.View
         name:
             sort: (kw) => kw.get("name")
             group: (kw) => kw.get("name")[0]
+            group_label: (letter) -> letter
+        activity:
+            sort: (kw) => kw.get("activity_percentile")
+            group: (kw) => Math.ceil((kw.get("activity_percentile"))*100/5)*5
+            group_label: (perc) => GROUP_LABEL_I18N_HACK perc
 
     initialize: ->
         @tags = new KeywordList
         @tags.filters.limit = 0
         @tags.filters.activity = true
         
-        @grouping = @groupings["name"]
+        @grouping = @groupings["activity"]
         @tags.comparator = @grouping.sort
         
         @$el.spin()
+        @tags.on "reset", @_calc_act_percentiles
         @tags.on "reset", @render
+        @tags.on "sort", @render
         @tags.fetch reset: true
     
+    set_sorting: (field) =>
+        @grouping = @groupings[field]
+        @tags.comparator = @grouping.sort
+        @tags.sort()
+
+    _calc_act_percentiles: =>
+        sorted_models = _.sortBy @tags.models, (kw) -> -kw.get("activity_score")
+        n = sorted_models.length
+        for i in [0...n]
+            sorted_models[i].attributes.activity_percentile = (i+1)/(n+1)
 
     render: =>
         @$el.empty()
         grouped = @tags.groupBy @grouping.group
-        #grouped = _.sortBy grouped,
         for grp, kws of grouped
-            @$el.append(@template section: grp, tags: kws)
+            @$el.append @template section: @grouping.group_label(grp), tags: kws
 $ ->
-    new KeywordListView
+    view = new KeywordListView
+    
+    buttons = $("#topic-list-sort-buttons button")
+    buttons.click ->
+        btn = $ @
+        buttons.removeClass "active"
+        btn.addClass "active"
+        order = btn.data("order")
+        view.set_sorting order
+    
 
 </script>
 {% endcompress %}
