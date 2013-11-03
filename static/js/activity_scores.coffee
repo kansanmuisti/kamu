@@ -1,6 +1,7 @@
 class @ActivityScoresView extends Backbone.View
     initialize: (options) ->
         @scores = options.scores
+        @avg_bin_score = options.avg_bin_score
         @start_time = options.start_time
         @end_time = options.end_time
         @render()
@@ -52,8 +53,14 @@ class @ActivityScoresView extends Backbone.View
 
             yaxis:
                 show: false
+                max: @avg_bin_score * 2
 
             grid:
+                markings: [
+                    yaxis:
+                        from: @avg_bin_score
+                        to: @avg_bin_score
+                ]
                 borderWidth:
                     top: 0
                     bottom: 1

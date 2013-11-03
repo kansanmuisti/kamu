@@ -4,7 +4,7 @@ import datetime
 
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
-from django.db.models import Q
+from django.db.models import Q, Min, Max, Sum
 from django.http import HttpResponse
 from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response, get_list_or_404, get_object_or_404
@@ -185,6 +185,13 @@ def show_member(request, member, page=None):
     types = [[t.type, _(t.name)] for t in activity_types]
     weights = {t.type: t.weight for t in activity_types}
 
+    agr=MemberActivity.objects.aggregate(Min('time'), Max('time'),
+                                             Sum('type__weight'))
+    day_delta = (agr['time__max'] - agr['time__min']).days
+    mp_count = 200
+    daily_avg_act = agr['type__weight__sum'] / day_delta / mp_count
+
+    args['activity_daily_avg'] = daily_avg_act
     args['activity_counts_json'] = res.serialize(None,
         member.get_activity_counts(), 'application/json')
     args['activity_types_json'] = res.serialize(None,

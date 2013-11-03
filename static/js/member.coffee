@@ -22,6 +22,7 @@ class @MemberActivityScoresView extends Backbone.View
                        @end_time.getDate()
 
         resolution = 'month'
+        @avg_bin_score = activity_daily_avg * 30
 
         params =
             resolution: resolution
@@ -36,7 +37,8 @@ class @MemberActivityScoresView extends Backbone.View
         @graph = new ActivityScoresView el:@el,                     \
                                         start_time: @start_time,    \
                                         end_time: @end_time,        \
-                                        scores:coll
+                                        scores:coll,                \
+                                        avg_bin_score:@avg_bin_score
 
 class @MemberActivityFeedView extends Backbone.View
     el: ".activity-feed"
