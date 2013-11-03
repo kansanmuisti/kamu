@@ -32,7 +32,7 @@
         </div>
     <% } %>
     <% if (target.subject) { %>
-        <h2><%= target.subject %></h2>
+        <h2><a href="<%= target.url %>"><%= target.subject %></a></h2>
     <% } %>
         <div class="summary">
             <%= target.text %>
