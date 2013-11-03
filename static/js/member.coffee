@@ -3,15 +3,40 @@ class @MemberActivityScoresView extends Backbone.View
         @member = options.member
         @collection = new MemberActivityScoresList @member.get 'id'
         @collection.bind 'reset', @add_all_items
+
+        time = new Date()
+        year = time.getFullYear()
+        month = time.getMonth()
+        @start_time = new Date(year - 2, month + 1, 1)
+        start_time_str = @start_time.getFullYear() + "-" +  \
+                          (@start_time.getMonth() + 1) + "-" + \
+                          @start_time.getDate()
+
+        time =  new Date(new Date(year, month + 1, 1).getTime() - 1)
+        year = time.getFullYear()
+        month = time.getMonth()
+        day = time.getDate()
+        @end_time = new Date(year, month, day)
+        end_time_str = @end_time.getFullYear() + "-" + \
+                       (@end_time.getMonth() + 1) + "-" + \
+                       @end_time.getDate()
+
+        resolution = 'month'
+
         params =
-            resolution: 'year'
+            resolution: resolution
+            since: start_time_str
+            until: end_time_str
             limit: 0
         @collection.fetch
             reset: true
             data: params
 
     add_all_items: (coll) =>
-        @graph = new ActivityScoresView el:@el, scores:coll
+        @graph = new ActivityScoresView el:@el,                     \
+                                        start_time: @start_time,    \
+                                        end_time: @end_time,        \
+                                        scores:coll
 
 class @MemberActivityFeedView extends Backbone.View
     el: ".activity-feed"
