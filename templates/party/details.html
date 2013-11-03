@@ -31,19 +31,19 @@
                     <nav class="side-navigation">
                         <ul class="nav nav-pills nav-stacked">
                             <li class="active">
-                                <a href=#>Perustiedot</a>
+                                <a href="#">Perustiedot</a>
                             </li>
                             <li>
-                                <a href=#>Valiokuntapaikat</a>
+                                <a href="#">Valiokuntapaikat</a>
                             </li>
                             <li>
-                                <a href=#>Kansanedustajat</a>
+                                <a href="{% url 'parliament.views.list_party_mps' name=party.name %}">Kansanedustajat</a>
                             </li>
                             <li>
-                                <a href=#>Tilastot</a>
+                                <a href="#">Tilastot</a>
                             </li>
                             <li>
-                                <a href=#>Yhteystiedot</a>
+                                <a href="#">Yhteystiedot</a>
                             </li>
                         </ul>
                     </nav>
@@ -61,7 +61,7 @@
                         <fieldset>
                             <legend>Aktiivinen näissä asioissa</legend>
                             <div class="tag-cloud  tagcloud--select">
-                                <ul class="tagcloud__content">
+                                <ul class="items">
                                     <li class="l">
                                         <a href="../../aiheet/aihe/" class="disabled">Verotus</a>
                                     </li>
