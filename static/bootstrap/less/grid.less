@@ -26,6 +26,9 @@
 .col-xs-10,
 .col-xs-11,
 .col-xs-12,
+.col-xs-13,
+.col-xs-14,
+.col-xs-15,
 .col-sm-1,
 .col-sm-2,
 .col-sm-3,
@@ -38,6 +41,9 @@
 .col-sm-10,
 .col-sm-11,
 .col-sm-12,
+.col-sm-13,
+.col-sm-14,
+.col-sm-15,
 .col-md-1,
 .col-md-2,
 .col-md-3,
@@ -50,6 +56,9 @@
 .col-md-10,
 .col-md-11,
 .col-md-12,
+.col-md-13,
+.col-md-14,
+.col-md-15,
 .col-lg-1,
 .col-lg-2,
 .col-lg-3,
@@ -61,7 +70,10 @@
 .col-lg-9,
 .col-lg-10,
 .col-lg-11,
-.col-lg-12 {
+.col-lg-12,
+.col-lg-13,
+.col-lg-14,
+.col-lg-15 {
   position: relative;
   // Prevent columns from collapsing when empty
   min-height: 1px;
@@ -89,7 +101,10 @@
 .col-xs-8,
 .col-xs-9,
 .col-xs-10,
-.col-xs-11 {
+.col-xs-11,
+.col-xs-12,
+.col-xs-13,
+.col-xs-14 {
   float: left;
 }
 .col-xs-1  { width: percentage((1 / @grid-columns)); }
@@ -107,6 +122,7 @@
 .col-xs-13 { width: percentage((13/ @grid-columns)); }
 .col-xs-14 { width: percentage((14/ @grid-columns)); }
 .col-xs-15 { width: 100%; }
+.col-xs-half { width: 50%; }
 
 
 // Small grid
@@ -122,6 +138,7 @@
     max-width: @container-tablet;
   }
 
+  .col-sm-half,
   .col-sm-1,
   .col-sm-2,
   .col-sm-3,
@@ -150,6 +167,7 @@
   .col-sm-13 { width: percentage((13/ @grid-columns)); }
   .col-sm-14 { width: percentage((14/ @grid-columns)); }
   .col-sm-15 { width: 100%; }
+  .col-sm-half { width: 50%; }
 
   // Push and pull columns for source order changes
   .col-sm-push-1  { left: percentage((1 / @grid-columns)); }
@@ -202,6 +220,7 @@
   .container {
     max-width: @container-desktop;
   }
+  .col-md-half,
   .col-md-1,
   .col-md-2,
   .col-md-3,
@@ -230,6 +249,7 @@
   .col-md-13 { width: percentage((13/ @grid-columns)); }
   .col-md-14 { width: percentage((14/ @grid-columns)); }
   .col-md-15 { width: 100%; }
+  .col-md-half { width: 50%; }
 
   // Push and pull columns for source order changes
   .col-md-push-0  { left: auto; }
@@ -286,6 +306,7 @@
     max-width: @container-lg-desktop;
   }
 
+  .col-lg-half,
   .col-lg-1,
   .col-lg-2,
   .col-lg-3,
@@ -314,6 +335,7 @@
   .col-lg-13 { width: percentage((13/ @grid-columns)); }
   .col-lg-14 { width: percentage((14/ @grid-columns)); }
   .col-lg-15 { width: 100%; }
+  .col-lg-half { width: 50%; }
 
   // Push and pull columns for source order changes
   .col-lg-push-0  { left: auto; }
