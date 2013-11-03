@@ -276,6 +276,9 @@ class MemberActivityTypeResource(KamuResource):
     class Meta:
         resource_name = 'member_activity_type'
         queryset = MemberActivityType.objects
+        filtering = {
+            'type': ['exact', 'in']
+        }
 
 class MemberActivityResource(KamuResource):
     member = fields.ForeignKey('parliament.api.MemberResource', 'member', null=True)

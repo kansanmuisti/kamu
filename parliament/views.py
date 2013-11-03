@@ -65,7 +65,19 @@ FEED_ACTIONS = [
         'type': 'WQ',
         'action': _('submitted a written question'),
         'group': 'parliament'
-    }, {
+    },
+    {
+        'name': _('Government bills'),
+        'icon': 'clipboard',
+        'type': 'GB',
+        'action': _('government bill was introduced'),
+        'group': 'parliament',
+        'no_actor': True,
+    }
+]
+
+"""
+    {
         'name': _('Votes'),
         'icon': 'thumbs-down',
         'type': 'RV',
@@ -77,14 +89,8 @@ FEED_ACTIONS = [
         'type': 'CD',
         'action': _('submitted a committee dissent'),
         'group': 'parliament'
-    }, {
-        'name': _('Government bills'),
-        'icon': 'clipboard',
-        'type': 'GB',
-        'action': _('government bill was introduced'),
-        'group': 'parliament'
-    }
-]
+    },
+"""
 
 MEMBER_LIST_FIELDS = [
     {
@@ -156,9 +162,11 @@ def _get_member_activity_kws(member):
     kw_list = sorted(kw_dict.iteritems(), key=operator.itemgetter(1), reverse=True)[0:20]
     return kw_list
 
-def make_feed_filters():
+def make_feed_filters(actor=False):
     groups = {}
     for a in FEED_ACTIONS:
+        if actor and a.get('no_actor', False):
+            continue
         grp = a['group']
         d = groups.get(grp, [])
         d.append(a)
@@ -198,7 +206,7 @@ def show_member(request, member, page=None):
         types, 'application/json')
     args['activity_type_weights_json'] = res.serialize(None,
         weights, 'application/json')
-    args['feed_filters'] = make_feed_filters()
+    args['feed_filters'] = make_feed_filters(actor=True)
     args['feed_actions_json'] = simplejson.dumps(make_feed_actions(), ensure_ascii=False)
     kw_act = _get_member_activity_kws(member)
     kw_act_json = simplejson.dumps(kw_act, ensure_ascii=False)

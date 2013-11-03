@@ -107,7 +107,6 @@ FEED_ACTIONS = {{feed_actions_json|safe}};
 <link href="{% static "css/plots.less" %}" rel="stylesheet" type="text/less" />
 {% endcompress %}
 
-<script type="text/javascript" src="{% static "js/vendor/d3.v3.js" %}"></script>
 <script type="text/javascript">
     activity_counts = {{ activity_counts_json|safe }}
     activity_types = {{ activity_types_json|safe }}
@@ -131,30 +130,9 @@ FEED_ACTIONS = {{feed_actions_json|safe}};
 <script type="text/coffeescript" src="{% static "js/member.coffee" %}"></script>
 {% endcompress %}
 
-{% compress js %}
+{% compress js inline %}
 <script type="text/coffeescript">
     graph = new MemberActivityScoresView member:member, el:"#member-activity-graph"
-</script>
-{% endcompress %}
-
-{% compress js %}
-<script type="text/coffeescript">
-    tags = ({name: x[0], count: x[1], url: '#'} for x in keyword_activity)
-    tags = _.sortBy tags, (x) -> x.name
-    $("#member-tag-cloud").tag_cloud tags
-
-    feed_view = new MemberActivityFeedView member
-
-    $("#member-tag-cloud li a").click (ev) ->
-        ev.preventDefault()
-        if $(this).hasClass 'active'
-            feed_view.filter()
-            $(this).removeClass 'active'
-        else
-            kw = $.trim $(@).html()
-            feed_view.filter_keyword kw
-            $("#member-tag-cloud li a").removeClass 'active'
-            $(this).addClass 'active'
 </script>
 {% endcompress %}
 
