@@ -1,47 +1,6 @@
-class @MemberActivityScoresView extends Backbone.View
-    initialize: (options) ->
-        @member = options.member
-        end_date = options.end_date
-        @collection = new MemberActivityScoresList @member.get 'id'
-        @collection.bind 'reset', @add_all_items
-
-        time = new Date(end_date)
-        year = time.getFullYear()
-        month = time.getMonth()
-        @start_time = new Date(year - 2, month + 1, 1)
-        start_time_str = @start_time.getFullYear() + "-" +  \
-                          (@start_time.getMonth() + 1) + "-" + \
-                          @start_time.getDate()
-
-        time =  new Date(new Date(year, month + 1, 1).getTime() - 1)
-        year = time.getFullYear()
-        month = time.getMonth()
-        day = time.getDate()
-        @end_time = new Date(year, month, day)
-        end_time_str = @end_time.getFullYear() + "-" + \
-                       (@end_time.getMonth() + 1) + "-" + \
-                       @end_time.getDate()
-
-        resolution = 'month'
-        @avg_bin_score = activity_daily_avg * 30
-
-        params =
-            resolution: resolution
-            since: start_time_str
-            until: end_time_str
-            limit: 0
-        @collection.fetch
-            reset: true
-            data: params
-
-    add_all_items: (coll) =>
-        @graph = new ActivityScoresView el:@el,                     \
-                                        start_time: @start_time,    \
-                                        end_time: @end_time,        \
-                                        scores:coll,                \
-                                        avg_bin_score:@avg_bin_score
-
-
+class @MemberActivityScoresView extends @ActivityScoresView
+    initialize: (member, options) ->
+        super (new MemberActivityScoresList member.get 'id'), options
 
 class @MemberActivityFeedView extends Backbone.View
     el: ".activity-feed"

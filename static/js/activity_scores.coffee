@@ -1,10 +1,42 @@
 class @ActivityScoresView extends Backbone.View
-    initialize: (options) ->
-        @scores = options.scores
-        @avg_bin_score = options.avg_bin_score
-        @start_time = options.start_time
-        @end_time = options.end_time
-        @render()
+    initialize: (collection, options) ->
+        @el = options.el
+        end_date = options.end_date
+        activity_daily_avg = options.activity_daily_avg
+
+        collection.bind 'reset', @add_all_items
+
+        time = new Date(end_date)
+        year = time.getFullYear()
+        month = time.getMonth()
+        @start_time = new Date(year - 2, month + 1, 1)
+        start_time_str = @start_time.getFullYear() + "-" +  \
+                          (@start_time.getMonth() + 1) + "-" + \
+                          @start_time.getDate()
+
+        time =  new Date(new Date(year, month + 1, 1).getTime() - 1)
+        year = time.getFullYear()
+        month = time.getMonth()
+        day = time.getDate()
+        @end_time = new Date(year, month, day)
+        end_time_str = @end_time.getFullYear() + "-" + \
+                       (@end_time.getMonth() + 1) + "-" + \
+                       @end_time.getDate()
+
+        resolution = 'month'
+        if activity_daily_avg
+            @avg_bin_score = activity_daily_avg * 30
+        else
+            @avg_bin_score = null
+
+        params =
+            resolution: resolution
+            since: start_time_str
+            until: end_time_str
+            limit: 0
+        collection.fetch
+            reset: true
+            data: params
 
     draw_plot: ->
         $.plot $(@el), [ @act_histogram ], @plot_options
@@ -16,7 +48,10 @@ class @ActivityScoresView extends Backbone.View
             return @
 
         @act_histogram = []
-        max_score = @avg_bin_score + 20
+        if @avg_bin_score
+            max_score = @avg_bin_score + 20
+        else
+            max_score = 0
 
         data_idx = 0
         while data_idx < score_list.length
@@ -43,6 +78,14 @@ class @ActivityScoresView extends Backbone.View
             data_idx += 1
 
         colors = ["#00c0c0"]
+        if @avg_bin_score
+            markings = [
+                yaxis:
+                    from: @avg_bin_score
+                    to: @avg_bin_score
+            ]
+        else
+            marking = []
 
         @plot_options =
             colors: colors
@@ -71,11 +114,7 @@ class @ActivityScoresView extends Backbone.View
                 max: max_score
 
             grid:
-                markings: [
-                    yaxis:
-                        from: @avg_bin_score
-                        to: @avg_bin_score
-                ]
+                markings: markings
                 borderWidth:
                     top: 0
                     bottom: 1
@@ -88,3 +127,8 @@ class @ActivityScoresView extends Backbone.View
             @draw_plot()
     
         return @
+
+    add_all_items: (collection) =>
+        @scores = collection
+        @render()
+
