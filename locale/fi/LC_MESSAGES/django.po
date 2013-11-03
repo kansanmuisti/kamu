@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-30 23:12+0200\n"
+"POT-Creation-Date: 2013-11-03 18:08+0200\n"
 "PO-Revision-Date: 2011-04-14 12:54+0300\n"
 "Last-Translator: Juha Yrjölä <juha.yrjola@iki.fi>\n"
 "Language-Team: Finnish <info@kansanmuisti.fi>\n"
@@ -112,99 +112,99 @@ msgstr "VB"
 msgid "Election budget"
 msgstr "Vaalibudjetti"
 
-#: parliament/views.py:31
+#: parliament/views.py:32
 msgid "tweeted"
 msgstr "tweettasi"
 
-#: parliament/views.py:37
+#: parliament/views.py:38
 msgid "published in Facebook"
 msgstr "julkaisi Facebookissa"
 
-#: parliament/views.py:40
+#: parliament/views.py:41 templates/show_document.html:47
 msgid "Statements"
 msgstr "Puheenvuorot"
 
-#: parliament/views.py:43
+#: parliament/views.py:44
 msgid "made a plenary statement"
 msgstr "käytti puheenvuoron"
 
-#: parliament/views.py:46
+#: parliament/views.py:47
 msgid "Signatures"
 msgstr "Allekirjoitukset"
 
-#: parliament/views.py:49
+#: parliament/views.py:50
 msgid "signed"
 msgstr "allekirjoitti"
 
-#: parliament/views.py:51
+#: parliament/views.py:52
 msgid "signed an initiative"
 msgstr "allekirjoitti lakialoitteen"
 
-#: parliament/views.py:52
+#: parliament/views.py:53
 msgid "signed a written question"
 msgstr "allekirjoitti kirjallisen kysymyksen"
 
-#: parliament/views.py:56
+#: parliament/views.py:57
 msgid "Own initiatives"
 msgstr "Omat aloitteet"
 
-#: parliament/views.py:59
+#: parliament/views.py:60
 msgid "sponsored an initiative"
 msgstr "laati lakialoitteen"
 
-#: parliament/views.py:62
+#: parliament/views.py:63
 msgid "Written questions"
 msgstr "Kirjalliset kysymykset"
 
-#: parliament/views.py:65
+#: parliament/views.py:66
 msgid "submitted a written question"
 msgstr "laati kirjallisen kysymyksen"
 
-#: parliament/views.py:68
+#: parliament/views.py:69
 msgid "Votes"
 msgstr "Äänet"
 
-#: parliament/views.py:71
+#: parliament/views.py:72
 msgid "voted against own party"
 msgstr "äänesti puoluettaan vastaan"
 
-#: parliament/views.py:74
+#: parliament/views.py:75
 msgid "Dissents"
 msgstr "Vastalauseet"
 
-#: parliament/views.py:77
+#: parliament/views.py:78
 msgid "submitted a committee dissent"
 msgstr "antoi vastalauseen valiokunnassa"
 
-#: parliament/views.py:80
+#: parliament/views.py:81
 msgid "Government bills"
 msgstr "Hallituksen esitykset"
 
-#: parliament/views.py:83
+#: parliament/views.py:84
 msgid "government bill was introduced"
-msgstr "hallituksen esitys jätettiin"
+msgstr "hallitusn jätti esityksen"
 
-#: parliament/views.py:91 templates/party/list.html:90
+#: parliament/views.py:92 templates/party/list.html:91
 msgid "Activity"
 msgstr "Aktiviteetti"
 
-#: parliament/views.py:94
+#: parliament/views.py:95
 msgid "Name"
 msgstr "Nimi"
 
-#: parliament/views.py:97
+#: parliament/views.py:98
 msgid "Attendance"
 msgstr "Läsnäolo"
 
-#: parliament/views.py:100
+#: parliament/views.py:101
 msgid "Agreement with party"
 msgstr "Samanmielisyys puolueen kanssa"
 
-#: parliament/views.py:103 templates/member/list.html:64
+#: parliament/views.py:104 templates/member/list.html:64
 msgid "Number of terms"
 msgstr "Kaudet"
 
-#: parliament/views.py:106
+#: parliament/views.py:107
 msgid "Age"
 msgstr "Ikä"
 
@@ -316,24 +316,24 @@ msgstr ""
 msgid "Other"
 msgstr "Muu"
 
-#: parliament/models/member.py:345
+#: parliament/models/member.py:359
 msgid "Chairman"
 msgstr "puheenjohtaja"
 
-#: parliament/models/member.py:346
+#: parliament/models/member.py:360
 msgid "Deputy Chairman"
 msgstr "varapuheenjohtaja"
 
-#: parliament/models/member.py:347
+#: parliament/models/member.py:361
 msgctxt "organisation"
 msgid "Member"
 msgstr "jäsen"
 
-#: parliament/models/member.py:348
+#: parliament/models/member.py:362
 msgid "Deputy Member"
 msgstr "varajäsen"
 
-#: parliament/models/member.py:370
+#: parliament/models/member.py:384
 msgid "Minister"
 msgstr "ministeri"
 
@@ -353,11 +353,11 @@ msgstr "tietoa"
 msgid "About the site"
 msgstr "Tietoa Kamusta"
 
-#: templates/base.html:58
+#: templates/base.html:60
 msgid "Read more"
 msgstr "Lue lisää"
 
-#: templates/base.html:112 templates/list_topics.html:21
+#: templates/base.html:117 templates/list_topics.html:21
 #: templates/member/details.html:84 templates/member/list.html:16
 #: templates/opinions/summary.html:136
 msgid "Search"
@@ -371,7 +371,7 @@ msgstr "Ajankohtaista"
 msgid "Front page"
 msgstr "Etusivu"
 
-#: templates/home.html:100
+#: templates/home.html:123
 msgid "Show more items"
 msgstr "Näytä lisää asioita"
 
@@ -409,44 +409,46 @@ msgstr "Aiheet"
 
 #: templates/list_topics.html:18
 msgid "Browse keywords"
-msgstr ""
+msgstr "Selaa hakusanoja"
 
 #: templates/list_topics.html:23
-#, fuzzy
 msgid "Search keywords"
-msgstr "Hakutulokset asiasanalle"
+msgstr "Hae asiasanoista"
 
 #: templates/list_topics.html:28
 msgid "Sort"
 msgstr "Lajittele"
 
 #: templates/list_topics.html:32
-msgid "Alphabetical"
-msgstr ""
+msgid "Most active"
+msgstr "Eniten aktiivisuutta"
 
 #: templates/list_topics.html:33
-#, fuzzy
-msgid "With latest activity"
-msgstr "Poliittinen aktiivisuus"
+msgid "Latest activity"
+msgstr "Viimeaikainen aktiivisuus"
 
 #: templates/list_topics.html:34
-#, fuzzy
-msgid "Most interesting"
-msgstr "Sidonnaisuudet"
+msgid "Alphabetical"
+msgstr "Aakkosjärjestys"
 
-#: templates/list_topics.html:75
+#: templates/list_topics.html:76
 msgid "Active recently"
 msgstr "Pinnalla viime aikoina"
 
-#: templates/list_topics.html:82
+#: templates/list_topics.html:83
 msgid "Active this term"
 msgstr "Pinnalla tällä vaalikaudella"
 
-#: templates/list_topics.html:88
+#: templates/list_topics.html:89
 msgid "All time active"
 msgstr "Eniten aktiivisuutta"
 
-#: templates/new_session.html:3
+#: templates/list_topics.html:94
+#, python-format
+msgid "Most active #{perc}%%"
+msgstr "Aktiivisin #{perc}%%"
+
+#: templates/new_session.html:3 templates/show_document.html:50
 msgid "Plenary session"
 msgstr "Täysistunto"
 
@@ -542,13 +544,17 @@ msgstr "Poissaolevien lukumäärä"
 msgid "Similar Citizens' Initiatives"
 msgstr "Samanlaisia kansalaisaloitteita"
 
-#: templates/show_document.html:16
+#: templates/show_document.html:17
 msgid "Similar documents"
 msgstr "Samanlaisia asiakirjoja"
 
-#: templates/show_document.html:40
+#: templates/show_document.html:44
 msgid "Proposal content"
 msgstr "Esityksen sisältö"
+
+#: templates/show_document.html:60
+msgid "speaker"
+msgstr "puhemies"
 
 #: templates/show_topic.html:4
 msgid "Topic"
@@ -571,7 +577,7 @@ msgstr "Ketkä ovat aktiivisimpia tämän asian parissa?"
 msgid "Documents related to topic \"%(topic)s\""
 msgstr "Asiakirjat, jotka liittyvät aiheeseen \"%(topic)s\""
 
-#: templates/show_topic.html:127
+#: templates/show_topic.html:88
 msgid "All documents"
 msgstr "Kaikki asiakirjat"
 
@@ -1005,6 +1011,11 @@ msgid ""
 "Please note that this link will only be valid for %(expiration_days)s days."
 msgstr ""
 
+#: templates/registration/activation_email_subject.txt:1
+#, fuzzy
+msgid "Activate your account"
+msgstr "Luo uusi tunnus"
+
 #: templates/registration/login.html:3 templates/registration/login.html:42
 msgid "Login"
 msgstr "Kirjaudu sisään"
@@ -1227,441 +1238,3 @@ msgstr "Luo uusi tunnus"
 msgid "Create the account"
 msgstr "Luo tunnus"
 
-#~ msgid "Register as beta tester"
-#~ msgstr "Rekisteröidy beta-testaajaksi"
-
-#~ msgid "Register as beta tester for KAMU"
-#~ msgstr "Registeröidy Kamun beetatestaajaksi"
-
-#~ msgid "Only e-mail is mandatory. Fill as many as you wish."
-#~ msgstr "Vain sähköpostiosoite on pakollinen. Muuten täytä ne jotka haluat."
-
-#~ msgid "Add organization"
-#~ msgstr "Järjestön lisääminen"
-
-#~ msgid "Modify an organization"
-#~ msgstr "Muokkaa järjestöä"
-
-#~ msgid "Add a new organization"
-#~ msgstr "Lisää uusi järjestö"
-
-#~ msgid "Preview"
-#~ msgstr "Esikatsele"
-
-#~ msgid "Registration received"
-#~ msgstr "Rekisteröinti vastaanotettu"
-
-#~ msgid ""
-#~ "\n"
-#~ "  <p>Thank you for your interest in KAMU. We will contact you soon.</p>\n"
-#~ "  "
-#~ msgstr ""
-#~ "\n"
-#~ "  <p>Kiitos, että olet kiinnostunut Kamusta. Otamme pian yhteyttä.</p>\n"
-#~ "  "
-
-#~ msgid "Organizations"
-#~ msgstr "Järjestöt"
-
-#~ msgid "Score a session"
-#~ msgstr "Pisteytä äänestys"
-
-#~ msgid "Score for session"
-#~ msgstr "Äänestyksen pisteytys"
-
-#~ msgid "Save"
-#~ msgstr "Tallenna"
-
-#~ msgid "Previous"
-#~ msgstr "Edell."
-
-#~ msgid "Next"
-#~ msgstr "Seur."
-
-#~ msgid "Name in service links"
-#~ msgstr "Nimi palvelussa"
-
-#~ msgid "Description"
-#~ msgstr "Kuvaus"
-
-#~ msgid "Info link"
-#~ msgstr "Linkki kotisivulle"
-
-#~ msgid "Logo"
-#~ msgstr "Logo"
-
-#~ msgid "Modify"
-#~ msgstr "Muokkaa"
-
-#~ msgid "General"
-#~ msgstr "Yleistiedot"
-
-#~ msgid "Please log in first!"
-#~ msgstr "Kirjaudu sisään ensin!"
-
-#~ msgid "Empty"
-#~ msgstr "Tyhjä"
-
-#~ msgid "No votes in database"
-#~ msgstr "Ei ääniä tietokannassa"
-
-#~ msgid "ago"
-#~ msgstr "sitten"
-
-#~ msgid "Leave a new comment"
-#~ msgstr "Jätä uusi kommentti"
-
-#~ msgid "No statements found"
-#~ msgstr "Ei puheenvuoroja"
-
-#~ msgid "Session scores"
-#~ msgstr "Äänestysten pisteytykset"
-
-#~ msgid ""
-#~ "\n"
-#~ "    You may add a score here through the page for the voting session.\n"
-#~ "    "
-#~ msgstr ""
-#~ "\n"
-#~ "Pisteytyksiä voi lisätä äänestyksen sivulta.\n"
-#~ "    "
-
-#~ msgid "Parliament vote"
-#~ msgstr "Eduskunnan äänestys"
-
-#~ msgid "vote"
-#~ msgstr "äänestys"
-
-#~ msgid "time"
-#~ msgstr "klo. "
-
-#~ msgid "Scoring"
-#~ msgstr "Pisteytykset"
-
-#~ msgid "Match to Opinions:"
-#~ msgstr "Yhdistä vaalikonevastaukseen:"
-
-#~ msgid ""
-#~ "\n"
-#~ "<p>You may indicate how you yourself would vote on this subject.</p>\n"
-#~ msgstr ""
-#~ "\n"
-#~ "<p>Voit äänestää asiasta myös itse.</p>\n"
-
-#~ msgid "Plenary session minutes"
-#~ msgstr "Istuntopöytäkirja"
-
-#~ msgid "Post"
-#~ msgstr "Julkaise"
-
-#~ msgid "Preview your comment"
-#~ msgstr "Esikatsele kommenttiasi"
-
-#~ msgid "Please correct the error below"
-#~ msgid_plural "Please correct the errors below"
-#~ msgstr[0] "Korjaa alla oleva virhe."
-#~ msgstr[1] "Korjaa alla olevat virheet."
-
-#~ msgid "Post your comment"
-#~ msgstr "Lähetä kommenttisi"
-
-#~ msgid "or make changes"
-#~ msgstr "tai tee vielä muutoksia"
-
-#~ msgid "Facebook Connect"
-#~ msgstr "Yhdistäminen Facebook-tiliin"
-
-#~ msgid "Facebook functionality disabled."
-#~ msgstr "Facebook-toiminnallisuus pois käytöstä."
-
-#~ msgid "Finalize your registration"
-#~ msgstr "Viimeistele rekisteröintisi"
-
-#~ msgid ""
-#~ "\n"
-#~ "<h2>Welcome to Kansan muisti, %(first_name)s %(last_name)s!</h2>\n"
-#~ "Please finalize your registration by choosing a username below.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "<h2>Tervetuloa Kansan muistiin, %(first_name)s %(last_name)s!</h2>\n"
-#~ "Viimeistele rekisteröintisi valitsemalla vielä käyttäjätunnuksesi.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please correct the error below.\n"
-#~ msgid_plural ""
-#~ "\n"
-#~ "Please correct the errors below.\n"
-#~ msgstr[0] ""
-#~ "\n"
-#~ "Korjaa alla oleva virhe.\n"
-#~ msgstr[1] ""
-#~ "\n"
-#~ "Korjaa alla olevat virheet.\n"
-
-#~ msgid "Submit"
-#~ msgstr "Lähetä"
-
-#, fuzzy
-#~ msgctxt "Member"
-#~ msgid "organisation"
-#~ msgstr "Järjestö"
-
-#~ msgid "Facebook update"
-#~ msgstr "Facebook-päivitys"
-
-#~ msgid "Tweet"
-#~ msgstr "Tweetti"
-
-#~ msgid "Statement"
-#~ msgstr "Puheenvuoro"
-
-#~ msgid "Initiative"
-#~ msgstr "Lakialoite"
-
-#~ msgid "Signature"
-#~ msgstr "Allekirjoitus"
-
-#~ msgid "Rebel vote"
-#~ msgstr "Vastaääni"
-
-#~ msgid "Plenary statement"
-#~ msgstr "Täysistuntopuheenvuoro"
-
-#, fuzzy
-#~ msgid "Recent activity"
-#~ msgstr "Eduskunnassa käsiteltyjä asioita"
-
-#~ msgid "Allekirjoitukset"
-#~ msgstr "Signatures"
-
-#~ msgid "Will not tell"
-#~ msgstr "En kerro"
-
-#~ msgid "No affiliation"
-#~ msgstr "Ei puoluekantaa"
-
-#~ msgid "Male"
-#~ msgstr "Mies"
-
-#~ msgid "Female"
-#~ msgstr "Nainen"
-
-#~ msgid "Gender"
-#~ msgstr "Sukupuoli"
-
-#~ msgid "Monthly income"
-#~ msgstr "Kuukausitulot"
-
-#~ msgid "Education"
-#~ msgstr "Koulutus"
-
-#~ msgid "I belong to a party"
-#~ msgstr "Kuulun puolueeseen"
-
-#~ msgid "I always vote"
-#~ msgstr "Äänestän aina"
-
-#~ msgid "I have never voted"
-#~ msgstr "En ole koskaan äänestänyt"
-
-#~ msgid "I vote in the communal elections"
-#~ msgstr "Äänestän kunnallivaaleissa"
-
-#~ msgid "I vote in the parliamentary elections"
-#~ msgstr "Äänestän eduskuntavaaleissa"
-
-#~ msgid "I vote in the presidentiary elections"
-#~ msgstr "Äänestän presidentinvaaleissa"
-
-#~ msgid "Can facebook"
-#~ msgstr "Osaa facebookata"
-
-#~ msgid "Can word process"
-#~ msgstr "Osaa tekstinkäsitellä"
-
-#~ msgid "Can code"
-#~ msgstr "Osaa koodata"
-
-#~ msgid "E-mail"
-#~ msgstr "Sähköposti"
-
-#~ msgid "Party affiliation"
-#~ msgstr "Puoluekanta"
-
-#~ msgid "Username"
-#~ msgstr "Käyttäjätunnus"
-
-#~ msgid "This value must contain only letters, numbers and underscores."
-#~ msgstr "Ainoastaan kirjaimet, numerot ja alaviivat ovat sallittu."
-
-#~ msgid "A user with that username already exists."
-#~ msgstr "Käyttäjätunnus on jo käytössä."
-
-#~ msgid "Home city"
-#~ msgstr "Kotipaikka"
-
-#~ msgid "Membership fee"
-#~ msgstr "Jäsenmaksu"
-
-#~ msgid "Comments"
-#~ msgstr "Kommentit"
-
-#~ msgid "Public membership"
-#~ msgstr "Julkinen jäsenyys"
-
-#~ msgid "Your membership application for Kansan muisti KAMU ry"
-#~ msgstr "Jäsenhakemuksesi Kansan muisti ry:hyn"
-
-#~ msgid "File size too big."
-#~ msgstr "Tiedosto on liian iso."
-
-#~ msgid "Image dimensions too big."
-#~ msgstr "Kuvan dimensiot ovat liian suuret."
-
-#~ msgid "Home page link"
-#~ msgstr "Kotisivun osoite"
-
-#~ msgid "Not enough characters."
-#~ msgstr "Ei tarpeeksi merkkejä."
-
-#~ msgid "Organization already exists."
-#~ msgstr "Järjestö on jo luotu."
-
-#~ msgid "Invalid logo."
-#~ msgstr "Logo on väärässä formaatissa."
-
-#~ msgid "Re-send activation emails"
-#~ msgstr "Lähetä aktivaatio-sähköpostit uudelleen"
-
-#~ msgid "Password"
-#~ msgstr "Salasana"
-
-#~ msgid "The two password fields didn't match."
-#~ msgstr "Salasanakentät eivät täsmää."
-
-#~ msgid ""
-#~ "This email address is already in use. Please supply a different email "
-#~ "address."
-#~ msgstr "Sähköpostiosoite on jo käytössä."
-
-#~ msgid "user"
-#~ msgstr "käyttäjä"
-
-#~ msgid "activation key"
-#~ msgstr "aktivaatioavain"
-
-#~ msgid "registration profile"
-#~ msgstr "rekisteröintiprofiili"
-
-#~ msgid "registration profiles"
-#~ msgstr "rekisteröintiprofiilit"
-
-#~ msgid "Logged in"
-#~ msgstr "Kirjautuneena"
-
-#~ msgid "Log out"
-#~ msgstr "Kirjaudu ulos"
-
-#~ msgid "What is Kamu?"
-#~ msgstr "Kansan muisti"
-
-#~ msgid "Plenary Sessions"
-#~ msgstr "Täysistunnot"
-
-#~ msgid "Select term"
-#~ msgstr "Valitse vaalikausi"
-
-#~ msgid "Select district"
-#~ msgstr "Valitse vaalipiiri"
-
-#~ msgid "or choose your county"
-#~ msgstr "tai valitse kuntasi"
-
-#~ msgid ""
-#~ "\n"
-#~ "Copyright &copy; 2010–2011 Kansan muisti ry. The owners and operators of "
-#~ "this\n"
-#~ "website are not responsible for the accuracy of the information "
-#~ "provided.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Copyright &copy; 2010–2011 Kansan muisti ry. Palvelun ylläpitäjä ei "
-#~ "vastaa tietojen oikeellisuudesta.\n"
-
-#~ msgid "Main page"
-#~ msgstr "Etusivu"
-
-#~ msgid "Background"
-#~ msgstr "Taustaa"
-
-#~ msgid "Rules"
-#~ msgstr "Säännöt"
-
-#~ msgid "Feedback"
-#~ msgstr "Palaute"
-
-#~ msgid "Donate"
-#~ msgstr "Lahjoita"
-
-#~ msgid "Contact"
-#~ msgstr "Yhteystiedot"
-
-#~ msgid "Keywords from the latest votes"
-#~ msgstr "Uusimpien äänestysten asiasanat"
-
-#~ msgid "Leave us feedback"
-#~ msgstr "Jätä palautetta"
-
-#~ msgid ""
-#~ "Please report any errors you find, send us your ideas for improvement, "
-#~ "volunteer for work, or just say hi."
-#~ msgstr ""
-#~ "Raportoi meille löytämistäsi virheistä sivustolla, lähetä ideoitasi "
-#~ "jatkokehitystä varten, tarjoa apuasi tai jätä muuta palautetta."
-
-#~ msgid "Send"
-#~ msgstr "Lähetä"
-
-#~ msgid "Most popular"
-#~ msgstr "Suosituimmat"
-
-#~ msgid "Latest votes"
-#~ msgstr "Uusimmat äänestykset"
-
-#~ msgid ""
-#~ "Includes all the members that have been active during the chosen time "
-#~ "period."
-#~ msgstr ""
-#~ "Mukana kaikki kansanedustajat, jotka ovat olleet aktiivisena valitulla "
-#~ "aikavälillä."
-
-#~ msgid "Navigation"
-#~ msgstr "Navigaatio"
-
-#~ msgid "MPs"
-#~ msgstr "Kansanedustajat"
-
-#~ msgid "Social media"
-#~ msgstr "Sosiaalinen media"
-
-#~ msgid "Show more updates"
-#~ msgstr "Näytä lisää päivityksiä"
-
-#~ msgid "Share in social media"
-#~ msgstr "Jaa sosiaalisessa mediassa"
-
-#~ msgid "Statement "
-#~ msgstr "Puheenvuoro"
-
-#~ msgid "Score"
-#~ msgstr "Pisteet"
-
-#~ msgid "Absent"
-#~ msgstr "Poissa"
-
-#~ msgid "Home"
-#~ msgstr "Etusivu"
-
-#~ msgid "All districts"
-#~ msgstr "Kaikki"
