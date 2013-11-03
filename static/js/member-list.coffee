@@ -97,6 +97,16 @@ class MemberListView extends Backbone.View
                     return -1
                 else
                     return 1
+        attrsort = (field) ->
+            (aw, bw) ->
+                a = aw.model.attributes[field]
+                b = bw.model.attributes[field]
+                if a == b
+                    return namesort(aw, bw)
+                if a > b
+                    return -1
+                else
+                    return 1
 
         @_sort_funcs =
             name: namesort
@@ -105,7 +115,7 @@ class MemberListView extends Backbone.View
             party_agree: statsort('party_agree')
             session_agree: statsort('party_agree')
             term_count: statsort('term_count')
-            age: statsort('age')
+            age: attrsort('age')
 
         @_sort_fields = []
         for field in MEMBER_LIST_FIELDS
@@ -141,9 +151,9 @@ class MemberListView extends Backbone.View
 
             func = f.sort_func
             if ascending
-                @sort_order = 1
-            else
                 @sort_order = -1
+            else
+                @sort_order = 1
 
             @_raw_sort_func = func
             @_filter_listing()
