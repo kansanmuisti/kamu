@@ -60,14 +60,13 @@ class @ActivityScoresView extends Backbone.View
             score = act.score
 
             while data_idx + 1 < score_list.length
-                data_idx += 1
-
-                act = score_list[data_idx].attributes
+                act = score_list[data_idx + 1].attributes
 
                 if act.time != time
                     break
 
                 score += act.score
+                data_idx += 1
 
             time = new Date(time).getTime()
             column = [ time, score ]
