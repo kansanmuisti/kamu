@@ -309,6 +309,7 @@ class MemberActivityResource(KamuResource):
             target['text'] = o.summary
             target['subject'] = o.subject
             target['name'] = o.name
+            target['type'] = o.type
             target['keywords'] = get_keywords(o)
             target['url'] = o.get_absolute_url()
         else:
