@@ -111,7 +111,8 @@ class ActivityScoresResource(Resource):
 
         obj = self.parent_object
         score_list = obj.get_activity_score_set(since=since, until=until,
-                                                resolution=resolution)
+                                                resolution=resolution,
+                                                **kwargs)
         bundle=[]
         for score in score_list:
             score_obj = DictModel(score)
@@ -125,6 +126,46 @@ class ActivityScoresResource(Resource):
     class Meta:
         include_resource_uri = False
         resource_name = 'activity_scores'
+
+class ParliamentResource(Resource):
+    class ParliamentHelper(object):
+        def get_activity_score_set(self, **kwargs):
+            scores = MemberActivity.objects.get_score_set(**kwargs)
+            if 'calc_average' in kwargs:
+                print "average"
+                for s in scores:
+                    s['score'] /= 200
+
+            return scores
+
+    def get_parliament_activity_scores(self, request, **kwargs):
+        self.method_check(request, allowed=['get'])
+        self.is_authenticated(request)
+
+        obj = self.ParliamentHelper()
+        scores_resource = ActivityScoresResource()
+        uri_base = self._build_reverse_url('api_get_parliament_activity_scores',
+                                       kwargs=self.resource_uri_kwargs(obj))
+               
+        if request.GET.get('calculate_average', '').lower() in ['true', '1']:
+            kwargs['calc_average'] = 1
+
+        return scores_resource.get_list(request, parent_object=obj,
+                                        parent_uri=uri_base, **kwargs)
+
+    def prepend_urls(self):
+        url_base = r"^(?P<resource_name>%s)/" % self._meta.resource_name
+        return [
+            url(url_base + 'activity_scores/$',
+                self.wrap_view('get_parliament_activity_scores'),
+                name="api_get_parliament_activity_scores"),
+        ]
+
+    def detail_uri_kwargs(self, bundle_or_obj=None):
+        return {}
+
+    class Meta:
+        dummy = 1
 
 class PartyResource(KamuResource):
     SUPPORTED_LOGO_DIMS = ((32, 32), (48, 48), (64, 64), (128,128))
@@ -495,7 +536,7 @@ class KeywordResource(KamuResource):
 
         return obj_list
 
-all_resources = [TermResource, PartyResource, MemberResource, PlenarySessionResource,
+all_resources = [TermResource, ParliamentResource, PartyResource, MemberResource, PlenarySessionResource,
                  PlenaryVoteResource, VoteResource, FundingSourceResource, FundingResource,
                  SeatResource, MemberSeatResource, DocumentResource, MemberActivityResource,
                  KeywordResource, CommitteeResource, KeywordActivityResource, KeywordResource,
