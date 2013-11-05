@@ -84,7 +84,7 @@ class @ActivityScoresView extends Backbone.View
                     to: @avg_bin_score
             ]
         else
-            marking = []
+            markings = []
 
         @plot_options =
             colors: colors
