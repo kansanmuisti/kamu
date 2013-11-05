@@ -9,19 +9,25 @@ class @ActivityScoresView extends Backbone.View
         time = new Date(end_date)
         year = time.getFullYear()
         month = time.getMonth()
-        @start_time = new Date(year - 2, month + 1, 1)
-        start_time_str = @start_time.getFullYear() + "-" +  \
-                          (@start_time.getMonth() + 1) + "-" + \
-                          @start_time.getDate()
+        start_time = new Date(year - 2, month + 1, 1)
+        start_time_str = start_time.getFullYear() + "-" +  \
+                          (start_time.getMonth() + 1) + "-" + \
+                          start_time.getDate()
 
         time =  new Date(new Date(year, month + 1, 1).getTime() - 1)
         year = time.getFullYear()
         month = time.getMonth()
         day = time.getDate()
-        @end_time = new Date(year, month, day)
-        end_time_str = @end_time.getFullYear() + "-" + \
-                       (@end_time.getMonth() + 1) + "-" + \
-                       @end_time.getDate()
+        end_time = new Date(year, month, day)
+        end_time_str = end_time.getFullYear() + "-" + \
+                       (end_time.getMonth() + 1) + "-" + \
+                       end_time.getDate()
+
+        @plot_series = []
+        @plot_global_options = @get_plot_global_options(start_time, end_time)
+
+        $(window).resize =>
+            @draw_plot()
 
         resolution = 'month'
         if activity_daily_avg
@@ -39,15 +45,16 @@ class @ActivityScoresView extends Backbone.View
             data: params
 
     draw_plot: ->
-        $.plot $(@el), [ @act_histogram ], @plot_options
+        if @plot_series.length == 0
+            return
 
-    render: ->
-        score_list = @scores.models
+        $.plot $(@el), @plot_series, @plot_global_options
 
+    get_histogram: (score_list) ->
         if score_list.length == 0
-            return @
+            return []
 
-        @act_histogram = []
+        act_histogram = []
         if @avg_bin_score
             max_score = @avg_bin_score + 20
         else
@@ -70,13 +77,20 @@ class @ActivityScoresView extends Backbone.View
 
             time = new Date(time).getTime()
             column = [ time, score ]
-            @act_histogram.push column
+            act_histogram.push column
 
             max_score = Math.max max_score, score
 
             data_idx += 1
 
-        colors = ["#00c0c0"]
+        return [act_histogram, max_score]
+
+    render: ->
+        [act_histogram, max_score] = @get_histogram(@scores.models)
+
+        if act_histogram.length == 0
+            return @
+
         if @avg_bin_score
             markings = [
                 yaxis:
@@ -86,14 +100,24 @@ class @ActivityScoresView extends Backbone.View
         else
             markings = []
 
-        @plot_options =
-            colors: colors
-            series:
-                bars:
-                    show: true
-                    fill: 1
-                    barWidth: 16 * 24 * 60 * 60 * 1000     # milliseconds
-                    align: "center"
+        @plot_global_options['yaxis']['max'] = max_score
+        @plot_global_options['grid']['markings'] = markings
+
+        @plot_series.push
+            data: act_histogram
+            color: "#00c0c0"
+            bars:
+                show: true
+                fill: 1
+                barWidth: 16 * 24 * 60 * 60 * 1000     # milliseconds
+                align: "center"
+
+        @draw_plot()
+
+        return @
+
+    get_plot_global_options: (start_time, end_time) ->
+        return {
             xaxis:
                 mode: "time"
                 tickLength: 5
@@ -105,27 +129,19 @@ class @ActivityScoresView extends Backbone.View
                     else
                         format_str = "MMM"
                     return moment(d).format(format_str)
-                min: @start_time.getTime() - 20 * 24 * 60 * 60 * 1000
-                max: @end_time.getTime()
+                min: start_time.getTime() - 20 * 24 * 60 * 60 * 1000
+                max: end_time.getTime()
 
             yaxis:
                 show: false
-                max: max_score
 
             grid:
-                markings: markings
                 borderWidth:
                     top: 0
                     bottom: 1
                     left: 0
                     right: 0
-
-        @draw_plot()
-
-        $(window).resize =>
-            @draw_plot()
-    
-        return @
+        }
 
     add_all_items: (collection) =>
         @scores = collection
