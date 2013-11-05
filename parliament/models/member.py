@@ -428,45 +428,32 @@ class MemberActivityManager(models.Manager):
 
         return act
 
-    def scores(self, qset):
-        act = qset.annotate(score=models.Sum('type__weight'))
+    def get_score_set(self, qfilter=Q(), **kwargs):
+        act = self.aggregates(**kwargs)
+        act = act.filter(qfilter)
 
-        return act
+        return act.annotate(score=models.Sum('type__weight'))
 
-    def counts(self, qset):
-        act = qset.annotate(count=models.Count('id'))
+    def get_count_set(self, qfilter=Q(), **kwargs):
+        act = self.aggregates(**kwargs)
+        act = act.filter(qfilter)
 
-        return act
+        return act.annotate(count=models.Count('id'))
 
     def scores_for_party(self, party, **kwargs):
-        act = self.aggregates(**kwargs)
-        act = act.filter(member__party=party)
-
-        return self.scores(act)
+        return self.get_score_set(Q(member__party=party), **kwargs)
 
     def scores_for_member(self, member, **kwargs):
-        act = self.aggregates(**kwargs)
-        act = act.filter(member=member)
-
-        return self.scores(act)
+        return self.get_score_set(Q(member=member), **kwargs)
 
     def scores_for_keyword(self, keyword, **kwargs):
-        act = self.aggregates(**kwargs)
-        act = act.filter(keywordactivity__keyword=keyword)
-
-        return self.scores(act)
+        return self.get_score_set(Q(keywordactivity__keyword=keyword), **kwargs)
 
     def counts_for_party(self, party, **kwargs):
-        act = self.aggregates(**kwargs)
-        act = act.filter(member__party=party)
-
-        return self.counts(act)
+        return self.get_count_set(Q(member__party=party), **kwargs)
 
     def counts_for_member(self, member, **kwargs):
-        act = self.aggregates(**kwargs)
-        act = act.filter(member=member)
-
-        return self.counts(act)
+        return self.get_count_set(Q(member=member), **kwargs)
 
 class MemberActivityType(models.Model):
     type = models.CharField(max_length=5, primary_key=True)
