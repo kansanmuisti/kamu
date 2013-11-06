@@ -5,106 +5,72 @@
 
 {% block main_class %}party-list{% endblock %}
 {% block content %}
-        <div class="content content--parties">
-            <header class="page-heading">
-                <h1>{% trans "Parties" %}</h1>
-            </header>
-{% comment %}
-        <div class="feed-filters">
-            <form class="form-horizontal">
-                <div class="form-group">
-                    <label class="col-lg-2  control-label">{% trans "Sort" %}</label>
-                    <div class="col-lg-10">
-                    <div class="btn-toolbar">
-                        <div class="btn-group" data-toggle="buttons-checkbox">
-                            <button class="btn  btn-default btn-sm" type="button">
-                                Aktiivisuus
-                            </button>
-                            <button class="btn  btn-default btn-sm" type="button">
-                                Puheenvuorot
-                            </button>
-                            <button class="btn  btn-default btn-sm" type="button">
-                                Aloitteet
-                            </button>
-                            <button class="btn  btn-default btn-sm" type="button">
-                                Läsnäolot
-                            </button>
-                        </div>
-                        <div class="btn-group" data-toggle="buttons-checkbox">
-                            <button class="btn  btn-default  btn-small  active" type="button">
-                                Kansanedustajat <i class="typcn  typcn-arrow-down  typcn--medium"></i>
-                            </button>  
-                        </div>
-                    </div>
+<div class="content content--parties">
+    <header class="page-heading">
+        <h1>{% trans "Parties" %}</h1>
+    </header>
+</div>
+<div class="party-list">
+    <div class="party-list-divider-government">{% trans "Government" %}</div>
+    <ul class="party-list party-list-government row">
+    </ul>
+
+    <div class="party-list-divider-opposition">{% trans "Opposition" %}</div>
+    <ul class="party-list party-list-opposition row">
+    </ul>
+</div>
+
+<script id="party-list-item-template" type="text/template">
+<li class="col-md-5">
+    {% comment %}party_governing_status == opposition / government{% endcomment %}
+    <div class="party-list-item <%= party_governing_status %>">
+        <div class="mplist-grid__content">
+            <div class="header">
+                <h4 class="name">
+                    <a href="<%= view_url %>"><%= full_name %></a>
+                </h4>
+            </div>
+            <div class="row">
+                <div class="col-sm-5">
+                    <div class="portrait">
+                        <a href="<%= view_url %>">
+                            <img src="/api/v1/party/<%= name %>/logo?dim=128x128">
+                        </a>
                     </div>
                 </div>
-            </form>
-        </div>
-{% endcomment %}
-        </div>
-        <div class="party-list">
-            <div class="party-list-divider-government">Hallitus</div>
-            <ul class="party-list party-list-government row">
-            </ul>
-
-            <div class="party-list-divider-opposition">Oppositio</div>
-            <ul class="party-list party-list-opposition row">
-            </ul>
-        </div>
-        <!-- FIXME
-        <div class="content  content--parties">
-            <h4>Muut rekisteröidyt puolueet Suomessa</h4>
-            <ul>
-                <li>linkki vaalit.fi puoluelistaukseen</li>
-                <li>hallitus vs oppositio (sehän on jo tässä?)</li>
-            </ul>
-        </div>
-        -->
-        <script id="party-list-item-template" type="text/template">
-        <li class="col-md-5">
-            {% comment %}party_governing_status == opposition / government{% endcomment %}
-            <div class="party-list-item <%= party_governing_status %>">
-                <div class="mplist-grid__content">
-                    <div class="header">
-                        <h4 class="name">
-                            <a href="<%= view_url %>"><%= full_name %></a>
-                        </h4>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-5">
-                            <div class="portrait">
-                                <a href="<%= view_url %>">
-                                    <img src="/api/v1/party/<%= name %>/logo?dim=128x128">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-sm-10">
-                            <div class="stats">
-                                <div class="location"><%= name %></div>
-                                <span class="badge  badge--terms  js-tooltip" title="{% trans "MPs" %}">
-                                    <i class="typcn  typcn-user  typcn--medium"></i><%= member_count %></span>
-                                <span class="badge  badge--minister  js-tooltip" title="{% trans "ministers" %}">
-                                    <i class="typcn  typcn-briefcase  typcn--medium"></i><%= minister_count %></span>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-md-6">{% trans "Activity" %}</div>
-                                    <div class="col-md-7">
-                                        <div class="progress js-tooltip" title="x {% trans "points" %}">
-                                            <div class="progress-bar" style="width:12px"></div>
-                                        </div>
-                                    </div>
+                <div class="col-sm-10">
+                    <div class="stats">
+                        <div class="location"><%= name %></div>
+                        <span class="badge  badge--terms  js-tooltip" title="{% trans "Number of MPs" %}">
+                            <i class="typcn  typcn-user  typcn--medium"></i><%= member_count %></span>
+                        <% if (minister_count) { %>
+                        <span class="badge  badge--minister  js-tooltip" title="{% trans "Number of ministers" %}">
+                            <i class="typcn  typcn-briefcase  typcn--medium"></i><%= minister_count %>
+                        </span>
+                        <% } %>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6">{% trans "Activity" %}</div>
+                            <div class="col-md-7">
+                                <div class="progress js-tooltip" title="x {% trans "points" %}">
+                                    <div class="progress-bar" style="width:12px"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </li>
-        </script>
-        {% compress js %}
-        <script type="text/coffeescript" src="{% static "js/models.coffee" %}"></script>
-        {% endcompress %}
-        {% compress js %}
-        <script type="text/coffeescript" src="{% static "js/party-list.coffee" %}"></script>
-        {% endcompress %}
+        </div>
+    </div>
+</li>
+</script>
+
+{% compress js %}
+<script type="text/coffeescript" src="{% static "js/models.coffee" %}"></script>
+{% endcompress %}
+
+{% compress js %}
+<script type="text/coffeescript" src="{% static "js/party-list.coffee" %}"></script>
+{% endcompress %}
+
 {% endblock %}
