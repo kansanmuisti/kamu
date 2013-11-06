@@ -2,32 +2,33 @@ class @ActivityScoresView extends Backbone.View
     initialize: (collection, options) ->
         @el = options.el
         end_date = options.end_date
-        activity_daily_avg = options.activity_daily_avg
 
         collection.bind 'reset', @add_all_items
 
         time = new Date(end_date)
         year = time.getFullYear()
         month = time.getMonth()
-        @start_time = new Date(year - 2, month + 1, 1)
-        start_time_str = @start_time.getFullYear() + "-" +  \
-                          (@start_time.getMonth() + 1) + "-" + \
-                          @start_time.getDate()
+        start_time = new Date(year - 2, month + 1, 1)
+        start_time_str = start_time.getFullYear() + "-" +  \
+                          (start_time.getMonth() + 1) + "-" + \
+                          start_time.getDate()
 
         time =  new Date(new Date(year, month + 1, 1).getTime() - 1)
         year = time.getFullYear()
         month = time.getMonth()
         day = time.getDate()
-        @end_time = new Date(year, month, day)
-        end_time_str = @end_time.getFullYear() + "-" + \
-                       (@end_time.getMonth() + 1) + "-" + \
-                       @end_time.getDate()
+        end_time = new Date(year, month, day)
+        end_time_str = end_time.getFullYear() + "-" + \
+                       (end_time.getMonth() + 1) + "-" + \
+                       end_time.getDate()
+
+        @plot_series = []
+        @plot_global_options = @get_plot_global_options(start_time, end_time)
+
+        $(window).resize =>
+            @draw_plot()
 
         resolution = 'month'
-        if activity_daily_avg
-            @avg_bin_score = activity_daily_avg * 30
-        else
-            @avg_bin_score = null
 
         params =
             resolution: resolution
@@ -38,21 +39,29 @@ class @ActivityScoresView extends Backbone.View
             reset: true
             data: params
 
-    draw_plot: ->
-        $.plot $(@el), [ @act_histogram ], @plot_options
-
-    render: ->
-        score_list = @scores.models
-
-        if score_list.length == 0
-            return @
-
-        @act_histogram = []
-        if @avg_bin_score
-            max_score = @avg_bin_score + 20
+        if options.show_average_activity
+            params['calculate_average'] = true
+            avg_act_collection = new ParliamentActivityScoresList
+            avg_act_collection.bind 'reset', @add_all_avg_act_items
+            avg_act_collection.fetch
+                reset: true
+                data: params
         else
-            max_score = 0
+            @avg_scores = []
 
+    draw_plot: ->
+        if @plot_series.length == 0
+            return
+
+        $.plot $(@el), @plot_series, @plot_global_options
+
+    get_histogram: (score_list) ->
+        if score_list.length == 0
+            return []
+
+        act_histogram = []
+
+        max_score = 0
         data_idx = 0
         while data_idx < score_list.length
             act = score_list[data_idx].attributes
@@ -70,30 +79,59 @@ class @ActivityScoresView extends Backbone.View
 
             time = new Date(time).getTime()
             column = [ time, score ]
-            @act_histogram.push column
+            act_histogram.push column
 
             max_score = Math.max max_score, score
 
             data_idx += 1
 
-        colors = ["#00c0c0"]
-        if @avg_bin_score
-            markings = [
-                yaxis:
-                    from: @avg_bin_score
-                    to: @avg_bin_score
-            ]
-        else
-            marking = []
+        return [act_histogram, max_score]
 
-        @plot_options =
-            colors: colors
-            series:
-                bars:
+    render: ->
+        if !@scores or !@avg_scores
+            return @
+
+        [act_histogram, max_score] = @get_histogram(@scores.models)
+        if act_histogram.length == 0
+            return @
+
+        if @avg_scores.length != 0
+            [avg_histogram, avg_max_score] = @get_histogram(@avg_scores.models)
+            max_score = Math.max max_score, avg_max_score
+            draw_avg = avg_histogram.length != 0
+        else
+            draw_avg = false
+
+        @plot_global_options['yaxis']['max'] = max_score
+        @plot_global_options['series'] =
+            curvedLines:
+                active: draw_avg
+
+        @plot_series.push
+            data: act_histogram
+            color: "#00c0c0"
+            bars:
+                show: true
+                fill: 1
+                barWidth: 16 * 24 * 60 * 60 * 1000     # milliseconds
+                align: "center"
+
+        if draw_avg
+            @plot_series.push
+                data: avg_histogram
+                color: "rgba(255, 255, 255, 0.6)"
+                shadowSize: 0
+                lines:
                     show: true
-                    fill: 1
-                    barWidth: 16 * 24 * 60 * 60 * 1000     # milliseconds
-                    align: "center"
+                curvedLines:
+                    apply: true
+
+        @draw_plot()
+
+        return @
+
+    get_plot_global_options: (start_time, end_time) ->
+        return {
             xaxis:
                 mode: "time"
                 tickLength: 5
@@ -105,29 +143,25 @@ class @ActivityScoresView extends Backbone.View
                     else
                         format_str = "MMM"
                     return moment(d).format(format_str)
-                min: @start_time.getTime() - 20 * 24 * 60 * 60 * 1000
-                max: @end_time.getTime()
+                min: start_time.getTime() - 20 * 24 * 60 * 60 * 1000
+                max: end_time.getTime()
 
             yaxis:
                 show: false
-                max: max_score
 
             grid:
-                markings: markings
                 borderWidth:
                     top: 0
                     bottom: 1
                     left: 0
                     right: 0
-
-        @draw_plot()
-
-        $(window).resize =>
-            @draw_plot()
-    
-        return @
+        }
 
     add_all_items: (collection) =>
         @scores = collection
+        @render()
+
+    add_all_avg_act_items: (collection) =>
+        @avg_scores = collection
         @render()
 
