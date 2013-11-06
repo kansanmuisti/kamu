@@ -2,7 +2,6 @@ class @ActivityScoresView extends Backbone.View
     initialize: (collection, options) ->
         @el = options.el
         end_date = options.end_date
-        activity_daily_avg = options.activity_daily_avg
 
         collection.bind 'reset', @add_all_items
 
@@ -30,10 +29,6 @@ class @ActivityScoresView extends Backbone.View
             @draw_plot()
 
         resolution = 'month'
-        if activity_daily_avg
-            @avg_bin_score = activity_daily_avg * 30
-        else
-            @avg_bin_score = null
 
         params =
             resolution: resolution
@@ -43,6 +38,16 @@ class @ActivityScoresView extends Backbone.View
         collection.fetch
             reset: true
             data: params
+
+        if options.show_average_activity
+            params['calculate_average'] = true
+            avg_act_collection = new ParliamentActivityScoresList
+            avg_act_collection.bind 'reset', @add_all_avg_act_items
+            avg_act_collection.fetch
+                reset: true
+                data: params
+        else
+            @avg_scores = []
 
     draw_plot: ->
         if @plot_series.length == 0
@@ -55,11 +60,8 @@ class @ActivityScoresView extends Backbone.View
             return []
 
         act_histogram = []
-        if @avg_bin_score
-            max_score = @avg_bin_score + 20
-        else
-            max_score = 0
 
+        max_score = 0
         data_idx = 0
         while data_idx < score_list.length
             act = score_list[data_idx].attributes
@@ -86,22 +88,24 @@ class @ActivityScoresView extends Backbone.View
         return [act_histogram, max_score]
 
     render: ->
-        [act_histogram, max_score] = @get_histogram(@scores.models)
+        if !@scores or !@avg_scores
+            return @
 
+        [act_histogram, max_score] = @get_histogram(@scores.models)
         if act_histogram.length == 0
             return @
 
-        if @avg_bin_score
-            markings = [
-                yaxis:
-                    from: @avg_bin_score
-                    to: @avg_bin_score
-            ]
+        if @avg_scores.length != 0
+            [avg_histogram, avg_max_score] = @get_histogram(@avg_scores.models)
+            max_score = Math.max max_score, avg_max_score
+            draw_avg = avg_histogram.length != 0
         else
-            markings = []
+            draw_avg = false
 
         @plot_global_options['yaxis']['max'] = max_score
-        @plot_global_options['grid']['markings'] = markings
+        @plot_global_options['series'] =
+            curvedLines:
+                active: draw_avg
 
         @plot_series.push
             data: act_histogram
@@ -111,6 +115,16 @@ class @ActivityScoresView extends Backbone.View
                 fill: 1
                 barWidth: 16 * 24 * 60 * 60 * 1000     # milliseconds
                 align: "center"
+
+        if draw_avg
+            @plot_series.push
+                data: avg_histogram
+                color: "rgba(255, 255, 255, 0.6)"
+                shadowSize: 0
+                lines:
+                    show: true
+                curvedLines:
+                    apply: true
 
         @draw_plot()
 
@@ -145,5 +159,9 @@ class @ActivityScoresView extends Backbone.View
 
     add_all_items: (collection) =>
         @scores = collection
+        @render()
+
+    add_all_avg_act_items: (collection) =>
+        @avg_scores = collection
         @render()
 
