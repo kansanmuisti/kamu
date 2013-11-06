@@ -21,7 +21,7 @@ class PartyListView extends Backbone.View
 
     initialize: ->
         @collection = new PartyList
-        @collection.comparator = 'member_count'
+        @collection.comparator = (model) -> return -model.get('member_count')
         # This gets triggered when the content has fetch'ed from JSON
         @listenTo @collection, "reset", @render
         @collection.fetch
