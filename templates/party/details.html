@@ -123,7 +123,7 @@
                         <!-- --------- Activity ------- -->
                         <fieldset>
                             <legend>Aktiivisuus</legend>
-                            <div class="activity-graph" id="js-activity-graph">Aktiivisuuskäyrä</div>
+                            <div id="party-activity-graph" class="activity-graph"></div>
                         </fieldset>
                         <!-- --------- Search ------- -->
                         <fieldset>
@@ -335,4 +335,27 @@
  
         </div>
     </div>
+
+{% compress js %}
+<script type="text/coffeescript" src="{% static "js/activity_scores.coffee" %}"></script>
+{% endcompress %}
+
+{% compress js %}
+<script type="text/coffeescript" src="{% static "js/party-details.coffee" %}"></script>
+{% endcompress %}
+
+<script type="text/javascript">
+    party_activity_end_date = "{{ party_activity_end_date|safe }}";
+    party = new Party({{party_json|safe}});
+</script>
+
+{% compress js %}
+<script type="text/coffeescript">
+    new PartyActivityScoresView party,
+                    show_average_activity:true,
+                    end_date:party_activity_end_date,
+                    el:"#party-activity-graph"
+</script>
+{% endcompress %}
+
 {% endblock %}

@@ -5,6 +5,10 @@ class @PartyView extends Backbone.View
 		@$el.html @template @model.toJSON
 		return @
 
+class @PartyActivityScoresView extends @ActivityScoresView
+    initialize: (party, options) ->
+        super (new PartyActivityScoresList party.get 'name'), options
+
 # Horribly simplified version of the code in member-list
 
 class MemberListItemView extends Backbone.View

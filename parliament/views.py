@@ -521,7 +521,13 @@ def show_party(request, name):
     party = get_object_or_404(Party, name=name)
 
     party_json = get_embedded_resource(request, PartyResource, party)
-    args = dict(party=party, party_json=party_json)
+
+    max_time = MemberActivity.objects.filter(member__party=party). \
+        aggregate(Max("time"))['time__max']
+    party_activity_end_date = max_time.date
+
+    args = dict(party=party, party_json=party_json,
+            party_activity_end_date=party_activity_end_date)
 
     return render_to_response("party/details.html", args,
         context_instance=RequestContext(request))
