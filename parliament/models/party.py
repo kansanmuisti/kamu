@@ -22,13 +22,30 @@ class Party(models.Model):
 
         return self.activity_objects
 
+    def get_party_association_objects(self):
+        if not hasattr(self, 'party_association_objects'):
+            party_association = models.get_model('parliament', 'PartyAssociation')
+            self.party_association_objects = party_association.objects
+
+        return self.party_association_objects
+
     def get_activity_count_set(self, **kwargs):
         activity_objects = self.get_activity_objects()
         return activity_objects.counts_for_party(self.id, **kwargs)
  
     def get_activity_score_set(self, **kwargs):
         activity_objects = self.get_activity_objects()
-        return activity_objects.scores_for_party(self.id, **kwargs)
+        party_association_objects = self.get_party_association_objects()
+        act_set = activity_objects.scores_for_party(self.id, **kwargs)
+        for act in act_set:
+            act_time = act['activity_date']
+            query = Q(begin__lte=act_time)
+            query = query & (Q(end__gte=act_time) | Q(end__isnull=True))
+            query = query & Q(party=self)
+            member_count = party_association_objects.filter(query).count() 
+            act['score'] /= member_count
+
+        return act_set
  
     def __unicode__(self):
         return self.full_name

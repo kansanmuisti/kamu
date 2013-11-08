@@ -132,7 +132,6 @@ class ParliamentResource(Resource):
         def get_activity_score_set(self, **kwargs):
             scores = MemberActivity.objects.get_score_set(**kwargs)
             if 'calc_average' in kwargs:
-                print "average"
                 for s in scores:
                     s['score'] /= 200
 

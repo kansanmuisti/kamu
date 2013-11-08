@@ -67,6 +67,11 @@ class @ParliamentActivityScoresList extends Backbone.Tastypie.Collection
         @urlRoot = URL_CONFIG['api_parliament_activity_scores']
     model: ActivityScores
 
+class @PartyActivityScoresList extends Backbone.Tastypie.Collection
+    initialize: (party_name) ->
+        @urlRoot = URL_CONFIG['api_party_activity_scores'].replace 'PARTY', party_name
+    model: ActivityScores
+
 class @MemberActivityScoresList extends Backbone.Tastypie.Collection
     initialize: (member_id) ->
         @urlRoot = URL_CONFIG['api_member_activity_scores'].replace('999', member_id)
