@@ -9,6 +9,9 @@ def create_statement_activity(sender, **kwargs):
     # Some statements can be from non-MP speakers
     if not obj.member:
         return
+    # Also ignore speaker statements when it comes to activity
+    if obj.type == "speaker":
+        return   
     act, created = StatementActivity.objects.get_or_create(statement=obj)
     if not created and getattr(obj, '_updated', False):
         act.save()
