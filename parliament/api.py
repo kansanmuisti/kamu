@@ -344,6 +344,7 @@ class MemberActivityResource(KamuResource):
         elif acttype == 'ST':
             o = item.statementactivity.statement
             target['text'] = o.text
+            target['url'] = o.get_indocument_url()
         elif acttype in ('IN', 'WQ', 'GB', 'SI'):
             if acttype == 'SI':
                 o = item.signatureactivity.signature.doc

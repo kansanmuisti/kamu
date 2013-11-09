@@ -141,6 +141,19 @@ class Statement(models.Model):
     def __unicode__(self):
         return "%s/%d (%s)" % (self.item.get_short_id(), self.index, unicode(self.member))
 
+    def get_short_id(self):
+        return "%s/%d"%(self.item.get_short_id(), self.index)
+    
+    def get_indocument_url(self):
+        # A hack as the item itself doesn't have a proper
+        # page in the system
+        try:
+            doc = self.item.docs.all()[0]
+        except IndexError:
+            return None
+
+        return doc.get_absolute_url() + "#statement-" + self.get_short_id()
+    
 class PlenaryVoteManager(models.Manager):
     def between(self, begin=None, end=None):
         query = Q()
