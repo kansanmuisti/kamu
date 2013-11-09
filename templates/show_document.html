@@ -33,6 +33,10 @@
                         {% endfor %}
                     </div>
                 </div>
+                <div class="document-author">
+                      <span class="author-label">{% trans "Author" %}</span>
+                      <a href="{{doc.author.get_absolute_url}}">{{doc.author.get_print_name}}</a>
+                </div>
                 <ol class="proposal-progress">
                     {% for stage in doc.processing_stages %}
                     <li class="{% if stage.date %}passed{% else %}unpassed{% endif %}">
