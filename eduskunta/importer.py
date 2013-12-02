@@ -39,6 +39,7 @@ class Importer(object):
 
     def clean_text(self, text):
         text = text.replace('\n', ' ')
+        text = text.replace(u'\u00a0', ' ')
         # remove consecutive whitespaces
         return re.sub(r'\s\s+', ' ', text, re.U).strip()
 
