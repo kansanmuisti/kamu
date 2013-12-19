@@ -4,6 +4,7 @@
 *.mo
 *.swp
 .cache
+.vagrant
 files
 tags
 kamu.db
