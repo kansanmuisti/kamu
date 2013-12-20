@@ -1,6 +1,6 @@
 from django.db import models
 from django.http import Http404
-from django.conf.urls.defaults import *
+from django.conf.urls import url
 from django.core.exceptions import *
 from django.shortcuts import redirect
 from dateutil.relativedelta import relativedelta

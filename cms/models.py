@@ -145,4 +145,4 @@ class Cache(models.Model):
 class NewRevisionForm(ModelForm):
     class Meta:
         model = Revision
-        exclude = ('content')
+        exclude = ('content',)

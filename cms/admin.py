@@ -1,5 +1,5 @@
 from django.contrib import admin
-from kamu.cms.models import Category, Item, Newsitem, Content, Revision, Cache
+from cms.models import Category, Item, Newsitem, Content, Revision, Cache
 
 admin.site.register(Category)
 admin.site.register(Item)

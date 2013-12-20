@@ -121,7 +121,7 @@ MIDDLEWARE_CLASSES = (
     'httpstatus.middleware.HttpStatusErrorsMiddleware',
 )
 
-ROOT_URLCONF = 'kamu.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -137,9 +137,6 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'django.contrib.webdesign',
-    'django.contrib.markup',
-    'django.contrib.messages',
 
     'sorl.thumbnail',
     'compressor',
