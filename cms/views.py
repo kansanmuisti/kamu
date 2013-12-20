@@ -4,8 +4,8 @@ from httpstatus.decorators import postonly
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseServerError, HttpResponseBadRequest
 from httpstatus import Http403
-from kamu.cms.models import Category, Item, Newsitem, Revision, Content
-from kamu.cms.models import NewRevisionForm
+from cms.models import Category, Item, Newsitem, Revision, Content
+from cms.models import NewRevisionForm
 from django.utils.safestring import mark_safe
 from django.utils.translation import get_language
 from datetime import date
