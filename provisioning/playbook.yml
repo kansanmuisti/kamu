@@ -1,11 +1,10 @@
 ---
 - hosts: all
   sudo: yes
+  gather_facts: no
   tasks:
-  - name: Update the apt cache
-    action: apt update-cache=yes
-  - name: install base packages
-    apt: pkg=$item state=present
+  - name: Install base packages
+    apt: pkg={{ item }} state=present update-cache=yes
     with_items:
     - python-pip
     - python-dev
@@ -18,16 +17,20 @@
     - opensp
     - tidy
     - libmalaga7
+    - python-psycopg2
+    - language-pack-fi
 
   - name: Node.js | Package prerequisites for node.js
     action: apt pkg=python-software-properties state=installed
     tags: nodejs
   - name: Node.js | Add the node.js PPA
     action: command add-apt-repository -y ppa:chris-lea/node.js creates=/etc/apt/sources.list.d/chris-lea-node_js-precise.list
+    register: node_ppa_result
     tags: nodejs
   - name: Node.js | Update the apt cache for the new repository
     action: apt update-cache=yes
     tags: nodejs
+    when: node_ppa_result.rc == 0
   - name: Node.js | Install nodejs and npm
     action: apt pkg=$item state=installed
     tags: nodejs
@@ -35,8 +38,24 @@
     - nodejs
 
   - name: NPM | Install dependencies
-    action: npm name=$item global=yes
+    action: npm name={{ item }} global=yes
     with_items:
     - coffee-script
     - less
 
+- hosts: all
+  sudo: yes
+  sudo_user: postgres
+  tasks:
+  - name: PostgreSQL | Create database
+    action: postgresql_db name=kamu encoding=utf8 lc_collate=fi_FI.UTF8 template=template0
+    tags: postgres
+  - name: PostgreSQL | Create user
+    action: postgresql_user name={{ app_user }} encrypted=no password=kamu
+  - name: PostgreSQL | Grant privileges
+    action: postgresql_privs db=kamu role={{ app_user }} privs=ALL type=database
+
+- hosts: all
+  tasks:
+  - name: Python | Install kamu requirements
+    action: pip virtualenv=/home/vagrant/.virtualenvs/kamu virtualenv_site_packages=yes requirements=/vagrant/requirements.txt

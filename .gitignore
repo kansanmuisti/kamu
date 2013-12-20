@@ -5,6 +5,7 @@
 *.swp
 .cache
 .vagrant
+vagrant_ansible_inventory*
 files
 tags
 kamu.db

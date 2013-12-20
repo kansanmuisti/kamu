@@ -8,7 +8,7 @@ Vagrant.configure("2") do |config|
         config.vm.box_url =
 "http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box"
 
-	#config.vm.hostname = "kamudev"
+        config.vm.hostname = "kamudev"
 
         # Assign this VM to a host only network IP, allowing you to access
         # it
@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
 
         # Enable provisioning with a shell script.
         config.vm.provision "ansible" do |ansible|
-		ansible.inventory_file = "provisioning/dev"
                 ansible.playbook = "provisioning/playbook.yml"
+                ansible.extra_vars = { app_user: "vagrant" }
         end
 end

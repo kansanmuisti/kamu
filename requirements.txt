@@ -11,6 +11,6 @@ django-compressor>=1.3
 twitter-text-py
 sorl-thumbnail
 django-extensions
--e git+https://github.com/sproutsocial/pyfaceb.git#egg=pyfaceb
+pyfaceb>=0.2.4
 requests>=1.1.0
 requests-cache
