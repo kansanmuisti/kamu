@@ -1,5 +1,33 @@
-Dependencies
-============
+# Installation
+
+The easiest way to install a development environment is the provisioning method.
+If you don't want to run a virtual machine on your computer, follow the manual method.
+
+## Provisioning method
+
+First download and install the latest versions of [Vagrant](http://vagrantup.com) and [Ansible](http://www.ansibleworks.com/). Ubuntu and Mac OS X packages for Vagrant are available from the [Vagrant download page](http://www.vagrantup.com/downloads.html). Ubuntu packages for Ansible can be installed from a PPA:
+
+    sudo add-apt-repository ppa:rquillo/ansible
+    sudo apt-get update
+    sudo apt-get install ansible
+
+The only remaining step is to install the virtual machine:
+
+    vagrant up
+
+This will automatically download and provision the virtual machine. After the command completes (it will take a while), you may SSH into your VM and start the Django server:
+
+    vagrant ssh
+    workon kamu
+    cd /vagrant
+    ./manage.py runserver 0.0.0.0:8000
+
+Now you should be able to point your browser to the VM webserver at [http://192.168.107.2:8000/](http://192.168.107.2:8000/). Your project directory will be shared to the VM (in /vagrant), so any changes you make on your host machine will be reflected immediately to the VM.
+
+## Manual method
+
+### Dependencies
+
 - virtualenvwrapper
 - python-imaging
 - python-lxml
@@ -14,8 +42,7 @@ Dependencies
 - tidy
 - libmalaga7
 
-LESS and Coffee Script
-====================
+#### LESS and Coffee Script
 
 If you don't have the libnode-less package, you need to install less
 manually. First we need to install node.js, fetch source package
@@ -33,8 +60,7 @@ After that we can install less and coffee
     # sudo npm install -g less
     # sudo npm install -g coffee-script
 
-Commands
-========
+### Commands
 
 First, you need to install the .deb dependencies. You can do that by running
 (as root) setup-root.sh.
@@ -42,16 +68,14 @@ First, you need to install the .deb dependencies. You can do that by running
 If you just installed virtualenvwrapper, you need to logout and login for
 the new bash aliases to kick in.
 
-virtualenv
-----------
+#### virtualenv
 
     $ mkvirtualenv kamu
     $ workon kamu
     $ python setup-site.py
 
 
-Postgres
-========
+#### Postgres
 
     $ su - postgres
     $ psql
@@ -63,8 +87,7 @@ settings_local.py. You can do that by copying the DATABASES setting from
 settings.py and setting the value of ENGINE to
 'django.db.backends.postgresql_psycopg2'.
 
-MySQL
-=====
+#### MySQL
 
     CREATE DATABASE kamu CHARACTER SET utf8 COLLATE utf8_swedish_ci;
     CREATE USER 'kamu'@'localhost' IDENTIFIED BY 'kamu';
@@ -82,8 +105,7 @@ ALTER DATABASE kamu DEFAULT CHARACTER SET utf8 COLLATE utf8_swedish_ci;
     	echo $ALT | ./manage.py dbshell
     done
 
-The rest
-========
+### The rest
 
 First test your DB connection by:
 
@@ -93,7 +115,7 @@ If everything goes well, you're ready to download and install the initial
 contents:
 
     $ ./setup-db.sh
-    
+
     $ django-admin.py compilemessages	# create the compiled locale files
     $ django-admin.py index --rebuild	# generate the search index
 
