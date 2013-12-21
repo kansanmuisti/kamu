@@ -33,7 +33,7 @@
     when: node_ppa_result.changed
 
   - name: Node.js | Install nodejs and npm
-    action: apt pkg=$item state=installed
+    action: apt pkg={{ item }} state=installed
     tags: nodejs
     with_items:
     - nodejs
@@ -75,14 +75,14 @@
     register: kamu_db_result
     ignore_errors: yes
   - name: Kamu | Download database dump
-    get_url: src={{ download_url }}/kamu.sql.bz2 dest=/home/{{ app_user }} mode=0644
+    get_url: url={{ download_url }}/kamu.sql.bz2 dest=/home/{{ app_user }} mode=0644
     when: kamu_db_result.rc != 0
   - name: Kamu | Apply database dump
     shell: bunzip2 -c /home/{{ app_user }}/kamu.sql.bz2 | psql kamu
     when: kamu_db_result.rc != 0
 
   - name: Kamu | Download image files
-    get_url: src={{ download_url }}/kamu-img.tar.bz2 dest=/home/{{ app_user }} mode=0644
+    get_url: url={{ download_url }}/kamu-img.tar.bz2 dest=/home/{{ app_user }} mode=0644
   - name: Kamu | Untar image file
     command: tar -C /vagrant -xjf /home/{{ app_user }}/kamu-img.tar.bz2 creates=/vagrant/media/images/parties
 
