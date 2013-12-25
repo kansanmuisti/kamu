@@ -408,7 +408,7 @@ class KeywordActivityResource(KamuResource):
         }
 
 class PlenarySessionResource(KamuResource):
-    plenary_votes = fields.ToManyField('parliament.api.PlenaryVoteResource', 'plenary_vote_set')
+    plenary_votes = fields.ToManyField('parliament.api.PlenaryVoteResource', 'plenaryvote_set')
     class Meta:
         queryset = PlenarySession.objects.all()
         resource_name = 'plenary_session'
