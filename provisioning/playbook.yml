@@ -49,6 +49,9 @@
   sudo: yes
   sudo_user: postgres
   tasks:
+  - name: PostgreSQL | Start server
+    sudo_user: root
+    service: name=postgresql state=started
   - name: PostgreSQL | Create database
     action: postgresql_db name=kamu encoding=utf8 lc_collate=fi_FI.UTF8 template=template0
     tags: postgres
