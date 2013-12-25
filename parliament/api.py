@@ -145,7 +145,7 @@ class ParliamentResource(Resource):
         scores_resource = ActivityScoresResource()
         uri_base = self._build_reverse_url('api_get_parliament_activity_scores',
                                        kwargs=self.resource_uri_kwargs(obj))
-               
+
         if request.GET.get('calculate_average', '').lower() in ['true', '1']:
             kwargs['calc_average'] = 1
 
@@ -414,16 +414,25 @@ class PlenarySessionResource(KamuResource):
         resource_name = 'plenary_session'
 
 class PlenaryVoteResource(KamuResource):
+    plenary_session = fields.ForeignKey(PlenarySessionResource, 'plsess')
     votes = fields.ToManyField('parliament.api.VoteResource', 'vote_set', full=True)
     class Meta:
         queryset = PlenaryVote.objects.all()
         resource_name = 'plenary_vote'
+        filtering = {
+            'plenary_session': ALL_WITH_RELATIONS,
+        }
 
 class VoteResource(KamuResource):
-    plenary_vote = fields.ForeignKey(PlenaryVoteResource, 'plenary_vote')
+    plenary_vote = fields.ForeignKey(PlenaryVoteResource, 'session')
     member = fields.ForeignKey(MemberResource, 'member')
     class Meta:
         queryset = Vote.objects.all()
+        filtering = {
+          'plenary_vote': ALL_WITH_RELATIONS,
+          'member': ALL_WITH_RELATIONS,
+          'vote': ALL
+        }
 
 class FundingSourceResource(KamuResource):
     class Meta:

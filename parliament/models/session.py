@@ -294,7 +294,7 @@ class Vote(models.Model):
                 'vote': self.vote}
 
     def __unicode__(self):
-        return str(self.session) + ' / ' + self.member.name
+        return unicode(self.session) + u' / ' + unicode(self.member.name)
 
     class Meta:
         app_label = 'parliament'
