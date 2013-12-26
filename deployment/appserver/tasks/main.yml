@@ -30,7 +30,7 @@
 - name: Python | Install Django requirements
   action: pip virtualenv={{ venv }} virtualenv_site_packages=yes requirements=/vagrant/requirements.txt
 - name: Django | Generate local settings file
-  template: src=settings_local.py.j2 dest=/vagrant/settings_local.py
+  template: src=settings_local.py.j2 dest=/vagrant/settings_local.py backup=yes
 - name: Django | Add virtualenv execute script
   template: src=venv_exec.j2 dest={{ venv }}/exec mode=0755
 

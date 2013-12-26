@@ -1,3 +1,8 @@
+- name: Disallow passing locale information over SSH
+  lineinfile: dest=/etc/ssh/sshd_config regexp=^AcceptEnv state=absent
+- name: Restart sshd
+  service: name=ssh state=restarted
+
 - name: Install Ubuntu packages
   apt: pkg={{ item }} state=present update-cache=yes cache_valid_time=86400
   with_items:
