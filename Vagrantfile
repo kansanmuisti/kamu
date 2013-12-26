@@ -34,7 +34,7 @@ SCRIPT
 
         config.vm.provision "ansible" do |ansible|
                 ansible.playbook = "deployment/site.yml"
-                ansible.extra_vars = { app_user: "vagrant", ubuntu_version: "saucy" }
+                ansible.extra_vars = { app_user: "vagrant" }
                 ansible.host_key_checking = false
                 #ansible.verbose = "v"
         end
