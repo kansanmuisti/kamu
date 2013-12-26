@@ -1,0 +1,8 @@
+- name: Install Ubuntu packages
+  apt: pkg={{ item }} state=present update-cache=yes cache_valid_time=86400
+  with_items:
+  - language-pack-fi
+  - python-pip
+  - virtualenvwrapper
+  - gettext
+  - git

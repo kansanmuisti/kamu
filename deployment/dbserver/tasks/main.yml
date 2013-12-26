@@ -1,0 +1,23 @@
+- name: Install Ubuntu packages
+  sudo: yes
+  apt: pkg={{ item }} state=present update-cache=yes cache_valid_time=86400
+  with_items:
+  - postgresql
+  - python-psycopg2
+
+- name: PostgreSQL | Start server
+  sudo: yes
+  service: name=postgresql state=started
+- name: PostgreSQL | Create database
+  sudo_user: postgres
+  sudo: yes
+  action: postgresql_db name={{ db_name }} encoding=utf8 lc_collate={{ locale }} lc_ctype={{ locale }} template=template0
+  tags: postgres
+- name: PostgreSQL | Create user
+  sudo_user: postgres
+  sudo: yes
+  action: postgresql_user name={{ app_user }} encrypted=no password={{ db_password }}
+- name: PostgreSQL | Grant privileges
+  sudo_user: postgres
+  sudo: yes
+  action: postgresql_privs db=kamu role={{ app_user }} privs=ALL type=database

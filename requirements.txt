@@ -14,3 +14,4 @@ django-extensions
 pyfaceb>=0.2.4
 requests>=1.1.0
 requests-cache
+ansible
