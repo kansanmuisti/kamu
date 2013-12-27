@@ -65,3 +65,8 @@
 
 - name: Django | Generate translations
   action: command {{ venv }}/exec /vagrant/manage.py compilemessages creates=/vagrant/locale/fi/LC_MESSAGES/django.mo
+
+- name: Activate virtualenv automatically
+  lineinfile: dest=/home/{{ app_user }}/.bashrc regexp="^source {{ venv }}/bin/activate" line="source {{ venv }}/bin/activate"
+
+- include: varnish.yml

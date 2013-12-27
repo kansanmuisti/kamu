@@ -18,11 +18,10 @@ The only remaining step is to install the virtual machine:
 This will automatically download and provision the virtual machine. After the command completes (it will take a while), you may SSH into your VM and start the Django server:
 
     vagrant ssh
-    workon kamu
     cd /vagrant
-    ./manage.py runserver 0.0.0.0:8000
+    ./manage.py runserver
 
-Now you should be able to point your browser to the VM webserver at [http://192.168.107.2:8000/](http://192.168.107.2:8000/). Your project directory will be shared to the VM (in /vagrant), so any changes you make on your host machine will be reflected immediately to the VM.
+Now you should be able to point your browser to the VM webserver at [http://192.168.107.2/](http://192.168.107.2/). Your project directory will be shared to the VM (in /vagrant), so any changes you make on your host machine will be reflected immediately to the VM.
 
 ## Manual method
 
