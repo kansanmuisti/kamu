@@ -1,0 +1,13 @@
+- name: varnish | Install Ubuntu packages
+  sudo: yes
+  apt: pkg={{ item }} state=present update-cache=yes cache_valid_time=86400
+  with_items:
+  - varnish
+- name: varnish | Install VCL
+  sudo: yes
+  template: dest=/etc/varnish/default.vcl src=varnish_default.vcl.j2 backup=yes
+  notify: restart varnish
+- name: varnish | Setup defaults
+  sudo: yes
+  template: dest=/etc/default/varnish src=varnish_etc_default.j2 backup=yes
+  notify: restart varnish
