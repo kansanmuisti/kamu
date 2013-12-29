@@ -24,6 +24,11 @@ Vagrant.configure("2") do |config|
         config.vm.network "forwarded_port", guest: 8000, host: 8107
         config.vm.network "forwarded_port", guest: 22, host: 22107, id: "ssh", auto_correct: true
 
+        config.vm.provider "virtualbox" do |vb|
+                vb.customize ["modifyvm", :id, "--ostype", "Ubuntu_64"]
+                vb.customize ["modifyvm", :id, "--cpus", "2"]
+        end
+
         $script = <<SCRIPT
 cat /etc/ssh/sshd_config | grep -v -e "^AcceptEnv" > /etc/ssh/sshd_config.new
 mv /etc/ssh/sshd_config.new /etc/ssh/sshd_config
