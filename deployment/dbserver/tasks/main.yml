@@ -11,7 +11,7 @@
 - name: PostgreSQL | Create database
   sudo_user: postgres
   sudo: yes
-  action: postgresql_db name={{ db_name }} encoding=utf8 lc_collate={{ locale }} lc_ctype={{ locale }} template=template0
+  postgresql_db: name={{ db_name }} encoding=utf8 lc_collate={{ locale }} lc_ctype={{ locale }} template=template0
   tags: postgres
 - name: PostgreSQL | Create user
   sudo_user: postgres

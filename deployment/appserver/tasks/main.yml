@@ -16,19 +16,19 @@
 
 - name: Node.js | Install nodejs package
   sudo: yes
-  action: apt pkg={{ item }} state=installed update-cache=yes
+  apt: pkg={{ item }} state=installed update-cache=yes
   with_items:
   - nodejs
 
 - name: NPM | Install dependencies
   sudo: yes
-  action: npm name={{ item }} global=yes
+  npm: name={{ item }} global=yes
   with_items:
   - coffee-script
   - less
 
 - name: Python | Install Django requirements
-  action: pip virtualenv={{ venv }} virtualenv_site_packages=yes requirements=/vagrant/requirements.txt
+  pip: virtualenv={{ venv }} virtualenv_site_packages=yes requirements=/vagrant/requirements.txt
 - name: Django | Generate local settings file
   template: src=settings_local.py.j2 dest=/vagrant/settings_local.py backup=yes
 - name: Django | Add virtualenv execute script
