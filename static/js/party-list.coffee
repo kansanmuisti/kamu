@@ -8,7 +8,7 @@ class PartyListView extends Backbone.View
         return @
 
     render_one: (party) ->
-        if party.get "governing_party"
+        if party.get "governing_now"
             el = @el_gov
         else
             el = @el_oppo
@@ -33,7 +33,7 @@ class @PartyListItemView extends Backbone.View
     render: ->
         template_variables = @model.toJSON()
         # This is a view-specific transformation, would seem out of place in model
-        if template_variables.governing_party
+        if template_variables.governing_now
             template_variables.party_governing_status = "party-government"
         else
             template_variables.party_governing_status = "party-opposition"

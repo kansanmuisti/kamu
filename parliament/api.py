@@ -211,14 +211,19 @@ class PartyResource(KamuResource):
         scores_resource = ActivityScoresResource()
         uri_base = self._build_reverse_url('api_get_party_activity_scores',
                                        kwargs=self.resource_uri_kwargs(obj))
-                
+
         return scores_resource.get_list(request, parent_object=obj,
                                         parent_uri=uri_base, **kwargs)
     def dehydrate(self, bundle):
         party = bundle.obj
         bundle.data['logo_128x128'] = get_thumbnail(party.logo, '128x128', format='PNG').url
         bundle.data['member_count'] = party.member_set.current().count()
-        bundle.data['governing_party'] = party.is_currently_governing()
+        bundle.data['governing_now'] = party.is_governing()
+
+        gps = party.governingparty_set.order_by('begin')
+        d = [{'begin': gp.begin, 'end': gp.end} for gp in gps]
+        bundle.data['governing_terms'] = d
+
         # This tests for whether the member has a ministryassociation that has not ended. (Begin condition
         # is due to to the null testing on right side of left join)
         bundle.data['minister_count'] = party.member_set.filter(ministryassociation__isnull=False,ministryassociation__end__isnull=True).count()

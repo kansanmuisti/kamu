@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load compress static i18n thumbnail %}
+{% load compress static i18n thumbnail parliament %}
 
 {% block title %}{{doc.name}}: {{doc.subject}}{% endblock %}
 
@@ -55,15 +55,17 @@
                 <div class="plenary-discussion">
                     <h4>{% trans "Plenary session" %} {{ item.plsess.date }}</h4>
                     {% for statement in item.statement_set.all %}
+                    {% with member=statement.member governing_party=statement.member.party|governing:item.plsess.date %}
+                    {% if governing_party %}Govern!!!{% endif %}
                     <div class="proposal-statement media">
                         <a id="statement-{{statement.get_short_id}}" />
-                        <a class="pull-left" href="{{statement.member.get_absolute_url}}">
-                            {% thumbnail statement.member.photo "64x64" as tn %}
+                        <a class="pull-left" href="{{member.get_absolute_url}}">
+                            {% thumbnail member.photo "64x64" as tn %}
                             <img class="media-object" src="{{tn.url}}">
                             {% endthumbnail %}
                         </a>
                         <div class="media-body proposal-statement-content">
-                            <h5 class="media-heading">{{statement.member}} /{{statement.member.party.name}}
+                            <h5 class="media-heading">{{member}} /{{member.party.name}}
                             {% if statement.type == 'speaker' %} ({% trans "speaker" %}) {% endif %}
                             </h5>
                             <div class="proposal-statement-text">
@@ -71,6 +73,7 @@
                             </div>
                         </div>
                     </div>
+                    {% endwith %}
                     {% endfor %}
                 </div>
             {% endfor %}
