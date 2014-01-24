@@ -120,7 +120,7 @@ fieldset {
 }
 
 .content {
-    .boxed();
+   .boxed();
 }
 
 .shadow-heavy {
@@ -142,8 +142,9 @@ fieldset {
         header {
             h4 {
                 font-family: @font-family-base;
-                font-size: @font-size-large;
+                font-size: @font-size-base;
                 font-weight: 900;
+        
                 color: @gray-darker;
                 margin-top: 0;
                 text-transform: none;
@@ -171,7 +172,7 @@ fieldset {
         }
         .source {
             float: left;
-            margin-left: 10px;
+            margin-left: 16px;
             a {
                 font-family: @headings-font-family;
                 text-transform: uppercase;
@@ -211,8 +212,8 @@ fieldset {
                 }
             }
         }
-        .content {
-            padding-top: 10px;
+        .feed-content {
+            padding: 16px 0 0 0;
             margin: 25px 0 0 64px;
             .clearfix;
             border-top: 1px solid @gray-lighter;
@@ -222,7 +223,8 @@ fieldset {
                 font-weight: 900;
                 line-height: 20px;
                 text-transform: none;
-                margin: 0;
+                margin: 0 0 0.5em 0;
+                letter-spacing: -1px;
                 a {
                     color: inherit;
                     text-decoration: none;
@@ -237,7 +239,7 @@ fieldset {
         }
         .labels {
             text-align: right;
-            margin-bottom: 0.5em;
+            margin-bottom: 1em;
             .label {
                 background-color: @gray-light;
             }
@@ -339,7 +341,7 @@ fieldset {
         float: left;
         width: 180px;
         img {
-            height: 120px;
+            height: 75px;
         }
     }
     nav {
@@ -528,6 +530,31 @@ main.member-list {
             background: @blueberry;
         }
     }
+  .mplist-grid__badge {
+    background: #0E4B4B;
+    -webkit-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.66);
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.66);
+    position: absolute;
+    left: -25px;
+    bottom: 15px;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    width: 100px;
+    height: 24px;
+    text-align: center;
+  }
+  .mplist-grid__badge .badge-content {
+    display: inline-block;
+    font-size: 12px;
+    font-family: 'Roboto Condensed';
+    text-transform: uppercase;
+    font-weight: 900;
+    color: #FFF;
+    margin-top: 0;
+    margin-left: 0;
+  }
+  
 }
 
 /***************************************************************
@@ -939,6 +966,119 @@ main.party-list {
         font-weight: 700;
     }
 }
+
+/* TT */
+
+.proposal-statement-content {
+  padding: 12px;
+  position: relative;
+  background: #E6E6E6;
+  margin-right: 68px;
+  margin-left: 68px;
+}
+
+.side-opposition .proposal-statement-content {
+  background: #dad7f0 ;
+  margin-right: 0;
+}
+
+.side-government .proposal-statement-content {
+  background: #c6e9e7;
+  margin-left: 0;
+}
+
+.side-neutral .proposal-statement-content {
+  background: #E6E6E6;
+  margin-left: 0;
+}
+
+
+.statement-portrait {
+  position: relative;
+  display: none;
+}
+
+.statement-portrait:after {
+  right: -40px;
+  bottom: auto;
+  left: auto;
+  border:0;
+}
+
+.side-government .statement-portrait,
+.side-neutral .statement-portrait,
+.side-opposition .statement-portrait {
+  display: block;
+  &:after {
+    content: "";
+    top:12px;
+    position: absolute;
+    border-style: solid;
+    display: block;
+    width: 0;
+  }
+}
+
+.side-opposition .statement-portrait {
+  float: right !important;
+  margin-left: 24px;
+}
+
+.side-government .statement-portrait,
+.side-neutral .statement-portrait {
+  float: left !important;
+  margin-right: 24px;
+}
+
+
+.side-neutral .statement-portrait:after {
+  right: -40px;
+  bottom: auto;
+  left: auto;
+  border-width: 30px 0 0 40px;
+  border-color: #E6E6E6 rgba(0, 0, 0, 0) ;
+}
+
+.side-government .statement-portrait:after {
+  right: -40px;
+  bottom: auto;
+  left: auto;
+  border-width: 30px 0 0 40px;
+  border-color: #c6e9e7 rgba(0, 0, 0, 0) ;
+}
+
+.side-opposition .statement-portrait:after {
+  left: -40px;
+  bottom: auto;
+  border-width: 0 0 30px 40px;
+  border-color: rgba(0, 0, 0, 0) #dad7f0;
+}
+
+.side-opposition .media-heading {
+  text-align: right;
+}
+
+.read-more a {
+  display: block;
+  text-decoration: none;
+  text-align: center;
+  padding-right: 12px;
+  margin-top: 12px;
+  border-top: #333 solid 2px;
+  color: #333;
+}
+
+.side-government .read-more a {
+  border-top: #1C6262 solid 2px;
+  color: #1C6262;
+}
+
+.side-opposition .read-more a {
+  border-top: #6f59bc solid 2px;
+  color: #6f59bc;
+}
+
+/* TT END */
 
 /* -------------   GENERAL MODIFIED STYLES IN OLD NAMESPACE ----------- */
 

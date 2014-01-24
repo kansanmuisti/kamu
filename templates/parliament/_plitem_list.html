@@ -6,7 +6,7 @@
         <time>{{item.plsess.date|date:"SHORT_DATE_FORMAT"}}</time>
         <a href="{{item.docs.all.0.get_absolute_url}}"><h4>{{ item.description }}</h4></a>
     <header>
-    <div class="content">
+    <div class="plenary-item-content">
 {% if item.statement %}
         <span class="mp-name">{{ item.statement.member.get_print_name }}</span> ({{ item.statement.member.party.name }}): "{{ item.statement.text|truncatewords:50 }}"
 {% endif %}

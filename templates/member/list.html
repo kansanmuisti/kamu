@@ -83,6 +83,11 @@
                 </div>
             </div>
         </div>
+        <% if (minister) { %>
+        <div class="mplist-grid__badge">
+           <div class="badge-content  js-tooltip" title="<%= minister %>" data-original-title="<%= minister %>">ministeri</div>
+        </div>
+        <% } %>
     </div>
 </li>
 </script>
