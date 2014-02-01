@@ -132,7 +132,7 @@ class MemberListView extends Backbone.View
 
         # Just to have something in the sort order,
         # this will be overriden once we get data
-        @set_sort_order "name"
+        @set_sort_order "recent_activity"
 
     _calculate_rankings: (collection) =>
         activity_scores = (model.attributes.stats['recent_activity'] \
