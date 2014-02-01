@@ -69,6 +69,7 @@ class MemberListView extends Backbone.View
         @index.field "party"
         @index.field "district"
         @index.field "party_short"
+        @index.field "titles"
         @index.ref "id"
 
         @search_el = $(@search_el)
@@ -191,12 +192,18 @@ class MemberListView extends Backbone.View
             item_view = new MemberListItemView model: model
             @children[model.id] = item_view
             party = model.get_party party_list
+
+            titles = []
+            if model.is_minister()
+                titles.push MINISTER_TRANSLATION
+
             @index.add
                 id: model.id
                 name: model.get('name')
                 party: party.get('full_name')
                 party_short: party.get('name')
                 district: model.attributes.district_name
+                titles: titles.join(', ')
 
     render: ->
         @_calculate_rankings @collection
