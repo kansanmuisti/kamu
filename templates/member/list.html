@@ -60,7 +60,7 @@
             </div>
             <div class="col-xs-10">
                 <div class="info">
-                    <div class="location"><%= district_name %> vaalipiiri</div>
+                    <div class="location"><%= district_name %> {% trans 'district' %}</div>
                     <div class="age"><%= age %> v.</div>
                     <span class="badge badge--terms js-tooltip" title="{% trans 'Number of terms' %}">
                         <i class="typcn typcn-calender"> </i><%= terms.length %>
@@ -72,7 +72,7 @@
                     <% } %>
                     <hr />
                     <div class="row">
-                        <div class="stat-name col-xs-6">Aktiivisuus:</div>
+                        <div class="stat-name col-xs-6">{% trans "Activity" %}:</div>
                         <div class="stat-value col-xs-2"><%= stats.recent_activity %></div>
                         <div class="col-xs-7">
                             <div class="progress">
@@ -85,7 +85,7 @@
         </div>
         <% if (minister) { %>
         <div class="mplist-grid__badge">
-           <div class="badge-content  js-tooltip" title="<%= minister %>" data-original-title="<%= minister %>">ministeri</div>
+           <div class="badge-content  js-tooltip" title="<%= minister %>" data-original-title="<%= minister %>">{% trans "minister" %}</div>
         </div>
         <% } %>
     </div>
