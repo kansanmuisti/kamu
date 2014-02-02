@@ -320,10 +320,61 @@ class MemberResource(KamuResource):
             'party': ('exact',),
         }
 
+class PlenarySessionResource(KamuResource):
+    plenary_votes = fields.ToManyField('parliament.api.PlenaryVoteResource', 'plenaryvote_set', null=True)
+    class Meta:
+        queryset = PlenarySession.objects.all()
+        resource_name = 'plenary_session'
+
+class PlenarySessionItemResource(KamuResource):
+    plenary_session = fields.ForeignKey(PlenarySessionResource, 'plsess')
+    documents = fields.ManyToManyField('parliament.api.DocumentResource', 'docs', full=False)
+    class Meta:
+        queryset = PlenarySessionItem.objects.all()
+        resouce_name = 'plenary_session_item'
+        filtering = {
+            'plenary_session': ALL_WITH_RELATIONS,
+        }
+
+class PlenaryVoteResource(KamuResource):
+    plenary_session = fields.ForeignKey(PlenarySessionResource, 'plsess')
+    session_item = fields.ForeignKey(PlenarySessionItemResource, 'plsess_item')
+    votes = fields.ToManyField('parliament.api.VoteResource', 'vote_set', full=True)
+    class Meta:
+        queryset = PlenaryVote.objects.all()
+        resource_name = 'plenary_vote'
+        filtering = {
+            'plenary_session': ALL_WITH_RELATIONS,
+            'session_item': ALL_WITH_RELATIONS,
+        }
+
+class VoteResource(KamuResource):
+    plenary_vote = fields.ForeignKey(PlenaryVoteResource, 'session')
+    member = fields.ForeignKey(MemberResource, 'member')
+    class Meta:
+        queryset = Vote.objects.all()
+        filtering = {
+          'plenary_vote': ALL_WITH_RELATIONS,
+          'member': ALL_WITH_RELATIONS,
+          'vote': ALL
+        }
+
+class StatementResource(KamuResource):
+    member = fields.ForeignKey('parliament.api.MemberResource', 'member', null=True)
+    session_item = fields.ForeignKey(PlenarySessionItemResource, 'item')
+
+    class Meta:
+        resource_name = 'statement'
+        queryset = Statement.objects.all()
+        filtering = {
+            'member': ['exact', 'in']
+        }
+
+
 class MemberActivityTypeResource(KamuResource):
     class Meta:
         resource_name = 'member_activity_type'
-        queryset = MemberActivityType.objects
+        queryset = MemberActivityType.objects.all()
         filtering = {
             'type': ['exact', 'in']
         }
@@ -342,12 +393,15 @@ class MemberActivityResource(KamuResource):
         acttype = item.type.pk
         if acttype == 'FB':
             o = item.socialupdateactivity.update
+            res_class = UpdateResource
             target['text'] = o.text
         elif acttype == 'TW':
             o = item.socialupdateactivity.update
+            res_class = UpdateResource
             target['text'] = o.text
         elif acttype == 'ST':
             o = item.statementactivity.statement
+            res_class = StatementResource
             target['text'] = o.text
             target['url'] = o.get_indocument_url()
         elif acttype in ('IN', 'WQ', 'GB', 'SI'):
@@ -355,6 +409,7 @@ class MemberActivityResource(KamuResource):
                 o = item.signatureactivity.signature.doc
             else:
                 o = item.initiativeactivity.doc
+            res_class = DocumentResource
             target['text'] = o.summary
             target['subject'] = o.subject
             target['name'] = o.name
@@ -363,6 +418,11 @@ class MemberActivityResource(KamuResource):
             target['url'] = o.get_absolute_url()
         else:
             raise Exception("Invalid type %s" % acttype)
+
+        res = res_class()
+        uri = res.get_resource_uri(o)
+        target['resource_uri'] = uri
+
         d['target'] = target
         return d
 
@@ -410,33 +470,6 @@ class KeywordActivityResource(KamuResource):
         filtering = {
             'keyword': ('exact', 'in'),
             'activity': ALL_WITH_RELATIONS
-        }
-
-class PlenarySessionResource(KamuResource):
-    plenary_votes = fields.ToManyField('parliament.api.PlenaryVoteResource', 'plenaryvote_set', null=True)
-    class Meta:
-        queryset = PlenarySession.objects.all()
-        resource_name = 'plenary_session'
-
-class PlenaryVoteResource(KamuResource):
-    plenary_session = fields.ForeignKey(PlenarySessionResource, 'plsess')
-    votes = fields.ToManyField('parliament.api.VoteResource', 'vote_set', full=True)
-    class Meta:
-        queryset = PlenaryVote.objects.all()
-        resource_name = 'plenary_vote'
-        filtering = {
-            'plenary_session': ALL_WITH_RELATIONS,
-        }
-
-class VoteResource(KamuResource):
-    plenary_vote = fields.ForeignKey(PlenaryVoteResource, 'session')
-    member = fields.ForeignKey(MemberResource, 'member')
-    class Meta:
-        queryset = Vote.objects.all()
-        filtering = {
-          'plenary_vote': ALL_WITH_RELATIONS,
-          'member': ALL_WITH_RELATIONS,
-          'vote': ALL
         }
 
 class FundingSourceResource(KamuResource):
@@ -554,4 +587,4 @@ all_resources = [TermResource, ParliamentResource, PartyResource, MemberResource
                  PlenaryVoteResource, VoteResource, FundingSourceResource, FundingResource,
                  SeatResource, MemberSeatResource, DocumentResource, MemberActivityResource,
                  KeywordResource, CommitteeResource, KeywordActivityResource, KeywordResource,
-                 ActivityScoresResource]
+                 ActivityScoresResource, PlenarySessionItemResource, StatementResource]
