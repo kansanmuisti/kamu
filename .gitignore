@@ -28,3 +28,4 @@ eduskunta/doc_xml
 eduskunta/minutes_sgml
 eduskunta/minutes_xml
 .Rproj.user
+local_update_config

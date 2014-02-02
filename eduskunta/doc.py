@@ -260,7 +260,7 @@ class DocImporter(Importer):
         assert len(el_list) >= 1
         el = el_list[0]
         text = self.clean_text(el.text)
-        print('%s %s: %s' % (info['type'], info['id'], text))
+        self.logger.info('%s %s: %s' % (info['type'], info['id'], text))
         info['subject'] = text
 
         if info['type'].endswith('VM'):
