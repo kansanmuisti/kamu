@@ -199,7 +199,7 @@ class PlenaryVote(UpdatableModel):
         vdict = {}
         for i in range(len(Vote.VOTE_CHOICES)):
             v = Vote.VOTE_CHOICES[i]
-            vdict[v[0]] = vcnt[i]
+            vdict[v[0]] = int(vcnt[i])
         return vdict
 
     def save(self, *args, **kwargs):

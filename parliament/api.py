@@ -339,7 +339,10 @@ class PlenarySessionItemResource(KamuResource):
 class PlenaryVoteResource(KamuResource):
     plenary_session = fields.ForeignKey(PlenarySessionResource, 'plsess')
     session_item = fields.ForeignKey(PlenarySessionItemResource, 'plsess_item')
-    votes = fields.ToManyField('parliament.api.VoteResource', 'vote_set', full=True)
+
+    def dehydrate_vote_counts(self, bundle):
+        return bundle.obj.get_vote_counts()
+
     class Meta:
         queryset = PlenaryVote.objects.all()
         resource_name = 'plenary_vote'
@@ -356,7 +359,7 @@ class VoteResource(KamuResource):
         filtering = {
           'plenary_vote': ALL_WITH_RELATIONS,
           'member': ALL_WITH_RELATIONS,
-          'vote': ALL
+          'vote': ['in', 'exact']
         }
 
 class StatementResource(KamuResource):
