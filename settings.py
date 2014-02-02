@@ -164,6 +164,8 @@ SERVER_EMAIL = 'noreply@kansanmuisti.fi'
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
+TASTYPIE_DEFAULT_FORMATS = ['json']
+
 FACEBOOK_ENABLED = False
 FACEBOOK_APP_ID = "Set this in settings_local"
 FACEBOOK_APP_SECRET = "Set this in settings_local"
