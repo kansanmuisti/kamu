@@ -184,7 +184,7 @@ def parse_ministerships(line):
     return d
 
 class MemberImporter(Importer):
-    LIST_URL = '/triphome/bin/thw/trip/?${base}=hetekaue&${maxpage}=10001&${snhtml}=hex/hxnosynk&${html}=hex/hx4600&${oohtml}=hex/hx4600&${sort}=lajitnimi&nykyinen=$+and+(VPR_LOPPUTEPVM+%3E=24.03.1999)'
+    LIST_URL = '/triphome/bin/thw/trip/?${base}=hetekaue&${maxpage}=10001&${snhtml}=hex/hxnosynk&${html}=hex/hx4600&${oohtml}=hex/hx4600&${sort}=lajitnimi&nykyinen=$+and+(VPR_LOPPUTEPVM+>=%s)'
     MP_INFO_URL = '/triphome/bin/hex5000.sh?hnro=%d&kieli=su'
     DATE_MATCH = r'(\d{1,2})\.(\d{1,2})\.(\d{4})'
     DISTRICTS_FILE = 'districts.txt'
@@ -369,12 +369,14 @@ class MemberImporter(Importer):
         dir_name = os.path.join(mp.photo.field.upload_to, fname)
         path = os.path.join(settings.MEDIA_ROOT, dir_name)
         mp.photo = dir_name
-        if not os.path.exists(path):
+        if self.replace or not os.path.exists(path):
             self.logger.debug("getting MP portrait")
             s = self.open_url(url, 'members')
             f = open(path, 'wb')
             f.write(s)
             f.close()
+
+        mp.mark_modified()
 
         mp.save()
 
@@ -449,6 +451,7 @@ class MemberImporter(Importer):
                     if not ca_obj:
                         args['member'] = mp
                         ca_obj = CommitteeAssociation(**args)
+                        self.logger.debug("New committee association: %s" % ca_obj)
                         ca_obj.save()
                     else:
                         ca_obj.found = True
@@ -458,6 +461,7 @@ class MemberImporter(Importer):
                 if not ma_obj:
                     args['member'] = mp
                     ma_obj = MinistryAssociation(**args)
+                    self.logger.debug("New ministry association: %s" % ma_obj)
                     ma_obj.save()
                 else:
                     ma_obj.found = True
@@ -548,13 +552,18 @@ class MemberImporter(Importer):
             if not hasattr(mp, 'found'):
                 print "%s not found" % mp
 
-    def import_members(self, args):
+    def import_members(self, **args):
         if not MemberActivityType.objects.count():
             import_activity_types()
             self.logger.info("%d activity types imported" % MemberActivityType.objects.count())
 
         self.logger.debug("fetching MP list")
-        list_url = self.URL_BASE + self.LIST_URL
+        if args.get('full', False):
+            date_str = '24.03.1999'
+        else:
+            term = Term.objects.latest()
+            date_str = term.begin.strftime('%d.%m.%Y')
+        list_url = self.URL_BASE + self.LIST_URL % date_str
         s = self.open_url(list_url, 'member')
         doc = html.fromstring(s)
         doc.make_links_absolute(list_url)
@@ -565,6 +574,18 @@ class MemberImporter(Importer):
             if 'single' in args and not args['single'].lower() in name.lower():
                 continue
             self.logger.debug("fetching MP %s" % name)
+
+            name = re.sub(r'\s*\([\w\d. ]+\)\s*', '', name)
+            last_name, given_names = name.split(',')
+            given_names = given_names.strip()
+            last_name = last_name.strip()
+            try:
+                mp = Member.objects.get(surname=last_name, given_names=given_names)
+                if not self.replace:
+                    continue
+            except Member.DoesNotExist:
+                pass
+
             s = self.open_url(url, 'member')
             doc = html.fromstring(s)
             el = doc.xpath("//frame[@name='vasen2']")

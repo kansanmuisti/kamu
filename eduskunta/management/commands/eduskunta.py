@@ -22,7 +22,7 @@ class Command(BaseCommand):
                     default=False, help='Import MP seatings'),
         make_option('--minutes', action='store_true', dest='minutes',
                     default=False, help='Import plenary session minutes'),
-        make_option('--docs', action='store_true', dest='docs',
+        make_option('--doc', action='store_true', dest='docs',
                     default=False, help='Import parliament documents'),
         make_option('--vote', action='store_true', dest='vote',
                     default=False, help='Import plenary session votes'),
@@ -60,7 +60,8 @@ class Command(BaseCommand):
             args = {}
             if options['single']:
                 args['single'] = options['single']
-            importer.import_members(args)
+            args['full'] = options['full']
+            importer.import_members(**args)
         if options['seat']:
             importer = SeatImporter(http_fetcher=http)
             importer.replace = options['replace']
@@ -88,7 +89,13 @@ class Command(BaseCommand):
         if options['vote']:
             importer = VoteImporter(http_fetcher=http)
             importer.replace = options['replace']
-            importer.import_votes()
+            args = {}
+            if options['single']:
+                args['single'] = options['single']
+            if options['from_year']:
+                args['from_year'] = options['from_year']
+            args['full'] = options['full']
+            importer.import_votes(**args)
         if options['funding']:
             importer = FundingImporter(http_fetcher=http)
             importer.replace = options['replace']

@@ -50,7 +50,6 @@ class VoteImporter(Importer):
     VOTE_URL = '/triphome/bin/thw.cgi/trip/?${html}=aax/aax4000&${base}=aanestysu&aanestysvpvuosi=%d&istuntonro=%s&aanestysnro=%d'
     VOTE_LIST_URL = '/triphome/bin/aax3000.sh?VAPAAHAKU=aanestysvpvuosi=%i'
     BEGIN_YEAR = 1999
-    END_YEAR = 2012
     CACHE_DIR = 'votes'
 
     def save_session(self, pv, info):
@@ -123,20 +122,27 @@ class VoteImporter(Importer):
                 votes.append(parse_vote(td_list[3].text, td_list[4].text))
         info['votes'] = votes
 
+        pv.mark_modified()
+        pv.mark_checked()
+
+        self.updated += 1
+
         return self.save_session(pv, info)
 
     def _make_obj_lists(self):
-        mp_list = Member.objects.all()
-        mpd = {}
-        for mp in mp_list:
-            mpd[mp.name] = mp
-        self.mp_by_name = mpd
+        if not hasattr(self, 'mp_by_name'):
+            mp_list = Member.objects.all()
+            mpd = {}
+            for mp in mp_list:
+                mpd[mp.name] = mp
+            self.mp_by_name = mpd
 
-        plsess_list = PlenarySession.objects.all()
-        psd = {}
-        for pl in plsess_list:
-            psd[pl.origin_id] = pl
-        self.plsess_by_id = psd
+        if not hasattr(self, 'plsess_by_id'):
+            plsess_list = PlenarySession.objects.all()
+            psd = {}
+            for pl in plsess_list:
+                psd[pl.origin_id] = pl
+            self.plsess_by_id = psd
 
     def _import_one(self, vote_id):
         (year, plsess, nr) = vote_id.split('/')
@@ -174,18 +180,28 @@ class VoteImporter(Importer):
             plv = self._import_one(vote_id)
         return plv
 
-
-    def import_votes(self):
+    def import_votes(self, **options):
         self._make_obj_lists()
-        for year in range(self.END_YEAR, self.BEGIN_YEAR-1, -1):
+        self.full_update = options.get('full')
+        self.updated = 0
+
+        this_year = datetime.now().year
+        for year in range(this_year, self.BEGIN_YEAR-1, -1):
             next_link = self.URL_BASE + self.VOTE_LIST_URL % year
             while next_link:
+                updated_begin = self.updated
+                self.logger.debug("Fetching from %s" % next_link)
                 el_list, next_link = self.read_listing(self.CACHE_DIR, next_link)
                 for el in el_list:
                     if el['plsess'] == '85/1999':
-                    	next_link = None
-                    	break
+                        # First plenary session in origin database
+                        next_link = None
+                        break
                     info = {'plsess': el['plsess'], 'number': el['number']}
                     info['link'] = el['results_link']
                     self.import_session(info)
                     db.reset_queries()
+
+                updated_this_round = self.updated - updated_begin
+                if not updated_this_round and not self.full_update:
+                    return

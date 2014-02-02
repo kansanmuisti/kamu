@@ -6,7 +6,7 @@ ROOT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LOG_FILE="/tmp/kamu-import-$(date "+%Y-%m-%d").log"
 
 if [ -f $ROOT_PATH/local_update_config ]; then
-	. $ROOT_PATH/local_update_config
+    $ROOT_PATH/local_update_config
 fi
 
 echo --------------------------------- >> $LOG_FILE
@@ -15,32 +15,45 @@ echo --------------------------------- >> $LOG_FILE
 
 cd $ROOT_PATH
 
-# Import new documents
-python manage.py eduskunta --traceback --docs >> $LOG_FILE 2>&1
-if [ $? -ne 0 ]; then
-    cat $LOG_FILE
-    exit 1
-fi
 
-# Import new minutes
-python manage.py eduskunta --traceback --minutes >> $LOG_FILE 2>&1
-if [ $? -ne 0 ]; then
-    cat $LOG_FILE
-    exit 1
-fi
-
-# Once a night, import MPs
-if [ "$1" == "nightly" ]; then
-    python manage.py eduskunta --traceback --members >> $LOG_FILE 2>&1
+if [ "$1" == "weekly" ]; then
+    # Once a week, re-import all MPs
+    python manage.py eduskunta --traceback --member --full --replace >> $LOG_FILE 2>&1
     if [ $? -ne 0 ]; then
         cat $LOG_FILE
         exit 1
     fi
-fi
+elif [ "$1" == "nightly" ]; then
+    # Once a night, re-import MPs
+    python manage.py eduskunta --traceback --member --replace >> $LOG_FILE 2>&1
+    if [ $? -ne 0 ]; then
+        cat $LOG_FILE
+        exit 1
+    fi
+else
+    # Import new MPs
+    python manage.py eduskunta --traceback --member >> $LOG_FILE 2>&1
+    if [ $? -ne 0 ]; then
+        cat $LOG_FILE
+        exit 1
+    fi
 
-# Once a week, re-import all MPs
-if [ "$1" == "weekly" ]; then
-    python manage.py eduskunta --traceback --members --replace >> $LOG_FILE 2>&1
+    # Import new documents
+    python manage.py eduskunta --traceback --doc >> $LOG_FILE 2>&1
+    if [ $? -ne 0 ]; then
+        cat $LOG_FILE
+        exit 1
+    fi
+
+    # Import new minutes
+    python manage.py eduskunta --traceback --minutes >> $LOG_FILE 2>&1
+    if [ $? -ne 0 ]; then
+        cat $LOG_FILE
+        exit 1
+    fi
+
+    # Import new votes
+    python manage.py eduskunta --traceback --vote >> $LOG_FILE 2>&1
     if [ $? -ne 0 ]; then
         cat $LOG_FILE
         exit 1
@@ -54,6 +67,5 @@ if [ ! -z "$VARNISH_BAN_URL" ]; then
         exit 1
     fi
 fi
-
 
 echo "Import completed successfully." >> $LOG_FILE

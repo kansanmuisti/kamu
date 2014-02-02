@@ -525,8 +525,8 @@ class DocImporter(Importer):
                 return
         f.write('"%s %s",%s\n' % (info['type'], info['id'], s))
     """
-    def import_docs(self, **kw_args):
-        single = kw_args.get('single', None)
+    def import_docs(self, **options):
+        single = options.get('single', None)
         if single:
             info = {}
             arr = single.split(' ')
@@ -538,7 +538,7 @@ class DocImporter(Importer):
         types = "(%s)" % '+or+'.join(DOC_TYPES.keys())
         url = DOC_LIST_URL % types
 
-        from_year = kw_args.get('from_year', None)
+        from_year = options.get('from_year', None)
         if from_year:
             url += '&PVMVP2=%s' % from_year
 
@@ -550,7 +550,7 @@ class DocImporter(Importer):
         url = 'http://www.eduskunta.fi' + input_el[0].attrib['value']
 
         list_item_count = 500
-        self.full_update = kw_args.get('full')
+        self.full_update = options.get('full')
 
         url = url.replace('${MAXPAGE}=51', '${MAXPAGE}=%s' % (list_item_count + 1))
         url = url.replace('${TRIPSHOW}=format=vex4050', '${TRIPSHOW}=format=vex4100')
