@@ -5,8 +5,8 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.views.generic import TemplateView
 
-from django.contrib import admin
-admin.autodiscover()
+#from django.contrib import admin
+#admin.autodiscover()
 
 # Change the length of EmailFields to accommodate overlong
 # Facebook email addresses.
@@ -16,11 +16,11 @@ def email_field_init(self, *args, **kwargs):
   CharField.__init__(self, *args, **kwargs)
 EmailField.__init__ = email_field_init
 
-urlpatterns = patterns('',
-    (r'^admin/', include(admin.site.urls)),
-)
+#urlpatterns = patterns('',
+#    (r'^admin/', include(admin.site.urls)),
+#)
 
-urlpatterns += patterns('parliament.views',
+urlpatterns = patterns('parliament.views',
     url(r'^$', 'main'),
     url(r'^ajax/parliament-activity/$', 'get_parliament_activity'),
     url(r'^ajax/mp-some-activity/$', 'get_mp_some_activity'),
