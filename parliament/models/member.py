@@ -7,6 +7,7 @@ from parliament.models.committee import *
 from parliament.models.party import *
 from parliament.models.session import *
 from parliament.models.document import Keyword
+from parliament.models.base import UpdatableModel
 
 import datetime
 
@@ -55,7 +56,7 @@ class MemberManager(models.Manager):
         name = ' '.join(names)
         return self.get(name=name)
 
-class Member(models.Model):
+class Member(UpdatableModel):
     name = models.CharField(max_length=50, unique=True)
     origin_id = models.CharField(max_length=20, unique=True, db_index=True, blank=True, null=True)
     url_name = models.SlugField(max_length=50, unique=True)

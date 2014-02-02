@@ -549,7 +549,7 @@ class MemberImporter(Importer):
                 print "%s not found" % mp
 
     def import_members(self, args):
-        if self.replace or not MemberActivityType.objects.count():
+        if not MemberActivityType.objects.count():
             import_activity_types()
             self.logger.info("%d activity types imported" % MemberActivityType.objects.count())
 
@@ -591,11 +591,17 @@ def import_activity_types(model_class=MemberActivityType):
         (act_id, name, weight) = line.split('\t')
         weight = float(weight)
 
+        changed = False
         try:
             act_type = model_class.objects.get(pk=act_id)
         except model_class.DoesNotExist:
             act_type = model_class(pk=act_id)
 
-        act_type.name = name
-        act_type.weight = weight
-        act_type.save()
+        if name != act_type.name:
+            act_type.name = name
+            changed = True
+        if weight != act_type.weight:
+            act_type.weight = weight
+            changed = True
+        if changed:
+            act_type.save()

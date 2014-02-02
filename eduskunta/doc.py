@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import re
+from datetime import datetime, timedelta
 from lxml import etree, html
 from django import db
 from eduskunta.importer import Importer, ParseError
@@ -65,7 +66,7 @@ class DocImporter(Importer):
 
         super(DocImporter, self).__init__(*args, **kwargs)
 
-    def fix_quirks(self, info):
+    def fix_id_quirks(self, info):
         if info['type'] == 'HE' and info['id'] == '45/1006':
             info['id'] = '45/2006'
 
@@ -426,19 +427,30 @@ class DocImporter(Importer):
     def import_doc(self, info):
         url = DOC_DL_URL % (info['type'], info['id'])
         info['info_link'] = url
-        self.fix_quirks(info)
+        self.fix_id_quirks(info)
         if not should_download_doc(info):
             self.logger.warning("skipping %s %s" % (info['type'], info['id']))
             return None
-        self.logger.info("downloading %s %s" % (info['type'], info['id']))
 
         origin_id = "%s %s" % (info['type'], info['id'])
         try:
             doc = Document.objects.get(origin_id=origin_id)
-            if not self.replace:
-                return doc
         except Document.DoesNotExist:
             doc = Document(origin_id=origin_id)
+
+        if 'update_time' in info:
+            doc.mark_checked()
+            if doc.last_modified_time and doc.last_modified_time >= info['update_time'] and not self.replace:
+                self.logger.debug("%s %s not updated" % (info['type'], info['id']))
+                doc.save(update_fields=['last_checked_time'])
+                return
+            else:
+                self.logger.debug("%s %s updated %s (checked %s)" % (
+                    info['type'], info['id'], info['update_time'], doc.last_modified_time
+                ))
+        else:
+            if not self.replace:
+                return doc
 
         doc.type = DOC_TYPES[info['type']]
         doc.name = origin_id
@@ -473,6 +485,7 @@ class DocImporter(Importer):
         if 'author' in info:
             doc.author = Member.objects.get(origin_id=info['author']['id'])
 
+        doc.mark_modified()
         doc.save()
 
         self.save_stages(doc, info)
@@ -484,6 +497,7 @@ class DocImporter(Importer):
         # to create the proper KeywordActivity objects.
         doc._updated = True
         doc.save()
+        self.updated += 1
 
         return doc
 
@@ -528,34 +542,49 @@ class DocImporter(Importer):
         if from_year:
             url += '&PVMVP2=%s' % from_year
 
-        if kw_args.get('massive', False):
-            s = self.open_list_url(url, 'docs')
-            root = html.fromstring(s)
-            input_el = root.xpath('//input[@name="backward"]')
-            assert len(input_el) == 1
-            url = 'http://www.eduskunta.fi' + input_el[0].attrib['value']
-            url = url.replace('${MAXPAGE}=51', '${MAXPAGE}=501')
+        self.logger.info("Fetching base list URL and creating session")
+        s = self.open_list_url(url, 'docs-list')
+        root = html.fromstring(s)
+        input_el = root.xpath('//input[@name="backward"]')
+        assert len(input_el) == 1
+        url = 'http://www.eduskunta.fi' + input_el[0].attrib['value']
+
+        list_item_count = 500
+        self.full_update = kw_args.get('full')
+
+        url = url.replace('${MAXPAGE}=51', '${MAXPAGE}=%s' % (list_item_count + 1))
+        url = url.replace('${TRIPSHOW}=format=vex4050', '${TRIPSHOW}=format=vex4100')
 
         self.skipped = 0
+        self.updated = 0
+
         while url:
             print url
+            updated_begin = self.updated
             ret = self.read_listing('docs', url)
             doc_list = ret[0]
             fwd_link = ret[1]
 
             for idx, info in enumerate(doc_list):
                 assert info['type'] in DOC_TYPES
-                self.logger.info("[%d/%d] processing document %s %s" %
+                self.logger.info("[%d/%d] document %s %s" %
                     (idx + 1, len(doc_list), info['type'], info['id']))
                 doc = self.import_doc(info)
                 db.reset_queries()
             url = fwd_link
 
-    def refresh_docs(self, **opts):
-        self.replace = True
-        # Go through all the docs that do not have keywords attached yet.
+            updated_this_round = self.updated - updated_begin
+            if not updated_this_round and not self.full_update:
+                break
+
+        yesterday = datetime.now() - timedelta(days=1)
         doc_list = Document.objects.filter(keywords__isnull=True).order_by('date')
-        for doc in doc_list:
+        q = db.models.Q(last_checked_time__lte=yesterday) | db.models.Q(last_checked_time__isnull=True)
+        doc_list = doc_list.filter(q)
+        self.logger.info("Updating %d documents without keywords" % len(doc_list))
+        for idx, doc in enumerate(doc_list):
             arr = doc.name.split(' ')
             info = {'type': arr[0], 'id': arr[1]}
+            self.logger.info("[%d/%d] document %s %s" %
+                (idx + 1, len(doc_list), info['type'], info['id']))
             self.import_doc(info)

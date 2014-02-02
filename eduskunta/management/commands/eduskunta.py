@@ -33,10 +33,8 @@ class Command(BaseCommand):
         make_option('--from-id', metavar='ID', dest='from_id', help='Start importing from ID'),
         make_option('--replace', action='store_true', dest='replace',
                     default=False, help='Replace values of existing objects'),
-        make_option('--massive', action='store_true', dest='massive',
-                    default=False, help='Optimize for large updates'),
-        make_option('--refresh', action='store_true', dest='refresh',
-                    help='Refresh existing documents'),
+        make_option('--full', action='store_true', dest='full',
+                    default=False, help='Perform a full update'),
         make_option('--cache', action='store', dest='cache',
                     help='Use cache in supplied director')
     )
@@ -75,7 +73,7 @@ class Command(BaseCommand):
                 args['from_year'] = options['from_year']
             if options['from_id']:
                 args['from_id'] = options['from_id']
-            args['massive'] = options['massive']
+            args['full'] = options['full']
             min_importer.import_minutes(args)
         if options['docs']:
             importer = DocImporter(http_fetcher=http)
@@ -85,11 +83,8 @@ class Command(BaseCommand):
                 args['single'] = options['single']
             if options['from_year']:
                 args['from_year'] = options['from_year']
-            args['massive'] = options['massive']
-            if options['refresh']:
-                importer.refresh_docs(**args)
-            else:
-                importer.import_docs(**args)
+            args['full'] = options['full']
+            importer.import_docs(**args)
         if options['vote']:
             importer = VoteImporter(http_fetcher=http)
             importer.replace = options['replace']

@@ -2,8 +2,9 @@ from django.db import models
 from django.db.models import Q
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
+from parliament.models.base import UpdatableModel
 
-class Party(models.Model):
+class Party(UpdatableModel):
     name = models.CharField(max_length=10, unique=True, db_index=True)
     full_name = models.CharField(max_length=50)
     logo = models.ImageField(upload_to='images/parties')
@@ -36,7 +37,7 @@ class Party(models.Model):
     def get_activity_count_set(self, **kwargs):
         activity_objects = self.get_activity_objects()
         return activity_objects.counts_for_party(self.id, **kwargs)
- 
+
     def get_activity_score_set(self, **kwargs):
         activity_objects = self.get_activity_objects()
         party_association_objects = self.get_party_association_objects()
@@ -50,7 +51,7 @@ class Party(models.Model):
             act['score'] /= member_count
 
         return act_set
- 
+
     def __unicode__(self):
         return self.full_name
 
@@ -74,7 +75,7 @@ class Government(models.Model):
     begin = models.DateField(help_text="Date when the government began operations")
     end = models.DateField(null=True, help_text="End date for the government")
     name = models.CharField(max_length=50, help_text="Descriptive name for this government, depends on national custom")
-    
+
     class Meta:
         app_label = 'parliament'
 

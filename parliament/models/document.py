@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Q
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
+from parliament.models.base import UpdatableModel
 
 class Keyword(models.Model):
     name = models.CharField(max_length=128, db_index=True, unique=True)
@@ -29,7 +30,7 @@ class Keyword(models.Model):
     class Meta:
         app_label = 'parliament'
 
-class Document(models.Model):
+class Document(UpdatableModel):
     TYPES = (
         ('mp_prop', _('MP law proposal')),
         ('gov_bill', _('Government bill')),
@@ -55,7 +56,6 @@ class Document(models.Model):
         help_text="Set if the document is authored by an MP")
 
     version = models.CharField(max_length=10, null=True)
-    update_time = models.DateTimeField(blank=True, null=True)
     error = models.CharField(max_length=50, blank=True, null=True)
 
     related_docs = models.ManyToManyField("self")

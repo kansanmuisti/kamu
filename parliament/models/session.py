@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 
 from parliament.models.document import *
 from parliament.models.member import *
+from parliament.models.base import UpdatableModel
 
 class TermManager(models.Manager):
     def get_for_date(self, date):
@@ -44,7 +45,7 @@ class PlenarySessionManager(models.Manager):
             query &= Q(date__lte=end)
         return self.filter(query)
 
-class PlenarySession(models.Model):
+class PlenarySession(UpdatableModel):
     name = models.CharField(max_length=20)
     term = models.ForeignKey(Term, db_index=True)
     date = models.DateField(db_index=True)
@@ -52,7 +53,6 @@ class PlenarySession(models.Model):
     url_name = models.SlugField(max_length=20, unique=True, db_index=True)
     origin_id = models.CharField(max_length=50, null=True, blank=True, db_index=True)
     origin_version = models.CharField(max_length=10, null=True, blank=True)
-    import_time = models.DateTimeField()
 
     objects = PlenarySessionManager()
 
@@ -143,7 +143,7 @@ class Statement(models.Model):
 
     def get_short_id(self):
         return "%s/%d"%(self.item.get_short_id(), self.index)
-    
+
     def get_indocument_url(self):
         # A hack as the item itself doesn't have a proper
         # page in the system
@@ -153,7 +153,7 @@ class Statement(models.Model):
             return None
 
         return doc.get_absolute_url() + "#statement-" + self.get_short_id()
-    
+
 class PlenaryVoteManager(models.Manager):
     def between(self, begin=None, end=None):
         query = Q()
@@ -168,7 +168,7 @@ class PlenaryVoteManager(models.Manager):
         pls_name = '/'.join(f[1:])
         return self.get(Q(plenary_session__name=pls_name) & Q(number=nr))
 
-class PlenaryVote(models.Model):
+class PlenaryVote(UpdatableModel):
     plsess = models.ForeignKey(PlenarySession, db_index=True)
     plsess_item = models.ForeignKey(PlenarySessionItem, db_index=True, null=True, blank=True)
     number = models.IntegerField()

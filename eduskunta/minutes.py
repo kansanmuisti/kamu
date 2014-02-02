@@ -2,7 +2,7 @@
 import re
 import os
 import logging
-import datetime
+from datetime import datetime, timedelta
 from lxml import etree, html
 from django import db
 from parliament.models.member import Member
@@ -33,6 +33,7 @@ SPEAKER_ADDRESSING = (
 
 class MinutesImporter(Importer):
     MINUTES_URL = '/triphome/bin/akx3000.sh?kanta=utaptk&LYH=LYH-PTK&haku=PTKSUP&kieli=su&VPVUOSI>=1999'
+    MINUTES_URL_TEMPLATE = 'http://www.eduskunta.fi/triphome/bin/akxptk.sh?{KEY}=PTK+%s+vp'
     LATEST_MINUTES_URL = '/triphome/bin/akx3000.sh?kanta=utaptk&uusimmat=k&VAPAAHAKU2=vpvuosi%3E=1999&haku=PTKSUP'
     VOTE_URL = 'http://www.eduskunta.fi/triphome/bin/thw.cgi/trip/?${html}=aax/aax4000&${base}=aanestysu&aanestysvpvuosi=%(year)s&istuntonro=%(plsess_nr)s&pj_kohta=%(item_nr)s&aanestysnro=%(vote_nr)s&${snhtml}=aax/aaxeiloydy'
     DOC_ID_MATCH = r'(\w+)\s(\w+/\d{4})\svp'
@@ -185,6 +186,9 @@ class MinutesImporter(Importer):
     def process_budget_item(self, budget_el):
         el = budget_el.xpath('plnimi')
         if len(el) != 1:
+            l = budget_el.getchildren()
+            if len(l) == 1 and l[0].tag == 'askaskes':
+                return None
             raise ParseError("budget class id not found")
         el = el[0]
         info = {'id': int(el.attrib['nro'])}
@@ -342,6 +346,8 @@ class MinutesImporter(Importer):
             budget_list = []
             for el in cl_el_list:
                 b_info = self.process_budget_item(el)
+                if not b_info:
+                    continue
                 for bi in budget_list:
                     if bi['id'] == b_info['id']:
                         bi['statements'].extend(b_info['statements'])
@@ -396,7 +402,18 @@ class MinutesImporter(Importer):
     def process_minutes(self, info):
         self.logger.info("processing minutes for plenary session %s/%s", info['type'], info['id'])
 
-        xml_fn = self.download_sgml_doc(info, info['minutes_link'])
+        try:
+            pl_sess = PlenarySession.objects.get(origin_id=info['id'])
+            current_version = pl_sess.origin_version
+        except PlenarySession.DoesNotExist:
+            pl_sess = None
+            current_version = None
+
+        if not self.full_update and current_version == '2.0':
+            self.logger.debug("skipping already final minutes")
+            return
+
+        xml_fn = self.download_sgml_doc(info, info['minutes_link'], current_version)
         f = open(xml_fn, 'r')
         root = etree.fromstring(f.read())
         f.close()
@@ -415,6 +432,13 @@ class MinutesImporter(Importer):
         if not m:
             raise ParseError("Version string invalid ('%s')" % ver_txt)
         info['version'] = m.groups()[0]
+
+        if not self.full_update and current_version == info['version']:
+            pl_sess.mark_checked()
+            pl_sess.save(update_fields=['last_checked_time'])
+            self.logger.debug("minutes not updated (version %s)" % info['version'])
+            return
+
         info['date'] = el.attrib['Ipvm']
         time_str = el.xpath('ident/kaika')[0].text
         m = re.match(r'kello (\d{1,2}\.\d{2})', time_str)
@@ -588,7 +612,7 @@ class MinutesImporter(Importer):
         pl_sess.date = info['date']
         pl_sess.info_link = info['minutes_link']
         pl_sess.url_name = pl_sess.origin_id.replace('/', '-')
-        pl_sess.import_time = datetime.datetime.now()
+        pl_sess.import_time = datetime.now()
         pl_sess.origin_version = info['version']
         pl_sess.save()
 
@@ -646,7 +670,14 @@ class MinutesImporter(Importer):
         self.doc_importer = DocImporter(http_fetcher=self.http, logger=self.logger)
         self._make_mp_dicts()
         next_link = self.URL_BASE + self.LATEST_MINUTES_URL
+
+        self.updated = 0
+
+        self.full_update = options.get('full', False)
+
         while next_link:
+            self.logger.debug("Fetching from %s" % next_link)
+            updated_begin = self.updated
             el_list, next_link = self.read_listing('minutes', next_link)
             for el in el_list:
                 year = int(el['id'].split('/')[1])
@@ -662,3 +693,25 @@ class MinutesImporter(Importer):
                 self.process_minutes(el)
                 db.reset_queries()
 
+            updated_this_round = self.updated - updated_begin
+            if not updated_this_round and not self.full_update:
+                break
+
+        # Update plenary session minutes that do not yet have final versions.
+        qs = PlenarySession.objects.exclude(origin_version='2.0').order_by('-date')
+
+        last_week = datetime.now() - timedelta(days=7)
+        q = db.models.Q(last_checked_time__lte=last_week) | db.models.Q(last_checked_time__isnull=True)
+        qs = qs.filter(q)
+        # Some minutes are very old and likely will never be updated.
+        two_years_ago = datetime.now() - timedelta(days=365*2)
+        qs = qs.exclude(date__lte=two_years_ago)
+        self.logger.info("Updating %d plenary sessions without non-final meeting minutes" % len(qs))
+
+        for idx, pl_sess in enumerate(qs):
+            info = {'type': 'PTK', 'id': pl_sess.origin_id}
+            info['minutes_link'] = self.MINUTES_URL_TEMPLATE % pl_sess.origin_id
+            self.logger.info("[%d/%d] plenary session minutes %s %s" %
+                (idx + 1, len(qs), info['type'], info['id']))
+            self.process_minutes(info)
+            db.reset_queries()

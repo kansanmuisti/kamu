@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 import re
 import os
 import logging
+from datetime import datetime
 from lxml import etree, html
 from utils.http import HttpFetcher
 
@@ -124,13 +126,22 @@ class Importer(object):
 
         s = self.open_list_url(url, list_type)
         doc = html.fromstring(s)
-        el_list = doc.xpath(".//div[@class='listing']/div/p")
+        el_list = doc.xpath(".//div[@class='listing']/div[@class='list-items']")
         doc.make_links_absolute(url)
 
         for el in el_list:
             link = {}
 
-            parsed_el = self.process_list_element(list_type, el)
+            p = el.find('p')
+            assert p
+
+            parsed_el = self.process_list_element(list_type, p)
+            label_el = el.xpath(u".//table//td/i[text()='Päivitetty']")
+            if label_el:
+                time_el = label_el[0].getparent().getparent().getchildren()[1]
+                time = datetime.strptime(time_el.text.strip(), '%d.%m.%Y %H:%M:%S')
+                parsed_el['update_time'] = time
+
             ret.append(parsed_el)
 
         # Check if last page of links
@@ -142,7 +153,9 @@ class Importer(object):
 
         return (ret, url)
 
-    def download_sgml_doc(self, info, html_url):
+    def download_sgml_doc(self, info, html_url, current_version=None):
+        should_update_xml = False
+
         s = self.open_url(html_url, self.doc_type)
         doc = html.fromstring(s)
         # Find the link to the SGML
@@ -152,8 +165,18 @@ class Importer(object):
             self.http.nuke_cache(html_url, self.doc_type)
             s = self.open_url(html_url, self.doc_type)
             doc = html.fromstring(s)
-        # Find the link to the SGML
-        el = doc.xpath(".//a[contains(., 'Rakenteinen asiakirja')]")
+            el = doc.xpath(".//a[contains(., 'Rakenteinen asiakirja')]")
+
+        if current_version:
+            ver_el = doc.xpath(".//div[@class='doclist-items']//div[@class='header']/span")
+            assert len(ver_el) == 1, "Version element not found"
+            m = re.search(r'([0-9]\.[0-9])', ver_el[0].text)
+            assert m, "Version number not found (%s)" % ver_el[0].text
+            doc_version = m.groups()[0]
+            if doc_version != current_version:
+                should_update_xml = True
+                self.logger.debug("SGML document updated (version %s, stored version %s)" % (doc_version, current_version))
+
         if len(el) != 1:
             year = info['id'].split('/')[1]
             if int(year) <= 1999:
@@ -169,7 +192,7 @@ class Importer(object):
         fname_base = m.groups()[0]
         stored_sgml_fn = '%s/%s' % (self.sgml_storage, fname)
 
-        if not os.path.exists(stored_sgml_fn):
+        if should_update_xml or not os.path.exists(stored_sgml_fn):
             self.logger.debug("downloading SGML file")
             try:
                 s = self.open_url(link, self.doc_type)
@@ -183,7 +206,7 @@ class Importer(object):
             f.close()
 
         xml_fn = '%s/%s.xml' % (self.xml_storage, fname_base)
-        if not os.path.exists(xml_fn):
+        if should_update_xml or not os.path.exists(xml_fn):
             ret = os.spawnv(os.P_WAIT, self.sgml_to_xml,
                             [self.SGML_TO_XML, stored_sgml_fn, xml_fn])
             if ret:

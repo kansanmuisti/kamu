@@ -1,9 +1,10 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
+from parliament.models.base import UpdatableModel
 
 
-class Committee(models.Model):
+class Committee(UpdatableModel):
     name = models.CharField(max_length=100, unique=True,
                             help_text='Name of the committee')
     description = models.CharField(max_length=500, null=True,
