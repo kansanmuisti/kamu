@@ -47,10 +47,13 @@ urlpatterns = patterns('parliament.views',
 
 from tastypie.api import Api
 from parliament.api import all_resources
+from social.api import UpdateResource, FeedResource
 
 v1_api = Api(api_name='v1')
 for res in all_resources:
     v1_api.register(res())
+v1_api.register(UpdateResource())
+v1_api.register(FeedResource())
 
 urlpatterns += patterns('',
     (r'^api/', include(v1_api.urls)),

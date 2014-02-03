@@ -10,11 +10,12 @@ from tastypie.resources import ModelResource, Resource
 from tastypie.exceptions import BadRequest
 from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie import fields, http
-from parliament.models import *
 from sorl.thumbnail import get_thumbnail
 import datetime
 import re
 
+from parliament.models import *
+from social.api import UpdateResource
 
 # Save these for caching purposes
 term_list = list(Term.objects.visible())
@@ -331,7 +332,7 @@ class PlenarySessionItemResource(KamuResource):
     documents = fields.ManyToManyField('parliament.api.DocumentResource', 'docs', full=False)
     class Meta:
         queryset = PlenarySessionItem.objects.all()
-        resouce_name = 'plenary_session_item'
+        resource_name = 'plenary_session_item'
         filtering = {
             'plenary_session': ALL_WITH_RELATIONS,
         }
@@ -478,6 +479,7 @@ class KeywordActivityResource(KamuResource):
 class FundingSourceResource(KamuResource):
     class Meta:
         queryset = FundingSource.objects.all()
+        resource_name = 'funding_source'
 
 class FundingResource(KamuResource):
     member = fields.ForeignKey(MemberResource, 'member')
@@ -494,6 +496,7 @@ class MemberSeatResource(KamuResource):
     member = fields.ForeignKey(MemberResource, 'member')
     class Meta:
         queryset = MemberSeat.objects.all()
+        resource_name = 'member_seat'
 
 class DocumentResource(KamuResource):
     def dehydrate(self, bundle):
