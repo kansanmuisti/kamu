@@ -162,6 +162,19 @@ def _get_member_activity_kws(member):
     kw_list = sorted(kw_dict.iteritems(), key=operator.itemgetter(1), reverse=True)[0:20]
     return kw_list
 
+def _get_party_activity_kws(party):
+    kw_act_list = KeywordActivity.objects.filter(activity__member__party=party).select_related('keyword', 'activity', 'activity__type')
+    kw_dict = {}
+    for kwa in kw_act_list:
+        name = kwa.keyword.name
+        score = kwa.activity.type.weight
+        if name in kw_dict:
+            kw_dict[name] += score
+        else:
+            kw_dict[name] = score
+    kw_list = sorted(kw_dict.iteritems(), key=operator.itemgetter(1), reverse=True)[0:20]
+    return kw_list
+
 def make_feed_filters(actor=False):
     groups = {}
     for a in FEED_ACTIONS:
@@ -526,8 +539,15 @@ def show_party(request, name):
         aggregate(Max("time"))['time__max']
     party_activity_end_date = max_time.date
 
-    args = dict(party=party, party_json=party_json,
-            party_activity_end_date=party_activity_end_date)
+    kw_act = _get_party_activity_kws(party)
+    kw_act_json = simplejson.dumps(kw_act, ensure_ascii=False)
+
+    args = dict(party=party,
+                party_json=party_json,
+                party_activity_end_date=party_activity_end_date,
+                feed_actions_json=simplejson.dumps(make_feed_actions(), ensure_ascii=False),
+                feed_filters = make_feed_filters(actor=True),
+                keyword_activity = kw_act_json)
 
     return render_to_response("party/details.html", args,
         context_instance=RequestContext(request))
@@ -537,7 +557,7 @@ def list_party_mps(request, name):
 
     party_json = get_embedded_resource(request, PartyResource, party)
     args = dict(party=party, party_json=party_json)
-    party_mp_list_json = get_embedded_resource_list(request, MemberResource, {'party': party})
+    party_mp_list_json = get_embedded_resource_list(request, MemberResource, {'party': party, 'current': "True"})
     args['member_list_json'] = party_mp_list_json
 
     return render_to_response("party/mps.html", args, context_instance=RequestContext(request))
