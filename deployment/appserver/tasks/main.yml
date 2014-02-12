@@ -9,6 +9,7 @@
   - libmalaga7
   - python-psycopg2
   - python-dev
+  - python-lxml
 
 - name: Node.js | Add the node.js PPA
   sudo: yes
@@ -45,7 +46,7 @@
   when: django_db_result.stdout.find('{{ db_test_table }}') == -1
 - name: Django | Apply database dump
   sudo: yes
-  sudo_user: postgres
+  sudo_user: "{{ app_user }}"
   shell: bunzip2 -c /home/{{ app_user }}/{{ db_dump_filename }} | psql {{ db_name }}
   when: django_db_result.stdout.find('{{ db_test_table }}') == -1
 
