@@ -264,10 +264,10 @@ class FeedUpdater(object):
                         time.sleep(0.5)
                         continue
                     else:
-                        raise UpdateError(e.message)
+                        raise UpdateError(e.message, can_continue=True)
         # If we got this far, the error repeated 3 times, so
         # we bail out.
-        raise UpdateError(last_e.message)
+        raise UpdateError(last_e.message, can_continue=True)
 
     @transaction.commit_on_success
     def process_facebook_feed(self, feed, full_update=False):
