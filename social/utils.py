@@ -391,8 +391,10 @@ class FeedUpdater(object):
         assert feed.type == "FB"
         return self.process_facebook_feed(feed)
 
-    def update_feeds(self):
+    def update_feeds(self, **opts):
         feed_types = ("TW", "FB")
+        if 'type' in opts:
+            feed_types = opts['type']
         for ft in feed_types:
             feed_list = self.find_feeds_to_update(ft)
             for feed in feed_list:

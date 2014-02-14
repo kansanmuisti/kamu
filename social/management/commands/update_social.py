@@ -16,6 +16,7 @@ class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
         make_option('--cached', action='store_true', dest='cached', default=False,
             help='Use local cache for HTTP requests'),
+        make_option('--type', action='store', dest='type', help='Types of feed to update'),
     )
 
     def handle(self, *args, **options):
@@ -24,4 +25,7 @@ class Command(BaseCommand):
             import requests_cache
             requests_cache.install_cache("update-social")
         self.updater = FeedUpdater(self.logger)
-        self.updater.update_feeds()
+        update_opts = {}
+        if 'type' in options:
+            update_opts['type'] = options['type'].split(',')
+        self.updater.update_feeds(**update_opts)
