@@ -575,7 +575,7 @@ class MemberImporter(Importer):
                 continue
             self.logger.debug("fetching MP %s" % name)
 
-            name = re.sub(r'\s*\([\w\d. ]+\)\s*', '', name)
+            name = re.sub(r'\s*\([\w\d. ,]+\)\s*', '', name)
             last_name, given_names = name.split(',')
             given_names = given_names.strip()
             last_name = last_name.strip()
