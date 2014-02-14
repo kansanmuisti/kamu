@@ -449,7 +449,7 @@ class DocImporter(Importer):
                     info['type'], info['id'], info['update_time'], doc.last_modified_time
                 ))
         else:
-            if not self.replace:
+            if doc.pk and not self.replace:
                 return doc
 
         doc.type = DOC_TYPES[info['type']]

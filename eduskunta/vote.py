@@ -167,6 +167,8 @@ class VoteImporter(Importer):
 
     def import_one(self, vote_id):
         self._make_obj_lists()
+        self.updated = 0
+
         try:
             plv = self._import_one(vote_id)
         except ParseError as e:
