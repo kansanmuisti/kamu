@@ -3,7 +3,7 @@
 TIMESTAMP_FORMAT="+%Y-%m-%d %H:%M:%S"
 ROOT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-LOG_FILE="/tmp/kamu-import-$(date "+%Y-%m-%d").log"
+LOG_FILE="/tmp/kamu-import-$(date "+%Y-%m-%d-%H-%M").log"
 
 if [ -f $ROOT_PATH/local_update_config ]; then
     $ROOT_PATH/local_update_config
