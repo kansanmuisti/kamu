@@ -53,7 +53,7 @@ class BrokenFeed(models.Model):
 
 class Update(models.Model):
     feed = models.ForeignKey(Feed, db_index=True)
-    text = models.CharField(max_length=4000, null=True)
+    text = models.TextField(null=True)
     type = models.CharField(max_length=30)
     sub_type = models.CharField(max_length=30, null=True)
     created_time = models.DateTimeField(db_index=True)
@@ -63,7 +63,7 @@ class Update(models.Model):
     share_link = models.URLField(null=True, max_length=350)
     share_title = models.CharField(null=True, max_length=250)
     share_caption = models.CharField(null=True, max_length=600)
-    share_description = models.CharField(null=True, max_length=600)
+    share_description = models.TextField(null=True)
 
     class Meta:
         unique_together = (('feed', 'origin_id'),)

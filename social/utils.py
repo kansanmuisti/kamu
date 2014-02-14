@@ -82,7 +82,7 @@ class FeedUpdater(object):
 
     def _set_field_with_len(self, update, field_name, text):
         max_length = self._get_field_max_len(update, field_name)
-        if text and len(text) > max_length:
+        if text and max_length is not None and len(text) > max_length:
             self.logger.warning("Truncating feed %s update %s field '%s' (length %d)" % (
                 update.feed.origin_id, update.origin_id, field_name, len(text)))
             text = text[0:max_length-3]
