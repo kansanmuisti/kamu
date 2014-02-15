@@ -216,7 +216,12 @@ def show_member(request, member, page=None):
         types, 'application/json')
     args['activity_type_weights_json'] = res.serialize(None,
         weights, 'application/json')
-    args['feed_filters'] = make_feed_filters(actor=True)
+    args['feed_filters'] = {
+            'buttons': make_feed_filters(actor=True),
+            'disable_button': {
+                'label': _('All activities')
+            }
+        }
     args['feed_actions_json'] = simplejson.dumps(make_feed_actions(), ensure_ascii=False)
     kw_act = _get_member_activity_kws(member)
     kw_act_json = simplejson.dumps(kw_act, ensure_ascii=False)

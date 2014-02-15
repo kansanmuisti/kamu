@@ -30,7 +30,7 @@ class @MemberActivityFeedView extends Backbone.View
 
     filter_type: (type) ->
         if type
-            @user_filters['type__type'] = type
+            @user_filters['type__type__in'] = type.join(",")
         else
             delete @user_filters['type__type']
         @filter()
@@ -63,13 +63,29 @@ $("#member-tag-cloud li a").click (ev) ->
         $("#member-tag-cloud li a").removeClass 'active'
         $(this).addClass 'active'
 
-$(".feed-filter-buttons button").click (ev) ->
+disable_filters = ->
+    $(".feed-filter-buttons .filter-button").removeClass 'active'
+    $(".feed-filter-buttons .disable-filters").addClass 'active'
+    feed_view.filter_type null
+
+$(".feed-filter-buttons .disable-filters").click disable_filters
+disable_filters()
+
+$(".feed-filter-buttons .filter-button").click (ev) ->
     $btn = $(ev.currentTarget)
     type = $btn.data 'feed-type'
-    if $btn.hasClass 'active'
-        $btn.removeClass 'active'
-        feed_view.filter_type()
-    else
-        $(".feed-filter-buttons button").removeClass 'active'
-        $btn.addClass 'active'
-        feed_view.filter_type type
+    $btn.toggleClass 'active'
+    
+    all_buttons = $(".feed-filter-buttons .filter-button")
+    active_buttons = $(".feed-filter-buttons .filter-button.active")
+    filters = ($(button).data("feed-type") for button in active_buttons)
+    
+    if filters.length == 0 or all_buttons.length == active_buttons.length
+        disable_filters()
+        return
+    
+
+    $(".feed-filter-buttons .disable-filters").removeClass 'active'
+    feed_view.filter_type filters
+    
+
