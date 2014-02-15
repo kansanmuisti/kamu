@@ -7,6 +7,7 @@ import email.utils
 import urllib
 import calendar
 import time
+import json
 from twython import Twython, TwythonError
 import pyfaceb
 import dateutil.parser
@@ -236,6 +237,7 @@ class FeedUpdater(object):
         for tw in tw_list:
             tw_obj = Update(feed=feed)
             tw_obj.origin_id = tw['id']
+            tw_obj.origin_data = tw
             text = tw['text']
             tw_obj.text = text.replace('&gt;', '>').replace('&lt;', '<').replace('&#39;', "'")
             date = calendar.timegm(email.utils.parsedate(tw['created_at']))
@@ -314,6 +316,7 @@ class FeedUpdater(object):
                 if post['type'] == 'status' and 'message' not in post:
                     # We're not interested in status updates with no content.
                     continue
+
                 try:
                     upd = Update.objects.get(feed=feed, origin_id=post['id'])
                     found = True
@@ -326,6 +329,7 @@ class FeedUpdater(object):
 
                 utc = dateutil.parser.parse(post['created_time'])
                 upd.created_time = utc.astimezone(dateutil.tz.tzlocal())
+                upd.origin_data = json.dumps(post, ensure_ascii=False)
                 self._set_field_with_len(upd, 'text', post.get('message', None))
                 upd.share_link = post.get('link', None)
                 upd.picture = post.get('picture', None)

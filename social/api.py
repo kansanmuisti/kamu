@@ -20,6 +20,7 @@ class UpdateResource(ModelResource):
     class Meta:
         queryset = Update.objects.all().order_by('-created_time')
         resource_name = 'social_update'
+        excludes = ['origin_data']
         filtering = {
             'feed': ALL_WITH_RELATIONS,
             'type': ALL,

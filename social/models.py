@@ -58,6 +58,7 @@ class Update(models.Model):
     sub_type = models.CharField(max_length=30, null=True)
     created_time = models.DateTimeField(db_index=True)
     origin_id = models.CharField(max_length=50, db_index=True)
+    origin_data = models.TextField(null=True, help_text="Raw dump of all data from source")
     interest = models.PositiveIntegerField(null=True)
     picture = models.URLField(null=True, max_length=350)
     share_link = models.URLField(null=True, max_length=350)
