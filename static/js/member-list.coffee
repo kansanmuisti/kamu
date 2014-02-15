@@ -40,10 +40,10 @@ class MemberListSortButtonsView extends Backbone.View
 class MemberListItemView extends Backbone.View
     template: _.template $("#member-list-item-template").html()
 
-    render: (current_stat) ->
+    render: (sort_order) ->
         attr = @model.toJSON()
         attr.party = @model.get_party(party_list)
-        attr.current_stat = current_stat
+        attr.sort_order = sort_order.id
         html = $($.trim(@template attr))
         @$el = html
         @el = @$el[0]
@@ -129,10 +129,10 @@ class MemberListView extends Backbone.View
         @sort_order = 1
         @sort_func = (a, b) =>
             @sort_order*@_raw_sort_func(a, b)
-
+        
         # Just to have something in the sort order,
         # this will be overriden once we get data
-        @set_sort_order "name"
+        @set_sort_order "recent_activity"
 
     _calculate_rankings: (collection) =>
         activity_scores = (model.attributes.stats['recent_activity'] \
@@ -157,7 +157,7 @@ class MemberListView extends Backbone.View
                 @sort_order = 1
 
             @_raw_sort_func = func
-            @_filter_listing()
+            @_filter_listing(field)
 
             @trigger 'sort-changed', f, ascending
 
@@ -181,10 +181,18 @@ class MemberListView extends Backbone.View
             result = (@children[hit.ref] for hit in @index.search query)
 
         result.sort @sort_func
-
+        
         for hit in result
-            hit.render()
+            hit.render(@active_sort_field.id)
             @$el.append hit.el
+        
+        css_class = switch @active_sort_field.id
+            when 'attendance' then '.attendance-statistics-bar'
+            when 'party_agree' then '.party-agree-statistics-bar'
+            when 'party_agree' then '.party-agree-statistics-bar'
+            else '.activity-ranking-statistics-bar'
+        
+        @$el.find(css_class).show()
 
     _process_children: (collection) =>
         @spinner_el.spin false
