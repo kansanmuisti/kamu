@@ -219,6 +219,9 @@ class FeedUpdater(object):
             if not len(tweets):
                 break
             for tw in tweets:
+                # FIXME: Skip retweets for now
+                if 'retweeted_status' in tw:
+                    continue
                 try:
                     mp_tw = Update.objects.get(feed=feed, origin_id=tw['id'])
                 except Update.DoesNotExist:
