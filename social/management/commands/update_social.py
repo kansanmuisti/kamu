@@ -26,6 +26,6 @@ class Command(BaseCommand):
             requests_cache.install_cache("update-social")
         self.updater = FeedUpdater(self.logger)
         update_opts = {}
-        if 'type' in options:
+        if 'type' in options and options['type']:
             update_opts['type'] = options['type'].split(',')
         self.updater.update_feeds(**update_opts)
