@@ -136,6 +136,7 @@ class Statement(models.Model):
         unique_together = (('item', 'index'),)
 
     def get_html_text(self):
+        """Text of statement with linefeeds doubled. For use with django |linebreaks"""
         return mark_safe(linebreaks(self.text.replace('\n', '\n\n')))
 
     def __unicode__(self):

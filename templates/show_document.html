@@ -68,7 +68,7 @@
                             {% if statement.type == 'speaker' %} ({% trans "speaker" %}) {% endif %}
                             </h5>
                             <div class="proposal-statement-text">
-                                {{statement.text|linebreaks}}
+                                {{statement.get_html_text|linebreaks}}
                             </div>
                         </div>
                     </div>
