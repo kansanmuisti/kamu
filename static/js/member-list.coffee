@@ -166,7 +166,7 @@ class MemberListView extends Backbone.View
         model = col.models[i]
         a = model.attributes
         hint = a.given_names.split(" ", 1)[0].split('-', 1)[0].toLowerCase() + " " +
-            model.get_party(party_list).get('full_name').toLowerCase()[..2] + " " +
+            model.get_party(party_list).get('name').toLowerCase()[..2] + " " +
             a.district_name.toLowerCase()[..3]
 
         #$el = @search_el
@@ -208,8 +208,8 @@ class MemberListView extends Backbone.View
             @index.add
                 id: model.id
                 name: model.get('name')
-                party: party.get('full_name')
-                party_short: party.get('name')
+                party: party.get('name')
+                party_short: party.get('abbreviation')
                 district: model.attributes.district_name
                 titles: titles.join(', ')
 

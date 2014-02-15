@@ -251,7 +251,7 @@ def show_member_votes(request, member):
 
 def show_member_basic(request, member):
     pa_list = PartyAssociation.objects.filter(member=member).order_by('begin')
-    pa_list = pa_list.select_related('party__full_name')
+    pa_list = pa_list.select_related('party__name')
     da_list = DistrictAssociation.objects.filter(member=member).order_by('begin')
     member.pa_list = pa_list
     member.da_list = da_list

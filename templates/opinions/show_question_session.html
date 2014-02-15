@@ -212,7 +212,7 @@ This page shows how the MPs voted compared to their stated opinions.
 
 <h3 style='margin-top: 16px'>{% trans "Parties" %}</h3>
 {% for party in parties %}
-<div id="stats_{{ party.name }}" class="opinions_party_stats">
+<div id="stats_{{ party.abbreviation }}" class="opinions_party_stats">
   <div class="logo"><img src="{% thumbnail party.logo 32x32 %}" /></div>
   <div class="stats opt_stats">
     <div class="text"></div>

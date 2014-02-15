@@ -1,10 +1,10 @@
 class @Party extends Backbone.Tastypie.Model
     url: ->
-        URL_CONFIG['api_party'] + @get('name') + '/'
+        URL_CONFIG['api_party'] + @get('abbreviation') + '/'
     get_logo_thumbnail: (width, height) ->
         return @url() + "logo/?dim=#{width}x#{height}"
     get_view_url: ->
-        URL_CONFIG['party_details'].replace 'PARTY', @get('name')
+        URL_CONFIG['party_details'].replace 'PARTY', @get('abbreviation')
 
     toJSON: (options) ->
         ret = super options

@@ -8,7 +8,7 @@
     <header>
     <div class="plenary-item-content">
 {% if item.statement %}
-        <span class="mp-name">{{ item.statement.member.get_print_name }}</span> ({{ item.statement.member.party.name }}): "{{ item.statement.text|truncatewords:50 }}"
+        <span class="mp-name">{{ item.statement.member.get_print_name }}</span> ({{ item.statement.member.party.abbreviation }}): "{{ item.statement.text|truncatewords:50 }}"
 {% endif %}
 {% if item.nr_statements %}
 {% blocktrans count nr_statements=item.nr_statements %}

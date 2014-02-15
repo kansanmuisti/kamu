@@ -15,21 +15,21 @@
   <li class="opinion_navigation_category">
     <ul>
 {% if opinions_page == 'summary' or opinions_page == 'party' %}
-    {% for party in parties|dictsort:"full_name" %}
-      <li><a href="{% url 'opinions.views.show_party_congruences' party=party.name %}">
-        {{ party.full_name }}
+    {% for party in parties|dictsort:"name" %}
+      <li><a href="{% url 'opinions.views.show_party_congruences' party=party.abbreviation %}">
+        {{ party.name }}
       </a></li>
     {% endfor %}
 {% else %}
     {% for party in parties %}
       <li>
-        <a href="{% url 'opinions.views.show_party_congruences' party=party.name %}"
+        <a href="{% url 'opinions.views.show_party_congruences' party=party.abbreviation %}"
            {% if question %}
            title="{% trans "Promise percentage for this question" %}: {{party.congruence_avg|congruence_to_percentage}}%"
            {% else %}
            title="{% trans "Overall promise percentage" %}: {{party.congruence_avg|congruence_to_percentage}}%"
            {% endif %}>
-          {{ party.full_name }}
+          {{ party.name }}
           <div class="promise_percentage_bar" style="width: {{party.congruence_avg|congruence_to_percentage}}%; background-color: {{party.congruence_avg|congruence_to_color}};"></div>
         </a>
 

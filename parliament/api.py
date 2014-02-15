@@ -174,13 +174,13 @@ class PartyResource(KamuResource):
         self.method_check(request, allowed=['get'])
         self.is_authenticated(request)
         try:
-            party = Party.objects.get(name=kwargs.get('name'))
+            party = Party.objects.get(abbreviation=kwargs.get('abbreviation'))
         except Party.DoesNotExist:
             return http.HttpNotFound()
         return api_get_thumbnail(request, party.logo, self.SUPPORTED_LOGO_DIMS)
 
     def prepend_urls(self):
-        url_base = r"^(?P<resource_name>%s)/(?P<name>[\w\d_.-]+)/" % self._meta.resource_name
+        url_base = r"^(?P<resource_name>%s)/(?P<abbreviation>[\w\d_.-]+)/" % self._meta.resource_name
         return [
             url(url_base + '$', self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
             url(url_base + 'logo/$', self.wrap_view('get_logo'), name="api_get_logo"),
@@ -192,12 +192,12 @@ class PartyResource(KamuResource):
     def get_party(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
         self.is_authenticated(request)
-        if 'name' in kwargs:
-            party_name = kwargs.get('name')
+        if 'abbreviation' in kwargs:
+            party_abbreviation = kwargs.get('abbreviation')
             try:
-                party = Party.objects.get(name=party_name)
+                party = Party.objects.get(abbreviation=party_abbreviation)
             except Party.DoesNotExist:
-                raise Http404("Party '%s' does not exist" % party_name)
+                raise Http404("Party '%s' does not exist" % party_abbreviation)
         else:
             party_id = kwargs.get('pk')
             try:
@@ -232,7 +232,7 @@ class PartyResource(KamuResource):
 
     class Meta:
         queryset = Party.objects.all()
-        detail_uri_name = 'name'
+        detail_uri_name = 'abbreviation'
 
 class CommitteeResource(KamuResource):
     class Meta:
@@ -560,7 +560,7 @@ class KeywordResource(KamuResource):
             d = {}
             d['members'] = [{'id': mp.id, 'name': mp.get_print_name(), 'url_name': mp.url_name, 'score': mp.score} for mp in mp_list[0:10]]
             #FIXME: Party data should be averaged to per-MP values
-            d['parties'] = [{'id': party.id, 'name': party.name, 'full_name': party.full_name, 'score': party.score} for party in party_list]
+            d['parties'] = [{'id': party.id, 'abbreviation': party.abbreviation, 'name': party.name, 'score': party.score} for party in party_list]
             bundle.data['most_active'] = d
 
         return bundle

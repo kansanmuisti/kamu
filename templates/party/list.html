@@ -27,20 +27,20 @@
         <div class="mplist-grid__content">
             <div class="header">
                 <h4 class="name">
-                    <a href="<%= view_url %>"><%= full_name %></a>
+                    <a href="<%= view_url %>"><%= name %></a>
                 </h4>
             </div>
             <div class="row">
                 <div class="col-sm-5">
                     <div class="portrait">
                         <a href="<%= view_url %>">
-                            <img src="/api/v1/party/<%= name %>/logo?dim=128x128">
+                            <img src="/api/v1/party/<%= abbreviation %>/logo?dim=128x128">
                         </a>
                     </div>
                 </div>
                 <div class="col-sm-10">
                     <div class="stats">
-                        <div class="location"><%= name %></div>
+                        <div class="location"><%= abbreviation %></div>
                         <span class="badge  badge--terms  js-tooltip" title="{% trans "Number of MPs" %}">
                             <i class="typcn  typcn-user  typcn--medium"></i><%= member_count %></span>
                         <% if (minister_count) { %>
