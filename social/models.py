@@ -69,6 +69,12 @@ class Update(models.Model):
         unique_together = (('feed', 'origin_id'),)
         ordering = ['-created_time']
 
+    def get_origin_url(self):
+        if self.feed.type == 'FB':
+            return 'https://www.facebook.com/%s' % self.origin_id
+        elif self.feed.type == 'TW':
+            return 'https://www.twitter.com/%s/status/%s' % (self.feed.account_name, self.origin_id)
+
     def render_html(self):
         if self.feed.type == 'TW':
             tt = TwitterText(self.text)

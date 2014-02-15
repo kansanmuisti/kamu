@@ -395,14 +395,11 @@ class MemberActivityResource(KamuResource):
         d = {}
         target = {}
         acttype = item.type.pk
-        if acttype == 'FB':
+        if acttype in ('FB', 'TW'):
             o = item.socialupdateactivity.update
             res_class = UpdateResource
             target['text'] = o.text
-        elif acttype == 'TW':
-            o = item.socialupdateactivity.update
-            res_class = UpdateResource
-            target['text'] = o.text
+            target['url'] = o.get_origin_url()
         elif acttype == 'ST':
             o = item.statementactivity.statement
             res_class = StatementResource
