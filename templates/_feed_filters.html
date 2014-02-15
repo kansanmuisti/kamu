@@ -1,11 +1,17 @@
 <div class="btn-toolbar feed-filter-buttons">
-{% for name, items in feed_filters.items %}
+{% for name, items in feed_filters.buttons.items %}
     <div class="btn-group {{name}}">
     {% for f in items %}
-        <button class="btn btn-default" data-feed-type="{{f.type}}" title="{{f.name}}" type="button">
+        <button class="btn btn-default filter-button" data-feed-type="{{f.type}}" title="{{f.name}}" type="button">
             <i class="typcn typcn-{{f.icon}} typcn--medium"></i>
         </button>
     {% endfor %}
     </div>
-{% endfor %}
+    {% endfor %}
+  
+  <div class="btn-group">
+    <button class="btn btn-default disable-filters" type="button">
+        {{feed_filters.disable_button.label}}
+    </button>
+  </div>
 </div>
