@@ -143,6 +143,18 @@ class FeedUpdater(object):
 
     @transaction.commit_on_success
     def process_tweet(self, tweet):
+        if 'delete' in tweet:
+            tweet_id = tweet['delete']['status']['id']
+            try:
+                tw_obj = Update.objects.get(feed__type="TW", origin_id=tweet_id)
+                tw_obj.delete()
+            except Update.DoesNotExist:
+                pass
+            return
+
+        if not 'text' in tweet:
+            return
+
         self.logger.debug("incoming tweet with id %s" % tweet['id'])
         try:
             tw_obj = Update.objects.get(feed__type="TW", origin_id=tweet['id'])
