@@ -43,6 +43,12 @@ FEED_ACTIONS = {{feed_actions_json|safe}};
             {% thumbnail member.photo "128x192" as photo %}
             <img class="portrait" src="{{photo.url}}" />
             {% endthumbnail %}
+            <div class="badges">
+                <div class="terms">
+                    <div class="contents">
+                        <span>{% trans "Terms" %}</span>3</div>
+                </div>
+            </div>
             <div class="roles">
                 <ul class="minister">
                     {% for ma in member.posts.ministry %}

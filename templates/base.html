@@ -6,7 +6,8 @@
     <title>{% block title %}{% endblock %} | KAMU</title>
     <meta property="og:site_name" content="Kansan muisti" />
     <meta property="fb:app_id" content="107387482616243" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="shortcut icon" href="{% static 'images/icons/favicon.ico' %}" />
 
     <!-- fonts-->
@@ -70,6 +71,7 @@
     <script type="text/javascript" src="{% static "js/vendor/jquery.spin.js" %}"></script>
     <script type="text/javascript" src="{% static "bootstrap/js/tab.js" %}"></script>
     <script type="text/javascript" src="{% static "bootstrap/js/tooltip.js" %}"></script>
+    <script type="text/javascript" src="{% static "bootstrap/js/collapse.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/lunr.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/jquery.oninput.js" %}"></script>
     {% endcompress %}
@@ -103,13 +105,13 @@
         </div>
     </header>
     <div class="main-nav-container">
-        <nav class="container main-nav navbar navbar-default">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+        <nav class="container main-nav navbar navbar-default" role="navigation">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#j-navbar-responsive">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <div class="navbar-collapse collapse">
+            <div class="navbar-collapse collapse" id="j-navbar-responsive">
                 <ul class="nav navbar-nav">
                     <li><a href="/">Etusivu</a></li>
                     <li><a href="{% url 'parliament.views.list_topics' %}">Aiheet</a></li>

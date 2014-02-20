@@ -479,11 +479,14 @@ main.member-list {
             .clearfix();
         }
         .name {
-            margin: 0 48px 10px 0;
+            display: block;
+            margin: 0 42px 10px 0;
             padding: 0;
             line-height: 20px;
-            border-bottom: 1px solid @gray-lighter;
+            border-bottom: 1px solid @gray-lighter; 
+            overflow: hidden;
             a {
+                white-space: nowrap;
                 text-transform: none;
                 color: @electric;
                 font-size: @font-size-large;
