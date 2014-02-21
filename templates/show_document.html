@@ -32,10 +32,11 @@
                           >{{kw.name}}</a>
                         {% endfor %}
                     </div>
-                </div>
-                <div class="document-author">
+                  <div class="document-author">
                       <span class="author-label">{% trans "Author" %}</span>
                       <a href="{{doc.author.get_absolute_url}}">{{doc.author.get_print_name}}</a>
+                      <a href="{{doc.author.get_absolute_url}}"><img src="/static/images/portrait.png"></a>
+                  </div>
                 </div>
                 <ol class="proposal-progress">
                     {% for stage in doc.processing_stages %}

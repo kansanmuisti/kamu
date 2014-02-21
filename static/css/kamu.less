@@ -56,7 +56,7 @@ h1 {
 
 h2 {
     font-size: @font-size-extra-large;
-    line-height: 40px;
+    //line-height: 40px;
 }
 
 h3 {
@@ -160,7 +160,7 @@ fieldset {
   border: 1px solid lighten(@electric,20%);
 }
 
-.progress-bar-info {
+.progress-bar-info, .progress-bar {
     background-color: @electric;
 }
 
@@ -198,6 +198,9 @@ fieldset {
             float: left;
             padding: 3px;
             background-color: @gray-light;
+        &:hover {
+          background-color: @mint;  
+        }
         }
         .source {
             float: left;
@@ -439,7 +442,7 @@ main.home-page {
         h3 {
             font-family: @font-family-base;
             font-weight: 900;
-            color: #333333;
+            color: @gray-dark;
             line-height: 20px;
         }
         > header {
@@ -456,6 +459,66 @@ main.home-page {
             }
         }
     }
+}
+
+.highlight-image {
+  width: 50%;
+  display: none;
+}
+
+.highlight-statement-content {
+  padding: 5px;
+  position: relative;
+  background: #E6E6E6;
+  a {
+    text-decoration: none;
+    color: @gray-dark; 
+  }
+}
+
+.highlight-source-link {
+  a {
+    color: @gray;
+    text-decoration: none;
+    font-size: @font-size-small;
+    &:hover {
+      color: @gray-dark;
+    }
+  }
+}
+
+.side-opposition .highlight-statement-content {
+  background: #dad7f0 ;
+  margin-right: 0;
+}
+
+.side-government .highlight-statement-content {
+  background: #c6e9e7;
+  margin-left: 0;
+}
+
+.side-neutral .highlight-statement-content {
+  background: #E6E6E6;
+  margin-left: 0;
+}
+
+.issue-highlight {
+  display: block;
+  background: @pine;
+  padding: 12px 12px 6px 12px;
+  border-radius: 3px;
+  text-transform: uppercase; 
+  font-family: @brand-font-family;
+  color: #FFFFFF;
+}
+
+.section-link {
+  margin-top: 24px;
+  border-top: 2px solid @pine;
+  a {
+    color: @pine;
+    float: right;
+  }
 }
 
 .most-active-members {
@@ -658,6 +721,8 @@ main.member-details {
             line-height: 30px;
             text-transform: none;
             margin-top: 0;
+            word-wrap: break-word;
+            overflow: hidden;
         }
         .portrait {
             padding: 5px;
@@ -1024,6 +1089,7 @@ main.party-list {
             border-bottom: 1px @gray-lighter solid;
         }
         .labels {
+            width: 50%;
             margin: 0;
             float: right;
         }
@@ -1035,9 +1101,19 @@ main.party-list {
     }
 
     .document-author {
-        float: right;
+        .clearfix();
+        width: 50%;
         .author-label {
             font-weight: 700;
+        }
+        img {
+          float: left;
+          margin-right: 10px;
+          border: 3px solid @gray-light;
+          height: 80px;
+          &:hover {
+            border-color: @mint;
+          }
         }
     }
 }
@@ -1050,13 +1126,31 @@ main.party-list {
 }
 
 .similar-documents {
-    li a {
-        color: @text-color;
-        font-weight: 700;
-    }
+  background: #1C6262;
+  color: #e6e6e6;
 }
 
-/* TT */
+.similar-documents h4 {
+  color: #8ED4CF;
+}
+
+.similar-documents ol {
+  margin-left: 0;
+  padding-left: 0;
+  list-style: none;
+  border-bottom: 2px solid #8ED4CF;
+}
+
+.similar-documents ol li {
+  border-top: 2px solid #8ED4CF;
+  padding: 6px 0;
+}
+
+.similar-documents li a {
+  color: #e6e6e6;
+  font-weight: 700;
+}
+
 
 .proposal-statement-content {
   padding: 12px;
