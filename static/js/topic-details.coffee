@@ -90,9 +90,8 @@ class TopicFeedView extends Backbone.View
     set_filter: (types) ->
         fname = 'activity__type__in'
         if not types
-            delete @collection.filters[fname]
-        else
-            @collection.filters[fname] = types.join(',')
+            types = @supported_types
+        @collection.filters[fname] = types.join(',')
         @collection.fetch reset: true
 
 SUPPORTED_TYPES = ['IN', 'GB', 'WQ']
