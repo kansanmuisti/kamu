@@ -58,7 +58,9 @@ class FeaturedTopicListView extends Backbone.View
             tab.pane_el.removeClass "active"
         new_tab.pane_el.addClass "active"
         new_tab.header_el.addClass "active"
-
+        
+        pane = @$el.find('.tab-pane')
+        pane.empty().spin()
         @active_tab = new_tab
         if new_tab.list.length
             @render_tags()

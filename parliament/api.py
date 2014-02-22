@@ -228,6 +228,14 @@ class PartyResource(KamuResource):
         # This tests for whether the member has a ministryassociation that has not ended. (Begin condition
         # is due to to the null testing on right side of left join)
         bundle.data['minister_count'] = party.member_set.filter(ministryassociation__isnull=False,ministryassociation__end__isnull=True).count()
+
+        opts = {'since': bundle.request.GET.get('activity_days', 'term')}
+        activity_start = parse_date_from_opts(opts, 'since')
+        stats = bundle.request.GET.get('stats', '')
+        if stats.lower() in ('1', 'true'):
+            bundle.data['stats'] = {}
+            bundle.data['stats']['recent_activity'] = bundle.obj.get_activity_score(activity_start)
+
         return bundle
 
     class Meta:
@@ -562,8 +570,8 @@ class KeywordResource(KamuResource):
             #FIXME: Party data should be averaged to per-MP values
             d['parties'] = [{'id': party.id, 'name': party.name, 'full_name': party.full_name, 'score': party.score} for party in party_list]
             bundle.data['most_active'] = d
-
-        return bundle
+	
+	return bundle
 
     def apply_sorting(self, obj_list, options=None):
         obj_list = super(KeywordResource, self).apply_sorting(obj_list, options)

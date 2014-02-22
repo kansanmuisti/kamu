@@ -34,6 +34,15 @@ class Party(UpdatableModel):
 
         return self.party_association_objects
 
+    def get_activity_score(self, begin=None, end=None):
+        MemberActivity = models.get_model('parliament', 'MemberActivity')
+        activities = MemberActivity.objects.filter(member__party=self)
+        if begin: activities = activities.filter(time__gte=begin)
+        if end: activities = activities.filter(time__lte=end)
+        number_of_members = self.member_set.count()
+        activity = activities.aggregate(act=models.Sum('type__weight'))['act']
+        return activity/number_of_members
+
     def get_activity_count_set(self, **kwargs):
         activity_objects = self.get_activity_objects()
         return activity_objects.counts_for_party(self.id, **kwargs)
