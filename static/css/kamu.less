@@ -62,6 +62,7 @@ h2 {
 h3 {
     &.section-header {
         color: @pine;
+        margin-top: 0;
     }
     font-size: @font-size-large;
     line-height: 40px;
@@ -467,7 +468,7 @@ main.home-page {
 }
 
 .highlight-statement-content {
-  padding: 5px;
+  padding: 10px;
   position: relative;
   background: #E6E6E6;
   a {
@@ -477,6 +478,11 @@ main.home-page {
 }
 
 .highlight-source-link {
+  line-height: 1;
+  padding: 10px;
+  .highlight-source-session {
+    font-weight: 700;
+  }
   a {
     color: @gray;
     text-decoration: none;
@@ -718,11 +724,14 @@ main.member-details {
         background-color: @gray-lighter;
         h1 {
             font-size: @font-size-extra-extra-large;
-            line-height: 30px;
+            line-height: 35px;
             text-transform: none;
             margin-top: 0;
             word-wrap: break-word;
             overflow: hidden;
+        }
+        img {
+          margin-bottom: 10px;
         }
         .portrait {
             padding: 5px;
