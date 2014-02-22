@@ -19,13 +19,24 @@ class PartyListView extends Backbone.View
             el: el
         party_view.render().el
 
+    _calculate_stats: ->
+        stats = (m) -> m.attributes.stats
+        max_score = _.max @collection.models.map (m) ->
+            stats(m).recent_activity
+        for m in @collection.models
+            s = stats m
+            s.activity_ranking = s.recent_activity/max_score
+    
     initialize: ->
         @collection = new PartyList
         @collection.comparator = (model) -> return -model.get('member_count')
         # This gets triggered when the content has fetch'ed from JSON
+        @listenTo @collection, "reset", @_calculate_stats
         @listenTo @collection, "reset", @render
         @collection.fetch
             reset: true
+            data:
+                stats: true
 
 class @PartyListItemView extends Backbone.View
     template: _.template $('#party-list-item-template').html()
