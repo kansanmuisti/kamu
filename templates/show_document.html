@@ -32,11 +32,15 @@
                           >{{kw.name}}</a>
                         {% endfor %}
                     </div>
-                  <div class="document-author">
-                      <span class="author-label">{% trans "Author" %}</span>
-                      <a href="{{doc.author.get_absolute_url}}">{{doc.author.get_print_name}}</a>
-                      <a href="{{doc.author.get_absolute_url}}"><img src="/static/images/portrait.png"></a>
-                  </div>
+                    {% if doc.author %}
+                    <div class="document-author">
+                        <span class="author-label">{% trans "Author" %}</span>
+                        <a href="{{doc.author.get_absolute_url}}">{{doc.author.get_print_name}}</a>
+                        {% thumbnail doc.author.photo "64x96" as tn %}
+                        <a href="{{doc.author.get_absolute_url}}"><img src="{{tn.url}}"></a>
+                        {% endthumbnail %}
+                    </div>
+                    {% endif %}
                 </div>
                 <ol class="proposal-progress">
                     {% for stage in doc.processing_stages %}
