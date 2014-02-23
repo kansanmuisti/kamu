@@ -654,7 +654,7 @@ msgstr "Järjestä"
 
 #: templates/member/list.html:63
 msgid "district"
-msgstr ""
+msgstr "vaalipiiri"
 
 #: templates/member/list.html:107 templates/member/list.html.py:117
 #, fuzzy
@@ -973,7 +973,7 @@ msgstr "Pinnalla tällä vaalikaudella"
 
 #: templates/party/details.html:58
 msgid "Recent actions of party MPs"
-msgstr ""
+msgstr "Puolueen jäsenten viimeisimmät aktiviteetit"
 
 #: templates/party/list.html:14
 #, fuzzy
@@ -996,7 +996,7 @@ msgstr "pistettä"
 
 #: templates/party/mps.html:59
 msgid "List of MPs for this party"
-msgstr ""
+msgstr "Puolueen kansanedustajat"
 
 #: templates/registration/activate.html:3
 #: templates/registration/activation_complete.html:3
