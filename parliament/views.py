@@ -547,7 +547,7 @@ def show_party(request, name):
     kw_act = _get_party_activity_kws(party)
     kw_act_json = simplejson.dumps(kw_act, ensure_ascii=False)
 
-    governing = list(GoverningParty.objects.filter(party=party).order_by('-begin'))
+    governing = [gp for gp in GoverningParty.objects.filter(party=party).order_by('-begin') if gp.end != None]
 
     args = dict(party=party,
                 party_json=party_json,

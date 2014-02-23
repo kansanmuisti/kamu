@@ -25,13 +25,13 @@
                 <img src="/api/v1/party/{{ party.name }}/logo?dim=128x128">
                 <div class="roles">
                     <ul class="minister">
-                        {% if party.is_governing %}<li>Hallituksessa</li>
-                        {% else %}<li>Oppositiossa</li>{% endif %}
+                        {% if party.is_governing %}<li>{% trans "Governing" %}</li>
+                        {% else %}<li>{% trans "In opposition" %}</li>{% endif %}
                     </ul>
                     <ul class="committee">
-                {% for term in governing %}
-                        <li>{% trans "Government" %} {{term.begin.year}}-{{term.end.year}}</li>
-                {% endfor %}
+                    {% for term in governing %}
+                        <li>{% trans "In government" %} {{term.begin.year}}-{{term.end.year}}</li>
+                    {% endfor %}
                     </ul>
                 </div>
             </div>
