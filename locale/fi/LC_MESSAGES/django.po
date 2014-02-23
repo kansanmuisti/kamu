@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-23 21:55+0200\n"
+"POT-Creation-Date: 2014-02-23 23:12+0200\n"
 "PO-Revision-Date: 2011-04-14 12:54+0300\n"
 "Last-Translator: Juha Yrjölä <juha.yrjola@iki.fi>\n"
 "Language-Team: Finnish <info@kansanmuisti.fi>\n"
@@ -169,7 +169,7 @@ msgid "government bill was introduced"
 msgstr "hallitus esitti"
 
 #: parliament/views.py:98 templates/member/list.html:75
-#: templates/party/details.html:54 templates/party/list.html:54
+#: templates/party/details.html:56 templates/party/list.html:54
 msgid "Activity"
 msgstr "Aktiivisuus"
 
@@ -195,9 +195,8 @@ msgid "Age"
 msgstr "Ikä"
 
 #: parliament/views.py:222
-#, fuzzy
 msgid "All activities"
-msgstr "Eniten aktiivisuutta"
+msgstr "Kaikki aktiviteetti"
 
 #: parliament/models/document.py:35
 msgid "MP law proposal"
@@ -307,24 +306,36 @@ msgstr ""
 msgid "Other"
 msgstr "Muu"
 
-#: parliament/models/member.py:360
+#: parliament/models/member.py:365
 msgid "Chairman"
 msgstr "puheenjohtaja"
 
-#: parliament/models/member.py:361
+#: parliament/models/member.py:366
 msgid "Deputy Chairman"
 msgstr "varapuheenjohtaja"
 
-#: parliament/models/member.py:362
+#: parliament/models/member.py:367
 msgctxt "organisation"
 msgid "Member"
 msgstr "jäsen"
 
-#: parliament/models/member.py:363
+#: parliament/models/member.py:368
 msgid "Deputy Member"
 msgstr "varajäsen"
 
-#: parliament/models/member.py:385
+#: parliament/models/member.py:390
+msgid "Speaker"
+msgstr "Puhemies"
+
+#: parliament/models/member.py:391
+msgid "1st Deputy Speaker"
+msgstr "Ensimmäinen varapuhemies"
+
+#: parliament/models/member.py:392
+msgid "2st Deputy Speaker"
+msgstr "Toinen varapuhemies"
+
+#: parliament/models/member.py:410
 msgid "Minister"
 msgstr "ministeri"
 
@@ -407,7 +418,6 @@ msgid "All time active"
 msgstr "Eniten aktiivisuutta"
 
 #: templates/list_topics.html:94
-#, python-brace-format
 msgid "Most active #{perc}"
 msgstr "Aktiivisin #{perc}"
 
@@ -628,15 +638,14 @@ msgid "Electoral districts"
 msgstr "Vaalipiirit"
 
 #: templates/member/details.html:49
-#, fuzzy
 msgid "Terms"
-msgstr "Vaalikausi"
+msgstr "Kaudet"
 
 #: templates/member/details.html:92
 msgid "Input text"
 msgstr "Syötä teksti"
 
-#: templates/member/details.html:96 templates/party/details.html:62
+#: templates/member/details.html:96 templates/party/details.html:64
 msgid "Filter"
 msgstr "Rajaus"
 
@@ -657,7 +666,6 @@ msgid "district"
 msgstr "vaalipiiri"
 
 #: templates/member/list.html:107 templates/member/list.html.py:117
-#, fuzzy
 msgid "minister"
 msgstr "ministeri"
 
@@ -966,27 +974,35 @@ msgstr[1] ""
 "\n"
 "%(nr_votes)s äänestystä\n"
 
-#: templates/party/details.html:50
-#, fuzzy
-msgid "Active in these topics"
-msgstr "Pinnalla tällä vaalikaudella"
+#: templates/party/details.html:28
+msgid "Governing"
+msgstr "Hallituksessa"
 
-#: templates/party/details.html:58
+#: templates/party/details.html:29
+msgid "In opposition"
+msgstr "Oppositiossa"
+
+#: templates/party/details.html:33
+msgid "In government"
+msgstr "Hallituksessa"
+
+#: templates/party/details.html:52
+msgid "Active in these topics"
+msgstr "Aktiivinen näissä aiheissa"
+
+#: templates/party/details.html:60
 msgid "Recent actions of party MPs"
 msgstr "Puolueen jäsenten viimeisimmät aktiviteetit"
 
 #: templates/party/list.html:14
-#, fuzzy
 msgid "Government"
 msgstr "Hallitus"
 
 #: templates/party/list.html:45
-#, fuzzy
 msgid "Number of MPs"
 msgstr "Kansanedustajien lukumäärä"
 
 #: templates/party/list.html:48
-#, fuzzy
 msgid "Number of ministers"
 msgstr "Ministerien lukumäärä"
 
@@ -1031,9 +1047,8 @@ msgid ""
 msgstr ""
 
 #: templates/registration/activation_email_subject.txt:1
-#, fuzzy
 msgid "Activate your account"
-msgstr "Luo uusi tunnus"
+msgstr "Aktivoi tunnuksesi"
 
 #: templates/registration/login.html:3 templates/registration/login.html:42
 msgid "Login"
