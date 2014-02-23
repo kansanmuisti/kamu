@@ -3,6 +3,7 @@ import re
 import os
 import logging
 import difflib
+import pprint
 from lxml import etree, html
 from django import db
 from django.conf import settings
@@ -103,6 +104,9 @@ ROLE_MAP = {
     'vj': 'deputy-m',
     'pj': 'chairman',
     'vpj': 'deputy-cm',
+    'Pm': 'Speaker',
+    'I Vpm': '1st-deputy-speaker',
+    'II Vpm': '2nd-deputy-speaker'
 }
 
 def parse_date(s, is_begin):
@@ -128,9 +132,11 @@ def parse_committee_membership(line):
     m = re.match(r'([^0-9(]+)(.+)', line)
     assert m, "Committee name not found: %s" % line
     committee_name = m.groups()[0].strip()
-    # Only record committees (valiokunta)
-    if not committee_name.endswith('valiokunta'):
-        return None
+    
+    if not committee_name.endswith('valiokunta'): 
+        if committee_name.lower() != u'puhemiehistö':
+            #print "Skipping " + committee_name
+            return None
 
     info['committee'] = committee_name
     date_line = m.groups()[1].strip()
@@ -145,7 +151,11 @@ def parse_committee_membership(line):
         m_line = m_line.strip()
         m = re.match(r'\((\w+)\) ([0-9. I-]+)', m_line)
         if m:
-            role = ROLE_MAP[m.groups()[0]]
+            # Skip if role is not defined by ROLE_MAP
+            try:
+                role = ROLE_MAP[m.groups()[0]]
+            except KeyError, e:
+                continue
             m_line = m.groups()[1]
         else:
             role = 'member'
@@ -157,6 +167,9 @@ def parse_committee_membership(line):
         else:
             d['end'] = None
         # Exclude cases where both begin and end are None
+        if not d['begin'] and not d['end']:
+            continue
+        # Exclude cases where begin and end are the same
         if not d['begin'] and not d['end']:
             continue
         else:
@@ -422,6 +435,7 @@ class MemberImporter(Importer):
                     return o
 
         ca_list = list(CommitteeAssociation.objects.filter(member=mp))
+        sa_list = list(SpeakerAssociation.objects.filter(member=mp))
         ma_list = list(MinistryAssociation.objects.filter(member=mp))
 
         # Memberships
@@ -447,14 +461,25 @@ class MemberImporter(Importer):
                         role = None
                     args = dict(committee_id=committee.id, begin=period['begin'], end=period['end'], 
                                 role=role)
-                    ca_obj = find_with_attrs(ca_list, args)
-                    if not ca_obj:
-                        args['member'] = mp
-                        ca_obj = CommitteeAssociation(**args)
-                        self.logger.debug("New committee association: %s" % ca_obj)
-                        ca_obj.save()
+                    # Differentiate between committee and speaker associations
+                    if post['committee'] == u'Puhemiehistö':
+                        sa_obj = find_with_attrs(sa_list, args)
+                        if not sa_obj:
+                            args['member'] = mp
+                            sa_obj = SpeakerAssociation(**args)
+                            self.logger.debug("New speaker association: %s" % sa_obj)
+                            sa_obj.save()
+                        else:
+                            sa_obj.found = True
                     else:
-                        ca_obj.found = True
+                        ca_obj = find_with_attrs(ca_list, args)
+                        if not ca_obj:
+                            args['member'] = mp
+                            ca_obj = CommitteeAssociation(**args)
+                            self.logger.debug("New committee association: %s" % ca_obj)
+                            ca_obj.save()
+                        else:
+                            ca_obj.found = True
             else:
                 args = dict(label=post['label'], role=post['role'], begin=post['begin'], end=post['end'])
                 ma_obj = find_with_attrs(ma_list, args)
@@ -598,7 +623,11 @@ class MemberImporter(Importer):
             mp_id = int(m.groups()[0])
 
             mp_info = self.fetch_member(mp_id)
-            self.save_member(mp_info)
+            if 'dry_run' in args and not args['dry_run']:
+                self.save_member(mp_info)
+            elif 'dry_run' in args and args['dry_run']:
+                pprint.pprint(mp_info)
+
         self.logger.info('Imported {0} MPs'.format(len(link_list)))
 
 

@@ -176,6 +176,11 @@ class Member(UpdatableModel):
             qs = qs.current()
         posts['ministry'] = list(qs)
 
+        qs = self.speakerassociation_set
+        if current:
+            qs = qs.current()
+        posts['speaker'] = list(qs)
+
         return posts
 
     @models.permalink
@@ -379,6 +384,26 @@ class CommitteeAssociation(models.Model):
         else:
             role = self.role
         return u"%s %s in %s from %s to %s" % (self.member, role, self.committee, self.begin, self.end)
+
+class SpeakerAssociation(models.Model):
+    ROLE_CHOICES = (
+        ('speaker', _('Speaker')),
+        ('1st-deputy', _('1st Deputy Speaker')),
+        ('2nd-deputy', _('2st Deputy Speaker')),
+    )
+    member = models.ForeignKey(Member, db_index=True)
+    begin = models.DateField()
+    end = models.DateField(db_index=True, blank=True, null=True)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, help_text='Speaker position')
+
+    objects = AssociationManager()
+
+    class Meta:
+        app_label = 'parliament'
+
+    def __unicode__(self):
+        return u"%s (%s) from %s to %s" % (self.member, self.role, self.begin, self.end)
+
 
 class MinistryAssociation(models.Model):
     ROLE_CHOICES = (
