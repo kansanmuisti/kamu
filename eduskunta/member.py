@@ -435,6 +435,7 @@ class MemberImporter(Importer):
                     return o
 
         ca_list = list(CommitteeAssociation.objects.filter(member=mp))
+        sa_list = list(SpeakerAssociation.objects.filter(member=mp))
         ma_list = list(MinistryAssociation.objects.filter(member=mp))
 
         # Memberships
@@ -460,14 +461,25 @@ class MemberImporter(Importer):
                         role = None
                     args = dict(committee_id=committee.id, begin=period['begin'], end=period['end'], 
                                 role=role)
-                    ca_obj = find_with_attrs(ca_list, args)
-                    if not ca_obj:
-                        args['member'] = mp
-                        ca_obj = CommitteeAssociation(**args)
-                        self.logger.debug("New committee association: %s" % ca_obj)
-                        ca_obj.save()
+                    # Differentiate between committee and speaker associations
+                    if post['committee'] == u'Puhemiehistö':
+                        sa_obj = find_with_attrs(sa_list, args)
+                        if not sa_obj:
+                            args['member'] = mp
+                            sa_obj = SpeakerAssociation(**args)
+                            self.logger.debug("New speaker association: %s" % sa_obj)
+                            sa_obj.save()
+                        else:
+                            sa_obj.found = True
                     else:
-                        ca_obj.found = True
+                        ca_obj = find_with_attrs(ca_list, args)
+                        if not ca_obj:
+                            args['member'] = mp
+                            ca_obj = CommitteeAssociation(**args)
+                            self.logger.debug("New committee association: %s" % ca_obj)
+                            ca_obj.save()
+                        else:
+                            ca_obj.found = True
             else:
                 args = dict(label=post['label'], role=post['role'], begin=post['begin'], end=post['end'])
                 ma_obj = find_with_attrs(ma_list, args)
