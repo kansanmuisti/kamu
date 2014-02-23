@@ -402,8 +402,8 @@ msgstr "Eniten aktiivisuutta"
 
 #: templates/list_topics.html:94
 #, python-format
-msgid "Most active #{perc}%%"
-msgstr "Aktiivisin #{perc}%%"
+msgid "Most active #{perc}%"
+msgstr "Aktiivisin #{perc}%"
 
 #: templates/new_session.html:3 templates/show_document.html:56
 msgid "Plenary session"
