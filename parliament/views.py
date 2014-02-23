@@ -547,12 +547,15 @@ def show_party(request, name):
     kw_act = _get_party_activity_kws(party)
     kw_act_json = simplejson.dumps(kw_act, ensure_ascii=False)
 
+    governing = list(GoverningParty.objects.filter(party=party).order_by('-begin'))
+
     args = dict(party=party,
                 party_json=party_json,
                 party_activity_end_date=party_activity_end_date,
                 feed_actions_json=simplejson.dumps(make_feed_actions(), ensure_ascii=False),
                 feed_filters = make_feed_filters(actor=True),
-                keyword_activity = kw_act_json)
+                keyword_activity = kw_act_json,
+                governing=governing)
 
     return render_to_response("party/details.html", args,
         context_instance=RequestContext(request))
