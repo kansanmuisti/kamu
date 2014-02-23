@@ -555,6 +555,8 @@ class KeywordResource(KamuResource):
             bundle.data['last_date'] = obj.last_date
         bundle.data['slug'] = obj.get_slug()
 
+        latest_term = Term.objects.latest()
+
         if bundle.request.GET.get('related', '').lower() in ('true', '1'):
             qs = Keyword.objects.filter(document__in=bundle.obj.document_set.all()).distinct()
             qs = qs.annotate(count=models.Count('document')).filter(document__in=bundle.obj.document_set.all())
@@ -563,14 +565,28 @@ class KeywordResource(KamuResource):
             bundle.data['related'] = related_kws
 
         if bundle.request.GET.get('most_active', '').lower() in ('true', '1'):
-            mp_list = Member.objects.filter(memberactivity__keywordactivity__keyword=bundle.obj).annotate(score=models.Sum('memberactivity__type__weight')).order_by('-score')
-            party_list = Party.objects.filter(member__memberactivity__keywordactivity__keyword=bundle.obj).annotate(score=models.Sum('member__memberactivity__type__weight')).order_by('-score')
+            mp_list = Member.objects.active_in_term(latest_term).filter(memberactivity__keywordactivity__keyword=bundle.obj)
+            mp_list = mp_list.distinct().annotate(score=models.Sum('memberactivity__type__weight')).order_by('-score')
+            party_dict = {}
+            for p in Party.objects.all():
+                p.mp_count = p.member_set.active_in_term(latest_term).count()
+                p.score = 0
+                party_dict[p.id] = p
+            for mp in mp_list:
+                party_dict[mp.party_id].score += mp.score
+            for p in party_dict.values():
+                if p.mp_count:
+                    p.score /= p.mp_count
+                else:
+                    assert p.score == 0
+
+            party_list = party_dict.values()
+            party_list = sorted(party_list, key=lambda p: p.score, reverse=True)
             d = {}
             d['members'] = [{'id': mp.id, 'name': mp.get_print_name(), 'url_name': mp.url_name, 'score': mp.score} for mp in mp_list[0:10]]
-            #FIXME: Party data should be averaged to per-MP values
             d['parties'] = [{'id': party.id, 'name': party.name, 'full_name': party.full_name, 'score': party.score} for party in party_list]
             bundle.data['most_active'] = d
-        
+
         return bundle
 
     def apply_sorting(self, obj_list, options=None):
