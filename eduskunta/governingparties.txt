@@ -1,4 +1,9 @@
 #party	#govname	#startdate	#endingdate
+sd	Lipponen II	1999-04-15	2003-04-17
+kok	Lipponen II	1999-04-15	2003-04-17
+r	Lipponen II	1999-04-15	2003-04-17
+vas	Lipponen II	1999-04-15	2003-04-17
+vihr	Lipponen II	1999-04-15	2002-05-31
 kesk	Vanhanen	2003-06-24	2007-04-19
 sd	Vanhanen	2003-06-24	2007-04-19
 r	Vanhanen	2003-06-24	2007-04-19
