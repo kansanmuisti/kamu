@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load compress static thumbnail i18n %}
 
-{% block title %}{{ party.full_name }}{% endblock %}
+{% block title %}{{ party.name }}{% endblock %}
 
 {% block head %}
 <!-- Initial models -->
@@ -23,9 +23,9 @@
                 <div class="col-md-15">
                     <div class="party-card">
                         <div class="page-heading">
-                            <h1>{{ party.full_name}}</h1>
+                            <h1>{{ party.name}}</h1>
                         </div>
-                        <img src="/api/v1/party/{{ party.name }}/logo?dim=128x128">
+                        <img src="/api/v1/party/{{ party.abbreviation }}/logo?dim=128x128">
                     </div>
                 </div>
                 <!-- PARTY NAVI BOX -->
@@ -39,7 +39,7 @@
                                 <a href="#">Valiokuntapaikat</a>
                             </li>
                             <li>
-                                <a href="{% url 'parliament.views.list_party_mps' name=party.name %}">Kansanedustajat</a>
+                                <a href="{% url 'parliament.views.list_party_mps' name=party.abbreviation %}">Kansanedustajat</a>
                             </li>
                             <li>
                                 <a href="#">Tilastot</a>

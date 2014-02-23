@@ -204,7 +204,7 @@ def compare_question_and_session(request, question, vote_map, term, vote_by_mp=N
             d['answer'] = ans_by_mp[mp.id]
         d['id'] = mp.url_name
         d['url'] = mp.get_absolute_url()
-        d['party'] = party.name
+        d['party'] = party.abbreviation
         d['party_logo'] = party.thumbnail.absolute_url
         d['portrait'] = tn.absolute_url
         if vote_by_mp and mp.pk in vote_by_mp:
@@ -213,9 +213,9 @@ def compare_question_and_session(request, question, vote_map, term, vote_by_mp=N
 
     party_json = {}
     for party in parties:
-        d = {'name': party.full_name}
+        d = {'name': party.name}
         d['logo'] = party.thumbnail.absolute_url
-        party_json[party.name] = d
+        party_json[party.abbreviation] = d
 
     args = dict(question=question, options=options,
                 parties=parties)
@@ -566,7 +566,7 @@ def update_coalition(request):
 
     stats = {}
     for party in gov_list:
-        stats[party.name] = round(cab_stats.cohesion(party=party.name), 4)
+        stats[party.abbreviation] = round(cab_stats.cohesion(party=party.abbreviation), 4)
 
     d = {"party_stats": stats,
         "question_stats": question_stats,
@@ -594,7 +594,7 @@ def display_coalition(request):
 
     for party in party_list:
         tn = DjangoThumbnail(party.logo, (38, 38))
-        d = {'id': party.name, 'name': party.full_name}
+        d = {'id': party.abbreviation, 'name': party.name}
         d['logo'] = tn.absolute_url
         d['logo_dim'] = dict(x=tn.width(), y=tn.height())
         mp_list = Member.objects.active_in_term(term)

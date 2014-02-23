@@ -11,8 +11,8 @@
     <td class="votechart">
     <dl class="votechart">
 	{% for party in option.party_shares %}
-      <dt>{{party.name}}</dt>
-      <dd><span style="height: {{party.share}}%"><em>{{party.share}}%<br />{{party.name}}</em></span></dt>
+      <dt>{{party.abbreviation}}</dt>
+      <dd><span style="height: {{party.share}}%"><em>{{party.share}}%<br />{{party.abbreviation}}</em></span></dt>
     {% endfor %}
     </dl>
   </td>

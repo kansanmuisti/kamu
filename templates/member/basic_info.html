@@ -42,7 +42,7 @@
 <label>{% trans "Party associations" %}</label>
 <dl>
 {% for pa in member.partyassociation_set.all %}
-<dt>{{ pa.party.full_name }}</dt>
+<dt>{{ pa.party.name }}</dt>
 <dd>{{ pa.begin|date }}&#8211;{% if pa.end %}{{ pa.end|date }}{% endif %}</dd>
 {% endfor %}
 </dl>
