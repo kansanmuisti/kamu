@@ -36,7 +36,9 @@ class Command(BaseCommand):
         make_option('--full', action='store_true', dest='full',
                     default=False, help='Perform a full update'),
         make_option('--cache', action='store', dest='cache',
-                    help='Use cache in supplied director')
+                    help='Use cache in supplied director'),
+        make_option('--dry-run', action='store_true', dest='dry_run',
+                    help='Do not commit any changes to the database')
     )
 
     def handle(self, *args, **options):
@@ -61,6 +63,7 @@ class Command(BaseCommand):
             if options['single']:
                 args['single'] = options['single']
             args['full'] = options['full']
+            args['dry_run'] = options['dry_run']
             importer.import_members(**args)
         if options['seat']:
             importer = SeatImporter(http_fetcher=http)

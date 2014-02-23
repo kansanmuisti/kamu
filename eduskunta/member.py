@@ -3,6 +3,7 @@ import re
 import os
 import logging
 import difflib
+import pprint
 from lxml import etree, html
 from django import db
 from django.conf import settings
@@ -598,7 +599,11 @@ class MemberImporter(Importer):
             mp_id = int(m.groups()[0])
 
             mp_info = self.fetch_member(mp_id)
-            self.save_member(mp_info)
+            if 'dry_run' in args and not args['dry_run']:
+                self.save_member(mp_info)
+            elif 'dry_run' in args and args['dry_run']:
+                pprint.pprint(mp_info)
+
         self.logger.info('Imported {0} MPs'.format(len(link_list)))
 
 
