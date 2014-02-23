@@ -570,8 +570,8 @@ class KeywordResource(KamuResource):
             #FIXME: Party data should be averaged to per-MP values
             d['parties'] = [{'id': party.id, 'name': party.name, 'full_name': party.full_name, 'score': party.score} for party in party_list]
             bundle.data['most_active'] = d
-	
-	return bundle
+        
+        return bundle
 
     def apply_sorting(self, obj_list, options=None):
         obj_list = super(KeywordResource, self).apply_sorting(obj_list, options)
