@@ -29,7 +29,9 @@
                         {% else %}<li>Oppositiossa</li>{% endif %}
                     </ul>
                     <ul class="committee">
-                        <li>Hallitus 2007-2011</li>
+                {% for term in governing %}
+                        <li>{% trans "Government" %} {{term.begin.year}}-{{term.end.year}}</li>
+                {% endfor %}
                     </ul>
                 </div>
             </div>
