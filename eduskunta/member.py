@@ -104,6 +104,9 @@ ROLE_MAP = {
     'vj': 'deputy-m',
     'pj': 'chairman',
     'vpj': 'deputy-cm',
+    'Pm': 'Speaker',
+    'I Vpm': '1st-deputy-speaker',
+    'II Vpm': '2nd-deputy-speaker'
 }
 
 def parse_date(s, is_begin):
@@ -129,9 +132,11 @@ def parse_committee_membership(line):
     m = re.match(r'([^0-9(]+)(.+)', line)
     assert m, "Committee name not found: %s" % line
     committee_name = m.groups()[0].strip()
-    # Only record committees (valiokunta)
-    if not committee_name.endswith('valiokunta'):
-        return None
+    
+    if not committee_name.endswith('valiokunta'): 
+        if committee_name.lower() != u'puhemiehistö':
+            #print "Skipping " + committee_name
+            return None
 
     info['committee'] = committee_name
     date_line = m.groups()[1].strip()
@@ -146,7 +151,11 @@ def parse_committee_membership(line):
         m_line = m_line.strip()
         m = re.match(r'\((\w+)\) ([0-9. I-]+)', m_line)
         if m:
-            role = ROLE_MAP[m.groups()[0]]
+            # Skip if role is not defined by ROLE_MAP
+            try:
+                role = ROLE_MAP[m.groups()[0]]
+            except KeyError, e:
+                continue
             m_line = m.groups()[1]
         else:
             role = 'member'
@@ -158,6 +167,9 @@ def parse_committee_membership(line):
         else:
             d['end'] = None
         # Exclude cases where both begin and end are None
+        if not d['begin'] and not d['end']:
+            continue
+        # Exclude cases where begin and end are the same
         if not d['begin'] and not d['end']:
             continue
         else:
