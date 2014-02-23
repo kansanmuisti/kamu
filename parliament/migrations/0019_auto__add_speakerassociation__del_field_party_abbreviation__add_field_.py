@@ -18,27 +18,9 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('parliament', ['SpeakerAssociation'])
 
-        # Deleting field 'Party.abbreviation'
-        db.delete_column(u'parliament_party', 'abbreviation')
-
-        # Adding field 'Party.name'
-        db.add_column(u'parliament_party', 'name',
-                      self.gf('django.db.models.fields.CharField')(default='', unique=True, max_length=10, db_index=True),
-                      keep_default=False)
-
-
     def backwards(self, orm):
         # Deleting model 'SpeakerAssociation'
         db.delete_table(u'parliament_speakerassociation')
-
-        # Adding field 'Party.abbreviation'
-        db.add_column(u'parliament_party', 'abbreviation',
-                      self.gf('django.db.models.fields.CharField')(default='', max_length=10, unique=True, db_index=True),
-                      keep_default=False)
-
-        # Deleting field 'Party.name'
-        db.delete_column(u'parliament_party', 'name')
-
 
     models = {
         'parliament.committee': {

@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 import re
 import os
-import logging
 import difflib
 import pprint
-from lxml import etree, html
+from lxml import html
 from django import db
 from django.conf import settings
 from parliament.models.member import *
@@ -104,9 +103,12 @@ ROLE_MAP = {
     'vj': 'deputy-m',
     'pj': 'chairman',
     'vpj': 'deputy-cm',
-    'Pm': 'Speaker',
-    'I Vpm': '1st-deputy-speaker',
-    'II Vpm': '2nd-deputy-speaker'
+}
+
+SPEAKER_ROLE_MAP = {
+    'pm': 'speaker',
+    'i vpm': '1st-deputy-speaker',
+    'ii vpm': '2nd-deputy-speaker'
 }
 
 def parse_date(s, is_begin):
@@ -132,13 +134,18 @@ def parse_committee_membership(line):
     m = re.match(r'([^0-9(]+)(.+)', line)
     assert m, "Committee name not found: %s" % line
     committee_name = m.groups()[0].strip()
-    
-    if not committee_name.endswith('valiokunta'): 
-        if committee_name.lower() != u'puhemiehistö':
-            #print "Skipping " + committee_name
-            return None
 
-    info['committee'] = committee_name
+    if committee_name.endswith('valiokunta'):
+        org_type = 'committee'
+    elif committee_name.lower() == u'puhemiehistö':
+        org_type = 'speakers'
+        print line
+    else:
+        #print "Skipping " + committee_name
+        return None
+
+    info['org_name'] = committee_name
+    info['org_type'] = org_type
     date_line = m.groups()[1].strip()
     # Check if there are historical committee names in the string.
     m = re.match(r'\([^)]+\d+[^)]+\) ', date_line)
@@ -149,13 +156,17 @@ def parse_committee_membership(line):
     for m_line in date_line.split(','):
         d = {}
         m_line = m_line.strip()
-        m = re.match(r'\((\w+)\) ([0-9. I-]+)', m_line)
+        m = re.match(r'\(([ \w]+)\) ([0-9. I-]+)', m_line)
         if m:
-            # Skip if role is not defined by ROLE_MAP
-            try:
-                role = ROLE_MAP[m.groups()[0]]
-            except KeyError, e:
-                continue
+            role_str = m.groups()[0]
+            if org_type == 'speakers':
+                role_str = role_str.lower()
+                # Skip electee speaker roles
+                if role_str == u'ipm':
+                    continue
+                role = SPEAKER_ROLE_MAP[role_str]
+            else:
+                role = ROLE_MAP[role_str]
             m_line = m.groups()[1]
         else:
             role = 'member'
@@ -210,7 +221,6 @@ class MemberImporter(Importer):
             if not line or line[0] == '#':
                 continue
             m = re.match(r'(\d+)\s+([\w \-]+)$', line, re.U)
-            nr = m.groups()[0]
             district = m.groups()[1]
             try:
                 d = District.objects.get(name=district)
@@ -440,17 +450,23 @@ class MemberImporter(Importer):
 
         # Memberships
         for post in mp_info['posts']:
-            if 'committee' in post:
-                try:
-                    committee = Committee.objects.get(name=post['committee'])
-                    # Update current committees
-                    if committee.current == False and post['current'] == True:
-                        committee.current = True
+            org_type = post.get('org_type', None)
+            if org_type in ('committee', 'speakers'):
+                if org_type == 'committee':
+                    try:
+                        committee = Committee.objects.get(name=post['org_name'])
+                        # Update current committees
+                        if committee.current == False and post['current'] == True:
+                            committee.current = True
+                            committee.save()
+                    except Committee.DoesNotExist:
+                        committee = Committee(name=post['org_name'],
+                                            current=post['current'])
                         committee.save()
-                except Committee.DoesNotExist:
-                    committee = Committee(name=post['committee'],
-                                          current=post['current'])
-                    committee.save()
+                else:
+                    from pprint import pprint
+                    pprint(post)
+
                 # There can be several periods
                 periods = post['periods']
                 for period in periods:
@@ -459,19 +475,10 @@ class MemberImporter(Importer):
                         role = period['role']
                     else:
                         role = None
-                    args = dict(committee_id=committee.id, begin=period['begin'], end=period['end'], 
-                                role=role)
+                    args = dict(begin=period['begin'], end=period['end'], role=role)
                     # Differentiate between committee and speaker associations
-                    if post['committee'] == u'Puhemiehistö':
-                        sa_obj = find_with_attrs(sa_list, args)
-                        if not sa_obj:
-                            args['member'] = mp
-                            sa_obj = SpeakerAssociation(**args)
-                            self.logger.debug("New speaker association: %s" % sa_obj)
-                            sa_obj.save()
-                        else:
-                            sa_obj.found = True
-                    else:
+                    if org_type == 'committee':
+                        args['committee_id'] = committee.id
                         ca_obj = find_with_attrs(ca_list, args)
                         if not ca_obj:
                             args['member'] = mp
@@ -480,6 +487,15 @@ class MemberImporter(Importer):
                             ca_obj.save()
                         else:
                             ca_obj.found = True
+                    else:
+                        sa_obj = find_with_attrs(sa_list, args)
+                        if not sa_obj:
+                            args['member'] = mp
+                            sa_obj = SpeakerAssociation(**args)
+                            self.logger.debug("New speaker association: %s" % sa_obj)
+                            sa_obj.save()
+                        else:
+                            sa_obj.found = True
             else:
                 args = dict(label=post['label'], role=post['role'], begin=post['begin'], end=post['end'])
                 ma_obj = find_with_attrs(ma_list, args)
@@ -491,7 +507,7 @@ class MemberImporter(Importer):
                 else:
                     ma_obj.found = True
 
-        for obj in ca_list + ma_list:
+        for obj in ca_list + ma_list + sa_list:
             if not getattr(obj, 'found', False):
                 self.logger.warning("Deleting removed association: %s" % obj)
                 obj.delete()
@@ -507,7 +523,7 @@ class MemberImporter(Importer):
                     if a_el:
                         try:
                             membership_desc = a_el[0].text + a_el[0].tail
-                        except TypeError, e:
+                        except TypeError:
                             self.logger.warning("Problem parsing item")
                             self.logger.warning(html.tostring(el))
                     else:
@@ -605,7 +621,7 @@ class MemberImporter(Importer):
             given_names = given_names.strip()
             last_name = last_name.strip()
             try:
-                mp = Member.objects.get(surname=last_name, given_names=given_names)
+                Member.objects.get(surname=last_name, given_names=given_names)
                 if not self.replace:
                     continue
             except Member.DoesNotExist:
