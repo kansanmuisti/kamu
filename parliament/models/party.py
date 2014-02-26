@@ -13,6 +13,12 @@ class Party(UpdatableModel):
     vis_color = models.CharField(max_length=15, blank=True, null=True)
 
     def is_governing(self, date=None):
+        """Returns a boolean status indicating if the party has been or is
+        currently participating in the government
+
+        date: date for which the method should return governing status, if not set,
+              returns the status for current date
+        """
         qs = Q(end=None)
         if date is not None:
             qs |= Q(end__gte=date)

@@ -31,10 +31,12 @@ class AssociationManager(models.Manager):
 
 class MemberManager(models.Manager):
     def current(self):
+        """Currently serving MPs"""
         mem_list = PartyAssociation.objects.filter(end__isnull=True).distinct().values_list('member', flat=True)
         return self.filter(id__in=mem_list)
 
     def active_in(self, date_begin, date_end):
+        """MPs that have served between date_begin and date_end"""
         query = Q()
         if date_end:
             query &= Q(begin__lte=date_end)
@@ -42,8 +44,10 @@ class MemberManager(models.Manager):
         mem_list = PartyAssociation.objects.filter(query).distinct().values_list('member', flat=True)
         return self.filter(id__in=mem_list)
     def active_in_term(self, term):
+        """MPs that have served during given parliamentary Term"""
         return self.active_in(term.begin, term.end)
     def in_district(self, district, date_begin, date_end):
+        """MPs from given District that have served between date_begin and date_end"""
         query = Q(name = district)
         if date_end:
             query &= Q(begin__lte=date_end)
