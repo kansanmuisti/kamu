@@ -431,9 +431,9 @@ class MemberActivityManager(models.Manager):
     def during(self, begin, end):
         query = Q()
         if end:
-            query &= Q(date__lte=end)
+            query &= Q(time__lte=end)
         if begin:
-            query &= Q(date__gte=begin)
+            query &= Q(time__gte=begin)
         return self.filter(query)
     def during_term(self, term):
         return self.during(term.begin, term.end)
