@@ -582,9 +582,10 @@ class KeywordResource(KamuResource):
 
             party_list = party_dict.values()
             party_list = sorted(party_list, key=lambda p: p.score, reverse=True)
+
             d = {}
             d['members'] = [{'id': mp.id, 'name': mp.get_print_name(), 'url_name': mp.url_name, 'score': mp.score} for mp in mp_list[0:10]]
-            d['parties'] = [{'id': party.id, 'name': party.name, 'full_name': party.full_name, 'score': party.score} for party in party_list]
+            d['parties'] = [{'id': party.id, 'name': party.name, 'full_name': party.full_name, 'score': party.score, 'mp_count': party.mp_count} for party in party_list]
             bundle.data['most_active'] = d
 
         return bundle
