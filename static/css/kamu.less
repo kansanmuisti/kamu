@@ -527,10 +527,85 @@ main.home-page {
   }
 }
 
+
+ul.highlight-parties {
+
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      .clearfix();
+
+    > li {
+      list-style: none;
+      border-bottom: 1px solid @gray-light;
+    }
+
+    .party-highlight {
+        .clearfix();
+        margin: 0;
+        //padding: 6px;
+        
+        .party-thumbnail {
+          padding-top: 10px;
+          .make-md-column(4);
+          .make-xs-column(2);
+          //float: left;
+          //border: 2px solid @lemon;
+        }
+        .party-activity {
+          padding-top: 10px;
+          .make-md-column(11);
+          .make-xs-column(4);
+          height: 100%;
+          .thumbnail-activity {
+            background:@gray-lighter;
+            height: 14px;
+            max-width: 480px;
+          }
+          .thumbnail-activity-bar {
+            float: left;
+            height: 100%;
+            background: @electric;
+          } 
+        }
+        .party-issues {
+          //margin-left: 58px;
+          padding: 10px;
+          .make-md-column(11);
+          .make-xs-column(9);
+          height: 100%;
+          ul {
+            
+            list-style: none;
+            //height: 14px;
+            line-height: 14px;
+          }
+          li {
+            display: inline-block;
+            //background: @gray;
+            font-size: 11px;
+            background: @gray-lighter;
+            border-left: 3px solid @gray;
+            border-radius: 1px;
+            padding: 0 6px 0 4px;
+            margin: 0 6px 3px 0;
+            a, a:hover {
+              color: @pine;
+              text-decoration: none;
+            }
+            &:last-child {
+             //border: 0;
+            }
+          }
+        }
+    }
+}
+
+
 .most-active-members {
     .clearfix();
-  
-    ol {
+    //background: @mint;
+    ol, ul {
         counter-reset:li;
         margin: 0;
         padding: 0;
@@ -543,14 +618,13 @@ main.home-page {
         margin-bottom: 10px;
         .make-xs-column(3);
     }
-    .member-thumbnail {
+    .member-thumbnail, li a {
       .clearfix();
       position: relative;
-      border: 3px solid @gray-light;
+      //border: 3px solid @gray-light;
       &:hover {
-        border-color: @mint;
-      }
-    img {    
+        //border-color: @mint;
+      }   
     }
     .thumbnail-activity {
       background:@gray-lighter;
@@ -564,7 +638,7 @@ main.home-page {
     }  
   }
   
-}
+
 .most-active-parties {
     ol {
         counter-reset:li;
@@ -833,6 +907,11 @@ main.member-details {
             }
         }
     }
+  
+  .activity-feed > .activity-item .feed-content {
+    margin-left: 16px;
+
+}
 }
 
 

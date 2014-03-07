@@ -82,116 +82,21 @@ $ ->
 </div>
 <div class="row">
 
-<!--- Party Highlights Layout --->
-<div class="col-xs-15 col-md-5"> 
-  <div class="box">
-    <img src="/static/images/etu-puolueet-300x200.png" class="highlight-image">
-    <h3 class="section-header">Puolueiden aktiivisuus</h3>
-                          <ul class="highlight-parties">
-                          <li title="Vihreä liitto">
-                            
-                                <div class="party-thumbnail">
-                                    <a href="/party/vihr/">
-                                        <img src="/api/v1/party/vihr/logo/?dim=32x32">
-                                    </a>
-                                    <div class="thumbnail-activity">
-                                      <div class="thumbnail-activity-bar" style="width: 45%"></div>
-                                    </div>
-                                </div>
-                          </li>
-                          <li title="Sosialidemokraatit">
-                          <a href="/party/sd/">
-                              <div class="party-thumbnail">
-                                  <img src="/api/v1/party/sd/logo/?dim=32x32">
-                                                                    <div class="thumbnail-activity">
-                                      <div class="thumbnail-activity-bar" style="width: 45%"></div>
-                                    </div>
-                              </div>
-                          </a>
-                      </li>
-                          <li title="Kokoomus">
-                          <a href="/party/kok/">
-                              <div class="party-thumbnail">
-                                  <img src="/api/v1/party/kok/logo/?dim=32x32">
-                                                                    <div class="thumbnail-activity">
-                                      <div class="thumbnail-activity-bar" style="width: 45%"></div>
-                                    </div>
-                              </div>
-                          </a>
-                      </li>
-                      <li title="Kristillisdemokraatit">
-                          <a href="/party/kd/">
-                              <div class="party-thumbnail">
-                                  <img src="/api/v1/party/kd/logo/?dim=32x32">                                    <div class="thumbnail-activity">
-                                      <div class="thumbnail-activity-bar" style="width: 45%"></div>
-                                    </div>
-                              </div>
-                          </a>
-                      </li>
-                      <li title="Vasemmistoliitto">
-                          <a href="/party/vas/">
-                              <div class="party-thumbnail">
-                                  <img src="/api/v1/party/vas/logo/?dim=32x32">
-                                                                    <div class="thumbnail-activity">
-                                      <div class="thumbnail-activity-bar" style="width: 45%"></div>
-                                    </div>
-                              </div>
-                          </a>
-                      </li>
-                        <li title="Keskusta">
-                          <a href="/party/kesk/">
-                              <div class="party-thumbnail">
-                                  <img src="/api/v1/party/kesk/logo/?dim=32x32">
-                                                                    <div class="thumbnail-activity">
-                                      <div class="thumbnail-activity-bar" style="width: 45%"></div>
-                                    </div>
-                              </div>
-                          </a>
-                      </li>
-                        <li title="Muutos 2011">
-                          <a href="/party/m11/">
-                              <div class="party-thumbnail">
-                                  <img src="/api/v1/party/m11/logo/?dim=32x32">
-                                                                    <div class="thumbnail-activity">
-                                      <div class="thumbnail-activity-bar" style="width: 45%"></div>
-                                    </div>
-                              </div>
-                          </a>
-                      </li>
-                        <li title="Perussuomalaiset">
-                          <a href="/party/ps/">
-                              <div class="party-thumbnail">
-                                  <img src="/api/v1/party/ps/logo/?dim=32x32">
-                                                                    <div class="thumbnail-activity">
-                                      <div class="thumbnail-activity-bar" style="width: 45%"></div>
-                                    </div>
-                              </div>
-                          </a>
-                      </li>
-                        <li title="RKP">
-                          <a href="/party/r/">
-                              <div class="party-thumbnail">
-                                  <img src="/api/v1/party/r/logo/?dim=32x32">
-                                                                    <div class="thumbnail-activity">
-                                      <div class="thumbnail-activity-bar" style="width: 45%"></div>
-                                    </div>
-                              </div>
-                          </a>
-                      </li>
-                      </ul>
-  </div>
-</div>
+<div class="main-col col-md-10 col-md-push-5">
 <!--- MP Highlights Layout --->
-<div class="col-xs-15 col-md-10"> 
+<div class=""> 
   <div class="box">
             <section class="most-active-members">
                 <img src="/static/images/etu-mpt-300x200.png" class="highlight-image">
                 <h3 class="section-header">Aktiivisimmat kansanedustajat</h3>
                 <ul>{% for mp in most_active_mps %}
                     <li>
-                {% thumbnail mp.photo '70x105' as tn %}
+                {% thumbnail mp.photo '128x192' as tn %}
                         <a href="{{mp.get_absolute_url}}"><img class="mp-thumbnail" src="{{tn.url}}"></a>
                 {% endthumbnail %}
+                      <div class="thumbnail-activity">
+                        <div class="thumbnail-activity-bar" style="width: 45%"></div>
+                      </div>
                 {% endfor %}
                     </li>
                 </ul>
@@ -200,7 +105,7 @@ $ ->
 </div>
   
 <!--- Issues Highlights Layout --->
-<div class="col-xs-15 col-md-10">
+<div class="">
   <div class="box">
     <img src="/static/images/etu-asiat-300x200.png" class="highlight-image">
     <h3 class="section-header">Ajankohtaisia aiheita</h3>
@@ -286,16 +191,219 @@ $ ->
     </div>
   </div>
 </div>
-  
+
+  </div> <!-- end main-col -->
+
+  <div class="col-side col-md-5 col-md-pull-10">
+<!--- Party Highlights Layout --->
+<div class=""> 
+  <div class="box">
+    <img src="/static/images/etu-puolueet-300x200.png" class="highlight-image">
+    <h3 class="section-header">Puolueiden aktiivisuus</h3>
+    <ul class="highlight-parties">
+      <li title="kok">
+        <div class="party-highlight">
+          <div class="party-thumbnail">
+            <a href="/party/kok/">
+              <img src="/api/v1/party/kok/logo/?dim=48x48">
+            </a>
+          </div>
+          <div class="party-activity">
+            <div class="thumbnail-activity">
+              <div class="thumbnail-activity-bar" style="width: 45%"></div>
+            </div>
+          </div>
+          <div class="party-issues">
+            <ul class="party-activity--issues">
+              <li><a href="/topic/308-tupakkatuotteet/">Tupakkatuotteet</a></li>
+              <li><a href="/topic/308-tupakkatuotteet/">Hätäkeskukset</a></li>
+              <li><a href="/topic/308-tupakkatuotteet/">Rekisteröity parisuhde</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+      <li title="sd">
+        <div class="party-highlight">
+          <div class="party-thumbnail">
+            <a href="/party/sd/">
+              <img src="/api/v1/party/sd/logo/?dim=48x48">
+            </a>
+          </div>
+          <div class="party-activity">
+            <div class="thumbnail-activity">
+              <div class="thumbnail-activity-bar" style="width: 45%"></div>
+            </div>
+          </div>
+          <div class="party-issues">
+            <ul class="party-activity--issues">
+              <li><a href="/topic/308-tupakkatuotteet/">Tupakkatuotteet</a></li>
+              <li><a href="/topic/308-tupakkatuotteet/">Hätäkeskukset</a></li>
+              <li><a href="/topic/308-tupakkatuotteet/">Rekisteröity parisuhde</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+      <li title="vas">
+        <div class="party-highlight">
+          <div class="party-thumbnail">
+            <a href="/party/vas/">
+              <img src="/api/v1/party/vas/logo/?dim=48x48">
+            </a>
+          </div>
+          <div class="party-activity">
+            <div class="thumbnail-activity">
+              <div class="thumbnail-activity-bar" style="width: 45%"></div>
+            </div>
+          </div>
+          <div class="party-issues">
+            <ul class="party-activity--issues">
+              <li><a href="/topic/308-tupakkatuotteet/">Tupakkatuotteet</a></li>
+              <li><a href="/topic/308-tupakkatuotteet/">Hätäkeskukset</a></li>
+              <li><a href="/topic/308-tupakkatuotteet/">Rekisteröity parisuhde</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+      
+      <li title="r">
+        <div class="party-highlight">
+          <div class="party-thumbnail">
+            <a href="/party/r/">
+              <img src="/api/v1/party/r/logo/?dim=48x48">
+            </a>
+          </div>
+          <div class="party-activity">
+            <div class="thumbnail-activity">
+              <div class="thumbnail-activity-bar" style="width: 45%"></div>
+            </div>
+          </div>
+          <div class="party-issues">
+            <ul class="party-activity--issues">
+              <li><a href="/topic/308-tupakkatuotteet/">Tupakkatuotteet</a></li>
+              <li><a href="/topic/308-tupakkatuotteet/">Hätäkeskukset</a></li>
+              <li><a href="/topic/308-tupakkatuotteet/">Rekisteröity parisuhde</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+      <li title="Vihreä liitto">
+        <div class="party-highlight">
+          <div class="party-thumbnail">
+            <a href="/party/vihr/">
+              <img src="/api/v1/party/vihr/logo/?dim=48x48">
+            </a>
+          </div>
+          <div class="party-activity">
+            <div class="thumbnail-activity">
+              <div class="thumbnail-activity-bar" style="width: 45%"></div>
+            </div>
+          </div>
+          <div class="party-issues">
+            <ul class="party-activity--issues">
+              <li><a href="/topic/308-tupakkatuotteet/">Tupakkatuotteet</a></li>
+              <li><a href="/topic/308-tupakkatuotteet/">Hätäkeskukset</a></li>
+              <li><a href="/topic/308-tupakkatuotteet/">Rekisteröity parisuhde</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+      <li title="kd">
+        <div class="party-highlight">
+          <div class="party-thumbnail">
+            <a href="/party/kd/">
+              <img src="/api/v1/party/kd/logo/?dim=48x48">
+            </a>
+          </div>
+          <div class="party-activity">
+            <div class="thumbnail-activity">
+              <div class="thumbnail-activity-bar" style="width: 45%"></div>
+            </div>
+          </div>
+          <div class="party-issues">
+            <ul class="party-activity--issues">
+              <li><a href="/topic/308-tupakkatuotteet/">Tupakkatuotteet</a></li>
+              <li><a href="/topic/308-tupakkatuotteet/">Hätäkeskukset</a></li>
+              <li><a href="/topic/308-tupakkatuotteet/">Rekisteröity parisuhde</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+      
+      <li title="ps">
+        <div class="party-highlight">
+          <div class="party-thumbnail">
+            <a href="/party/ps/">
+              <img src="/api/v1/party/ps/logo/?dim=48x48">
+            </a>
+          </div>
+          <div class="party-activity">
+            <div class="thumbnail-activity">
+              <div class="thumbnail-activity-bar" style="width: 45%"></div>
+            </div>
+          </div>
+          <div class="party-issues">
+            <ul class="party-activity--issues">
+              <li><a href="/topic/308-tupakkatuotteet/">Tupakkatuotteet</a></li>
+              <li><a href="/topic/308-tupakkatuotteet/">Hätäkeskukset</a></li>
+              <li><a href="/topic/308-tupakkatuotteet/">Rekisteröity parisuhde</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+      <li title="kesk">
+        <div class="party-highlight">
+          <div class="party-thumbnail">
+            <a href="/party/kesk/">
+              <img src="/api/v1/party/kesk/logo/?dim=48x48">
+            </a>
+          </div>
+          <div class="party-activity">
+            <div class="thumbnail-activity">
+              <div class="thumbnail-activity-bar" style="width: 45%"></div>
+            </div>
+          </div>
+          <div class="party-issues">
+            <ul class="party-activity--issues">
+              <li><a href="/topic/308-tupakkatuotteet/">Tupakkatuotteet</a></li>
+              <li><a href="/topic/308-tupakkatuotteet/">Hätäkeskukset</a></li>
+              <li><a href="/topic/308-tupakkatuotteet/">Rekisteröity parisuhde</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+      <li title="m11">
+        <div class="party-highlight">
+          <div class="party-thumbnail">
+            <a href="/party/m11/">
+              <img src="/api/v1/party/m11/logo/?dim=48x48">
+            </a>
+          </div>
+          <div class="party-activity">
+            <div class="thumbnail-activity">
+              <div class="thumbnail-activity-bar" style="width: 45%"></div>
+            </div>
+          </div>
+          <div class="party-issues">
+            <ul class="party-activity--issues">
+              <li><a href="/topic/308-tupakkatuotteet/">Tupakkatuotteet</a></li>
+              <li><a href="/topic/308-tupakkatuotteet/">Hätäkeskukset</a></li>
+              <li><a href="/topic/308-tupakkatuotteet/">Rekisteröity parisuhde</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
 <!--- LATEST NEWS -->
-<div class="col-xs-15 col-md-10">
+<div class="">
         <section class="parliament-newsfeed newsfeed box">
             <h3 class="section-header">Viimeisimmät tapahtumat</h3>
             {{parl_act_html|safe}}
             <div id="parliament-showmore" class="showmore-link"><a href="#">{% trans "Show more items" %} &or;</a></div>
         </section>
-    </div>
 </div>
-
+</div> <!-- end side-col -->
+</div> <!-- end row -->
 {% endblock %}
 
