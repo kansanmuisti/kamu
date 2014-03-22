@@ -77,11 +77,5 @@ class FeaturedTopicListView extends Backbone.View
                 @select_tab tab
                 break
 
-render_tags = (el, data) ->
-
-#render_tags $("#recent_tags"), recent_topics_json
-#render_tags $("#term_tags"), term_topics_json
-#render_tags $("#alltime_tags"), all_time_topics_json
-
 featured_list_view = new FeaturedTopicListView tabs: FEATURED_TABS
 featured_list_view.render()
