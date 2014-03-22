@@ -140,13 +140,14 @@ INSTALLED_APPS = (
 
     'sorl.thumbnail',
     'compressor',
+    'south',
+    'tastypie',
+    'tastypie_swagger',
 
     'social',
     'parliament',
     'eduskunta',
     'cms',
-    'south',
-    'tastypie',
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -173,6 +174,8 @@ FACEBOOK_APP_SECRET = "Set this in settings_local"
 FACEBOOK_DOMAIN = None
 
 KAMU_OPINIONS_MAGIC_USER = 'kamu'
+
+TASTYPIE_SWAGGER_API_MODULE = 'urls.v1_api'
 
 FAST_TEST = False
 

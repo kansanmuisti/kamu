@@ -3,7 +3,6 @@
 from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
 from django.conf import settings
-from django.views.generic import TemplateView
 
 #from django.contrib import admin
 #admin.autodiscover()
@@ -55,11 +54,12 @@ for res in all_resources:
 v1_api.register(UpdateResource())
 v1_api.register(FeedResource())
 
-urlpatterns += patterns('',
-    (r'^api/', include(v1_api.urls)),
-)
+swagger_kwargs = {'tastypie_api_module': 'kamu.urls.v1_api', 'namespace': 'tastypie_swagger'}
 
-urlpatterns += patterns('', (r'^i18n/', include('django.conf.urls.i18n')))
+urlpatterns += patterns('',
+    url(r'^api/', include(v1_api.urls)),
+    url(r'^api/v1/doc/', include('tastypie_swagger.urls', namespace='tastypie_swagger'), kwargs=swagger_kwargs),
+)
 
 urlpatterns += patterns('cms.views',
     url(r'^news/vaalikoneet-avoimiksi/$', 'show_news'),

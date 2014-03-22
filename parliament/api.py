@@ -30,7 +30,7 @@ def process_api_thumbnail(bundle, image, field_name):
     if len(arr) == 2:
         # Make sure they are numbers.
         try:
-            num = [int(x) for x in arr]
+            [int(x) for x in arr]
         except ValueError:
             arr = []
     if len(arr) != 2:
@@ -58,6 +58,8 @@ class KamuResource(ModelResource):
     def __init__(self, api_name=None):
         super(KamuResource, self).__init__(api_name)
         self._meta.cache = SimpleCache(timeout=3600)
+        self._meta.list_allowed_methods = ['get']
+        self._meta.detail_allowed_methods = ['get']
 
 class TermResource(KamuResource):
     class Meta:
@@ -87,9 +89,9 @@ class DictModel(object):
         return value
 
 class ActivityScoresResource(Resource):
-    type=fields.CharField(attribute='type')
-    score=fields.FloatField(attribute='score')
-    time=fields.DateTimeField(attribute="activity_date")
+    type = fields.CharField(attribute='type')
+    score = fields.FloatField(attribute='score')
+    time = fields.DateTimeField(attribute='activity_date')
 
     def get_list(self, request, **kwargs):
         self.parent_object = kwargs.get('parent_object')
@@ -114,7 +116,7 @@ class ActivityScoresResource(Resource):
         score_list = obj.get_activity_score_set(since=since, until=until,
                                                 resolution=resolution,
                                                 **kwargs)
-        bundle=[]
+        bundle = []
         for score in score_list:
             score_obj = DictModel(score)
             bundle.append(score_obj)
@@ -283,7 +285,7 @@ class MemberResource(KamuResource):
         obj = self.get_member(request, **kwargs)
         scores_resource = ActivityScoresResource()
         uri_base = self._build_reverse_url('api_get_member_activity_scores',
-                                       kwargs=self.resource_uri_kwargs(obj))
+                                    kwargs=self.resource_uri_kwargs(obj))
 
         return scores_resource.get_list(request, parent_object=obj,
                                         parent_uri=uri_base, **kwargs)
@@ -615,4 +617,4 @@ all_resources = [TermResource, ParliamentResource, PartyResource, MemberResource
                  PlenaryVoteResource, VoteResource, FundingSourceResource, FundingResource,
                  SeatResource, MemberSeatResource, DocumentResource, MemberActivityResource,
                  KeywordResource, CommitteeResource, KeywordActivityResource, KeywordResource,
-                 ActivityScoresResource, PlenarySessionItemResource, StatementResource]
+                 PlenarySessionItemResource, StatementResource]
