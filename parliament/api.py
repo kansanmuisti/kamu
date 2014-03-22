@@ -47,7 +47,7 @@ def parse_date_from_opts(options, field_name, default=None):
 
     val = val.lower()
     if val == 'month':
-        return datetime.date.today() - relativedelta(months=2)
+        return datetime.date.today() - relativedelta(months=1)
     elif val == 'term':
         return Term.objects.latest().begin
     try:
