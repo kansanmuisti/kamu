@@ -443,7 +443,7 @@ class DocImporter(Importer):
             if doc.last_modified_time and doc.last_modified_time >= info['update_time'] and not self.replace:
                 self.logger.debug("%s %s not updated" % (info['type'], info['id']))
                 doc.save(update_fields=['last_checked_time'])
-                return
+                return None
             else:
                 self.logger.debug("%s %s updated %s (checked %s)" % (
                     info['type'], info['id'], info['update_time'], doc.last_modified_time
@@ -497,7 +497,6 @@ class DocImporter(Importer):
         # to create the proper KeywordActivity objects.
         doc._updated = True
         doc.save()
-        self.updated += 1
 
         return doc
 
@@ -570,6 +569,8 @@ class DocImporter(Importer):
                 self.logger.info("[%d/%d] document %s %s" %
                     (idx + 1, len(doc_list), info['type'], info['id']))
                 doc = self.import_doc(info)
+                if doc and getattr(doc, '_updated', False):
+                    self.updated += 1
                 db.reset_queries()
             url = fwd_link
 
