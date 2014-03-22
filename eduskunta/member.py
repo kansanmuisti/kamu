@@ -463,9 +463,6 @@ class MemberImporter(Importer):
                         committee = Committee(name=post['org_name'],
                                             current=post['current'])
                         committee.save()
-                else:
-                    from pprint import pprint
-                    pprint(post)
 
                 # There can be several periods
                 periods = post['periods']
