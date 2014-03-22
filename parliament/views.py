@@ -549,11 +549,18 @@ def show_party(request, name):
 
     governing = [gp for gp in GoverningParty.objects.filter(party=party).order_by('-begin') if gp.end != None]
 
+    feed_filters = {
+            'buttons': make_feed_filters(actor=True),
+            'disable_button': {
+                'label': _('All activities')
+            }
+        }
+
     args = dict(party=party,
                 party_json=party_json,
                 party_activity_end_date=party_activity_end_date,
                 feed_actions_json=simplejson.dumps(make_feed_actions(), ensure_ascii=False),
-                feed_filters = make_feed_filters(actor=True),
+                feed_filters=feed_filters,
                 keyword_activity = kw_act_json,
                 governing=governing)
 

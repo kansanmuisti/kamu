@@ -3,7 +3,8 @@ class @PartyActivityScoresView extends @ActivityScoresView
         super (new PartyActivityScoresList party.get 'name'), options
 
 class MemberListItemView extends Backbone.View
-    template: _.template $("#member-list-item-template").html()
+    initialize: ->
+        @template = _.template $("#member-list-item-template").html()
 
     render: ->
         template_variables = @model.toJSON()
