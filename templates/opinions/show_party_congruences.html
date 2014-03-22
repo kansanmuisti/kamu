@@ -1,10 +1,10 @@
 {% extends "opinions/opinion_base.html" %}
 {% load i18n thumbnail opinions %}
-{% block title %}{% trans "Promise statistics for" %} {{party.full_name}}{% endblock %}
+{% block title %}{% trans "Promise statistics for" %} {{party.name}}{% endblock %}
 
 {% block content %}
 
-<h1>{{ party.full_name }}</h1>
+<h1>{{ party.name }}</h1>
 <img style="float: right;" src="{% thumbnail party.logo 64x64 %}" /> 
 
 {% for q in questions %}

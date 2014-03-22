@@ -5,8 +5,8 @@ from django.utils.translation import ugettext as _
 from parliament.models.base import UpdatableModel
 
 class Party(UpdatableModel):
-    name = models.CharField(max_length=10, unique=True, db_index=True)
-    full_name = models.CharField(max_length=50)
+    abbreviation = models.CharField(max_length=10, unique=True, db_index=True)
+    name = models.CharField(max_length=50)
     logo = models.ImageField(upload_to='images/parties')
     homepage_link = models.URLField()
     # Unique color for visualizations, in the RGB #xxyyzz form
@@ -68,7 +68,7 @@ class Party(UpdatableModel):
         return act_set
 
     def __unicode__(self):
-        return self.full_name
+        return self.name
 
     class Meta:
         app_label = 'parliament'

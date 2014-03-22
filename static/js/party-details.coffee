@@ -1,6 +1,6 @@
 class @PartyActivityScoresView extends @ActivityScoresView
     initialize: (party, options) ->
-        super (new PartyActivityScoresList party.get 'name'), options
+        super (new PartyActivityScoresList party.get 'abbreviation'), options
 
 class MemberListItemView extends Backbone.View
     initialize: ->

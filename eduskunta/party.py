@@ -42,8 +42,8 @@ class PartyImporter(Importer):
                     continue
             except Party.DoesNotExist:
                 party = Party(name=name)
-            party.full_name = long_name
-            self.logger.info(u"importing party %s/%s" % (party.full_name, party.name))
+            party.name = long_name
+            self.logger.info(u"importing party %s/%s" % (party.name, party.abbreviation))
             party.logo = logo
             party.vis_color = vis_color
             party.save()

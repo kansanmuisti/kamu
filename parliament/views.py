@@ -272,7 +272,7 @@ def _get_mp_some_activity(request, offset):
         tn = get_thumbnail(mp.photo, '32x48')
         d['mp_portrait'] = tn.url
         d['mp_link'] = mp.get_absolute_url()
-        d['mp_party'] = mp.party.name
+        d['mp_party'] = mp.party.abbreviation
         some_updates.append(d)
     some_html = render_to_string('parliament/_some_update_list.html',
                                  {'some_updates': some_updates},
@@ -535,8 +535,8 @@ def show_document(request, slug):
 def list_parties(request):
     return render_to_response('party/list.html', context_instance=RequestContext(request))
 
-def show_party(request, name):
-    party = get_object_or_404(Party, name=name)
+def show_party(request, abbreviation):
+    party = get_object_or_404(Party, abbreviation=abbreviation)
 
     party_json = get_embedded_resource(request, PartyResource, party)
 
@@ -567,8 +567,8 @@ def show_party(request, name):
     return render_to_response("party/details.html", args,
         context_instance=RequestContext(request))
 
-def list_party_mps(request, name):
-    party = get_object_or_404(Party, name=name)
+def list_party_mps(request, abbreviation):
+    party = get_object_or_404(Party, abbreviation=abbreviation)
 
     party_json = get_embedded_resource(request, PartyResource, party)
     args = dict(party=party, party_json=party_json)
