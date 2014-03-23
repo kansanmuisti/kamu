@@ -38,10 +38,13 @@ def process_api_thumbnail(bundle, image, field_name):
     tn_dim = 'x'.join(arr)
     bundle.data[field_name] = get_thumbnail(image, tn_dim).url
 
-def parse_date_from_opts(options, field_name):
+def parse_date_from_opts(options, field_name, default=None):
     val = options.get(field_name, None)
     if not val:
-        return None
+        if not default:
+            return None
+        val = default
+
     val = val.lower()
     if val == 'month':
         return datetime.date.today() - relativedelta(months=2)
@@ -252,6 +255,15 @@ class CommitteeAssociationResource(KamuResource):
     class Meta:
         queryset = CommitteeAssociation.objects.all()
 
+
+# Arguments:
+#   - current (bool)
+#   - activity_days
+#   - stats (bool)
+#   - activity_counts (bool)
+#   - activity_days (time ago)
+#   - since (time ago)
+
 class MemberResource(KamuResource):
     SUPPORTED_PORTRAIT_DIMS = ((48, 72), (64, 96), (106, 159), (128, 192))
 
@@ -300,6 +312,20 @@ class MemberResource(KamuResource):
             qset = qset & Member.objects.active_in_term(current_term)
         return qset
 
+    def apply_sorting(self, obj_list, options=None):
+        if 'order_by' in options:
+            val = options['order_by']
+            if val[0] == '-':
+                val = val[1:]
+            if val == 'activity_score':
+                since = parse_date_from_opts(options, 'since', 'term')
+                obj_list = obj_list.filter(memberactivity__time__gte=since)
+                obj_list = obj_list.annotate(activity_score=models.Sum('memberactivity__type__weight'))
+                obj_list = obj_list.order_by(options['order_by'])
+                return obj_list
+
+        return super(MemberResource, self).apply_sorting(obj_list, options)
+
     def dehydrate(self, bundle):
         process_api_thumbnail(bundle, bundle.obj.photo, 'photo_thumbnail')
         bundle.data['district_name'] = bundle.obj.get_latest_district().name
@@ -323,10 +349,14 @@ class MemberResource(KamuResource):
         if activity_counts.lower() in ('1', 'true'):
             bundle.data['activity_counts'] = bundle.obj.get_activity_counts()
 
+        if hasattr(bundle.obj, 'activity_score'):
+            bundle.data['activity_score'] = bundle.obj.activity_score
+
         return bundle
 
     class Meta:
         queryset = Member.objects.select_related('party')
+        ordering = ['activity_score']
         filtering = {
             'party': ('exact',),
         }
