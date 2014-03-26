@@ -45,7 +45,7 @@ class Party(UpdatableModel):
         activities = MemberActivity.objects.filter(member__party=self)
         if begin: activities = activities.filter(time__gte=begin)
         if end: activities = activities.filter(time__lte=end)
-        number_of_members = self.member_set.count()
+        number_of_members = self.member_set.current().count()
         activities = activities.aggregate(act=models.Sum('type__weight'))
         activity_score = activities['act']
         if activity_score == None:
