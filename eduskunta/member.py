@@ -384,7 +384,14 @@ class MemberImporter(Importer):
         else:
             mp.phone = None
         mp.info_link = mp_info['info_url']
-        mp.party = self.determine_party(mp_info)
+
+        # This is to support the hack where we add non-MP ministers
+        # as pseudo MPs. They do not get a PartyAssociation, only
+        # party attribute for purpose of counting ministers
+        if 'party' in mp_info:
+            mp.party = Party.objects.get(abbreviation=mp_info['party'])
+        else:
+            mp.party = self.determine_party(mp_info)
 
         url = mp_info['portrait']
         ext = url.split('.')[-1]
@@ -642,6 +649,30 @@ class MemberImporter(Importer):
                 pprint.pprint(mp_info)
 
         self.logger.info('Imported {0} MPs'.format(len(link_list)))
+
+        self.logger.info("Adding Carl Haglund as a pseudo-MP for purposes of minister counting")
+
+        haglund_info = {'birthdate': u'1979-03-29',
+             'birthplace': u'Espoo',
+             'email': 'carl.haglund@eduskunta.fi',
+             'given_names': 'Carl Christoffer',
+             'home_county': 'Espoo',
+             'id': "nonmp_0001",
+             'info_url': 'http://valtioneuvosto.fi/hallitus/jasenet/puolustusministeri/fi.jsp',
+             'name': u'Carl Haglund',
+             # Following two are a minimal hack to make Carl only show up in the
+             # minister calculations. See save_member
+             'party': 'r',
+             'parties': {},
+             'phone': '09 1608 8284',
+             'portrait': 'http://valtioneuvosto.fi/hallitus/jasenet/kuvat/140px/haglund.jpg',
+             'districts': {},
+             'posts': [{'begin': datetime.date(2012, 7, 5),
+                        'end': None,
+                        'label': u'puolustusministeri',
+                        'role': 'minister'}],
+             'surname': 'Haglund'}
+        self.save_member(haglund_info)
 
 
 def import_activity_types(model_class=MemberActivityType):
