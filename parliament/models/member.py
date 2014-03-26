@@ -175,15 +175,15 @@ class Member(UpdatableModel):
         l = list(qs.in_print_order())
         posts['committee'] = l
 
-        qs = self.ministryassociation_set
+        qs = self.ministryassociation_set.all()
         if current:
             qs = qs.current()
-        posts['ministry'] = list(qs)
+        posts['ministry'] = list(qs.order_by('begin'))
 
-        qs = self.speakerassociation_set
+        qs = self.speakerassociation_set.all()
         if current:
             qs = qs.current()
-        posts['speaker'] = list(qs)
+        posts['speaker'] = list(qs.order_by('begin'))
 
         return posts
 

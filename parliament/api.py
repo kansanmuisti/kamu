@@ -330,9 +330,14 @@ class MemberResource(KamuResource):
         process_api_thumbnail(bundle, bundle.obj.photo, 'photo_thumbnail')
         bundle.data['district_name'] = bundle.obj.get_latest_district().name
 
-        posts = bundle.obj.get_posts()
+        if bundle.request.GET.get('all_posts', '').lower() in ('true', '1'):
+            current = False
+        else:
+            current = True
+        posts = bundle.obj.get_posts(current)
         d = {'ministry': [{'begin': x.begin, 'end': x.end, 'label': x.label, 'role': x.role} for x in posts['ministry']]}
         d['committee'] = [{'begin': x.begin, 'end': x.end, 'committee': x.committee.name, 'role': x.role} for x in posts['committee']]
+        d['speaker'] = [{'begin': x.begin, 'end': x.end, 'role': x.role} for x in posts['speaker']]
         bundle.data['posts'] = d
 
         bundle.data['terms'] = [term.name for term in bundle.obj.get_terms()]
@@ -359,6 +364,7 @@ class MemberResource(KamuResource):
         ordering = ['activity_score']
         filtering = {
             'party': ('exact',),
+            'name': ('exact', 'in'),
         }
 
 class PlenarySessionResource(KamuResource):
