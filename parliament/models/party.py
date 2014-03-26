@@ -46,8 +46,13 @@ class Party(UpdatableModel):
         if begin: activities = activities.filter(time__gte=begin)
         if end: activities = activities.filter(time__lte=end)
         number_of_members = self.member_set.count()
-        activity = activities.aggregate(act=models.Sum('type__weight'))['act']
-        return activity/number_of_members
+        activities = activities.aggregate(act=models.Sum('type__weight'))
+        activity_score = activities['act']
+        if activity_score == None:
+            activity_score = 0
+        if not number_of_members:
+            return 0
+        return activity_score/number_of_members
 
     def get_activity_count_set(self, **kwargs):
         activity_objects = self.get_activity_objects()
