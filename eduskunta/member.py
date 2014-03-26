@@ -107,8 +107,8 @@ ROLE_MAP = {
 
 SPEAKER_ROLE_MAP = {
     'pm': 'speaker',
-    'i vpm': '1st-deputy-speaker',
-    'ii vpm': '2nd-deputy-speaker'
+    'i vpm': '1st-deputy',
+    'ii vpm': '2nd-deputy'
 }
 
 def parse_date(s, is_begin):

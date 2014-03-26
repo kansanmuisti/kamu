@@ -55,6 +55,11 @@ FEED_ACTIONS = {{feed_actions_json|safe}};
                     <li>{{ma.label}}</li>
                     {% endfor %}
                 </ul>
+                <ul class="speaker">
+                    {% for sa in member.posts.speaker %}
+                    <li>{{sa.get_role_display}}</li>
+                    {% endfor %}
+                </ul>
                 <ul class="committee">
                     {% for ca in member.posts.committee %}
                     <li>{{ca.committee.name}}{% if ca.role != 'member' %} (<span class="role-name">{{ca.get_role_display}}</span>){% endif %}</li>

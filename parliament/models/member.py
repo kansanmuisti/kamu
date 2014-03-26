@@ -392,8 +392,8 @@ class CommitteeAssociation(models.Model):
 class SpeakerAssociation(models.Model):
     ROLE_CHOICES = (
         ('speaker', _('Speaker')),
-        ('1st-deputy', _('1st Deputy Speaker')),
-        ('2nd-deputy', _('2st Deputy Speaker')),
+        ('1st-deputy-speaker', _('1st Deputy Speaker')),
+        ('2nd-deputy-speaker', _('2st Deputy Speaker')),
     )
     member = models.ForeignKey(Member, db_index=True)
     begin = models.DateField()
