@@ -35,13 +35,13 @@ class PartyImporter(Importer):
             line = line.strip().decode('utf8')
             if not line or line[0] == '#':
                 continue
-            (name, long_name, logo, vis_color) = line.split('\t')
+            (abbr, long_name, logo, vis_color) = line.split('\t')
             try:
-                party = Party.objects.get(name=name)
+                party = Party.objects.get(abbreviation=abbr)
                 if not self.replace:
                     continue
             except Party.DoesNotExist:
-                party = Party(name=name)
+                party = Party(abbreviation=abbr)
             party.name = long_name
             self.logger.info(u"importing party %s/%s" % (party.name, party.abbreviation))
             party.logo = logo
@@ -80,7 +80,7 @@ class PartyImporter(Importer):
                 continue
             (party, government, begin, end) = line.split('\t')
             try:
-                party = Party.objects.get(name=party)
+                party = Party.objects.get(abbreviation=party)
             except Party.DoesNotExist:
                 raise ParseError('Invalid party %s in initial governing party data' % party)
             try:
