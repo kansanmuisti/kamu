@@ -389,6 +389,7 @@ class PlenarySessionItemResource(KamuResource):
         filtering = {
             'plenary_session': ALL_WITH_RELATIONS,
         }
+        ordering = ['plenary_session']
 
 class PlenaryVoteResource(KamuResource):
     plenary_session = fields.ForeignKey(PlenarySessionResource, 'plsess')
