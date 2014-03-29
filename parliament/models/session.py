@@ -171,7 +171,7 @@ class PlenaryVoteManager(models.Manager):
 
 class PlenaryVote(UpdatableModel):
     plsess = models.ForeignKey(PlenarySession, db_index=True)
-    plsess_item = models.ForeignKey(PlenarySessionItem, db_index=True, null=True, blank=True)
+    plsess_item = models.ForeignKey(PlenarySessionItem, db_index=True, null=True, blank=True, related_name='plenary_votes')
     number = models.IntegerField()
     time = models.DateTimeField()
     subject = models.TextField()

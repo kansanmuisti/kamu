@@ -343,6 +343,12 @@ class MemberResource(KamuResource):
         bundle.data['terms'] = [term.name for term in bundle.obj.get_terms()]
         bundle.data['age'] = bundle.obj.get_age()
 
+        pa_list = []
+        for pa in bundle.obj.partyassociation_set.all().order_by('begin'):
+            d = {'party': pa.party.abbreviation, 'begin': pa.begin, 'end': pa.end}
+            pa_list.append(d)
+        bundle.data['party_associations'] = pa_list
+
         opts = {'since': bundle.request.GET.get('activity_days', 'term')}
         activity_start = parse_date_from_opts(opts, 'since')
         stats = bundle.request.GET.get('stats', '')
@@ -376,6 +382,7 @@ class PlenarySessionResource(KamuResource):
 class PlenarySessionItemResource(KamuResource):
     plenary_session = fields.ForeignKey(PlenarySessionResource, 'plsess')
     documents = fields.ManyToManyField('parliament.api.DocumentResource', 'docs', full=False)
+    plenary_votes = fields.OneToManyField('parliament.api.PlenaryVoteResource', 'plenary_votes', full=False, null=True)
     class Meta:
         queryset = PlenarySessionItem.objects.all()
         resource_name = 'plenary_session_item'
