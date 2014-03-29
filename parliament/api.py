@@ -345,7 +345,11 @@ class MemberResource(KamuResource):
 
         pa_list = []
         for pa in bundle.obj.partyassociation_set.all().order_by('begin'):
-            d = {'party': pa.party.abbreviation, 'begin': pa.begin, 'end': pa.end}
+            if pa.party:
+                abbr = pa.party.abbreviation
+            else:
+                abbr = None
+            d = {'party': abbr, 'begin': pa.begin, 'end': pa.end}
             pa_list.append(d)
         bundle.data['party_associations'] = pa_list
 
