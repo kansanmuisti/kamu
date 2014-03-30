@@ -682,7 +682,11 @@ class MinutesImporter(Importer):
         mp_list = Member.objects.all()
         mpd = {}
         for mp in mp_list:
-            mpd[int(mp.origin_id)] = mp
+            try:
+                mp_nr = int(mp.origin_id)
+            except ValueError:
+                continue
+            mpd[mp_nr] = mp
         self.mp_by_hnro = mpd
         mpd = {}
         for mp in mp_list:
