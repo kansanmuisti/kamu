@@ -268,7 +268,10 @@ class MinutesImporter(Importer):
             # WORKAROUND
             m = re.match(r"(\d+)\)\s+", desc)
             if not m:
-                raise ParseError("Item number not found")
+                if pl_sess_info['id'] == '91/2004':
+                    # WORKAROUND for missing knro
+                    return
+                raise ParseError("Item number not found (desc. '%s')" % desc)
             nr = int(m.groups()[0])
             desc = re.sub(r"\d+\)\s+", "", desc, re.U)
         else:
