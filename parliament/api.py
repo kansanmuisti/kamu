@@ -370,7 +370,7 @@ class MemberResource(KamuResource):
         return bundle
 
     class Meta:
-        queryset = Member.objects.select_related('party')
+        queryset = Member.objects.select_related('party').exclude(origin_id__startswith='nonmp')
         ordering = ['activity_score']
         filtering = {
             'party': ('exact',),
