@@ -392,6 +392,7 @@ class PlenarySessionItemResource(KamuResource):
         resource_name = 'plenary_session_item'
         filtering = {
             'plenary_session': ALL_WITH_RELATIONS,
+            'processing_stage': ALL,
         }
         ordering = ['plenary_session']
 
