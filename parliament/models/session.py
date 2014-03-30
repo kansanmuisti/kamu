@@ -75,6 +75,7 @@ class PlenarySessionItem(models.Model):
     description = models.CharField(max_length=1000)
     sub_description = models.CharField(max_length=100, null=True, blank=True)
     docs = models.ManyToManyField(Document, through='PlenarySessionItemDocument')
+    processing_stage = models.CharField(max_length=20, null=True, blank=True, db_index=True)
 
     # cache the counts here for faster SELECTs
     nr_votes = models.IntegerField(null=True, blank=True, db_index=True)
@@ -86,7 +87,7 @@ class PlenarySessionItem(models.Model):
         app_label = 'parliament'
 
     def count_related_objects(self):
-        self.nr_votes = self.plenaryvote_set.count()
+        self.nr_votes = self.plenary_votes.count()
         self.nr_statements = self.statement_set.exclude(type='speaker').count()
 
     def get_short_id(self):

@@ -28,6 +28,23 @@ SPEAKER_ADDRESSING = (
     'Arvostettu puhemies', 'Talman',
 )
 
+PROCESSING_STAGES = {
+    'lahetekeskustelu': 'debate',
+    'ensimmainen': '1stread',
+    'toinen': '2ndread',
+    'mietpoydallepano': 'agenda',
+    'ainoa': 'onlyread',
+    'vaalit': 'election',
+    'toinenainoa': 'only2read',
+    'kolmas': '3rdread',
+    'taysistuntokasittely': 'debate',
+    'yksikasittely': 'onlyread',
+    'kolmasainoa': 'only3read',
+    'keskustelu': 'debate',
+    'palautekeskustelu': 'feedback',
+}
+
+
 # paalk, pjkohta, valta -> keskust -> pvuoro
 # kyskesk -> sktkesk -> sktpvuor
 
@@ -240,6 +257,12 @@ class MinutesImporter(Importer):
             return
         desc = self.clean_text(desc_item.text)
 
+        processing_stage = hdr_el.attrib.get('kasvaihe', None)
+        if processing_stage:
+            if not processing_stage in PROCESSING_STAGES:
+                raise ParseError("Unknown processing stage '%s'" % processing_stage)
+            processing_stage = PROCESSING_STAGES[processing_stage]
+
         nr_el = hdr_el.xpath("knro")
         if len(nr_el) == 0:
             # WORKAROUND
@@ -258,7 +281,7 @@ class MinutesImporter(Importer):
         if desc.startswith(he_txt):
             desc = desc.replace(he_txt, 'HE:', 1)
 
-        item_info = {'nr': nr, 'desc': desc}
+        item_info = {'nr': nr, 'desc': desc, 'processing_stage': processing_stage}
 
         doc_list = hdr_el.xpath('*[self::ak or self::aak]')
         docs = []
@@ -525,6 +548,7 @@ class MinutesImporter(Importer):
         except PlenarySessionItem.DoesNotExist:
             item = PlenarySessionItem(plsess=pl_sess, number=item_info['nr'])
         item.description = item_info['desc']
+        item.processing_stage = item_info['processing_stage']
 
         if item_info['type'] == 'question_time':
             item.type = 'question'

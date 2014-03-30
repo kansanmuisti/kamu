@@ -348,7 +348,7 @@ class MemberResource(KamuResource):
             if pa.party:
                 abbr = pa.party.abbreviation
             else:
-                abbr = None
+                abbr = pa.name
             d = {'party': abbr, 'begin': pa.begin, 'end': pa.end}
             pa_list.append(d)
         bundle.data['party_associations'] = pa_list
