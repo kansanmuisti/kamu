@@ -393,6 +393,8 @@ class PlenarySessionItemResource(KamuResource):
         filtering = {
             'plenary_session': ALL_WITH_RELATIONS,
             'processing_stage': ALL,
+            'nr_votes': ALL,
+            'nr_statements': ALL,
         }
         ordering = ['plenary_session']
 
