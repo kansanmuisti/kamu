@@ -139,7 +139,7 @@ def parse_committee_membership(line):
         org_type = 'committee'
     elif committee_name.lower() == u'puhemiehistö':
         org_type = 'speakers'
-        print line
+        print line.encode('utf8')
     else:
         #print "Skipping " + committee_name
         return None
@@ -356,7 +356,7 @@ class MemberImporter(Importer):
                 latest_pa = pa
         party_name = pg_to_party(latest_pa['party'])
         if party_name:
-            party = Party.objects.get(name=party_name)
+            party = Party.objects.get(abbreviation=party_name)
             return party
         return None
 
@@ -430,7 +430,7 @@ class MemberImporter(Importer):
         for pa in mp_info['parties']:
             p_name = pg_to_party(pa['party'])
             if p_name:
-                party = Party.objects.get(name=p_name)
+                party = Party.objects.get(abbreviation=p_name)
             else:
                 party = None
             pa_obj = PartyAssociation(member=mp, begin=pa['begin'])
