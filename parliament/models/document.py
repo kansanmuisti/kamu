@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Q
+from django.conf import settings
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
 from parliament.models.base import UpdatableModel
@@ -27,8 +27,43 @@ class Keyword(models.Model):
         name = name.replace(' (hist.)', '')
         return slugify(name)
 
+    def store_activity_score(self, term=None):
+        args = {}
+        if term:
+            args['since'] = term.begin
+            if term.end:
+                args['until'] = term.end
+        scores = self.get_activity_score_set(**args)
+        score_sum = 0
+        for act in scores:
+            score_sum += act['score']
+
+        act_score_class = models.get_model('parliament', 'KeywordActivityScore')
+        args = {'keyword': self, 'term': term}
+        try:
+            obj = act_score_class.objects.get(**args)
+        except act_score_class.DoesNotExist:
+            obj = act_score_class(**args)
+        obj.score = score_sum
+        obj.save()
+
+        return obj
+
     class Meta:
         app_label = 'parliament'
+
+class KeywordActivityScore(models.Model):
+    keyword = models.ForeignKey(Keyword, db_index=True)
+    term = models.ForeignKey('parliament.Term', db_index=True, null=True)
+    score = models.PositiveIntegerField()
+    calc_time = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return u"%s (%s): %d points" % (self.keyword.name, self.term, self.score)
+
+    class Meta:
+        app_label = 'parliament'
+        unique_together = (('keyword', 'term'),)
 
 class Document(UpdatableModel):
     TYPES = (

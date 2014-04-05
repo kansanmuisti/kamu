@@ -1,7 +1,8 @@
-import os
 from optparse import make_option
-from django.core.management.base import BaseCommand, CommandError
-from django.conf import settings
+from django.core.management.base import BaseCommand
+
+from parliament.models import Term, Keyword
+
 from ...party import PartyImporter
 from ...member import MemberImporter
 from ...minutes import MinutesImporter
@@ -10,6 +11,7 @@ from ...seat import SeatImporter
 from ...funding import FundingImporter
 from ...doc import DocImporter
 from utils.http import HttpFetcher
+
 
 class Command(BaseCommand):
     help = 'Import data from the Finnish parliament'
@@ -28,6 +30,8 @@ class Command(BaseCommand):
                     default=False, help='Import plenary session votes'),
         make_option('--funding', action='store_true', dest='funding',
                     default=False, help='Import election funding'),
+        make_option('--keyword-activity', action='store_true', dest='keyword_activity',
+                    help='Update keyword activity score cache'),
         make_option('--single', metavar='ID', dest='single', help='Import only a single element'),
         make_option('--from-year', metavar='YEAR', dest='from_year', help='Start importing from YEAR'),
         make_option('--from-id', metavar='ID', dest='from_id', help='Start importing from ID'),
@@ -42,6 +46,8 @@ class Command(BaseCommand):
     )
 
     def handle(self, *args, **options):
+        verbosity = int(options['verbosity'])
+
         http = HttpFetcher()
         if options['cache']:
             http.set_cache_dir(options['cache'])
@@ -103,3 +109,15 @@ class Command(BaseCommand):
             importer = FundingImporter(http_fetcher=http)
             importer.replace = options['replace']
             importer.import_funding()
+
+        if options['keyword_activity']:
+            term = Term.objects.latest()
+            for idx, kw in enumerate(Keyword.objects.all()):
+                if verbosity == 2 and idx % 100 == 0:
+                    print(idx)
+                # First for just the most recent term
+                recent = kw.store_activity_score(term=term)
+                # Then for all time
+                all_time = kw.store_activity_score()
+                if verbosity >= 3:
+                    print("%s: all time %d, recent term %d" % (kw, all_time.score, recent.score))

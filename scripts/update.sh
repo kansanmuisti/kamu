@@ -58,6 +58,13 @@ else
         cat $LOG_FILE
         exit 1
     fi
+
+    # Recalculate keyword activities
+    python manage.py eduskunta --traceback --keyword-activity >> $LOG_FILE 2>&1
+    if [ $? -ne 0 ]; then
+        cat $LOG_FILE
+        exit 1
+    fi
 fi
 
 if [ ! -z "$VARNISH_BAN_URL" ]; then
