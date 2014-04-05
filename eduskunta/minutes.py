@@ -453,7 +453,10 @@ class MinutesImporter(Importer):
             return
         if el.tag != 'ptk':
             raise ParseError("Unknown root tag: %s" % el.tag)
-        ver_txt = el.attrib['Versio']
+        if 'Versio' in el.attrib:
+            ver_txt = el.attrib['Versio']
+        else:
+            ver_txt = '0.9'
         m = re.match('\w*[\s\.]*(\d\.\d)', ver_txt)
         if not m:
             raise ParseError("Version string invalid ('%s')" % ver_txt)
