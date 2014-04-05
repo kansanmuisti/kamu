@@ -179,6 +179,8 @@ TASTYPIE_SWAGGER_API_MODULE = 'urls.v1_api'
 
 FAST_TEST = False
 
+NUMBER_OF_MPS = 200
+
 try:
     from settings_local import *
 except ImportError:

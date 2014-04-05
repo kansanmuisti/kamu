@@ -1,6 +1,7 @@
 from django.db import models
 from django.http import Http404
 from django.conf.urls import url
+from django.conf import settings
 from django.core.exceptions import *
 from django.shortcuts import redirect
 from dateutil.relativedelta import relativedelta
@@ -139,7 +140,7 @@ class ParliamentResource(Resource):
             scores = MemberActivity.objects.get_score_set(**kwargs)
             if 'calc_average' in kwargs:
                 for s in scores:
-                    s['score'] /= 200
+                    s['score'] /= settings.NUMBER_OF_MPS
 
             return scores
 
