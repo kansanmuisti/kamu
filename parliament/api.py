@@ -235,7 +235,7 @@ class PartyResource(KamuResource):
         # is due to to the null testing on right side of left join)
         bundle.data['minister_count'] = party.member_set.filter(ministryassociation__isnull=False,ministryassociation__end__isnull=True).count()
 
-        opts = {'since': bundle.request.GET.get('activity_days', 'term')}
+        opts = {'since': bundle.request.GET.get('activity_since', 'term')}
         activity_start = parse_date_from_opts(opts, 'since')
         stats = bundle.request.GET.get('stats', '')
         if stats.lower() in ('1', 'true'):
@@ -259,11 +259,9 @@ class CommitteeAssociationResource(KamuResource):
 
 # Arguments:
 #   - current (bool)
-#   - activity_days
 #   - stats (bool)
 #   - activity_counts (bool)
-#   - activity_days (time ago)
-#   - since (time ago)
+#   - activity_since (time ago)
 
 class MemberResource(KamuResource):
     SUPPORTED_PORTRAIT_DIMS = ((48, 72), (64, 96), (106, 159), (128, 192))
@@ -353,8 +351,7 @@ class MemberResource(KamuResource):
             d = {'party': abbr, 'begin': pa.begin, 'end': pa.end}
             pa_list.append(d)
         bundle.data['party_associations'] = pa_list
-
-        opts = {'since': bundle.request.GET.get('activity_days', 'term')}
+        opts = {'since': bundle.request.GET.get('activity_since', 'term')}
         activity_start = parse_date_from_opts(opts, 'since')
         stats = bundle.request.GET.get('stats', '')
         if stats.lower() in ('1', 'true'):
