@@ -3,6 +3,7 @@ from django.http import Http404
 from django.conf.urls import url
 from django.conf import settings
 from django.core.exceptions import *
+from django.db.models import Sum
 from django.shortcuts import redirect
 from dateutil.relativedelta import relativedelta
 
@@ -49,6 +50,8 @@ def parse_date_from_opts(options, field_name, default=None):
     val = val.lower()
     if val == 'month':
         return datetime.date.today() - relativedelta(months=1)
+    elif val == '2months':
+        return datetime.date.today() - relativedelta(months=2)
     elif val == 'term':
         return Term.objects.latest().begin
     try:
@@ -237,10 +240,27 @@ class PartyResource(KamuResource):
 
         opts = {'since': bundle.request.GET.get('activity_since', 'term')}
         activity_start = parse_date_from_opts(opts, 'since')
+
+        recent_keywords = bundle.request.GET.get('recent_keywords', '')
+        if recent_keywords.lower() in ('1', 'true'):
+            # Add keywords with most recent activity
+            kwa_list = KeywordActivity.objects.filter(activity__member__party=bundle.obj).filter(activity__time__gte=activity_start)
+            qs = Keyword.objects.filter(keywordactivity__in=kwa_list)
+            qs = qs.annotate(score=Sum('keywordactivity__activity__type__weight')).order_by('-score')
+            kw_list = qs[0:5]
+            bundle.data['recent_keywords'] = [
+                {'id': kw.id, 'score': kw.score, 'name': kw.name, 'slug': kw.get_slug()} for kw in kw_list
+            ]
+
         stats = bundle.request.GET.get('stats', '')
         if stats.lower() in ('1', 'true'):
             bundle.data['stats'] = {}
-            bundle.data['stats']['recent_activity'] = bundle.obj.get_activity_score(activity_start)
+            score = bundle.obj.get_activity_score(begin=activity_start)
+            bundle.data['stats']['recent_activity'] = score
+            # Could be calculated only once per request, but tastypie
+            # probably makes this difficult and we are very slow already
+            days = (datetime.date.today() - activity_start).days
+            bundle.data['stats']['activity_days_included'] = days
 
         return bundle
 
@@ -682,5 +702,5 @@ class KeywordResource(KamuResource):
 all_resources = [TermResource, ParliamentResource, PartyResource, MemberResource, PlenarySessionResource,
                  PlenaryVoteResource, VoteResource, FundingSourceResource, FundingResource,
                  SeatResource, MemberSeatResource, DocumentResource, MemberActivityResource,
-                 KeywordResource, CommitteeResource, KeywordActivityResource, KeywordResource,
+                 KeywordResource, CommitteeResource, KeywordActivityResource,
                  PlenarySessionItemResource, StatementResource]

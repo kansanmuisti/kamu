@@ -97,6 +97,10 @@ class DocumentList extends Backbone.Tastypie.Collection
 class @Keyword extends Backbone.Tastypie.Model
     get_view_url: ->
         URL_CONFIG['topic_details'].replace('999', @get('id')).replace('SLUG', @get('slug'))
+    toJSON: (options) ->
+        ret = super options
+        ret.view_url = @get_view_url()
+        return ret
 
 class @KeywordList extends Backbone.Tastypie.Collection
     urlRoot: URL_CONFIG['api_keyword']
