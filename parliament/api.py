@@ -260,8 +260,9 @@ class CommitteeAssociationResource(KamuResource):
 # Arguments:
 #   - current (bool)
 #   - stats (bool)
-#   - activity_counts (bool)
+#   - include_activity (bool)
 #   - activity_since (time ago)
+#   - activity_counts (bool)
 
 class MemberResource(KamuResource):
     SUPPORTED_PORTRAIT_DIMS = ((48, 72), (64, 96), (106, 159), (128, 192))
@@ -317,7 +318,9 @@ class MemberResource(KamuResource):
             if val[0] == '-':
                 val = val[1:]
             if val == 'activity_score':
-                since = parse_date_from_opts(options, 'since', 'term')
+                since = parse_date_from_opts(options, 'activity_since', 'term')
+                # NOTE! This must produce same results as Member.get_activity_score
+                # for the responses to makes sense.
                 obj_list = obj_list.filter(memberactivity__time__gte=since)
                 obj_list = obj_list.annotate(activity_score=models.Sum('memberactivity__type__weight'))
                 obj_list = obj_list.order_by(options['order_by'])
@@ -352,26 +355,38 @@ class MemberResource(KamuResource):
             pa_list.append(d)
         bundle.data['party_associations'] = pa_list
         opts = {'since': bundle.request.GET.get('activity_since', 'term')}
-        activity_start = parse_date_from_opts(opts, 'since')
+        activity_since = parse_date_from_opts(opts, 'since')
         stats = bundle.request.GET.get('stats', '')
         if stats.lower() in ('1', 'true'):
+            # FIXME: What is "latest!?"
             bundle.data['stats'] = bundle.obj.get_latest_stats()
-            bundle.data['stats']['recent_activity'] = bundle.obj.get_activity_score(activity_start)
+            
+            # If sorting is used, the activity score is calculated
+            # already during sorting. This will be added later on.
+            if not hasattr(bundle.obj, 'activity_score'):
+                activity_score = bundle.obj.get_activity_score(activity_since)
+            
+            bundle.data['activity_score'] = activity_score
+        
+        if hasattr(bundle.obj, 'activity_score'):
+            bundle.data['activity_score'] = bundle.obj.activity_score
+
+        if 'activity_score' in bundle.data:
+            # Could be calculated only once per request, but tastypie
+            # probably makes this difficult and we are very slow already
+            bundle.data['activity_days_included'] = (datetime.date.today() - activity_since).days
 
         activity_counts = bundle.request.GET.get('activity_counts', '')
         if activity_counts.lower() in ('1', 'true'):
             resolution = bundle.request.GET.get(
                 'activity_counts_resolution', None)
             bundle.data['activity_counts'] = bundle.obj.get_activity_counts(
-                since=activity_start, resolution=resolution)
-
-        if hasattr(bundle.obj, 'activity_score'):
-            bundle.data['activity_score'] = bundle.obj.activity_score
+                since=activity_since, resolution=resolution)
 
         return bundle
 
     class Meta:
-        queryset = Member.objects.select_related('party').exclude(origin_id__startswith='nonmp')
+        queryset = Member.objects.all().exclude(origin_id__startswith='nonmp')
         ordering = ['activity_score']
         filtering = {
             'party': ('exact',),

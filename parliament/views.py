@@ -94,7 +94,7 @@ FEED_ACTIONS = [
 
 MEMBER_LIST_FIELDS = [
     {
-        'id': 'recent_activity',
+        'id': 'activity_score',
         'name': _('Activity'),
     }, {
         'id': 'name',

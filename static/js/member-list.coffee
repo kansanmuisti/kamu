@@ -111,7 +111,7 @@ class MemberListView extends Backbone.View
 
         @_sort_funcs =
             name: namesort
-            recent_activity: statsort('recent_activity')
+            activity_score: attrsort('activity_score')
             attendance: statsort('attendance')
             party_agree: statsort('party_agree')
             session_agree: statsort('party_agree')
@@ -132,17 +132,18 @@ class MemberListView extends Backbone.View
         
         # Just to have something in the sort order,
         # this will be overriden once we get data
-        @set_sort_order "recent_activity"
+        @set_sort_order "activity_score"
 
     _calculate_rankings: (collection) =>
-        activity_scores = (model.attributes.stats['recent_activity'] \
-            for model in collection.models)
-        activity_scores = _.sortBy activity_scores, (x) -> x
-        percentile = (v) ->
-            activity_scores.indexOf(v)/(activity_scores.length-1)
         for model in collection.models
-            stats = model.attributes.stats
-            stats['activity_ranking'] = percentile stats['recent_activity']
+            attr = model.attributes
+            stats = attr.stats
+            console.log attr
+            per_day_activity = attr.activity_score/attr.activity_days_included
+            ranking = per_day_activity/ACTIVITY_BAR_CAP
+            if ranking > 1.0
+                ranking = 1.0
+            stats['activity_ranking'] = ranking
 
     set_sort_order: (field, ascending=true) =>
             for f in @_sort_fields
@@ -218,7 +219,7 @@ class MemberListView extends Backbone.View
         @_process_children @collection
         @_update_search_hint @collection
         @_filter_listing()
-        @set_sort_order "recent_activity", false
+        @set_sort_order "activity_score", false
 
 member_list_view = new MemberListView
 sort_buttons_view = new MemberListSortButtonsView
