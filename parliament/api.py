@@ -362,7 +362,10 @@ class MemberResource(KamuResource):
 
         activity_counts = bundle.request.GET.get('activity_counts', '')
         if activity_counts.lower() in ('1', 'true'):
-            bundle.data['activity_counts'] = bundle.obj.get_activity_counts()
+            resolution = bundle.request.GET.get(
+                'activity_counts_resolution', None)
+            bundle.data['activity_counts'] = bundle.obj.get_activity_counts(
+                since=activity_start, resolution=resolution)
 
         if hasattr(bundle.obj, 'activity_score'):
             bundle.data['activity_score'] = bundle.obj.activity_score
