@@ -6,7 +6,7 @@ class MostActiveMembersView extends Backbone.View
         @collection.bind 'reset', @add_all_items
         @params =
             order_by: '-activity_score'
-            since: 'month'
+            activity_since: 'month'
             limit: 10
         @collection.fetch
             reset: true
@@ -17,7 +17,7 @@ class MostActiveMembersView extends Backbone.View
         @collection.each (model) =>
             data = model.toJSON()
             data.thumbnail_url = model.get_portrait_thumbnail 128
-            score = data.activity_score
+            score = data.activity_score / data.activity_days_included
             data.activity_percentage = score * 100.0 / max_score
             el = $(@template data)
             @$el.append el
