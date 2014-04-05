@@ -360,14 +360,12 @@ class MemberResource(KamuResource):
         if stats.lower() in ('1', 'true'):
             # FIXME: What is "latest!?"
             bundle.data['stats'] = bundle.obj.get_latest_stats()
-            
+
             # If sorting is used, the activity score is calculated
             # already during sorting. This will be added later on.
             if not hasattr(bundle.obj, 'activity_score'):
-                activity_score = bundle.obj.get_activity_score(activity_since)
-            
-            bundle.data['activity_score'] = activity_score
-        
+                bundle.obj.activity_score = bundle.obj.get_activity_score(activity_since)
+
         if hasattr(bundle.obj, 'activity_score'):
             bundle.data['activity_score'] = bundle.obj.activity_score
 
