@@ -26,6 +26,8 @@
 
     {% compress js inline %}
     <script type="text/coffeescript">
+    # TODO: Document how the activity bar cap score is calculated
+    window.ACTIVITY_BAR_CAP = 500
     window.API_PREFIX = '/api/v1/'
     window.URL_CONFIG =
         'member_list': '{% url "parliament.views.list_members" %}'

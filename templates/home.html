@@ -5,9 +5,9 @@
 {% block head %}
 {% compress js inline %}
 
-
 <script type="text/coffeescript">
 $ ->
+    return
     activity_feeds = [{
         url: "{% url 'parliament.views.get_parliament_activity' %}"
         more_link: "#parliament-showmore a"
@@ -46,6 +46,7 @@ $ ->
 
     most_active_el = $(".most-active-members")
     most_active_width = 0
+
     show_active_mps = ->
         width = most_active_el.width()
         if width == most_active_width
@@ -86,22 +87,14 @@ $ ->
 <!--- MP Highlights Layout --->
 <div class=""> 
   <div class="box">
-            <section class="most-active-members">
-                <img src="/static/images/etu-mpt-300x200.png" class="highlight-image">
-                <h3 class="section-header">Aktiivisimmat kansanedustajat</h3>
-                <ul>{% for mp in most_active_mps %}
-                    <li>
-                {% thumbnail mp.photo '128x192' as tn %}
-                        <a href="{{mp.get_absolute_url}}"><img class="mp-thumbnail" src="{{tn.url}}"></a>
-                {% endthumbnail %}
-                      <div class="thumbnail-activity">
-                        <div class="thumbnail-activity-bar" style="width: 45%"></div>
-                      </div>
-                {% endfor %}
-                    </li>
-                </ul>
-            </section>
-        </div>
+    <section class="most-active-members">
+      <h3 class="section-header">Aktiivisimmat kansanedustajat</h3>
+        <ul>
+          {% for mp in most_active_mps %}
+          {% endfor %}
+        </ul>
+    </section>
+  </div>
 </div>
   
 <!--- Issues Highlights Layout --->
@@ -405,5 +398,19 @@ $ ->
 </div>
 </div> <!-- end side-col -->
 </div> <!-- end row -->
-{% endblock %}
 
+<script type="text/template" id="most-active-mps-item">
+<li>
+  <a href="<%= view_url %>"><img class="mp-thumbnail" src="<%= thumbnail_url %>"></a>
+  <div class="thumbnail-activity">
+    <div class="thumbnail-activity-bar" style="width: <%= activity_percentage %>%"></div>
+  </div>
+</li>
+</script>
+
+{% compress js %}
+<script type="text/coffeescript" src="{% static 'js/models.coffee' %}"></script>
+<script type="text/coffeescript" src="{% static 'js/home.coffee' %}"></script>
+{% endcompress %}
+
+{% endblock %}
