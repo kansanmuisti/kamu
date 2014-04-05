@@ -1,0 +1,94 @@
+{% load i18n %}
+{% comment %}
+shared template for rendering MP "cards" used in MP lists
+
+parameters for layout control:
+columns: 2/3 (3 is default): lays the cards in 2 or 3 columns respectively
+         (really col-md-half vs. col-md-5)
+
+parameters rendered to HTML:
+party: party information (backbone model)
+photo_thumbnail: URL for MP photo thumbnail
+district_name: Name of the voting district
+age: Age of MP
+terms: List of service terms of MP
+minister: the name of possible minister post for the MPs (must be unset otherwise)
+stats: object with activity_ranking, attendance and party_agree stats
+
+Current CSS hides the stats, and they need to be explicitly displayed by user
+{% endcomment %}
+<script id="member-list-item-template" type="text/template">
+<% if (typeof columns !== "undefined" && columns == 2) { %>
+<li class="col-md-half col-sm-half">
+<% } else { %>
+<li class="col-md-5 col-sm-half">
+<% } %>
+    <div class="member-list-item">
+        <div class="header">
+            <h4 class="name"><a href="<%= view_url %>"><%= name %></a></h4>
+            <% if (_.isFunction(party.get)) { %>
+            <div class="party">
+                <a href="#PLACEHOLDER" class="js-tooltip" title="<%= party.get('name') %>">
+                    <img src="<%= party.get_logo_thumbnail(32, 32) %>" height='32' />
+                </a>
+            </div>
+            <% } %>
+        </div>
+        <div class="row">
+            <div class="col-xs-5 portrait">
+                <a class="portrait-link" href="<%= view_url %>">
+                    <img src="<%= photo_thumbnail %>" />
+                </a>
+            </div>
+            <div class="col-xs-10">
+                <div class="info">
+                    <div class="location"><%= district_name %> {% trans 'district' %}</div>
+                    <div class="age"><%= age %> v.</div>
+                    <span class="badge badge--terms js-tooltip" title="{% trans 'Number of terms' %}">
+                        <i class="typcn typcn-calender"> </i><%= terms.length %>
+                    </span>
+                    <% if (minister) { %>
+                    <span class="badge badge--minister" title="<%= minister %>">
+                        <i class="typcn typcn-briefcase"></i>
+                    </span>
+                    <% } %>
+                    <hr />
+                    <div class="row activity-ranking-statistics-bar statistics-bar-container">
+                        <div class="stat-name col-xs-6">{% trans "Activity" %}:</div>
+                        <div class="stat-value col-xs-2"><%= stats.recent_activity %></div>
+                        <div class="col-xs-7">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-info" style="width: <%= stats.activity_ranking*100 %>%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row attendance-statistics-bar statistics-bar-container">
+                        <div class="stat-name col-xs-6">{% trans "Attendance" %}:</div>
+                        <div class="stat-value col-xs-2"><%= Math.round(stats.attendance*100) %>%</div>
+                        <div class="col-xs-7">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-info" style="width: <%= stats.attendance*100 %>%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row party-agree-statistics-bar statistics-bar-container">
+                        <div class="stat-name col-xs-6">{% trans "Agreement with party" %}:</div>
+                        <div class="stat-value col-xs-2"><%= Math.round(stats.party_agree*100) %>%</div>
+                        <div class="col-xs-7">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-info" style="width: <%= stats.party_agree*100 %>%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <% if (minister) { %>
+        <div class="mplist-grid__badge">
+           <div class="badge-content  js-tooltip" title="<%= minister %>" data-original-title="<%= minister %>">{% trans "minister" %}</div>
+        </div>
+        <% } %>
+    </div>
+</li>
+</script>

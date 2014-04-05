@@ -535,7 +535,7 @@ def show_document(request, slug):
 def list_parties(request):
     return render_to_response('party/list.html', context_instance=RequestContext(request))
 
-def show_party(request, abbreviation):
+def show_party_feed(request, abbreviation):
     party = get_object_or_404(Party, abbreviation=abbreviation)
 
     party_json = get_embedded_resource(request, PartyResource, party)
@@ -564,15 +564,20 @@ def show_party(request, abbreviation):
                 keyword_activity = kw_act_json,
                 governing=governing)
 
-    return render_to_response("party/details.html", args,
+    return render_to_response("party/feed.html", args,
         context_instance=RequestContext(request))
 
-def list_party_mps(request, abbreviation):
+def show_party_mps(request, abbreviation):
     party = get_object_or_404(Party, abbreviation=abbreviation)
 
     party_json = get_embedded_resource(request, PartyResource, party)
-    args = dict(party=party, party_json=party_json)
-    party_mp_list_json = get_embedded_resource_list(request, MemberResource, {'party': party, 'current': "True"})
-    args['member_list_json'] = party_mp_list_json
+    party_mp_list_json = get_embedded_resource_list(request, MemberResource, {'party': party, 'stats': "True", 'thumbnail_dim': "104x156", 'current': "True"})
+
+    governing = [gp for gp in GoverningParty.objects.filter(party=party).order_by('-begin') if gp.end != None]    
+
+    args = dict(party=party,
+                party_json=party_json,
+                member_list_json = party_mp_list_json,
+                governing=governing)
 
     return render_to_response("party/mps.html", args, context_instance=RequestContext(request))

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load compress static thumbnail i18n %}
+
+{% block title %}{{ party.name }}{% endblock %}
+
+{% block main_class %}container party-base{% endblock %}
+{% block content %}
+    <div class="row">
+        <!-- Party sidebar ======================================== -->
+        <div class="col-md-4">
+            <div class="member-card">
+                <h1>{{ party.name}}</h1>
+                <img src="/api/v1/party/{{ party.abbreviation }}/logo?dim=128x128">
+                <div class="roles">
+                    <ul class="minister">
+                        {% if party.is_governing %}<li>{% trans "In government" %}</li>
+                        {% else %}<li>{% trans "In opposition" %}</li>{% endif %}
+                    </ul>
+                    <ul class="committee">
+                    {% for term in governing %}
+                        <li>{% trans "In government" %} {{term.begin.year}}-{{term.end.year}}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <nav class="side-navigation">
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="active"><a href="#">Perustiedot</a></li>
+                    <li><a href="#">Valiokuntapaikat</a></li>
+                    <li><a href="{% url 'parliament.views.show_party_mps' abbreviation=party.abbreviation %}">Kansanedustajat</a></li>
+                    <li><a href="#">Tilastot</a></li>
+                    <li><a href="#">Yhteystiedot</a></li>
+                </ul>
+            </nav>
+        </div>
+        <!-- Party sidebar end ==================================== -->
+        <div class="col-md-11">
+        <!-- Party subpage content ================================================ -->
+            {% block party_content %}{% endblock %}
+        <!-- Party subpage content end ============================================ -->
+        </div>
+    </div>
+{% endblock %}

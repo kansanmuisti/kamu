@@ -41,75 +41,7 @@
     <button data-col="<%= id %>" class="btn btn-default" type="button"><%= name %></button>
 </script>
 
-<script id="member-list-item-template" type="text/template">
-<li class="col-md-5 col-sm-half">
-    <div class="member-list-item">
-        <div class="header">
-            <h4 class="name"><a href="<%= view_url %>"><%= name %></a></h4>
-            <div class="party">
-                <a href="#PLACEHOLDER" class="js-tooltip" title="<%= party.get('name') %>">
-                    <img src="<%= party.get_logo_thumbnail(32, 32) %>" height='32' />
-                </a>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-5 portrait">
-                <a class="portrait-link" href="<%= view_url %>">
-                    <img src="<%= photo_thumbnail %>" />
-                </a>
-            </div>
-            <div class="col-xs-10">
-                <div class="info">
-                    <div class="location"><%= district_name %> {% trans 'district' %}</div>
-                    <div class="age"><%= age %> v.</div>
-                    <span class="badge badge--terms js-tooltip" title="{% trans 'Number of terms' %}">
-                        <i class="typcn typcn-calender"> </i><%= terms.length %>
-                    </span>
-                    <% if (minister) { %>
-                    <span class="badge badge--minister" title="<%= minister %>">
-                        <i class="typcn typcn-briefcase"></i>
-                    </span>
-                    <% } %>
-                    <hr />
-                    <div class="row activity-ranking-statistics-bar statistics-bar-container">
-                        <div class="stat-name col-xs-6">{% trans "Activity" %}:</div>
-                        <div class="stat-value col-xs-2"><%= stats.recent_activity %></div>
-                        <div class="col-xs-7">
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-info" style="width: <%= stats.activity_ranking*100 %>%"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row attendance-statistics-bar statistics-bar-container">
-                        <div class="stat-name col-xs-6">{% trans "Attendance" %}:</div>
-                        <div class="stat-value col-xs-2"><%= Math.round(stats.attendance*100) %>%</div>
-                        <div class="col-xs-7">
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-info" style="width: <%= stats.attendance*100 %>%"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row party-agree-statistics-bar statistics-bar-container">
-                        <div class="stat-name col-xs-6">{% trans "Agreement with party" %}:</div>
-                        <div class="stat-value col-xs-2"><%= Math.round(stats.party_agree*100) %>%</div>
-                        <div class="col-xs-7">
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-info" style="width: <%= stats.party_agree*100 %>%"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        <% if (minister) { %>
-        <div class="mplist-grid__badge">
-           <div class="badge-content  js-tooltip" title="<%= minister %>" data-original-title="<%= minister %>">{% trans "minister" %}</div>
-        </div>
-        <% } %>
-    </div>
-</li>
-</script>
+{% include "_mp_card_template.html" %}
 
 <!-- Embedded resources -->
 <script type="text/javascript">
