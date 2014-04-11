@@ -25,6 +25,9 @@ DATABASES = {
     }
 }
 
+# Keep the database connection open for 120s
+CONN_MAX_AGE = 120
+
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
 # Local time zone for this installation. Choices can be found here:
