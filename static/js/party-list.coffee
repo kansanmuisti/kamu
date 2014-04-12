@@ -21,11 +21,13 @@ class PartyListView extends Backbone.View
 
     _calculate_stats: ->
         stats = (m) -> m.attributes.stats
-        max_score = _.max @collection.models.map (m) ->
-            stats(m).recent_activity
+        max_score = window.ACTIVITY_BAR_CAP
         for m in @collection.models
             s = stats m
-            s.activity_ranking = s.recent_activity/max_score
+            s.activity_per_day = s.recent_activity/s.activity_days_included
+            s.activity_ranking = s.activity_per_day/max_score*100
+            if s.activity_ranking > 100
+                s.activity_ranking = 100
     
     initialize: ->
         @collection = new PartyList
