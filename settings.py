@@ -28,6 +28,16 @@ DATABASES = {
 # Keep the database connection open for 120s
 CONN_MAX_AGE = 120
 
+HAYSTACK_CONNECTIONS = {
+    'default': { 
+        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'URL': 'http://127.0.0.1:8080/kamu',
+        'INCLUDE_SPELLING': True,
+        'TIMEOUT': 60,
+    },
+}
+HAYSTACK_LIMIT_TO_REGISTERED_MODELS = False
+
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
 # Local time zone for this installation. Choices can be found here:
@@ -146,6 +156,7 @@ INSTALLED_APPS = (
     'south',
     'tastypie',
     'tastypie_swagger',
+    'haystack',
 
     'social',
     'parliament',

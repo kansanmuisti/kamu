@@ -6,6 +6,7 @@ from django.core.exceptions import *
 from django.db.models import Sum
 from django.shortcuts import redirect
 from dateutil.relativedelta import relativedelta
+from haystack.inputs import AutoQuery
 
 from tastypie.cache import SimpleCache
 from tastypie.resources import ModelResource, Resource
@@ -18,6 +19,8 @@ import re
 
 from parliament.models import *
 from social.api import UpdateResource
+
+from .search_resource import SearchResource
 
 # Save these for caching purposes
 term_list = list(Term.objects.visible())
@@ -699,8 +702,42 @@ class KeywordResource(KamuResource):
 
         return obj_list
 
+
+class KamuSearchResource(SearchResource):
+    def dehydrate(self, bundle):
+        obj = bundle.obj
+        if not obj.model in res_by_model:
+            return bundle
+        res = res_by_model[obj.model](api_name='v1')
+        target_bundle = res.build_bundle(obj=obj.object, request=bundle.request)
+        out = res.full_dehydrate(target_bundle)
+        bundle.data = out.data
+        bundle.data['score'] = obj.score
+        return bundle
+
+    def apply_filters(self, request, applicable_filters):
+        objects = self.get_object_list(request)
+        if not request:
+            return objects
+        query = request.GET.get('q', None)
+        if query:
+            objects = objects.filter(text=AutoQuery(query))
+
+        return objects
+
+    class Meta:
+        pass
+
 all_resources = [TermResource, ParliamentResource, PartyResource, MemberResource, PlenarySessionResource,
                  PlenaryVoteResource, VoteResource, FundingSourceResource, FundingResource,
                  SeatResource, MemberSeatResource, DocumentResource, MemberActivityResource,
                  KeywordResource, CommitteeResource, KeywordActivityResource,
-                 PlenarySessionItemResource, StatementResource]
+                 PlenarySessionItemResource, StatementResource, KamuSearchResource]
+
+from social.api import UpdateResource
+
+res_by_model = {}
+for res in all_resources + [UpdateResource]:
+    if not hasattr(res.Meta, 'queryset'):
+        continue
+    res_by_model[res.Meta.queryset.model] = res

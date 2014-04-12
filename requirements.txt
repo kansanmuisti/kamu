@@ -16,3 +16,4 @@ requests>=1.1.0
 requests-cache
 ansible
 django-tastypie-swagger
+django-haystack
