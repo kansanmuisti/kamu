@@ -5,6 +5,7 @@ import datetime
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
 from django.db.models import Q, Min, Max, Sum
+from django.db import connection
 from django.http import HttpResponse
 from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response, get_list_or_404, get_object_or_404
@@ -149,31 +150,32 @@ def get_view_member(url_name):
     member.current_district = current_district
     return member
 
-def _get_member_activity_kws(member):
-    kw_act_list = KeywordActivity.objects.filter(activity__member=member).select_related('keyword', 'activity', 'activity__type')
-    kw_dict = {}
-    for kwa in kw_act_list:
-        name = kwa.keyword.name
-        score = kwa.activity.type.weight
-        if name in kw_dict:
-            kw_dict[name] += score
-        else:
-            kw_dict[name] = score
-    kw_list = sorted(kw_dict.iteritems(), key=operator.itemgetter(1), reverse=True)[0:20]
-    return kw_list
+def _get_member_activity_kws(member, since=Term.objects.latest().begin, n=20):
+    kw_act_list = (
+        Keyword.objects
+        .filter(keywordactivity__activity__member=member,
+            keywordactivity__activity__time__gte=since)
+        .annotate(score=Sum("keywordactivity__activity__type__weight"))
+        .order_by('-score')
+        )
+    
+    kw_act_list = kw_act_list[:n]
+    
+    return [(r.name, r.score) for r in kw_act_list]
 
-def _get_party_activity_kws(party):
-    kw_act_list = KeywordActivity.objects.filter(activity__member__party=party).select_related('keyword', 'activity', 'activity__type')
-    kw_dict = {}
-    for kwa in kw_act_list:
-        name = kwa.keyword.name
-        score = kwa.activity.type.weight
-        if name in kw_dict:
-            kw_dict[name] += score
-        else:
-            kw_dict[name] = score
-    kw_list = sorted(kw_dict.iteritems(), key=operator.itemgetter(1), reverse=True)[0:20]
-    return kw_list
+def _get_party_activity_kws(party, since=Term.objects.latest().begin, n=20):
+    # TODO: Should do on the proper party membership?
+    kw_act_list = (
+        Keyword.objects
+        .filter(keywordactivity__activity__member__party=party,
+            keywordactivity__activity__time__gte=since)
+        .annotate(score=Sum("keywordactivity__activity__type__weight"))
+        .order_by('-score')
+        )
+    
+    kw_act_list = kw_act_list[:n]
+    
+    return [(r.name, r.score) for r in kw_act_list]
 
 def make_feed_filters(actor=False):
     groups = {}
