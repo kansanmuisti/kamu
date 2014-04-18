@@ -52,8 +52,8 @@
                         <div class="row">
                             <div class="col-md-6">{% trans "Activity" %}</div>
                             <div class="col-md-7">
-                                <div class="progress js-tooltip" title="<%= Math.round(stats.recent_activity) %> {% trans "points" %}">
-                                    <div class="progress-bar" style="width: <%= stats.activity_ranking*100 %>%"></div>
+                                <div class="progress js-tooltip" title="<%= Math.round(stats.activity_per_day) %> {% trans "points" %}">
+                                    <div class="progress-bar" style="width: <%= stats.activity_ranking %>%"></div>
                                 </div>
                             </div>
                         </div>
