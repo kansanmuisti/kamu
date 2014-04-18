@@ -17,3 +17,4 @@ requests-cache
 ansible
 django-tastypie-swagger
 django-haystack
+pysolr
