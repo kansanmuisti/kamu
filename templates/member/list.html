@@ -46,7 +46,7 @@
 <!-- Embedded resources -->
 <script type="text/javascript">
     MEMBER_LIST_FIELDS = {{list_fields_json|safe}};
-    MINISTER_TRANSLATION = "{% trans "minister" %}";
+    MINISTER_TRANSLATION = "{% trans "minister" %}"
     party_json = {{party_json|safe}};
 </script>
 
@@ -55,6 +55,17 @@
 {% endcompress %}
 {% compress js %}
 <script type="text/coffeescript" src="{% static "js/member-list.coffee" %}"></script>
+<script type="text/coffeescript">
+$ ->
+    # TODO: The party list is a horrible hack!
+    window.party_list = new PartyList party_json
+    member_list_view = new MemberListView
+    sort_buttons_view = new MemberListSortButtonsView
+        member_list_view: member_list_view
+    sort_buttons_view.render()
+    
+
+</script>
 {% endcompress %}
 
 {% endblock %}

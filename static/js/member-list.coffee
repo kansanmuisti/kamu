@@ -1,9 +1,10 @@
-class MemberListSortButtonsView extends Backbone.View
+class @MemberListSortButtonsView extends Backbone.View
     el: ".member-list-sort-buttons"
     template: _.template $.trim $("#member-list-sort-button-template").html()
 
-    initialize: ->
-        @listenTo member_list_view, 'sort-changed', @sort_changed
+    initialize: (options) ->
+        @member_list_view = options.member_list_view
+        @listenTo @member_list_view, 'sort-changed', @sort_changed
 
     events:
         'click button': 'handle_sort_button'
@@ -15,7 +16,7 @@ class MemberListSortButtonsView extends Backbone.View
             ascending = false
 
         field = $(btn).data "col"
-        member_list_view.set_sort_order field, ascending
+        @member_list_view.set_sort_order field, ascending
 
     sort_changed: (field, ascending) ->
         @$el.find('button').removeClass('active').removeClass('ascending').find('i').remove()
@@ -32,7 +33,7 @@ class MemberListSortButtonsView extends Backbone.View
         @$el.empty()
         for f in MEMBER_LIST_FIELDS
             button_el = $(@template f)
-            if member_list_view.active_sort_field.id == f.id
+            if @member_list_view.active_sort_field.id == f.id
                 button_el.addClass 'active'
             @$el.append button_el
         return @
@@ -49,12 +50,14 @@ class MemberListItemView extends Backbone.View
         @el = @$el[0]
         return @
 
-class MemberListView extends Backbone.View
+class @MemberListView extends Backbone.View
     el: "ul.member-list"
     spinner_el: ".spinner-container"
     search_el: "main .text-search"
 
-    initialize: ->
+    initialize: (options={}) ->
+        @extra_filters = options.filters
+
         @spinner_el = $(@spinner_el)
         @spinner_el.spin top: 0
 
@@ -76,14 +79,18 @@ class MemberListView extends Backbone.View
         @search_el.input @_filter_listing
 
         @_setup_sort()
-
-        @collection.fetch
-            reset: true
-            data:
+        
+        data =
                 thumbnail_dim: "104x156"
                 current: true
                 stats: true
                 limit: 500
+        
+        data = _.extend data, @extra_filters
+
+        @collection.fetch
+            reset: true
+            data: data
             processData: true
 
     _setup_sort: =>
@@ -138,7 +145,6 @@ class MemberListView extends Backbone.View
         for model in collection.models
             attr = model.attributes
             stats = attr.stats
-            console.log attr
             per_day_activity = attr.activity_score/attr.activity_days_included
             ranking = per_day_activity/ACTIVITY_BAR_CAP
             if ranking > 1.0
@@ -205,7 +211,7 @@ class MemberListView extends Backbone.View
             titles = []
             if model.is_minister()
                 titles.push MINISTER_TRANSLATION
-
+            
             @index.add
                 id: model.id
                 name: model.get('name')
@@ -221,7 +227,4 @@ class MemberListView extends Backbone.View
         @_filter_listing()
         @set_sort_order "activity_score", false
 
-member_list_view = new MemberListView
-sort_buttons_view = new MemberListSortButtonsView
-sort_buttons_view.render()
-party_list = new PartyList party_json
+

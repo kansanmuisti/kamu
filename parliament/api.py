@@ -270,6 +270,9 @@ class PartyResource(KamuResource):
     class Meta:
         queryset = Party.objects.all()
         detail_uri_name = 'abbreviation'
+        filtering = {
+            'abbreviation': ('exact',)
+        }
 
 class CommitteeResource(KamuResource):
     class Meta:
@@ -410,7 +413,7 @@ class MemberResource(KamuResource):
         queryset = Member.objects.all().exclude(origin_id__startswith='nonmp')
         ordering = ['activity_score']
         filtering = {
-            'party': ('exact',),
+            'party': ALL_WITH_RELATIONS,
             'name': ('exact', 'in'),
         }
 

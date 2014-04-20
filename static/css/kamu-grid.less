@@ -2,16 +2,26 @@
     @EXTRA GRID
 \*------------------------------------*/
 
-@media (min-width: @screen-sm-min) {
-    .col-sm-half {
+.make-col-sm-half() {
+    @media (min-width: @screen-sm-min) {
         width: 50%;
         float: left;
     }
+}
 
-    .col-md-half {
+.col-sm-half {
+    .make-col-sm-half();
+}
+
+.make-col-md-half() {
+    @media (min-width: @screen-md-min) {
         width: 50%;
         float: left;
         padding-left: 10px;
         padding-right: 10px;
     }
+}
+
+.col-md-half {
+    .make-col-md-half();
 }

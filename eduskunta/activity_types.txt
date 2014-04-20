@@ -1,10 +1,10 @@
 # id	name	weight
-IN	Initiative	240
+IN	Initiative	392.72
 RV	Rebel vote	10
 CD	Committee dissent	20
-TW	Tweet	1
-FB	Facebook update	2
-ST	Plenary statement	4
-SI	Signature	18
-WQ	Written question	35
+TW	Tweet	1.76
+FB	Facebook update	6.81
+ST	Plenary statement	10.37
+SI	Signature	36.40
+WQ	Written question	76.72
 GB	Government bill	0
