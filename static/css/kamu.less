@@ -688,7 +688,19 @@ ul.highlight-parties {
 main.member-list {
     ul.member-list {
         list-style: none;
+        > li {
+            .make-col-sm-half();
+            .make-md-column(5);
+        }
     }
+    
+    ul.two-column-member-list {
+        > li {
+            .make-col-sm-half();
+            .make-col-md-half();
+        }
+    }
+
     .member-list-item {
         position: relative;
         background-color: @white;

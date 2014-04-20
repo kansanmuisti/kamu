@@ -11,7 +11,8 @@
     <!-- Bootstrapped data for scripts on page -->
     <script type="text/javascript">
         party_json = {{party_json|safe}};
-        party_list_json = {{member_list_json|safe}};
+        MEMBER_LIST_FIELDS = {{list_fields_json|safe}};
+        MINISTER_TRANSLATION = "{% trans "minister" %}"
     </script>
 {% endblock %}
 
@@ -19,18 +20,47 @@
 <!-- MP list for party ============================================ -->
 <div class="content">
     <h3>{% trans "List of MPs for this party" %}</h3>
-    <ul class="member-list row">
+    <div class="feed-filters">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="col-lg-2 control-label">{% trans "Search" %}</label>
+                <div class="col-lg-6">
+                    <input type="text" class="text-search form-control" placeholder="{% trans 'Search with name, party, district' %}...">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-2 control-label">{% trans "Order" %}</label>
+                <div class="col-lg-10">
+                    <div class="btn-toolbar">
+                        <div class="btn-group btn-group-sm member-list-sort-buttons">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <ul class="member-list two-column-member-list row">
     </ul>
 </div>
 {% include "_mp_card_template.html" %}
+<script id="member-list-sort-button-template" type="text/template">
+    <button data-col="<%= id %>" class="btn btn-default" type="button"><%= name %></button>
+</script>
 <!-- MP list for party end ======================================== -->
 {% compress js %}
 <script type="text/coffeescript" src="{% static "js/activity_scores.coffee" %}"></script>
-<script type="text/coffeescript" src="{% static "js/party-details.coffee" %}"></script>
-<script type="text/coffeescript">   
+<script type="text/coffeescript" src="{% static "js/member-list.coffee" %}"></script>
+<script type="text/coffeescript">
 $(->
+    # TODO: The party list is a horrible hack!
+    window.party_list = new PartyList party_json
     member_list_view = new MemberListView
-    party_list = new PartyList party_json
+    	filters: party__abbreviation: 'kok'
+    sort_buttons_view = new MemberListSortButtonsView
+        member_list_view: member_list_view
+    sort_buttons_view.render()
 )
 </script>
 {% endcompress %}

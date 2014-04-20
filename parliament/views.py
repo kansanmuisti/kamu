@@ -579,7 +579,7 @@ def show_party_mps(request, abbreviation):
 
     args = dict(party=party,
                 party_json=party_json,
-                member_list_json = party_mp_list_json,
+                list_fields_json=simplejson.dumps(MEMBER_LIST_FIELDS),
                 governing=governing)
 
     return render_to_response("party/mps.html", args, context_instance=RequestContext(request))
