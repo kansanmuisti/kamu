@@ -66,6 +66,8 @@ class Update(models.Model):
     share_caption = models.CharField(null=True, max_length=600)
     share_description = models.TextField(null=True)
 
+    last_modified_time = models.DateTimeField(db_index=True, auto_now=True, null=True)
+
     class Meta:
         unique_together = (('feed', 'origin_id'),)
         ordering = ['-created_time']
