@@ -23,6 +23,7 @@ class MostActiveMembersView extends Backbone.View
                 data.activity_percentage = 100
             el = $(@template data)
             @$el.append el
+            el.tooltip()
 
 members_view = new MostActiveMembersView()
 
