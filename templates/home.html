@@ -2,76 +2,6 @@
 {% load i18n compress static thumbnail %}
 {% block title %}{% trans "Front page" %}{% endblock %}
 
-{% block head %}
-{% compress js inline %}
-
-<script type="text/coffeescript">
-$ ->
-    return
-    activity_feeds = [{
-        url: "{% url 'parliament.views.get_parliament_activity' %}"
-        more_link: "#parliament-showmore a"
-        target_el: "#parliament-activity .post-list"
-        offset: {{ parl_act_offset }}
-    }, {
-        url: "{% url 'parliament.views.get_mp_some_activity' %}"
-        more_link: "#livefeed-showmore a"
-        target_el: "#livefeed .post-list"
-        offset: {{ some_offset }}
-    }]
-
-    set_timestamps = ->
-        $(".time[title]").each ->
-            time = $(this).attr 'title'
-            mom = moment time
-            $(@).text mom.fromNow()
-
-    set_timestamps()
-    for act in activity_feeds
-        $(act.more_link).click act, (ev) ->
-            act = ev.data
-            url = act.url + "?offset=" + act.offset
-            $.ajax url,
-            	type: 'GET',
-            	success: (data) ->
-                    html = $("<div>")
-                    html.append $(data.html)
-                    html.hide()
-                    $(act.target_el).append html
-                    act.offset = data.offset
-                    set_timestamps()
-                    html.slideDown()
-            return false
-    setInterval set_timestamps, 60*1000
-
-    most_active_el = $(".most-active-members")
-    most_active_width = 0
-
-    show_active_mps = ->
-        width = most_active_el.width()
-        if width == most_active_width
-            return
-        most_active_width = width
-        li_list = most_active_el.find('li')
-        tn_width = li_list.outerWidth()
-        cols = Math.floor(width / tn_width)
-        rows = Math.floor(li_list.length / cols)
-        if rows == 0
-            rows = 1
-        if rows > 2
-            rows = 2
-        count = rows * cols
-        for li in li_list[0..count]
-            $(li).show()
-        for li in li_list[count..]
-             $(li).hide()
-
-    $(window).resize show_active_mps
-    show_active_mps()
-</script>
-{% endcompress %}
-{% endblock %}
-
 {% block main_class %}home-page{% endblock %}
 
 {% block content %}
@@ -90,8 +20,6 @@ $ ->
     <section class="most-active-members">
       <h3 class="section-header">Aktiivisimmat kansanedustajat</h3>
         <ul>
-          {% for mp in most_active_mps %}
-          {% endfor %}
         </ul>
     </section>
   </div>
