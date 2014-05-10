@@ -33,7 +33,8 @@ HAYSTACK_CONNECTIONS = {
         'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
         'URL': 'http://127.0.0.1:8080/kamu',
         'INCLUDE_SPELLING': True,
-        'TIMEOUT': 60,
+        'TIMEOUT': 120,
+        'BATCH_SIZE': 500,
     },
 }
 HAYSTACK_LIMIT_TO_REGISTERED_MODELS = False

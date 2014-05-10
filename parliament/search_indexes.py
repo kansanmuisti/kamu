@@ -5,6 +5,7 @@ from social.models import Update
 
 class MemberIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, model_attr='name', use_template=False)
+    autosuggest = indexes.EdgeNgramField(model_attr='name')
 
     def get_updated_field(self):
         return 'last_modified_time'
@@ -13,10 +14,10 @@ class MemberIndex(indexes.SearchIndex, indexes.Indexable):
         return Member
 
 
-#class DocumentIndex(indexes.SearchIndex, indexes.Indexable):
-class DocumentIndex(object):
+class DocumentIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
-    subject = indexes.CharField()
+    subject = indexes.CharField(model_attr='subject')
+    autosuggest = indexes.EdgeNgramField(model_attr='subject')
     date = indexes.DateField()
 
     def get_updated_field(self):
@@ -26,8 +27,7 @@ class DocumentIndex(object):
         return Document
 
 
-#class StatementIndex(indexes.SearchIndex, indexes.Indexable):
-class StatementIndex(object):
+class StatementIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, model_attr='text')
     date = indexes.DateField()
 
