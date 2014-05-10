@@ -5,7 +5,7 @@ from django.utils.translation import ugettext as _
 from parliament.models.base import UpdatableModel
 
 class Keyword(models.Model):
-    name = models.CharField(max_length=128, db_index=True, unique=True)
+    name = models.CharField(max_length=128, db_index=True)
 
     # To avoid recursive imports..
     def get_activity_objects(self):
@@ -20,7 +20,7 @@ class Keyword(models.Model):
         return activity_objects.scores_for_keyword(self.id, **kwargs)
 
     def __unicode__(self):
-        return self.name
+        return self.name_fi
 
     def get_slug(self):
         name = self.name
