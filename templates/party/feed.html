@@ -19,11 +19,23 @@
 <!-- Content ================================================== -->
 <div class="filter-feed box">
     <section>
-        <h4>{% trans "Active in these topics" %}</h4>
+	<h4>{% trans "Active in these topics" %}
+            <span class="help-link">
+            <a href="#" data-toggle="modal" data-target="#topic-tagcloud-help">
+	    <i class="typcn typcn-info-large icon"></i>
+            </a>
+            </span>
+        </h4>
         <div id="party-tag-cloud" class="tag-cloud"></div>
     </section>
     <section>
-        <h4>{% trans "Activity" %}</h4>
+        <h4>{% trans "Activity" %}
+          <span class="help-link">
+          <a href="#" data-toggle="modal" data-target="#activity-graph-help">
+          <i class="typcn typcn-info-large icon"></i>
+	  </a>
+	  </span>
+	</h4>
         <div id="party-activity-graph" class="activity-graph"></div>
     </section>
     <section>
@@ -76,5 +88,33 @@
                     el:"#party-activity-graph"
 </script>
 {% endcompress %}
+
+<div class="modal fade" id="activity-graph-help" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">{% trans "Party activity graph" %}</h4>
+      </div>
+      <div class="modal-body">
+	Some help here
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="topic-tagcloud-help" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">{% trans "Party topic activity" %}</h4>
+      </div>
+      <div class="modal-body">
+	Some help here
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
