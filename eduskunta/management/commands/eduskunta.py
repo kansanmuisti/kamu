@@ -11,7 +11,6 @@ from ...seat import SeatImporter
 from ...funding import FundingImporter
 from ...doc import DocImporter
 from utils.http import HttpFetcher
-from django.utils import translation
 
 
 class Command(BaseCommand):
@@ -48,8 +47,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         verbosity = int(options['verbosity'])
-
-        translation.activate('fi')
 
         http = HttpFetcher()
         if options['cache']:

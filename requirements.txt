@@ -18,4 +18,3 @@ ansible
 django-tastypie-swagger
 django-haystack
 pysolr
-django-modeltranslation

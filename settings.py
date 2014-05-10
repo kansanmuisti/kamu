@@ -158,7 +158,6 @@ INSTALLED_APPS = (
     'tastypie',
     'tastypie_swagger',
     'haystack',
-    'modeltranslation',
 
     'social',
     'parliament',
