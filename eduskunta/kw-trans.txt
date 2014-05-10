@@ -1,0 +1,2628 @@
+Verotus:taxation
+Rikoslaki:penal code
+Tulovero:income tax
+Lapset:children
+Terveydenhuolto:health care
+Sairausvakuutus:health insurance
+Rikokset:crimes
+Verovähennykset:tax deductions
+Euroopan unioni:European Union
+Kunnat:municipalities
+Valtion talousarvio:The State Budget
+Arvonlisävero:VAT
+Työntekijät:workforce
+Opiskelijat:students
+Lapsiperheet:families with children
+Vammaiset:disabled
+Työttömyysturva:unemployment benefits
+Ulkomaalaiset:foreigners
+Maksut:dues
+Vanhemmat:parents
+Yrittäjät:entrepreneurs
+Rangaistukset:penalties
+Sosiaalihuolto:social welfare
+Rintamaveteraanit:veterans
+Palvelut:services
+Henkilöstö:staff
+Ajoneuvot:vehicles
+Verot:taxes
+Direktiivit:directives
+Vankeus:imprisonment
+Kuntoutus:rehabilitation
+Polttoaineet:fuels
+Kansainväliset sopimukset:international agreements
+Yritykset:companies
+Elintarvikkeet:foods
+Poliisi:police
+Työeläkkeet:earnings-related pensions
+Valvonta:control
+Rekisterit:registers
+Seksuaalirikokset:sexual offenses
+Verovapaus:tax exemption
+Rahoitus:financing
+Sotilasvammat:military injuries
+Kotitalous:household
+Luvat:permissions
+Bioenergia:bioenergy
+Yliopistot:Colleges and Universities
+Maatalousyrittäjät:farmers
+Valmisteverot:excise duties
+Metsästys:hunting
+Päästöt:emissions
+Opintotuki:student allowance
+Vahingonkorvaus:damages
+Lapsilisät:child allowances
+Alkoholi:alcohol
+Työsopimukset:contracts of employment
+Määräaika:deadline
+Lastensuojelu:child welfare
+Yhdenvertaisuus:parity
+Toimeentulotuki:income support
+Alkoholijuomat:alcoholic beverages
+Alaikäiset:minors
+Tulot:revenue
+Omaishoito:informal care
+Nuoret:young people
+Tieliikenne:road traffic
+Eläkkeet:pensions
+Kansaneläkelaitos:The Social Insurance Institution
+Yritystoiminta:business
+Sähkö:electricity
+Työttömyyspäivärahat:unemployment allowance
+Turvallisuus:safety
+Koulutus:training
+Perusopetus:basic education
+Väkivalta:violence
+Maahanmuuttajat:immigrants
+Vähittäiskauppa:retail
+Lääkkeet:medicines
+Rakentaminen:construction
+Liikenneturvallisuus:road safety
+Ammattikorkeakoulut:Polytechnics
+Sotainvalidit:disabled war veterans
+Pakkokeinot:coercive measures
+Oikeudenkäynti:trial
+Autovero:car tax
+Lääkärit:doctors
+Perheenjäsenet:members of the family
+Lainsäädäntö:legislation
+Kansaneläkkeet:national pensions
+Indeksit:indices
+Lisätalousarviot:supplementary budgets
+Ampuma-aseet:firearms
+Järjestöt:organizations
+Palkat:wages
+Veronhuojennukset:tax relief
+Lasten päivähoito:children's day care
+Sota:war
+Huumeet:drugs
+Laitoshoito:inpatient
+Sosiaaliturva:social security
+Matkakustannukset:travel expenses
+Rikoksen uhrit:crime victims
+Työllisyyspolitiikka:employment policy
+Vammaispalvelut:services for the disabled
+Lastenhoito:childcare
+Asiakasmaksut:customer payments
+Sairauspäivärahat:sickness allowance
+Lainat:loans
+Pienet ja keskisuuret yritykset:small and medium-sized enterprises
+Koululaiset:schoolchildren
+Äitiysraha:maternity allowance
+Sakko:fine
+Ikärajat:age limits
+Avustajat:assistants
+Työmarkkinatuki:labor market support
+Vaalit:election
+Hallinto:governance
+Kuluttajansuoja:consumer protection
+Ympäristönsuojelu:environmental protection
+Loma:holiday
+Tasa-arvo:equality
+Haja-asutusalueet:sparsely populated areas
+Työnantajan sosiaaliturvamaksut:employers' social contributions
+Henkilötiedot:personal data
+Kuntien valtionosuudet:municipaliticies' central government subsidies
+Oleskeluluvat:residence permits
+Eläinsuojelu:animal welfare
+Sairaanhoito:nursing
+Vanhempainraha:parental allowance
+Energiantuotanto:energy production
+Vanhukset:elderly
+Aluepolitiikka:regional policy
+Maakaasu:natural gas
+Puolustusvoimat:army
+Investoinnit:investments
+Eduskunta:parliament
+Lukio:high school
+Avioliitto:marriage
+Tutkimustoiminta:research
+Naiset:ladies
+Luonnonsuojelu:conservation
+Korkeakoulut:colleges
+Sairaalat:hospitals
+Alkoholipolitiikka:alcohol policy
+Hinnat:prices
+Asumiskustannukset:housing costs
+Toimivalta:jurisdiction
+Syyte:prosecution
+Ammatit:occupations
+Kansanedustajain vaalit:parliamentary elections
+Euroopan yhteisöt (hist.):The European Communities (hist.)
+Lasten kotihoidon tuki:children's home care allowance
+Valtionavustukset:state grants
+Perusoikeudet:fundamental rights
+Salassapito:confidentiality
+Opetustoimi:Education Department
+Mielenterveys:mental health
+Eläkeläiset:the retired
+Lasten yksityisen hoidon tuki:private child-care subsidy
+Vanhentuminen:statute of limitations
+Avohoito:outpatient care
+Aseet:arms
+Vesiliikenne:water transport
+Virat:posts
+Vuosiloma:annual leave
+Eläimet:animals
+Suomi:Finland
+Harmaa talous:the gray economy
+Puhelinpalvelut:telephone services
+Muutoksenhaku:appeal
+Mainonta:advertising
+Autot:cars
+Rintamasotilastunnus:frontier military ID
+Työelämä:career
+Vangit:prisoners
+Rintamapalvelustunnus:battlefront service ID
+Rintamatunnus:battlefront ID
+Tietoverkot:information networks
+Elinkeinoverotus:business taxation
+Lahjavero:gift tax
+Energiapolitiikka:energy policy
+Perintövero:inheritance tax
+Ilmoitusvelvollisuus:notification duty
+EU-maat:EU countries
+Työllisyys:employment
+Ylivelkaantuneet:the over-indebted
+Perustuslait:constitutions
+Tuomioistuimet:The Courts
+Köyhyys:poverty
+Yksinhuoltajat:single parents
+Käräjäoikeudet:district courts
+Alkoholijuomavero:tax on alcoholic beverages
+Työsopimuksen irtisanominen:termination of employment contract
+Kilpailu:competition
+Opetus:teaching
+Kulutusluotot:consumer credit
+Päivärahat:daily allowances
+Veronpalautus:tax refund
+Valtiontuki:central government subsidy
+Osa-aikatyö:part-time work
+Palkkiot:fees
+Terveydensuojelu:health protection
+Työsuhde:employment relationship
+Ydinvoimalat:nuclear power plants
+Maksuliikenne:payment transactions
+Nestekaasu:liquefied petroleum gas
+Rangaistuksen määrääminen:imposition of a penalty
+Tapaamisoikeus:visitation rights
+Työvoimapolitiikka:labour policy
+Eläketurva:pension security
+Kalastus:fishing
+Velat:liabilities
+Pakkausmerkinnät:package labelling
+Velallinen:debtor
+Työnantajat:employers
+Julkisuus:publicity
+Avioero:divorce
+Ihmisoikeudet:human rights
+Terveyskeskukset:Health centers
+Petoeläimet:predators
+Kansalaisuus:citizenship
+Pikalainat:Quick Loans
+Vuorotteluvapaa:Job alternation leave
+Tiet:tract
+Kunnallisvaalit:Municipal elections
+Verotusmenettely:taxation Procedure
+Koulut:schools
+Asunnot:housing
+Työkyvyttömyyseläkkeet:disability pensions
+Kehitysyhteistyö:Development and
+Työttömyysetuudet:unemployment Benefits
+Rikoksentekijät:Offenders
+Nuorisotyöttömyys:youth unemployment
+Tutkinnot:degrees
+Pienyrittäjät:small Business Owners
+Kansanäänestykset:Referendums
+Työttömät:the unemployed
+Hoitovapaa:child-care leave
+Kodinhoitoapu:Home help
+Euroopan parlamentin edustajien vaalit:European Elections
+Korko:interest
+Rahapelit:Gambling
+Laitteet:equipment
+Valtioneuvosto:The Government
+Kiinteistöt:real estate
+Kiinteistövero:Real estate tax
+Kuntalaki:The Local Government Act
+Maaseutu:countryside
+Isyysraha:paternity allowance
+Osakeyhtiöt:limited liability companies
+Äänestykset:Vote
+Peruskoulu:Primary school
+Toimeentuloturva:Income security
+Nuorisotyö:youth Ministry
+Internet:Internet
+Maksukyvyttömyys:insolvency
+Matkapuhelimet:mobile phones
+Rikosrekisteri:record
+Nuoret työntekijät:Young workers
+Epätyypilliset työsuhteet:non-standard employment
+Kaivokset:mines
+Valtiontakaus:state guarantee
+Virkamiehet:officials
+Tiedonsaantioikeus:Right to information
+Ajo-oikeus:The right to drive
+Luottolaitokset:credit institutions
+Isyys:paternity
+Ajokielto:driving ban
+Asevelvollisuus:conscription
+Pienyritykset:small business
+Kansanterveys:Public Health
+Telekuuntelu:Interception of telecommunications
+Päihdehuolto:Substance Abusers
+Liikennejuopumus:drunken driving
+Pitkäaikaistyöttömyys:Long-term unemployment
+Sosiaalipalvelut:social services
+Pankkipalvelut:banking
+Esitutkinta:pretrial investigation
+Viestintämarkkinat:communications Markets
+Maatalous:Farming
+Vaalirahoitus:election Finance
+Urheilu:sports
+Tapaturmavakuutus:accident insurance
+Työtaistelut:Labour disputes
+Uskonnolliset yhteisöt:religious communities
+EU-maataloustuki:EU agriculture
+Säädösvalmistelu:Legal Preparation
+Viranhaltijat:Officers of
+Adoptio:adoption
+Valtion virkamiehet:civil service
+Vanhempainvapaa:Parental leave
+Sukupolvenvaihdos:Generational
+Perhehoito:Family Care
+Korkotukilainat:Concessional Loans
+Lomitus:Interlace
+Isovanhemmat:grandparents
+Työehtosopimukset:Collective agreements
+Päästökauppa:Emissions trading
+Psykiatriset potilaat:psychiatric patients
+Maatilat:farms
+Miehet:men
+Psykologit:psychologists
+Työvoiman vuokraus:Temporary employment agency
+Syyttäjät:prosecutors
+Vanhuuseläke:old age pension
+Säteilysuojelu:radiation protection
+Erikoissairaanhoito:Specialized Medical Care
+Syrjäytyminen:exclusion
+Markkinointi:marketing
+Velkajärjestely:debt Settlement
+Kaksikielisyys:bilingualism
+Ajoneuvovero:road tax
+Metsätalous:forestry
+Työaika:working hours
+Yhteisövero:The corporate
+Euroopan sosiaalinen peruskirja:The European Social Charter
+Dieselöljy:diesel oil
+Pääomatulojen verotus:Taxation of capital income
+Palkkatuki:The wage subsidy
+Potilaat:patients
+Takaisinperintä:recovery
+Mielenterveystyö:Mental Health
+Perhevapaat:Family leave
+Kotikunta:Municipality of Residence
+Pysäköinti:parking
+Televisio:TV
+Varainsiirtovero:Transfer Tax
+Perhepolitiikka:Family policy
+Sosiaalityö:social work
+Psykiatria:psychiatry
+Tasavallan presidentin vaali:Presidential Elections
+Ikääntyvät työntekijät:Older workers
+Työvoima:labor
+Työsuojelu:Occupational Safety and Health
+Väestötiedot:Demography
+Lasten kotihoito:Childhood Care
+Konkurssi:bankruptcy
+Yhteistyö:cooperation
+Kroonikot:chronically
+Terveystarkastukset:health checks
+Työvoimapalvelut:Employment services
+Matkailu:tourism
+Maataloustuki:agricultural
+Perinnöt:inheritances
+Euroalue:Eurozone
+Luovutusvoitot:Capital gains
+Lähestymiskielto:Restraining Order
+Tietojärjestelmät:information systems
+Rehut:Feed
+Eläkeikä:retirement age
+Lääkelaitos (hist.):National Agency for Medicines ( hist. )
+Tiedotus:PR
+Ylioppilastutkinto:matriculation examination
+Työturvallisuus:occupational safety
+Työkyvyttömyys:disability
+Rikollisuus:crime
+Kulttuuritoimi:Cultural
+Veropolitiikka:tax policy
+Vammaistuki:Disability allowance
+Polttoainevero:Fuel duty
+Tietotekniikka:information technology
+Oikeusturva:Legal
+Tasavallan presidentti:President of the Republic
+Kotihoito:domiciliary care
+Moottoriajoneuvovero (hist.):Motor vehicle tax ( hist. )
+Elinkeinopolitiikka:business policy
+Ammattikoulutus:Vocational training
+Puhelimet:phones
+Venäjä:Russia
+Oikeudenkäyntikulut:costs
+Taksit:taxis
+Eläketuki:pension Support
+Ehdolliset rangaistukset:suspended sentences
+Tietoliikenne:communication
+Polttoainemaksu:fuel Payment
+Ruotsin kieli:The Swedish language
+Veroasteikot:Tax scales
+Kiinteistönkauppa:Real estate transactions
+Hirvieläimet:deer
+Potilasturvallisuus:patient Safety
+Perheet:Families
+Sairaanhoitajat:nurses
+Suunnittelu:design
+Vanhustenhuolto:Elderly
+Ennakkoperintä:paye
+Kansallispuistot:national Parks
+Tuonti:import
+Elatusturva:of maintenance
+Maanomistajat:landowners
+Yhteiskuntapolitiikka:Social Policy
+Kulttuuri:culture
+Sähkömarkkinat:The electricity market
+Henkilöautot:private cars
+Aluekehitys:Regional Development
+Hautaus:interment
+Työterveyshuolto:Occupational health
+Arpajaiset:lottery
+Hevostalous:horse Management
+Opettajat:teachers
+Elinkeinot:Livelihood
+Jätevero:waste Tax
+Perheväkivalta:domestic violence
+Isyysvapaa:paternity leave
+Vuokra-asunnot:Apartments for Rent
+Pelastustoimi:Rescue services
+Ydinenergia:nuclear energy
+Vakuutusyhtiöt:Insurance companies
+Koulumatkatuki:Travel support
+Tiedonvälitys:Information
+Valtiontalous:Central government
+Moottoripyörät:Motorcycles
+Kaatopaikat:Landfills
+Yksilönsuoja:Privacy protection
+Opettajankoulutus:Teacher
+Pankit:banks
+Ammattitutkinnot:Qualifications
+Teollisuus:industry
+Energiatehokkuus:Energy Efficiency
+Turkistarhaus:Fur
+Rikesakko:the-spot fine
+Aluehallintovirastot:Regional State Administrative Agencies
+Kuntajako:Local Authority Boundaries
+Taksinkuljettajat:taxi drivers
+Rautatieliikenne:Rail transport
+Järjestäytynyt rikollisuus:organized crime
+Terveyskasvatus:health Education
+Talletukset:deposits
+Marjat:berries
+Säätiöt:foundations
+Koira:dog
+Huumetestit:drug Tests
+Sijoitukset:investments
+Rokotteet:vaccines
+Kunnallisvero:poll tax
+Vesivoima:water power
+Kriminaalipolitiikka:criminal
+Hätäkeskukset:call centers
+Hammashuolto:Dental Care
+Lahjat:Gifts
+Juhlapäivät:holidays
+Maataloustuotanto:agricultural Production
+Rekisteröity parisuhde:registered partnership
+Varallisuusvero:The property tax
+Kolmannet maat (EU-asiat):Third countries ( EU Affairs)
+Lapsipotilaat:Paediatric patients
+Lapsen huolto:Parental responsibility
+Koulutuspolitiikka:education and training policy
+Yleishyödylliset yhteisöt:Non-commercial organizations
+Sanomalehdet:newspapers
+Kirjanpito:accounting
+Lukukausimaksut:tuition Fees
+Rauhanturvaaminen:peacekeeping
+Joukkoliikenne:public transport
+Vankilat:prisons
+Kansalaistoiminta:Civic activities
+Terveydenhoitajat:Public health nurses
+Ansiotulot:earnings
+Psyykkiset sairaudet:mental illnesses
+Tekstiviestit:SMS
+Bensiini:petrol
+Yleinen järjestys:Law and order
+Esiopetus:Pre-school education
+Kiusaaminen:harassment
+Naisjärjestöt:women's organizations
+Ammatilliset oppilaitokset:vocational schools
+Ravintolat:restaurants
+Kotieläintuotanto:livestock Production
+Asiakirjat:documentation
+Elintarvikevalvonta:food control
+Sienet:mushrooms
+Maastakarkotus:expulsion
+Vesikulkuneuvot:water Transportation
+Turkistalous:fur farming
+Työttömyys:unemployment
+Ajokortit:Driving licenses
+Rahoitustarkastus (hist.):Financial Supervision Authority ( hist. )
+Liikunta:exercise
+Virkanimitykset:Recruitment
+Raskaus:pregnancy
+Vapaa liikkuvuus:Freedom of movement
+Kunnallispolitiikka:municipal policy
+Luonnonsuojelualueet:Nature Reserves
+Alkolukot:Alcolocks
+Vapaaehtoistyö:Volunteering
+Yritystuki:enterprise Support
+Rajavartiolaitos:The Border Guard
+Luonnontuotteet:natural Products
+Kotipalvelut:home services
+Tulli:customs
+Turvapaikkaoikeus:Right of asylum
+Vajaakuntoiset:People with disabilities
+Vammaisetuudet:Disability benefits
+Kulukorvaukset:Reimbursement of expenses
+Kielet:Languages
+Asetukset:Options
+Tartuntataudit:infectious Diseases
+Ulosotto:distraint
+Verohallinto:Tax Administration
+Elatusvelvollisuus:maintenance obligations
+Abortti:abortion
+Elinkeino-, liikenne- ja ympäristökeskukset:Economic Development, Transport and the Environment
+Eläimistön suojelu:conservation of wild fauna
+Radio:radio
+Jätehuolto:waste disposal
+Aikakauslehdet:Journals
+Tietosuoja:Privacy Policy
+Malminetsintä:Prospecting
+Opetusryhmät:Classes
+Kreikka:Greece
+Konsernit:groups
+Digitaalitekniikka:digital technology
+Henkilöliikenne:passenger
+Laskusuhdanne:The economic downturn
+Rahoitustuki:financial support for
+Yhdyskuntapalvelu:community service
+Ammattioppilaitokset:vocational schools
+Geenitekniikka:genetic engineering
+Aikuiskoulutustuki:Adult Support
+Avoliitto:cohabitation
+Ehdonalainen vapaus:Parole
+Yhdistyneet kansakunnat:United Nations
+Pysäköintivirhemaksu:Parking ticket
+Pedofilia:pedophilia
+Korjausrakentaminen:Renovation
+Paikallishallinto:Local
+Tupakointi:smoking
+Ulkopolitiikka:Foreign Policy
+Palomiehet:Firefighters
+Kansanedustajat:Members of Parliament
+Kestävä kehitys:sustainable development
+Arvopaperimarkkinat:securities markets
+Maanpuolustus:national defense
+Muuttoilmoitukset:Moving Announcements
+Erityishoitoraha:special care allowance
+Liikenne:traffic
+Rakennukset:buildings
+Asevelvolliset:conscripts
+Kiinteistönvälitys:real estate
+Jätteet:waste
+Maatalouspolitiikka:agricultural policy
+Siviilipalvelus:Non-military
+Eläkevakuutus:insurance
+Erityisopetus:Special
+Sosiaaliset yritykset:social enterprises
+Lääketiede:medicine
+Pakkohoito:forced Treatment
+Kotirauha:Home Peace
+Viinit:wines
+Kuntainliitot:municipal associations
+Apuvälineet:aids
+Nuorisorikollisuus:juvenile delinquency
+Liha:meat
+Korjausavustukset:Repair Grants
+Luottamushenkilöt:Elected
+Asuntojen perusparantaminen:Improvement of basic housing
+Kotisairaanhoito:Home health care
+Syöpätaudit:Oncology
+Lämmitys:heating
+Ammattitaudit:occupational diseases
+Äänitteet:Recordings
+Turve:peat
+Saksa:Germany
+Leikkaushoito:Surgical treatment
+Rahoitusmarkkinat:financial markets
+Valtionyhtiöt:state-owned Companies
+Viro:Estonia
+Suojatyö:sheltered work
+Arpajaisvero:The lottery tax
+Ammattipätevyys:professional qualifications
+Eläkelaitokset:The pension institutions
+Kotouttaminen:integration
+Syrjintä:discrimination
+Yksityiset tiet:private roads
+Terrorismi:terrorism
+Sikiö:fetus
+Iltapäivätoiminta:Afternoon activities
+Liikennevalvonta:Road Safety
+Ympäristövaikutukset:the environmental impact of
+Yrittäjäeläkkeet:entrepreneur Pensions
+Asunto-osakeyhtiöt:Housing companies
+Liikenteen turvallisuusvirasto:Transport Safety Agency
+Kuntouttava työtoiminta:rehabilitative work
+Talouspolitiikka:Economic policy
+Korkovähennys:Interest deduction
+Korkotuki:Concessional
+Rangaistusten täytäntöönpano:enforcement of sentences
+Euroopan rahoitusvakausväline:European Financial Stability Facility
+Pakolaiset:refugees
+Rahanpesu:Money laundering
+Verovelvollisuus:tax liability
+Urheiluseurat:Sports clubs
+Riistanhoito:game Management
+Aluehallinto:Regional State Administrative
+Hakkuut:Harvested
+Ilmastonmuutokset:climate change
+Puolueet:Political parties
+Liikuntavammaiset:The physically disabled
+Eläkepolitiikka:pension policy
+Lentoliikenne:air service
+Viestintävirasto:Finnish Communications Regulatory Authority
+Hallinto-oikeudet:The administrative courts
+Rahoitustoiminta:financing activities
+Eläkkeensaajien asumistuki:Housing allowance for pensioners
+Liikenneonnettomuudet:Traffic accidents
+Työssäkäyntialueet:employment areas
+Perusvähennys:basic allowance
+Työharjoittelu:Internship
+Kunnallistalous:municipal finances
+Lautamiehet:board Men
+Asiakkaat:customers
+Työttömyyseläkkeet:unemployment pensions
+Sananvapaus:freedom of speech
+Seksuaalisuus:sexuality
+Tulonhankkimisvähennys:Tulonhankkimisvähennys
+Suomen Pankki:The Bank of Finland
+Energia-avustukset:Energy subsidies
+Arkistot:Archives
+Kuntarakenne:The municipal structure
+Asuntotuotanto:Dwelling
+Susi:wolf
+Indeksiehto:Condition index
+Tupakkavero:tobacco tax
+Verosopimukset:tax treaties
+Pääkaupunkiseutu:Metropolitan Area
+Merenkulku:shipping
+Puolustustarvikkeet:Military equipment
+Yleisradio:broadcasting
+Natura 2000:of the Natura 2000
+Sairaanhoitopiirit:Hospital districts
+Oikeudenkäymiskaari:Judicial Procedure
+Vesiliikennejuopumus:Vesiliikennejuopumus
+Vienti:export
+Rahoitusjärjestelmät:financial systems
+Ulkomaat:foreign countries
+Kuljetustuki:transport Support
+Energia:energy
+Tiekunnat:PRIVATE ROAD
+Matkaliput:Tickets
+Kuorma-autot:Trucks
+Kunnalliset eläkkeet:social pensions
+Lomautus:lay-off
+Kemikaalit:chemicals
+Kielitaito:Knowledge of languages
+Vesistöt:Water bodies
+Lapsikaappaus:child abduction
+Vakuutus:insurance
+Tekijänoikeus:copyright
+Virvoitusjuomat:Soft drinks
+Kuljetus:transport
+Autonkuljettajat:Drivers
+Johtokunnat:boards
+Riita-asiat:Disputes
+Kehitysvammaiset:People with intellectual disabilities
+Sairausloma:sick leave
+Terveydenhoito:health care
+Kivihiili:coal
+Tiedonantovelvollisuus:obligation to provide information
+Kanne:complaint
+Postipalvelut:Postal services
+Itsehallinto:self-government
+Asbesti:asbestos
+Osuuskunnat:Co-operatives
+Rahastot:funds
+Luopumistukijärjestelmät:early retirement schemes
+Tilintarkastus:audit
+Kansaneläkkeen lapsikorotus:The national pension increase child
+Tavaraliikenne:freight
+Aukiolo:opening
+Julkiset hankinnat:public procurement
+Henkilökuntaedut:Staff Benefits
+Poistot:Depreciation and amortization
+Sukunimet:surnames
+Eduskunnan pankkivaltuusto:The Parliamentary Supervisory Council
+Työsuojelupiirit (hist.):Occupational Safety and Health Districts ( hist. )
+Työ- ja elinkeinotoimistot:The Ministry of Employment and Economic Development Offices
+Asumistuki:housing benefit
+Valtiokonttori:The State Treasury
+Sähköinen viestintä:electronic communications
+Takaus:guarantee
+Aikuiskoulutus:Adult Education
+Lääninhallitukset (hist.):Provincial governments ( hist. )
+VR Osakeyhtiö:VR
+Ympäristöpolitiikka:Environmental policy
+Henkilöntarkastus:Bodily
+Tupakka:tobacco
+Maakunnat:provinces
+Sähköautot:electric Cars
+Maankäyttö:Land Use
+Maahanmuuttovirasto:immigration
+Valtion eläkkeet:state pensions
+Tupakkatuotteet:tobacco Products
+Uskonnonvapaus:religious liberty
+Keliakia:Celiac Disease
+Kaavoitus:planning
+Huoltovarmuus:Security of Supply
+Poikkeusolot:The emergency situation
+Palvelutalot:sheltered accommodation
+Ministerit:The Ministers
+Henkilörekisterit:Registers
+Hoitotakuu:The health care
+Työkyky:Ability to work
+Kirjastot:libraries
+Yhdysvallat (USA):United States (U.S. )
+Perhepäivähoito:Family Child Care
+Viisumit:visas
+Yritysdemokratia:corporate Democracy
+Homoseksuaalisuus:gay Sexuality
+Työvoimakustannukset:Labour costs
+Pakkaukset:packaging
+Joukkovelkakirjalainat:Bonds
+Vaalipiirit:constituencies
+Energiapuu:coppice
+Julkinen hallinto:Public administration
+Merenkulkulaitos (hist.):The Finnish Maritime Administration ( hist. )
+Hoitolaitokset:care Enterprises
+Metsähallitus:National Forestry
+Ympäristökeskukset (hist.):Environmental Centres ( hist. )
+Verontilitys:tax Accounting
+Vesihuolto:Water supply
+Lastenhuolto:children's Service
+Työvoimatoimistot (hist.):Employment Offices ( hist. )
+Maanvuokra:ground rent
+Vakuutetun sairausvakuutusmaksu:Health insurance premium
+Kypros:Cyprus
+Osakkeet:stocks
+Tutkimuslaitokset:research Institutes
+Lissabonin sopimus:The Treaty of Lisbon
+Monikkoperheet:Multiple Births
+Kriisinhallinta:crisis management
+Neuvottelukunnat:Advisory Boards
+Sosiaali- ja terveysalan lupa- ja valvontavirasto:Health and Social Care authorization and supervision of agency
+Eläinlääkärit:vets
+Metsälaki:The Forest Act
+Ympäristövahingot:damage to the environment
+Työ- ja elinkeinokeskukset (hist.):The Ministry of Employment and Economic Development Centres ( hist. )
+Lahjonta:corruption
+Yhtiöt:companies
+Ruotsi:Sweden
+Turvallisuuspolitiikka:security Policy
+Toimiluvat:Licensing
+Kotityö:outwork
+Ydinonnettomuudet:nuclear accidents
+Porotalous:reindeer husbandry
+Ravitsemusterapeutit:nutritionists
+Taide:art
+Pelastuslaki:rescue Act
+Nopeusrajoitukset:Speed ​​Limits
+Ydinvastuu:The Nuclear Liability
+Jokamiehenoikeudet:Everyman's rights
+Romanit:The Roma
+Aravajärjestelmä:Arava system
+Urheilijat:athletes
+Tuulivoimalat:Wind turbines
+Työpajat:workshops
+Polttopuu:firewood
+Rahankeräys:whip-round
+Toisen asteen koulutus:Secondary education
+Kansaneläkkeen hoitotuki:The national pension allowance
+Optiot:options
+Liikennepolitiikka:Transport policy
+Puolustuspolitiikka:Defence policy
+Lehdistö:press
+Tappiontasaus:loss sharing
+Kuorma-autoliikenne:Trucking
+Uhkasakko:A periodic penalty payment
+Maatalousyrittäjäeläke:Farmer Pension
+Arvopaperit:securities
+Viestintä:communication
+Kunnallishallinto:Local government
+Pääomatulot:Income from capital
+Työtuomioistuin:industrial tribunal
+Kansanedustajain eläke:MP pensions
+Kansainväliset toimielimet:International institutions
+Vähemmistöt:minorities
+Apteekit:pharmacies
+Maaseutuelinkeinot:rural Industries
+Euroopan neuvosto:the Council of Europe
+Kunnanvaltuustot:municipal councils
+Valtion erityisrahoitusyhtiö:State-owned specialized financing company
+Finanssivalvonta:The Financial Supervisory Authority
+Postinjakelu:Mail delivery
+Itämeri:Baltic Sea
+Perhe-eläkkeet:Survivors' pensions
+Kuntoutusraha:The allowance
+Bulgaria:Bulgaria
+Eläinlääkintä:veterinary
+Apurahat:Scholarships
+Tulvavahingot:flood damage
+Pellot:fields
+Ostopalvelut:purchase Services
+Valtionhallinto:Central government
+Liikunta-alueet:Sports fields
+Alkoholittomat juomat:Non-alcoholic beverages
+Asuntolainat:Lending for house purchase
+Ryhmäkanteet:Class actions
+Eläintaudit:animal diseases
+Oppimateriaali:Study Material
+Merimieseläke:Seamen's Pension
+Työssäoloehto:employment for
+Ammatillinen aikuiskoulutus:vocational Adult Education
+Tietopalvelu:Information Services
+Hotellit:Hotels
+Työsuojeluhallinto:Occupational Safety and Health Administration
+Sähkölaitokset:power plants
+Työ- ja elinkeinoministeriö:The Ministry of Employment and the Economy
+Äänikynnys:threshold
+Telemarkkinat:telecommunications Market
+Lapsikorotukset:child supplements
+Irlanti:Ireland
+Opetus- ja kulttuuriministeriö:Ministry of Education and Ministry of Culture
+Investointituki:Investment
+Käyttövoimavero:motive
+Afganistan:Afghanistan
+Valtion lainananto:State lending
+Kansainvälinen politiikka:International politics
+Metsänhoito:forestry
+Slovakia:Slovakia
+Energiamarkkinavirasto:The Energy Market Authority
+Byrokratia:bureaucracy
+Itävalta:Austria
+Kaupungit:Cities
+Hammaslääkärit:dentists
+Sotilasavustus:military Assistance
+Belgia:Belgium
+Luxemburg:Luxembourg
+Taloudellinen yhteistyö:economic co-operation
+Italia:Italy
+Slovenia:Slovenia
+Alankomaat:Netherlands
+Kuntien yhdistymisavustukset:municipal mergers
+Malta:Malta
+Portugali:Portugal
+Ranska:France
+Pohjoismaat:Nordic countries
+Maaseutuvirasto:Rural Affairs
+Myymälät:Stores
+Omistusasunnot:Owner-occupied dwellings
+Romania:Romania
+Mielipiteet:opinions
+Osakkaat:shareholders
+Ansiotulojen verotus:Earned income tax
+Eduskunnan työjärjestys:Parliament's Rules of Procedure
+Kaksinkertainen verotus:Double taxation
+Sairaanhoitotarvikkeet:Medical Supplies
+Taiteilijat:Artists
+Karhut:Bears
+Espanja:Spain
+Valvontarangaistus:control Penalty
+Rakennuslaki:Building
+Sähköposti:e-mail
+Varhaiskasvatus:Early Childhood Education
+Lisäaineet:additives
+Hajautus:devolution
+Euroopan unionin laajentuminen:Enlargement of the European Union
+Henkilöyhtiöt:partnerships
+Vastaanottokeskukset:The reception centers
+Sähköinen asiointi:E-services
+Tiekuljetus:Road Transport
+Yritysverotus:Corporate taxation
+Työllistämistuki:The wage subsidies
+Talvikunnossapito:Winter maintenance
+Säilöönotto:Detention
+Lesket:widows
+Sovittelu:mediation
+Euroopan komissio:the European Commission
+Pääministerit:The Prime Ministers
+Uraani:uranium
+Työriidat:Labour disputes
+Vaaralliset aineet:Hazardous substances
+Kieltenopetus:Language Learning
+Joukkoviestintä:Mass communication
+Satovahingot:damage to the crop
+Kuntayhtymät:federations of municipalities
+Passit:passports
+Osingot:dividends
+Työriitojen sovittelu:Resolving labor disputes
+Eurooppa-neuvosto:The European Council
+Kielilaki:The Language Act
+Virastodemokratia:Office for Democracy
+Euroopan ihmisoikeustuomioistuin:European Court of Human Rights
+Linja-autoliikenne:The bus service
+Rautatiet:railway
+Mielenosoitukset:The protests
+Lääkealan turvallisuus- ja kehittämiskeskus:Medicines and Development
+Työvoimahallinto:Labour Office
+Viivästyskorko:Interest on late payment
+Vanhusasiavaltuutettu:The Ombudsman for the Elderly
+Äitiysvapaa:Maternity leave
+Opetusohjelmat:Tutorials
+Jätevesihuolto:Waste water management
+Postitoimipaikat:Post offices
+Lautakunnat:boards
+Doping:doping
+Naamiot:masks
+Hallituksen esitykset:The Board's proposals
+Eduskunnan virkamiehet:parliamentary officials
+Todistelu:argument
+Kirjallisuus:literature
+Vakuutuskassat:Social security funds
+Puoluetuki:party Support
+Elatus:maintenance
+Miinat:mines
+Luottotiedot:Credit history
+Itella:Itella
+Rajanylityspaikat:Border crossings
+Uskonnonopetus:religious education
+Arvo-osuudet:Value of the shares
+Ahvenanmaa:Åland Islands
+Maalämpö:Geothermal
+Säädökset:acts
+Kalakannat:Fish stocks
+Potilasvahingot:patient Injuries
+Talletuspankit:deposit banks
+Palvelusetelit:vouchers
+Ajo-opetus:Driving lessons
+Orkesterit:orchestras
+Tiepiirit (hist.):Road Districts ( hist. )
+Ympäristölupavirastot (hist.):Environmental Permit ( hist. )
+Suomen kieli:The Finnish language
+Kehittämisavustukset:Contributions to the Development of
+Metsiensuojelu:forest protection
+Nuorisojärjestöt:youth Organizations
+Puutavara:timber
+Toimitusjohtajat:CEOs
+Hovioikeudet:Courts of appeal
+Sukupolvenvaihdoseläkkeet:generation pension
+Koulukuljetus:School Transport
+Kehitysalueet:development areas
+Valtion yksiköt:state departments
+Asumisoikeusasunnot:Right-of- Flats
+Energiatalous:energy Economics
+Maaseutupolitiikka:rural policy
+Täydennyskoulutus:Continuing Education
+Luonnonvarat:natural resources
+Tuomarit:The Judges
+Viittomakieli:sign language
+Kuri:discipline
+Veronkierto:tax avoidance
+Sisäasiainministeriö:Ministry of the Interior
+Lentokentät:Airports
+Elintarviketeollisuus:Food Industry
+Merensuojelu:marine Conservation
+Ihmiskauppa:Trafficking in human beings
+Kiintiöt:quotas
+Tapaturmat:accidents
+Esteellisyys:disqualification
+Valtiovarainministeriö:Treasury
+Tietoturvallisuus:Security
+Museot:Museums
+Atk-ohjelmat:Computer software
+Tilatuki:The SPS
+Rajoitettu verovelvollisuus:Limited tax liability
+Linnut:birds
+Saamelaiset:The Sami people
+Veroprosentti:The tax rate
+Osa-aikaeläkket:Part -time
+Liputus:Flagging
+Vuokralaiset:Tenants
+Elatustuki:Child support
+Parlamentarismi:parliamentarism
+Seurakunnat:parishes
+Euroopan yhteisöjen komissio (hist.):Commission of the European Communities ( hist. )
+Radanpito:Infrastructure management
+Ranta-alueet:Waterfronts
+Rotusyrjintä:racial Discrimination
+Ulkomaankauppa:Foreign Trade
+Rintamalisä:front Supplement
+Ajoneuvojen siirtäminen:transfer vehicle
+Alkoholisairaudet:alcohol Diseases
+Lakkauttaminen:abolition
+Ministeriöt:ministries
+Eläketulovähennys:The pension income deduction
+Voimalat:Power Plants
+Konserniavustukset:Group contributions
+Maakuntaitsehallinto:provincial Autonomy
+Metsäverotus:forest Taxation
+Muutosturva:The change
+Valtio:state
+Ilmansuojelu:air Pollution
+Telepalvelut:Telecommunication services
+Liikenneluvat:Authorisations
+Kertomukset:reports
+Talousrikokset:economic crimes
+Nuoret rikoksentekijät:Young offenders
+Evankelis-luterilainen kirkko:The Evangelical Lutheran Church
+Eläinkokeet:Studies in animals
+OECD:OECD
+Lähdevero:withholding tax
+Puoluerahoitus:party Funding
+Professorit:professors
+Arvopaperipörssi:stock exchange
+Verkkotunnukset:domains
+Kierrätys:recycling
+Kulutushyödykkeet:Consumables
+Saaristot:archipelagos
+Tietokannat:databases
+Postitoiminta:The Postal Operations
+Kuuba:Cuba
+Äitiysavustukset:Maternity benefits
+Ulkomaalaisvirasto:Immigration
+Verolait:tax laws
+Vapaa sivistystyö:Liberal adult education
+Tiehallinto (hist.):Finnish Road Administration ( hist. )
+Ammattinimikkeet:Job titles
+Atk-laitteet:Computer hardware
+Kuulovammaiset:hearing impaired
+Yhtiökokoukset:General Meetings of Shareholders
+Tilastot:statistics
+Asumisen rahoitus- ja kehittämiskeskus:Housing Finance and Development
+Tuulienergia:Wind Energy
+Maatilatalous:farm Financial
+Ulkomailla työskentelevät:abroad to work
+Suuronnettomuudet:Catastrophes
+Vankeinhoito:Penitentiary
+Suomen Kuntaliitto:Finnish Local and Regional Authorities
+Pankkituki:Bank Support
+EU-rakennerahastot:EU Structural Funds
+Anniskeluoikeudet:License
+Rikosvahingot:criminal damage
+Ensiasunnot:The first houses
+Senaatti-kiinteistöt:Senate Properties
+Asiantuntijat:experts
+Vakauttaminen:consolidation
+Ikääntyvät työttömät:Older people unemployed
+Lastenhoitajat:Nannies
+Euroopan talousalue:European Economic Area
+Opetushallitus:Board of Education
+Valtiontalouden tarkastusvirasto:The National Audit Office
+Työttömyyskassat:unemployment funds
+Valtiosääntö:constitution
+Finnair:Finnair
+Työtapaturmat:Accidents at work
+Linja-autot:Buses
+Syyttämättä jättäminen:non-prosecution
+Olut:beer
+Työvoima- ja elinkeinokeskukset (hist.):The Employment and Economic Development Centres ( hist. )
+Poliisihallitus:The National Police Board
+Televisiomaksu:television Pay
+Helsingin yliopisto:University of Helsinki
+Takavarikko:attachment
+Liikkeenjohto:management
+Kalastuksenhoitomaksu:Fishing Licence
+Puhelinmaksut:Telephone charges
+Kansaneläkkeen pohjaosa:national pensions
+Metsätilat:forest Modes
+Itä-Timor:Timor-Leste
+Ympäristöministeriö:Ministry of the Environment
+Erityiskoulut:special schools
+Virkaehtosopimukset:Collective bargaining agreements
+Koulutuspäiväraha:training allowance
+Vuokratalot:Houses for rent
+Asiakirjajulkisuus:Access to documents
+Raha-automaattiavustukset:Slot Machine grants
+Vesiensuojelu:Water conservation
+Euro:euro
+Junat:trains
+Tutkintotodistukset:Diplomas
+Virkistystoiminta:recreation
+Norja:Norway
+Jätevesi:sewage
+Tilaajan selvitysvelvollisuus:The contractor's obligation to
+Paloturvallisuus:Fire Safety
+Kuvaohjelmat:Photo Programs
+Pankkitalletukset:Bank deposits
+Työvoimakoulutus:Labour market
+Työmarkkinajärjestöt:The labor market organizations
+Päiväkodit:Day-care centers
+Ympäristöhallinto:environmental Management
+Televalvonta:Remote surveillance
+Luontoisedut:fringe benefits
+Väylämaksu:The bus fee
+Rikosseuraamuslaitos:The Criminal Sanctions Agency
+Rajatarkastukset:border checks
+Ympäristöluvat:environmental permits
+Peitetoiminta:Cover Action
+Tilinpäätös:Financial Statements
+Eduskunnan valiokunnat:Parliamentary Committees
+Islanti:Iceland
+Työsuhdeoptiot:Employee stock options
+Ammattiyhdistykset:The trade unions
+Kuorma-autonkuljettajat:Truck drivers
+Asuntokauppa:The housing market
+Matalapalkkatuki:Low-wage
+Huoneenvuokra:room Rental
+Varhaiseläkkeet:Early retirement
+Työsuhdeturva:Job Security
+Järjestystoimi:order Activity
+Vesiliikenneturvallisuus:water Traffic Safety
+Öljyntorjunta:oil spill response
+Hylkeet:seals
+Puolustushallinto:Defence Administration
+Rakennuksen energiatodistus:building's energy
+Päiväsakko:daily penalty
+Säteilyturvallisuus:radiation and Nuclear Safety
+Täytäntöönpano:execution
+Maito:milk
+UPM-Kymmene:UPM-Kymmene
+Karjatalous:livestock
+Diabetes:diabetes
+Lapsiasiavaltuutetut:The Ombudsman for Children
+Israel:Israel
+Elokuva:movie
+Korkein hallinto-oikeus:The Supreme Administrative Court
+Eläkemaksut:Pension contributions
+Neuvolat:The clinics
+Ympäristöverot:environmental taxes
+Vanhainkodit:Homes for the aged
+Musiikki:music
+Kulttuuritapahtumat:Cultural events
+Työpaikkademokratia:workplace Democracy
+Jäänmurtajat:Icebreakers
+Prostituutio:prostitution
+Biotunnistus:Biotunnistus
+Tasoristeykset:level crossings
+Merentutkimuslaitos (hist.):Institute of Marine Research ( hist. )
+Liikennevirasto:Transport Agency
+Lohi:salmon
+Vakuutuskorvaukset:insurance claims and benefits
+Arvopaperikeskus:Central Securities Depository
+Hautausmaat:cemeteries
+Merimiehet:Sailors
+Saamen kieli:The Sami language
+Rakennusteollisuus:The construction industry
+Hedelmöityshoito:reproductive technology
+Maksuvapautus:exemption from payment
+Luottamusmiehet:The shop stewards
+Rautatieasemat:railway stations
+Markkinaoikeus:The Market
+Menettämisseuraamus:forfeiture
+Eduskuntaryhmät:parliamentary groups
+Rangaistusmääräysmenettely (hist.):The penal procedure ( hist. )
+Tutkijat:Researchers
+Suomen ympäristökeskus:The Finnish Environment Institute
+Sairauskuluvähennys:The medical expenses deduction
+Kemikaalivirasto:The Agency
+Käytetyt autot:used Cars
+Työnhaku:job-hunting
+Lastentarhanopettajat:kindergarten teachers
+Hallintolainkäyttö:Administrative Judicial
+Aurinkoenergia:Solar Energy
+Demokratia:democracy
+Suuhygienistit:Dental hygienists
+Paluumuuttajat:Returnees
+Työluvat:Work permits
+Kosovo:Kosovo
+Työttömyysvakuutus:unemployment Insurance
+Valtion liikelaitokset:state-owned companies
+Raideliikenne:Rail
+Satamat:ports
+Palkkaturva:wage Security
+Pakettiautot:vans
+Sosiaali- ja terveysministeriö:Social Affairs and Health
+Vakuutusoikeus:insurance law
+Lääketeollisuus:The pharmaceutical industry
+Öljyvahingot:oil spills
+Räjähteet:Explosives
+Lentokoneet:Planes
+Fysioterapia:physiotherapy
+Ympäristötuki:Environmental
+Makeisvero:confectionery Tax
+Vähemmistövaltuutettu:The Ombudsman for Minorities
+Kuvaohjelmien tarkastus:The inspection
+Jäätelö:ice cream
+Ympäristömyrkyt:environmental toxins
+Oikeuslaitos:judiciary
+Pätkätyö:short-term jobs
+Tulevaisuus:future
+Biodiversiteetti:biodiversity
+Kunnallinen eläkelaitos:municipal pension
+Hallintomenettely:The Administrative Procedure
+Oikeuskansleri:attorney general
+Sikatalous:pig farming
+Rakennemuutos:The structural
+Kompostointi:composting
+Tulkit:interpreters
+Elintarviketurvallisuusvirasto:Food Safety Authority
+Oppisopimukset:Learning Contracts
+Riistanhoitomaksu:The game management fee
+Näkövammaiset:Visually impaired
+Veikkaus:pools
+Varuskunnat:garrisons
+Majoitus- ja ravitsemistoiminta:Accommodation and food service activities
+Kertausharjoitukset:refresher
+Valtion kiinteistövarallisuus:State real estate assets
+Ratahallintokeskus (hist.):Rail Administration ( hist. )
+Rajaseudut:border regions
+Vesienhoito:water management
+Ilkivalta:vandalism
+Ensikodit:primary Homes
+Oulun yliopisto:University of Oulu
+Kouluruokailu:school meals
+Väestönsuojelu:civil defense
+Valtion lainanotto:government borrowing
+Konkurssipesät:bankruptcy Nests
+Henkivakuutus:life insurance
+Kalastajat:fishermen
+Laboratoriot:laboratories
+Ammatinvalinnanohjaus:vocational guidance
+Synnytys:birth
+Ansiotulovähennys:earned income
+Veneet:Boats
+Århusin yleissopimus:The Aarhus Convention
+Pohjoismaiden ministerineuvosto:Nordic Council of Ministers
+Holhous:guardianship
+Postimaksut:post-free
+Meripelastus:salvage
+Kalatalous:fisheries
+Kulttuuritoiminta:cultural Activities
+Sydän- ja verisuonitaudit:Heart and vascular diseases
+Liikennepalvelut:Traffic Services
+Kansainväliset suhteet:International Relations
+Maitovalmisteet:dairy Products
+Perintätoiminta:Recovery of Function
+Elimensiirto:spare-part surgery
+Hallitusten välinen konferenssi:The Intergovernmental Conference
+Papit:clergy
+Paikallisradio:in local area
+Lähihoitajat:Licensed practical nurses
+Ilmailu:aviation
+Elämänkatsomustieto:ethics
+Valtioneuvoston kanslia:Prime Minister's Office
+Eläkesäätiöt:The pension funds
+Pelastustoiminta:rescue operations
+Taidekasvatus:Art Education
+Jumalanpilkka:blasphemy
+Tulvasuojelu:flood protection
+Ulkomaanedustus:foreign Agencies
+Asunnonvälitys:The Housing Service
+Julkinen talous:Public finances
+Todistajat:witnesses
+Hallitukset:governments
+Arvopaperinvälitysliike:Market Brokerage
+Eroraha:severance pay
+Teollisuusjätteet:industrial waste
+Varastot:stores
+Teatteri:theater
+Panttioikeudet:lien
+Sijoituspalveluyritykset:investment firms
+Suojelupoliisi:special branch
+Salakuljetus:smuggling
+Maailman postiliitto:The Universal Postal Union
+Kuljettajantutkinto:for the degree
+Välityspalkkiot:brokerage commissions
+Lahjoitusvähennys:donation deduction
+Rikoksentekijän luovutus:Offender transfer
+Vammaishuolto:Disability Service
+Asianajajat:lawyers
+Vesivoimalat:water power plant
+Metsätyöntekijät:forestry Workers
+Löytötavarat:Lost and Found
+Sidonnaisuudet:The Prime
+Saattohoito:terminal care
+EU-tuet:EU subsidies
+Korkeakouluhallinto:Higher Education Administration
+Maatalousyrittäjän vuosiloma:Farmers' annual leave
+Autoilijat:motorists
+Kevyen liikenteen väylät:Pedestrian and cycle paths
+Yhdistystalot:The association Houses
+Huutokauppa:auction
+Lapsivähennys:child Tax Credit
+Varustamoliikelaitos:Shipping Agency
+Liechtenstein:Liechtenstein
+Kodinhoitajat:home Caregivers
+Paperiteollisuus:The paper
+Kirjailijat:writers
+Vuokrankorotukset:rent increases
+Euroopan vakausmekanismi:European Stability Mechanism
+Pelastusopisto:Emergency Services
+Oppilashuolto:student Welfare
+Metsävahingot:forest damage
+Ilmavoimat:air force
+Poikkeusluvat:Waivers
+Irak:Iraq
+Virkistysalueet:recreation
+Perheneuvonta:Family counseling
+Metsäteollisuus:The Forest
+Kulttuurihistorialliset alueet:Cultural-historical areas
+Metsäkeskukset:forestry Centres
+Tärkkelys:starch
+Peruna:potato
+Lääkehoidon kehittämiskeskus (hist.):Pharmacotherapy Development ( hist. )
+Liikkumisvapaus:Freedom of movement
+Home:mold
+Säästäminen:saving
+Pohjavesi:water table
+Kissa:cat
+Ilmatieteen laitos:the met
+Maa-aines:Soil
+Jumalanpalvelus:worship
+Maistraatit:Register offices
+Moottoriajoneuvot:motor vehicles
+Vesilaki:The Water Act
+Biotekniikka:biotechnology
+Virka-apu:Their assistance in
+Tietoyhteiskunta:The Information Society
+Kalanviljely:fish farming
+Merikuljetus:Transport by sea
+Eläkekassat:pension funds
+Kääntäjät:translators
+Telakkateollisuus:The shipbuilding industry
+Fortum:Fortum
+Tullihallinto:The Customs Department
+Eläkevakuutusmaksuvähennys:The reduction of pension
+Harmaan talouden selvitysyksikkö:The underground economy, clearing unit
+Neste:liquid
+Tekstiili- ja vaatetusteollisuus:Textile and clothing industry
+Valuutanvaihto:Currency Exchange
+Metsäntutkimuslaitos:Finnish Forest Research Institute
+Sijoitusrahastot:Mutual Funds
+Ennakkopäätökset:advance Decisions
+Raakapuu:yard
+Arvonimet:Titles
+Vaatimustenmukaisuus:Declaration of Conformity
+Alkio:embryo
+Valtion eläkerahasto:The State Pension Fund
+Yksinhuoltajavähennys:The reduction of single-parent
+Jyväskylän yliopisto:University of Jyväskylä
+Terveydenhuolto-oppilaitokset:Health care institutions
+Opiskelijavaihto:Student Exchange
+Sudan:Sudan
+Tekninen tarkkailu:technical monitoring
+Rintamasotilaseläke:Frontier Military Retirement
+Riista- ja kalatalouden tutkimuslaitos:Finnish Game and Fisheries Research Institute
+Ympäristö:environment
+Kosmeettiset tuotteet:cosmetic products
+Aasia:Asia
+Teletoiminta:telecommunications
+Sotilaskuri:military discipline
+Kotieläimet:Pets
+Terveydenhuollon oikeusturvakeskus (hist.):Authority for Medicolegal Affairs ( hist. )
+Nato:NATO
+Suomen Akatemia:Academy of Finland
+Kriminaalihuolto:Probation
+Kuolemansyyt:Causes of death
+Turvavyöt:Seat belts
+Vesistötyöt:Water works
+Kansainväliset järjestöt:International organizations
+Laivanvarustus:Shipping
+Ulkoasiainministeriö:Ministry of Foreign Affairs
+Pelastustoimilaki (hist.):Emergency Services Act ( hist. )
+Puolustushallinnon rakennuslaitos:Defence Administration
+Alkuperäiskansat:indigenous peoples
+Kirkkolaki:The Church Act
+Palestiinan itsehallintoalue:Palestinian Authority
+Virastotalot:Office buildings
+Sveitsi:Switzerland
+Kansaneläkelaitoksen valtuutetut:The Social Insurance Institution authorized
+Puolustusministeriö:Ministry of Defense
+Puutarhatalous:horticulture
+Tavaramerkit:trademarks
+Säästöpankit:savings banks
+Tietokoneet:computers
+Vakuutusmaksuvero:Tax on insurance premiums
+Kasviston suojelu:flora
+Taiteilijaeläke:artist Pension
+Sisävesiliikenne:Inland waterway transport
+Sähköinen allekirjoitus:electronic signature
+Loma-asunnot:Vacation Rentals
+Vakuutussopimukset:insurance Contracts
+Vakuudet:collateral
+Yhdistelmätuki (hist.):The combination of Support ( hist. )
+Yhteisösakko:The corporate
+Pormestarit:mayors
+Järjestyksenvalvojat:Security stewards
+Vakuutuslaitokset:insurance companies
+Marokko:Morocco
+Omaisuudenhoitoyhtiöt:Asset management companies
+Valmiuslaki:The Emergency Powers Act
+Jatkokoulutus:further education
+Australia:Australia
+Työnantajajärjestöt:Employers' organizations
+Rakennerahastot:The Structural Funds
+Sähköinen tunnistaminen:electronic identification
+Koulutuskeskukset:training centers
+Ajoneuvorekisterit:The vehicle registers
+Traktorit:tractors
+Työterveyslaitos:Institute of Occupational Health
+Raiskaus:rape
+Opetusministeriö (hist.):Ministry of Education ( hist. )
+Taloudellisen kasvun turvaaminen:Securing economic growth
+Euroopan talous- ja rahaliitto:European Economic and Monetary Union
+Kansainvälinen työjärjestö:The International Labour Organization
+Valtiontakuut:state guarantees
+Kaupanvahvistajat:The notary
+Mopot:Mopeds
+Korkein oikeus:Supreme Court
+Maksuvälineet:means of payment
+Varikot:depots
+Kansanedustajain perhe-eläke:MPs family pension
+Potilasasiamiehet:The patient ombudsmen
+Valtioneuvoston selonteot:Government reports
+Insinöörit:engineers
+Proteesit:prostheses
+Ensiapu:first aid
+Toimittajat:suppliers
+Pääomamarkkinat:capital Markets
+Tieliikelaitos:The Finnish Road Enterprise
+Merialueet:sea ​​areas
+Kirkkorakennukset:The Church Buildings
+Eduskunnan oikeusasiamies:The Parliamentary Ombudsman
+Maakunta-arkistot:Provincial Archives
+Lastensuojelulaitokset:Child welfare institutions
+Erityiset oikeudet:The special rights
+Moottorikelkat:snowmobiles
+Kilpailunrajoitukset:Antitrust
+Pyöräily:cycling
+Turvallisuusneuvosto:Security Council
+Länsi-Sahara:Western Sahara
+Yhteisöasuminen:Community Housing
+TeliaSonera:TeliaSonera
+Kosteusvauriot:moisture problems
+Lannoitteet:fertilizers
+Luonnonhaittakorvaus:NHP
+Toiminimet:Business names
+Maanmittaustoimitukset:National Land Survey of Delivery
+EU-sisäasiayhteistyö:EU home affairs cooperation
+Raha-automaattiyhdistys:Slot Machine
+Reumataudit:rheumatic diseases
+Järvet:lakes
+Helikopterit:helicopters
+Alusturvallisuus:ship safety
+Sivutoimet:page Actions
+Väestörekisterikeskus:Registry office
+Työpaikkaruokailu:Staff lunch
+Työministeriö (hist.):The Ministry of Labour ( hist. )
+Työnantajan työttömyysvakuutusmaksu:Employer's unemployment insurance
+Kaapeliviestintä:cable Communications
+Kuolleeksi julistaminen:Declaration of death
+Kidutus:torture
+Kuluttajavirasto:consumer Agency
+Virkapuvut:Uniforms
+Vammaisjärjestöt:Disability organizations
+Tuotekehitys:Research and development
+Sairauskassat:sickness funds
+Yrtit:herbs
+Kadut:The streets
+Yksityiset turvallisuuspalvelut:private security
+Neuvostoliitto (hist.):The Soviet Union ( hist. )
+Eläketurvakeskus:Eläketurvakeskus
+Poliisipiirit:police Districts
+Rautatievaunut:Wagons
+Henkilötodistukset:Passes
+Juomavesi:Drinking water
+Yrityssaneeraus:The Restructuring
+Kaupparekisterit:trade register
+Kioskit:kiosks
+Veroparatiisit:Tax Havens
+Edunvalvonta:lobbying
+Pornografia:pornography
+Tiedoksianto hallintoasioissa:Notification to administrative matters
+Kalastusalueet:fishing areas
+Teknologia:technology
+Liikennevakuutus:Motor Insurance
+Virvoitusjuomavero:Soft Drink Tax
+Yksityistäminen:privatization
+Kemira:Kemira
+Yleisötilaisuudet:Public meetings
+Mielisairaalat:mental hospital
+Väestöpolitiikka:population policy
+Kehitysmaat:developing countries
+Tuotevastuu:product Liability
+Opettajankoulutuslaitokset:Teacher education institutions
+Kartat:Maps
+Helsingin eurooppalainen koulu:Helsinki European school
+Optikot:Opticians
+Öljy:oil
+Kommandiittiyhtiöt:limited partnerships
+Biopankit:biobanks
+Katsastus:inspection
+Tulolähteet:Sources of income
+Ydinjätteet:nuclear waste
+Merilaki:Law of the sea
+Sairaankuljetus:ambulance
+Liikenne- ja viestintäministeriö:The Ministry of Transport and Communications
+Säteilyturvakeskus:Radiation and Nuclear Safety
+Yrityskaupat:Mergers & Acquisitions
+Teurastamot:slaughterhouses
+Liito-orava:Flying Squirrel
+Eduskunnan kansliatoimikunta:Parliamentary Commissioner's Office
+Eläinaktivismi:animal Activism
+Kuntien kalleusluokitus (hist.):The high cost of the Local Government Classification ( hist. )
+Opintososiaaliset edut:Student benefits
+Kanada:Canada
+Baltia:The Baltics
+Luonnonmukainen tuotanto:Organic production
+Kuivaus:dry
+Pohjoiskalotin koulutussäätiö:Arctic Vocational Foundation
+Tuotantokiintiöt:production quotas
+Vesistöjen säännöstely:water source
+Viihde-elektroniikka:Consumer electronics
+Ongelmajätteet:Hazardous waste
+Kauppa- ja teollisuusministeriö (hist.):Of Trade and Industry ( hist. )
+Liikesalaisuus:trade secret
+Vientituki:The refund
+Yksityissairaalat:nursing home
+Yleiset alueet:Common areas
+Puhtaanapito:sanitation
+Oikeusrekisterikeskus:The Legal Register Centre
+Työrikokset:employment offenses
+Yhteistoimintamenettely:Cooperation
+Juristit:lawyers
+Työperäiset sairaudet:Work-related diseases
+Kuluttaja-asiamies:Ombudsman
+Veronkanto:levy
+Maatalousmaa:Agricultural land
+Esikoulu:Pre-school
+Osakepääoma:capital stock
+Matelijat:Reptiles
+Kalavahingot:damage to fish
+Syyria:Syria
+Palvelukeskukset:Service centers
+Tukkukauppa:wholesale
+Tonnistovero:The tonnage tax
+Lentoturvallisuus:flight Safety
+Raha:money
+Venäjän kieli:The Russian language
+Työeläkeasioiden muutoksenhakulautakunta:Pension Appeal
+Kasvinsuojelu:plant protection
+EU-oikeusasiayhteistyö:European Ombudsman co-operation
+Vakuutusvalvontavirasto (hist.):The Insurance Supervisory Authority ( hist. )
+Viivekorko:The penalty
+Varojen arvostaminen verotuksessa:The valuation of assets for tax purposes
+Koulutusrahastot:education Funds
+Libanon:Lebanon
+Sosiaaliturvan muutoksenhakulautakunta:Social Security Appeal Board
+Metsähallinto:The Forestry Commission
+Ennakkoäänestys:Advance
+Oikeuspolitiikka:Legal policy
+Yritys- ja yhteisötiedot:Corporate and institutional information
+Kansalliset kaupunkipuistot:National City Parks
+Kansalaisopistot:Adult education centers
+Työväenkulttuuri:Workers' Culture
+Elintarvikevirasto (hist.):National Food Agency ( hist. )
+Työvoimapiirit:labor- circuits
+Kasvinjalostus:plant Breeding
+Maksuperusteet:payment Basics
+Valuutta:currency
+Sahateollisuus:The sawmill industry
+Oikeustoimi:judicial act
+Esteettömyys:accessibility
+Luotsaus:Pilotage
+Sotilasoikeudenkäynti:military Trial
+Tietosuojavaltuutettu:The EDPS
+Ilmakuljetus:airlift
+Lämpövoimalat:thermal power stations
+Terveyden ja hyvinvoinnin laitos:Health and Welfare
+Kuntien valtionavut:Government transfers to municipalities
+Destia:Destia
+CE-merkintä:CE marking
+Siipikarjatalous:poultry
+Turvatarkastukset:Security checks
+Työnvälitys:Employment
+Liikennekasvatus:traffic education
+Torjunta-aineet:Pesticides
+Patentit:patents
+Kansanopistot:Folk
+Sukupuoli:gender
+Hedelmät:fruits
+Sitra:zither
+Kuolemanrangaistus:capital punishment
+Napoli II yleissopimus:Naples II Convention
+Keskushallinto:central government
+Katsastusasemat:Inspection Stations
+Rajat:cross-
+Palkinnot:Awards
+Kiina:China
+Liikennevahingot:traffic accidents
+Karjala:Karelia
+Turvakodit:Shelters
+Metro:metro
+Radiolaitteet:radio equipment
+Joet:Rivers
+Turvallisuusselvitykset:safety reports
+Asuntopolitiikka:housing policy
+Tiede:science
+Saatavien perintä:recovery of debts
+Petos:fraud
+Kiinnitysluottopankit:Mortgage banks
+Julkaisutoiminta:publishing
+Tuoteturvallisuus:product Safety
+Rautatielaki:The Railway Act
+Maa- ja elintarviketalouden tutkimuskeskus:Agriculture and Agrifood Research
+Laillisuusvalvonta:Judicial review
+Valtion elokuvatarkastamo:state of Film
+Taiteen edistämiskeskus:the Arts Board
+Taidepolitiikka:Art policy
+Verotoimistot:Tax offices
+Sukupuolinen häirintä:sexual harassment
+Sosiaalipolitiikka:social policy
+Vesikulkuneuvorekisteri:Water craft Register
+Alkoholismi:alcoholism
+Rakennussuojelu:protection of Buildings
+Peruutetut aloitteet:are omitted
+Talousvyöhyke:The exclusive economic zone
+Europarlamentaarikot:MEPs
+Rauhantyö:Peace
+Audiovisuaalinen ala:Audio and video
+Velkaneuvonta:debt Advice
+Rautateiden liikennepaikat:Of rail traffic locations
+Osaamiskeskukset:Centres of Expertise
+Paikallisliikenne:Local
+Allergia:allergy
+Rajavyöhykket:border zone
+Kemialliset aseet:chemical weapons
+Sillat:Bridges
+Joukkovelkakirjat:Bonds
+Afrikka:Africa
+Kanavat:channels
+Vientitakuut:export credit guarantees
+Kauttakulkuliikenne:transit
+Veronlisäys:tax Increase
+Apteekkimaksu:pharmacy Payment
+Maa- ja metsätalousministeriö:Agriculture and Forestry
+Schengenin sopimus:The Schengen Agreement
+Terveyshallinto:health Management
+Seuraamusmaksu:The penalty
+Verojen perintä:recovery of taxes
+Ilmastonmuutosta koskeva Kioton pöytäkirja:Climate change, the Kyoto Protocol on
+Tasa-arvolautakunta:Equality Board
+Kaksoisrangaistavuus:Double criminality
+Kansainvälinen oikeusapu:International legal
+Yrityskiinnitys:Business mortgage
+Kunnalliset liikelaitokset:municipal corporations
+Taimiaineisto:planting material
+Elokuvien tarkastus:movies inspection
+Valtionverotus:state Taxation
+Välimiesmenettely:Arbitration
+Englannin kieli:English
+Rakennusmaa:Building land
+Investointivaraukset:investment Provisions
+Ulkomainen apu:Foreign Aid
+Sarjakuvat:comics
+Maailman terveysjärjestö:World Health Organization
+Vesitilukset:Vesitilukset
+Euroopan ydinfysiikan tutkimusjärjestö:European Organization for Nuclear Research
+Sotalesket:war widows
+Melu:noise
+Tekstiilit:Textiles
+Karjalan kieli:Karelian
+Teollisoikeus:IPR
+Maatalousverotus:agricultural Taxation
+Panttivangit:hostages
+Unkari:Hungary
+Sosiaalialan oppilaitokset:the social institutions
+Yksityiskoulut:private Schools
+Edustajanpalkkio:A salary
+Ympäristöterveydenhuolto:environment and health
+Turvatoimet eduskunnassa:Security measures in parliament
+Euroopan parlamentti:the European Parliament
+Huoltovarmuuskeskus:National Emergency Supply Agency
+Makeiset:confectionery
+Kauppapolitiikka:trade policy
+Euroopan unionin neuvosto:Council of the EU
+Lääninhallinto:county Management
+Romuajoneuvot:scrap Vehicles
+Ajoneuvolaki:vehicle Act
+Hyönteiset:Insects
+Anguilla:Anguilla
+Kauppakaari:Kauppakaari
+Osamaksukauppa:hire-purchase
+Kasvihuoneviljely:Greenhouses
+Vakuutusyhdistykset:insurance Associations
+Taidehallinto:Arts Administration
+Kaksikäyttötuotteet:Dual-use items
+Metsänviljely:forest reproductive
+Finavia:Finavia
+Hyödyllisyysmallit:Utility Models
+Alusrekisteri:The fleet register
+Metsätalousmaa:Forested area
+Inkinen, Matti:Inkinen, Matti
+EU-puheenjohtajuus:Presidency of the EU
+Seksiala:Seksiala
+Valtion asuntorahasto:Housing
+Tulopolitiikka:incomes policy
+Yhdenmukaistaminen:The alignment
+Lähialueyhteistyö:Neighbouring area cooperation
+Siirtolaiset:Migrants
+Lähialueet:The surrounding area
+Esitteet:brochures
+Venesatamat:Marinas
+Metsäpolitiikka:forest policy
+Jäähallit:Skating rinks
+Itsenäisyys:independence
+Stora Enso:Stora Enso
+Tiedoksianto:service
+Liikuntatilat:sports facilities
+Lossit:ferries
+Mallioikeus:Designs
+Raaka-aineet:Raw materials
+Kivenjalostus:stone processing
+Kasvinjalostajanoikeus:plant breeders' rights
+Vientiluotot:export credits
+Lennonjohtajat:Air traffic controllers
+Koulurakennukset:School buildings
+Kielitutkinnot:Examinations
+Leirintäalueet:camping
+Etelä-Amerikka:South America
+Aluevalvonta:Range monitoring
+Työttömyysvakuutusrahasto:The Unemployment Insurance Fund
+Osuuspankit:Co-operative banks
+Kansainvälinen valuuttarahasto:International Monetary Fund
+Rahamarkkinat:money market
+Tilisiirrot:Transfers
+Vesiväylät:waterways
+Velkakirjat:bonds
+Sokeri:sugar
+Irtain omaisuus:movables
+Ilmailulaitos (hist.):The Civil Aviation Administration ( hist. )
+Osakaslainat:shareholder loans
+Syrjintälautakunta:discrimination Board
+Julkisyhteisöt:General government
+Kansalaisaloitteet:Citizens' initiatives
+Rautatiekuljetus:rail transport
+Euroopan keskuspankki:the European Central Bank
+Autokiinnitys:car Mounting
+Ulkomaiset investoinnit:foreign investment
+Eduskunnan hyväksymä lausuma:Approved by Parliament Statement
+Asumisoikeusyhdistykset:Right-of Associations
+Iran:Iran
+Musiikkitapahtumat:Music Events
+Sähköturvallisuus:electrical Safety
+Itä-Eurooppa:Eastern Europe
+Miinanraivaus:Demining
+Palkkiotoimikunta:the remuneration committee
+Kansainvälisten suhteiden ja Euroopan unionin asioiden tutkimuslaitos:International relations and EU affairs
+Kananmunat:eggs
+Prokura:procuration
+Kansanmusiikki:folk music
+UMTS:UMTS
+Työryhmät:The working groups
+Suola:salt
+Ammatilliset aikuiskoulutuskeskukset:Vocational adult education centers
+Etätyö:telecommuting
+Kunniamerkit:Decorations
+Sotaveteraanijärjestöt:War Veterans' Organizations
+Valmismatkat:Package holidays
+Perustuslakivaliokunta:The Constitutional Law Committee
+Logistiikka:logistics
+Myyntiedustajat:salesman
+Talvirenkaat:winter tires
+Aluekehitysrahat:Regional Cash
+Taideteokset:Works of art
+Inkeriläiset:Ingrians
+Maastoliikenne:Off-road traffic
+Vahinkovakuutus:Non-life insurance
+Palvelusaika:period of service
+Maantielaki:Highway Act
+Sisäasiainhallinto:Internal Affairs Administration
+Tavaroiden vapaa liikkuvuus:Free movement of goods
+Lunastus:redemption
+Eurooppa-sopimukset:The Europe Agreements
+Hakemuslainkäyttö:The application for judicial
+Kroatia:Croatia
+EU-jäsenyys:EU membership
+Metsänparannus:forest improvement
+Aika:time
+Vartiointiliikkeet:Security Dealers
+Hissit:lifts
+Rahapolitiikka:monetary policy
+Patoturvallisuus:dam Safety
+Ulkoasiainhallinto:The Foreign Service
+Suhdannevaihtelut:Economic fluctuations
+Kotimaisten kielten tutkimuskeskus:Languages ​​of Finland Research
+Starttiraha:Start-up
+Jäsenmaksut:Membership fees
+Kansallislaulut:national Anthems
+Kalatiet:fish Roads
+Osa-aikalisä:Part- time out
+Meluntorjunta:Protection against noise
+Yleiset vesialueet:public waters
+Ratalaki:Track Law
+Otsoni:ozone
+Luotsausliikelaitos:Pilotage
+Partisaanit:Partisans
+Kansainvälinen merenkulkujärjestö:The International Maritime Organization
+Huonekaluteollisuus:furniture Industry
+Kansanedustajan poissaolo:MP's absence
+Kunnianloukkaus:defamation
+Siivousala:The cleaning
+Euroopan unionin tuomioistuin:European Court of Justice
+Nuorisohuolto:youth Service
+Standardointi:standardization
+Elektroniikka:electronics
+Liikennevalot:traffic lights
+Vesihuoltotyöt:water supply and sanitary works
+Voimansiirto:transmission
+Ulkosuomalaiset:Finnish expatriates
+Pääkaupunkiseudun yhteistyövaltuuskunta (hist.):Helsinki Metropolitan Area Council ( hist. )
+Vakoilu:espionage
+Hallitusohjelmat:Government programs
+Säteilytys:irradiation
+Uusjakojen tukeminen:nyskiften support
+Kotieläinjalostus:Animal Breeding
+Henkilövahinkoasiain neuvottelukunta:Personal Advisory Board
+Mediakasvatus- ja kuvaohjelmakeskus:Media Education and Audiovisual Programmes Centre
+Ylikuormamaksu:overload fees
+Latvia:Latvia
+Lainkäyttö:jurisdiction
+Tullitariffit:customs tariffs
+Sähköinen lääkemääräys:e-prescribing
+Liikepankit:commercial banks
+Seychellit:Seychelles
+Oikeusapu:legal aid
+Kiinteistönmuodostamisoikeus:Kiinteistönmuodostamisoikeus
+Luottokortit:Credit Cards
+Liberia:Liberia
+Verotililaki:Tax Account Act
+Luontaiselinkeinot:livelihoods
+Röntgentutkimus:X-ray examination
+Barentsin alue:the Barents Region
+Vilja:grain
+Yritysneuvonta:Business Consultancy
+Kemianteollisuus:chemical Industry
+Kiinteistörekisterit:Real Estate Registers
+Lentäjät:pilots
+Valko-Venäjä:Belarus
+Romanikieli:The Romani language
+Sosiaali- ja terveysalan tutkimus- ja kehittämiskeskus (hist.):Health and Social Care Research and Development Centre ( hist. )
+Palkansaajan työttömyysvakuutusmaksu:Employee's unemployment insurance
+Panttilainaamot:Pawn Shops
+Liiketoimintakiellot:business Suspensions
+Aseeton palvelus:unarmed service
+Kypärät:Helmets
+Tapaturmakorvaukset:accident Compensation
+Ympäristölupamenettely:the environmental licensing procedure
+Kuvataide:visual arts
+Tampereen teknillinen yliopisto:Tampere University of Technology
+Keksinnöt:inventions
+Sosiaalivakuutus:social insurance
+Siemen:seed
+Tutkimusasemat:research Stations
+Luotsausliikelaitos (hist.):Pilotage ( hist. )
+Indonesia:Indonesia
+Maatalouskoneet:agricultural machinery
+Pakkolunastus:expropriation
+Lintuvesialueet:bird waters
+Costa Rica:Costa Rica
+Lähi-itä:Middle East
+Suojaosuus:protective Share
+Kemijoki:kemijoki
+Maanmittauslaitos:Land Survey of Finland
+Dementia:dementia
+Muovi:plastic
+Naapurit:neighbors
+Maatilatalouden tulovero:the Agricultural income Tax
+Vapo:Vapo
+Mittalaitteet:Measuring Instruments
+Euroopan yhteisöjen tuomioistuin (hist.):European Court of Justice ( hist. )
+Työsuhdeasunnot:Staff housing
+Viranomaisradioverkko:Government radio network
+Perävaunut:trailers
+Itä-Suomen yliopisto:University of Eastern Finland
+Andorra:Andorra
+Kuluttajapolitiikka:consumer policy
+Somalia:Somalia
+Eurooppa:Europe
+Euroopan talousyhteisö:European Economic Community
+Nimikirjat:name of Books
+Teatterikorkeakoulu:The Theatre Academy
+Sosiaali- ja terveydenhuollon tuotevalvontakeskus (hist.):Social and health care product ( hist. )
+CFC-yhdisteet:CFCs
+Oikeusministeriö:Ministry of Justice
+Virkarikokset:The official crime
+Pohjoinen ulottuvuus:The Northern Dimension
+Irtaimen kauppa:sale of goods
+Turvatekniikan keskus:Safety Technology
+Outokumpu:Outokumpu
+Retkeilyalueet:hiking Areas
+Julistukset:Declarations
+Haastemiehet:bailiffs
+Monaco:Monaco
+Konsulipalvelut:consular services
+Sri Lanka:Sri Lanka
+Hammasteknikot:dental Technicians
+Rakennepolitiikka:structural policy
+Pelit:Games
+Palosuojelurahasto:Fire Protection Fund
+Tietokirjallisuus:nonfiction
+Ulkoilureitit:Walking trails
+Turvallisuus- ja kemikaalivirasto:Safety and Chemicals Agency
+Nigeria:Nigeria
+Hallintolaki:The Administrative Procedure Act
+Keskuspankit:central Banks
+Ehkäisymenetelmät:contraceptive methods
+Ministerivastuu:Minister responsible
+Muusikot:musicians
+Etämyynti:Distance selling
+Puheterapeutit:Speech Therapists
+Ulkoilu:outdoor activities
+Tiedepolitiikka:science policy
+Sianliha:pork
+Aikavyöhykkeet:Time Zones
+Etuosto-oikeus:Right of first refusal
+Upseerit:officers
+Maakuntaliitot:Regional Councils
+Asunnottomat:homeless
+Laivanisännät:The hosts of the ship
+Tekes - teknologian ja innovaatioiden kehittämiskeskus:Tekes - Technology and Innovation
+Aids:AIDS
+Puola:Poland
+Velvoitevarastointi:The obligation to Storage
+Video:video
+Maisemansuojelu:Landscaping
+Ulkomaiset tuomiot:foreign judgments
+Antarktis:Antarctic
+Energiamerkintä:The energy label
+Virkakelpoisuus:The official eligibility
+Verohallitus:National Board of Taxes
+Omistusoikeus:ownership
+Kaksoiskansalaisuus:dual citizenship
+Kulttuuriomaisuus:cultural Capital
+Väliyhteisöt:interim government
+Kiinteistötietojärjestelmä:Real Estate Information
+Veronhyvitys:The tax credit
+Jalankulkijat:pedestrians
+Eläintarhat:zoos
+Suomen Posti (hist.):Finland Post ( hist. )
+Tielaitos (hist.):The Public Roads Administration ( hist. )
+Eläkeläisjärjestöt:Pensioners'
+Ajoharjoitteluradat:övningsbana
+Kirjastoautot:library vehicles
+Majakat:Lighthouses
+EU-komissaarit:EU commissioners
+Globalisaatio:globalization
+Ympäristökasvatus:environmental Education
+Yleiset kokoukset:General meetings
+Aluekeskukset:regional centers
+Rautateiden sähköistäminen:Electrification of the rail
+Yrittäjäkoulutus:entrepreneur Training
+Tiibet:Tibet
+Vaihtoehtolääkintä:alternative medicine
+Suomen Vientiluotto:Finnish Export Credit
+Nuorisorangaistus:youth Penalty
+Valtakunnansyyttäjänvirasto:Office of the Prosecutor
+Belize:Belize
+Alusluotot:The vessel Loans
+Luopumiseläkkeet:farm closure
+Kuluttajaneuvonta:consumer information
+Tullivero:customs Tax
+Kiinnitys:mortgage
+Kihlakunnat:placeringshärader
+Lainhuudatus:registration of title
+Maakaari:Maakaari
+Veronkorotus:tax increase
+Taidemuseot:Art Museums
+Pohjoismainen yhteistyö:Nordic co-operation
+Tyyppihyväksyntä:The approval
+Rahalaitokset:MFIs
+Kansainvälinen rikostuomioistuin:The International Criminal Court
+Työttömyysturvan muutoksenhakulautakunta:Unemployment Appeal
+Kilpailuvirasto:The Finnish Competition
+Raittiustyö:Temperance
+Talonmiehet:caretakers
+Elintarvikehygienia:food Hygiene
+Rahoitus- ja vakuutusryhmittymät:Financial and insurance groups
+Ylityö:overtime
+Henkilöstörahastot:personnel funds
+Oikeushallinto:Justice Administration
+Filippiinit:Philippines
+Vapaakauppa:Free Trade
+Merenkulkuoppilaitokset:Maritime Schools
+Rautatievirasto (hist.):The European Railway Agency ( hist. )
+Ortodoksinen kirkko:Orthodox Church
+Lipponen, Paavo:Lipponen , Paavo
+Paikkatietoinfrastruktuuri:The spatial data infrastructure
+Kirjalliset kysymykset:Questions for written answer
+Tax-free-myynti:Tax -free sales
+Hieronta:massage
+Valtiosihteerit:state Secretaries
+Myymäläautot:The store Cars
+Yhteistoiminta-avustus:Collaboration Grant
+Luonnonmukainen viljely:Organic farming
+Konepajat:Machine Shops
+Velkojien maksunsaantijärjestys:The ranking of creditors
+Valtionrautatiet (hist.):State Railways ( hist. )
+Vala:oath
+Kulttuuripolitiikka:cultural Policy
+Inflaatio:inflation
+Sosiaaliset luotot:social Lending
+Maataloushallinto:agricultural Administration
+Laivaväen luettelointi:Of the crew inventory of
+Suulliset kysymykset:Questions for oral answer
+Hallituksen toimenpiteet:measures taken by Government
+Väestönlaskenta:Census
+Sterilointi:sterilization
+Terästeollisuus:steel
+Kurssikeskukset:The course centers
+Opastuskeskukset:assistance centers
+Keva:Keva
+Jalkojenhoito:pedicure
+Valokuvat:Photos
+Hautala, Heidi:Hautala Heidi
+Eutanasia:euthanasia
+Majavat:Beavers
+Toissijaisuusperiaate:The principle of subsidiarity
+Valtion taloudellinen tutkimuskeskus:Government Institute for Economic Research
+Maanmittaus:surveying
+Sosiaaliturvakortti:Social Security Card
+Kotiavustajat:home help
+Åbo Akademi:Åbo Akademi University
+Vaaralliset rikoksenuusijat:dangerous offenders
+Paperi:paper
+Kenia:Kenya
+Taajamat:built-up areas
+Musiikkioppilaitokset:Music schools
+Kivennäisvesi:mineral water
+Metsänhoitoyhdistykset:forest Management Associations
+Turvevoimalat:peat power plants
+Altia Group:Altia Group
+Aikuislukiot:adult High Schools
+Museovirasto:National Board of Antiquities
+Sosiaalihallinto:Social Administration
+Yleissitovuus:bind
+Liikenneturva:Traffic Safety
+Ksylitoli:xylitol
+Telelaskut:telecom invoices
+Vaasan yliopisto:University of Vaasa
+Voitot:gains
+Iso-Britannia:Great Britain
+Metallituotteet:metal products
+Veripalvelu:blood
+Ihalainen, Lauri:Ihalainen, Lauri
+Valuuttakurssit:Exchange Rates
+Erityisopettajat:special education teachers
+Laiturit:Piers
+Pellonraivaus:The clearance of the field
+Luontopolut:Nature Trails
+Lakialoitteet:Law Initiatives
+Maailmanpankki:The World Bank
+Teollisuusalueet:industrial areas
+Kehitysyhtiöt:development companies
+Haittavero:adverse tax
+Satelliitit:satellites
+Sosiaaliasiamiehet:Social agents
+Maatilatalouden kehittämisrahasto:The Development Fund
+Hävittäjät:Destroyers
+Tampereen yliopisto:University of Tampere
+Yksityismetsät:private forests
+Suoramarkkinointi:Direct Marketing
+Toimihenkilöt:white-collar workers
+Hallintoneuvostot:The Boards
+Toimittajaeläke:Supplier of Retirement
+Finanssipolitiikka:Fiscal policy
+DNA:DNA
+Rikosseuraamusvirasto (hist.):The Criminal Sanctions Agency ( hist. )
+Kansanterveyslaitos (hist.):National Public Health Institute ( hist. )
+Maataloustuotteet:agricultural Products
+Maaseutuelinkeinojen valituslautakunta:Rural Industries Board of Appeal
+Etelä-Afrikka:South Africa
+Kauppakamarit:chambers of Commerce
+Hansel:Hansel
+Jersey:jersey
+Ajoneuvohallintokeskus (hist.):The Vehicle Administration ( hist. )
+Patentti- ja rekisterihallitus:National Board of Patents and Registration of Finland
+Tutkintavankeus:pretrial detention
+Sotarikokset:war crimes
+Opintokeskukset:study centers
+Caymansaaret:Cayman Islands
+Kunnanhallitukset:Local authorities
+Kansainvälinen demokratia- ja vaaliapuinstituutti:International Democracy and Electoral Assistance
+Kiinteistörahastot:Real Estate Funds
+Yhteistoiminta-asiamies:Co- Agent
+Salakuuntelu:tap
+Gibraltar:the rock
+Kesäyliopistot:summer Universities
+Integraatio:integration
+Kansainvälinen perheoikeus:International Family Law
+Kansainvälinen merioikeustuomioistuin:The International Law of the Sea Court
+Opintovapaa:study leave
+Rajakauppa:Cross-border trade
+Kirkollisvero:church tax
+Euroopan unionin yleinen tuomioistuin:General Court of the European Union
+Rekisterihallinto:Register Administration
+Kulttuuriesineet:cultural goods
+Öljysuojarahastot:Oil Pollution Compensation Fund
+Yleiset tiet:Public roads
+Invalidivähennys:disabled person's allowance
+Ravintorasvavero (hist.):Dietary Fat Tax ( hist. )
+Vuotos:Vuotos
+Merenkulkuhallitus (hist.):Maritime Board ( hist. )
+Dublinin yleissopimus:The Dublin Convention
+Siemenperuna:seed potato
+Maatalousneuvonta:agricultural extension
+Valuutansiirtovero:Currency Transfer Tax
+Unihäiriöt:Sleep Disorders
+Käyttelytilit:Demand deposit accounts
+Selluteollisuus:Pulp Industry
+Valtioelimet:state organs
+Aineenopettajat:Subject teachers
+Aseistakieltäytyminen:Conscientious objection
+Raittiusjärjestöt:temperance Organizations
+Välimeren alue:The Mediterranean region
+Muinaisjäännökset:relics
+Schengen-maat:Schengen countries
+Sokerivero (hist.):Sugar Tax ( hist. )
+Koiravero:dog tax
+Käsiteollisuus:handicraft
+Hintapolitiikka:Pricing Policy
+Kihlakunnansyyttäjät:District Prosecutors
+Rajavyöhykkeet:border zone
+Pelastustoimen alueet:Rescue service areas
+Naudanliha:beef
+Urheilutalot:Sports halls
+Farmaseutit:pharmacists
+Lomatoiminta:holiday Activities
+Lammastalous:sheep farming
+Rullaluistelu:roller skating
+Bangladesh:Bangladesh
+Nizzan sopimus:The Treaty of Nice
+VR-Rata:VR-Track
+Vastaanottoluvat:reception Permissions
+Euroopan unionin perustuslakisopimus:Constitutional Treaty of the European Union
+Yhteisalueet:The common areas
+Joukkoliikenteen tarkastusmaksu:Public transport ticket inspection
+Kalastusvyöhyke:fishing zone
+Ilmailuhallinto (hist.):The Civil Aviation Authority ( hist. )
+Rasitteet:easements
+Eettiset toimikunnat:Ethics committees
+Eurooppalainen alueellisen yhteistyön yhtymä:The European Grouping of Territorial Cooperation
+Yhteismerkit:Collective marks
+Keskuskauppakamari:central Chamber of Commerce
+Vakuutuksenvälittäjät:insurance Brokers
+Prümin sopimus:The Treaty of Prüm
+Puutavaranmittaus:The measurement of timber
+Toimilupamaksu:The license fee
+Ympäristömerkit:Eco-labels
+EMAS-järjestelmä:EMAS
+Valtion riskipääomatakuut:State guarantees to venture capital
+Yliopistolliset keskussairaalat:University hospitals
+Onnettomuustutkinta:accident Investigation
+Yhteismetsät:Common Forests
+Saint Kitts ja Nevis:Saint Kitts and Nevis
+Kihlakunnanvirastot:District Offices
+San Marino:San Marino
+Tietosuojalautakunta:Data Protection Board
+Seutuvaltuustot:regional councils
+Merityöaika:sea ​​of working time
+Termiinit:Forward contracts
+Maaoikeudet (hist.):Land rights ( hist. )
+Painelaitteet:pressure equipment
+Merioikeudellinen vastuu:Legal responsibility Sea
+Kansalliskirjasto:The National
+Valtakunnanvoudinvirasto:Valtakunnanvoudinvirasto
+Oikeuspoliittinen tutkimuslaitos:Research Institute of Legal Policy
+Asuntosäästöpalkkiot:Building savings Fees
+Opetusalan koulutuskeskus:In Education
+Vapaakappaleet:free Copies
+Suomen elokuva-arkisto:The Finnish Film Archive
+Seutuyhteistyökokeilu:Regional Cooperation Experiment
+Maanpuolustuskorkeakoulu:National Defence College
+Valtion vakuusrahasto:Government Guarantee Fund
+Alusliikennepalvelu:Vessel Traffic Service
+Yhteisomistus:Co-ownership
+Merimiesten vuosiloma:Seamen's annual
+Valtakunnallinen terveydenhuollon eettinen neuvottelukunta (hist.):The National Advisory Board on Health Care Ethics ( hist. )
+Virkavapaus:leave of absence
+Uruguay:Uruguay
+Salaustekniikka:encryption technology
+Ajopiirturit:tachographs
+Kuvataideakatemia:Academy of Fine Arts
+Kuwait:Kuwait
+Rakennusvero:building Tax
+Guatemala:Guatemala
+Turvallisuustutkinta:A safety investigation
+Kulttuurihallinto:culture Administration
+Vastuuasetus:responsibility for setting
+Antigua ja Barbuda:Antigua and Barbuda
+Euroopan puolustusvirasto:The European Defence Agency
+Sijoittautumisoikeus:Right of establishment
+Nuoret maatalousyrittäjät:Young farmers
+Serbia:Serbia
+Verotuksen oikaisulautakunnat:The Board of Adjustment
+Mongolia:Mongolia
+Kolttasaamelaiset:The East Sami
+Teknologian kehittämiskeskus:technology and Innovation
+Eurojust:Eurojust
+Turkki:Turkey
+Tullihallitus:National Board of Customs
+Valtakunnallinen sosiaali- ja terveysalan eettinen neuvottelukunta:The National Health and Social Care Ethics
+Sibelius-Akatemia:The Sibelius Academy
+Verkkokauppa:Catalog
+Suhdannetalletukset:Counter-cyclical deposits
+Viestintähallinto:communications Management
+Tanska:Denmark
+Keskusverolautakunta:The Central Tax Board
+Ihotaudit:Skin Diseases
+Puolustusmateriaalialan yhteistyöorganisaatio (OCCAR):Armaments cooperation organization ( OCCAR)
+Syytetyt:Defendants
+Geologian tutkimuskeskus:Geological Survey of Finland
+Pohjoismaiden Investointipankki:The Nordic Investment Bank
+Taideyliopisto:Art University
+Heraldiikka:heraldry
+Qatar:Qatar
+Valtiovarain hoito:Treasury management
+Grönlanti:Greenland
+Mansaari:Man
+Henkilönkatsastus:person Inspection
+Tsad:Chad
+Hukkakaura:Wild oat
+Kansainvälinen atomienergiajärjestö:The International Atomic Energy Agency
+Markkinatuomioistuin (hist.):The Market Court ( hist. )
+Lait:laws
+Metallirahat:coins
+Kulttuurikeskukset:cultural centers
+Alustakaus:ship Guarantee
+Jordania:Jordan
+Pohjoismaiden ympäristörahoitusyhtiö:The Nordic Environment Finance
+Julkiset notaarit:Notary Public
+Osaomistus:Fractional Ownership
+Fuusiot:mergers
+Tarkastusvaliokunta:The Audit Committee
+Mittatekniikan keskus:Centre for Metrology
+Aluevedet:territorial waters
+Luotolliset tilit:Bank overdrafts are
+Tulo- ja menoarvio:Income and expenditure
+Raittiuskasvatus:Abstinence Education
+Euroopan keskuspankkijärjestelmä:European System of Central Banks
+Valtiontakuurahasto:The State Guarantee Fund
+Montserrat:Montserrat
+Singapore:Singapore
+Färsaaret:faeroe
+Eurooppalainen taloudellinen etuyhtymä:European Economic Interest Grouping
+Armenia:Armenia
+Avaruus:space
+Guernsey:Guernsey
+Eurooppayhtiöt:European companies
+Tiedehallinto:science Administration
+Vanuatu:Vanuatu
+Arabiemiirikunnat:United Arab Emirates
+Varmuusvarastot:Emergency stocks
+Panama:Panama
+Namibia:Namibia
+Maidon kiintiömaksu (hist.):The milk quota payment ( hist. )
+Tasavallan presidentin kanslia:Office of the President of the Republic of
+Turun yliopisto:University of Turku
+Ukraina:Ukraine
+Serbia ja Montenegro (hist.):Serbia and Montenegro ( hist. )
+Egypti:Egypt
+Piirimalli:circuit Model
+Valtion johtavat virkamiehet:The state's leading officials
+Rautaruukki:Rautaruukki
+Geenitestit:Genetic tests
+Hylyt:wrecks
+Kansainvälisen uusiutuvan energian virasto:International Renewable Energy Agency
+Kirgisia:Kyrgyzstan
+FAO:FAO
+Kunnallinen työmarkkinalaitos:Local Authority Employers
+Haus kehittämiskeskus:Haus Development
+Öljyjätemaksu:Waste oil charge
+Suomenlinnan hoitokunta:Finland Governing Body of Suomenlinna
+Alioikeudet:Lower courts
+Vajaatuottoiset metsät:Less than a yielding forests
+Jamaika:Jamaica
+Kansainvälinen siviili-ilmailujärjestö:The International Civil Aviation Organization
+Säädöskokoelmat:statute book
+AKT-maat:ACP countries
+Telemaksut:telecommunications charges
+Valtion kiinteistölaitos (hist.):State Real Property ( hist. )
+Kazakstan:Kazakhstan
+Tadzikistan:Tajikistan
+Valtion teknillinen tutkimuskeskus:VTT Technical Research Centre
+Kansainvälinen yksityisoikeus:Private international law
+Kirkon eläkkeet:The Church of pensions
+Energiavirasto:The Energy Information Administration
+Sierra Leone:Sierra Leone
+Algeria:Algeria
+Rooman sopimus:The Treaty of Rome
+Suomen Autokatsastus (hist.):Finnish Motor Vehicle Inspection ( hist. )
+Turks- ja Caicossaaret:Turks and Caicos Islands
+Leasing:leasing
+Luontaistuotteet:health foods
+Jätevesimaksu:wastewater Payment
+Yhtiöveron hyvitys:Avoir fiscal tax credit
+Euroopan turvallisuus- ja yhteistyöjärjestö:European Security and Cooperation in Europe
+Merentakaiset maat ja alueet (EU-asiat):Overseas Countries and Territories ( EU Affairs)
+Maatilalaki (hist.):Farm Act ( hist. )
+Eduskunnan täysistunnot:The plenary sessions
+Marshallinsaaret:The Marshall Islands
+Innovaatiorahoituskeskus Tekes:Innovation Tekes Financial Centre
+Valtion maaomaisuus (hist.):State -owned land property ( hist. )
+Teollisen yhteistyön rahasto:Fund for Industrial Cooperation
+Kuulutukset:alerts
+Työsuojeluhenkilörekisteri:Occupational Safety and Health Personal register
+Merimieskatselmus (hist.):Seamen's Muster ( hist. )
+Sotilasopetuslaitokset (hist.):Military Education ( hist. )
+Suomen Punainen Risti:The Finnish Red Cross
+Vankilaoikeus:prison Law
+Kansainvälinen punainen risti:The International Red Cross
+Työneuvosto:The Labour Council
+Keskusvirastot:central agencies
+Metsätalouden kehittämiskeskus:forestry Development
+Hallinnon kehittämiskeskus (hist.):Institute of Public Management ( hist. )
+Metsänhoitomaksut:forest Management Fees
+Sinetit:seals
+Euroopan aluekehitysrahasto:European Regional Development Fund
+Geodeettinen laitos:Finnish Geodetic Institute
+Euroopan eteläinen observatorio:The European Southern Observatory
+Kansainvälisen kauppatiedon ja -yhteistyön järjestö:For International Trade Information and Cooperation Agency
+Svenska handelshögskolan:Hanken School of Economics
+Bosnia ja Hertsegovina:Bosnia and Herzegovina
+Euroopan talouskomissio:Economic Commission for Europe
+Albania:Albania
+Taideteollinen korkeakoulu:Art and Design
+Uzbekistan:Uzbekistan
+Hypoteekkiyhdistykset:mortgage
+Kansainvälisen liikkuvuuden ja yhteistyön keskus:International Mobility Centre
+Pakkohuutokauppa:compulsory auction
+Niue:Niue
+Matkailun edistämiskeskus:Tourist
+Pohjoismainen kulttuurirahasto:The Nordic Culture Fund
+Kansainvälinen työkonferenssi:the International Labour Conference
+Tieteellisten seurain valtuuskunta:Learned Societies
+Oppivelvollisuus:compulsory education
+Maailman matkailujärjestö:The World Tourism Organisation
+Rikemaksu:Rike Payment
+Ratavero:Track Tax
+Mosambik:Mozambique
+Läänit:counties
+Tulontasaus:income equalization
+Eurooppaosuuskunnat:Cooperatives Europe
+Bermuda:Bermuda
+Bahama:The Bahamas
+Merityötulovähennys:seafarer's income
+Muuttoliike:migration
+Georgia:Georgia
+Venäjän ja Itä-Euroopan instituutti:Russian and East European Institute
+Koulutusvakuutus:education Insurance
+Alusjätteet:The ship waste
+Kasvintuotannon tarkastuskeskus (hist.):
+Kilpailuneuvosto (hist.):
+Lappeenrannan teknillinen yliopisto:Lappeenranta University of Technology
+Korvausrahasto:
+Lapin yliopisto:
+Euro-Välimeri-sopimus:
+Yleinen oikeusapu:
+Tekes - teknologian ja innovaatioiden kehittämiskeskus (hist.):
+Myymis- ja hukkaamiskielto:
+Kuolettaminen:
+Svenska Finlands folkting:
+Amsterdamin sopimus:
+Yhteisömalliasetus:
+Sonera:
+Sotatila:
+Pakotteet:
+Botswana:
+Leimat:
+Vuokra-asuntojen omaksilunastaminen:
+Uimahallit:
+Teknillinen korkeakoulu, Espoo:
+Lainhuutorekisterit:
+Neuvottelumandaatti:
+Tsekki:The Czech Republic
+Paineastiat:
+Makedonia:Macedonia
+Barbados:
+Lappeenrannan teknillinen korkeakoulu (hist.):
+Vankeinhoidon koulutuskeskus (hist.):
+Fide (hist.):
+Eurooppa-koulut:
+Mannerjalusta:
+Tunnusmerkit:
+Eläinlääkintä- ja elintarviketutkimuslaitos (hist.):
+Vietnam:Vietnam
+Ylimääräinen muutoksenhaku:
+Montenegro:Montenegro
+Lomén sopimus:
+Kuntien yleiset rahoitusavustukset:
+Teknologiakeskukset:
+Vesiylioikeus (hist.):
+Europol-yleissopimus:
+Vierasvelkapanttaus:
+Teräaseet:
+Sotilasrikokset:
+Dominica:
+Leimavero (hist.):
+Euroopan sosiaalirahasto:
+Valtiontilintarkastajat:
+AKT-EY-sopimus:
+WIPO:
+Kansainvälinen merikartoitusjärjestö:
+Pohjoismaiden kehitysrahasto:
+Uudelleenkoulutus:
+Kolumbia:
+Inspecta:
+Kuntien kulttuuritoiminta:
+Chile:
+Maanmittaushallinto:
+Macao:
+El Salvador:
+Unesco:
+Lainanottovaltuudet:
+Sosiaali- ja terveyskertomus:
+Tilastokeskus:
+Eritrea:
+Valtion tilinpäätös:
+Lainvalinta:
+Brittiläiset Neitsytsaaret:
+Kuluttajariitalautakunta:The Consumer Disputes Board
+Kemiallisten aseiden kieltojärjestö:
+Kiinnitysrekisterit:
+Intia:India
+Kastroiminen (hist.):
+Joensuun yliopisto (hist.):
+Cookinsaaret:
+Samoa:
+Grenada:
+Maksuton oikeudenkäynti:
+Omaneuvojat:
+Pohjoismaiden neuvosto:
+Kiinteistötoimitusmaksu:
+Mauritius:
+Maasotakoulu:
+Mittayksiköt:
+Helsingin kauppakorkeakoulu (hist.):
+Aseidenriisunta:
+Dominikaaninen tasavalta:
+Tilusjärjestelyt:
+Tähtitiede:
+Turun kauppakorkeakoulu:
+Euroopan avaruusjärjestö:
+Maksamismääräys:
+Aruba:
+Marginaalivero:
+Taidenäyttelyt:
+Sambia:
+SOLAS-yleissopimus:
+Peru:Peru
+Tunisia:Tunisia
+Leikkikalut:
+Europol:
+Palvelussuhdeturva:
+Atk:
+Eläinlääkintävahinkojen arviolautakunta:
+Kuopion yliopisto (hist.):
+Suomen Teollisuussijoitus:
+Erämaat:
+Perusvapaudet:
+ESA:
+Kauppa-alusluettelot:
+Siemenperunakeskus (hist.):
+Metalliteollisuus:Metal industry
+Valtakunnansyyttäjä:
+Liettua:Lithuania
+Yhteisöpetossopimus:
+Hongkong:Hong Kong
+Lapsen hoitotuki:
+Arkkitehdit:
+Ecuador:
+Energiamarkkinavirasto (hist.):
+Veroäyri (hist.):
+Turvatoimiasetus:
+Rikosseuraamusalan koulutuskeskus:
+Väestökirjat:
+Verotuki:
+Valtakunnanoikeus:
+Sirkukset:
+Valtion perhe-eläkkeet:
+Kuntien eläkelautakunta (hist.):
+Euroopan metsäinstituutti:
+Bahrain:
+Vesioikeudet (hist.):
+Talousneuvosto:
+Telehallintokeskus (hist.):
+Keski-Afrikan tasavalta:
+Euro-Välimeri-lentoliikennesopimus:
+Haagin vuoden 1954 yleissopimus:
+Kuntien takauskeskus:
+Vakuutustarkastus:
+Tampereen teknillinen korkeakoulu (hist.):
+Keinosiemennys:
+Saint Lucia:
+Sisäpiirikaupat:
+Keksijät:
+Terveyskeskusmaksu:
+Väestökirjahallinto:
+Asevarustelu:
+Alusten jääluokat:
+Azerbaidzan:
+Väärennökset:
+Julkinen haaste:
+Asuintalovaraus:Housing provision
+Nepal:Nepal
+Moldova:
+Korruption vastainen Yhdistyneiden kansakuntien yleissopimus:
+Saint Vincent ja Grenadiinit:
+Tansania:
+Euroopan atomienergiayhteisö:
+Aluetuki:
+Korean tasavalta:
+Saamelaiskäräjät:
+Perheoikeus:
+Kuntoutuslaitokset:
+Säästökassat:
+Brunei:
+Edustusmeno:
+Riskipääomarahoitus:
+Kuluttajavalituslautakunta:
+Nicaragua:
+Kansallisgalleria:
+Etiopia:
+Suosiolahja:
+Edita:
+Bryssel I -asetus:
+Euroopan hiili- ja teräsyhteisö:
+Kansainvälinen merenpohjajärjestö:
+Puutarhatuotteet:
+Ydinaseet:
+Maailman kauppajärjestö:
+Alankomaiden Antillit:
+Alko:alcohol
+Argentiina:
+Avoin yliopisto:open university
+Hodorkovski, Mihail:
+Testamentti:
+Vuorotyö:shift work
+Peruutetut kysymykset:
+Käsi- ja taideteollisuusoppilaitokset:
+Steiner-koulut:
+Eritasoristeykset:
+Lehdistötuki:
+Kalanviljelylaitokset:
+Jätepaperi:
+IVY:CIS
+Viljavarastot:
+Kloonaus:
+Mielipidelehdet:
+Koskiensuojelu:
+Keskiolut:
+Agenda 2000:
+Öljykasvit:
+Euroopan neuvoston Suomen valtuuskunta:
+Muistomerkit:
+Sotilasarvot:
+Kaatuneet:
+Tuoteväärennökset:
+Tuki- ja liikuntaelinten taudit:
+Maapolitiikka:
+Urheiluopistot:
+Kapiteeli:
+Tavara-asemat:
+Paikallislehdet:
+Leirikeskukset:
+Ooppera:opera
+Ansiomerkit:Badges
+Verkkojuttelu:
+Kirpputorit:
+Saksan demokraattinen tasavalta (hist.):
+Kiropraktikot:
+Olutvero (hist.):
+Katumaksut:
+Teosto ry:
+Teatteriryhmät:
+Osa-aikaeläkkeet:
+Sponda:
+Nordea:Nordea
+Panostajat:
+Suvaitsevaisuus:
+Kauppatalo Hansel (hist.):
+Helsingin seudun liikennekuntayhtymä:
+Kurdit:The Kurds
+Lapsityövoima:
+Arsenal:Arsenal
+Vesakontorjunta:
+Turkmenistan:
+Rahoitustuki (EU-asiat):
+Vitamiinit:
+Tiedekeskukset:
+Keski-Eurooppa:Central Europe
+Ylikuorma:
+SARS:
+Etunimet:First names
+Harjoittelukoulut:
+Perkaustyöt:
+Virkajärjestelyt:
+Jalkineteollisuus:
+Tietokonevirukset:
+Brasilia:
+Valtioneuvoston periaatepäätös:
+Munuaistaudit:
+Eläinlääketieteellinen tiedekunta:
+Sydänkirurgia:
+Luotsiasemat:
+Vakuusrahastot:
+Elatusvelvollisuusvähennys:
+Tukialueet:
+Lissabonin strategia:
+Puhemiesneuvoston ehdotukset:
+Puolueettomuuspolitiikka:
+Ruanda:
+Olympialaiset:
+Metsätalousoppilaitokset:
+Elinympäristö:
+Amnesty International:
+Sampo:Sampo
+Ruoppaus:
+Veronmaksukyvyn alentumisvähennys:
+Tanssi:dance
+Rehevöityminen:
+Konttikuljetus:
+Kuha:
+Valtiontalouden tarkastus:
+Stubb, Alexander:
+Hiilivoimalat:
+Vihannekset:
+Silmälasit:glasses
+Teollisuuden Voima:
+Elektroniikkateollisuus:
+Tekoaltaat:
+Angola:
+Kotiuttamisraha:
+Tuomioja, Erkki:
+Fennovoima:Fennovoima
+Maissi:
+Sasi, Kimmo:
+Väyrynen, Paavo:
+Sääpalvelu:
+Soidensuojelu:
+Venezuela:
+Nuorisotilat:
+Tsetsenia:
+Elinkorko:
+Juutalaiset:
+Maanhankinta:
+Sähköistys:
+Suomen markka:
+Lähetysseurat:
+Tasa-arvovaltuutettu:
+Yötyö:
