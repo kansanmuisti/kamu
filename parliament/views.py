@@ -4,7 +4,7 @@ import datetime
 
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
-from django.db.models import Q, Min, Max, Sum
+from django.db.models import Q, Min, Max, Sum, Count
 from django.db import connection
 from django.http import HttpResponse
 from django.utils.translation import ugettext as _
@@ -306,6 +306,29 @@ def _get_most_active_mps():
     cache.set('most_active_mps', mp_list, 8*60*60)
     return mp_list[0:10]
 
+def _get_discussed_topics():
+    begin = datetime.date.today() - datetime.timedelta(days=30)
+    items = PlenarySessionItem.objects.filter(
+        nr_statements__isnull=False,
+        plsess__date__gt=begin,
+        plenarysessionitemdocument__order=0
+        ).order_by('-nr_statements')
+    items = items.annotate(keywords_count=Count('docs__keywords'))
+    items = items.filter(keywords_count__gt=0)
+    items = items[:10]
+    discussed_topics = []
+    for item in items:
+        first_doc = item.docs.all()[0]
+        topic = first_doc.keywords.all()[0]
+        topic = item.docs.all()[0].keywords.all()[0]
+        first_statement = item.statement_set.filter(type='normal')[0]
+        topic.item = item
+        topic.first_statement = first_statement
+        topic.doc = first_doc
+        discussed_topics.append(topic)
+    
+    return discussed_topics
+
 def main(request):
     args = {}
 
@@ -318,6 +341,8 @@ def main(request):
     args['parl_act_offset'] = parl_data['offset']
 
     args['most_active_mps'] = _get_most_active_mps()
+    
+    args['discussed_topics'] = _get_discussed_topics()
 
     navbuttons = [
         {

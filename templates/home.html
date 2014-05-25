@@ -24,27 +24,39 @@
     </section>
   </div>
 </div>
-  
-<!--- Issues Highlights Layout --->
+
+<!--- Issues Highlights --->
 <div class="">
   <div class="box">
     <img src="/static/images/etu-asiat-300x200.png" class="highlight-image">
-    <h3 class="section-header">Ajankohtaisia aiheita</h3>
+    <h3 class="section-header">{% trans "Most discussed topics" %}</h3>
+    
+    {% for topic in discussed_topics %}
     <div>
-      <a href="/topic/105-hatakeskukset/">
-        <h4 class="issue-highlight">Hätäkeskukset</h4>
+      <a href="{% url 'parliament.views.show_topic' topic=topic.pk slug=topic.get_slug %}">
+        <h4 class="issue-highlight">{{topic.name}}</h4>
       </a>
-      <div class="highlight-statement media side-opposition">
-        <a id="statement-126/2012/1/1"></a>
-        <a class="statement-portrait" href="/member/lohi-markus/">
-          <img class="media-object" src="/media/cache/66/8f/668fbdc26dbb33ade5a520e90951534b.jpg">
+      <div class="highlight-statement media
+          {% if topic.first_statement.member.party.is_governing %}
+          side-government
+          {% else %}
+          side-opposition
+          {% endif %}">
+        <a class="statement-portrait" href="{% url 'parliament.views.show_member' member=topic.first_statement.member.url_name %}">
+          {% thumbnail topic.first_statement.member.photo "64x64" as portrait %}
+          <img class="media-object" src="{{portrait.url}}">
+          {% endthumbnail %}
         </a>
         <div class="media-body highlight-statement-content">
           <div class="summary">
-            <h5 class="media-heading">Lohi Markus /kesk</h5>
+            <h5 class="media-heading">
+              <a href="{% url 'parliament.views.show_member' member=topic.first_statement.member.url_name %}">
+              {{topic.first_statement.member.name}} /{{topic.first_statement.member.party.abbreviation}}
+              </a>
+            </h5>
             <div class="highlight-statement-text">
-              <a href="/document/he-64-2012/#statement-126/2012/1/6">
-                <p>Viime viikolla poliisin eläkeikää koskevan lain ensimmäisessä käsittelyssä totesimme työurien pidentämisen olevan välttämätöntä. Siihen on olemassa kansantaloudellisia ja työvoiman riittävyyteen liittyviä syitä. Myös eläkejärjestelmämme on koetteilla työ- ja elinkeinoelämän rakennemuutoksissa. [...]</p>
+              <a href="{{topic.first_statement.get_indocument_url}}">
+                {{topic.first_statement.get_html_text|truncatewords:50|linebreaks}}
               </a>
             </div>
           </div>
@@ -52,63 +64,16 @@
       </div>
       <div class="highlight-source-link">
         <div class="highlight-source-session">
-          <a href="/document/he-64-2012/#statement-126/2012/1/0">Täysistunto 11. joulukuuta 2012</a>
+          <a href="{{topic.first_statement.get_indocument_url}}">
+          {% trans "Plenary session" %} {{topic.item.plsess.date}}
+          </a>
         </div>
-        <a href="/document/he-64-2012/">Hallituksen esitys eduskunnalle laeiksi poliisin hallinnosta annetun lain 15 §:n muuttamisesta, hätäkeskustoiminnasta annetun lain 30 §:n muuttamisesta ja valtion virkamieslain 35 §:n 2 momentin kumoamisesta</a>
+        <a href="{{topic.doc.get_absolute_url}}">{{topic.doc.subject}}</a>
       </div>
-      <a href="/topic/724-rekisteroity-parisuhde/">
-        <h4 class="issue-highlight">Rekisteröity parisuhde</h4>
-      </a>
-      <div class="highlight-statement media side-government">
-        <a id="statement-27/2012/10/1"></a>
-        <a class="statement-portrait" href="/member/stubb-alexander/">
-          <img class="media-object" src="/media/cache/0d/94/0d9458951b04e64511a37fe021b5fcfd.jpg">
-        </a>
-        <div class="media-body highlight-statement-content">
-          <div class="summary">
-            <h5 class="media-heading">Stubb Alexander /kok</h5>
-            <div class="highlight-statement-text">
-              <a href="/document/la-2-2012/#statement-number">
-                <p>Täytyy heti aluksi myöntää, että jännittää hiukkasen, koska itselleni hetki on siinä mielessä historiallinen, että puhun ensimmäistä kertaa tässä salissa kansanedustajan ominaisuudessa. Toki tässä salissa sai valmistella tätä hetkeä neljä vuotta, niin että siinä mielessä ainakin valmiudet pitäisi olla. [...]</p>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="highlight-source-link">
-        <div class="highlight-source-session">
-          <a href="/document/he-64-2012/#statement-126/2012/1/0">Täysistunto 11. joulukuuta 2012</a>
-        </div>
-        <a href="/document/la-2-2012/">Laki avioliittolain muuttamisesta, rekisteröidystä parisuhteesta annetun lain 1 luvun kumoamisesta sekä transseksuaalin sukupuolen vahvistamisesta annetun lain 2 §:n 2 ja 3 momentin kumoamisesta</a>
-      </div>
-      <a href="/topic/308-tupakkatuotteet/">
-        <h4 class="issue-highlight">Tupakkatuotteet</h4>
-      </a>
-      <div class="highlight-statement media side-opposition">
-        <a id="statement-12/2014/4/4"></a>
-        <a class="statement-portrait" href="/member/kokko-osmo/">
-          <img class="media-object" src="/media/cache/c5/69/c569519cdc5580632ac430f672e4b918.jpg">
-        </a>
-        <div class="media-body highlight-statement-content">
-          <div class="summary">
-            <h5 class="media-heading">Kokko Osmo /ps</h5>
-            <div class="highlight-statement-text">
-              <a href="/document/he-94-2011/">
-                <p>Lakialoite, jonka edustaja Jalonen on tehnyt, on mielestäni oikeansuuntainen, koska niin kuin useissa puheenvuoroissa täällä on todettu, tupakka on erittäin haitallinen ja tällä tavalla, tällä uudella lailla, saataisiin hallintaan tämä, että ennen kaikkea nuorten, joissa on tulevaisuus, tupakointia oltaisiin tällä lailla rajoittamassa. [...]</p>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="highlight-source-link">
-        <div class="highlight-source-session">
-          <a href="/document/he-64-2012/#statement-126/2012/1/0">Täysistunto 11. joulukuuta 2012</a>
-        </div>
-        <a href="/document/he-94-2011/">Hallituksen esitys eduskunnalle laiksi tupakkaverosta annetun lain 1 §:n ja liitteen muuttamisesta</a>
-      </div>
-      <div class="section-link">
-        <a href="/topic/">Selaa aiheita >></a>
-      </div>
+    </div>
+    {% endfor %}
+    <div class="section-link">
+      <a href="/topic/">{% trans "Browse topics" %} >></a>
     </div>
   </div>
 </div>
