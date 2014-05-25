@@ -11,7 +11,7 @@ def create_statement_activity(sender, **kwargs):
         return
     # Also ignore speaker statements when it comes to activity
     if obj.type == "speaker":
-        return   
+        return
     act, created = StatementActivity.objects.get_or_create(statement=obj)
     if not created and getattr(obj, '_updated', False):
         act.save()

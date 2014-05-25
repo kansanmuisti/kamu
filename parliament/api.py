@@ -357,6 +357,7 @@ class MemberResource(KamuResource):
     def dehydrate(self, bundle):
         process_api_thumbnail(bundle, bundle.obj.photo, 'photo_thumbnail')
         bundle.data['district_name'] = bundle.obj.get_latest_district().name
+        bundle.data['print_name'] = bundle.obj.get_print_name()
 
         if bundle.request.GET.get('all_posts', '').lower() in ('true', '1'):
             current = False
@@ -725,11 +726,15 @@ class KamuSearchResource(SearchResource):
         query = request.GET.get('q', None)
         if query:
             objects = objects.filter(text=AutoQuery(query))
+        else:
+            input_str = request.GET.get('input', None)
+            if input_str:
+                objects = objects.filter(autosuggest=input_str)
 
         return objects
 
     class Meta:
-        pass
+        index_fields = ['autosuggest']
 
 all_resources = [TermResource, ParliamentResource, PartyResource, MemberResource, PlenarySessionResource,
                  PlenaryVoteResource, VoteResource, FundingSourceResource, FundingResource,

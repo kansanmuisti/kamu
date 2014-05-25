@@ -13,6 +13,14 @@ class MemberIndex(indexes.SearchIndex, indexes.Indexable):
     def get_model(self):
         return Member
 
+    def index_queryset(self, using=None):
+        return self.get_model().objects.current()
+
+    def prepare(self, obj):
+        data = super(MemberIndex, self).prepare(obj)
+        data['boost'] = 2.0
+        return data
+
 
 class DocumentIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
@@ -32,7 +40,7 @@ class StatementIndex(indexes.SearchIndex, indexes.Indexable):
     date = indexes.DateField()
 
     def get_updated_field(self):
-        return 'last_modified_time'
+        return 'item__plsess__last_modified_time'
 
     def get_model(self):
         return Statement
@@ -49,4 +57,5 @@ class SocialUpdateIndex(indexes.SearchIndex, indexes.Indexable):
         return Update
 
     def index_queryset(self, using=None):
-        return Update.objects.filter(text__isnull=False)
+        queryset = Update.objects.filter(text__isnull=False)
+        return queryset

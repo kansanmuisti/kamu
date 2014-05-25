@@ -95,9 +95,6 @@
 {% compress js %}
 <script type="text/coffeescript" src="{% static "js/feed.coffee" %}"></script>
 {% endcompress %}
-{% compress js %}
-<script type="text/coffeescript" src="{% static "js/models.coffee" %}"></script>
-{% endcompress %}
 
 <script type="text/javascript">
     topic = new Keyword({{keyword_json|safe}});

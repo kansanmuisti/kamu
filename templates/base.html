@@ -78,6 +78,7 @@
     <script type="text/javascript" src="{% static "bootstrap/js/modal.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/lunr.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/jquery.oninput.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/vendor/typeahead.bundle.js" %}"></script>
     {% endcompress %}
     {% compress js %}
     <script type="text/javascript" src="{% static "js/vendor/underscore.js" %}"></script>
@@ -124,7 +125,7 @@
                 </ul>
                 <form class="navbar-form navbar-right" role="search">
                   <div class="form-group">
-                    <input type="text" class="form-control input-sm" placeholder="{% trans 'Search' %}">
+                    <input type="text" class="form-control input-sm" id="main-search" placeholder="{% trans 'Search' %}">
                   </div>
                   <button type="submit" class="btn btn-sm navbar-btn">Submit</button>
                 </form>
@@ -134,6 +135,26 @@
             </div>
         </nav>
     </div>
+
+    <script type="text/template" id="main-search-result">
+        <a href="<%= view_url %>">
+            <div class="tt-suggestion-data">
+            <% if (image_url) { %>
+            <div class="image">
+                <img src="<%= image_url %>" />
+            </div>
+            <% } %>
+            <div class="text">
+            <%- text %>
+            </div>
+            </div>
+        </a>
+    </script>
+
+    {% compress js %}
+    <script type="text/coffeescript" src="{% static "js/models.coffee" %}"></script>
+    <script type="text/coffeescript" src="{% static "js/base.coffee" %}"></script>
+    {% endcompress %}
 
     <main class="container {% block main_class %}generic{% endblock %}">
     {% block content %}{% endblock %}
