@@ -504,6 +504,9 @@ class MemberActivity(models.Model):
 
     objects = MemberActivityManager()
 
+    def get_keywords(self):
+        return None
+
     def update_keyword_activities(self):
         current_keywords = self.keywordactivity_set.all()
         kwa_dict = {}
@@ -511,19 +514,20 @@ class MemberActivity(models.Model):
             kwa_dict[kwa.keyword.id] = kwa
             kwa.found = False
         # First add the new keywords
-        if hasattr(self, 'keywords'):
-            for kw in self.keywords:
+        new_keywords = self.get_keywords()
+        if new_keywords:
+            for kw in new_keywords:
                 if kw.id in kwa_dict:
                     kwa_dict[kw.id].found = True
                 else:
                     kwa = KeywordActivity(keyword=kw, activity=self)
-                    #print "Add %s" % unicode(kwa).encode('utf8')
+                    #print "add %s" % unicode(kwa).encode('utf8')
                     kwa.save()
         # Then remove the deleted keywords.
         for kw_id in kwa_dict:
             if not kwa_dict[kw_id].found:
                 kwa = kwa_dict[kw_id]
-                #print u"remove %s" % unicode(kwa)
+                #print u"remove %s" % unicode(kwa).encode('utf8')
                 kwa.delete()
 
     def save(self, *args, **kwargs):
@@ -558,6 +562,9 @@ class InitiativeActivity(MemberActivity):
 
     objects = MemberActivityManager()
 
+    def get_keywords(self):
+        return self.doc.keywords.all()
+
     def save(self, *args, **kwargs):
         doc = self.doc
         assert doc.type in ('mp_prop', 'written_ques', 'gov_bill'), "Invalid document type: %s" % doc
@@ -569,7 +576,6 @@ class InitiativeActivity(MemberActivity):
             self.type = MemberActivityType.objects.get(type='WQ')
         else:
             self.type = MemberActivityType.objects.get(type='GB')
-        self.keywords = self.doc.keywords.all()
         if doc.type != 'gov_bill':
             self.member = self.doc.author
         else:
@@ -642,16 +648,18 @@ class StatementActivity(MemberActivity):
 
     objects = MemberActivityManager()
 
-    def save(self, *args, **kwargs):
-        self.type = MemberActivityType.objects.get(type=self.TYPE)
-        self.member = self.statement.member
-        self.time = self.statement.item.plsess.date
+    def get_keywords(self):
         docs = self.statement.item.docs.all()
         kw_dict = {}
         for doc in docs:
             for kw in doc.keywords.all():
                 kw_dict[kw.id] = kw
-        self.keywords = kw_dict.values()
+        return kw_dict.values()
+
+    def save(self, *args, **kwargs):
+        self.type = MemberActivityType.objects.get(type=self.TYPE)
+        self.member = self.statement.member
+        self.time = self.statement.item.plsess.date
         return super(StatementActivity, self).save(*args, **kwargs)
 
     class Meta:
@@ -663,11 +671,13 @@ class SignatureActivity(MemberActivity):
 
     objects = MemberActivityManager()
 
+    def get_keywords(self):
+        return self.signature.doc.keywords.all()
+
     def save(self, *args, **kwargs):
         self.type = MemberActivityType.objects.get(type=self.TYPE)
         self.member = self.signature.member
         self.time = self.signature.date
-        self.keywords = self.signature.doc.keywords.all()
         return super(SignatureActivity, self).save(*args, **kwargs)
 
     class Meta:
