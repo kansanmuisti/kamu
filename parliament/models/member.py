@@ -504,8 +504,7 @@ class MemberActivity(models.Model):
 
     objects = MemberActivityManager()
 
-    def save(self, *args, **kwargs):
-        ret = super(MemberActivity, self).save(*args, **kwargs)
+    def update_keyword_activities(self):
         current_keywords = self.keywordactivity_set.all()
         kwa_dict = {}
         for kwa in current_keywords:
@@ -526,6 +525,10 @@ class MemberActivity(models.Model):
                 kwa = kwa_dict[kw_id]
                 #print u"remove %s" % unicode(kwa)
                 kwa.delete()
+
+    def save(self, *args, **kwargs):
+        ret = super(MemberActivity, self).save(*args, **kwargs)
+        self.update_keyword_activities()
         return ret
 
     def __unicode__(self):

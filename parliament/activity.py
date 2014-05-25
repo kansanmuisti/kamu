@@ -39,6 +39,16 @@ def create_document_signature_activity(sender, **kwargs):
 def create_document_activity(sender, **kwargs):
     # Create the activity record for document authorship.
     obj = kwargs['instance']
+    if getattr(obj, 'keywords_changed', False):
+        # Refresh statements
+        st_act_list = StatementActivity.objects.filter(statement__item__in=obj.plenarysessionitem_set.all()).distinct()
+        for st_act in st_act_list:
+            st_act.update_keyword_activities()
+
+        si_act_list = SignatureActivity.objects.filter(signature__doc=obj)
+        for si_act in si_act_list:
+            si_act.update_keyword_activities()
+
     if obj.type not in ('mp_prop', 'written_ques', 'gov_bill'):
         return
     if obj.author == None and obj.type != 'gov_bill':
