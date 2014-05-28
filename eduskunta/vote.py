@@ -56,6 +56,7 @@ class VoteImporter(Importer):
         dt = datetime.strptime('%s %s' % (str(pv.plsess.date), info['time']),
                                '%Y-%m-%d %H.%M')
         pv.time = dt
+        assert pv.time.date() == pv.plsess.date, 'Vote %s time mismatch (%s vs. %s)' % (pv, pv.time, pv.plsess)
         pv.setting = info['setting']
         pv.subject = info['subject']
         pv.save()
@@ -190,6 +191,9 @@ class VoteImporter(Importer):
         this_year = datetime.now().year
         for year in range(this_year, self.BEGIN_YEAR-1, -1):
             next_link = self.URL_BASE + self.VOTE_LIST_URL % year
+
+            year_votes = PlenaryVote.objects.filter(plsess__name__endswith=year)
+            seen_votes = []
             while next_link:
                 updated_begin = self.updated
                 self.logger.debug("Fetching from %s" % next_link)
@@ -199,11 +203,24 @@ class VoteImporter(Importer):
                         # First plenary session in origin database
                         next_link = None
                         break
+                    vote_id = '%s/%s' % (el['number'], el['plsess'])
+                    seen_votes.append(vote_id)
                     info = {'plsess': el['plsess'], 'number': el['number']}
                     info['link'] = el['results_link']
+                    if 'single' in options:
+                        if options['single'] != vote_id:
+                            continue
                     self.import_session(info)
                     db.reset_queries()
+                    if options.get('single', None) == vote_id:
+                        return
 
                 updated_this_round = self.updated - updated_begin
-                if not updated_this_round and not self.full_update:
+                if not updated_this_round and not self.full_update and not options['single']:
                     return
+
+            for plvote in list(year_votes):
+                vote_id = '%d/%s' % (plvote.number, plvote.plsess.name)
+                if vote_id not in seen_votes:
+                    print("Vote %s not found anymore" % vote_id)
+                    plvote.delete()
