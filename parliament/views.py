@@ -332,16 +332,10 @@ def _get_discussed_topics():
 def main(request):
     args = {}
 
-    some_data = _get_mp_some_activity(request, 0)
-    args['some_html'] = some_data['html']
-    args['some_offset'] = some_data['offset']
-
     parl_data = _get_parliament_activity(request, 0)
     args['parl_act_html'] = parl_data['html']
     args['parl_act_offset'] = parl_data['offset']
 
-    args['most_active_mps'] = _get_most_active_mps()
-    
     args['discussed_topics'] = _get_discussed_topics()
 
     navbuttons = [
