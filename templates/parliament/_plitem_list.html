@@ -10,6 +10,9 @@
 {% if item.statement %}
         <span class="mp-name">{{ item.statement.member.get_print_name }}</span> ({{ item.statement.member.party.abbreviation }}): "{{ item.statement.text|truncatewords:50 }}"
 {% endif %}
+
+<div>
+<a href="{{item.docs.all.0.get_absolute_url}}#statements">
 {% if item.nr_statements %}
 {% blocktrans count nr_statements=item.nr_statements %}
 1 statement
@@ -18,6 +21,7 @@
 {% endblocktrans %}
 {% if item.nr_votes %},{% endif %}
 {% endif %}
+</a>
 
 {% if item.nr_votes %}
 {% blocktrans count nr_votes=item.nr_votes %}
@@ -26,7 +30,7 @@
 {{nr_votes}} votes
 {% endblocktrans %}
 {% endif %}
-    &gt;
-    </div>
+</div>
+</div>
 </article>
 {% endfor %}

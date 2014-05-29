@@ -54,6 +54,7 @@
             <div class="proposal-summary">{{doc.summary|linebreaks}}</div>
 
             {% if session_items %}
+            <a id="statements"></a>
             <h2>{% trans "Statements" %}</h2>
             <div class="proposal-statements">
             {% for item in session_items %}
