@@ -48,7 +48,10 @@ party_list = new PartyList party_json
 
 tags = ({name: x[0], count: x[1], url: '#'} for x in keyword_activity)
 tags = _.sortBy tags, (x) -> x.name
-$("#member-tag-cloud").tag_cloud tags
+if tags.length > 0
+    $("#member-tag-cloud").tag_cloud tags
+else
+    $("#member-tag-cloud").append("<h4>Ei asiasanoitettua aktiivisuutta</h4>")
 
 feed_view = new MemberActivityFeedView member
 
