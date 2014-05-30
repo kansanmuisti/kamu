@@ -216,7 +216,7 @@ class VoteImporter(Importer):
                         return
 
                 updated_this_round = self.updated - updated_begin
-                if not updated_this_round and not self.full_update and not options['single']:
+                if not updated_this_round and not self.full_update and not options.get('single', None):
                     return
 
             for plvote in list(year_votes):
