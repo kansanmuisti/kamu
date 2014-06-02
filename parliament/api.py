@@ -412,7 +412,7 @@ class MemberResource(KamuResource):
 
     class Meta:
         queryset = Member.objects.all().exclude(origin_id__startswith='nonmp')
-        ordering = ['activity_score']
+        ordering = ['activity_score', 'origin_id']
         filtering = {
             'party': ALL_WITH_RELATIONS,
             'name': ('exact', 'in'),
