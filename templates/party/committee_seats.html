@@ -1,0 +1,54 @@
+{% extends "party/party_base.html" %}
+{% load compress static i18n static %}
+
+{% block main_class %}member-details{% endblock %}
+
+{% block title %}{% trans "Committee seats for" %} {{ party.name }}{% endblock %}
+
+{% block head %}
+    <!-- Bootstrapped data for scripts on page -->
+    <script type="text/javascript">
+        MEMBER_TRANSLATION = "{% trans "member" %}"
+        DEPUTYM_TRANSLATION = "{% trans "deputy member" %}"
+        CHAIRMAN_TRANSLATION = "{% trans "chairman" %}"
+    </script>
+{% endblock %}
+
+
+{% block party_content %}
+<div class="content content--parties">
+    <header class="page-heading">
+        <h3>{% trans "Committee seats" %}</h3>
+    </header>
+</div>
+<div class="party-committee-seats">
+<h4>Current period</h4>
+<ul id="committee-seat-list"></ul>
+</div>
+
+<script id="committee-list-template" type="text/template">
+<li>
+<h4><%= name %></h4>
+<h5>Members</h5>
+<ul>
+<% _.each(members, function(member) { %>
+    <li>
+    <%= member.name %> <%= member.committee_role %>
+    </li>
+<% }); %>
+</li>
+</ul>
+</script>
+
+{% compress js %}
+<script type="text/coffeescript" src="{% static "js/models.coffee" %}"></script>
+{% endcompress %}
+{% compress js %}
+<script type="text/coffeescript" src="{% static "js/party-committee.coffee" %}"></script>
+<script type="text/coffeescript">
+$(->
+    member_list_view = new PartyCommitteeView party_abbreviation: "sd"
+)
+</script>
+{% endcompress %}
+{% endblock %}

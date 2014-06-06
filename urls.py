@@ -37,6 +37,7 @@ urlpatterns = patterns('parliament.views',
     url(r'^party/$', 'list_parties'),
     url(r'^party/(?P<abbreviation>[-\w]+)/$', 'show_party_feed'),
     url(r'^party/(?P<abbreviation>[-\w]+)/mps/$', 'show_party_mps'),
+    url(r'^party/(?P<abbreviation>[-\w]+)/committees/$', 'show_party_committees'),
 
     url(r'^topic/$', 'list_topics'),
     url(r'^topic/(?P<topic>\d+)-(?P<slug>[-\w]+)/$', 'show_topic'),

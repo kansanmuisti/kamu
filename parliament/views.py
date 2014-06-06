@@ -602,3 +602,10 @@ def show_party_mps(request, abbreviation):
                 governing=governing)
 
     return render_to_response("party/mps.html", args, context_instance=RequestContext(request))
+
+def show_party_committees(request, abbreviation):
+    party = get_object_or_404(Party, abbreviation=abbreviation)
+
+    args = dict(party=party,)
+
+    return render_to_response("party/committee_seats.html", args, context_instance=RequestContext(request))
