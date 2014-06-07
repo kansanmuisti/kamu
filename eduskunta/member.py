@@ -56,6 +56,7 @@ MEMBER_NAME_TRANSFORMS = {
     'Moilanen-Savolainen Riikka': 'Moilanen Riikka',
     'Mönkäre Sinikka': 'Laisaari Sinikka',
     'Karttunen-Raiskio Marjukka': 'Karttunen Marjukka',
+    'Ojansuu Kirsi': 'Ojansuu-Kaunisto Kirsi',
 }
 
 
