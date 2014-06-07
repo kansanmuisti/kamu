@@ -385,6 +385,7 @@ class MinutesImporter(Importer):
             raise ParseError("unknown tag %s" % item.tag)
         votes = []
         vote_list = item.xpath('.//aanestys')
+
         for vote_el in vote_list:
             gp = vote_el.getparent().getparent()
             if gp.tag == 'paalk':
@@ -403,21 +404,28 @@ class MinutesImporter(Importer):
                 if pl_sess_info['id'] in ('84/2001', '88/2007', '130/1999', '132/2012'):
                     continue
                 raise ParseError("No vote reference found")
+
             for ref_el in vote_ref_list:
                 attr = ref_el.attrib
                 # WORKAROUND
                 if u'\xa8' in attr['aannro']:
                     attr['aannro'] = attr['aannro'].replace(u'\xa8', '')
                 vote_id = (int(attr['vpvuosi']), attr['istnro'], int(attr['aannro']))
-                # WORKAROUND
+
                 vote_pl_id = "%s/%d" % (vote_id[1], vote_id[0])
-                if vote_pl_id != pl_sess_info['id']:
-                    self.logger.warning("mismatch %s != %s (vote #%d)" % (vote_pl_id, pl_sess_info['id'], vote_id[2]))
+                if vote_pl_id != pl_sess_info['id'] or vote_id in self.seen_votes:
+                    # WORKAROUND
                     (pid, y) = pl_sess_info['id'].split('/')
-                    vote_id = (int(y), pid, vote_id[2])
+                    new_vote_id = (int(y), pid, self.last_vote_number + 1)
+                    self.logger.warning("mismatch %d/%s != %d/%s" % (vote_id[2], vote_pl_id, new_vote_id[2], pl_sess_info['id']))
+                    vote_id = new_vote_id
+
+                self.last_vote_number = vote_id[2]
+
                 vote_full_id = "%d/%s/%d" % vote_id
                 if vote_full_id in ('2006/43/2', '2005/130/11', '2004/78/1'):
                     continue
+                self.seen_votes.append(vote_id)
                 votes.append({'sub_number': sub_number, 'vote_id': vote_id})
         if votes:
             item_info['votes'] = votes
@@ -427,6 +435,8 @@ class MinutesImporter(Importer):
     @db.transaction.commit_on_success
     def process_minutes(self, info):
         self.logger.info("processing minutes for plenary session %s/%s", info['type'], info['id'])
+        self.last_vote_number = 0
+        self.seen_votes = []
 
         try:
             pl_sess = PlenarySession.objects.get(origin_id=info['id'])
@@ -544,7 +554,7 @@ class MinutesImporter(Importer):
             plv = self.vote_importer.import_one('%d/%s/%d' % vote)
         if plv.plsess_item != item:
             plv.plsess_item = item
-            plv.save()
+            plv.save(update_fields=['plsess_item'])
         return
 
     def save_item(self, pl_sess, item_info):
@@ -632,7 +642,7 @@ class MinutesImporter(Importer):
     def save_minutes(self, info):
         try:
             pl_sess = PlenarySession.objects.get(origin_id=info['id'])
-            if not self.replace and pl_sess.origin_version == info['version']:
+            if not self.full_update and pl_sess.origin_version == info['version']:
                 return
         except PlenarySession.DoesNotExist:
             pl_sess = PlenarySession(origin_id=info['id'])
@@ -709,6 +719,10 @@ class MinutesImporter(Importer):
 
         self.full_update = options.get('full', False)
 
+        single_id = options.get('single', None)
+        if single_id:
+            self.full_update = True
+
         while next_link:
             self.logger.debug("Fetching from %s" % next_link)
             updated_begin = self.updated
@@ -724,8 +738,14 @@ class MinutesImporter(Importer):
                     else:
                         continue
 
+                if single_id and el['id'] != single_id:
+                    continue
+
                 self.process_minutes(el)
                 db.reset_queries()
+
+                if single_id:
+                    return
 
             updated_this_round = self.updated - updated_begin
             if not updated_this_round and not self.full_update:
