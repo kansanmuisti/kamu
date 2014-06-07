@@ -187,6 +187,8 @@ class VoteImporter(Importer):
         self._make_obj_lists()
         self.full_update = options.get('full')
         self.updated = 0
+        if options.get('single', False):
+            self.replace = True
 
         this_year = datetime.now().year
         for year in range(this_year, self.BEGIN_YEAR-1, -1):
@@ -219,8 +221,9 @@ class VoteImporter(Importer):
                 if not updated_this_round and not self.full_update and not options.get('single', None):
                     return
 
-            for plvote in list(year_votes):
-                vote_id = '%d/%s' % (plvote.number, plvote.plsess.name)
-                if vote_id not in seen_votes:
-                    print("Vote %s not found anymore" % vote_id)
-                    plvote.delete()
+            if not options.get('single', None):
+                for plvote in list(year_votes):
+                    vote_id = '%d/%s' % (plvote.number, plvote.plsess.name)
+                    if vote_id not in seen_votes:
+                        print("Vote %s not found anymore" % vote_id)
+                        plvote.delete()
