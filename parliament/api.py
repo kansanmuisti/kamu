@@ -182,6 +182,13 @@ class ParliamentResource(Resource):
 class PartyResource(KamuResource):
     SUPPORTED_LOGO_DIMS = ((32, 32), (48, 48), (64, 64), (128,128))
 
+    logo_128x128 = fields.FileField()
+    member_count = fields.IntegerField(help_text="Number of currently serving MP's in this party.")
+    governing_now = fields.BooleanField(help_text="True if the party is currently in government")
+    governing_terms = fields.DictField(help_text="Time intervals when the party has been in the government")
+    minister_count = fields.IntegerField(help_text="Number of currently acting ministers in the party.")
+    stats = fields.DictField(help_text="Party's activity statistics: 'recent_activity' is average of the Party's current MPs' activity and 'activity_days_included' is days from 'since'. Included only if the 'stats' parameter is true.")
+
     def get_logo(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
         self.is_authenticated(request)
@@ -273,6 +280,17 @@ class PartyResource(KamuResource):
         filtering = {
             'abbreviation': ('exact',)
         }
+        
+        custom_parameters = {
+            'stats': {
+                'type': 'boolean',
+                'descr': 'Include party statistics in the result. Default off.'
+            },
+            'activity_since': {
+                'type': 'datetime',
+                'descr': "Calculate activity since date until now. Accepts also 'term' for current term (default), 'month' for past 30 days or '2months' for past 60 days."
+            }
+        }
 
 class CommitteeResource(KamuResource):
     class Meta:
@@ -289,11 +307,22 @@ class CommitteeAssociationResource(KamuResource):
 #   - include_activity (bool)
 #   - activity_since (time ago)
 #   - activity_counts (bool)
-
 class MemberResource(KamuResource):
+    
     SUPPORTED_PORTRAIT_DIMS = ((48, 72), (64, 96), (106, 159), (128, 192))
 
     party = fields.ForeignKey('parliament.api.PartyResource', 'party')
+
+    # Custom fields added in dehydrate
+    district_name = fields.CharField(help_text="Name of the MP's electorate district")
+    posts = fields.DictField(help_text="Posts of the MP, eg ministership and commitee memberships.")
+    all_posts = fields.BooleanField(help_text="Include all MP's posts. By default returns only posts that the MP is currently serving in.")
+    terms = fields.IntegerField(help_text="Number of terms served in the parliament")
+    age = fields.IntegerField(help_text="MP's current age in years")
+    party_associations = fields.DictField(help_text="Time intervals when the MP has been member of parties.")
+    stats = fields.DictField(help_text="MP's statistics such as attendance. Included only if the 'stats' parameter is true.")
+    activity_score = fields.FloatField(help_text="Total activity score calculated since the date given by the 'since' parameter. Included only if the 'stats' parameter is true.")
+    activity_days_included = fields.FloatField(help_text="Days included in the average activity score. Included only if the activity score is included.")
 
     def prepend_urls(self):
         url_base = r"^(?P<resource_name>%s)/(?P<pk>\d+)/" % self._meta.resource_name
@@ -416,6 +445,17 @@ class MemberResource(KamuResource):
         filtering = {
             'party': ALL_WITH_RELATIONS,
             'name': ('exact', 'in'),
+        }
+
+        custom_parameters = {
+            'stats': {
+                'type': 'boolean',
+                'descr': 'Include MP statistics in the result. Default off.'
+            },
+            'activity_since': {
+                'type': 'datetime',
+                'descr': "Calculate activity since date until now. Accepts also 'term' for current term (default), 'month' for past 30 days or '2months' for past 60 days."
+            }
         }
 
 class PlenarySessionResource(KamuResource):

@@ -156,7 +156,6 @@ INSTALLED_APPS = (
     'compressor',
     'south',
     'tastypie',
-    'tastypie_swagger',
     'haystack',
 
     'social',

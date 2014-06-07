@@ -55,11 +55,8 @@ for res in all_resources:
 v1_api.register(UpdateResource())
 v1_api.register(FeedResource())
 
-swagger_kwargs = {'tastypie_api_module': 'kamu.urls.v1_api', 'namespace': 'tastypie_swagger'}
-
 urlpatterns += patterns('',
     url(r'^api/', include(v1_api.urls)),
-    url(r'^api/v1/doc/', include('tastypie_swagger.urls', namespace='tastypie_swagger'), kwargs=swagger_kwargs),
 )
 
 urlpatterns += patterns('cms.views',

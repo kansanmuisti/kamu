@@ -61,6 +61,9 @@ class MemberManager(models.Manager):
         return self.get(name=name)
 
 class Member(UpdatableModel):
+    """
+    Member of parliament. Can be current or past.
+    """
     name = models.CharField(max_length=50, unique=True)
     origin_id = models.CharField(max_length=20, unique=True, db_index=True, blank=True, null=True)
     url_name = models.SlugField(max_length=50, unique=True)

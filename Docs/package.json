@@ -1,0 +1,6 @@
+{
+	"name": "Kamu",
+	"version": "1.0.0",
+	"description": "Kansan muisti REST API",
+	"apidocFilename": "rest_api.md"
+}

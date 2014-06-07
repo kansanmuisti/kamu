@@ -29,3 +29,5 @@ eduskunta/minutes_sgml
 eduskunta/minutes_xml
 .Rproj.user
 local_update_config
+Docs/hackily_generated_tmp_docs.py
+static/api_v1_doc
