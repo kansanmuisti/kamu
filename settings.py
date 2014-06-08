@@ -21,12 +21,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'kamu',
         'USER': 'kamu',
-        'PASSWORD': 'kamu'
+        'PASSWORD': 'kamu',
+        # Keep the database connection open for an hour
+        'CONN_MAX_AGE': 3600,
     }
 }
 
-# Keep the database connection open for 120s
-CONN_MAX_AGE = 120
 
 HAYSTACK_CONNECTIONS = {
     'default': { 
