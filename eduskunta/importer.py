@@ -157,6 +157,10 @@ class Importer(object):
         should_update_xml = False
 
         s = self.open_url(html_url, self.doc_type)
+        if len(s) == 0:
+            self.logger.warning("No content for doc %s" % info['id'])
+            return None
+
         doc = html.fromstring(s)
         # Find the link to the SGML
         el = doc.xpath(".//a[contains(., 'Rakenteinen asiakirja')]")
