@@ -6,8 +6,12 @@ import pprint
 from lxml import html
 from django import db
 from django.conf import settings
-from parliament.models.member import *
+from datetime import datetime
+from parliament.models.session import Term
 from parliament.models.party import Party
+from parliament.models.member import Member, DistrictAssociation, PartyAssociation, \
+    CommitteeAssociation, SpeakerAssociation, MinistryAssociation, MemberActivityType, \
+    District
 from eduskunta.importer import Importer, ParseError
 from eduskunta.party import pg_to_party
 from dateutil.parser import parse as dateutil_parse
@@ -642,7 +646,10 @@ class MemberImporter(Importer):
             if not m:
                 raise ParseError("MP ID not found")
             mp_id = int(m.groups()[0])
-
+            # FIXME: New MPs that replace the euro-MEPs -- Remove this later
+            if mp_id in (1275, 1276, 1277):
+                if datetime.now() < datetime(year=2014, month=7, day=4):
+                    continue
             mp_info = self.fetch_member(mp_id)
             if 'dry_run' in args and not args['dry_run']:
                 self.save_member(mp_info)
@@ -668,7 +675,7 @@ class MemberImporter(Importer):
              'phone': '09 1608 8284',
              'portrait': 'http://valtioneuvosto.fi/hallitus/jasenet/kuvat/140px/haglund.jpg',
              'districts': {},
-             'posts': [{'begin': datetime.date(2012, 7, 5),
+             'posts': [{'begin': datetime(year=2012, month=7, day=5).date(),
                         'end': None,
                         'label': u'puolustusministeri',
                         'role': 'minister'}],
