@@ -77,6 +77,13 @@ class VoteImporter(Importer):
         return pv
 
     def import_session(self, info):
+        if not info['plsess'] in self.plsess_by_id:
+            try:
+                plsess = PlenarySession.objects.get(origin_id=info['plsess'])
+            except PlenarySession.DoesNotExist:
+                raise Exception("Vote %s refers to unexisting plenary session" % (info['number'], info['plsess']))
+            self.plsess_by_id[info['plsess']] = plsess
+
         plsess = self.plsess_by_id[info['plsess']]
         try:
             pv = PlenaryVote.objects.get(plsess=plsess, number=info['number'])

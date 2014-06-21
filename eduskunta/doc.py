@@ -32,6 +32,7 @@ SKIP_DOCS = [
     'LA 48/2012', # missing date of committee hearing
     'HE 273/2009', # ???
     'KK 180/2012', # SGML doc not found
+    'HE 214/2013', # corrupt HTML
 ]
 
 def should_download_doc(doc):

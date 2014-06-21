@@ -59,7 +59,8 @@ class MinutesImporter(Importer):
     NON_MP_NAMES = (u'Mikko Puumalainen', u'Raimo Tammilehto', u'Kalevi Hemilä',
     		    u'Kari Häkämies', u'Carl Haglund')
     NON_MP_ROLES = ('Eduskunnan oikeusasiamies',
-                    'Valtioneuvoston oikeuskansleri')
+                    'Valtioneuvoston oikeuskansleri',
+                    'Valtiovarainministeri')
 
     TERM_DASH = u'\u2013'
     TERMS = [
