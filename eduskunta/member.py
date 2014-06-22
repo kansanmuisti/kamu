@@ -6,12 +6,13 @@ import pprint
 from lxml import html
 from django import db
 from django.conf import settings
+from django.template.defaultfilters import slugify
 from datetime import datetime
 from parliament.models.session import Term
 from parliament.models.party import Party
 from parliament.models.member import Member, DistrictAssociation, PartyAssociation, \
     CommitteeAssociation, SpeakerAssociation, MinistryAssociation, MemberActivityType, \
-    District
+    District, Committee
 from eduskunta.importer import Importer, ParseError
 from eduskunta.party import pg_to_party
 from dateutil.parser import parse as dateutil_parse
