@@ -256,7 +256,12 @@ class MemberImporter(Importer):
         surname, first_names = names[-1], ' '.join(names[0:-1])
         mp_info['name'] = "%s %s" % (surname, first_names)
 
-        surname, given_names = get_field_el(doc, 'name').text.strip().split(', ')
+        name_el = get_field_el(doc, 'name')
+        if name_el == None:
+            self.logger.warning("MP info element not found")
+            return None
+
+        surname, given_names = name_el.text.strip().split(', ')
         if '(' in given_names:
             given_names = given_names.split('(')[0].strip()
         mp_info['surname'] = surname
@@ -652,6 +657,8 @@ class MemberImporter(Importer):
                 if datetime.now() < datetime(year=2014, month=7, day=4):
                     continue
             mp_info = self.fetch_member(mp_id)
+            if not mp_info:
+                continue
             if 'dry_run' in args and not args['dry_run']:
                 self.save_member(mp_info)
             elif 'dry_run' in args and args['dry_run']:
