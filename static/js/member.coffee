@@ -32,7 +32,7 @@ class @MemberActivityFeedView extends Backbone.View
         if type
             @user_filters['type__type__in'] = type.join(",")
         else
-            delete @user_filters['type__type']
+            delete @user_filters['type__type__in']
         @filter()
 
     add_item: (item) =>
@@ -86,7 +86,6 @@ $(".feed-filter-buttons .filter-button").click (ev) ->
     if filters.length == 0 or all_buttons.length == active_buttons.length
         disable_filters()
         return
-    
 
     $(".feed-filter-buttons .disable-filters").removeClass 'active'
     feed_view.filter_type filters

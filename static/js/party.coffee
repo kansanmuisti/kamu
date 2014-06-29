@@ -34,7 +34,7 @@ class @PartyActivityFeedView extends Backbone.View
         if type
             @user_filters['type__type__in'] = type.join(",")
         else
-            delete @user_filters['type__type']
+            delete @user_filters['type__type__in']
         @filter()
 
 
