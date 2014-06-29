@@ -64,9 +64,9 @@ class PlenarySession(UpdatableModel):
         return self.name
 
 class PlenarySessionItem(models.Model):
-    TYPES = (('agenda', 'Agenda item'),
-             ('question', 'Question time'),
-             ('budget', 'Budget proposal'),)
+    TYPES = (('agenda', _('Agenda item')),
+             ('question', _('Question time')),
+             ('budget', _('Budget proposal')),)
 
     plsess = models.ForeignKey(PlenarySession)
     number = models.PositiveIntegerField()
@@ -96,6 +96,15 @@ class PlenarySessionItem(models.Model):
                                  self.sub_number)
         else:
             return "%s/%d" % (str(self.plsess), self.number)
+    
+    def get_preferred_view_url(self):
+        try:
+            # By default link to the document page that usually
+            # gives a nicer context
+            doc = self.docs.all()[0]
+            return doc.get_absolute_url()
+        except IndexError:
+            return self.get_absolute_url()
 
     def get_absolute_url(self):
         args = {'plsess': self.plsess.url_name,
@@ -103,6 +112,15 @@ class PlenarySessionItem(models.Model):
         if self.sub_number is not None:
             args['subitem_nr'] = self.sub_number
         return reverse('parliament.views.show_item', kwargs=args)
+
+    def get_type_description(self):
+        parts = [
+            self.get_type_display(),
+            self.sub_description,
+            _(self.processing_stage) if self.processing_stage else ''
+            ]
+        parts = filter(None, parts)
+        return ", ".join(parts)
 
     def __unicode__(self):
         return "%s %s: %s" % (self.get_short_id(), self.type, self.description)
@@ -145,17 +163,11 @@ class Statement(models.Model):
 
     def get_short_id(self):
         return "%s/%d"%(self.item.get_short_id(), self.index)
-
+    
     def get_indocument_url(self):
         # A hack as the item itself doesn't have a proper
         # page in the system
-        try:
-            doc = self.item.docs.all()[0]
-        except IndexError:
-            return None
-
-        return doc.get_absolute_url() + "#statement-" + self.get_short_id()
-
+        return self.item.get_preferred_view_url() + "#statement-" + self.get_short_id()
 class PlenaryVoteManager(models.Manager):
     def between(self, begin=None, end=None):
         query = Q()
