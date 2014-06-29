@@ -35,7 +35,7 @@ class MostActivePartiesView extends Backbone.View
         @collection.bind 'reset', @add_all_items
         params =
             activity_since: '2months'
-            stats: 'true'
+            include: 'stats'
             recent_keywords: 'true'
         @collection.fetch
             reset: true

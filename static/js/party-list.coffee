@@ -38,7 +38,7 @@ class PartyListView extends Backbone.View
         @collection.fetch
             reset: true
             data:
-                stats: true
+                include: 'stats'
 
 class @PartyListItemView extends Backbone.View
     template: _.template $('#party-list-item-template').html()

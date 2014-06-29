@@ -83,7 +83,7 @@ class @MemberListView extends Backbone.View
         data =
                 thumbnail_dim: "104x156"
                 current: true
-                stats: true
+                include: 'stats'
                 limit: 500
         
         data = _.extend data, @extra_filters

@@ -592,7 +592,7 @@ def show_party_mps(request, abbreviation):
     party = get_object_or_404(Party, abbreviation=abbreviation)
 
     party_json = get_embedded_resource(request, PartyResource, party)
-    party_mp_list_json = get_embedded_resource_list(request, MemberResource, {'party': party, 'stats': "True", 'thumbnail_dim': "104x156", 'current': "True"})
+    party_mp_list_json = get_embedded_resource_list(request, MemberResource, {'party': party, 'include': "stats", 'thumbnail_dim': "104x156", 'current': "True"})
 
     governing = [gp for gp in GoverningParty.objects.filter(party=party).order_by('-begin') if gp.end != None]    
 

@@ -187,7 +187,7 @@ class PartyResource(KamuResource):
     governing_now = fields.BooleanField(help_text="True if the party is currently in government")
     governing_terms = fields.DictField(help_text="Time intervals when the party has been in the government")
     minister_count = fields.IntegerField(help_text="Number of currently acting ministers in the party.")
-    stats = fields.DictField(help_text="Party's activity statistics: 'recent_activity' is average of the Party's current MPs' activity and 'activity_days_included' is days from 'since'. Included only if the 'stats' parameter is true.")
+    stats = fields.DictField(help_text="Party's activity statistics: 'recent_activity' is average of the Party's current MPs' activity and 'activity_days_included' is days from 'since'. Included only if the 'stats' is in the `include` parameter.")
 
     def get_logo(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
@@ -262,8 +262,8 @@ class PartyResource(KamuResource):
                 {'id': kw.id, 'score': kw.score, 'name': kw.name, 'slug': kw.get_slug()} for kw in kw_list
             ]
 
-        stats = bundle.request.GET.get('stats', '')
-        if stats.lower() in ('1', 'true'):
+        include = bundle.request.GET.get('include', '')
+        if include.lower() == 'stats':
             bundle.data['stats'] = {}
             score = bundle.obj.get_activity_score(begin=activity_start)
             bundle.data['stats']['recent_activity'] = score
@@ -282,9 +282,9 @@ class PartyResource(KamuResource):
         }
         
         custom_parameters = {
-            'stats': {
-                'type': 'boolean',
-                'descr': 'Include party statistics in the result. Default off.'
+            'include': {
+                'type': 'str',
+                'descr': "Comma separated list of nested models to include. Currently supports 'stats'."
             },
             'activity_since': {
                 'type': 'datetime',
@@ -301,12 +301,6 @@ class CommitteeAssociationResource(KamuResource):
         queryset = CommitteeAssociation.objects.all()
 
 
-# Arguments:
-#   - current (bool)
-#   - stats (bool)
-#   - include_activity (bool)
-#   - activity_since (time ago)
-#   - activity_counts (bool)
 class MemberResource(KamuResource):
     
     SUPPORTED_PORTRAIT_DIMS = ((48, 72), (64, 96), (106, 159), (128, 192))
@@ -320,8 +314,8 @@ class MemberResource(KamuResource):
     terms = fields.IntegerField(help_text="Number of terms served in the parliament")
     age = fields.IntegerField(help_text="MP's current age in years")
     party_associations = fields.DictField(help_text="Time intervals when the MP has been member of parties.")
-    stats = fields.DictField(help_text="MP's statistics such as attendance. Included only if the 'stats' parameter is true.")
-    activity_score = fields.FloatField(help_text="Total activity score calculated since the date given by the 'since' parameter. Included only if the 'stats' parameter is true.")
+    stats = fields.DictField(help_text="MP's statistics such as attendance. Included only if the 'stats' is in the `include` parameter.")
+    activity_score = fields.FloatField(help_text="Total activity score calculated since the date given by the 'since' parameter. Included only if the 'stats' is in the `include` parameter.")
     activity_days_included = fields.FloatField(help_text="Days included in the average activity score. Included only if the activity score is included.")
 
     def prepend_urls(self):
@@ -412,8 +406,8 @@ class MemberResource(KamuResource):
         bundle.data['party_associations'] = pa_list
         opts = {'since': bundle.request.GET.get('activity_since', 'term')}
         activity_since = parse_date_from_opts(opts, 'since')
-        stats = bundle.request.GET.get('stats', '')
-        if stats.lower() in ('1', 'true'):
+        include = bundle.request.GET.get('include', '')
+        if include.lower() == 'stats':
             # FIXME: What is "latest!?"
             bundle.data['stats'] = bundle.obj.get_latest_stats()
 
@@ -448,9 +442,9 @@ class MemberResource(KamuResource):
         }
 
         custom_parameters = {
-            'stats': {
-                'type': 'boolean',
-                'descr': 'Include MP statistics in the result. Default off.'
+           'include': {
+                'type': 'str',
+                'descr': "Comma separated list of nested models to include. Currently supports 'stats'."
             },
             'activity_since': {
                 'type': 'datetime',
