@@ -93,6 +93,8 @@ class Command(BaseCommand):
                 args['single'] = options['single']
             if options['from_year']:
                 args['from_year'] = options['from_year']
+            if options['from_id']:
+                args['from_id'] = options['from_id']
             args['full'] = options['full']
             importer.import_docs(**args)
         if options['vote']:

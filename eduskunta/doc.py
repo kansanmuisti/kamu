@@ -74,6 +74,11 @@ class DocImporter(Importer):
     def handle_processing_stages(self, info, html_doc):
         doc_name = "%s %s" % (info['type'], info['id'])
 
+        status_map = {
+            1: 'upcoming',
+            2: 'in_progress',
+            3: 'finished'
+        }
         names = {'vireil': ('intro', (u'Annettu eduskunnalle', u'Aloite jätetty')),
                  'lahete': ('debate', u'Lähetekeskustelu'),
                  'valiok': ('committee', u'Valiokuntakäsittely'),
@@ -90,6 +95,8 @@ class DocImporter(Importer):
                  'raue': ('lapsed', None),
                  'jatlep': ('suspended', None),
         }
+        finishing_phases = ('3ndread', '2ndread', 'onlyread', 'only2read', 'only3read',
+                            'cancelled', 'lapsed', 'lapsed')
 
         img_els = html_doc.xpath("//div[@id='vepsasia-kasittely']/img")
         assert len(img_els)
@@ -99,9 +106,9 @@ class DocImporter(Importer):
             m = re.match('/thwfakta/yht/kuvat/palkki/ve([a-z0-9]+)_(\d)\.gif', s)
             phase = m.groups()[0]
             status = int(m.groups()[1])
+            status = status_map[status]
             if not phase in names:
                 raise ParseError("unknown processing phase %s" % phase)
-            assert status in (1, 2, 3)
             l = names[phase]
             phase = l[0]
             phases.append((phase, status, l[1]))
@@ -109,18 +116,23 @@ class DocImporter(Importer):
         last_phase = phases[-1][0]
         phase_list = []
         for idx, (phase, status, el_name) in enumerate(phases):
-            if not el_name or status not in (2, 3):
+            if not el_name or status not in ('in_progress', 'finished'):
                 continue
             box_el_list = html_doc.xpath("//div[@class='listborder']//h2")
             # quirks
-            if doc_name == 'HE 25/2009' and phase == '2ndread':
+            if doc_name in ('HE 25/2009', 'HE 57/2014', 'HE 29/2014') and phase == '2ndread':
                 el_name = names['akja2k'][1]
+            if doc_name in ('HE 29/2014', 'HE 3/2014', 'HE 215/2013', 'HE 203/2013') and phase == 'only2read':
+                phase = '2ndread'
+                el_name = names['2kasit'][1]
             if doc_name == 'HE 112/2011':
                 if phase == '2ndread':
                     continue
                 if phase == '1stread':
                     phase = 'onlyread'
                     el_name = names['akasit'][1]
+
+            finishing_phase = None
             for box_el in box_el_list:
                 s = box_el.text_content().strip().strip('.')
                 if isinstance(el_name, tuple):
@@ -156,8 +168,32 @@ class DocImporter(Importer):
                 date = date_el[0].tail.strip()
                 (d, m, y) = date.split('.')
                 date = '-'.join((y, m, d))
+
+            if phase == 'finished':
+                finishing_phase = idx
+
             phase_list.append((idx, phase, date))
             #print "%s: %s" % (phase, date)
+
+        if not finishing_phase:
+            for p in phases:
+                if p[0] == 'finished' and p[1] != 'upcoming':
+                    is_finished = True
+                    break
+            else:
+                is_finished = False
+            if is_finished:
+                for p in phase_list:
+                    if p[1] in finishing_phases and p[1] != 'upcoming':
+                        finishing_phase = p
+                        break
+                assert finishing_phase, 'Finishing phase not found'
+
+                idx = finishing_phase[0] + 1
+                max_idx = max([x[0] for x in phase_list])
+                assert max_idx < idx
+                phase_list.append((idx, 'finished', finishing_phase[2]))
+
         info['phases'] = phase_list
 
     def handle_question(self, info, html_doc):
@@ -549,6 +585,8 @@ class DocImporter(Importer):
         if from_year:
             url += '&PVMVP2=%s' % from_year
 
+        from_id = options.get('from_id', None)
+
         self.logger.info("Fetching base list URL and creating session")
         s = self.open_list_url(url, 'docs-list')
         root = html.fromstring(s)
@@ -574,8 +612,15 @@ class DocImporter(Importer):
 
             for idx, info in enumerate(doc_list):
                 assert info['type'] in DOC_TYPES
-                self.logger.info("[%d/%d] document %s %s" %
-                    (idx + 1, len(doc_list), info['type'], info['id']))
+                doc_id = '%s %s' % (info['type'], info['id'])
+                self.logger.info("[%d/%d] document %s" %
+                    (idx + 1, len(doc_list), doc_id))
+
+                if from_id:
+                    if from_id.upper() != doc_id:
+                        continue
+                    from_id = None
+
                 doc = self.import_doc(info)
                 if doc and getattr(doc, '_updated', False):
                     self.updated += 1

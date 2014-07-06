@@ -133,6 +133,8 @@ MIDDLEWARE_CLASSES = (
     #'django.contrib.auth.middleware.AuthenticationMiddleware',
     #'django.contrib.messages.middleware.MessageMiddleware',
     'httpstatus.middleware.HttpStatusErrorsMiddleware',
+    # ProfilerMiddleware needs to be last
+    'profiler.middleware.ProfilerMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
