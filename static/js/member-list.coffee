@@ -31,11 +31,21 @@ class @MemberListSortButtonsView extends Backbone.View
 
     render: ->
         @$el.empty()
+        category_elements = {}
+        default_category = null
+        for cat in MEMBER_LIST_FIELD_CATEGORIES
+            cat_el = $("""<fieldset class="btn-group btn-group-sm"><legend>#{cat.name}</legend></fieldset>""").appendTo @$el
+            for field in cat.fields ? []
+                category_elements[field] = cat_el
+            default_category = cat_el
+            
         for f in MEMBER_LIST_FIELDS
             button_el = $(@template f)
             if @member_list_view.active_sort_field.id == f.id
                 button_el.addClass 'active'
-            @$el.append button_el
+            
+            cat = category_elements[f.id] ? default_category
+            cat.append button_el
         return @
 
 class MemberListItemView extends Backbone.View

@@ -22,7 +22,7 @@
                 <label class="col-lg-2 control-label">{% trans "Order" %}</label>
                 <div class="col-lg-10">
                     <div class="btn-toolbar">
-                        <div class="btn-group btn-group-sm member-list-sort-buttons">
+                        <div class="member-list-sort-buttons">
                         </div>
                     </div>
                 </div>
@@ -46,6 +46,7 @@
 <!-- Embedded resources -->
 <script type="text/javascript">
     MEMBER_LIST_FIELDS = {{list_fields_json|safe}};
+    MEMBER_LIST_FIELD_CATEGORIES = {{MEMBER_LIST_FIELD_CATEGORIES|safe}};
     MINISTER_TRANSLATION = "{% trans "minister" %}"
     party_json = {{party_json|safe}};
 </script>
