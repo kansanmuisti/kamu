@@ -57,10 +57,10 @@ class MinutesImporter(Importer):
     SGML_TO_XML = 'sgml-to-xml.sh'
 
     NON_MP_NAMES = (u'Mikko Puumalainen', u'Raimo Tammilehto', u'Kalevi Hemilä',
-    		    u'Kari Häkämies', u'Carl Haglund')
+                    u'Kari Häkämies', u'Carl Haglund', u'Laura Räty')
     NON_MP_ROLES = ('Eduskunnan oikeusasiamies',
                     'Valtioneuvoston oikeuskansleri',
-                    'Valtiovarainministeri')
+                    'Valtiovarainministeri', 'Sosiaali- ja terveysministeri')
 
     TERM_DASH = u'\u2013'
     TERMS = [
