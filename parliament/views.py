@@ -321,7 +321,11 @@ def _get_discussed_topics():
         first_doc = item.docs.all()[0]
         topic = first_doc.keywords.all()[0]
         topic = item.docs.all()[0].keywords.all()[0]
-        first_statement = item.statement_set.filter(type='normal')[0]
+        item_list = item.statement_set.filter(type='normal')
+        if item_list:
+            first_statement = item_list[0]
+        else:
+            first_statement = None
         topic.item = item
         topic.first_statement = first_statement
         topic.doc = first_doc
