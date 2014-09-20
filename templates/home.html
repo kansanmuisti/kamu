@@ -42,17 +42,25 @@
           {% else %}
           side-opposition
           {% endif %}">
+        {% if topic.first_statement.member.url_name %}
         <a class="statement-portrait" href="{% url 'parliament.views.show_member' member=topic.first_statement.member.url_name %}">
+        {% endif %}
           {% thumbnail topic.first_statement.member.photo "64x64" as portrait %}
           <img class="media-object" src="{{portrait.url}}">
           {% endthumbnail %}
+        {% if topic.first_statement.member.url_name %}
         </a>
+        {% endif %}
         <div class="media-body highlight-statement-content">
           <div class="summary">
             <h5 class="media-heading">
+              {% if topic.first_statement.member %}
               <a href="{% url 'parliament.views.show_member' member=topic.first_statement.member.url_name %}">
-              {{topic.first_statement.member.name}} /{{topic.first_statement.member.party.abbreviation}}
+              {{topic.first_statement.speaker_name}} /{{topic.first_statement.member.party.abbreviation}}
               </a>
+              {% else %}
+              {{topic.first_statement.speaker_name}}
+              {% endif %}
             </h5>
             <div class="highlight-statement-text">
               <a href="{{topic.first_statement.get_indocument_url}}">
