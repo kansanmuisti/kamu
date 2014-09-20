@@ -115,6 +115,18 @@ MEMBER_LIST_FIELDS = [
     }
 ]
 
+MEMBER_LIST_FIELD_CATEGORIES = [
+    {
+        'id': 'statistics',
+        'name': _("Term's statistics"),
+        'fields': ['activity_score', 'attendance', 'party_agree']
+    },
+    {
+        'id': 'default',
+        'name': _("Basic info")
+    }
+]
+
 party_json = None
 def get_parties(request):
     global party_json
@@ -494,6 +506,7 @@ def list_members(request):
     args = {}
     args['party_json'] = get_parties(request)
     args['list_fields_json'] = simplejson.dumps(MEMBER_LIST_FIELDS)
+    args['MEMBER_LIST_FIELD_CATEGORIES'] = simplejson.dumps(MEMBER_LIST_FIELD_CATEGORIES)
 
     return render_to_response('member/list.html',
             args, context_instance=RequestContext(request))
