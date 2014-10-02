@@ -4,4 +4,6 @@ Jäätteenmäki	2003-04-17	2003-06-24
 Vanhanen	2003-06-24	2007-04-19
 Vanhanen II	2007-04-19	2010-06-22
 Kiviniemi	2010-06-22	2011-06-22
-Katainen	2010-06-22	None
+Katainen	2010-06-22	2014-06-24
+Stubb	2014-06-24	None
+
