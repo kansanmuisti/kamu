@@ -94,6 +94,7 @@ class @MemberListView extends Backbone.View
                 thumbnail_dim: "104x156"
                 current: true
                 include: 'stats'
+                activity_since: 'term'
                 limit: 500
         
         data = _.extend data, @extra_filters
@@ -131,7 +132,7 @@ class @MemberListView extends Backbone.View
             activity_score: attrsort('activity_score')
             attendance: statsort('attendance')
             party_agree: statsort('party_agree')
-            session_agree: statsort('party_agree')
+            session_agree: statsort('session_agree')
             term_count: statsort('term_count')
             age: attrsort('age')
 
