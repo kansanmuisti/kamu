@@ -50,14 +50,18 @@ class @MemberListSortButtonsView extends Backbone.View
 
 class MemberListItemView extends Backbone.View
     template: _.template $("#member-list-item-template").html()
-
-    render: (sort_order) ->
+    
+    _do_render: ->
         attr = @model.toJSON()
         attr.party = @model.get_party(party_list)
-        attr.sort_order = sort_order.id
         html = $($.trim(@template attr))
         @$el = html
         @el = @$el[0]
+        @_is_rendered = true
+
+    render: =>
+        if not @_is_rendered
+            @_do_render()
         return @
 
 class @MemberListView extends Backbone.View
@@ -191,7 +195,11 @@ class @MemberListView extends Backbone.View
         #$el.attr "placeholder", $el.attr("placeholder") + hint
 
     _filter_listing: =>
-        @$el.empty()
+        # TODO: This would be more responsive with
+        # asynchronous rendering of the elements. Maybe.
+        # In some profiling runs clearing the parent element took
+        # almost all the time.
+        @$el[0].innerHtml = ''
         query = @search_el.val()
         if not query
             result = (@children[key] for key of @children)
@@ -200,10 +208,14 @@ class @MemberListView extends Backbone.View
 
         result.sort @sort_func
         
+        children = []
         for hit in result
             hit.render(@active_sort_field.id)
-            @$el.append hit.el
+            children.push hit.el
         
+        @$el.append children
+        @$el.find('.statistics-row').hide()
+
         css_class = switch @active_sort_field.id
             when 'attendance' then '.attendance-statistics-bar'
             when 'party_agree' then '.party-agree-statistics-bar'
