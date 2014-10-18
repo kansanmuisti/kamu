@@ -741,6 +741,25 @@ class KeywordResource(KamuResource):
         return obj_list
 
 
+class MemberUpdateResource(UpdateResource):
+    def dehydrate(self, bundle):
+        bundle = super(MemberUpdateResource, self).dehydrate(bundle)
+        obj = bundle.obj
+        mf = obj.feed.membersocialfeed
+        bundle.data['member_name'] = mf.member
+        party = mf.member.party
+        if party:
+            party = party.abbreviation
+        else:
+            party = None
+        bundle.data['member_party'] = party
+        bundle.data['feed_type'] = obj.feed.type
+        return bundle
+
+    class Meta:
+        queryset = Update.objects.all()
+        resource_name = 'update'
+
 class KamuSearchResource(SearchResource):
     def dehydrate(self, bundle):
         obj = bundle.obj
@@ -774,12 +793,11 @@ all_resources = [TermResource, ParliamentResource, PartyResource, MemberResource
                  PlenaryVoteResource, VoteResource, FundingSourceResource, FundingResource,
                  SeatResource, MemberSeatResource, DocumentResource, MemberActivityResource,
                  KeywordResource, CommitteeResource, KeywordActivityResource,
-                 PlenarySessionItemResource, StatementResource, KamuSearchResource]
-
-from social.api import UpdateResource
+                 PlenarySessionItemResource, StatementResource, MemberUpdateResource,
+                 KamuSearchResource]
 
 res_by_model = {}
-for res in all_resources + [UpdateResource]:
+for res in all_resources:
     if not hasattr(res.Meta, 'queryset'):
         continue
     res_by_model[res.Meta.queryset.model] = res

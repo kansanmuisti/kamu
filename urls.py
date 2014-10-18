@@ -52,23 +52,13 @@ from social.api import UpdateResource, FeedResource
 v1_api = Api(api_name='v1')
 for res in all_resources:
     v1_api.register(res())
-v1_api.register(UpdateResource())
 v1_api.register(FeedResource())
 
 urlpatterns += patterns('',
     url(r'^api/', include(v1_api.urls)),
 )
 
-urlpatterns += patterns('cms.views',
-    url(r'^news/vaalikoneet-avoimiksi/$', 'show_news'),
-    url(r'^news/(?P<date>\d{4}/\d{2}/\d{2})/(?P<index>\d+)/$', 'render_news'),
-    url(r'^cms/edit/(?P<item_id>\d+)/$', 'edit_item'),
-    url(r'^cms/add/news/$', 'add_newsitem'),
-    url(r'^cms/preview/markdown/$', 'preview_markdown'),
-)
-
 if settings.DEBUG:
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
     urlpatterns += staticfiles_urlpatterns()
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
