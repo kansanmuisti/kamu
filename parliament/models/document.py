@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.template.defaultfilters import slugify
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 from parliament.models.base import UpdatableModel
 
 class Keyword(models.Model):

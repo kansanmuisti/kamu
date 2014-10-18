@@ -1,7 +1,8 @@
 from django.db import models, connection
 from django.db.models import Q
 from django.template.defaultfilters import slugify
-from django.utils.translation import pgettext, ugettext as _
+from django.utils.translation import pgettext_lazy as pgettext, ugettext_lazy as _
+from django import VERSION as DJANGO_VERSION
 
 from parliament.models.committee import *
 from parliament.models.party import *
@@ -11,11 +12,12 @@ from parliament.models.base import UpdatableModel
 
 import datetime
 
-# Django bug workaround
-from django.db.models.loading import cache as model_cache
+# Django bug workaround (only in version < 1.7)
+if DJANGO_VERSION[0:2] < (1, 7):
+    from django.db.models.loading import cache as model_cache
 
-if not model_cache.loaded:
-    model_cache._populate()
+    if not model_cache.loaded:
+        model_cache._populate()
 
 # Helper to filter Association objects
 class AssociationQuerySet(models.query.QuerySet):

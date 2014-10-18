@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import Q
 from django.template.defaultfilters import slugify
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 from django.utils.html import linebreaks
 from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
@@ -96,7 +96,7 @@ class PlenarySessionItem(models.Model):
                                  self.sub_number)
         else:
             return "%s/%d" % (str(self.plsess), self.number)
-    
+
     def get_preferred_view_url(self):
         try:
             # By default link to the document page that usually
@@ -113,12 +113,19 @@ class PlenarySessionItem(models.Model):
             args['subitem_nr'] = self.sub_number
         return reverse('parliament.views.show_item', kwargs=args)
 
+    def get_processing_stage_str(self):
+        stages = DocumentProcessingStage.STAGE_CHOICES
+        for st in stages:
+            if st[0] == self.processing_stage:
+                break
+        return unicode(st[1])
+
     def get_type_description(self):
         parts = [
             self.get_type_display(),
             self.sub_description,
-            _(self.processing_stage) if self.processing_stage else ''
-            ]
+            self.get_processing_stage_str() if self.processing_stage else ''
+        ]
         parts = filter(None, parts)
         return ", ".join(parts)
 

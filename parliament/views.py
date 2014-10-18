@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import operator
 import datetime
+import json
 
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
@@ -11,7 +12,6 @@ from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response, get_list_or_404, get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
-from django.utils import simplejson
 from sorl.thumbnail import get_thumbnail
 from parliament.models import *
 from social.models import Update
@@ -236,9 +236,9 @@ def show_member(request, member, page=None):
                 'label': _('All activities')
             }
         }
-    args['feed_actions_json'] = simplejson.dumps(make_feed_actions(), ensure_ascii=False)
+    args['feed_actions_json'] = json.dumps(make_feed_actions(), ensure_ascii=False)
     kw_act = _get_member_activity_kws(member)
-    kw_act_json = simplejson.dumps(kw_act, ensure_ascii=False)
+    kw_act_json = json.dumps(kw_act, ensure_ascii=False)
     args['keyword_activity'] = kw_act_json
     template = 'member/details.html'
 
@@ -269,7 +269,7 @@ def get_parliament_activity(request):
         raise Http400()
 
     data = _get_parliament_activity(request, offset)
-    return HttpResponse(simplejson.dumps(data), mimetype="application/json")
+    return HttpResponse(json.dumps(data), mimetype="application/json")
 
 def _get_mp_some_activity(request, offset):
     q = Update.objects.filter(feed__in=MemberSocialFeed.objects.all())
@@ -303,7 +303,7 @@ def get_mp_some_activity(request):
         raise Http400()
 
     data = _get_mp_some_activity(request, offset)
-    return HttpResponse(simplejson.dumps(data), mimetype="application/json")
+    return HttpResponse(json.dumps(data), mimetype="application/json")
 
 
 def _get_most_active_mps():
@@ -496,8 +496,8 @@ def show_topic(request, topic, slug=None):
     kw = get_object_or_404(Keyword, id=topic)
     kw_json = get_embedded_resource(request, KeywordResource, kw, {'related': '1', 'most_active': '1'})
     args = {'topic': kw, 'keyword_json': kw_json}
-    args['feed_actions_json'] = simplejson.dumps(make_feed_actions(), ensure_ascii=False)
-    args['feed_filters_json'] = simplejson.dumps(make_feed_filters(), ensure_ascii=False)
+    args['feed_actions_json'] = json.dumps(make_feed_actions(), ensure_ascii=False)
+    args['feed_filters_json'] = json.dumps(make_feed_filters(), ensure_ascii=False)
     agr = kw.keywordactivity_set.aggregate(Max("activity__time")) 
     max_time = agr['activity__time__max']
     keyword_activity_end_date = max_time.date
@@ -509,8 +509,8 @@ def show_topic(request, topic, slug=None):
 def list_members(request):
     args = {}
     args['party_json'] = get_parties(request)
-    args['list_fields_json'] = simplejson.dumps(MEMBER_LIST_FIELDS)
-    args['MEMBER_LIST_FIELD_CATEGORIES'] = simplejson.dumps(MEMBER_LIST_FIELD_CATEGORIES)
+    args['list_fields_json'] = json.dumps(MEMBER_LIST_FIELDS)
+    args['MEMBER_LIST_FIELD_CATEGORIES'] = json.dumps(MEMBER_LIST_FIELD_CATEGORIES)
 
     return render_to_response('member/list.html',
             args, context_instance=RequestContext(request))
@@ -583,7 +583,7 @@ def show_party_feed(request, abbreviation):
     party_activity_end_date = max_time.date
 
     kw_act = _get_party_activity_kws(party)
-    kw_act_json = simplejson.dumps(kw_act, ensure_ascii=False)
+    kw_act_json = json.dumps(kw_act, ensure_ascii=False)
 
     governing = [gp for gp in GoverningParty.objects.filter(party=party).order_by('-begin') if gp.end != None]
 
@@ -597,7 +597,7 @@ def show_party_feed(request, abbreviation):
     args = dict(party=party,
                 party_json=party_json,
                 party_activity_end_date=party_activity_end_date,
-                feed_actions_json=simplejson.dumps(make_feed_actions(), ensure_ascii=False),
+                feed_actions_json=json.dumps(make_feed_actions(), ensure_ascii=False),
                 feed_filters=feed_filters,
                 keyword_activity = kw_act_json,
                 governing=governing)
@@ -615,7 +615,7 @@ def show_party_mps(request, abbreviation):
 
     args = dict(party=party,
                 party_json=party_json,
-                list_fields_json=simplejson.dumps(MEMBER_LIST_FIELDS),
+                list_fields_json=json.dumps(MEMBER_LIST_FIELDS),
                 governing=governing)
 
     return render_to_response("party/mps.html", args, context_instance=RequestContext(request))
@@ -626,3 +626,8 @@ def show_party_committees(request, abbreviation):
     args = dict(party=party,)
 
     return render_to_response("party/committee_seats.html", args, context_instance=RequestContext(request))
+
+def search(request):
+    q = request.GET.get('q', '').strip()
+    args = dict()
+    return render_to_response("search.html", args, context_instance=RequestContext(request))
