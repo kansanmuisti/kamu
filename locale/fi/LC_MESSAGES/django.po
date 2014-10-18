@@ -1,20 +1,22 @@
 # Kansan muisti
 # Copyright (C) 2010-2011 Kansan muisti ry.
 # This file is distributed under the same license as the kamu package.
-# Juha Yrjölä <juha.yrjola@iki.fi>, 2010, 2011.
+# Juha Yrjölä <juha.yrjola@iki.fi>, 2010, 2011, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-23 23:12+0200\n"
-"PO-Revision-Date: 2011-04-14 12:54+0300\n"
+"POT-Creation-Date: 2014-10-18 20:06+0300\n"
+"PO-Revision-Date: 2014-10-18 20:06+0300\n"
 "Last-Translator: Juha Yrjölä <juha.yrjola@iki.fi>\n"
-"Language-Team: Finnish <info@kansanmuisti.fi>\n"
-"Language: \n"
+"Language-Team: Finnish <>\n"
+"Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Gtranslator 2.91.6\n"
 
 #: contact_form/forms.py:142
 msgid "Your name"
@@ -56,6 +58,10 @@ msgstr "Jokseenkin yhdenmukainen"
 msgid "Congruent"
 msgstr "Yhdenmukainen"
 
+#: opinions/templatetags/opinions.py:35
+msgid "N/A"
+msgstr "-"
+
 #: opinions/views.py:438
 msgid "Session connected to question."
 msgstr "Äänestys yhdistetty kysymykseen."
@@ -63,10 +69,6 @@ msgstr "Äänestys yhdistetty kysymykseen."
 #: opinions/views.py:441
 msgid "Session removed from question."
 msgstr "Äänestys poistettu kysymyksen yhteydestä."
-
-#: opinions/templatetags/opinions.py:35
-msgid "N/A"
-msgstr "-"
 
 #: parliament/member_views.py:174
 msgid "Term"
@@ -112,175 +114,89 @@ msgstr "VB"
 msgid "Election budget"
 msgstr "Vaalibudjetti"
 
-#: parliament/views.py:32
-msgid "tweeted"
-msgstr "tweettasi"
-
-#: parliament/views.py:38
-msgid "published in Facebook"
-msgstr "julkaisi Facebookissa"
-
-#: parliament/views.py:41 templates/show_document.html:57
-msgid "Statements"
-msgstr "Puheenvuorot"
-
-#: parliament/views.py:44
-msgid "made a plenary statement"
-msgstr "käytti puheenvuoron"
-
-#: parliament/views.py:47
-msgid "Signatures"
-msgstr "Allekirjoitukset"
-
-#: parliament/views.py:50
-msgid "signed"
-msgstr "allekirjoitti"
-
-#: parliament/views.py:52
-msgid "signed an initiative"
-msgstr "allekirjoitti lakialoitteen"
-
-#: parliament/views.py:53
-msgid "signed a written question"
-msgstr "allekirjoitti kirjallisen kysymyksen"
-
-#: parliament/views.py:57
-msgid "Own initiatives"
-msgstr "Omat aloitteet"
-
-#: parliament/views.py:60
-msgid "sponsored an initiative"
-msgstr "laati lakialoitteen"
-
-#: parliament/views.py:63
-msgid "Written questions"
-msgstr "Kirjalliset kysymykset"
-
-#: parliament/views.py:66
-msgid "submitted a written question"
-msgstr "laati kirjallisen kysymyksen"
-
-#: parliament/views.py:70
-msgid "Government bills"
-msgstr "Hallituksen esitykset"
-
-#: parliament/views.py:73
-msgid "government bill was introduced"
-msgstr "hallitus esitti"
-
-#: parliament/views.py:98 templates/member/list.html:75
-#: templates/party/details.html:56 templates/party/list.html:54
-msgid "Activity"
-msgstr "Aktiivisuus"
-
-#: parliament/views.py:101
-msgid "Name"
-msgstr "Nimi"
-
-#: parliament/views.py:104 templates/member/list.html:84
-msgid "Attendance"
-msgstr "Läsnäolo"
-
-#: parliament/views.py:107 templates/member/list.html:93
-msgid "Agreement with party"
-msgstr "Samanmielisyys puolueen kanssa"
-
-#: parliament/views.py:110 templates/member/list.html:65
-#: templates/party/mps.html:86
-msgid "Number of terms"
-msgstr "Kaudet"
-
-#: parliament/views.py:113
-msgid "Age"
-msgstr "Ikä"
-
-#: parliament/views.py:222
-msgid "All activities"
-msgstr "Kaikki aktiviteetti"
-
-#: parliament/models/document.py:35
+#: parliament/models/document.py:70
 msgid "MP law proposal"
 msgstr "Lakialoite"
 
-#: parliament/models/document.py:36
+#: parliament/models/document.py:71
 msgid "Government bill"
 msgstr "Hallituksen esitys"
 
-#: parliament/models/document.py:37
+#: parliament/models/document.py:72
 msgid "Written question"
 msgstr "Kirjallinen kysymys"
 
-#: parliament/models/document.py:38
+#: parliament/models/document.py:73
 msgid "Interpellation"
 msgstr "Välikysymys"
 
-#: parliament/models/document.py:86
+#: parliament/models/document.py:121
 msgid "Introduced"
 msgstr "Vireille&shy;tulo"
 
-#: parliament/models/document.py:87
+#: parliament/models/document.py:122
 msgid "Debate"
 msgstr "Lähete&shy;keskustelu"
 
-#: parliament/models/document.py:88
+#: parliament/models/document.py:123
 msgid "In committee"
 msgstr "Valiokunta&shy;käsittely"
 
-#: parliament/models/document.py:89
+#: parliament/models/document.py:124
 msgid "On agenda"
 msgstr "Pöydälle&shy;pano"
 
-#: parliament/models/document.py:90
+#: parliament/models/document.py:125
 msgid "First reading"
 msgstr "I käsittely"
 
-#: parliament/models/document.py:91
+#: parliament/models/document.py:126
 msgid "Second reading"
 msgstr "II käsittely"
 
-#: parliament/models/document.py:92
+#: parliament/models/document.py:127
 msgid "Third reading"
 msgstr "III käsittely"
 
-#: parliament/models/document.py:93
+#: parliament/models/document.py:128
 msgid "Finished"
 msgstr "Käsittely päättynyt"
 
-#: parliament/models/document.py:94
+#: parliament/models/document.py:129
 msgid "Only reading"
 msgstr "Ainoa käsittely"
 
-#: parliament/models/document.py:95
+#: parliament/models/document.py:130
 msgid "Only and 2nd reading"
 msgstr "Ainoa ja II käsittely"
 
-#: parliament/models/document.py:96
+#: parliament/models/document.py:131
 msgid "Only and 3rd reading"
 msgstr "Ainoa ja III käsittely"
 
-#: parliament/models/document.py:97
+#: parliament/models/document.py:132
 msgid "Cancelled"
 msgstr "Peruutettu"
 
-#: parliament/models/document.py:98
+#: parliament/models/document.py:133
 msgid "Lapsed"
 msgstr "Rauennut"
 
-#: parliament/models/document.py:99
+#: parliament/models/document.py:134
 msgid "Suspended"
 msgstr "Jätetty lepäämään"
 
-#: parliament/models/document.py:100
+#: parliament/models/document.py:135
 msgid "In ministry"
 msgstr "Ministeriössä"
 
 #: parliament/models/funding.py:10 parliament/models/funding.py:22
 msgid "Corporation"
-msgstr ""
+msgstr "Yritys"
 
 #: parliament/models/funding.py:11 parliament/models/funding.py:23
 msgid "Individual"
-msgstr ""
+msgstr "Yksityishenkilö"
 
 #: parliament/models/funding.py:12 parliament/models/funding.py:27
 msgid "Party"
@@ -288,56 +204,163 @@ msgstr "Puolue"
 
 #: parliament/models/funding.py:21
 msgid "Own funds"
-msgstr ""
+msgstr "Oma rahoitus"
 
 #: parliament/models/funding.py:24
 msgid "Loan"
-msgstr ""
+msgstr "Laina"
 
 #: parliament/models/funding.py:25
 msgid "Undefined individuals"
-msgstr ""
+msgstr "Nimeämättömät yksityishenkilöt"
 
 #: parliament/models/funding.py:26
 msgid "Undefined communities"
-msgstr ""
+msgstr "Nimeämättömät yhteisöt"
 
 #: parliament/models/funding.py:28
 msgid "Other"
 msgstr "Muu"
 
-#: parliament/models/member.py:365
+#: parliament/models/member.py:374
 msgid "Chairman"
 msgstr "puheenjohtaja"
 
-#: parliament/models/member.py:366
+#: parliament/models/member.py:375
 msgid "Deputy Chairman"
 msgstr "varapuheenjohtaja"
 
-#: parliament/models/member.py:367
+#: parliament/models/member.py:376
 msgctxt "organisation"
 msgid "Member"
 msgstr "jäsen"
 
-#: parliament/models/member.py:368
+#: parliament/models/member.py:377
 msgid "Deputy Member"
 msgstr "varajäsen"
 
-#: parliament/models/member.py:390
+#: parliament/models/member.py:399
 msgid "Speaker"
 msgstr "Puhemies"
 
-#: parliament/models/member.py:391
+#: parliament/models/member.py:400
 msgid "1st Deputy Speaker"
 msgstr "Ensimmäinen varapuhemies"
 
-#: parliament/models/member.py:392
+#: parliament/models/member.py:401
 msgid "2st Deputy Speaker"
 msgstr "Toinen varapuhemies"
 
-#: parliament/models/member.py:410
+#: parliament/models/member.py:419
 msgid "Minister"
 msgstr "ministeri"
+
+#: parliament/models/session.py:67
+msgid "Agenda item"
+msgstr "Päiväjärjestyksen kohta"
+
+#: parliament/models/session.py:68
+msgid "Question time"
+msgstr "Kyselytunti"
+
+#: parliament/models/session.py:69
+msgid "Budget proposal"
+msgstr "Talousarvioaloite"
+
+#: parliament/views.py:33
+msgid "tweeted"
+msgstr "tweettasi"
+
+#: parliament/views.py:39
+msgid "published in Facebook"
+msgstr "julkaisi Facebookissa"
+
+#: parliament/views.py:42 templates/parliament/plenary_item_details.html:42
+#: templates/show_document.html:61
+msgid "Statements"
+msgstr "Puheenvuorot"
+
+#: parliament/views.py:45
+msgid "made a plenary statement"
+msgstr "käytti puheenvuoron"
+
+#: parliament/views.py:48
+msgid "Signatures"
+msgstr "Allekirjoitukset"
+
+#: parliament/views.py:51
+msgid "signed"
+msgstr "allekirjoitti"
+
+#: parliament/views.py:53
+msgid "signed an initiative"
+msgstr "allekirjoitti lakialoitteen"
+
+#: parliament/views.py:54
+msgid "signed a written question"
+msgstr "allekirjoitti kirjallisen kysymyksen"
+
+#: parliament/views.py:58
+msgid "Own initiatives"
+msgstr "Omat aloitteet"
+
+#: parliament/views.py:61
+msgid "sponsored an initiative"
+msgstr "laati lakialoitteen"
+
+#: parliament/views.py:64
+msgid "Written questions"
+msgstr "Kirjalliset kysymykset"
+
+#: parliament/views.py:67
+msgid "submitted a written question"
+msgstr "laati kirjallisen kysymyksen"
+
+#: parliament/views.py:71
+msgid "Government bills"
+msgstr "Hallituksen esitykset"
+
+#: parliament/views.py:74
+msgid "government bill was introduced"
+msgstr "hallitus esitti"
+
+#: parliament/views.py:99 templates/_mp_card_template.html:51
+#: templates/member/details.html:94 templates/party/feed.html:32
+#: templates/party/list.html:54
+msgid "Activity"
+msgstr "Aktiivisuus"
+
+#: parliament/views.py:102
+msgid "Name"
+msgstr "Nimi"
+
+#: parliament/views.py:105 templates/_mp_card_template.html:60
+msgid "Attendance"
+msgstr "Läsnäolo"
+
+#: parliament/views.py:108 templates/_mp_card_template.html:69
+msgid "Agreement with party"
+msgstr "Samanmielisyys puolueen kanssa"
+
+#: parliament/views.py:111 templates/_mp_card_template.html:41
+msgid "Number of terms"
+msgstr "Kaudet"
+
+#: parliament/views.py:114
+msgid "Age"
+msgstr "Ikä"
+
+#: parliament/views.py:121
+msgid "Term's statistics"
+msgstr "Vaalikauden tilastot"
+
+#: parliament/views.py:126
+msgid "Basic info"
+msgstr "Perustiedot"
+
+#: parliament/views.py:236 parliament/views.py:593
+msgid "All activities"
+msgstr "Kaikki aktiviteetti"
 
 #: templates/404.html:3 templates/404.html.py:8
 msgid "Page not found"
@@ -347,6 +370,15 @@ msgstr "Sivua ei löydy"
 msgid "Internal server error"
 msgstr "Sisäinen virhe"
 
+#: templates/_mp_card_template.html:39
+msgid "district"
+msgstr "vaalipiiri"
+
+#: templates/_mp_card_template.html:83 templates/member/list.html:50
+#: templates/party/mps.html:15
+msgid "minister"
+msgstr "ministeri"
+
 #: templates/about.html:4
 msgid "Info"
 msgstr "tietoa"
@@ -355,15 +387,35 @@ msgstr "tietoa"
 msgid "About the site"
 msgstr "Tietoa Kamusta"
 
-#: templates/base.html:64
+#: templates/base.html:68
 msgid "Read more"
 msgstr "Lue lisää"
 
-#: templates/base.html:122 templates/list_topics.html:21
-#: templates/member/details.html:90 templates/member/list.html:16
-#: templates/opinions/summary.html:136
+#: templates/base.html:129
+msgid "Input search terms"
+msgstr "Syötä hakusanat"
+
+#: templates/base.html:131 templates/base.html.py:134
+#: templates/list_topics.html:21 templates/member/details.html:107
+#: templates/member/list.html:16 templates/opinions/summary.html:136
+#: templates/party/mps.html:26
 msgid "Search"
 msgstr "Hae"
+
+#: templates/contact_form/contact_form_sent.html:3
+#: templates/contact_form/contact_form_sent.html:5
+msgid "Feedback sent"
+msgstr "Viesti lähetetty"
+
+#: templates/contact_form/contact_form_sent.html:6
+msgid ""
+"\n"
+"  <p>Thank you for your valuable feedback.</p>\n"
+"  "
+msgstr ""
+"\n"
+"  <p>Kiitos palautteestasi!</p>\n"
+"  "
 
 #: templates/full_news.html:4
 msgid "News"
@@ -373,9 +425,59 @@ msgstr "Ajankohtaista"
 msgid "Front page"
 msgstr "Etusivu"
 
-#: templates/home.html:295
+#: templates/home.html:34
+msgid "Most discussed topics"
+msgstr "Keskustelluimmat aiheet"
+
+#: templates/home.html:78 templates/new_session.html:3
+#: templates/parliament/plenary_item_details.html:40
+#: templates/show_document.html:65
+msgid "Plenary session"
+msgstr "Täysistunto"
+
+#: templates/home.html:86
+msgid "Browse topics"
+msgstr "Selaa aiheita"
+
+#: templates/home.html:109
 msgid "Show more items"
 msgstr "Näytä lisää asioita"
+
+#: templates/joining/confirm_application.html:3
+msgid "Thank you for your application"
+msgstr "Kiitos hakemuksestasi"
+
+#: templates/joining/confirm_application.html:21
+msgid "Membership application received"
+msgstr "Jäsenhakemuksesi vastaanotettu"
+
+#: templates/joining/confirm_application.html:25
+msgid "Recipient"
+msgstr "Vastaanottaja"
+
+#: templates/joining/confirm_application.html:27
+msgid "Account number"
+msgstr "Tilinumero"
+
+#: templates/joining/confirm_application.html:29
+msgid "Reference number"
+msgstr "Viitenumero"
+
+#: templates/joining/confirm_application.html:31
+msgid "Sum"
+msgstr "Summa"
+
+#: templates/joining/confirm_application.html:34
+msgid "All this has been e-mailed to you as well to address"
+msgstr "Nämä tiedot on myös lähetetty sinulle sähköpostiosoitteeseen"
+
+#: templates/joining/new_member.html:3
+msgid "Join Kansan muisti ry"
+msgstr "Liity Kansan muisti ry:hyn"
+
+#: templates/joining/new_member.html:11
+msgid "Send application"
+msgstr "Lähetä kaavake"
 
 #: templates/list_topics.html:4 templates/list_topics.html.py:12
 msgid "Topics"
@@ -418,12 +520,73 @@ msgid "All time active"
 msgstr "Eniten aktiivisuutta"
 
 #: templates/list_topics.html:94
+#, python-brace-format
 msgid "Most active #{perc}"
 msgstr "Aktiivisin #{perc}"
 
-#: templates/new_session.html:3 templates/show_document.html:61
-msgid "Plenary session"
-msgstr "Täysistunto"
+#: templates/member/basic_info.html:9
+msgid "Surname"
+msgstr "Sukunimi"
+
+#: templates/member/basic_info.html:14
+msgid "Given names"
+msgstr "Etunimet"
+
+#: templates/member/basic_info.html:22
+msgid "Birthdate"
+msgstr "Syntymäaika"
+
+#: templates/member/basic_info.html:27
+msgid "Telephone"
+msgstr "Puhelinnumero"
+
+#: templates/member/basic_info.html:35
+msgid "Email address"
+msgstr "Sähköpostiosoite"
+
+#: templates/member/basic_info.html:42
+msgid "Party associations"
+msgstr "Eduskuntaryhmät"
+
+#: templates/member/basic_info.html:51
+msgid "Electoral districts"
+msgstr "Vaalipiirit"
+
+#: templates/member/details.html:49
+msgid "Terms"
+msgstr "Kaudet"
+
+#: templates/member/details.html:84
+msgid "Is interested in these topics"
+msgstr "Aktiivinen näissä aiheissa"
+
+#: templates/member/details.html:109
+msgid "Input text"
+msgstr "Syötä teksti"
+
+#: templates/member/details.html:113 templates/party/feed.html:46
+msgid "Filter"
+msgstr "Rajaus"
+
+#: templates/member/details.html:170
+msgid "MP activity graph"
+msgstr "Edustajan aktiivisuus"
+
+#: templates/member/details.html:184
+msgid "MP topic activity"
+msgstr "Edustajan aktiivisuus aiheessa"
+
+#: templates/member/list.html:4 templates/member/list.html.py:11
+msgid "Members of the Parliament"
+msgstr "Kansanedustajat"
+
+#: templates/member/list.html:18 templates/party/mps.html:28
+msgid "Search with name, party, district"
+msgstr "Hae nimen, puolueen ja vaalipiirin perusteella"
+
+#: templates/member/list.html:22 templates/party/mps.html:32
+msgid "Order"
+msgstr "Järjestä"
 
 #: templates/new_sessions.html:3 templates/sessions.html:3
 msgid "Plenary sessions"
@@ -458,216 +621,6 @@ msgstr[0] ""
 msgstr[1] ""
 "\n"
 "%(count)s äänestystä\n"
-
-#: templates/question_session_congruence_input.html:6
-#: templates/opinions/show_question.html:41
-msgid "Relevance"
-msgstr "Relevanssi"
-
-#: templates/question_session_congruence_input.html:22
-#: templates/opinions/show_question.html:57
-msgid "Congruence with voting yes"
-msgstr "Yhdenmukaisuus puoltavan äänen kanssa"
-
-#: templates/search.html:3 templates/search.html.py:6
-#: templates/search_keyword.html:3
-msgid "Search results"
-msgstr "Hakutulokset"
-
-#: templates/search.html:26 templates/search_keyword.html:18
-msgid "No results found"
-msgstr "Ei hakuosumia"
-
-#: templates/search_keyword.html:6
-msgid "Search results for keyword"
-msgstr "Hakutulokset asiasanalle"
-
-#: templates/sessions.html:19
-#, python-format
-msgid ""
-"\n"
-"%(count)s plenary session\n"
-msgid_plural ""
-"\n"
-"%(count)s plenary sessions\n"
-msgstr[0] ""
-"\n"
-"%(count)s täysistunto\n"
-msgstr[1] ""
-"\n"
-"%(count)s täysistuntoa\n"
-
-#: templates/sessions.html:38
-msgid "Number of Yay votes"
-msgstr "Jaa-äänien lukumäärä"
-
-#: templates/sessions.html:39
-msgid "Number of Nay votes"
-msgstr "Ei-äänien lukumäärä"
-
-#: templates/sessions.html:40
-msgid "Number of Empty votes"
-msgstr "Tyhjä-äänien lukumäärä"
-
-#: templates/sessions.html:41
-msgid "Number of absentees"
-msgstr "Poissaolevien lukumäärä"
-
-#: templates/show_document.html:13
-msgid "Similar Citizens' Initiatives"
-msgstr "Samanlaisia kansalaisaloitteita"
-
-#: templates/show_document.html:17
-msgid "Similar documents"
-msgstr "Samanlaisia esityksiä"
-
-#: templates/show_document.html:37
-msgid "Author"
-msgstr "Laatija"
-
-#: templates/show_document.html:53
-msgid "Proposal content"
-msgstr "Esityksen sisältö"
-
-#: templates/show_document.html:73
-msgid "speaker"
-msgstr "puhemies"
-
-#: templates/show_topic.html:4
-msgid "Topic"
-msgstr "Aihe"
-
-#: templates/show_topic.html:18
-msgid "Related keywords"
-msgstr "Tähän liittyvät aiheet"
-
-#: templates/show_topic.html:28
-msgid "Which parties are active with this issue?"
-msgstr "Mitkä puolueet ovat aktiivisimpia tämän asian parissa?"
-
-#: templates/show_topic.html:126
-msgid "Who are active with this issue?"
-msgstr "Ketkä ovat aktiivisimpia tämän asian parissa?"
-
-#: templates/show_topic.html:251
-#, python-format
-msgid "Documents related to topic \"%(topic)s\""
-msgstr "Asiakirjat, jotka liittyvät aiheeseen \"%(topic)s\""
-
-#: templates/show_topic.html:291
-msgid "All documents"
-msgstr "Kaikki asiakirjat"
-
-#: templates/contact_form/contact_form_sent.html:3
-#: templates/contact_form/contact_form_sent.html:5
-msgid "Feedback sent"
-msgstr "Viesti lähetetty"
-
-#: templates/contact_form/contact_form_sent.html:6
-msgid ""
-"\n"
-"  <p>Thank you for your valuable feedback.</p>\n"
-"  "
-msgstr ""
-"\n"
-"  <p>Kiitos palautteestasi!</p>\n"
-"  "
-
-#: templates/joining/confirm_application.html:3
-msgid "Thank you for your application"
-msgstr "Kiitos hakemuksestasi"
-
-#: templates/joining/confirm_application.html:21
-msgid "Membership application received"
-msgstr "Jäsenhakemuksesi vastaanotettu"
-
-#: templates/joining/confirm_application.html:25
-msgid "Recipient"
-msgstr "Vastaanottaja"
-
-#: templates/joining/confirm_application.html:27
-msgid "Account number"
-msgstr "Tilinumero"
-
-#: templates/joining/confirm_application.html:29
-msgid "Reference number"
-msgstr "Viitenumero"
-
-#: templates/joining/confirm_application.html:31
-msgid "Sum"
-msgstr "Summa"
-
-#: templates/joining/confirm_application.html:34
-msgid "All this has been e-mailed to you as well to address"
-msgstr "Nämä tiedot on myös lähetetty sinulle sähköpostiosoitteeseen"
-
-#: templates/joining/new_member.html:3
-msgid "Join Kansan muisti ry"
-msgstr "Liity Kansan muisti ry:hyn"
-
-#: templates/joining/new_member.html:11
-msgid "Send application"
-msgstr "Lähetä kaavake"
-
-#: templates/member/basic_info.html:9
-msgid "Surname"
-msgstr "Sukunimi"
-
-#: templates/member/basic_info.html:14
-msgid "Given names"
-msgstr "Etunimet"
-
-#: templates/member/basic_info.html:22
-msgid "Birthdate"
-msgstr "Syntymäaika"
-
-#: templates/member/basic_info.html:27
-msgid "Telephone"
-msgstr "Puhelinnumero"
-
-#: templates/member/basic_info.html:35
-msgid "Email address"
-msgstr "Sähköpostiosoite"
-
-#: templates/member/basic_info.html:42
-msgid "Party associations"
-msgstr "Eduskuntaryhmät"
-
-#: templates/member/basic_info.html:51
-msgid "Electoral districts"
-msgstr "Vaalipiirit"
-
-#: templates/member/details.html:49
-msgid "Terms"
-msgstr "Kaudet"
-
-#: templates/member/details.html:92
-msgid "Input text"
-msgstr "Syötä teksti"
-
-#: templates/member/details.html:96 templates/party/details.html:64
-msgid "Filter"
-msgstr "Rajaus"
-
-#: templates/member/list.html:4 templates/member/list.html.py:11
-msgid "Members of the Parliament"
-msgstr "Kansanedustajat"
-
-#: templates/member/list.html:18
-msgid "Search with name, party, district"
-msgstr "Hae nimen, puolueen ja vaalipiirin perusteella"
-
-#: templates/member/list.html:22
-msgid "Order"
-msgstr "Järjestä"
-
-#: templates/member/list.html:63
-msgid "district"
-msgstr "vaalipiiri"
-
-#: templates/member/list.html:107 templates/member/list.html.py:117
-msgid "minister"
-msgstr "ministeri"
 
 #: templates/opinions/coalition.html:3
 msgid "Government formation"
@@ -857,6 +810,16 @@ msgstr "Kysymykseen liittyvät äänestykset"
 msgid "Log in or register to make a difference"
 msgstr "Kirjaudu sisään tai rekisteröidy vaikuttaaksesi"
 
+#: templates/opinions/show_question.html:41
+#: templates/question_session_congruence_input.html:6
+msgid "Relevance"
+msgstr "Relevanssi"
+
+#: templates/opinions/show_question.html:57
+#: templates/question_session_congruence_input.html:22
+msgid "Congruence with voting yes"
+msgstr "Yhdenmukaisuus puoltavan äänen kanssa"
+
 #: templates/opinions/show_question.html:74
 msgid "Submit scores"
 msgstr "Lähetä pisteytykset"
@@ -944,7 +907,7 @@ msgstr ""
 msgid "No sessions scored"
 msgstr "Ei pisteytettyjä äänestyksiä"
 
-#: templates/parliament/_plitem_list.html:14
+#: templates/parliament/_plitem_list.html:17
 #, python-format
 msgid ""
 "\n"
@@ -959,7 +922,7 @@ msgstr[1] ""
 "\n"
 "%(nr_statements)s puheenvuoroa\n"
 
-#: templates/parliament/_plitem_list.html:23
+#: templates/parliament/_plitem_list.html:27
 #, python-format
 msgid ""
 "\n"
@@ -974,25 +937,54 @@ msgstr[1] ""
 "\n"
 "%(nr_votes)s äänestystä\n"
 
-#: templates/party/details.html:28
-msgid "Governing"
-msgstr "Hallituksessa"
+#: templates/parliament/plenary_item_details.html:26
+msgid "Plenary session item documents"
+msgstr "Täysistunnon päiväjärjestyksen kohdan asiakirjat"
 
-#: templates/party/details.html:29
-msgid "In opposition"
-msgstr "Oppositiossa"
+#: templates/parliament/plenary_item_details.html:54
+#: templates/show_document.html:79
+msgid "speaker"
+msgstr "puhemies"
 
-#: templates/party/details.html:33
-msgid "In government"
-msgstr "Hallituksessa"
+#: templates/party/committee_seats.html:6
+msgid "Committee seats for"
+msgstr "Valiokuntapaikat puolueelle"
 
-#: templates/party/details.html:52
+#: templates/party/committee_seats.html:11
+#| msgctxt "organisation"
+#| msgid "Member"
+msgid "member"
+msgstr "jäsen"
+
+#: templates/party/committee_seats.html:12
+#| msgid "Deputy Member"
+msgid "deputy member"
+msgstr "varajäsen"
+
+#: templates/party/committee_seats.html:13
+#| msgid "Chairman"
+msgid "chairman"
+msgstr "puheenjohtaja"
+
+#: templates/party/committee_seats.html:21
+msgid "Committee seats"
+msgstr "Valiokuntapaikat"
+
+#: templates/party/feed.html:22
 msgid "Active in these topics"
 msgstr "Aktiivinen näissä aiheissa"
 
-#: templates/party/details.html:60
+#: templates/party/feed.html:42
 msgid "Recent actions of party MPs"
 msgstr "Puolueen jäsenten viimeisimmät aktiviteetit"
+
+#: templates/party/feed.html:97
+msgid "Party activity graph"
+msgstr "Puolueen aktiivisuus"
+
+#: templates/party/feed.html:111
+msgid "Party topic activity"
+msgstr "Puolueen aktiivisuus aiheessa"
 
 #: templates/party/list.html:14
 msgid "Government"
@@ -1010,9 +1002,17 @@ msgstr "Ministerien lukumäärä"
 msgid "points"
 msgstr "pistettä"
 
-#: templates/party/mps.html:59
+#: templates/party/mps.html:22
 msgid "List of MPs for this party"
 msgstr "Puolueen kansanedustajat"
+
+#: templates/party/party_base.html:16 templates/party/party_base.html.py:21
+msgid "In government"
+msgstr "Hallituksessa"
+
+#: templates/party/party_base.html:17
+msgid "In opposition"
+msgstr "Oppositiossa"
 
 #: templates/registration/activate.html:3
 #: templates/registration/activation_complete.html:3
@@ -1271,6 +1271,93 @@ msgstr "Luo uusi tunnus"
 #: templates/registration/registration_form.html:10
 msgid "Create the account"
 msgstr "Luo tunnus"
+
+#: templates/search.html:4 templates/search_keyword.html:3
+msgid "Search results"
+msgstr "Hakutulokset"
+
+#: templates/search_keyword.html:6
+msgid "Search results for keyword"
+msgstr "Hakutulokset asiasanalle"
+
+#: templates/search_keyword.html:18
+msgid "No results found"
+msgstr "Ei hakuosumia"
+
+#: templates/sessions.html:19
+#, python-format
+msgid ""
+"\n"
+"%(count)s plenary session\n"
+msgid_plural ""
+"\n"
+"%(count)s plenary sessions\n"
+msgstr[0] ""
+"\n"
+"%(count)s täysistunto\n"
+msgstr[1] ""
+"\n"
+"%(count)s täysistuntoa\n"
+
+#: templates/sessions.html:38
+msgid "Number of Yay votes"
+msgstr "Jaa-äänien lukumäärä"
+
+#: templates/sessions.html:39
+msgid "Number of Nay votes"
+msgstr "Ei-äänien lukumäärä"
+
+#: templates/sessions.html:40
+msgid "Number of Empty votes"
+msgstr "Tyhjä-äänien lukumäärä"
+
+#: templates/sessions.html:41
+msgid "Number of absentees"
+msgstr "Poissaolevien lukumäärä"
+
+#: templates/show_document.html:13
+msgid "Similar Citizens' Initiatives"
+msgstr "Samanlaisia kansalaisaloitteita"
+
+#: templates/show_document.html:17
+msgid "Similar documents"
+msgstr "Samanlaisia esityksiä"
+
+#: templates/show_document.html:37
+msgid "Author"
+msgstr "Laatija"
+
+#: templates/show_document.html:55
+msgid "Proposal content"
+msgstr "Esityksen sisältö"
+
+#: templates/show_topic.html:4
+msgid "Topic"
+msgstr "Aihe"
+
+#: templates/show_topic.html:18
+msgid "Related keywords"
+msgstr "Tähän liittyvät aiheet"
+
+#: templates/show_topic.html:28
+msgid "Which parties are active with this issue?"
+msgstr "Mitkä puolueet ovat aktiivisimpia tämän asian parissa?"
+
+#: templates/show_topic.html:36
+msgid "Who are active with this issue?"
+msgstr "Ketkä ovat aktiivisimpia tämän asian parissa?"
+
+#: templates/show_topic.html:61
+#, python-format
+msgid "Documents related to topic \"%(topic)s\""
+msgstr "Asiakirjat, jotka liittyvät aiheeseen \"%(topic)s\""
+
+#: templates/show_topic.html:104
+msgid "All documents"
+msgstr "Kaikki asiakirjat"
+
+#~ msgid "Governing"
+#~ msgstr "Hallituksessa"
 
 #~ msgid "Votes"
 #~ msgstr "Äänet"
