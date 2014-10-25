@@ -23,7 +23,7 @@ DATABASES = {
         'USER': 'kamu',
         'PASSWORD': 'kamu',
         # Keep the database connection open for an hour
-        'CONN_MAX_AGE': 3600,
+        #'CONN_MAX_AGE': 3600,
     }
 }
 
@@ -100,7 +100,12 @@ SECRET_KEY = 'ljqf))w56l68l26zgtn**2u198y0j5$82o^ac%m0x23l=hq_75'
 
 INTERNAL_IPS = ( '127.0.0.1', )
 
-CACHE_BACKEND = 'locmem://'
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'kamu-cache',
+    }
+}
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 
@@ -135,6 +140,7 @@ MIDDLEWARE_CLASSES = (
     'httpstatus.middleware.HttpStatusErrorsMiddleware',
     # ProfilerMiddleware needs to be last
     'profiler.middleware.ProfilerMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
@@ -153,10 +159,11 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.staticfiles',
     #'django.contrib.admin',
+    #'debug_toolbar.apps.DebugToolbarConfig',
+    'django_extensions',
 
     'sorl.thumbnail',
     'compressor',
-    'south',
     'tastypie',
     'haystack',
 
