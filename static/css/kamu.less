@@ -819,7 +819,84 @@ main.member-list {
  * Member details (used by party details as well)
  ***************************************************************/
 main.member-details {
-    .member-card {
+    .badges {
+        padding: 10px;
+        margin: 10px 0 10px 0;
+        //background-color: @gray;
+        float: right;
+
+        .terms {
+            .clearfix();
+            .contents {
+                width: 48px;
+                height: 48px;
+                border-radius: 24px;
+                background-color: @gray-light;
+                color: @white;
+                font-size: 24px;
+                line-height: 6px;
+                font-family: @headings-font-family;
+                font-weight: 700;
+                text-align: center;
+                span {
+                   display: block;
+                   color: @white;
+                   font-size: 11px;
+                   line-height: 28px;
+                   text-transform: uppercase;
+                }
+            }
+        }
+    }
+
+    .filter-feed {
+        > section, > .section {
+            margin-bottom: 2 * @box-padding;
+            border-top: 3px solid @blueberry;
+            > h4 {
+                .section-heading;
+            }
+        }
+    }
+    .activity-feed > .activity-item .feed-content {
+        margin-left: 16px;
+    }
+}
+
+
+.entity-details {
+    .roles {
+        ul {
+            padding-left: 0;
+            list-style: none;
+            clear: both;
+        }
+        li {
+            border-radius: 3px;
+            padding: 3px;
+            margin: 2px;
+            background: white;
+            overflow: hidden;
+        }
+        .role(@color) {
+            border-left: 15px solid @color;
+        }
+        .minister li {
+            font-weight: 900;
+            .role(@mint);
+        }
+        .committee li {
+            .role(@blueberry);
+        }
+        .speaker li {
+            .role(@electric);
+        }
+
+        .role-name {
+            font-style: italic;
+        }
+    }
+    .card {
         .boxed;
         .shadowboxed-bg;
         background-color: @gray-lighter;
@@ -867,82 +944,7 @@ main.member-details {
                 display: block;
             }
         }
-        .roles {
-            ul {
-                padding-left: 0;
-                list-style: none;
-                clear: both;
-            }
-            li {
-                border-radius: 3px;
-                padding: 3px;
-                margin: 2px;
-                background: white;
-                overflow: hidden;
-            }
-            .role(@color) {
-                border-left: 15px solid @color;
-            }
-            .minister li {
-                font-weight: 900;
-                .role(@mint);
-            }
-            .committee li {
-                .role(@blueberry);
-            }
-            .speaker li {
-                .role(@electric);
-            }
-
-            .role-name {
-                font-style: italic;
-            }
-        }
     }
-    .badges {
-        padding: 10px;
-        margin: 10px 0 10px 0;
-        //background-color: @gray;
-        float: right;
-
-        .terms {
-            .clearfix();
-            .contents {
-                width: 48px;
-                height: 48px;
-                border-radius: 24px;
-                background-color: @gray-light;
-                color: @white;
-                font-size: 24px;
-                line-height: 6px;
-                font-family: @headings-font-family;
-                font-weight: 700;
-                text-align: center;
-                span {
-                   display: block;
-                   color: @white;
-                   font-size: 11px;
-                   line-height: 28px;
-                   text-transform: uppercase;
-                }
-            }
-        }
-    }
-
-    .filter-feed {
-        > section, > .section {
-            margin-bottom: 2 * @box-padding;
-            border-top: 3px solid @blueberry;
-            > h4 {
-                .section-heading;
-            }
-        }
-    }
-  
-  .activity-feed > .activity-item .feed-content {
-    margin-left: 16px;
-
-}
 }
 
 /***************************************************************
