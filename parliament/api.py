@@ -41,7 +41,7 @@ def process_api_thumbnail(bundle, image, field_name):
     if len(arr) != 2:
         raise BadRequest("Thumbnail dimensions not in proper format (e.g. 64x96)")
     tn_dim = 'x'.join(arr)
-    bundle.data[field_name] = get_thumbnail(image, tn_dim).url
+    bundle.data[field_name] = get_thumbnail(image, tn_dim, crop="center").url
 
 def parse_date_from_opts(options, field_name, default=None):
     val = options.get(field_name, None)
@@ -84,7 +84,7 @@ def api_get_thumbnail(request, image, supported_dims):
         dims = ', '.join([('%dx%d' % (x[0], x[1])) for x in supported_dims])
         raise BadRequest("Supported thumbnail dimensions: %s" % dims)
     fmt = 'PNG' if str(image).endswith('.png') else 'JPEG'
-    tn_url = get_thumbnail(image, '%dx%d' % (width, height), format=fmt).url
+    tn_url = get_thumbnail(image, '%dx%d' % (width, height), format=fmt, crop="center").url
     return redirect(tn_url)
 
 class DictModel(object):

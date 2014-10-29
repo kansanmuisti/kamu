@@ -7,7 +7,7 @@
 {% block head %}
 <meta property="og:title" content="{{ member.get_print_name }}" />
 <meta property="og:type" content="politician" />
-{% thumbnail member.photo "64x96" as photo %}
+{% thumbnail member.photo "64x96" crop="center" as photo %}
 <meta property="og:image" content="http://{{ fb_host }}{{ photo.url }}" />
 {% endthumbnail %}
 <meta property="og:url" content="http://{{ fb_host }}{{ member.get_absolute_url }}" />
@@ -40,7 +40,7 @@ FEED_ACTIONS = {{feed_actions_json|safe}};
                     <span class="district">{{member.get_latest_district.district.name}} vaalipiiri</span>
                 </div>
             </div>
-            {% thumbnail member.photo "128x192" as photo %}
+            {% thumbnail member.photo "128x192" crop="center" as photo %}
             <img class="portrait" src="{{photo.url}}" />
             {% endthumbnail %}
             <div class="badges">
