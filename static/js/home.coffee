@@ -16,6 +16,7 @@ class MostActiveMembersView extends Backbone.View
         @$el.empty()
         @collection.each (model) =>
             data = model.toJSON()
+            data.party_thumbnail_url = data.party + 'logo/?dim=32x32'
             data.thumbnail_url = model.get_portrait_thumbnail 128
             score = data.activity_score / data.activity_days_included
             data.activity_percentage = score * 100.0 / max_score
