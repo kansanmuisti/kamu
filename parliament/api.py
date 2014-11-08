@@ -457,6 +457,9 @@ class PlenarySessionResource(KamuResource):
     class Meta:
         queryset = PlenarySession.objects.all()
         resource_name = 'plenary_session'
+        filtering = {
+            'date': ALL,
+            }
 
 class PlenarySessionItemResource(KamuResource):
     plenary_session = fields.ForeignKey(PlenarySessionResource, 'plsess')

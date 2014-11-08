@@ -1,71 +1,114 @@
 {% extends "base.html" %}
-{% load i18n basic %}
+{% load i18n compress static %}
 {% block title %}{% trans "Plenary sessions" %}{% endblock %}
+
 {% block head %}
-    <script type="text/javascript">
-    $(function() {
-    	// Accordion
-	$("#accordion").accordion({
-        	header: "h3",
-        	autoHeight: false,
-                collapsible: true,
-                active: false });
-    });
-    </script>
+{% compress js %}
+<script type="text/javascript" src="{% static "js/vendor/jquery.appear.js" %}"></script> 
+<script type="text/coffeescript" src="{% static "js/vendor/jquery.gimmesomemore.coffee" %}"></script> 
+{% endcompress %}
 {% endblock %}
 
 {% block content %}
-  <h1>
-{% blocktrans count pl_session_page.paginator.count as count %}
-{{ count }} plenary session
-{% plural %}
-{{ count }} plenary sessions
-{% endblocktrans %}</h1>
+<script type="text/template" id="plenary-session-template">
+  <h5 class="title"><%= name %> <%= date %></h5>
+</script>
 
-  <div id="accordion" class="ui-accordion ui-widget ui-helper-reset ui-accordion-icons">
-{% for ps in pl_session_page.object_list %}
-    <div>
-      <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all"><a href="#"><table class="psession_bar">
-        <tr><td style="width: 100px;">{{ ps.name }}</td><td>{{ ps.date|i18n_date:"long-month" }}</td><td class="psession_bar">
-{% blocktrans count ps.sess_list|length as count %}
-{{ count }} voting session
-{% plural %}
-{{ count }} voting sessions
-{% endblocktrans %}</td></tr></table></a></h3>
-    <div style="display: none;"><table class="sessions" id="v{{ ps.name }}">
-    <tbody>
-      <tr style="margin-bottom: 8px;"><th /><th /><th />
-        <th class="yes_vote" title='{% trans "Number of Yay votes" %}' />
-        <th class="no_vote" title='{% trans "Number of Nay votes" %}' />
-        <th class="empty_vote" title='{% trans "Number of Empty votes" %}' />
-        <th class="absent_vote" title='{% trans "Number of absentees" %}' />
-      </tr>
-{% for session in ps.sess_list %}
-      <tr>
-      	<td class="session_name">
-          <a href='{% url 'votes.views.show_session' plsess=ps.url_name,sess=session.number %}'>{{ session.number }}</a>
-      	</td>
-      	<td class="session_desc">
-          <a href='{% url 'votes.views.show_session' plsess=ps.url_name,sess=session.number %}'>
-            {{ session.info|linebreaks }}
-          </a>
-      	</td>
-        <td class="session_subj">
-{% if session.subject %}
-            <p><i>{{ session.subject }}</i></p>
-{% endif %}
-	</td>
+<script type="text/template" id="plenary-session-item-template">
+<div class="plenary-session-item">
+  <!-- For available fields, see
+       http://dev.kansanmuisti.fi/static/api_v1_doc/index.html#api-PlenarySessionItem
+       -->
+  <a href="/session/<%= session.url_name %>/<%= number %>/"><h4 class="title"><%= description %></h4></a>
 
-      	<td class="session_votes">{{ session.get_vote_counts.Y }}</td>
-      	<td class="session_votes">{{ session.get_vote_counts.N }}</td>
-      	<td class="session_votes">{{ session.get_vote_counts.E }}</td>
-      	<td class="session_votes">{{ session.get_vote_counts.A }}</td>
-      </tr>
-{% endfor %}
-    </tbody></table></div>
+  <span class="nr_votes"><%= plenary_votes.length %> äänestystä</span>,
+  <!-- NOTE: nr_statements are sometimes broken
+        (and shouldn't be separate variables anyway, but Tastypie. -->
+  <span class="nr_statements"><%= nr_statements %> puheenvuoroa</span>
+</div>
+</script>
+
+<div class="row">
+    <div class="col-md-4">
     </div>
-{% endfor %}
-  </div>
-{% load pagination_nav %}
-{% pagination_nav_qs pl_session_page "" request.GET %}
+    <div class="col-md-11 content">
+        <div id="session-item-list"></div>
+        <div id="session-item-list-end"></div>
+    </div>
+</div>
+
+{% compress js inline %}
+<script type="text/coffeescript">
+# Hacks to work around hacks :(
+fix_undefineds = (obj) ->
+    if not _.isObject obj
+        return obj
+    newobj = {}
+    for k, v of obj
+        continue if typeof v == "undefined"
+        newobj[k] = fix_undefineds v
+    return newobj
+
+apiurl = (path, args={}) ->
+    url = "/api/v1/#{path}"
+    args = fix_undefineds args
+    if not _.isEmpty args
+        url += "?"+$.param args
+    return url
+
+SESSIONS_PER_REQUEST = 1
+# Gotta love Tastypie
+ALMOST_INFINITY=1000
+
+last_date_visible = undefined
+session_template = _.template $("#plenary-session-template").html()
+session_item_template = _.template $("#plenary-session-item-template").html()
+render_sessions = (sessions) ->
+    container = $("#session-item-list")
+    for session in sessions
+        container.append session_template session
+        for item in session.session_items
+            container.append session_item_template item
+        last_date_visible = session.date
+
+fetch_sessions = (date_limit=undefined, offset=0, limit=SESSIONS_PER_REQUEST) ->
+    # I really shouldn't have to do this on the client side!
+    # Somebody else can make yet another dehydrate hack if they are worried
+    # about performance. I don't care anymore. Damn you Tastypie!
+    # Actually if there was a sane backend and a sane data binder, I wouldn't
+    # have to do any of this. -Jami
+    populate_session = (session) ->
+        $.getJSON(apiurl "plenary_session_item/",
+            plenary_session: session.id
+            limit: ALMOST_INFINITY)
+        .then ({meta, objects}) ->
+            session.session_items = objects
+            for item in objects
+                item.session = session
+            return session
+            
+
+    $.getJSON(apiurl "plenary_session/",
+        limit: limit
+        offset: offset
+        date__lt: date_limit)
+    .then ({meta, objects}) ->
+        $.when(objects.map(populate_session)...)
+        .then (args...) -> args
+        
+
+$("#session-item-list-end").gimmesomemore ->
+    $me = $ @
+    $me.spin()
+    fetch_sessions(last_date_visible)
+    .then (sessions) ->
+        render_sessions (sessions)
+        $me.spin(false)
+        is_end = sessions.length == 0
+        $me.toggleClass "no-more-content", is_end
+        return is_end
+    
+</script>
+{% endcompress %}
 {% endblock %}
+
