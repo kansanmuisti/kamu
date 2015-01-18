@@ -177,6 +177,8 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
 # Activation window from the sending of the activation e-mail
 ACCOUNT_ACTIVATION_DAYS = 3
 # URL for redirection when the user needs to login and nothing
