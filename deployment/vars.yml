@@ -3,6 +3,6 @@ db_password: OydFotGaFrizQuomunHynudyimUrUjRypMecsyeHodAmNoftif
 db_test_table: parliament_member
 locale: fi_FI.UTF-8
 venv: /home/{{ app_user }}/.virtualenvs/kamu
-download_base_url: http://www.kansanmuisti.fi/storage
+download_base_url: http://dev.kansanmuisti.fi/media
 db_dump_filename: kamu.sql.bz2
-image_dump_filename: kamu-img.tar.bz2
+image_dump_filename: kamu-images.tar.bz2

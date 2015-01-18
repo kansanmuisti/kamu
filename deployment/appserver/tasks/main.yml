@@ -11,15 +11,13 @@
   - python-dev
   - python-lxml
 
-- name: Node.js | Add the node.js PPA
-  sudo: yes
-  apt_repository: repo='ppa:chris-lea/node.js'
-
 - name: Node.js | Install nodejs package
   sudo: yes
   apt: pkg={{ item }} state=installed update-cache=yes
   with_items:
   - nodejs
+  - nodejs-legacy
+  - npm
 
 - name: NPM | Install dependencies
   sudo: yes
@@ -44,6 +42,7 @@
 - name: Django | Download database dump
   get_url: url={{ download_base_url }}/{{ db_dump_filename }} dest=/home/{{ app_user }} mode=0644
   when: django_db_result.stdout.find('{{ db_test_table }}') == -1
+
 - name: Django | Apply database dump
   sudo: yes
   sudo_user: "{{ app_user }}"
@@ -62,10 +61,16 @@
 - name: Kamu | Download image files
   get_url: url={{ download_base_url }}/{{ image_dump_filename }} dest=/home/{{ app_user }} mode=0644
 - name: Kamu | Untar image file
-  command: tar -C /vagrant -xjf /home/{{ app_user }}/{{ image_dump_filename }} creates=/vagrant/media/images/parties
+  command: tar -C /vagrant/media -xjf /home/{{ app_user }}/{{ image_dump_filename }} creates=/vagrant/media/images/parties
 
 - name: Django | Generate translations
   action: command {{ venv }}/exec /vagrant/manage.py compilemessages creates=/vagrant/locale/fi/LC_MESSAGES/django.mo
+
+- name: Django | Reset thumbnails
+  action: command {{ venv }}/exec /vagrant/manage.py thumbnail cleanup
+
+- name: Django | Reset mtime cache
+  action: command {{ venv }}/exec /vagrant/manage.py mtime_cache -c
 
 - name: Activate virtualenv automatically
   lineinfile: dest=/home/{{ app_user }}/.bashrc regexp="^source {{ venv }}/bin/activate" line="source {{ venv }}/bin/activate"
