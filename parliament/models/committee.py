@@ -11,7 +11,7 @@ class Committee(UpdatableModel):
                                    help_text='Description of the committee')
     origin_id = models.CharField(max_length=20, unique=True, null=True,
                                  help_text='Upstream identifier (in URL)')
-    current = models.BooleanField(help_text='Is the committee current or past')
+    current = models.BooleanField(help_text='Is the committee current or past', default=True)
     url_name = models.CharField(max_length=100, unique=True, null=True,
                                 help_text='Name identifier for URLs')
 
