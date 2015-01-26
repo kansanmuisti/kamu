@@ -20,3 +20,5 @@ django-haystack
 pysolr
 django-appconf
 mimeparse
+psycopg2
+lxml
