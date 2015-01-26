@@ -18,7 +18,11 @@
                     </ul>
                     <ul class="committee">
                     {% for term in governing %}
+                        {% if term.begin.year != term.end.year %}
                         <li>{% trans "In government" %} {{term.begin.year}}-{{term.end.year}}</li>
+                        {% else %}
+                        <li>{% trans "In government" %} {{term.begin.year}}</li>
+                        {% endif %}
                     {% endfor %}
                     </ul>
                 </div>
