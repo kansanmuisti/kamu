@@ -115,12 +115,20 @@ class ActivityScoresResource(Resource):
         return super(ActivityScoresResource, self).get_list(request, **kwargs)
 
     def obj_get_list(self, bundle, **kwargs):
-        resolution=bundle.request.GET.get('resolution', '').lower()
+        resolution = bundle.request.GET.get('resolution', '').lower()
         if resolution == '':
             resolution = None
 
         since = parse_date_from_opts(bundle.request.GET, 'since')
         until = parse_date_from_opts(bundle.request.GET, 'until')
+
+        keyword = bundle.request.GET.get('keyword', '')
+        if keyword:
+            try:
+                kw_obj = Keyword.objects.get(name=keyword)
+            except Keyword.DoesNotExist:
+                raise BadRequest("Invalid keyword '%s'" % keyword)
+            kwargs['keyword'] = kw_obj
 
         obj = self.parent_object
         score_list = obj.get_activity_score_set(since=since, until=until,

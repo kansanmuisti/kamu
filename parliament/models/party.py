@@ -43,12 +43,14 @@ class Party(UpdatableModel):
     def get_activity_score(self, begin=None, end=None):
         MemberActivity = models.get_model('parliament', 'MemberActivity')
         activities = MemberActivity.objects.filter(member__party=self)
-        if begin: activities = activities.filter(time__gte=begin)
-        if end: activities = activities.filter(time__lte=end)
+        if begin:
+            activities = activities.filter(time__gte=begin)
+        if end:
+            activities = activities.filter(time__lte=end)
         number_of_members = self.member_set.current().count()
         activities = activities.aggregate(act=models.Sum('type__weight'))
         activity_score = activities['act']
-        if activity_score == None:
+        if activity_score is None:
             activity_score = 0
         if not number_of_members:
             return 0
@@ -67,7 +69,7 @@ class Party(UpdatableModel):
             query = Q(begin__lte=act_time)
             query = query & (Q(end__gte=act_time) | Q(end__isnull=True))
             query = query & Q(party=self)
-            member_count = party_association_objects.filter(query).count() 
+            member_count = party_association_objects.filter(query).count()
             act['score'] /= member_count
 
         return act_set
@@ -78,17 +80,20 @@ class Party(UpdatableModel):
     class Meta:
         app_label = 'parliament'
 
+
 class GoverningParty(models.Model):
     """ Keeps track when the party has been in the government """
     party = models.ForeignKey(Party, db_index=True)
     begin = models.DateField(help_text="Beginning of government participation")
     end = models.DateField(null=True, help_text="End of government participation")
     government = models.ForeignKey("Government", help_text="Government wherein the party participated")
+
     class Meta:
         app_label = 'parliament'
 
     def __unicode__(self):
-        return u"%s %s - %s : %s" % (self.party,self.begin,self.end,self.government)
+        return u"%s %s - %s : %s" % (self.party, self.begin, self.end, self.government)
+
 
 class Government(models.Model):
     """ Governments of the nation on timeline """
@@ -104,4 +109,4 @@ class Government(models.Model):
             endyear = self.end.year
         else:
             endyear = None
-        return u"%s (%s - %s)" % (self.name,self.begin.year,endyear)
+        return u"%s (%s - %s)" % (self.name, self.begin.year, endyear)

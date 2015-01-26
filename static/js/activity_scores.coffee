@@ -1,14 +1,32 @@
 class @ActivityScoresView extends Backbone.View
-    initialize: (collection, options) ->
+    initialize: (@collection, options) ->
+        @options = _.extend {}, options
         @el = options.el
-        end_date = options.end_date
 
-        collection.bind 'reset', @add_all_items
+        @collection.bind 'reset', =>
+            @scores_fetched.resolve()
 
-        time = new Date(end_date)
+        if @options.show_average_activity
+            @avg_act_collection = new ParliamentActivityScoresList
+            @avg_act_collection.bind 'reset', =>
+                @avg_scores_fetched.resolve()
+
+        @user_filters = {}
+
+        @reset()
+
+    filter_keyword: (kw) ->
+        if kw
+            @user_filters['keyword'] = kw
+        else
+            delete @user_filters['keyword']
+        @reset()
+
+    reset: ->
+        time = new Date(@options.end_date)
         year = time.getFullYear()
         month = time.getMonth()
-        start_time = new Date(year - 2, month + 1, 1)
+        start_time = new Date(year - 4, month + 1, 1)
         start_time_str = start_time.getFullYear() + "-" +  \
                           (start_time.getMonth() + 1) + "-" + \
                           start_time.getDate()
@@ -25,29 +43,33 @@ class @ActivityScoresView extends Backbone.View
         @plot_series = []
         @plot_global_options = @get_plot_global_options(start_time, end_time)
 
-        $(window).resize =>
-            @draw_plot()
-
         resolution = 'month'
 
-        params =
+        @scores_fetched = $.Deferred()
+        @avg_scores_fetched = $.Deferred()
+
+        params = _.extend {}, @user_filters,
             resolution: resolution
             since: start_time_str
             until: end_time_str
             limit: 0
-        collection.fetch
+
+        @collection.fetch
             reset: true
             data: params
 
-        if options.show_average_activity
+        if @avg_act_collection
             params['calculate_average'] = true
-            avg_act_collection = new ParliamentActivityScoresList
-            avg_act_collection.bind 'reset', @add_all_avg_act_items
-            avg_act_collection.fetch
+            @avg_act_collection.fetch
                 reset: true
                 data: params
         else
-            @avg_scores = []
+            @avg_scores_fetched.resolve()
+
+        $.when(@scores_fetched, @avg_scores_fetched).done =>
+            $(window).resize =>
+                @draw_plot()
+            @render()
 
     draw_plot: ->
         if @plot_series.length == 0
@@ -78,7 +100,7 @@ class @ActivityScoresView extends Backbone.View
                 data_idx += 1
 
             time = new Date(time).getTime()
-            column = [ time, score ]
+            column = [time, score]
             act_histogram.push column
 
             max_score = Math.max max_score, score
@@ -88,15 +110,12 @@ class @ActivityScoresView extends Backbone.View
         return [act_histogram, max_score]
 
     render: ->
-        if !@scores or !@avg_scores
-            return @
-
-        [act_histogram, max_score] = @get_histogram(@scores.models)
+        [act_histogram, max_score] = @get_histogram @collection.models
         if act_histogram.length == 0
             return @
 
-        if @avg_scores.length != 0
-            [avg_histogram, avg_max_score] = @get_histogram(@avg_scores.models)
+        if @avg_act_collection
+            [avg_histogram, avg_max_score] = @get_histogram @avg_act_collection.models
             max_score = Math.max max_score, avg_max_score
             draw_avg = avg_histogram.length != 0
         else
@@ -106,6 +125,7 @@ class @ActivityScoresView extends Backbone.View
         @plot_global_options['series'] =
             curvedLines:
                 active: draw_avg
+                monotonicFit: true
 
         @plot_series.push
             data: act_histogram
@@ -131,7 +151,12 @@ class @ActivityScoresView extends Backbone.View
         return @
 
     get_plot_global_options: (start_time, end_time) ->
+        x_start = end_time.getTime() - (2 * 365 + 20) * 24 * 60 * 60 * 1000
+        if x_start < start_time.getTime()
+            x_start = start_time.getTime()
         return {
+            pan:
+                interactive: true
             xaxis:
                 mode: "time"
                 tickLength: 5
@@ -143,11 +168,14 @@ class @ActivityScoresView extends Backbone.View
                     else
                         format_str = "MMM"
                     return moment(d).format(format_str)
-                min: start_time.getTime() - 20 * 24 * 60 * 60 * 1000
+                min: x_start
                 max: end_time.getTime()
+                panRange: [start_time.getTime() - 20 * 24 * 60 * 60 * 1000, end_time.getTime()]
 
             yaxis:
                 show: false
+                panRange: false
+                min: 0
 
             grid:
                 borderWidth:
@@ -156,12 +184,3 @@ class @ActivityScoresView extends Backbone.View
                     left: 0
                     right: 0
         }
-
-    add_all_items: (collection) =>
-        @scores = collection
-        @render()
-
-    add_all_avg_act_items: (collection) =>
-        @avg_scores = collection
-        @render()
-

@@ -76,18 +76,17 @@
 {% endcompress %}
 
 <script type="text/javascript">
-    party_activity_end_date = "{{ party_activity_end_date|safe }}";
-    party = new Party({{party_json|safe}});
+    $(function() {
+        party_activity_end_date = "{{ party_activity_end_date|safe }}";
+        party = new Party({{party_json|safe}});
+        var opts = {
+            show_average_activity: true,
+            end_date: party_activity_end_date,
+            el: "#party-activity-graph"
+        };
+        party_activity_scores_view = new PartyActivityScoresView(party, opts);
+    });
 </script>
-
-{% compress js %}
-<script type="text/coffeescript">
-    new PartyActivityScoresView party,
-                    show_average_activity:true,
-                    end_date:party_activity_end_date,
-                    el:"#party-activity-graph"
-</script>
-{% endcompress %}
 
 <div class="modal fade" id="activity-graph-help" tabindex="-1" role="dialog">
   <div class="modal-dialog">

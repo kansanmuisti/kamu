@@ -57,11 +57,13 @@ $("#party-tag-cloud li a").click (ev) ->
     ev.preventDefault()
     if $(this).hasClass 'active'
         feed_view.filter_keyword()
+        party_activity_scores_view.filter_keyword()
         $(this).removeClass 'active'
     else
         kw = $.trim $(@).html()
         feed_view.filter_keyword kw
-        $("#member-tag-cloud li a").removeClass 'active'
+        party_activity_scores_view.filter_keyword kw
+        $("#party-tag-cloud li a").removeClass 'active'
         $(this).addClass 'active'
 
 disable_filters = ->

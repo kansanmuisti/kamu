@@ -454,7 +454,7 @@ class MemberActivityManager(models.Manager):
         if until:
             act = act.filter(time__lte=until)
         if resolution:
-            truncate_date=connection.ops.date_trunc_sql(resolution, 'time')
+            truncate_date = connection.ops.date_trunc_sql(resolution, 'time')
             act = act.extra({'activity_date': truncate_date})
         else:
             act = act.extra({'activity_date': 'date(time)'})
@@ -464,6 +464,9 @@ class MemberActivityManager(models.Manager):
         return act
 
     def get_score_set(self, qfilter=Q(), **kwargs):
+        if 'keyword' in kwargs:
+            qfilter &= Q(keywordactivity__keyword=kwargs['keyword'])
+
         act = self.aggregates(**kwargs)
         act = act.filter(qfilter)
 
@@ -476,7 +479,10 @@ class MemberActivityManager(models.Manager):
         return act.annotate(count=models.Count('id'))
 
     def scores_for_party(self, party, **kwargs):
-        return self.get_score_set(Q(member__party=party), **kwargs)
+        qs = Q(member__party=party)
+        if 'keyword' in kwargs:
+            qs &= Q(keywordactivity__keyword=kwargs['keyword'])
+        return self.get_score_set(qs, **kwargs)
 
     def scores_for_member(self, member, **kwargs):
         return self.get_score_set(Q(member=member), **kwargs)
