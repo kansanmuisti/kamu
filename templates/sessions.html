@@ -94,7 +94,7 @@ fetch_sessions = (date_limit=undefined, offset=0, limit=SESSIONS_PER_REQUEST) ->
     # in the backend. Behind these hacks there's a long and sad story
     # with themes like C winning over Lisp and Unix over Plan9.
     hacky_session_item_url = (model) ->
-        url = "/session/#{model.session.url_name}/#{model.number}"
+        url = "/session/#{model.session.url_name}/#{model.number}/"
         if model.sub_number > 0
             url += "#{model.sub_number}/"
         return url
