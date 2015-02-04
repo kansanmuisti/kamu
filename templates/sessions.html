@@ -5,34 +5,39 @@
 {% block head %}
 {% compress js %}
 <script type="text/javascript" src="{% static "js/vendor/jquery.appear.js" %}"></script> 
-<script type="text/coffeescript" src="{% static "js/vendor/jquery.gimmesomemore.coffee" %}"></script> 
+<script type="text/coffeescript" src="{% static "js/vendor/jquery.gimmesomemore.coffee" %}"></script>
 {% endcompress %}
 {% endblock %}
 
 {% block content %}
 <script type="text/template" id="plenary-session-template">
-  <h5 class="title"><%= name %> <%= date %></h5>
+  <li class="plenary-session">
+    <h5 class="title"><%= name %> <%= date %></h5>
+    <ul></ul>
+  </li>
 </script>
 
 <script type="text/template" id="plenary-session-item-template">
-<div class="plenary-session-item">
+<li class="plenary-session-item">
   <!-- For available fields, see
        http://dev.kansanmuisti.fi/static/api_v1_doc/index.html#api-PlenarySessionItem
        -->
-  <a href="/session/<%= session.url_name %>/<%= number %>/"><h4 class="title"><%= description %></h4></a>
+  <a href="<%= view_url %>"><h4 class="title">
+    <%= default_description %></h4></a>
 
   <span class="nr_votes"><%= plenary_votes.length %> äänestystä</span>,
   <!-- NOTE: nr_statements are sometimes broken
         (and shouldn't be separate variables anyway, but Tastypie. -->
   <span class="nr_statements"><%= nr_statements %> puheenvuoroa</span>
-</div>
+  <ul></ul>
+</li>
 </script>
 
 <div class="row">
     <div class="col-md-4">
     </div>
     <div class="col-md-11 content">
-        <div id="session-item-list"></div>
+        <ul id="session-item-list"></ul>
         <div id="session-item-list-end"></div>
     </div>
 </div>
@@ -63,12 +68,19 @@ ALMOST_INFINITY=1000
 last_date_visible = undefined
 session_template = _.template $("#plenary-session-template").html()
 session_item_template = _.template $("#plenary-session-item-template").html()
+
+render_session_item = (item) ->
+    session_item_template = _.template $("#plenary-session-item-template").html()
+    el = $ session_item_template item
+    el.find("> ul").append item.subitems.map render_session_item
+    return el
+
 render_sessions = (sessions) ->
     container = $("#session-item-list")
     for session in sessions
-        container.append session_template session
-        for item in session.session_items
-            container.append session_item_template item
+        el = $ session_template session
+        el.find('> ul').append session.session_items.map render_session_item
+        container.append el
         last_date_visible = session.date
 
 fetch_sessions = (date_limit=undefined, offset=0, limit=SESSIONS_PER_REQUEST) ->
@@ -77,14 +89,43 @@ fetch_sessions = (date_limit=undefined, offset=0, limit=SESSIONS_PER_REQUEST) ->
     # about performance. I don't care anymore. Damn you Tastypie!
     # Actually if there was a sane backend and a sane data binder, I wouldn't
     # have to do any of this. -Jami
+    
+    # Corresponds approximatedly to PlenarySessionItem.get_short_id
+    # in the backend. Behind these hacks there's a long and sad story
+    # with themes like C winning over Lisp and Unix over Plan9.
+    hacky_session_item_url = (model) ->
+        url = "/session/#{model.session.url_name}/#{model.number}"
+        if model.sub_number > 0
+            url += "#{model.sub_number}/"
+        return url
+    
+    hacky_session_item_description = (item) ->
+        return item.sub_description ? item.description
+    
     populate_session = (session) ->
         $.getJSON(apiurl "plenary_session_item/",
             plenary_session: session.id
             limit: ALMOST_INFINITY)
         .then ({meta, objects}) ->
-            session.session_items = objects
+            toplevel = []
+            toplevel_index = {}
+            non_toplevel = []
             for item in objects
                 item.session = session
+                item.view_url = hacky_session_item_url item
+                item.default_description = hacky_session_item_description item
+                item.subitems = []
+                if item.sub_number > 0
+                    non_toplevel.push item
+                    continue
+                toplevel.push item
+                toplevel_index[item.number] = item
+
+            for item in non_toplevel
+                toplevel_index[item.number].subitems.push item
+
+            session.session_items = toplevel
+                
             return session
             
 
