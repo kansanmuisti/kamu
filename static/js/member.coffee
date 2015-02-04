@@ -72,6 +72,8 @@ disable_filters = ->
     $(".feed-filter-buttons .filter-button").removeClass 'active'
     $(".feed-filter-buttons .disable-filters").addClass 'active'
     feed_view.filter_type null
+    if typeof member_activity_scores_view != 'undefined'
+        member_activity_scores_view.filter_type null
 
 $(".feed-filter-buttons .disable-filters").click disable_filters
 disable_filters()
@@ -91,5 +93,5 @@ $(".feed-filter-buttons .filter-button").click (ev) ->
 
     $(".feed-filter-buttons .disable-filters").removeClass 'active'
     feed_view.filter_type filters
-    
 
+    member_activity_scores_view.filter_type filters

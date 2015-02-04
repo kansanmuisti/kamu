@@ -12,6 +12,7 @@ class @ActivityScoresView extends Backbone.View
                 @avg_scores_fetched.resolve()
 
         @user_filters = {}
+        @type_filter = null
 
         @reset()
 
@@ -21,6 +22,13 @@ class @ActivityScoresView extends Backbone.View
         else
             delete @user_filters['keyword']
         @reset()
+
+    filter_type: (types) ->
+        if not types
+            @type_filter = []
+        else
+            @type_filter = types
+        @render()
 
     reset: ->
         time = new Date(@options.end_date)
@@ -40,7 +48,6 @@ class @ActivityScoresView extends Backbone.View
                        (end_time.getMonth() + 1) + "-" + \
                        end_time.getDate()
 
-        @plot_series = []
         @plot_global_options = @get_plot_global_options(start_time, end_time)
 
         resolution = 'month'
@@ -89,9 +96,17 @@ class @ActivityScoresView extends Backbone.View
             act = score_list[data_idx].attributes
             time = act.time
             score = act.score
+            if @type_filter and @type_filter.length
+                if act.type not in @type_filter
+                    data_idx += 1
+                    continue
 
             while data_idx + 1 < score_list.length
                 act = score_list[data_idx + 1].attributes
+
+                if @type_filter and @type_filter.length
+                    if act.type not in @type_filter
+                        break
 
                 if act.time != time
                     break
@@ -127,6 +142,7 @@ class @ActivityScoresView extends Backbone.View
                 active: draw_avg
                 monotonicFit: true
 
+        @plot_series = []
         @plot_series.push
             data: act_histogram
             color: "#00c0c0"
