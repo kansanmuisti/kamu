@@ -18,9 +18,10 @@
 {% endcompress %}
 
 <script type="text/javascript">
-member = new Member({{member_json|safe}});
 party_json = {{party_json|safe}};
 FEED_ACTIONS = {{feed_actions_json|safe}};
+keyword_activity = {{keyword_activity|safe}};
+member = new Member({{member_json|safe}});
 </script>
 {% endblock %}
 
@@ -133,11 +134,19 @@ FEED_ACTIONS = {{feed_actions_json|safe}};
 {% endcompress %}
 
 <script type="text/javascript">
-    activity_counts = {{ activity_counts_json|safe }};
-    activity_types = {{ activity_types_json|safe }};
-    activity_weights = {{ activity_type_weights_json|safe }};
-    keyword_activity = {{keyword_activity|safe}};
-    member_activity_end_date = "{{ member_activity_end_date|safe }}";
+    $(function() {
+        activity_counts = {{ activity_counts_json|safe }};
+        activity_types = {{ activity_types_json|safe }};
+        activity_weights = {{ activity_type_weights_json|safe }};
+        var member_activity_end_date = "{{ member_activity_end_date|safe }}";
+
+        var opts = {
+            show_average_activity: true,
+            end_date: member_activity_end_date,
+            el: "#member-activity-graph"
+        };
+        member_activity_scores_view = new MemberActivityScoresView(member, opts);
+    });
 </script>
 
 {% compress js %}
@@ -153,15 +162,6 @@ FEED_ACTIONS = {{feed_actions_json|safe}};
 
 {% compress js %}
 <script type="text/coffeescript" src="{% static "js/member.coffee" %}"></script>
-{% endcompress %}
-
-{% compress js inline %}
-<script type="text/coffeescript">
-    graph = new MemberActivityScoresView member, \
-                    show_average_activity:true,
-                    end_date:member_activity_end_date,
-                    el:"#member-activity-graph"
-</script>
 {% endcompress %}
 
 <div class="modal fade" id="activity-graph-help" tabindex="-1" role="dialog">

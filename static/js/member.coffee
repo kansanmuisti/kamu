@@ -59,10 +59,12 @@ $("#member-tag-cloud li a").click (ev) ->
     ev.preventDefault()
     if $(this).hasClass 'active'
         feed_view.filter_keyword()
+        member_activity_scores_view.filter_keyword()
         $(this).removeClass 'active'
     else
         kw = $.trim $(@).html()
         feed_view.filter_keyword kw
+        member_activity_scores_view.filter_keyword kw
         $("#member-tag-cloud li a").removeClass 'active'
         $(this).addClass 'active'
 
