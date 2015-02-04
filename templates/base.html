@@ -66,7 +66,8 @@
         expander_defaults =
             expandText: "{% trans "Read more" %}" + " »"
             expandEffect: 'fadeIn'
-            userCollapse: false
+            userCollapse: true
+            userCollapseText: '[x]'
         $.extend $.fn.expander.defaults, expander_defaults
     </script>
     <script type="text/coffeescript" src="{% static "js/tagcloud.coffee" %}"></script>
@@ -123,6 +124,7 @@
                     <li><a href="{% url 'parliament.views.list_topics' %}">Aiheet</a></li>
                     <li><a href="{% url 'parliament.views.list_members' %}">Kansanedustajat</a></li>
                     <li><a href="{% url 'parliament.views.list_parties' %}">Puolueet</a></li>
+                    <li><a href="{% url 'parliament.views.list_sessions' %}">Täysistunnot</a></li>
                 </ul>
                 <form class="navbar-form navbar-right" role="search">
                   <div class="form-group">

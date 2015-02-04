@@ -304,7 +304,7 @@ fieldset {
 
 .tag-cloud {
     background-color: @gray-lighter;
-    padding: 10px;
+    margin: 10px 0 0 0;
     ul {
         list-style: none;
         padding-left: 0;
@@ -313,10 +313,11 @@ fieldset {
         font-weight: 700;
         li {
             a {
-                background: @gray-light;
+                background: @white;
                 text-decoration: none;
-                padding: 5px 5px 0 5px;
-                color: @gray-lighter;
+                padding: 0.3em 5px 0 5px;
+                line-height: 1em;
+                color: @gray;
                 border-radius: 3px;
                 &:hover {
                     background-color: @lemon;
@@ -334,9 +335,7 @@ fieldset {
                 }
             }
             display: inline-block;
-            margin: 0 5px 5px 0;
-            padding-left: 5px;
-            padding-right: 5px;
+            margin: 0 10px 5px 0;
         }
     }
 }
@@ -344,7 +343,6 @@ fieldset {
 
 .feed-filters {
     .clearfix();
-    margin-bottom: 20px;
     padding: 10px;
     background: @gray-lighter;
     form {
@@ -628,7 +626,7 @@ ul.highlight-parties {
     }
     li a {
       .clearfix();
-      background: @gray-dark;
+      background: @gray-lighter;
       position: relative;
       display: block;
       
@@ -637,32 +635,35 @@ ul.highlight-parties {
         h5 {
           background: fade(#000,50%);
         }
-      }   
+      } 
     }
     
+  .mp-thumbnail {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
     h5 {
       position: absolute;
       bottom: 0;
       left: 0;
       right:0;
       padding: 6px;
-      //margin-right: auto;
-      //text-align: center;
-      //background: fade(#000,20%);
       margin:0;
       font-family: @brand-font-family;
       text-transform: none;
       color: @white;
       font-size: 13px;
       line-height: 15px;
+      text-shadow: 1px 1px 1px #000;
     }
   
     .party-badge {
       width: 32px;
       height: 32px;
       position: absolute;
-      top: 0;
-      right: 0;
+      top: 5px;
+      right: 5px;
     }
     
     .thumbnail-activity {
@@ -854,7 +855,7 @@ main.member-list {
  ***************************************************************/
 main.member-details {
     .badges {
-        padding: 10px;
+        padding: 5px;
         margin: 10px 0 10px 0;
         //background-color: @gray;
         float: right;
@@ -862,12 +863,12 @@ main.member-details {
         .terms {
             .clearfix();
             .contents {
-                width: 48px;
-                height: 48px;
-                border-radius: 24px;
+                width: 36px;
+                height: 36px;
+                border-radius: 18px;
                 background-color: @gray-light;
                 color: @white;
-                font-size: 24px;
+                font-size: 14px;
                 line-height: 6px;
                 font-family: @headings-font-family;
                 font-weight: 700;
@@ -875,8 +876,8 @@ main.member-details {
                 span {
                    display: block;
                    color: @white;
-                   font-size: 11px;
-                   line-height: 28px;
+                   font-size: 8px;
+                   line-height: 18px;
                    text-transform: uppercase;
                 }
             }
@@ -884,14 +885,21 @@ main.member-details {
     }
 
     .filter-feed {
+        background-color: @gray-lighter;
         > section, > .section {
-            margin-bottom: 2 * @box-padding;
-            border-top: 3px solid @blueberry;
+            //margin-bottom: 2 * @box-padding;
+            //border-top: 3px solid @blueberry;
             > h4 {
                 .section-heading;
             }
         }
     }
+  
+    .activity-feed-container {
+      background-color: @white;
+      .box;
+    }
+  
     .activity-feed > .activity-item .feed-content {
         margin-left: 16px;
     }
@@ -979,6 +987,11 @@ main.member-details {
             }
         }
     }
+  
+  .activity-feed > .activity-item .feed-content {
+    margin-left: 16px;
+
+}
 }
 
 /***************************************************************
@@ -1101,7 +1114,7 @@ main.party-list {
     }
     .tab-pane {
         background: @pine;
-        padding: 20px;
+        padding: 10px;
         margin-bottom: 20px;
         min-height: 100px;
     }
@@ -1443,20 +1456,19 @@ main.party-list {
 
 
 .tagcloud {
-    //background: @gray-lighter;
-    //padding: 10px;
     font-size: 1em;
-    line-height: 2 * 1em;
     .items {
         .list-inline;
         font-family: @brand-font-family;
         text-transform: uppercase;
         font-weight: 700;
         li {
-            margin: 10px 5px 5px 0;
+            margin: 0;
             padding: 0;
             }
         a {
+            padding: 0.3em 5px 0 5px;
+            line-height: 1.5em;
         }
         a:hover {
             background: @lemon;
@@ -1506,7 +1518,7 @@ main.party-list {
 }
 
 .activity-graph {
-  background: @gray-lighter;
+  //background: @white;
   padding: 10px;
   height: 120px;
 }

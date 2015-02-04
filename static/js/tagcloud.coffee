@@ -14,8 +14,8 @@
         min_count = Math.log(min_count)
         max_count = Math.log(max_count)
         min_opacity = 0.9
-        min_font_size = 10
-        max_font_size = 28
+        min_font_size = 0.5
+        max_font_size = 2
         font_size_delta = max_font_size - min_font_size
         weight_scale = max_count - min_count
 
@@ -23,14 +23,15 @@
             weight = (Math.log(tag.count) - min_count)
             weight /= weight_scale
             font_size = min_font_size
-            font_size += Math.round(font_size_delta * weight)
+            # font_size += Math.round(font_size_delta * weight)
+            font_size += font_size_delta * weight
             $li = $("<li/>")
             opacity = min_opacity + (1.0 - min_opacity) * weight
             $("<a/>").text(tag.name).attr(
                 title: "" + tag.count
                 href: tag.url
             ).css("opacity", opacity).appendTo $li
-            $li.children().css "fontSize", font_size + "px"
+            $li.children().css "fontSize", font_size + "em"
             if tag.id
                 $li.attr 'data-id', tag.id
             $li.appendTo tag_list
