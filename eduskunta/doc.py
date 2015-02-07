@@ -79,21 +79,22 @@ class DocImporter(Importer):
             2: 'in_progress',
             3: 'finished'
         }
-        names = {'vireil': ('intro', (u'Annettu eduskunnalle', u'Aloite jätetty')),
-                 'lahete': ('debate', u'Lähetekeskustelu'),
-                 'valiok': ('committee', u'Valiokuntakäsittely'),
-                 'poydal': ('agenda', u'Valiokunnan mietinnön pöydällepano'),
-                 '1kasit': ('1stread', u'Ensimmäinen käsittely'),
-                 '2kasit': ('2ndread', u'Toinen käsittely'),
-                 '3kasit': ('3ndread', u'Kolmas käsittely'),
-                 'paat': ('finished', None),
-                 'akasit': ('onlyread', u'Ainoa käsittely'),
-                 'akja2k': ('only2read', u'Ainoa ja toinen käsittely'),
-                 '3kjaak': ('only3read', u'Kolmas ja ainoa käsittely'),
-                 'peru': ('cancelled', u'Ilmoitus peruuttamisesta'),
-                 'rauennut': ('lapsed', None),
-                 'raue': ('lapsed', None),
-                 'jatlep': ('suspended', None),
+        names = {
+            'vireil': ('intro', (u'Annettu eduskunnalle', u'Aloite jätetty')),
+            'lahete': ('debate', u'Lähetekeskustelu'),
+            'valiok': ('committee', u'Valiokuntakäsittely'),
+            'poydal': ('agenda', u'Valiokunnan mietinnön pöydällepano'),
+            '1kasit': ('1stread', u'Ensimmäinen käsittely'),
+            '2kasit': ('2ndread', u'Toinen käsittely'),
+            '3kasit': ('3ndread', u'Kolmas käsittely'),
+            'paat': ('finished', None),
+            'akasit': ('onlyread', u'Ainoa käsittely'),
+            'akja2k': ('only2read', u'Ainoa ja toinen käsittely'),
+            '3kjaak': ('only3read', u'Kolmas ja ainoa käsittely'),
+            'peru': ('cancelled', u'Ilmoitus peruuttamisesta'),
+            'rauennut': ('lapsed', None),
+            'raue': ('lapsed', None),
+            'jatlep': ('suspended', None),
         }
         finishing_phases = ('3ndread', '2ndread', 'onlyread', 'only2read', 'only3read',
                             'cancelled', 'lapsed', 'lapsed')
@@ -122,7 +123,7 @@ class DocImporter(Importer):
             # quirks
             if doc_name in ('HE 25/2009', 'HE 57/2014', 'HE 29/2014') and phase == '2ndread':
                 el_name = names['akja2k'][1]
-            if doc_name in ('HE 29/2014', 'HE 3/2014', 'HE 215/2013', 'HE 203/2013') and phase == 'only2read':
+            if doc_name in ('HE 29/2014', 'HE 3/2014', 'HE 215/2013', 'HE 203/2013', 'HE 288/2014') and phase == 'only2read':
                 phase = '2ndread'
                 el_name = names['2kasit'][1]
             if doc_name == 'HE 112/2011':
