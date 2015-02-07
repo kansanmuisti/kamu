@@ -104,12 +104,13 @@ class @ActivityScoresView extends Backbone.View
             while data_idx + 1 < score_list.length
                 act = score_list[data_idx + 1].attributes
 
-                if @type_filter and @type_filter.length
-                    if act.type not in @type_filter
-                        break
-
                 if act.time != time
                     break
+
+                if @type_filter and @type_filter.length
+                    if act.type not in @type_filter
+                        data_idx += 1
+                        continue
 
                 score += act.score
                 data_idx += 1
