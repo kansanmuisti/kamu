@@ -70,7 +70,15 @@ class Party(UpdatableModel):
             query = query & (Q(end__gte=act_time) | Q(end__isnull=True))
             query = query & Q(party=self)
             member_count = party_association_objects.filter(query).count()
-            act['score'] /= member_count
+            if member_count:
+                act['score'] /= member_count
+            else:
+                # FIXME: This should be done through more intelligent
+                # scores_for_party().
+                act['delete'] = True
+                act['score'] = 0
+
+        act_set = [act for act in act_set if 'delete' not in act]
 
         return act_set
 
