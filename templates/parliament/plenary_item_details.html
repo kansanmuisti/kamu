@@ -50,7 +50,11 @@ $(function() {
                         {% endthumbnail %}
                     </a>
                     <div class="media-body proposal-statement-content">
+                        {% if member %}
                         <h5 class="media-heading">{{member}} /{{member.party.abbreviation}}
+                        {% else %}
+                        <h5 class="media-heading">{{statement.speaker_name}} / {{statement.speaker_role}}
+                        {% endif %}
                         {% if statement.type == 'speaker' %} ({% trans "speaker" %}) {% endif %}
                         </h5>
                         <div class="proposal-statement-text">
