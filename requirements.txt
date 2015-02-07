@@ -3,7 +3,6 @@ Markdown
 BeautifulSoup
 python-dateutil
 simplejson
-South
 django-tastypie
 twython>=3.0.0
 pygments
@@ -22,3 +21,4 @@ django-appconf
 mimeparse
 psycopg2
 lxml
+django-sortedm2m

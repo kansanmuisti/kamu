@@ -440,12 +440,14 @@ class DocImporter(Importer):
             st_obj.save()
 
     def save_keywords(self, doc, info):
-        old_kws = set([kw.name for kw in doc.keywords.all()])
-        new_kws = set(info['keywords'])
+        old_kws = list([kw.name for kw in doc.keywords.all()])
+        new_kws = list(info['keywords'])
+
         if old_kws == new_kws:
             doc.keywords_changed = False
             return
 
+        print "Keywords or their order changed"
         doc.keywords_changed = True
         for kw in info['keywords']:
             try:

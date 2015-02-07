@@ -1,4 +1,5 @@
 from django.db import models
+from sortedm2m.fields import SortedManyToManyField
 from django.conf import settings
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
@@ -94,7 +95,7 @@ class Document(UpdatableModel):
     error = models.CharField(max_length=50, blank=True, null=True)
 
     related_docs = models.ManyToManyField("self")
-    keywords = models.ManyToManyField(Keyword)
+    keywords = SortedManyToManyField(Keyword)
 
     def save(self, *args, **kwargs):
         if not self.url_name:
