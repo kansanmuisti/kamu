@@ -57,7 +57,7 @@ class MinutesImporter(Importer):
     SGML_TO_XML = 'sgml-to-xml.sh'
 
     NON_MP_NAMES = (u'Mikko Puumalainen', u'Raimo Tammilehto', u'Kalevi Hemilä',
-                    u'Kari Häkämies', u'Carl Haglund', u'Laura Räty')
+                    u'Kari Häkämies', u'Carl Haglund', u'Laura Räty', u'Antti Rinne')
     NON_MP_ROLES = ('Eduskunnan oikeusasiamies',
                     'Valtioneuvoston oikeuskansleri',
                     'Valtiovarainministeri', 'Sosiaali- ja terveysministeri')
@@ -509,7 +509,7 @@ class MinutesImporter(Importer):
         elif st_info['type'] == "speaker":
             speaker_dispname = (" ".join([st_info['first_name'], st_info['surname']]))
             speaker_dispname = self.clean_text(speaker_dispname.replace(u"\u00a0", u" "))
-            if speaker_dispname == "Pekka Ravis":
+            if speaker_dispname == "Pekka Ravis" or speaker_dispname == "Pekak Ravi":
                 speaker_dispname = "Pekka Ravi"
             if speaker_dispname == "Anssi Jotsenlahti":
                 speaker_dispname = "Anssi Joutsenlahti"
