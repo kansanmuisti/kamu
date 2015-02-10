@@ -199,13 +199,13 @@ class @MemberListView extends Backbone.View
         # asynchronous rendering of the elements. Maybe.
         # In some profiling runs clearing the parent element took
         # almost all the time.
-        @$el[0].innerHtml = ''
+        @$el.empty()
         query = @search_el.val()
         if not query
             result = (@children[key] for key of @children)
         else
             result = (@children[hit.ref] for hit in @index.search query)
-
+        
         result.sort @sort_func
         
         children = []
