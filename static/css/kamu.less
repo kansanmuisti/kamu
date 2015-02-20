@@ -94,7 +94,7 @@ h6 {
 }
 
 .section-heading {
-    margin: 5px 0 5px 0;
+    margin: 5px 0 20px 0;
     color: @gray-darker;
 }
 
@@ -303,7 +303,7 @@ fieldset {
 }
 
 .tag-cloud {
-    background-color: @gray-lighter;
+    background-color: @white;
     margin: 10px 0 0 0;
     ul {
         list-style: none;
@@ -885,7 +885,10 @@ main.member-details {
     }
 
     .filter-feed {
-        background-color: @gray-lighter;
+        background-color: @white;
+		.box {
+			margin-bottom: 0;
+		}
         > section, > .section {
             //margin-bottom: 2 * @box-padding;
             //border-top: 3px solid @blueberry;
@@ -1418,6 +1421,70 @@ main.party-list {
   border-top: #6f59bc solid 2px;
   color: #6f59bc;
 }
+
+/***************************************************************
+ * Plenary Session Page
+ ***************************************************************/
+
+/*ul*/
+
+#session-item-list {
+  color: @pine;
+  list-style: none;
+  .clearfix;
+  
+  h4 {
+    margin: 0;
+    padding: 0;
+    color: @electric;
+  }
+  /*li*/.plenary-session {
+    display: block;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid @gray-light;
+    .make-row();
+    h5 {
+      display: block;
+      margin: 0 0 20px 0;
+      background: @electric;
+      text-align: center;
+      height: 150px;
+      line-height: 75px;
+      color: @white;
+      .make-sm-column(3);
+    }
+    >ul {
+      .make-sm-column(12);
+      list-style: none;
+      /*li*/.plenary-session-item {
+        color: @gray-light;
+        display: block;
+        margin-bottom: 20px;
+        ul {
+          margin-left: 20px;
+          margin-top: 20px;
+          list-style: none;
+          li {
+            margin-bottom: 5px;
+            .title {
+              font-size: @font-size-base;
+              color: @blueberry;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.nr_votes {
+}
+
+.nr_statements {
+}
+
+
 
 /* TT END */
 
