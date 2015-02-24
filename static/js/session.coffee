@@ -24,7 +24,6 @@ session_template = _.template $("#plenary-session-template").html()
 session_item_template = _.template $("#plenary-session-item-template").html()
 
 render_session_item = (item) ->
-    session_item_template = _.template $("#plenary-session-item-template").html()
     el = $ session_item_template item
     el.find("> ul").append item.subitems.map render_session_item
     return el
@@ -32,6 +31,7 @@ render_session_item = (item) ->
 render_sessions = (sessions) ->
     container = $("#session-item-list")
     for session in sessions
+        session.date_str = moment(session.date).format 'DD.MM.YYYY'
         el = $ session_template session
         el.find('> ul').append session.session_items.map render_session_item
         container.append el
