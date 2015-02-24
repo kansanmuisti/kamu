@@ -12,29 +12,19 @@ class @MemberActivityFeedView extends Backbone.View
             member: @member.get 'id'
             limit: 20
         @user_filters = {}
-        @filter()
 
-    filter: ->
-        params = _.clone @base_filters
-        _.extend params, @user_filters
+    filter: ({keyword, type}={}) ->
+        params = {}
+        if keyword?
+            params.keyword = keyword
+        if type?
+            params.type__type__in = (t for t of type).join(",")
+        
+        _.extend params, @base_filters
         @collection.fetch
             reset: true
             data: params
-
-    filter_keyword: (kw) ->
-        if kw
-            @user_filters['keyword'] = kw
-        else
-            delete @user_filters['keyword']
-        @filter()
-
-    filter_type: (type) ->
-        if type
-            @user_filters['type__type__in'] = type.join(",")
-        else
-            delete @user_filters['type__type__in']
-        @filter()
-
+    
     add_item: (item) =>
         view = new ActivityView model: item, has_actor: false
         view.render()
@@ -55,43 +45,34 @@ else
 
 feed_view = new MemberActivityFeedView member
 
+mpact_state = hashstate.sub "mpact"
+type_state = mpact_state.sub "type"
+mpact_state.on (opts) ->
+    feed_view.filter opts
+    #member_activity_scores_view.filter opts
+
 $("#member-tag-cloud li a").click (ev) ->
     ev.preventDefault()
+    # TODO: Don't use the class as state!
     if $(this).hasClass 'active'
-        feed_view.filter_keyword()
-        member_activity_scores_view.filter_keyword()
+        mpact_state.update keyword: undefined
         $(this).removeClass 'active'
     else
         kw = $.trim $(@).html()
-        feed_view.filter_keyword kw
-        member_activity_scores_view.filter_keyword kw
+        mpact_state.update keyword: kw
         $("#member-tag-cloud li a").removeClass 'active'
         $(this).addClass 'active'
 
 disable_filters = ->
     $(".feed-filter-buttons .filter-button").removeClass 'active'
     $(".feed-filter-buttons .disable-filters").addClass 'active'
-    feed_view.filter_type null
-    if typeof member_activity_scores_view != 'undefined'
-        member_activity_scores_view.filter_type null
+    mpact_state.update type: undefined
 
 $(".feed-filter-buttons .disable-filters").click disable_filters
-disable_filters()
 
-$(".feed-filter-buttons .filter-button").click (ev) ->
-    $btn = $(ev.currentTarget)
-    type = $btn.data 'feed-type'
-    $btn.toggleClass 'active'
-    
-    all_buttons = $(".feed-filter-buttons .filter-button")
-    active_buttons = $(".feed-filter-buttons .filter-button.active")
-    filters = ($(button).data("feed-type") for button in active_buttons)
-    
-    if filters.length == 0 or all_buttons.length == active_buttons.length
-        disable_filters()
-        return
+$(".feed-filter-buttons .filter-button").each ->
+    btn = $(@)
+    state = type_state.sub(btn.data("feed-type"))
+    btn.click -> state.update if btn.hasClass("active") then undefined else 1
+    state.on (value) -> btn.toggleClass "active", Boolean(value)
 
-    $(".feed-filter-buttons .disable-filters").removeClass 'active'
-    feed_view.filter_type filters
-
-    member_activity_scores_view.filter_type filters
