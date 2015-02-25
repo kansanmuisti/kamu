@@ -72,6 +72,7 @@ class Member(UpdatableModel):
     birth_date = models.DateField(null=True, blank=True)
     birth_place = models.CharField(max_length=50, null=True, blank=True)
     given_names = models.CharField(max_length=50)
+    gender = models.CharField(max_length=1, null=True, blank=True)
     surname = models.CharField(max_length=50)
     summary = models.TextField(null=True)
 
