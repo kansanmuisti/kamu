@@ -248,7 +248,7 @@ class DocImporter(Importer):
         return info
 
     def parse_te_paragraphs(self, root_el):
-        p_list = root_el.xpath('//te')
+        p_list = root_el.xpath('.//te')
         paras = []
         for p_el in p_list:
             text = self.clean_text(p_el.text_content())
