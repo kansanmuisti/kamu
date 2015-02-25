@@ -27,13 +27,14 @@
             font_size += font_size_delta * weight
             $li = $("<li/>")
             opacity = min_opacity + (1.0 - min_opacity) * weight
-            $("<a/>").text(tag.name).attr(
+            $link = $("<a/>").text(tag.name).attr(
                 title: "" + tag.count
                 href: tag.url
             ).css("opacity", opacity).appendTo $li
             $li.children().css "fontSize", font_size + "em"
             if tag.id
                 $li.attr 'data-id', tag.id
+                $link.attr 'data-id', tag.id
             $li.appendTo tag_list
 
         this.append tag_list
