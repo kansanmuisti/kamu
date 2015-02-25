@@ -36,7 +36,7 @@ class @MemberActivityFeedView extends Backbone.View
 
 party_list = new PartyList party_json
 
-tags = ({name: x[0], count: x[1], url: '#'} for x in keyword_activity)
+tags = ({name: x[0], id: x[0], count: x[1], url: '#'} for x in keyword_activity)
 tags = _.sortBy tags, (x) -> x.name
 if tags.length > 0
     $("#member-tag-cloud").tag_cloud tags
@@ -45,32 +45,36 @@ else
 
 feed_view = new MemberActivityFeedView member
 
-mpact_state = hashstate.sub "mpact"
+mpact_state = hashstate.sub "as"
 type_state = mpact_state.sub "type"
+kw_state = mpact_state.sub "keyword"
 mpact_state.on (opts) ->
     feed_view.filter opts
     #member_activity_scores_view.filter opts
 
-$("#member-tag-cloud li a").click (ev) ->
+tagcloud_buttons = $("#member-tag-cloud li a")
+tagcloud_buttons.click (ev) ->
     ev.preventDefault()
-    # TODO: Don't use the class as state!
-    if $(this).hasClass 'active'
-        mpact_state.update keyword: undefined
-        $(this).removeClass 'active'
+    btn = $(@)
+    if btn.hasClass 'active'
+        kw_state.update undefined
     else
-        kw = $.trim $(@).html()
-        mpact_state.update keyword: kw
-        $("#member-tag-cloud li a").removeClass 'active'
-        $(this).addClass 'active'
+        kw_state.update btn.data "id"
 
-disable_filters = ->
-    $(".feed-filter-buttons .filter-button").removeClass 'active'
-    $(".feed-filter-buttons .disable-filters").addClass 'active'
-    mpact_state.update type: undefined
+kw_state.on (value) ->
+    tagcloud_buttons.removeClass "active"
+    return if not value?
+    tagcloud_buttons.filter("[data-id='#{value}']").addClass "active"
 
-$(".feed-filter-buttons .disable-filters").click disable_filters
+filter_buttons = $(".feed-filter-buttons .filter-button")
 
-$(".feed-filter-buttons .filter-button").each ->
+$(".feed-filter-buttons .disable-filters").click ->
+    type_state.update undefined
+
+type_state.on (types) ->
+    $(".feed-filter-buttons .disable-filters").toggleClass "active", not types?
+
+filter_buttons.each ->
     btn = $(@)
     state = type_state.sub(btn.data("feed-type"))
     btn.click -> state.update if btn.hasClass("active") then undefined else 1
