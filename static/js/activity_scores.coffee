@@ -28,9 +28,14 @@ class @ActivityScoresView extends Backbone.View
             @type_filter = []
         else
             @type_filter = types
+        
+        if @_reset_pending
+            # The pending reset will render this when it's done
+            return
         @render()
 
     reset: ->
+        @_reset_pending = true
         time = new Date(@options.end_date)
         year = time.getFullYear()
         month = time.getMonth()
@@ -77,6 +82,7 @@ class @ActivityScoresView extends Backbone.View
             $(window).resize =>
                 @draw_plot()
             @render()
+            @_reset_pending = false
 
     draw_plot: ->
         if @plot_series.length == 0
@@ -127,8 +133,6 @@ class @ActivityScoresView extends Backbone.View
 
     render: ->
         [act_histogram, max_score] = @get_histogram @collection.models
-        if act_histogram.length == 0
-            return @
 
         if @avg_act_collection
             [avg_histogram, avg_max_score] = @get_histogram @avg_act_collection.models
