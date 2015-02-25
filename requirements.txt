@@ -16,7 +16,7 @@ requests-cache
 ansible
 django-tastypie-swagger
 django-haystack
-pysolr
+elasticsearch
 django-appconf
 mimeparse
 psycopg2

@@ -1,6 +1,7 @@
 # Django settings for kamu project.
 import os
 import sys
+import json
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -27,17 +28,6 @@ DATABASES = {
     }
 }
 
-
-HAYSTACK_CONNECTIONS = {
-    'default': { 
-        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-        'URL': 'http://127.0.0.1:8080/kamu',
-        'INCLUDE_SPELLING': True,
-        'TIMEOUT': 120,
-        'BATCH_SIZE': 500,
-    },
-}
-HAYSTACK_LIMIT_TO_REGISTERED_MODELS = False
 
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
@@ -98,7 +88,7 @@ COMPRESS_JS_FILTERS = []
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'ljqf))w56l68l26zgtn**2u198y0j5$82o^ac%m0x23l=hq_75'
 
-INTERNAL_IPS = ( '127.0.0.1', )
+INTERNAL_IPS = ('127.0.0.1',)
 
 CACHES = {
     'default': {
@@ -106,6 +96,26 @@ CACHES = {
         'LOCATION': 'kamu-cache',
     }
 }
+
+
+def read_config(name):
+    f = open(os.path.join(SITE_ROOT, 'elasticsearch/{}.json'.format(name)))
+    return json.load(f)
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'multilingual_haystack.custom_elasticsearch_search_backend.CustomEsSearchEngine',
+        'URL': 'http://localhost:9200/',
+        'INDEX_NAME': 'kamu',
+        'MAPPINGS': read_config('mappings_finnish')['modelresult']['properties'],
+        'SETTINGS': read_config('settings_finnish'),
+        'TIMEOUT': 120,
+        'BATCH_SIZE': 1000,
+    }
+}
+
+HAYSTACK_LIMIT_TO_REGISTERED_MODELS = False
+
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 
@@ -116,7 +126,6 @@ TEMPLATE_LOADERS = (
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-    #"django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
@@ -132,14 +141,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    #'django.contrib.sessions.middleware.SessionMiddleware',
-    #'i18n.middleware.SetDefaultLanguageMiddleware',
-    #'django.middleware.locale.LocaleMiddleware',
-    #'django.contrib.auth.middleware.AuthenticationMiddleware',
-    #'django.contrib.messages.middleware.MessageMiddleware',
     'httpstatus.middleware.HttpStatusErrorsMiddleware',
     # ProfilerMiddleware needs to be last
-    'profiler.middleware.ProfilerMiddleware',
+    #'profiler.middleware.ProfilerMiddleware',
     #'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
