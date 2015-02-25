@@ -762,7 +762,7 @@ class MemberImporter(Importer):
              'party': 'r',
              'parties': {},
              'phone': '09 1608 8284',
-             'portrait': 'http://valtioneuvosto.fi/hallitus/jasenet/kuvat/140px/haglund.jpg',
+             'portrait': 'http://valtioneuvosto.fi/documents/10184/143444/Carl+Haglund/694456f8-8ce7-453a-bf8d-161c4a4d01ca?t=1404465254000&width=500',
              'districts': {},
              'posts': [{'begin': datetime(year=2012, month=7, day=5).date(),
                         'end': None,
