@@ -3,6 +3,7 @@ import re
 import os
 import difflib
 import pprint
+import requests
 from lxml import html
 from django import db
 from django.conf import settings
@@ -72,6 +73,80 @@ def fix_mp_name(name):
         name = MEMBER_NAME_TRANSFORMS[name.encode('utf8')].decode('utf8')
     return name
 
+male_mps = []
+female_mps = []
+
+def figure_mp_gender(name):
+    def get_gender_mps(gender):
+        resp = requests.get('http://www.eduskunta.fi/triphome/bin/hex3000.sh?kokohaku=sukupuoli={}'.format(gender))
+        if resp.status_code != 200:
+            return None
+        doc = html.fromstring(resp.content)
+        name_els = doc.xpath('//table[@class="resultTable"]//td/a')
+        mps = []
+        for td in name_els:
+            n = unicode(td.text.split('/')[0].strip()).replace(u'\u00a0', ' ')
+            mps.append(n)
+        return gender
+
+    global male_mps
+    if not male_mps:
+        male_mps = get_gender_mps('mies')
+
+    global female_mps
+    if not female_mps:
+        female_mps = get_gender_mps('nainen')
+
+    if name in female_mps:
+        return 'f'
+    elif name in male_mps:
+        return 'm'
+
+    # Plan B: Use genderizer to determine gender
+    gender_names = {
+        u'Hannakaisa': 'f',
+        u'Merikukka': 'f',
+        u'Toimi': 'm',
+        u'Valto': 'm',
+        u'Oiva': 'm',
+        u'Tatja': 'f',
+        u'Kalervo': 'm',
+        u'Rauha': 'f',
+        u'Ola': 'm',
+        u'Iivo': 'm',
+        u'Virpa': 'f',
+        u'Mauri': 'm',
+        u'Cai': 'm',
+        u'Lahja': 'f',
+        u'Miapetra': 'f',
+        u'Pietari': 'm',
+        u'Taito': 'm',
+    }
+
+    n = name
+    if len(n.split()):
+        n = n.split()[0]
+    if '-' in n:
+        n = n.split('-')[0]
+    if n in gender_names:
+        return gender_names[n]
+
+    GENDERIZE_BASE = 'http://api.genderize.io?name='
+    resp = requests.get(GENDERIZE_BASE + n + '&country_id=fi')
+    if resp.status_code != 200:
+        return None
+    data = resp.json()
+
+    if not data['gender']:
+        resp = requests.get(GENDERIZE_BASE + n)
+        if resp.status_code != 200:
+            return None
+        data = resp.json()
+
+    if data['gender'] and float(data['probability']) > 0.90:
+        gender_names[n] = data['gender'][0]
+        return gender_names[n]
+    return None
 
 FIELD_MAP = {
     'name': u'Täydellinen nimi',
@@ -264,6 +339,8 @@ class MemberImporter(Importer):
         surname, given_names = name_el.text.strip().split(', ')
         if '(' in given_names:
             given_names = given_names.split('(')[0].strip()
+        if not given_names and surname == 'Saarikangas':
+            given_names = 'Martin'
         mp_info['surname'] = surname
         mp_info['given_names'] = given_names.strip()
 
@@ -355,6 +432,8 @@ class MemberImporter(Importer):
         # Committee memberships
         mp_info['posts'] = self.resolve_memberships(doc)
 
+        mp_info['gender'] = figure_mp_gender(name)
+
         return mp_info
 
     def determine_party(self, mp_info):
@@ -394,6 +473,8 @@ class MemberImporter(Importer):
             mp.phone = mp_info['phone']
         else:
             mp.phone = None
+        if 'gender' in mp_info and mp_info['gender']:
+            mp.gender = mp_info['gender']
         mp.info_link = mp_info['info_url']
 
         # This is to support the hack where we add non-MP ministers
