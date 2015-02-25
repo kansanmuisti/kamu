@@ -68,9 +68,11 @@ $ ->
 	        kw_state.update btn.data "id"
 	
 	kw_state.on (value) ->
-	    tagcloud_buttons.removeClass "active"
-	    return if not value?
-	    tagcloud_buttons.filter("[data-id='#{value}']").addClass "active"
+        $(".feed-filters .tag-filter-input").val(value ? "")
+        tagcloud_buttons.removeClass "active"
+        if not value?
+            return
+        tagcloud_buttons.filter("[data-id='#{value}']").addClass "active"
 	
 	filter_buttons = $(".feed-filter-buttons .filter-button")
 	
@@ -85,4 +87,7 @@ $ ->
 	    state = type_state.sub(btn.data("feed-type"))
 	    btn.click -> state.update if btn.hasClass("active") then undefined else 1
 	    state.on (value) -> btn.toggleClass "active", Boolean(value)
+
+    $(".feed-filters .tag-filter-input").change -> kw_state.update $(@).val()
+        
 	
