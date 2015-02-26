@@ -37,7 +37,7 @@ class @MemberActivityFeedView extends Backbone.View
 $ ->
 	party_list = new PartyList party_json
 	
-	tags = ({name: x[0], id: x[0], count: x[1], url: '#'} for x in keyword_activity)
+	tags = ({name: x[0], id: x[0].toLowerCase(), count: x[1]} for x in keyword_activity)
 	tags = _.sortBy tags, (x) -> x.name
 	if tags.length > 0
 	    $("#member-tag-cloud").tag_cloud tags
@@ -72,7 +72,7 @@ $ ->
         tagcloud_buttons.removeClass "active"
         if not value?
             return
-        tagcloud_buttons.filter("[data-id='#{value}']").addClass "active"
+        tagcloud_buttons.filter("[data-id='#{value.toLowerCase()}']").addClass "active"
 	
 	filter_buttons = $(".feed-filter-buttons .filter-button")
 	

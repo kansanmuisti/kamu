@@ -125,7 +125,7 @@ class ActivityScoresResource(Resource):
         keyword = bundle.request.GET.get('keyword', '')
         if keyword:
             try:
-                kw_obj = Keyword.objects.get(name=keyword)
+                kw_obj = Keyword.objects.get(name__iexact=keyword)
             except Keyword.DoesNotExist:
                 raise BadRequest("Invalid keyword '%s'" % keyword)
             kwargs['keyword'] = kw_obj
