@@ -486,8 +486,7 @@ class MemberImporter(Importer):
             mp.party = self.determine_party(mp_info)
 
         url = mp_info['portrait']
-        ext = url.split('.')[-1]
-        fname = slugify(mp.name) + '.' + ext
+        fname = slugify(mp.name) + '.jpg'
         dir_name = os.path.join(mp.photo.field.upload_to, fname)
         path = os.path.join(settings.MEDIA_ROOT, dir_name)
         mp.photo = dir_name
@@ -749,26 +748,27 @@ class MemberImporter(Importer):
 
         self.logger.info("Adding Carl Haglund as a pseudo-MP for purposes of minister counting")
 
-        haglund_info = {'birthdate': u'1979-03-29',
-             'birthplace': u'Espoo',
-             'email': 'carl.haglund@eduskunta.fi',
-             'given_names': 'Carl Christoffer',
-             'home_county': 'Espoo',
-             'id': "nonmp_0001",
-             'info_url': 'http://valtioneuvosto.fi/hallitus/jasenet/puolustusministeri/fi.jsp',
-             'name': u'Carl Haglund',
-             # Following two are a minimal hack to make Carl only show up in the
-             # minister calculations. See save_member
-             'party': 'r',
-             'parties': {},
-             'phone': '09 1608 8284',
-             'portrait': 'http://valtioneuvosto.fi/documents/10184/143444/Carl+Haglund/694456f8-8ce7-453a-bf8d-161c4a4d01ca?t=1404465254000&width=500',
-             'districts': {},
-             'posts': [{'begin': datetime(year=2012, month=7, day=5).date(),
-                        'end': None,
-                        'label': u'puolustusministeri',
-                        'role': 'minister'}],
-             'surname': 'Haglund'}
+        haglund_info = {
+            'birthdate': u'1979-03-29',
+            'birthplace': u'Espoo',
+            'email': 'carl.haglund@eduskunta.fi',
+            'given_names': 'Carl Christoffer',
+            'home_county': 'Espoo',
+            'id': "nonmp_0001",
+            'info_url': 'http://valtioneuvosto.fi/hallitus/jasenet/puolustusministeri/fi.jsp',
+            'name': u'Carl Haglund',
+            # Following two are a minimal hack to make Carl only show up in the
+            # minister calculations. See save_member
+            'party': 'r',
+            'parties': {},
+            'phone': '09 1608 8284',
+            'portrait': 'http://valtioneuvosto.fi/documents/10184/143444/Carl+Haglund/694456f8-8ce7-453a-bf8d-161c4a4d01ca?t=1404465254000&width=500',
+            'districts': {},
+            'posts': [{'begin': datetime(year=2012, month=7, day=5).date(),
+                    'end': None,
+                    'label': u'puolustusministeri',
+                    'role': 'minister'}],
+            'surname': 'Haglund'}
         self.save_member(haglund_info)
 
 
