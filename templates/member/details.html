@@ -1,4 +1,4 @@
-{% extends "feedbase.html" %}
+{% extends "sidebarbase.html" %}
 {% load compress static thumbnail i18n %}
 
 {% block title %}{{ member.get_print_name }}{% endblock %}
@@ -15,7 +15,7 @@
 
 {% endblock %}
 
-{% block entity_details %}
+{% block sidebar %}
         <div class="card">
             <h1>{{member.get_print_name}}</h1>
             <div class="party-district">
@@ -68,5 +68,22 @@
             </ul>
         </nav>
         -->
-      
+        {% include "_feed_controls.html" %}
+{% endblock %}
+
+{% block main_content %}
+<script type="text/javascript">
+party_json = {{party_json|safe}};
+FEED_ACTIONS = {{feed_actions_json|safe}};
+keyword_activity = {{keyword_activity|safe}};
+member = new Member({{member_json|safe}});
+activity_counts = {{ activity_counts_json|safe }};
+activity_types = {{ activity_types_json|safe }};
+activity_weights = {{ activity_type_weights_json|safe }};
+member_activity_end_date = "{{ member_activity_end_date|safe }}";
+</script>
+{% include "_feed_content.html" %}
+{% compress js %}
+<script type="text/coffeescript" src="{% static "js/member.coffee" %}"></script>
+{% endcompress %}
 {% endblock %}

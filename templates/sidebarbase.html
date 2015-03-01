@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load compress static thumbnail i18n %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4 entity-details">
+       {% block sidebar %}{% endblock %}
+    </div>
+    <div class="col-md-11">
+       {% block main_content %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

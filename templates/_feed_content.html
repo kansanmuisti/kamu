@@ -1,0 +1,66 @@
+{% load static compress i18n %}
+<div class="filter-feed box">
+            <section>
+                <h4>{% trans "Is interested in these topics" %}
+		    <span class="help-link">
+                    <a href="#" data-toggle="modal" data-target="#topic-tagcloud-help">
+		      <i class="typcn typcn-info-large icon"></i>
+		    </a>
+		    </span>
+		</h4>
+                <div class="tag-cloud activity-tag-cloud"></div>
+            </section>
+            <section>
+	        <h4>{% trans "Activity" %}
+		    <span class="help-link">
+                    <a href="#" data-toggle="modal" data-target="#activity-graph-help">
+		      <i class="typcn typcn-info-large icon"></i>
+		    </a>
+		    </span>
+		</h4>
+                <div id="member-activity-graph" class="activity-graph"></div>
+            </section>
+
+        </div>
+        <div class="activity-feed-container">
+          <ul class="section activity-feed" class="feed unstyled">
+          </ul>
+        </div>
+    </div>
+
+{% include "_feed_item_template.html" %}
+{% compress js %}
+<script type="text/coffeescript" src="{% static "js/models.coffee" %}"></script>
+<script type="text/coffeescript" src="{% static "js/plots.coffee" %}"></script>
+<script type="text/coffeescript" src="{% static "js/activity_scores.coffee" %}"></script>
+<script type="text/coffeescript" src="{% static "js/feed.coffee" %}"></script>
+<script type="text/coffeescript" src="{% static "js/activityfeedview.coffee" %}"></script>
+{% endcompress %}
+
+<div class="modal fade" id="activity-graph-help" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">{% trans "MP activity graph" %}</h4>
+      </div>
+      <div class="modal-body">
+	Some help here
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="topic-tagcloud-help" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">{% trans "MP topic activity" %}</h4>
+      </div>
+      <div class="modal-body">
+	Some help here
+      </div>
+    </div>
+  </div>
+</div>
