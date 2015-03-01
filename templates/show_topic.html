@@ -23,16 +23,16 @@
     <div class="col-lg-10">
       <div class="content">
         <div class="row">
-          <div class="col-md-6">
-            <div class="box most-active-parties">
+          <div class="col-md-5">
+            <div class="most-active-parties">
               <h4>{% trans "Which parties are active with this issue?" %}</h4>
               <!-- ehdotus: Aktiivisimmat puolueet tässä asiassa -->
               <ol>
               </ol>
             </div>
           </div>
-          <div class="col-md-9">
-            <div class="box most-active-members">
+          <div class="col-md-10">
+            <div class="most-active-members">
               <h4>{% trans "Who are active with this issue?" %}</h4>
               <!-- ehdotus: Aktiivisimmat edustajat tässä asiassa -->
               <ol>
@@ -80,18 +80,19 @@
 </script>
 
 <script type="text/template" id="most-active-member-template">
-    <li title="<%= name %>">
-      <div class="member-thumbnail">
-        <a href="<%= view_url %>">
-          <img src="<%= thumbnail_url %>">
-        </a>
-        <div class="thumbnail-activity">
-          <div class="thumbnail-activity-bar" style="width: <%= member_activity_percentage %>%"></div>
-        </div>
-      </div>
-    </li>
+  <li>
+    <a href="<%= view_url %>"><img class="mp-thumbnail" src="<%= thumbnail_url %>">
+      <h5><%= name %></h5>  
+      <img src="/api/v1/party/vihr/logo/?dim=32x32" class="party-badge" alt="(party name)"/>
+    </a>
+    <div class="thumbnail-activity">
+      <div class="thumbnail-activity-bar" style="width: <%= member_activity_percentage %>%"></div>
+    </div>
+  </li> 
 </script>
 
+
+    
 {% compress js %}
 <script type="text/coffeescript" src="{% static "js/feed.coffee" %}"></script>
 {% endcompress %}
