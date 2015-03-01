@@ -102,6 +102,8 @@ h6 {
     margin-bottom: 20px;
     h1 {
         text-transform: none;
+        word-wrap: break-word;
+        overflow: hidden;
     }
 }
 
@@ -269,6 +271,10 @@ fieldset {
                     color: inherit;
                     text-decoration: none;
                 }
+            }
+            .details {
+              background: @gray-lighter;
+              padding: 10px;
             }
         }
         .content-image {
@@ -446,6 +452,17 @@ main {
     background: lighten(@mint,20%);
     //color: @electric;
   }
+}
+
+.read-more a, .read-less a {
+  display: block;
+  text-decoration: none;
+  text-align: center;
+  padding-right: 12px;
+  margin-top: 12px;
+  border-top: #333 solid 2px;
+  color: #333;
+  background-color: @gray-lighter;
 }
 
 
@@ -1411,16 +1428,6 @@ main.party-list {
 
 .side-opposition .media-heading {
   text-align: right;
-}
-
-.read-more a {
-  display: block;
-  text-decoration: none;
-  text-align: center;
-  padding-right: 12px;
-  margin-top: 12px;
-  border-top: #333 solid 2px;
-  color: #333;
 }
 
 .side-government .read-more a {

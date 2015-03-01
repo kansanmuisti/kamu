@@ -65,10 +65,12 @@
     <script type="text/javascript" src="{% static "js/vendor/jquery.expander.js" %}"></script>
     <script type="text/coffeescript">
         expander_defaults =
-            expandText: "{% trans "Read more" %}" + " »"
+            expandText: '{% trans "Read more" %}' + '<i class="typcn typcn-arrow-down"></i>'
             expandEffect: 'fadeIn'
+            sliceOn: '</p>'
+            widow: 15
             userCollapse: true
-            userCollapseText: '[x]'
+            userCollapseText: 'Pienennä <i class="typcn typcn-arrow-up"></i>'
         $.extend $.fn.expander.defaults, expander_defaults
     </script>
     <script type="text/coffeescript" src="{% static "js/tagcloud.coffee" %}"></script>
