@@ -171,10 +171,16 @@ class Statement(models.Model):
     def get_short_id(self):
         return "%s/%d"%(self.item.get_short_id(), self.index)
     
+    def get_anchor_string(self):
+        # Replace slash with dash here to work around some
+        # History.js issues :'(
+        return "statement-"+self.get_short_id().replace('/', '-')
+
     def get_indocument_url(self):
         # A hack as the item itself doesn't have a proper
-        # page in the system
-        return self.item.get_preferred_view_url() + "#statement-" + self.get_short_id()
+        # page in the system.
+        return self.item.get_preferred_view_url() + "#" + self.get_anchor_string()
+
 class PlenaryVoteManager(models.Manager):
     def between(self, begin=None, end=None):
         query = Q()
