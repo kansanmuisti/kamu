@@ -86,6 +86,13 @@ class @MemberActivity extends Backbone.Tastypie.Model
 
 class @MemberActivityList extends Backbone.Tastypie.Collection
     urlRoot: URL_CONFIG['api_member_activity']
+    initialize: (@params={}) ->
+    fetch: (opts) =>
+        opts = _.clone(opts)
+        opts.data = _.extend {}, @params, opts.data
+        super opts
+        
+
     model: MemberActivity
 
 class @Document extends Backbone.Tastypie.Model
