@@ -20,7 +20,7 @@ $ ->
     setup = new ActivityFeedControl hashstate.sub "as"
     setup.feed_view new ActivityFeedView
         el: relel ".activity-feed"
-        collection: new MemberActivityList(filter: pk: member.get "id")
+        collection: new MemberActivityList(member: member.get "id")
     setup.scores_view member_activity_scores_view
     setup.tagcloud tagcloud
     setup.controls relel ".feed-filters"
