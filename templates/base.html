@@ -61,6 +61,7 @@
     <script type="text/javascript">
         moment.lang("fi");
     </script>
+    <script type="text/javascript" src="{% static "js/vendor/share.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/jquery.expander.js" %}"></script>
     <script type="text/coffeescript">
         expander_defaults =
@@ -115,6 +116,7 @@
                     <li><a href="#">Kansan muisti ry.</a></li>
                 </ul>
             </nav>
+            <div class="share-button"></div>
         </div>
     </header>
     <div class="main-nav-container">
@@ -172,6 +174,14 @@
     <script type="text/javascript">
         // Activate Bootstrap tooltips
         $(".js-tooltip").tooltip();
+        // Activate share button
+        var share_opts = {
+            ui: {
+                button_text: 'Jaa',
+                button_font: false
+            }
+        };
+        new Share(".share-button", share_opts);
     </script>
 <!--
     <footer class="page-footer">
