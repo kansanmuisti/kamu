@@ -286,6 +286,12 @@ fieldset {
         .labels {
             text-align: right;
             margin-bottom: 1em;
+            a:hover {
+              text-decoration: none;
+              .label {
+                background-color: @mint;
+              }
+            }
             .label {
                 background-color: @gray-light;
             }
@@ -1270,7 +1276,8 @@ main.party-list {
             margin: 0 0 10px 0;
             font-family: @font-family-base;
             color: @pine;
-            font-size: @font-size-extra-extra-large;
+            font-size: @font-size-extra-large;
+            line-height: 1.2;
         }
         .details {
             .clearfix();
@@ -1430,14 +1437,16 @@ main.party-list {
   text-align: right;
 }
 
-.side-government .read-more a {
+.side-government .read-more a, .side-government .read-less a {
   border-top: #1C6262 solid 2px;
   color: #1C6262;
+  background: none;
 }
 
-.side-opposition .read-more a {
+.side-opposition .read-more a, .side-opposition .read-less a {
   border-top: #6f59bc solid 2px;
   color: #6f59bc;
+  background: none;
 }
 
 /***************************************************************
@@ -1502,7 +1511,48 @@ main.party-list {
 .nr_statements {
 }
 
+/***************************************************************
+ * Voting
+ ***************************************************************/
 
+.voting-result-summary {
+    .clearfix;
+    background: @white;
+    border: 1px solid @pine;
+    padding: 10px;
+  .voting-sum-container {
+    height: 25px;
+    overflow: hidden;
+    background: @gray-lighter;
+  }
+  .voting-sum {
+    height: 10px;
+    margin: 5px;
+  }
+  .voting-sum-icon {
+    height: 25px;
+    width: 60px;
+    float: left;
+    text-align: left;
+      i {
+        font-size: 20px;
+        line-height: 20px;
+      }
+  }
+  
+  .sum-no {
+    background: @electric;
+  }
+  .sum-yes {
+    background: @pine;
+  }
+  .sum-empty {
+    background: @lemon;
+  }
+  .sum-absent {
+    background: @lead;
+  }
+}
 
 /* TT END */
 
