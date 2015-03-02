@@ -57,7 +57,7 @@ $(function() {
             <div class="proposal-statements">
                 {% for statement in item.statement_set.all %}
                 {% with member=statement.member governing_party=statement.member.party|governing:item.plsess.date %}
-                <div class="proposal-statement media {% if statement.type == 'speaker' %}side-neutral{% elif governing_party %}side-government{% else %}side-opposition{% endif %}" id="statement-{{statement.get_short_id}}">
+                <div class="proposal-statement media {% if statement.type == 'speaker' %}side-neutral{% elif governing_party %}side-government{% else %}side-opposition{% endif %}" id="{{statement.get_anchor_string}}">
                     <a class="statement-portrait" href="{{member.get_absolute_url}}">
                         {% thumbnail member.photo "64x64" as tn %}
                         <img class="media-object" src="{{tn.url}}">
