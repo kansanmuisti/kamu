@@ -3,117 +3,49 @@
 
 {% block main_class %}party-details{% endblock %}
 
-{% block head %}
-    <!-- Backbone models -->
-{% compress js %}
-    <script type="text/coffeescript" src="{% static "js/models.coffee" %}"></script>
-{% endcompress %}
-    <!-- Bootstrapped data for scripts on page -->
-    <script type="text/javascript">
-        party_json = {{party_json|safe}};
-        FEED_ACTIONS = {{feed_actions_json|safe}};
-        keyword_activity = {{keyword_activity|safe}}
-    </script>
-{% endblock %}
 {% block party_content %}
-<!-- Content ================================================== -->
-<div class="filter-feed box">
-    <section>
-	<h4>{% trans "Active in these topics" %}
-            <span class="help-link">
-            <a href="#" data-toggle="modal" data-target="#topic-tagcloud-help">
-	    <i class="typcn typcn-info-large icon"></i>
-            </a>
-            </span>
-        </h4>
-        <div id="party-tag-cloud" class="tag-cloud"></div>
-    </section>
-    <section>
-        <h4>{% trans "Activity" %}
-          <span class="help-link">
-          <a href="#" data-toggle="modal" data-target="#activity-graph-help">
-          <i class="typcn typcn-info-large icon"></i>
-	  </a>
-	  </span>
-	</h4>
-        <div id="party-activity-graph" class="activity-graph"></div>
-    </section>
-    <section>
-        <h4>{% trans "Recent actions of party MPs" %}</h4>
-        <div class="feed-filters">
-            <form class="form-horizontal">
-                <div class="form-group">
-                    <label class="col-lg-3 control-label">{% trans "Filter" %}</label>
-                    <div class="col-lg-11">
-                    {% include "_feed_filters.html" %}
-                    </div>
-                </div>
-            </form>
-        </div>
-        <ul class="section activity-feed feed unstyled">
-        </ul>
-    </section>
-</div>
-
-{% include "_feed_item_template.html" %}
-
-{% compress js %}
-<script type="text/coffeescript" src="{% static "js/activity_scores.coffee" %}"></script>
-{% endcompress %}
-
-{% compress js %}
-<script type="text/coffeescript" src="{% static "js/party-details.coffee" %}"></script>
-{% endcompress %}
-
-{% compress js %}
-<!-- Feed-specific views etc. -->
-<script type="text/coffeescript" src="{% static "js/feed.coffee" %}"></script>
-{% endcompress %}
-
-{% compress js %}
-<!-- Party member activity feed initialization -->
-<script type="text/coffeescript" src="{% static "js/party.coffee" %}"></script>
-{% endcompress %}
-
+{% include "_feed_content.html" %}
 <script type="text/javascript">
-    $(function() {
-        party_activity_end_date = "{{ party_activity_end_date|safe }}";
-        party = new Party({{party_json|safe}});
-        var opts = {
-            show_average_activity: true,
-            end_date: party_activity_end_date,
-            el: "#party-activity-graph"
-        };
-        party_activity_scores_view = new PartyActivityScoresView(party, opts);
-    });
+party_json = {{party_json|safe}};
+party = new Party(party_json);
+FEED_ACTIONS = {{feed_actions_json|safe}};
+keyword_activity = {{keyword_activity|safe}};
+activity_end_date = "{{ party_activity_end_date|safe }}";
+/*activity_counts = {{ activity_counts_json|safe }};
+activity_types = {{ activity_types_json|safe }};
+activity_weights = {{ activity_type_weights_json|safe }};
+";*/
 </script>
 
-<div class="modal fade" id="activity-graph-help" tabindex="-1" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">{% trans "Party activity graph" %}</h4>
-      </div>
-      <div class="modal-body">
-	Some help here
-      </div>
-    </div>
-  </div>
-</div>
+{% compress js %}
+<script type="text/coffeescript">
+class @PartyActivityScoresView extends @ActivityScoresView
+    initialize: (party, options) ->
+        super (new PartyActivityScoresList party.get 'abbreviation'), options
 
-<div class="modal fade" id="topic-tagcloud-help" tabindex="-1" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">{% trans "Party topic activity" %}</h4>
-      </div>
-      <div class="modal-body">
-	Some help here
-      </div>
-    </div>
-  </div>
-</div>
-
+$ ->
+    root_el = $(document)
+    relel = (selector) -> root_el.find(selector)
+    tags = ({name: x[0], id: x[0].toLowerCase(), count: x[1]} for x in keyword_activity)
+    tags = _.sortBy tags, (x) -> x.name
+    tagcloud = $(".activity-tag-cloud")
+    if tags.length > 0
+        tagcloud.tag_cloud tags
+    else
+        tagcloud.append("<h4>Ei asiasanoitettua aktiivisuutta</h4>")
+    activity_scores_view = new PartyActivityScoresView party,
+        show_average_activity: true,
+        end_date: activity_end_date,
+        el: relel ".activity-graph"
+    
+    setup = new ActivityFeedControl hashstate.sub "as"
+    setup.feed_view new ActivityFeedView
+        el: relel ".activity-feed"
+        collection: new MemberActivityList(member__party: party.get "id")
+    setup.scores_view activity_scores_view
+    setup.tagcloud tagcloud
+    setup.controls relel ".feed-filters"
+</script>
+{% endcompress %}
 {% endblock %}
+

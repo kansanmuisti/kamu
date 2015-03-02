@@ -16,60 +16,59 @@
 {% endblock %}
 
 {% block sidebar %}
-        <div class="card">
-            <h1>{{member.get_print_name}}</h1>
-            <div class="party-district">
-                <div class="party-logo">
-                    {% thumbnail member.party.logo "48x48" format="PNG" as logo %}
-                    <img src="{{logo.url}}" style="margin:{{logo|margin:"48x48"}}" />
-                    {% endthumbnail %}
-                </div>
-                <div class="text">
-                    <a href="{{member.party.get_absolute_url}}">{{member.party.name}}</a>
-                    <span class="district">{{member.get_latest_district.district.name}} vaalipiiri</span>
-                </div>
-            </div>
-            {% thumbnail member.photo "128x192" crop="center" as photo %}
-            <img class="portrait" src="{{photo.url}}" />
+<div class="card">
+    <h1>{{member.get_print_name}}</h1>
+    <div class="party-district">
+        <div class="party-logo">
+            {% thumbnail member.party.logo "48x48" format="PNG" as logo %}
+            <img src="{{logo.url}}" style="margin:{{logo|margin:"48x48"}}" />
             {% endthumbnail %}
-            <div class="badges">
-              <div class="share-button"></div>
-                <div class="terms">
-                    <div class="contents">
-                        <span>{% trans "Terms" %}</span>{{member.get_terms|length}}</div>
-                </div>
-            </div>
-            <div class="roles">
-                <ul class="minister">
-                    {% for ma in member.posts.ministry %}
-                    <li>{{ma.label}}</li>
-                    {% endfor %}
-                </ul>
-                <ul class="speaker">
-                    {% for sa in member.posts.speaker %}
-                    <li>{{sa.get_role_display}}</li>
-                    {% endfor %}
-                </ul>
-                <ul class="committee">
-                    {% for ca in member.posts.committee %}
-                    <li>{{ca.committee.name}}{% if ca.role != 'member' %} (<span class="role-name">{{ca.get_role_display}}</span>){% endif %}</li>
-                    {% endfor %}
-                </ul>
-            </div>
         </div>
+        <div class="text">
+            <a href="{{member.party.get_absolute_url}}">{{member.party.name}}</a>
+            <span class="district">{{member.get_latest_district.district.name}} vaalipiiri</span>
+        </div>
+    </div>
+    {% thumbnail member.photo "128x192" crop="center" as photo %}
+    <img class="portrait" src="{{photo.url}}" />
+    {% endthumbnail %}
+    <div class="badges">
+      <div class="share-button"></div>
+        <div class="terms">
+            <div class="contents">
+                <span>{% trans "Terms" %}</span>{{member.get_terms|length}}</div>
+        </div>
+    </div>
+    <div class="roles">
+        <ul class="minister">
+            {% for ma in member.posts.ministry %}
+            <li>{{ma.label}}</li>
+            {% endfor %}
+        </ul>
+        <ul class="speaker">
+            {% for sa in member.posts.speaker %}
+            <li>{{sa.get_role_display}}</li>
+            {% endfor %}
+        </ul>
+        <ul class="committee">
+            {% for ca in member.posts.committee %}
+            <li>{{ca.committee.name}}{% if ca.role != 'member' %} (<span class="role-name">{{ca.get_role_display}}</span>){% endif %}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 
-        <!--
-        <nav class="side-navigation">
-            <ul class="nav nav-pills nav-stacked">
-                <li class="active"><a href=#>Etusivu</a></li>
-                <li class="disabled"><a href=#>Perustiedot</a></li>
-                <li class="disabled"><a href=#>Luottamustehtävät</a></li>
-                <li class="disabled"><a href=#>Äänestystiedot</a></li>
-                <li class="disabled"><a href=#>Tilastot</a></li>
-            </ul>
-        </nav>
-        -->
-        {% include "_feed_controls.html" %}
+<!--
+<nav class="side-navigation">
+    <ul class="nav nav-pills nav-stacked">
+        <li class="active"><a href=#>Etusivu</a></li>
+        <li class="disabled"><a href=#>Perustiedot</a></li>
+        <li class="disabled"><a href=#>Luottamustehtävät</a></li>
+        <li class="disabled"><a href=#>Äänestystiedot</a></li>
+        <li class="disabled"><a href=#>Tilastot</a></li>
+    </ul>
+</nav>
+-->
 {% endblock %}
 
 {% block main_content %}
@@ -85,6 +84,33 @@ member_activity_end_date = "{{ member_activity_end_date|safe }}";
 </script>
 {% include "_feed_content.html" %}
 {% compress js %}
-<script type="text/coffeescript" src="{% static "js/member.coffee" %}"></script>
+<script type="text/coffeescript">
+class @MemberActivityScoresView extends @ActivityScoresView
+    initialize: (member, options) ->
+        super (new MemberActivityScoresList member.get 'id'), options
+
+$ ->
+    root_el = $(document)
+    relel = (selector) -> root_el.find(selector)
+    tags = ({name: x[0], id: x[0].toLowerCase(), count: x[1]} for x in keyword_activity)
+    tags = _.sortBy tags, (x) -> x.name
+    tagcloud = $(".activity-tag-cloud")
+    if tags.length > 0
+        tagcloud.tag_cloud tags
+    else
+        tagcloud.append("<h4>Ei asiasanoitettua aktiivisuutta</h4>")
+    member_activity_scores_view = new MemberActivityScoresView member,
+        show_average_activity: true,
+        end_date: member_activity_end_date,
+        el: relel ".activity-graph"
+    
+    setup = new ActivityFeedControl hashstate.sub "as"
+    setup.feed_view new ActivityFeedView
+        el: relel ".activity-feed"
+        collection: new MemberActivityList(member: member.get "id")
+    setup.scores_view member_activity_scores_view
+    setup.tagcloud tagcloud
+    setup.controls relel ".feed-filters"
+</script>
 {% endcompress %}
 {% endblock %}
