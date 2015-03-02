@@ -508,6 +508,7 @@ class MemberActivityType(models.Model):
     class Meta:
         app_label = 'parliament'
 
+
 class MemberActivity(models.Model):
     # If member is None, it is activity related to a government bill.
     member = models.ForeignKey(Member, db_index=True, null=True)
@@ -533,14 +534,45 @@ class MemberActivity(models.Model):
                     kwa_dict[kw.id].found = True
                 else:
                     kwa = KeywordActivity(keyword=kw, activity=self)
-                    #print "add %s" % unicode(kwa).encode('utf8')
+                    # print "add %s" % unicode(kwa).encode('utf8')
                     kwa.save()
         # Then remove the deleted keywords.
         for kw_id in kwa_dict:
             if not kwa_dict[kw_id].found:
                 kwa = kwa_dict[kw_id]
-                #print u"remove %s" % unicode(kwa).encode('utf8')
+                # print u"remove %s" % unicode(kwa).encode('utf8')
                 kwa.delete()
+
+    def get_target_info(self):
+        d = {}
+        target = {}
+        acttype = self.type.pk
+        if acttype in ('FB', 'TW'):
+            o = self.socialupdateactivity.update
+            target['text'] = o.text
+            target['url'] = o.get_origin_url()
+        elif acttype == 'ST':
+            o = self.statementactivity.statement
+            target['text'] = o.text
+            target['url'] = o.get_indocument_url()
+        elif acttype in ('IN', 'WQ', 'GB', 'SI'):
+            if acttype == 'SI':
+                o = self.signatureactivity.signature.doc
+            else:
+                o = self.initiativeactivity.doc
+            target['text'] = o.summary
+            target['subject'] = o.subject
+            target['name'] = o.name
+            target['type'] = o.type
+            target['url'] = o.get_absolute_url()
+
+            keywords = [{'id': kw.id, 'name': kw.name, 'slug': kw.get_slug()} for kw in o.keywords.all()]
+            target['keywords'] = keywords
+        else:
+            raise Exception("Invalid type %s" % acttype)
+
+        target['object'] = o
+        return target
 
     def save(self, *args, **kwargs):
         ret = super(MemberActivity, self).save(*args, **kwargs)
@@ -553,6 +585,7 @@ class MemberActivity(models.Model):
     class Meta:
         app_label = 'parliament'
         ordering = ('time', 'member__name')
+
 
 class KeywordActivity(models.Model):
     activity = models.ForeignKey(MemberActivity, db_index=True)

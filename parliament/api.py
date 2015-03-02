@@ -534,46 +534,6 @@ class MemberActivityResource(KamuResource):
     member = fields.ForeignKey('parliament.api.MemberResource', 'member', null=True)
     type = fields.ForeignKey(MemberActivityTypeResource, 'type')
 
-    def get_extra_info(self, item):
-        def get_keywords(doc):
-            keywords = [{'id': kw.id, 'name': kw.name, 'slug': kw.get_slug()} for kw in doc.keywords.all()]
-            return keywords
-
-        d = {}
-        target = {}
-        acttype = item.type.pk
-        if acttype in ('FB', 'TW'):
-            o = item.socialupdateactivity.update
-            res_class = UpdateResource
-            target['text'] = o.text
-            target['url'] = o.get_origin_url()
-        elif acttype == 'ST':
-            o = item.statementactivity.statement
-            res_class = StatementResource
-            target['text'] = o.text
-            target['url'] = o.get_indocument_url()
-        elif acttype in ('IN', 'WQ', 'GB', 'SI'):
-            if acttype == 'SI':
-                o = item.signatureactivity.signature.doc
-            else:
-                o = item.initiativeactivity.doc
-            res_class = DocumentResource
-            target['text'] = o.summary
-            target['subject'] = o.subject
-            target['name'] = o.name
-            target['type'] = o.type
-            target['keywords'] = get_keywords(o)
-            target['url'] = o.get_absolute_url()
-        else:
-            raise Exception("Invalid type %s" % acttype)
-
-        res = res_class()
-        uri = res.get_resource_uri(o)
-        target['resource_uri'] = uri
-
-        d['target'] = target
-        return d
-
     def dehydrate(self, bundle):
         obj = bundle.obj
         if obj.member:
@@ -583,9 +543,26 @@ class MemberActivityResource(KamuResource):
                 bundle.data['party_name'] = party_dict[obj.member.party.id].name
 
         bundle.data['type'] = obj.type.pk
-        d = self.get_extra_info(obj)
+        d = obj.get_target_info()
         if d:
-            bundle.data.update(d)
+            bundle.data['target'] = d
+            target_obj = d['object']
+            del d['object']
+
+            acttype = obj.type.pk
+            if acttype in ('FB', 'TW'):
+                res_class = UpdateResource
+            elif acttype == 'ST':
+                res_class = StatementResource
+            elif acttype in ('IN', 'WQ', 'GB', 'SI'):
+                res_class = DocumentResource
+            else:
+                raise Exception("Invalid type %s" % acttype)
+
+            res = res_class()
+            uri = res.get_resource_uri(target_obj)
+            bundle.data['target']['resource_uri'] = uri
+
         return bundle
 
     def apply_filters(self, request, applicable_filters):
@@ -758,9 +735,8 @@ class MemberUpdateResource(UpdateResource):
         obj = bundle.obj
         mf = obj.feed.membersocialfeed
         bundle.data['member_name'] = mf.member
-        party = mf.member.party
-        if party:
-            party = party.abbreviation
+        if mf.member.party_id:
+            party = mf.member.party.abbreviation
         else:
             party = None
         bundle.data['member_party'] = party
@@ -780,6 +756,7 @@ class KamuSearchResource(SearchResource):
         target_bundle = res.build_bundle(obj=obj.object, request=bundle.request)
         out = res.full_dehydrate(target_bundle)
         bundle.data = out.data
+        bundle.data['result_type'] = res._meta.resource_name
         bundle.data['score'] = obj.score
         return bundle
 
@@ -793,9 +770,9 @@ class KamuSearchResource(SearchResource):
         else:
             input_str = request.GET.get('input', None)
             if input_str:
-                objects = objects.filter(autosuggest=input_str)
+                objects = objects.filter(autosuggest=input_str.lower())
 
-        return objects
+        return objects.load_all()
 
     class Meta:
         index_fields = ['autosuggest']
