@@ -43,7 +43,7 @@
 <script type="text/template" id="most-active-party-template">
     <li title="<%= name %>">
       <div class="party-thumbnail">
-        <a href="<%= view_url %>">
+        <a href="<%= view_url %>?as.keyword=<%= keyword.get("name") %>">
           <img src="<%= thumbnail_url %>">
         </a>
         <div class="thumbnail-activity">
@@ -55,7 +55,7 @@
 
 <script type="text/template" id="most-active-member-template">
   <li>
-    <a href="<%= view_url %>"><img class="mp-thumbnail" src="<%= thumbnail_url %>">
+    <a href="<%= view_url %>?as.keyword=<%= keyword.get("name") %>"><img class="mp-thumbnail" src="<%= thumbnail_url %>">
       <h5><%= name %></h5>  
       <img src="/api/v1/party/vihr/logo/?dim=32x32" class="party-badge" alt="(party name)"/>
     </a>
