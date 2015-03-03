@@ -58,6 +58,7 @@
     <script type="text/javascript" src="{% static "js/vendor/jquery-1.11.0.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/moment-with-locales.js" %}"></script>
     <script type="text/javascript">
+        GLOBAL_PARTY_LIST_JSON_HACK = {{PARTY_LIST_JSON|safe}}; 
         moment.locale("fi");
     </script>
     <script type="text/javascript" src="{% static "js/vendor/share.min.js" %}"></script>
@@ -184,6 +185,7 @@
             }
         };
         new Share(".share-button", share_opts);
+
     </script>
 <!--
     <footer class="page-footer">

@@ -145,6 +145,10 @@ def get_parties(request):
     party_json = json
     return json
 
+def hack_stuff_to_template_context_because_django_sucks(request):
+    return {
+            'PARTY_LIST_JSON': get_parties(request)
+            }
 
 def show_item(request, plsess, item_nr, subitem_nr=None):
     query = Q(plsess__url_name=plsess) & Q(number=item_nr)
