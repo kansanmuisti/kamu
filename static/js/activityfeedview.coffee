@@ -46,6 +46,8 @@ class @ActivityFeedControl
 
     scores_view: (view) => @state.on (opts={}) =>
         view.filter opts
+        view.el.on "plotdaterange", (ev, date) =>
+            @date_state.update date
 
     tagcloud: (el) =>
         tagcloud_buttons = el.find("li a")
@@ -103,7 +105,6 @@ class @ActivityFeedControl
                 update[$(btn).data('feed-type')] = value
             type_state.update update
         
-        # TODO: Give some range options
         date_state = @date_state
         daterange_group = el.find(".daterange-filter-group").show()
         daterange = daterange_group.find(".input-daterange")

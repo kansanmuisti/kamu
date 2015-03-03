@@ -1,3 +1,4 @@
+
 class @ActivityScoresView extends Backbone.View
     initialize: (@collection, options) ->
         @options = _.extend {}, options
@@ -18,12 +19,31 @@ class @ActivityScoresView extends Backbone.View
         @hack_selection = =>
             return if not @plot
             x = @plot.getAxes().xaxis
+            {from, to} = @higlight_range
+            if not from? and not to?
+                @plot.setSelection(xaxis: {})
+                return
             @plot.setSelection
                 xaxis:
                     from: @higlight_range.from ? x.min
                     to: @higlight_range.to ? x.max
 
         @el.on "plotpan", @hack_selection
+
+        @el.on "plotclick", (event, pos, item) =>
+            if pos.x > @higlight_range.from and pos.x < @higlight_range.to
+                @el.trigger "plotdaterange", undefined
+                return
+            # Round to nearest month. For some
+            # reason won't work with moment.js
+            from = new Date pos.x
+            from.setDate 1
+            to = new Date from.getTime()
+            to.setMonth from.getMonth() + 1
+
+            @el.trigger "plotdaterange"
+                from: moment(from).format "YYYY-MM-DD"
+                to: moment(to).format "YYYY-MM-DD"
 
         #@reset()
     
@@ -141,8 +161,10 @@ class @ActivityScoresView extends Backbone.View
 
                 score += act.score
                 data_idx += 1
-
-            time = new Date(time).getTime()
+            
+            # Hack the bar to be almost centered
+            time = new Date(time).getTime() + 14*24*60*60*1000
+            
             column = [time, score]
             act_histogram.push column
 
@@ -226,4 +248,5 @@ class @ActivityScoresView extends Backbone.View
                     bottom: 1
                     left: 0
                     right: 0
+                clickable: true
         }
