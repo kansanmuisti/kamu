@@ -89,6 +89,8 @@ class SubState
         @parent.update subchanges, history
 
     get: (var_path=[]) =>
+        if _.isString var_path
+                var_path = [var_path]
         var_path.unshift(@varname)
         @parent.get var_path
 

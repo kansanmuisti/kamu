@@ -56,10 +56,9 @@
 
     {% compress js %}
     <script type="text/javascript" src="{% static "js/vendor/jquery-1.11.0.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/vendor/moment.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/vendor/moment.fi.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/vendor/moment-with-locales.js" %}"></script>
     <script type="text/javascript">
-        moment.lang("fi");
+        moment.locale("fi");
     </script>
     <script type="text/javascript" src="{% static "js/vendor/share.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/jquery.expander.js" %}"></script>
