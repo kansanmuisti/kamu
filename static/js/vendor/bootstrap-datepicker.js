@@ -1405,10 +1405,10 @@
 			if (i === -1)
 				return;
 
-			$.each(this.pickers, function(i, p){
+            /*$.each(this.pickers, function(i, p){
 				if (!p.getUTCDate())
 					p.setUTCDate(new_date);
-			});
+			});*/
 
 			if (new_date < this.dates[j]){
 				// Date being moved earlier/left
