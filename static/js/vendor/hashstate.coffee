@@ -48,10 +48,11 @@ set_state_string = (new_hash, history=false) ->
         # the state at all if we give in an empty string, so we'll
         # have to resort to having an empty question mark
         new_hash = '?'
+    new_state = [History.getState().data, document.title, new_hash]
     if history
-        History.pushState null, null, new_hash
+        History.pushState new_state...
     else
-        History.replaceState null, null, new_hash
+        History.replaceState new_state...
 
 # TODO: Track (and signal) "pending" states
 class HashState
