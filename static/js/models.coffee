@@ -55,7 +55,7 @@ class @Member extends Backbone.Tastypie.Model
         return @get('posts').ministry.length > 0
 
     get_party: ->
-        return PARTY_LIST_HACK @get('party')
+        return PARTY_LIST_HACK[@get('party')]
 
 class @MemberList extends Backbone.Tastypie.Collection
     urlRoot: URL_CONFIG['api_member']
