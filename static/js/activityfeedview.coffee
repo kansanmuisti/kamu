@@ -45,11 +45,7 @@ class @ActivityFeedControl
         view.filter opts
 
     scores_view: (view) => @state.on (opts={}) =>
-        view.filter_keyword @kw_state.get()
-        types = @type_state.get()
-        if types?
-            types = (type for type of types)
-        view.filter_type types
+        view.filter opts
 
     tagcloud: (el) =>
         tagcloud_buttons = el.find("li a")
