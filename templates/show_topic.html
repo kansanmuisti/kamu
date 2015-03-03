@@ -1,76 +1,49 @@
-{% extends "base.html" %}
+{% extends "sidebarbase.html" %}
 {% load compress static i18n static %}
 
 {% block title %}{% trans "Topic" %}: {{topic.name}}{% endblock %}
 
 {% block main_class %}topic-details{% endblock %}
 
-{% block content %}
+{% block sidebar %}
+<div class="issue-card">
+    <div class="page-heading">
+        <h1>{{topic.name}}</h1>
+    </div>
+    <div class="share-button"></div>
+</div>
+<div class="content feature-tagcloud">
+    <h4>{% trans "Related keywords" %}</h4>
+    <div class="tagcloud tagcloud-navi">
+    </div>
+</div>
+{% endblock %}
 
-<div class="row">
-    <div class="col-lg-5">
-        <div class="issue-card">
-            <div class="page-heading">
-                <h1>{{topic.name}}</h1>
+{% block main_content %}
+<section class="box">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="most-active-parties">
+                <h4>{% trans "Which parties are active with this issue?" %}</h4>
+                <!-- ehdotus: Aktiivisimmat puolueet tässä asiassa -->
+                <ol>
+                </ol>
             </div>
-            <div class="share-button"></div>
         </div>
-        <div class="content feature-tagcloud">
-            <h4>{% trans "Related keywords" %}</h4>
-            <div class="tagcloud tagcloud-navi">
+        <div class="col-md-10">
+            <div class="most-active-members">
+                <h4>{% trans "Who are active with this issue?" %}</h4>
+                <!-- ehdotus: Aktiivisimmat edustajat tässä asiassa -->
+                <ol>
+                </ol>
             </div>
         </div>
     </div>
-    <div class="col-lg-10">
-      <div class="content">
-        <div class="row">
-          <div class="col-md-5">
-            <div class="most-active-parties">
-              <h4>{% trans "Which parties are active with this issue?" %}</h4>
-              <!-- ehdotus: Aktiivisimmat puolueet tässä asiassa -->
-              <ol>
-              </ol>
-            </div>
-          </div>
-          <div class="col-md-10">
-            <div class="most-active-members">
-              <h4>{% trans "Who are active with this issue?" %}</h4>
-              <!-- ehdotus: Aktiivisimmat edustajat tässä asiassa -->
-              <ol>
-              </ol>
-            </div>
-          </div>
-        </div>
-        <div class="feed-filters">
-          <form class="form-horizontal">
-            <fieldset>
-              <legend>Aktiivisuus</legend>
-              <div id="topic-activity-graph" class="activity-graph"></div>
-            </fieldset>
-            <fieldset>
-              <legend>Rajaus</legend>
-              <!-- <div>
-                      <input type="text" class="form-control" placeholder="Hae sisällöstä">
-                    </div> -->
-              <br>
-              <div class="btn-toolbar">
-                <!-- Filter buttons rendered here -->
-              </div>
-            </fieldset>
-          </form>
-        </div>
-        <h3>{% blocktrans with topic=topic.name %}Documents related to topic "{{topic}}"{% endblocktrans %}</h3>
-        <ul class="activity-feed"></ul>
-      </div>
-      </div>
-</div>
-
-{% include "_feed_item_template.html" %}
-
+</section>
 <script type="text/template" id="most-active-party-template">
     <li title="<%= name %>">
       <div class="party-thumbnail">
-        <a href="<%= view_url %>">
+        <a href="<%= view_url %>?as.keyword=<%= keyword.get("name") %>">
           <img src="<%= thumbnail_url %>">
         </a>
         <div class="thumbnail-activity">
@@ -82,7 +55,7 @@
 
 <script type="text/template" id="most-active-member-template">
   <li>
-    <a href="<%= view_url %>"><img class="mp-thumbnail" src="<%= thumbnail_url %>">
+    <a href="<%= view_url %>?as.keyword=<%= keyword.get("name") %>"><img class="mp-thumbnail" src="<%= thumbnail_url %>">
       <h5><%= name %></h5>  
       <img src="/api/v1/party/vihr/logo/?dim=32x32" class="party-badge" alt="(party name)"/>
     </a>
@@ -93,33 +66,40 @@
 </script>
 
 
-    
-{% compress js %}
-<script type="text/coffeescript" src="{% static "js/feed.coffee" %}"></script>
-{% endcompress %}
-
 <script type="text/javascript">
-    topic = new Keyword({{keyword_json|safe}});
-    FEED_ACTIONS = {{feed_actions_json|safe}};
-    FEED_FILTERS = {{feed_filters_json|safe}};
-    FEED_FILTER_ALL = {
-        name: "{% trans 'All documents' %}",
-    }
-    keyword_json = {{keyword_json|safe}};
-    topic_activity_end_date = "{{keyword_activity_end_date|safe}}"
-</script>
-
+keyword = topic = new Keyword({{keyword_json|safe}});
+FEED_ACTIONS = {{feed_actions_json|safe}};
+keyword_json = {{keyword_json|safe}};
+activity_end_date = "{{keyword_activity_end_date|safe}}"
+</script>  
+{% include "_feed_content.html" %}
 {% compress js %}
-<script type="text/coffeescript" src="{% static "js/plots.coffee" %}"></script>
-<script type="text/coffeescript" src="{% static "js/activity_scores.coffee" %}"></script>
 <script type="text/coffeescript" src="{% static "js/topic-details.coffee" %}"></script>
-{% endcompress %}
-
-{% compress js inline %}
 <script type="text/coffeescript">
-    graph = new TopicActivityScoresView topic, \
-                    end_date:topic_activity_end_date,
-                    el:"#topic-activity-graph"
+class @TopicActivityScoresView extends @ActivityScoresView
+    initialize: (topic, options) ->
+        super (new KeywordActivityScoresList topic.get 'id'), options
+
+$ ->
+    root_el = $(document)
+    relel = (selector) -> root_el.find(selector)
+    tagcloud = $(".activity-tag-cloud")
+    # TODO: Would be nicer to hide these by default
+    tagcloud.parent().remove()
+    relel("[data-feed-type-group=social]").hide()
+    relel(".tag-filter-group").hide()
+    activity_scores_view = new TopicActivityScoresView topic,
+        show_average_activity: false,
+        end_date: activity_end_date,
+        el: relel ".activity-graph"
+    
+    setup = new ActivityFeedControl hashstate.sub "as"
+    setup.feed_view new ActivityFeedView
+        el: relel ".activity-feed"
+        collection: new MemberActivityList(keyword: topic.get "name")
+    setup.scores_view activity_scores_view
+    #setup.tagcloud tagcloud
+    setup.controls relel ".feed-filters"
 </script>
 {% endcompress %}
 

@@ -4,7 +4,7 @@ make_time_string = (time) ->
     if now.diff(m, 'hours') < 24
         return m.fromNow()
     else if now.year() == m.year()
-        f = moment.langData()._longDateFormat['LL']
+        f = moment.localeData()._longDateFormat['LL']
         format = f.replace ' YYYY', ''
     else
         format = 'LL'

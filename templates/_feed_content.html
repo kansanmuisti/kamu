@@ -1,32 +1,30 @@
 {% load static compress i18n %}
+<section class="box">
+    <h4>{% trans "Is interested in these topics" %}
+        <span class="help-link">
+            <a href="#" data-toggle="modal" data-target="#topic-tagcloud-help">
+                <i class="typcn typcn-info-large icon"></i>
+            </a>
+        </span>
+    </h4>
+    <div class="tag-cloud activity-tag-cloud"></div>
+</section>
 <div class="filter-feed box">
-            <section>
-                <h4>{% trans "Is interested in these topics" %}
-		    <span class="help-link">
-                    <a href="#" data-toggle="modal" data-target="#topic-tagcloud-help">
-		      <i class="typcn typcn-info-large icon"></i>
-		    </a>
-		    </span>
-		</h4>
-                <div class="tag-cloud activity-tag-cloud"></div>
-            </section>
-            <section>
-	        <h4>{% trans "Activity" %}
-		    <span class="help-link">
-                    <a href="#" data-toggle="modal" data-target="#activity-graph-help">
-		      <i class="typcn typcn-info-large icon"></i>
-		    </a>
-		    </span>
-		</h4>
-                <div id="member-activity-graph" class="activity-graph"></div>
-            </section>
+    {% include "_feed_controls.html" %}
+    <h4>{% trans "Activity" %}
+        <span class="help-link">
+            <a href="#" data-toggle="modal" data-target="#activity-graph-help">
+                <i class="typcn typcn-info-large icon"></i>
+            </a>
+        </span>
+    </h4>
+    <div id="member-activity-graph" class="activity-graph"></div>
 
-        </div>
-        <div class="activity-feed-container">
-          <ul class="section activity-feed" class="feed unstyled">
-          </ul>
-        </div>
+    <div class="activity-feed-container">
+        <ul class="section activity-feed" class="feed unstyled">
+        </ul>
     </div>
+</div>
 
 {% include "_feed_item_template.html" %}
 {% compress js %}

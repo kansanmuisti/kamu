@@ -56,10 +56,10 @@
 
     {% compress js %}
     <script type="text/javascript" src="{% static "js/vendor/jquery-1.11.0.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/vendor/moment.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/vendor/moment.fi.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/vendor/moment-with-locales.js" %}"></script>
     <script type="text/javascript">
-        moment.lang("fi");
+        GLOBAL_PARTY_LIST_JSON_HACK = {{PARTY_LIST_JSON|safe}}; 
+        moment.locale("fi");
     </script>
     <script type="text/javascript" src="{% static "js/vendor/share.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/jquery.expander.js" %}"></script>
@@ -95,6 +95,7 @@
     <script type="text/javascript" src="{% static "js/vendor/jquery.flot.time.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/jquery.flot.navigate.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/jquery.flot.curvedlines.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/vendor/jquery.flot.selection.js" %}"></script>
     {% endcompress %}
     
     {% compress js %}
@@ -184,6 +185,7 @@
             }
         };
         new Share(".share-button", share_opts);
+
     </script>
 <!--
     <footer class="page-footer">

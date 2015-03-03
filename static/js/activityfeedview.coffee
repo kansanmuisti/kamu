@@ -6,12 +6,20 @@ class @ActivityFeedView extends Backbone.View
             limit: 20
         @user_filters = {}
 
-    filter: ({keyword, type}={}) ->
+    filter: ({keyword, type, date}={}) ->
         params = {}
         if keyword?
             params.keyword = keyword
         if type?
             params.type__type__in = (t for t of type).join(",")
+        date = date ? {}
+        if date.from?
+            params['time__gte'] = date.from
+        if date.to?
+            # Dates are converted to midnight, so
+            # we'll have to add one
+            params['time__lte'] = moment(date.to, 'YYYY-MM-DD')
+                .add(1, 'day').format('YYYY-MM-DD')
         
         _.extend params, @base_filters
         @collection.fetch
@@ -31,16 +39,15 @@ class @ActivityFeedControl
     constructor: (@state) ->
         @type_state = @state.sub "type"
         @kw_state = @state.sub "keyword"
+        @date_state = @state.sub "date"
 
     feed_view: (view) => @state.on (opts={}) =>
         view.filter opts
 
     scores_view: (view) => @state.on (opts={}) =>
-        view.filter_keyword @kw_state.get()
-        types = @type_state.get()
-        if types?
-            types = (type for type of types)
-        view.filter_type types
+        view.filter opts
+        view.el.on "plotdaterange", (ev, date) =>
+            @date_state.update date
 
     tagcloud: (el) =>
         tagcloud_buttons = el.find("li a")
@@ -90,11 +97,39 @@ class @ActivityFeedControl
             btn.click -> state.update if btn.hasClass("active") then undefined else 1
             state.on (value) -> btn.toggleClass "active", Boolean(value)
         
-        $(".filter-group-button").click ->
+        filter_buttons.find(".filter-group-button").click ->
             update = {}
             grp = $(@)
             value = if grp.hasClass("active") then undefined else 1
             for btn in grp.parent().find(".filter-button")
                 update[$(btn).data('feed-type')] = value
             type_state.update update
+        
+        date_state = @date_state
+        daterange_group = el.find(".daterange-filter-group").show()
+        daterange = daterange_group.find(".input-daterange")
+        daterange.datepicker
+            clearBtn: true
+            language: "fi"
+            autoclose: true
+            todayHiglight: true
+        
+        datestr = (value) ->
+            if not value?
+                return undefined
+            moment(value).format('YYYY-MM-DD')
+        
+        for myel in daterange_group.find('input')
+            myel = $ myel
+            sub = date_state.sub(myel.attr "name")
+            myel.on "changeDate", do (sub) -> (ev) ->
+                sub.update datestr ev.date
+            
+            sub.on do (myel) -> (value) ->
+                if value?
+                    value = moment(value, 'YYYY-MM-DD').toDate()
+                myel.datepicker 'update', value
+            
+        startel = daterange_group.find "[name=start]"
+        endel = daterange_group.find "[name=end]"
 

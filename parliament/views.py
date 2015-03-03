@@ -145,6 +145,10 @@ def get_parties(request):
     party_json = json
     return json
 
+def hack_stuff_to_template_context_because_django_sucks(request):
+    return {
+            'PARTY_LIST_JSON': get_parties(request)
+            }
 
 def show_item(request, plsess, item_nr, subitem_nr=None):
     query = Q(plsess__url_name=plsess) & Q(number=item_nr)
@@ -437,7 +441,14 @@ def show_topic(request, topic, slug=None):
     kw_json = get_embedded_resource(request, KeywordResource, kw, {'related': '1', 'most_active': '1'})
     args = {'topic': kw, 'keyword_json': kw_json}
     args['feed_actions_json'] = json.dumps(make_feed_actions(), ensure_ascii=False)
-    args['feed_filters_json'] = json.dumps(make_feed_filters(), ensure_ascii=False)
+    args['feed_filters'] = {
+            'buttons': make_feed_filters(actor=True),
+            'disable_button': {
+                'label': _('All activities')
+            }
+        }
+
+
     agr = kw.keywordactivity_set.aggregate(Max("activity__time")) 
     max_time = agr['activity__time__max']
     keyword_activity_end_date = max_time.date

@@ -15,6 +15,7 @@ class @PartyList extends Backbone.Tastypie.Collection
     urlRoot: URL_CONFIG['api_party']
     model: Party
 
+PARTY_LIST_HACK = new PartyList GLOBAL_PARTY_LIST_JSON_HACK
 # models for templates/member
 
 class @Member extends Backbone.Tastypie.Model
@@ -53,8 +54,8 @@ class @Member extends Backbone.Tastypie.Model
     is_minister: ->
         return @get('posts').ministry.length > 0
 
-    get_party: (party_list) ->
-        return party_list.get @get('party')
+    get_party: ->
+        return PARTY_LIST_HACK[@get('party')]
 
 class @MemberList extends Backbone.Tastypie.Collection
     urlRoot: URL_CONFIG['api_member']

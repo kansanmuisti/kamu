@@ -24,6 +24,11 @@ class Party(UpdatableModel):
             qs |= Q(end__gte=date)
             qs &= Q(begin__lte=date)
         return bool(self.governingparty_set.filter(qs))
+    
+    @models.permalink
+    def get_absolute_url(self):
+        return ('parliament.views.show_party_feed', (), {'abbreviation': self.abbreviation})
+
 
     # To avoid recursive imports..
     def get_activity_objects(self):

@@ -1,3 +1,4 @@
+
 class @ActivityScoresView extends Backbone.View
     initialize: (@collection, options) ->
         @options = _.extend {}, options
@@ -13,27 +14,66 @@ class @ActivityScoresView extends Backbone.View
 
         @user_filters = {}
         @type_filter = null
+        @higlight_range = {}
+        
+        @hack_selection = =>
+            return if not @plot
+            x = @plot.getAxes().xaxis
+            {from, to} = @higlight_range
+            if not from? and not to?
+                @plot.setSelection(xaxis: {})
+                return
+            @plot.setSelection
+                xaxis:
+                    from: @higlight_range.from ? x.min
+                    to: @higlight_range.to ? x.max
 
-        @reset()
+        @el.on "plotpan", @hack_selection
 
-    filter_keyword: (kw) ->
-        if kw
-            @user_filters['keyword'] = kw
+        @el.on "plotclick", (event, pos, item) =>
+            if pos.x > @higlight_range.from and pos.x < @higlight_range.to
+                @el.trigger "plotdaterange", undefined
+                return
+            # Round to nearest month. For some
+            # reason won't work with moment.js
+            from = new Date pos.x
+            from.setDate 1
+            to = new Date from.getTime()
+            to.setMonth from.getMonth() + 1
+
+            @el.trigger "plotdaterange"
+                from: moment(from).format "YYYY-MM-DD"
+                to: moment(to).format "YYYY-MM-DD"
+
+        #@reset()
+    
+    filter: ({keyword, type, date}={}) ->
+        # TODO! Backbone doesn't seem to cancel
+        # pending resets, which may cause client side
+        # filters not to be applied if two filterings
+        # come too close in time. What a piece of shit!
+        if keyword?
+            @user_filters['keyword'] = keyword
         else
             delete @user_filters['keyword']
+        
+        if type?
+            @type_filter = (t for t of type when t)
+        else
+            @type_filter = []
+        
+        @higlight_range = {}
+        if date? and date.from?
+            @higlight_range.from = moment(date.from, "YYYY-MM-DD").toDate().getTime()
+        if date? and date.to?
+            @higlight_range.to = moment(date.to, "YYYY-MM-DD").add(1, 'day').toDate().getTime()
+        
+        # We really need a full reset only when keywords change,
+        # but the query will be probably cached any way,
+        # so it probably doesn't really matter much.
         @reset()
 
-    filter_type: (types) ->
-        if not types
-            @type_filter = []
-        else
-            @type_filter = types
-        
-        if @_reset_pending
-            # The pending reset will render this when it's done
-            return
-        @render()
-
+    
     reset: ->
         @_reset_pending = true
         time = new Date(@options.end_date)
@@ -88,7 +128,8 @@ class @ActivityScoresView extends Backbone.View
         if @plot_series.length == 0
             return
 
-        $.plot $(@el), @plot_series, @plot_global_options
+        @plot = $.plot $(@el), @plot_series, @plot_global_options
+        @hack_selection()
 
     get_histogram: (score_list) ->
         if score_list.length == 0
@@ -120,8 +161,10 @@ class @ActivityScoresView extends Backbone.View
 
                 score += act.score
                 data_idx += 1
-
-            time = new Date(time).getTime()
+            
+            # Hack the bar to be almost centered
+            time = new Date(time).getTime() + 14*24*60*60*1000
+            
             column = [time, score]
             act_histogram.push column
 
@@ -146,6 +189,7 @@ class @ActivityScoresView extends Backbone.View
             curvedLines:
                 active: draw_avg
                 monotonicFit: true
+        @plot_global_options['selection'] = mode: 'x', disableMouse: true
 
         @plot_series = []
         @plot_series.push
@@ -204,4 +248,5 @@ class @ActivityScoresView extends Backbone.View
                     bottom: 1
                     left: 0
                     right: 0
+                clickable: true
         }
