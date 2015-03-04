@@ -42,6 +42,8 @@ urlpatterns = patterns('parliament.views',
     url(r'^topic/(?P<topic>\d+)-(?P<slug>[-\w]+)/$', 'show_topic'),
 
     url(r'^document/(?P<slug>[-\w]+)/$', 'show_document'),
+
+    url(r'^search/$', 'search'),
 )
 
 from tastypie.api import Api

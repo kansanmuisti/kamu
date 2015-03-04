@@ -38,6 +38,7 @@
         'topic_list': '{% url "parliament.views.list_topics" %}'
         'topic_details': '{% url "parliament.views.show_topic" topic="999" slug="SLUG" %}'
         'document_details': '{% url "parliament.views.show_document" slug="DOC" %}'
+        'search': '{% url "parliament.views.search" %}'
 
         'api_member': '{% url "api_dispatch_list" resource_name="member" api_name="v1" %}'
         'api_member_activity_scores': '{% url "api_get_member_activity_scores" resource_name="member" pk="999" api_name="v1" %}'
@@ -51,6 +52,7 @@
         'api_committee': '{% url "api_dispatch_list" resource_name="committee" api_name="v1" %}'
         'api_document': '{% url "api_dispatch_list" resource_name="document" api_name="v1" %}'
         'api_keyword': '{% url "api_dispatch_list" resource_name="keyword" api_name="v1" %}'
+        'api_search': '{% url "api_dispatch_list" resource_name="search" api_name="v1" %}'
     </script>
     {% endcompress %}
 
@@ -139,11 +141,11 @@
                     <li><a href="{% url 'parliament.views.list_parties' %}">Puolueet</a></li>
                     <li><a href="{% url 'parliament.views.list_sessions' %}">Täysistunnot</a></li>
                 </ul>
-                <form class="navbar-form navbar-right" role="search">
+                <form class="navbar-form navbar-right" id="main-search-form" role="search">
                   <div class="form-group">
-                    <input type="text" class="form-control input-sm" id="main-search" placeholder="{% trans 'Search' %}">
+                    <input type="text" class="form-control input-sm" id="main-search" placeholder="{% trans 'Input search terms' %}">
                   </div>
-                  <button type="submit" class="btn btn-sm navbar-btn">Submit</button>
+                  <button type="submit" class="btn btn-sm navbar-btn">{% trans 'Search' %}</button>
                 </form>
                 <!-- FIXME <form class="navbar-form">
                     <input type="text" class="form-control input-sm" placeholder="{% trans 'Search' %}">
@@ -187,7 +189,6 @@
             }
         };
         new Share(".share-button", share_opts);
-
     </script>
 <!--
     <footer class="page-footer">

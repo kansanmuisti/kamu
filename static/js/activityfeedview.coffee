@@ -1,11 +1,12 @@
 class @ActivityFeedView extends Backbone.View
-    initialize: ({@collection, @el}) ->
+    initialize: ({@collection, @el, default_filters}) ->
         @collection.bind 'add', @add_item
         @collection.bind 'reset', @add_all_items
         @all_loaded = false
         @base_filters =
             offset: 0
             limit: 20
+        _.extend @base_filters, default_filters
         
         @filters = {}
 

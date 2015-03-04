@@ -92,9 +92,15 @@ class @MemberActivityList extends Backbone.Tastypie.Collection
         opts = _.clone(opts)
         opts.data = _.extend {}, @params, opts.data
         super opts
-        
 
-    model: MemberActivity
+class @MemberActivitySearchList extends MemberActivityList
+    urlRoot: URL_CONFIG['api_search']
+    query: (query_string, opts) ->
+        str = $.trim query_string
+        opts = _.extend {}, opts
+        opts.data =
+            q: str
+        @fetch opts
 
 class @Document extends Backbone.Tastypie.Model
 
@@ -119,3 +125,9 @@ class @KeywordActivity extends Backbone.Tastypie.Model
 class @KeywordActivityList extends Backbone.Tastypie.Collection
     urlRoot: URL_CONFIG['api_keyword_activity']
     model: KeywordActivity
+
+class @SearchResult extends Backbone.Tastypie.Model
+
+class @SearchResultList extends Backbone.Tastypie.Collection
+    urlRoot: URL_CONFIG['api_search']
+    model: SearchResult
