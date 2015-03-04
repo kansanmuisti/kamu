@@ -2,13 +2,6 @@
 {% load i18n compress static %}
 {% block title %}{% trans "Plenary sessions" %}{% endblock %}
 
-{% block head %}
-{% compress js %}
-<script type="text/javascript" src="{% static "js/vendor/jquery.appear.js" %}"></script> 
-<script type="text/coffeescript" src="{% static "js/vendor/jquery.gimmesomemore.coffee" %}"></script>
-{% endcompress %}
-{% endblock %}
-
 {% block content %}
 <script type="text/template" id="plenary-session-template">
   <li class="plenary-session">
