@@ -700,7 +700,16 @@ class KeywordResource(KamuResource):
             party_list = sorted(party_list, key=lambda p: p.score, reverse=True)
 
             d = {}
-            d['members'] = [{'id': mp.id, 'name': mp.get_print_name(), 'url_name': mp.url_name, 'score': mp.score} for mp in mp_list[0:10]]
+            mp_json = []
+            for mp in mp_list[0:10]:
+                mpd = dict(id=mp.id, name=mp.get_print_name(), url_name=mp.url_name)
+                mpd['score'] = mp.score
+                if mp.party:
+                    mpd['party'] = mp.party.abbreviation
+                else:
+                    mpd['party'] = None
+                mp_json.append(mpd)
+            d['members'] = mp_json
             #FIXME: Party data should be averaged to per-MP values
             d['parties'] = [{'id': party.id, 'abbreviation': party.abbreviation, 'name': party.name, 'score': party.score, 'mp_count': party.mp_count} for party in party_list]
             bundle.data['most_active'] = d

@@ -33,6 +33,12 @@ for mp in most_active.members[0..9]
     member = new Member mp
     dict = member.toJSON()
     dict.thumbnail_url = member.get_portrait_thumbnail(64)
+    if dict.party
+        url = URL_CONFIG['api_party'] + dict.party + '/logo/?dim=32x32'
+        dict.party_thumbnail_url = url
+    else
+        dict.party_thumbnail_url = null
+
     # Better scaling here too
     dict.member_activity_percentage = mp.score / max_score * 100
     $ul.append $(template(dict))

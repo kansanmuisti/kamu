@@ -57,7 +57,7 @@
   <li>
     <a href="<%= view_url %>?as.keyword=<%= keyword.get("name") %>"><img class="mp-thumbnail" src="<%= thumbnail_url %>">
       <h5><%= name %></h5>  
-      <img src="/api/v1/party/vihr/logo/?dim=32x32" class="party-badge" alt="(party name)"/>
+      <% if (party_thumbnail_url) { %><img src="<%= party_thumbnail_url %>" class="party-badge" alt="(party name)"/><% } %>
     </a>
     <div class="thumbnail-activity">
       <div class="thumbnail-activity-bar" style="width: <%= member_activity_percentage %>%"></div>
