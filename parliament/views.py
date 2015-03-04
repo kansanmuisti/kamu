@@ -556,6 +556,7 @@ def show_party_feed(request, abbreviation):
     return render_to_response("party/feed.html", args,
         context_instance=RequestContext(request))
 
+
 def show_party_mps(request, abbreviation):
     party = get_object_or_404(Party, abbreviation=abbreviation)
 
@@ -571,6 +572,7 @@ def show_party_mps(request, abbreviation):
 
     return render_to_response("party/mps.html", args, context_instance=RequestContext(request))
 
+
 def show_party_committees(request, abbreviation):
     party = get_object_or_404(Party, abbreviation=abbreviation)
 
@@ -578,7 +580,9 @@ def show_party_committees(request, abbreviation):
 
     return render_to_response("party/committee_seats.html", args, context_instance=RequestContext(request))
 
+
 def search(request):
     q = request.GET.get('q', '').strip()
-    args = dict()
+    args = dict(party_json=get_parties(request), query=q)
+    args['feed_actions_json'] = json.dumps(make_feed_actions(), ensure_ascii=False)
     return render_to_response("search.html", args, context_instance=RequestContext(request))

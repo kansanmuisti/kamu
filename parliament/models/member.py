@@ -433,6 +433,7 @@ class MinistryAssociation(models.Model):
     def __unicode__(self):
         return u"%s %s (%s) from %s to %s" % (self.member, self.label, self.role, self.begin, self.end)
 
+
 class MemberActivityManager(models.Manager):
     def during(self, begin, end):
         query = Q()
@@ -441,6 +442,7 @@ class MemberActivityManager(models.Manager):
         if begin:
             query &= Q(time__gte=begin)
         return self.filter(query)
+
     def during_term(self, term):
         return self.during(term.begin, term.end)
 
@@ -497,6 +499,7 @@ class MemberActivityManager(models.Manager):
     def counts_for_member(self, member, **kwargs):
         return self.get_count_set(Q(member=member), **kwargs)
 
+
 class MemberActivityType(models.Model):
     type = models.CharField(max_length=5, primary_key=True)
     name = models.CharField(max_length=50)
@@ -508,11 +511,13 @@ class MemberActivityType(models.Model):
     class Meta:
         app_label = 'parliament'
 
+
 class MemberActivity(models.Model):
     # If member is None, it is activity related to a government bill.
     member = models.ForeignKey(Member, db_index=True, null=True)
     time = models.DateTimeField(db_index=True)
     type = models.ForeignKey(MemberActivityType, db_index=True)
+    last_modified_time = models.DateTimeField(null=True)
 
     objects = MemberActivityManager()
 
@@ -533,16 +538,59 @@ class MemberActivity(models.Model):
                     kwa_dict[kw.id].found = True
                 else:
                     kwa = KeywordActivity(keyword=kw, activity=self)
-                    #print "add %s" % unicode(kwa).encode('utf8')
+                    # print "add %s" % unicode(kwa).encode('utf8')
                     kwa.save()
         # Then remove the deleted keywords.
         for kw_id in kwa_dict:
             if not kwa_dict[kw_id].found:
                 kwa = kwa_dict[kw_id]
-                #print u"remove %s" % unicode(kwa).encode('utf8')
+                # print u"remove %s" % unicode(kwa).encode('utf8')
                 kwa.delete()
 
+    def get_target_info(self):
+        if getattr(self, '_target_info', None):
+            return self._target_info
+
+        target = {}
+        acttype = self.type.pk
+        if acttype in ('FB', 'TW'):
+            o = self.socialupdateactivity.update
+            target['text'] = o.text
+            target['url'] = o.get_origin_url()
+            target['last_modified_time'] = o.last_modified_time
+        elif acttype == 'ST':
+            o = self.statementactivity.statement
+            target['text'] = o.text
+            target['url'] = o.get_indocument_url()
+            target['last_modified_time'] = o.item.plsess.last_modified_time
+        elif acttype in ('IN', 'WQ', 'GB', 'SI'):
+            if acttype == 'SI':
+                o = self.signatureactivity.signature.doc
+            else:
+                o = self.initiativeactivity.doc
+            target['text'] = o.summary
+            target['subject'] = o.subject
+            target['name'] = o.name
+            target['type'] = o.type
+            target['url'] = o.get_absolute_url()
+            target['last_modified_time'] = o.last_modified_time
+
+            keywords = [{'id': kw.id, 'name': kw.name, 'slug': kw.get_slug()} for kw in o.keywords.all()]
+            target['keywords'] = keywords
+        else:
+            raise Exception("Invalid type %s" % acttype)
+
+        target['object'] = o
+        self._target_info = target
+
+        return target
+
+    def determine_last_modified_time(self):
+        target_info = self.get_target_info()
+        return target_info['last_modified_time']
+
     def save(self, *args, **kwargs):
+        self.last_modified_time = self.determine_last_modified_time()
         ret = super(MemberActivity, self).save(*args, **kwargs)
         self.update_keyword_activities()
         return ret
@@ -553,6 +601,7 @@ class MemberActivity(models.Model):
     class Meta:
         app_label = 'parliament'
         ordering = ('time', 'member__name')
+
 
 class KeywordActivity(models.Model):
     activity = models.ForeignKey(MemberActivity, db_index=True)
@@ -566,6 +615,7 @@ class KeywordActivity(models.Model):
     class Meta:
         app_label = 'parliament'
         unique_together = (('activity', 'keyword'),)
+
 
 class InitiativeActivity(MemberActivity):
     # This is both for written questions and law proposals.
@@ -602,6 +652,7 @@ class InitiativeActivity(MemberActivity):
     class Meta:
         app_label = 'parliament'
 
+
 class RebelVoteActivity(MemberActivity):
     TYPE = 'RV'
     vote = models.ForeignKey(Vote, unique=True)
@@ -614,6 +665,7 @@ class RebelVoteActivity(MemberActivity):
 
     class Meta:
         app_label = 'parliament'
+
 
 class CommitteeDissentActivity(MemberActivity):
     TYPE = 'CD'
@@ -634,10 +686,13 @@ class CommitteeDissentActivity(MemberActivity):
 
 from social.models import Feed, Update
 
+
 class MemberSocialFeed(Feed):
     member = models.ForeignKey(Member, db_index=True)
+
     class Meta:
         app_label = 'parliament'
+
 
 class SocialUpdateActivity(MemberActivity):
     update = models.ForeignKey(Update, unique=True)
@@ -653,6 +708,7 @@ class SocialUpdateActivity(MemberActivity):
 
     class Meta:
         app_label = 'parliament'
+
 
 class StatementActivity(MemberActivity):
     TYPE = 'ST'
@@ -676,6 +732,7 @@ class StatementActivity(MemberActivity):
 
     class Meta:
         app_label = 'parliament'
+
 
 class SignatureActivity(MemberActivity):
     TYPE = 'SI'

@@ -1,10 +1,14 @@
 class @ActivityFeedView extends Backbone.View
-    initialize: ({@collection, @el}) ->
+    initialize: ({@collection, @el, default_filters}) ->
         @collection.bind 'add', @add_item
         @collection.bind 'reset', @add_all_items
+        @all_loaded = false
         @base_filters =
+            offset: 0
             limit: 20
-        @user_filters = {}
+        _.extend @base_filters, default_filters
+        
+        @filters = {}
 
     filter: ({keyword, type, date}={}) ->
         params = {}
@@ -21,10 +25,10 @@ class @ActivityFeedView extends Backbone.View
             params['time__lte'] = moment(date.to, 'YYYY-MM-DD')
                 .add(1, 'day').format('YYYY-MM-DD')
         
-        _.extend params, @base_filters
-        @collection.fetch
+        @filters = _.extend {}, @base_filters, params
+        return (@collection.fetch
             reset: true
-            data: params
+            data: @filters)
     
     add_item: (item) =>
         view = new ActivityView model: item, has_actor: true
@@ -35,6 +39,12 @@ class @ActivityFeedView extends Backbone.View
         @$el.empty()
         coll.each @add_item
 
+    load_more: =>
+        @filters.offset += @filters.limit
+        return (@collection.fetch
+            reset: false
+            data: _.clone @filters)
+
 class @ActivityFeedControl
     constructor: (@state) ->
         @type_state = @state.sub "type"
@@ -43,6 +53,15 @@ class @ActivityFeedControl
 
     feed_view: (view) => @state.on (opts={}) =>
         view.filter opts
+        view.el.parent().find(".activity-feed-end").gimmesomemore ->
+            $me = $ @
+            $me.spin()
+            view.load_more().then ({objects}) ->
+                $me.spin(false)
+                is_end = objects.length == 0
+                $me.toggleClass "no-more-content", is_end
+                return is_end
+                
 
     scores_view: (view) => @state.on (opts={}) =>
         view.filter opts

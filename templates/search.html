@@ -1,28 +1,37 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load compress static thumbnail i18n %}
+
 {% block title %}{% trans "Search results" %}{% endblock %}
+
+{% block main_class %}search{% endblock %}
+
 {% block content %}
+<script type="text/javascript">
+party_json = {{party_json|safe}};
+FEED_ACTIONS = {{feed_actions_json|safe}};
+</script>
 
-<h1>{% trans "Search results" %}</h1>
+{% include "_feed_content.html" %}
 
-{% if result_page %}
+{% compress js inline %}
+<script type="text/coffeescript">
+$ ->
+    root_el = $(document)
+    relel = (selector) -> root_el.find(selector)
+    search_list = new MemberActivitySearchList()
+    hashstate.sub('q').on (value) ->
+        query = $.trim value
+        search_list.query query
 
-<ol class="search_results" start={{ result_page.start_index }}>
-{% for hit in result_page.object_list %}
-  <li style="margin-bottom: 8px;">{% if hit.url %}<a {% if hit.underline %}class="underline" {% endif %}href='{{ hit.url }}'>{% endif %}
-    <h3 style="display: inline;">{{ hit.instance }}</h3>{% if hit.url %}</a>{% endif %}{% comment %} - {{ hit.percent }} % {% trans "match" %}{% endcomment %}
-{% if hit.info %}
-    <div style="font-size: 80%; width: 480px;">{{ hit.info|linebreaks }}</div>
-{% endif %}
-  </li>
-{% endfor %}
-</ol>
+    setup = new ActivityFeedControl hashstate.sub('search')
+    setup.feed_view new ActivityFeedView
+        el: relel ".activity-feed"
+        collection: search_list
+    setup.controls relel ".feed-filters"
 
-{% load pagination_nav %}
-{% pagination_nav_qs result_page "" request.GET %}
-
-{% else %}
-<h2>{% trans "No results found" %}</h2>
-{% endif %}
+    $(".activity-tag-cloud-container").hide()
+    $(".filter-feed .feed-filtering").hide()
+</script>
+{% endcompress %}
 
 {% endblock %}

@@ -41,7 +41,7 @@ class @ActivityScoresView extends Backbone.View
             to = new Date from.getTime()
             to.setMonth from.getMonth() + 1
 
-            @el.trigger "plotdaterange"
+            @el.trigger "plotdaterange",
                 from: moment(from).format "YYYY-MM-DD"
                 to: moment(to).format "YYYY-MM-DD"
 

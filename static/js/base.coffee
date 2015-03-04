@@ -27,5 +27,11 @@ install_typeahead = ->
 
     $("#main-search").typeahead args, datasets
 
+search_handler = (ev) ->
+    ev.preventDefault()
+    query = $.trim $("#main-search").val()
+    window.location = URL_CONFIG['search'] + '?q=' + query
+
 $ ->
     install_typeahead()
+    $("#main-search-form").on 'submit', search_handler
