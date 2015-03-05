@@ -3,14 +3,15 @@ class @ActivityFeedView extends Backbone.View
         @collection.bind 'add', @add_item
         @collection.bind 'reset', @add_all_items
         @all_loaded = false
-        @base_filters =
-            offset: 0
-            limit: 20
+        
+        @base_filters = {}
         _.extend @base_filters, default_filters
         
         @filters = {}
 
     filter: ({keyword, type, date}={}) ->
+        @collection.filters.offset = 0
+        @collection.filters.limit = 20
         params = {}
         if keyword?
             params.keyword = keyword
@@ -40,7 +41,7 @@ class @ActivityFeedView extends Backbone.View
         coll.each @add_item
 
     load_more: =>
-        @filters.offset += @filters.limit
+        @collection.filters.offset += @collection.filters.limit
         return (@collection.fetch
             reset: false
             data: _.clone @filters)
