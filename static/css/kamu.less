@@ -196,26 +196,47 @@ fieldset {
     }
 }
 
+//.make-row();
+//.make-xs-column(5);
+//.make-sm-column(3);
+//.make-md-column(3);
+      
 .activity-feed {
     .list-unstyled();
     padding: 0;
     > .activity-item {
         border-top: 2px solid @gray-light;
-        padding: 5px 5px 0 0;
-        .clearfix();
-        margin-bottom: 20px;
+        padding: 10px 0 10px 0;
+        //.clearfix();
+        //margin-bottom: 20px;
+        .make-row();
         .avatar {
-            width: 48px;
+            //width: 48px;
+            //float: left;
+            //padding: 3px;
+            //background-color: @gray-light;
+            position: relative;
             float: left;
-            padding: 3px;
-            background-color: @gray-light;
+            width: 13.33333333%;
+            min-height: 1px;
+            padding-right: 10px;
         &:hover {
           background-color: @mint;  
         }
+          img {
+            width: 100%;
+          }
+        }
+        .content-block {
+          position: relative;
+          float: left;
+          width: 86.66666667%;
+          min-height: 1px;
+          padding-left: 10px;
         }
         .source {
             float: left;
-            margin-left: 16px;
+            //margin-left: 16px;
             a {
                 font-family: @headings-font-family;
                 text-transform: uppercase;
@@ -248,6 +269,8 @@ fieldset {
             line-height: 20px;
             font-size: @font-size-small;
             float: right;
+            //.make-xs-column(5);
+            
             a {
                 color: @gray;
                 &:hover {
@@ -257,9 +280,12 @@ fieldset {
         }
         .feed-content {
             padding: 16px 0 0 0;
-            margin: 25px 0 0 64px;
+            //margin: 25px 0 0 64px;
             .clearfix;
             border-top: 1px solid @gray-lighter;
+            //.make-xs-column(15);
+            
+            //.make-sm-column-offset(5);
             h2 {
                 font-family: @font-family-base;
                 font-size: @font-size-large;
