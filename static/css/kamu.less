@@ -191,47 +191,35 @@ fieldset {
     }
 }
 
-//.make-row();
-//.make-xs-column(5);
-//.make-sm-column(3);
-//.make-md-column(3);
-      
+.activity-feed-container {
+    background-color: @white;
+}
+
 .activity-feed {
     .list-unstyled();
     padding: 0;
     > .activity-item {
-        border-top: 2px solid @gray-light;
-        padding: 10px 0 10px 0;
-        //.clearfix();
-        //margin-bottom: 20px;
+        margin-bottom: 20px;
         .make-row();
         .avatar {
-            //width: 48px;
-            //float: left;
-            //padding: 3px;
-            //background-color: @gray-light;
-            position: relative;
-            float: left;
-            width: 13.33333333%;
-            min-height: 1px;
-            padding-right: 10px;
-        &:hover {
-          background-color: @mint;  
-        }
+          .make-xs-column(2);
           img {
-            width: 100%;
+            border: 3px solid @gray-light;
+            .img-responsive;
+          }
+          &:hover > img {
+            border: 3px solid @gray-light; 
           }
         }
+        .divider {
+          margin: 0 10px 20px 10px;
+          border-top: 2px solid @gray-light; 
+        }
         .content-block {
-          position: relative;
-          float: left;
-          width: 86.66666667%;
-          min-height: 1px;
-          padding-left: 10px;
+          .make-xs-column(13);
         }
         .source {
             float: left;
-            //margin-left: 16px;
             a {
                 font-family: @headings-font-family;
                 text-transform: uppercase;
@@ -242,6 +230,9 @@ fieldset {
                     color: @mint;
                 }
             }
+        }
+        .source-definition {
+          display: inline-block;
         }
         .author {
             font-family: @font-family-base;
@@ -263,9 +254,7 @@ fieldset {
         .timestamp {
             line-height: 20px;
             font-size: @font-size-small;
-            float: right;
-            //.make-xs-column(5);
-            
+            float: right;  
             a {
                 color: @gray;
                 &:hover {
@@ -275,12 +264,10 @@ fieldset {
         }
         .feed-content {
             padding: 16px 0 0 0;
-            //margin: 25px 0 0 64px;
+            float: left;
+            width: 100%;
             .clearfix;
             border-top: 1px solid @gray-lighter;
-            //.make-xs-column(15);
-            
-            //.make-sm-column-offset(5);
             h2 {
                 font-family: @font-family-base;
                 font-size: @font-size-large;
@@ -489,7 +476,7 @@ main {
   text-align: center;
   padding-right: 12px;
   margin-top: 12px;
-  border-top: #333 solid 2px;
+  border-top: @gray-light solid 2px;
   color: #333;
   background-color: @gray-lighter;
 }
@@ -961,12 +948,6 @@ main.member-details {
   
 
 }
-
-.activity-feed-container {
-    background-color: @white;
-    .box;
-}
-
 
 .entity-details {
     .roles {

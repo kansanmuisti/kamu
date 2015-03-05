@@ -1,4 +1,5 @@
 <script type="text/template" id="activity-item-template">
+    <hr class="divider"/>
     <div class="avatar">
       <% if (actor) { %>
         <a href="<%= actor.url %>">
@@ -16,9 +17,9 @@
           </a>
           <% } %>
           <% if (target) { %>
-          <a href="<%= target.url %>">
+          <a href="<%= target.url %>" class="source-definition">
           <% } else { %>
-          <a>
+          <a class="source-definition>
           <% } %>
               <i class="typcn typcn-<%= FEED_ACTIONS[type].icon %> icon"></i>
               <%= action %>
