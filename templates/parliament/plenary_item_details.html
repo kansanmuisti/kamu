@@ -39,6 +39,20 @@ $(function() {
                 <h4>{{item.get_type_description}}</h4>
                 <h4>{% trans "Plenary session" %} {{ item.plsess.date }}</h4>
             </header>
+          <h2 id="votings">Äänestys</h2>
+          <div class="proposal-votings">
+            <div class="voting-result-summary">
+              <div class="voting-sum-icon outcome"><i class="typcn typcn-thumbs-up"></i>150</div>
+              <div class="voting-sum-container"><div class="voting-sum sum-yes" style="width:75%"></div></div>
+              <div class="voting-sum-icon"><i class="typcn typcn-thumbs-down"></i>20</div>
+              <div class="voting-sum-container"><div class="voting-sum sum-no" style="width:10%"></div></div>
+              <div class="voting-sum-icon"><i class="typcn typcn-media-stop-outline"></i>20</div>
+              <div class="voting-sum-container"><div class="voting-sum sum-empty" style="width:10%"></div></div>
+              <div class="voting-sum-icon"><i class="typcn typcn-times-outline"></i>10</div>
+              <div class="voting-sum-container"><div class="voting-sum sum-absent" style="width:5%"></div></div>
+            </div>
+          </div>
+          
             <h2 id="statements">{% trans "Statements" %}</h2>
             <div class="proposal-statements">
                 {% for statement in item.statement_set.all %}

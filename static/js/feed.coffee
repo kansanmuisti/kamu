@@ -31,7 +31,7 @@ class @ActivityView extends Backbone.View
             obj.actor =
                 name: obj.member_name
                 url: URL_CONFIG['member_details'].replace 'MEMBER', obj.member_slug
-                thumbnail_url: obj.member + 'portrait/?dim=48x72'
+                thumbnail_url: obj.member + 'portrait/?dim=106x159'
         else
             obj.actor = null
         act = FEED_ACTIONS[obj.type]

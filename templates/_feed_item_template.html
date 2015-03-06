@@ -1,51 +1,56 @@
 <script type="text/template" id="activity-item-template">
-    <% if (actor) { %>
+    <hr class="divider"/>
     <div class="avatar">
+      <% if (actor) { %>
         <a href="<%= actor.url %>">
             <img src="<%= actor.thumbnail_url %>">
         </a>
+      <% } else { %>
+        <img src="http://fakeimg.pl/48x72/">
+      <% } %>
     </div>
-    <% } %>
-    <div class="source">
-        <% if (actor) { %>
-        <a href="<%= actor.url %>">
-            <span class="author"><%= actor.name %></span>
-        </a>
-        <% } %>
-        <% if (target) { %>
-        <a href="<%= target.url %>">
-        <% } else { %>
-        <a>
-        <% } %>
-            <i class="typcn typcn-<%= FEED_ACTIONS[type].icon %> icon"></i>
-            <%= action %>
-        </a>
+    <div class="content-block">
+      <div class="source">
+          <% if (actor) { %>
+          <a href="<%= actor.url %>">
+              <span class="author"><%= actor.name %></span>
+          </a>
+          <% } %>
+          <% if (target) { %>
+          <a href="<%= target.url %>" class="source-definition">
+          <% } else { %>
+          <a class="source-definition>
+          <% } %>
+              <i class="typcn typcn-<%= FEED_ACTIONS[type].icon %> icon"></i>
+              <%= action %>
+          </a>
+      </div>
+      <div class="timestamp">
+          <% if (target) { %>
+          <a href="<%= target.url %>">
+          <% } else { %>
+          <a>
+          <% } %>
+          <time datetime="<%= time %>">
+          <%= time_str %></time>
+          </a>
+      </div>
+      <% if (target) { %>
+      <div class="feed-content">
+      <% if (target.keywords && target.keywords.length) { %>
+          <div class="labels">
+          <% _.each(target.keywords, function(kw) { %>
+              <a href='<%= kw.view_url %>'><span class="label"><%= kw.name %></span></a>
+          <% }); %>
+          </div>
+      <% } %>
+      <% if (target.subject) { %>
+          <h2><a href="<%= target.url %>"><%= target.subject %></a></h2>
+      <% } %>
+          <div class="summary">
+              <%= target.text %>
+          </div>
+      </div>
+      <% } %>
     </div>
-    <div class="timestamp">
-        <% if (target) { %>
-        <a href="<%= target.url %>">
-        <% } else { %>
-        <a>
-        <% } %>
-        <time datetime="<%= time %>">
-        <%= time_str %></time>
-        </a>
-    </div>
-    <% if (target) { %>
-    <div class="feed-content">
-    <% if (target.keywords && target.keywords.length) { %>
-        <div class="labels">
-        <% _.each(target.keywords, function(kw) { %>
-            <a href='<%= kw.view_url %>'><span class="label"><%= kw.name %></span></a>
-        <% }); %>
-        </div>
-    <% } %>
-    <% if (target.subject) { %>
-        <h2><a href="<%= target.url %>"><%= target.subject %></a></h2>
-    <% } %>
-        <div class="summary">
-            <%= target.text %>
-        </div>
-    </div>
-    <% } %>
 </script>
