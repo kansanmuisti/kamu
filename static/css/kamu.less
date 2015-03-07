@@ -548,14 +548,6 @@ fieldset {
 
 main {
     margin-top: @box-padding;
-    /* background-color: white;
-    padding: 20px;
-    > h1 {
-        margin-top: 0px;
-        color: @accent-color;
-        font-family: "Expletus Sans", sans-serif;
-    }
-    */
 }
 
 .page-footer {
@@ -593,7 +585,7 @@ main {
  ***************************************************************/
 main.home-page {
     .top-feature-box {
-        .box();
+        .box;
         text-align: center;
         h3 {
             font-family: @font-family-base;
@@ -603,6 +595,9 @@ main.home-page {
         }
         > header {
             color: @accent-color;
+            .lead {
+              margin-bottom: 0;
+            }
         }
         > nav {
             .nav-button {
