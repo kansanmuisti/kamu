@@ -18,10 +18,10 @@
   <a href="<%= view_url %>"><h4 class="title">
     <%= default_description %></h4></a>
 
-  <span class="nr_votes"><%= plenary_votes.length %> äänestystä</span>,
+  <span class="nr_votes"><i class="typcn typcn-input-checked"></i><%= plenary_votes.length %></span>
   <!-- NOTE: nr_statements are sometimes broken
         (and shouldn't be separate variables anyway, but Tastypie. -->
-  <span class="nr_statements"><%= nr_statements %> puheenvuoroa</span>
+  <span class="nr_statements"><i class="typcn typcn-message-typing"></i><%= nr_statements %></span>
   <ul></ul>
 </li>
 </script>

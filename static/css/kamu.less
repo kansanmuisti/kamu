@@ -1481,11 +1481,15 @@ main.party-list {
   color: @pine;
   list-style: none;
   .clearfix;
-  
+  a:hover {
+    text-decoration: none;
+  } 
   h4 {
     margin: 0;
     padding: 0;
-    color: @electric;
+    color: @pine;
+    text-transform: none;
+    font-family: @font-family-sans-serif;
   }
   /*li*/.plenary-session {
     display: block;
@@ -1496,31 +1500,52 @@ main.party-list {
     h5 {
       display: block;
       margin: 0 0 20px 0;
-      background: @electric;
+      padding: 20px;
+      background: @pine;
       text-align: center;
       height: 150px;
-      line-height: 75px;
+      line-height: 1;
       color: @white;
       .make-sm-column(3);
+      .id {
+        display: block;
+        color: @mint;
+        margin-bottom: 10px;
+      }
+      .date{
+        display: block;
+        font-size: @font-size-extra-large;
+      }
     }
     >ul {
       .make-sm-column(12);
       list-style: none;
-      /*li*/.plenary-session-item {
-        color: @gray-light;
-        display: block;
-        margin-bottom: 20px;
-        ul {
-          margin-left: 20px;
-          margin-top: 20px;
-          list-style: none;
-          li {
-            margin-bottom: 5px;
-            .title {
-              font-size: @font-size-base;
-              color: @blueberry;
-            }
-          }
+    }
+  }
+  .plenary-session-item {
+    color: @gray;
+    display: block;
+    margin-bottom: 20px;
+    i {
+      font-size: @font-size-large;
+      line-height: 1;
+      color: @pine;
+      margin-right: 5px;
+    }
+    .nr_votes, .nr_statements {
+      margin-right: 10px;
+      font-weight: bold;
+      //font-size: @font-size-large;
+    }
+    ul {
+      margin-left: 20px;
+      margin-top: 20px;
+      list-style: none;
+      li {
+        margin-bottom: 5px;
+        .title {
+          font-size: @font-size-base;
+          //color: @pine;
         }
       }
     }
