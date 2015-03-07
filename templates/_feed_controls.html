@@ -3,7 +3,6 @@
 <script type="text/javascript" src="{% static "js/vendor/bootstrap-datepicker.js" %}"></script>
 <script type="text/javascript" src="{% static "js/vendor/bootstrap-datepicker.fi.js" %}"></script>
 <div class="feed-filtering">
-    <section>
         <div class="feed-filters">
             <form class="form-horizontal">
                 <h4>Aktiviteettien rajaus</h4>
@@ -34,5 +33,9 @@
                     </div>
             </form>
                 </div>
-    </section>	
 </div>
+{% compress js inline %}
+<script type="text/coffeescript">
+saneaffix_y $(".feed-filters")
+</script>
+{% endcompress %}

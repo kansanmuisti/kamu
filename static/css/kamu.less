@@ -1037,22 +1037,39 @@ main.member-details {
   }
 }
 
-.fixed-on-desktop {
-    position: static;
-    @media (min-width: @screen-md-min) {
+.affix {
+    z-index: 100;
+}
+
+.affix-hacks {
+    &.affix {
         position: fixed;
         top: 0;
-        height: 100%;
         // We lose the box shadow because of this,
         // but W3C was probably drunk again when speccing
         // this stuff.
         overflow-x: hidden; 
         overflow-y: auto;
     }
+
+    + .affix-placeholder {
+        display: none;
+    }
+
+    &.affix + .affix-placeholder {
+        display: block;
+    }
 }
 
-.sidebar-container.affix {
-    .fixed-on-desktop;
+.affix-always {
+    .affix-hacks;
+}
+
+.affix-desktop {
+    position: static;
+    @media (min-width: @screen-md-min) {
+       .affix-hacks;
+    }
 }
 
 /***************************************************************
