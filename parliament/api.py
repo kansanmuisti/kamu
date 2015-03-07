@@ -737,6 +737,14 @@ class KeywordResource(KamuResource):
 
         return obj_list
 
+    def apply_filters(self, request, applicable_filters):
+        qset = super(KeywordResource, self).apply_filters(request, applicable_filters)
+        val = request.GET.get('input', None)
+        if val:
+            qset = qset.filter(name__istartswith=val)
+
+        return qset
+
 
 class MemberUpdateResource(UpdateResource):
     def dehydrate(self, bundle):
