@@ -323,18 +323,38 @@ fieldset {
     }
 }
 
+.tag-text-styling {
+    font-family: @brand-font-family;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: @font-size-large;
+}
+
+.tag-banner {
+    .tag-text-styling;
+    background-color: @gray-lighter;
+    padding: 5px 5px 0 5px;
+    color: @pine;
+    border-radius: 3px;
+    border-left: 5px @gray-light solid;
+    //.shadow-light();
+    &:hover {
+        background-color: @lemon;
+        //color: @mint;
+        text-decoration: none;
+    }
+}
+
 .tag-cloud {
     background-color: @white;
     margin: 10px 0 0 0;
     ul {
         list-style: none;
         padding-left: 0;
-        font-family: @brand-font-family;
-        text-transform: uppercase;
-        font-weight: 700;
+        .tag-text-styling;
         li {
             a {
-                background: @white;
+                position: relative;
                 text-decoration: none;
                 padding: 0.3em 5px 0 5px;
                 line-height: 1em;
@@ -353,6 +373,7 @@ fieldset {
                     outline: 0;
                     -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
                     box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+                    z-index: 9998;
                 }
 
                 cursor: pointer;
@@ -1711,6 +1732,7 @@ main.party-list {
   height: 120px;
 }
 
+
 ul.tag-list {
         list-style: none;
         //margin-bottom: 20px;
@@ -1721,27 +1743,14 @@ ul.tag-list {
         margin: 0 10px 10px 0;
         //.make-column(3);
         a {
-          font-size: @font-size-large;
-          text-transform: uppercase;
-          font-family: @font-family-brand;
-          font-weight: 700;
-          background-color: @gray-lighter;
-          padding: 5px 5px 0 5px;
-          color: @pine;
-          border-radius: 3px;
-          border-left: 5px @gray-light solid;
-          //.shadow-light();
-          &:hover {
-            background-color: @lemon;
-            //color: @mint;
-            text-decoration: none;
-        }
-        & .break-list {
-            display: block;
+            .tag-banner;
+            & .break-list {
+                display: block;
             }
         }
     }
-    }
+}
+    
  .tag-list-divider {
     //background: @gray-light;
     border-bottom: 2px solid @mint;
