@@ -2,12 +2,32 @@
 {% load compress static thumbnail i18n %}
 
 {% block content %}
+{% compress js inline %}
+<script type="text/javascript" src="{% static 'bootstrap/js/affix.js' %}"></script>
+{% endcompress %}
 <div class="row">
     <div class="col-md-4 entity-details">
-       {% block sidebar %}{% endblock %}
+        <div class="sidebar-container" data-spy="affix">
+        {% block sidebar %}{% endblock %}
+        </div>
     </div>
     <div class="col-md-11">
        {% block main_content %}{% endblock %}
     </div>
 </div>
+{% compress js inline %}
+<script type="text/coffeescript">
+do ->
+    myel = $(".sidebar-container")
+    myel.affix
+        offset:
+            top: ->
+                myel.parent().offset().top
+    
+    hack_to_parent_size = ->
+        myel.width(myel.parent().width())
+    myel.on "affixed.bs.affix", hack_to_parent_size
+    $(window).resize hack_to_parent_size
+</script>
+{% endcompress %}
 {% endblock %}

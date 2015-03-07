@@ -1034,7 +1034,25 @@ main.member-details {
   .activity-feed > .activity-item .feed-content {
     margin-left: 16px;
 
+  }
 }
+
+.fixed-on-desktop {
+    position: static;
+    @media (min-width: @screen-md-min) {
+        position: fixed;
+        top: 0;
+        height: 100%;
+        // We lose the box shadow because of this,
+        // but W3C was probably drunk again when speccing
+        // this stuff.
+        overflow-x: hidden; 
+        overflow-y: auto;
+    }
+}
+
+.sidebar-container.affix {
+    .fixed-on-desktop;
 }
 
 /***************************************************************
