@@ -76,9 +76,15 @@
                         </a>
                         {% endif %}
                         <div class="media-body proposal-statement-content">
-                            <h5 class="media-heading">{{statement.speaker_name}}{% if member %} /{{member.party.abbreviation}}{% endif %}
+                            {% if member %}
+                            <h5 class="media-heading"><a class="unstyled" href="{{member.get_absolute_url}}">{{statement.speaker_name}} /{{member.party.abbreviation}}</a>
                             {% if statement.type == 'speaker' %} ({% trans "speaker" %}) {% endif %}
                             </h5>
+                            {% else %}
+                            <h5 class="media-heading">{{statement.speaker_name}}
+                            {% if statement.type == 'speaker' %} ({% trans "speaker" %}) {% endif %}
+                            </h5>
+                            {% endif %}
                             <div class="proposal-statement-text">
                                 {{statement.get_html_text|linebreaks}}
                             </div>
