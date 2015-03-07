@@ -26,7 +26,7 @@ class MemberActivityIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True)
     time = indexes.DateTimeField(model_attr='time')
     type = indexes.CharField(model_attr='type__type', faceted=True)
-    member = indexes.CharField(model_attr='member__name', faceted=True)
+    member = indexes.CharField(model_attr='member__name', faceted=True, null=True)
 
     def get_updated_field(self):
         return 'last_modified_time'
