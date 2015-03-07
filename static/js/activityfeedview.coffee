@@ -84,7 +84,34 @@ class @ActivityFeedControl
             if not value?
                 return
             tagcloud_buttons.filter("[data-id='#{value.toLowerCase()}']").addClass "active"
- 
+
+    install_typeahead: (el) ->
+        result_template = _.template $.trim $("#feed-filter-topic-result-template").html()
+        engine = new Bloodhound
+            datumTokenizer: (d) ->
+                return Bloodhound.tokenizers.whitespace d.name
+            queryTokenizer: Bloodhound.tokenizers.whitespace
+            remote:
+                url: API_PREFIX + 'keyword/?input=%QUERY'
+                filter: (resp) ->
+                    return resp.objects
+        engine.initialize()
+
+        args =
+            minLength: 3
+            highlight: true
+        datasets =
+            source: engine.ttAdapter()
+            displayKey: (d) ->
+                d.print_name
+            templates:
+                suggestion: (data) ->
+                    return result_template data
+
+        el.typeahead args, datasets
+        el.on 'typeahead:selected', (ev, suggestion) =>
+            console.log suggestion
+
     controls: (el) =>
         kw_state = @kw_state
         type_state = @type_state
@@ -92,7 +119,9 @@ class @ActivityFeedControl
         kw_state.on (value) ->
             el.find(".tag-filter-input").val(value ? "")
         el.find(".tag-filter-input").change -> kw_state.update $(@).val()
-        
+
+        @install_typeahead el.find(".tag-filter-input")
+
         filter_buttons = $(".feed-filter-buttons")
         
         filter_buttons.find(".disable-filters").click ->
