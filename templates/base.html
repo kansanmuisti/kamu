@@ -30,6 +30,7 @@
     window.ACTIVITY_BAR_CAP = 13.67
     window.API_PREFIX = '/api/v1/'
     window.URL_CONFIG =
+        'static_base': '{% static "" %}'
         'member_list': '{% url "parliament.views.list_members" %}'
         'member_details': '{% url "parliament.views.show_member" member="MEMBER" %}'
         'member_details_page': '{% url "parliament.views.show_member" member="MEMBER" page="PAGE" %}'
