@@ -554,20 +554,32 @@ class MemberActivity(models.Model):
         target = {}
         acttype = self.type.pk
         if acttype in ('FB', 'TW'):
-            o = self.socialupdateactivity.update
+            if type(self) == MemberActivity:
+                o = self.socialupdateactivity.update
+            else:
+                o = self.update
             target['text'] = o.text
             target['url'] = o.get_origin_url()
             target['last_modified_time'] = o.last_modified_time
         elif acttype == 'ST':
-            o = self.statementactivity.statement
+            if type(self) == MemberActivity:
+                o = self.statementactivity.statement
+            else:
+                o = self.statement
             target['text'] = o.text
             target['url'] = o.get_indocument_url()
             target['last_modified_time'] = o.item.plsess.last_modified_time
         elif acttype in ('IN', 'WQ', 'GB', 'SI'):
-            if acttype == 'SI':
-                o = self.signatureactivity.signature.doc
+            if type(self) == MemberActivity:
+                if acttype == 'SI':
+                    o = self.signatureactivity.signature.doc
+                else:
+                    o = self.initiativeactivity.doc
             else:
-                o = self.initiativeactivity.doc
+                if acttype == 'SI':
+                    o = self.signature.doc
+                else:
+                    o = self.doc
             target['text'] = o.summary
             target['subject'] = o.subject
             target['name'] = o.name
