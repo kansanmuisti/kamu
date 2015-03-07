@@ -1040,6 +1040,9 @@ main.member-details {
 .affix {
     z-index: 100;
 }
+.affix-placeholder {
+    display: none;
+}
 
 .affix-hacks {
     &.affix {
@@ -1048,8 +1051,6 @@ main.member-details {
         // We lose the box shadow because of this,
         // but W3C was probably drunk again when speccing
         // this stuff.
-        overflow-x: hidden; 
-        overflow-y: auto;
     }
 
     + .affix-placeholder {

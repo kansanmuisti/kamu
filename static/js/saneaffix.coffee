@@ -4,7 +4,6 @@
     myel.after placeholder
     myel.before anchor
     myel.addClass myclass
-    #myel.hide()
     hack_sizes = ->
         myel.outerWidth(anchor.width())
         placeholder.height myel.outerHeight(true)
