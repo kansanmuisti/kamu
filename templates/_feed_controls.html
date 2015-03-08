@@ -3,7 +3,7 @@
 <script type="text/javascript" src="{% static "js/vendor/bootstrap-datepicker.js" %}"></script>
 <script type="text/javascript" src="{% static "js/vendor/bootstrap-datepicker.fi.js" %}"></script>
 <div class="feed-filters">
-    <div class="keyword-filter-group">
+    <div class="keyword-filter-group"  style="display: none">
         <label>{% trans "Issue" %}</label>
         <div class="filter-control">
             <div class="filter-control-keyword-slot">
@@ -20,13 +20,13 @@
             </button>
         </div>
     </div>
-    <div class="type-filter-group">
+    <div class="type-filter-group" style="display: none">
         <label>{% trans "Filter" %}</label>
         <div class="filter-control">
             {% include "_feed_filters.html" %}
         </div>
     </div>
-    <div class="date-filter-group">
+    <div class="date-filter-group" style="display: none">
         <label>{% trans "Timerange" %}</label>
         <div class="filter-control">
             <div class="input-daterange input-group">
