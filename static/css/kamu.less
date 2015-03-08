@@ -330,12 +330,16 @@ fieldset {
     font-size: @font-size-large;
 }
 
+.tag-spacing {
+    padding: 5px 5px 0 5px;
+}
+
 .tag-banner {
     .tag-text-styling;
     background-color: @gray-lighter;
-    padding: 5px 5px 0 5px;
     color: @pine;
     border-radius: 3px;
+    .tag-spacing;
     border-left: 5px @gray-light solid;
     white-space: nowrap;
     //.shadow-light();
@@ -366,7 +370,7 @@ fieldset {
                     color: #222;
                     text-decoration: none;
                     .shadow-light();
-                    z-index: 9999;
+                    z-index: 50;
                 }
                 &.active {
                     color: @white;
@@ -374,7 +378,7 @@ fieldset {
                     outline: 0;
                     -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
                     box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-                    z-index: 9998;
+                    z-index: 45;
                 }
 
                 cursor: pointer;
@@ -397,12 +401,16 @@ fieldset {
     }
 
     > * {
-        float: left;
+        float: right;
 
         > label {
             margin: 0;
         }
-        padding-right: 10px;
+        padding-left: 10px;
+    }
+    
+    > .keyword-filter-group {
+        float: left;
     }
 
     .dropdown-menu {
@@ -423,21 +431,51 @@ fieldset {
 
 .keyword-filter-group {
     .selected-keyword {
+        white-space: nowrap;
+    }
+    .selected-keyword .keyword-link {
         .tag-banner;
+        border-left: 0;
+        margin-left: 0;
         display: inline-block;
         position: relative;
+        border-radius: 0 3px 3px 0;
+    }
+
+    .selected-keyword .remove-kw-filter {
+        border-radius: 3px 0 0 3px;
+        border-left: 3px @gray-light solid;
+        background-color: @gray-light;
+        margin-right: 0;
+        display: inline-block;
+        color: black;
+        .tag-text-styling;
+        .tag-spacing;
+        padding-left: 0px;
+        padding-right: 2px;
+        padding-right: 0;
+        cursor: pointer;
     }
 
     .filter-control-keyword-slot {
-        width: 12em;
+        width: 16em;
         display: inline-block;
         overflow: hidden;
         vertical-align: middle;
         position: relative;
         &:hover {
-            z-index: 9999;
+            z-index: 500;
             overflow: visible;
         }
+    }
+}
+
+.date-filter-group {
+    .input-daterange > input {
+        outline: none;
+        border: 0;
+        background: transparent;
+        width: 8em;
     }
 }
 
@@ -1710,7 +1748,7 @@ main.party-list {
             color: @gray-darker;
             text-decoration: none;
             .shadow-light();
-            z-index: 9999;
+            z-index: 501;
         }
     }
 }

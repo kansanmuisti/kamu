@@ -136,13 +136,16 @@ class @ActivityFeedControl
             search_toggle.toggleClass "active", show
             el.find(".filter-control-actual-keyword").toggle not show
             el.find(".filter-control-search-keyword").toggle show
+
+            if show
+                el.find(".tag-filter-input").focus()
         
         search_toggle.click -> toggle_search()
 
         kw_state.on (value) ->
             el.find(".no-selected-keyword").toggle not value?
-            link = el.find(".selected-keyword")
-            link.toggle value?
+            kw = el.find(".selected-keyword").toggle value?
+            link = el.find(".keyword-link")
             .text value ? ""
             if value?
                 url = URL_CONFIG['topic_details_by_name']
@@ -152,14 +155,14 @@ class @ActivityFeedControl
                 link.attr "href", ""
             toggle_search false
         
+        link = el.find(".remove-kw-filter").click ->
+            kw_state.update undefined
+
         input = el.find ".tag-filter-input"
         @install_typeahead input
         input.on 'typeahead:selected', (ev, suggestion) ->
             kw_state.update suggestion.name
         
-
-
-
     
     type_ctrl: (el) =>
         type_state = @type_state
