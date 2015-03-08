@@ -337,6 +337,7 @@ fieldset {
     color: @pine;
     border-radius: 3px;
     border-left: 5px @gray-light solid;
+    white-space: nowrap;
     //.shadow-light();
     &:hover {
         background-color: @lemon;
@@ -384,13 +385,59 @@ fieldset {
     }
 }
 
-
 .feed-filters {
     .clearfix();
     padding: 10px;
     background: @gray-lighter;
+    .shadow-heavy();
+    z-index: 100;
+    position: relative;
     form {
         margin: 0;
+    }
+
+    > * {
+        float: left;
+
+        > label {
+            margin: 0;
+        }
+        padding-right: 10px;
+    }
+
+    .dropdown-menu {
+        z-index: 101;
+        background: @gray-lighter;
+        border: 0;
+        .shadow-heavy();
+        padding: 3px;
+        border-radius: 0;
+        .filter-button {
+            width: 100%;
+            text-align: left;
+            border-radius: 0;
+        }
+    }
+}
+
+
+.keyword-filter-group {
+    .selected-keyword {
+        .tag-banner;
+        display: inline-block;
+        position: relative;
+    }
+
+    .filter-control-keyword-slot {
+        width: 12em;
+        display: inline-block;
+        overflow: hidden;
+        vertical-align: middle;
+        position: relative;
+        &:hover {
+            z-index: 9999;
+            overflow: visible;
+        }
     }
 }
 
@@ -1624,17 +1671,6 @@ main.party-list {
 
 /* -------------   GENERAL MODIFIED STYLES IN OLD NAMESPACE ----------- */
 
-.feed-filters {
-  .clearfix;
-  margin-bottom: 20px;
-  padding: 10px;
-  background: @gray-lighter;
-  //border: 1px solid @gray-light;
-  form {
-    margin: 0;
-  }
-}
-
 .feed-filters__search input {
   margin-bottom: 0 !important;
 }
@@ -1651,16 +1687,6 @@ main.party-list {
     width: 60px;
     font-size: @font-size-small;
     color: @gray;
-  }
-}
-
-.feed-filter-buttons {
-  .feed-type-group {
-    .dropdown-menu {
-      padding: 0px;
-      .filter-button { width: 100%; text-align: left; }
-      > li { padding: 0px; }
-    }
   }
 }
 

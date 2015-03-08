@@ -2,40 +2,48 @@
 <link type="text/css" href="{% static "js/vendor/datepicker3.css" %}" rel="stylesheet" />
 <script type="text/javascript" src="{% static "js/vendor/bootstrap-datepicker.js" %}"></script>
 <script type="text/javascript" src="{% static "js/vendor/bootstrap-datepicker.fi.js" %}"></script>
-<div class="feed-filtering">
-        <div class="feed-filters">
-            <form class="form-horizontal">
-                <h4>Aktiviteettien rajaus</h4>
-                <div class="form-group">
-                    <div class="input-daterange form-group daterange-filter-group" style="display: none;">
-                    <label class="col-lg-3 control-label">{% trans "Timerange" %}</label>
-                    <div class="col-lg-6">
-                        <div class="input-daterange input-group">
-                            <input type="text" class="input-sm form-control" name="from" />
-                            <span class="input-group-addon">
-                                <i class="typcn typcn-calendar typcn--large"></i> &#8594;
-                            </span>
-                            <input type="text" class="input-sm form-control" name="to" />
-</div>
+<div class="feed-filters">
+    <div class="keyword-filter-group">
+        <label>{% trans "Issue" %}</label>
+        <div class="filter-control">
+            <div class="filter-control-keyword-slot">
+                    <div class="filter-control-actual-keyword">
+                        <span class="no-selected-keyword" style="display: none">{% trans "All issues" %}</span>
+                        <a class="selected-keyword" style="display: none"></a>
                     </div>
+                    <div class="filter-control-search-keyword" style="display: none">
+                        <input type="text" class="tag-filter-input text-search form-control" placeholder="{% trans 'Search for a keyword' %}..."></input>
                     </div>
-                    <div class="form-group tag-filter-group">
-                        <label class="col-lg-3 control-label">{% trans "Issue" %}</label>
-                        <div class="col-lg-6">
-                            <input type="text" class="tag-filter-input text-search form-control" placeholder="{% trans 'Input text' %}...">
-                        </div>
-                    </div>
-                    <div class="form-group type-filter-group">
-                        <label class="col-lg-3 control-label">{% trans "Filter" %}</label>
-                        <div class="col-lg-11">
-                            {% include "_feed_filters.html" %}
-                        </div>
-                    </div>
-            </form>
-                </div>
+            </div>
+            <button type="button" class="btn btn-default search-toggle">
+                <i class="typcn typcn-medium typcn-zoom-outline"></i>
+            </button>
+        </div>
+    </div>
+    <div class="type-filter-group">
+        <label>{% trans "Filter" %}</label>
+        <div class="filter-control">
+            {% include "_feed_filters.html" %}
+        </div>
+    </div>
+    <div class="date-filter-group">
+        <label>{% trans "Timerange" %}</label>
+        <div class="filter-control">
+            <div class="input-daterange input-group">
+                <input type="text" class="input-sm form-control" name="from" />
+                <span class="input-group-addon">
+                    &#8594;
+                </span>
+                <input type="text" class="input-sm form-control" name="to" />
+            </div>
+        </div>
+    </div>
 </div>
 {% compress js inline %}
 <script type="text/coffeescript">
-saneaffix_y $(".feed-filters")
+el = $(".feed-filters:last")
+saneaffix_y el
+el.find(".filter-control .dropdown-menu").click (e) ->
+    e.stopPropagation()
 </script>
 {% endcompress %}

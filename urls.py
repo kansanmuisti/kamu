@@ -40,6 +40,7 @@ urlpatterns = patterns('parliament.views',
 
     url(r'^topic/$', 'list_topics'),
     url(r'^topic/(?P<topic>\d+)-(?P<slug>[-\w]+)/$', 'show_topic'),
+    url(r'^topic_by_name/$', 'show_topic_by_name'),
 
     url(r'^document/(?P<slug>[-\w]+)/$', 'show_document'),
 
