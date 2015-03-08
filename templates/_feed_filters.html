@@ -8,7 +8,7 @@
     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
       <span class="caret"></span>
     </button>
-    <ul class="dropdown-menu" role="menu">
+    <ul class="dropdown-menu dropdown-menu" role="menu">
     {% for f in items %}
         <li><button class="btn btn-default filter-button" type="button" data-feed-type="{{f.type}}" data-toggle="tooltip" type="button">
             <i class="typcn typcn-{{f.icon}} typcn--medium"></i> <span>{{f.name}}</span>

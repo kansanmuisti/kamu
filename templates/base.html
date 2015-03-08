@@ -37,6 +37,7 @@
         'party_details': '{% url "parliament.views.show_party_feed" abbreviation="PARTY" %}'
         'topic_list': '{% url "parliament.views.list_topics" %}'
         'topic_details': '{% url "parliament.views.show_topic" topic="999" slug="SLUG" %}'
+        'topic_details_by_name': '{% url "parliament.views.show_topic_by_name" %}'
         'document_details': '{% url "parliament.views.show_document" slug="DOC" %}'
         'search': '{% url "parliament.views.search" %}'
 
@@ -79,6 +80,7 @@
     <script type="text/javascript" src="{% static "js/vendor/spin.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/jquery.spin.js" %}"></script>
     <script type="text/javascript" src="{% static "bootstrap/js/tab.js" %}"></script>
+    <script type="text/javascript" src="{% static "bootstrap/js/button.js" %}"></script>
     <script type="text/javascript" src="{% static "bootstrap/js/tooltip.js" %}"></script>
     <script type="text/javascript" src="{% static "bootstrap/js/collapse.js" %}"></script>
     <script type="text/javascript" src="{% static "bootstrap/js/modal.js" %}"></script>
@@ -106,6 +108,8 @@
     <script type="text/coffeescript" src="{% static "js/vendor/hashstate.coffee" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/jquery.appear.js" %}"></script> 
     <script type="text/coffeescript" src="{% static "js/vendor/jquery.gimmesomemore.coffee" %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/affix.js' %}"></script>
+    <script type="text/coffeescript" src="{% static 'js/saneaffix.coffee' %}"></script>
     {% endcompress %}
 
     {% block head %}{% endblock %}

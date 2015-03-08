@@ -1341,11 +1341,11 @@ msgstr "Tähän liittyvät aiheet"
 
 #: templates/show_topic.html:28
 msgid "Which parties are active with this issue?"
-msgstr "Mitkä puolueet ovat aktiivisimpia tämän asian parissa?"
+msgstr "Aktiivisimmat puolueet tässä asiassa"
 
 #: templates/show_topic.html:36
 msgid "Who are active with this issue?"
-msgstr "Ketkä ovat aktiivisimpia tämän asian parissa?"
+msgstr "Aktiivisimmat kansanedustajat tässä asiassa"
 
 #: templates/show_topic.html:61
 #, python-format

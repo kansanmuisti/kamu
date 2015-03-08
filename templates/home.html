@@ -37,6 +37,7 @@
       <a href="{% url 'parliament.views.show_topic' topic=topic.pk slug=topic.get_slug %}">
         <h4 class="issue-highlight">{{topic.name}}</h4>
       </a>
+      {% if topic.first_statement %}
       <div class="highlight-statement media
           {% if topic.first_statement.member.party.is_governing %}
           side-government
@@ -73,12 +74,13 @@
       </div>
       <div class="highlight-source-link">
         <div class="highlight-source-session">
-          <a href="{{topic.first_statement.get_indocument_url}}">
+          <a href="{{topic.item.get_absolute_url}}">
           {% trans "Plenary session" %} {{topic.item.plsess.date}}
           </a>
         </div>
         <a href="{{topic.doc.get_absolute_url}}">{{topic.doc.subject}}</a>
       </div>
+      {% endif %}
     </div>
     {% endfor %}
     <div class="section-link">

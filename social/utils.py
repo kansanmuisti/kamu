@@ -242,7 +242,7 @@ class FeedUpdater(object):
                 else:
                     break
             else:
-                args['max_id'] = tw_list[0]['id'] - 1
+                args['max_id'] = tweets[-1]['id'] - 1
                 continue
             break
         self.logger.debug("New tweets: %d" % len(tw_list))
@@ -322,7 +322,7 @@ class FeedUpdater(object):
             for post in g['data']:
                 # Sanity check
                 assert post['from']['id'] == feed.origin_id
-                if post['type'] in ('question', 'swf', 'music', 'offer'):
+                if post['type'] in ('question', 'swf', 'music', 'offer', 'event'):
                     # We skip these updates for now.
                     continue
                 if post['type'] == 'status' and 'message' not in post:

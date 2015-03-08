@@ -323,18 +323,43 @@ fieldset {
     }
 }
 
+.tag-text-styling {
+    font-family: @brand-font-family;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: @font-size-large;
+}
+
+.tag-spacing {
+    padding: 5px 5px 0 5px;
+}
+
+.tag-banner {
+    .tag-text-styling;
+    background-color: @gray-lighter;
+    color: @pine;
+    border-radius: 3px;
+    .tag-spacing;
+    border-left: 5px @gray-light solid;
+    white-space: nowrap;
+    //.shadow-light();
+    &:hover {
+        background-color: @lemon;
+        //color: @mint;
+        text-decoration: none;
+    }
+}
+
 .tag-cloud {
     background-color: @white;
     margin: 10px 0 0 0;
     ul {
         list-style: none;
         padding-left: 0;
-        font-family: @brand-font-family;
-        text-transform: uppercase;
-        font-weight: 700;
+        .tag-text-styling;
         li {
             a {
-                background: @white;
+                position: relative;
                 text-decoration: none;
                 padding: 0.3em 5px 0 5px;
                 line-height: 1em;
@@ -345,7 +370,7 @@ fieldset {
                     color: #222;
                     text-decoration: none;
                     .shadow-light();
-                    z-index: 9999;
+                    z-index: 50;
                 }
                 &.active {
                     color: @white;
@@ -353,6 +378,7 @@ fieldset {
                     outline: 0;
                     -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
                     box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+                    z-index: 45;
                 }
 
                 cursor: pointer;
@@ -363,13 +389,93 @@ fieldset {
     }
 }
 
-
 .feed-filters {
     .clearfix();
     padding: 10px;
     background: @gray-lighter;
+    .shadow-heavy();
+    z-index: 100;
+    position: relative;
     form {
         margin: 0;
+    }
+
+    > * {
+        float: right;
+
+        > label {
+            margin: 0;
+        }
+        padding-left: 10px;
+    }
+    
+    > .keyword-filter-group {
+        float: left;
+    }
+
+    .dropdown-menu {
+        z-index: 101;
+        background: @gray-lighter;
+        border: 0;
+        .shadow-heavy();
+        padding: 3px;
+        border-radius: 0;
+        .filter-button {
+            width: 100%;
+            text-align: left;
+            border-radius: 0;
+        }
+    }
+}
+
+
+.keyword-filter-group {
+    .selected-keyword {
+        white-space: nowrap;
+    }
+    .selected-keyword .keyword-link {
+        .tag-banner;
+        border-left: 0;
+        margin-left: 0;
+        display: inline-block;
+        position: relative;
+        border-radius: 0 3px 3px 0;
+    }
+
+    .selected-keyword .remove-kw-filter {
+        border-radius: 3px 0 0 3px;
+        border-left: 3px @gray-light solid;
+        background-color: @gray-light;
+        margin-right: 0;
+        display: inline-block;
+        color: black;
+        .tag-text-styling;
+        .tag-spacing;
+        padding-left: 0px;
+        padding-right: 2px;
+        padding-right: 0;
+        cursor: pointer;
+    }
+
+    .filter-control-keyword-slot {
+        width: 16em;
+        display: inline-block;
+        overflow: hidden;
+        vertical-align: middle;
+        position: relative;
+        &:hover {
+            z-index: 500;
+            overflow: visible;
+        }
+    }
+}
+
+.date-filter-group {
+    .input-daterange > input {
+        outline: none;
+        border: 0;
+        background: transparent;
+        width: 8em;
     }
 }
 
@@ -1032,22 +1138,40 @@ main.member-details {
   }
 }
 
-.fixed-on-desktop {
-    position: static;
-    @media (min-width: @screen-md-min) {
+.affix {
+    z-index: 100;
+}
+.affix-placeholder {
+    display: none;
+}
+
+.affix-hacks {
+    &.affix {
         position: fixed;
         top: 0;
-        height: 100%;
         // We lose the box shadow because of this,
         // but W3C was probably drunk again when speccing
         // this stuff.
-        overflow-x: hidden; 
-        overflow-y: auto;
+    }
+
+    + .affix-placeholder {
+        display: none;
+    }
+
+    &.affix + .affix-placeholder {
+        display: block;
     }
 }
 
-.sidebar-container.affix {
-    .fixed-on-desktop;
+.affix-always {
+    .affix-hacks;
+}
+
+.affix-desktop {
+    position: static;
+    @media (min-width: @screen-md-min) {
+       .affix-hacks;
+    }
 }
 
 /***************************************************************
@@ -1605,17 +1729,6 @@ main.party-list {
 
 /* -------------   GENERAL MODIFIED STYLES IN OLD NAMESPACE ----------- */
 
-.feed-filters {
-  .clearfix;
-  margin-bottom: 20px;
-  padding: 10px;
-  background: @gray-lighter;
-  //border: 1px solid @gray-light;
-  form {
-    margin: 0;
-  }
-}
-
 .feed-filters__search input {
   margin-bottom: 0 !important;
 }
@@ -1632,16 +1745,6 @@ main.party-list {
     width: 60px;
     font-size: @font-size-small;
     color: @gray;
-  }
-}
-
-.feed-filter-buttons {
-  .feed-type-group {
-    .dropdown-menu {
-      padding: 0px;
-      .filter-button { width: 100%; text-align: left; }
-      > li { padding: 0px; }
-    }
   }
 }
 
@@ -1665,7 +1768,7 @@ main.party-list {
             color: @gray-darker;
             text-decoration: none;
             .shadow-light();
-            z-index: 9999;
+            z-index: 501;
         }
     }
 }
@@ -1713,6 +1816,7 @@ main.party-list {
   height: 120px;
 }
 
+
 ul.tag-list {
         list-style: none;
         //margin-bottom: 20px;
@@ -1723,27 +1827,14 @@ ul.tag-list {
         margin: 0 10px 10px 0;
         //.make-column(3);
         a {
-          font-size: @font-size-large;
-          text-transform: uppercase;
-          font-family: @font-family-brand;
-          font-weight: 700;
-          background-color: @gray-lighter;
-          padding: 5px 5px 0 5px;
-          color: @pine;
-          border-radius: 3px;
-          border-left: 5px @gray-light solid;
-          //.shadow-light();
-          &:hover {
-            background-color: @lemon;
-            //color: @mint;
-            text-decoration: none;
-        }
-        & .break-list {
-            display: block;
+            .tag-banner;
+            & .break-list {
+                display: block;
             }
         }
     }
-    }
+}
+    
  .tag-list-divider {
     //background: @gray-light;
     border-bottom: 2px solid @mint;

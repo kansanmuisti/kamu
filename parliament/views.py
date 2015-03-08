@@ -4,6 +4,7 @@ import datetime
 import json
 
 from django.core.urlresolvers import reverse
+from django.shortcuts import redirect
 from django.core.cache import cache
 from django.db.models import Q, Min, Max, Sum, Count
 from django.db import connection
@@ -434,6 +435,13 @@ def list_topics(request):
 
     return render_to_response('list_topics.html', args,
         context_instance=RequestContext(request))
+
+
+def show_topic_by_name(request):
+    name = request.GET.get('name', '').strip().lower()
+    kw = get_object_or_404(Keyword, name__iexact=name)
+    url = reverse("parliament.views.show_topic", kwargs=dict(topic=kw.id, slug=kw.get_slug()))
+    return redirect(url)
 
 def show_topic(request, topic, slug=None):
     # We don't use slug for anything.
