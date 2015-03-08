@@ -5,22 +5,22 @@
 <div class="feed-filters">
     <div class="keyword-filter-group"  style="display: none">
         <label>{% trans "Issue" %}</label>
-        <div class="filter-control">            <button type="button" class="btn btn-default search-toggle">
+        <div class="filter-control">
+            <button type="button" class="btn btn-default search-toggle">
                 <i class="typcn typcn-medium typcn-zoom-outline"></i>
             </button>
             <div class="filter-control-keyword-slot">
-                    <div class="filter-control-actual-keyword">
-                        <span class="no-selected-keyword" style="display: none">{% trans "All issues" %}</span>
-                        <div class="selected-keyword" style="display: none">
-                            <a class="remove-kw-filter">
-                                <i class="typcn typcn-times"></i>
-                            </a><a class="keyword-link"></a>
-                        </div>
-
+                <div class="filter-control-actual-keyword">
+                    <span class="no-selected-keyword" style="display: none">{% trans "All issues" %}</span>
+                    <div class="selected-keyword" style="display: none">
+                        <a class="remove-kw-filter">
+                            <i class="typcn typcn-times"></i>
+                        </a><a class="keyword-link"></a>
                     </div>
-                    <div class="filter-control-search-keyword" style="display: none">
-                        <input type="text" class="tag-filter-input text-search form-control" placeholder="{% trans 'Search for a keyword' %}..."></input>
-                    </div>
+                </div>
+                <div class="filter-control-search-keyword" style="display: none">
+                    <input type="text" class="tag-filter-input text-search form-control" placeholder="{% trans 'Search for a keyword' %}..."></input>
+                </div>
             </div>
 
         </div>
@@ -36,7 +36,7 @@
         <div class="filter-control">
             <div class="input-daterange">
                 <input type="text" class="input-sm" name="from" placeholder="{% trans "Any time"%}" />
-                    &#8594;
+                &#8594;
                 <input type="text" class="input-sm" name="to" placeholder="{% trans "Any time"%}" />
             </div>
         </div>
