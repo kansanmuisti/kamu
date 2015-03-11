@@ -28,7 +28,7 @@
                     <small class="number">{{doc.name}}</small>
                     <div class="labels">
                         {% for kw in doc.keywords.all %}
-                        <a class="label label-default"
+                        <a class="issue-tag-small" 
                           href="{% url "parliament.views.show_topic" topic=kw.pk slug=kw.get_slug %}"
                           >{{kw.name}}</a>
                         {% endfor %}

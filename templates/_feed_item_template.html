@@ -40,7 +40,7 @@
       <% if (target.keywords && target.keywords.length) { %>
           <div class="labels">
           <% _.each(target.keywords, function(kw) { %>
-              <a href='<%= kw.view_url %>'><span class="label"><%= kw.name %></span></a>
+              <a href='<%= kw.view_url %>'><span class="issue-tag-small"><%= kw.name %></span></a>
           <% }); %>
           </div>
       <% } %>
