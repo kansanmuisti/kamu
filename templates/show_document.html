@@ -66,25 +66,20 @@
                     <h4>{% trans "Plenary session" %} {{ item.plsess.date }}</h4>
                     {% for statement in item.statement_set.all %}
                     {% with member=statement.member governing_party=statement.member.party|governing:item.plsess.date %}
-                    <div class="proposal-statement media {% if statement.type == 'speaker' %}side-neutral{% elif governing_party %}side-government{% else %}side-opposition{% endif %}">
-                        <a id="{{statement.get_anchor_string}}"></a>
-                        {% if member %}
+                    <div class="proposal-statement media {% if statement.type == 'speaker' %}side-neutral{% elif governing_party %}side-government{% else %}side-opposition{% endif %}" id="{{statement.get_anchor_string}}">
                         <a class="statement-portrait" href="{{member.get_absolute_url}}">
                             {% thumbnail member.photo "64x64" as tn %}
                             <img class="media-object" src="{{tn.url}}">
                             {% endthumbnail %}
                         </a>
-                        {% endif %}
                         <div class="media-body proposal-statement-content">
                             {% if member %}
-                            <h5 class="media-heading"><a class="unstyled" href="{{member.get_absolute_url}}">{{statement.speaker_name}} /{{member.party.abbreviation}}</a>
-                            {% if statement.type == 'speaker' %} ({% trans "speaker" %}) {% endif %}
-                            </h5>
+                            <h5 class="media-heading">{{member}} /{{member.party.abbreviation}}
                             {% else %}
-                            <h5 class="media-heading">{{statement.speaker_name}}
+                            <h5 class="media-heading">{{statement.speaker_name}} / {{statement.speaker_role}}
+                            {% endif %}
                             {% if statement.type == 'speaker' %} ({% trans "speaker" %}) {% endif %}
                             </h5>
-                            {% endif %}
                             <div class="proposal-statement-text">
                                 {{statement.get_html_text|linebreaks}}
                             </div>
