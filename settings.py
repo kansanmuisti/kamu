@@ -140,6 +140,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.gzip.GZipMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'httpstatus.middleware.HttpStatusErrorsMiddleware',
@@ -171,6 +172,7 @@ INSTALLED_APPS = (
     'compressor',
     'tastypie',
     'haystack',
+    'corsheaders',
 
     'social',
     'parliament',
@@ -192,6 +194,9 @@ ACCOUNT_ACTIVATION_DAYS = 3
 LOGIN_URL = '/account/login/'
 DEFAULT_FROM_EMAIL = 'Kansan muisti <noreply@kansanmuisti.fi>'
 SERVER_EMAIL = 'noreply@kansanmuisti.fi'
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_METHODS = ['GET']
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
