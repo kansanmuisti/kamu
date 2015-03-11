@@ -1,15 +1,15 @@
 {% load i18n %}
 <div class="btn-toolbar feed-filter-buttons">
-  {% for name, items in feed_filters.buttons.items %}
-  <div class="btn-group feed-type-group" data-feed-type-group="{{name}}">
+  {% for group_type, group in feed_filters.buttons.items %}
+  <div class="btn-group feed-type-group" data-feed-type-group="{{group_type}}">
     <button type="button" class="btn btn-default filter-group-button">
-    {{ name }}
+    {{ group.name }}
     </button>
     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
       <span class="caret"></span>
     </button>
     <ul class="dropdown-menu dropdown-menu" role="menu">
-    {% for f in items %}
+    {% for f in group.items %}
         <li><button class="btn btn-default filter-button" type="button" data-feed-type="{{f.type}}" data-toggle="tooltip" type="button">
             <i class="typcn typcn-{{f.icon}} typcn--medium"></i> <span>{{f.name}}</span>
         </button></li>
