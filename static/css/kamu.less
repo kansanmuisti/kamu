@@ -1614,23 +1614,21 @@ main.party-list {
     color: @pine;
     text-transform: none;
     font-family: @font-family-sans-serif;
+    font-size: @font-size-large;
   }
   /*li*/.plenary-session {
-    display: block;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
-    border-bottom: 2px solid @gray-light;
-    .make-row();
+    .box;
+    .clearfix;
     h5 {
       display: block;
       margin: 0 0 20px 0;
       padding: 20px;
       background: @pine;
       text-align: center;
-      height: 150px;
+      height: 120px;
       line-height: 1;
       color: @white;
-      .make-sm-column(3);
+      .make-sm-column(5);
       .id {
         display: block;
         color: @mint;
@@ -1642,14 +1640,16 @@ main.party-list {
       }
     }
     >ul {
-      .make-sm-column(12);
+      .make-sm-column(10);
       list-style: none;
     }
   }
-  .plenary-session-item {
+  /*li*/.plenary-session-item {
     color: @gray;
     display: block;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    border-bottom: solid 1px @gray-light;
     i {
       font-size: @font-size-large;
       line-height: 1;
@@ -1659,17 +1659,17 @@ main.party-list {
     .nr_votes, .nr_statements {
       margin-right: 10px;
       font-weight: bold;
-      //font-size: @font-size-large;
     }
     ul {
       margin-left: 20px;
-      margin-top: 20px;
+      //margin-top: 10px;
       list-style: none;
       li {
         margin-bottom: 5px;
+        padding-bottom: 0;
+        border: none;
         .title {
           font-size: @font-size-base;
-          //color: @pine;
         }
       }
     }

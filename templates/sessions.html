@@ -3,9 +3,11 @@
 {% block title %}{% trans "Plenary sessions" %}{% endblock %}
 
 {% block content %}
+
+
 <script type="text/template" id="plenary-session-template">
   <li class="plenary-session">
-    <h5 class="title"><span class="id"><%= name %></span> <span class="date"><%= date_str %></h5>
+    <h5 class="title">Täysistunto<span class="id"><%= name %></span> <span class="date"><%= date_str %></h5>
     <ul></ul>
   </li>
 </script>
@@ -26,14 +28,19 @@
 </li>
 </script>
 
+<div class="content content--parties">
+    <header class="page-heading">
+        <h1>Täysistunnot</h1>
+    </header>
+</div>
+
 <div class="row">
-    <div class="col-md-4">
-    </div>
-    <div class="col-md-11 content">
+    <div class="col-md-15">
         <ul id="session-item-list"></ul>
         <div id="session-item-list-end"></div>
     </div>
 </div>
+
 
 {% compress js %}
 <script type="text/coffeescript" src="{% static 'js/session.coffee' %}"></script>
@@ -41,3 +48,4 @@
 
 {% endblock %}
 
+ 
