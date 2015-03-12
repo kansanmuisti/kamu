@@ -5,4 +5,4 @@ class ParliamentConfig(AppConfig):
     verbose_name = "Parliament"
 
     def ready(self):
-        print("ready")
+        pass

@@ -30,7 +30,7 @@ install_typeahead = ->
 search_handler = (ev) ->
     ev.preventDefault()
     query = $.trim $("#main-search").val()
-    window.location = URL_CONFIG['search'] + '?q=' + query
+    window.location = URL_CONFIG['search'] + '?as.q=' + query
 
 $ ->
     install_typeahead()

@@ -8,10 +8,11 @@ class @ActivityFeedView extends Backbone.View
         _.extend @base_filters, default_filters
         
         @filters = {}
-
-    filter: ({keyword, type, date}={}) ->
-        @collection.filters.offset = 0
-        @collection.filters.limit = 20
+    
+    filter_params: ({keyword, type, date, q}={}) ->
+        # TODO: The different params should be
+        # handled independently, so they would
+        # be nicer to customize
         params = {}
         if keyword?
             params.keyword = keyword
@@ -23,10 +24,18 @@ class @ActivityFeedView extends Backbone.View
         if date.to?
             # Dates are converted to midnight, so
             # we'll have to add one
-            params['time__lte'] = moment(date.to, 'YYYY-MM-DD')
+            params['time__lt'] = moment(date.to, 'YYYY-MM-DD')
                 .add(1, 'day').format('YYYY-MM-DD')
         
-        @filters = _.extend {}, @base_filters, params
+        if q?
+            params.q = q
+        return _.extend {}, @base_filters, params
+        
+
+    filter: (opts) ->
+        @collection.filters.offset = 0
+        @collection.filters.limit = 20
+        @filters = @filter_params opts
         return (@collection.fetch
             reset: true
             data: @filters)
