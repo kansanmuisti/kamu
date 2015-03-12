@@ -41,6 +41,7 @@ class @ActivityFeedView extends Backbone.View
             data: @filters)
     
     add_item: (item) =>
+        @collection.filters.offset += 1
         view = new ActivityView model: item, has_actor: true
         view.render()
         @$el.append view.el
@@ -50,7 +51,6 @@ class @ActivityFeedView extends Backbone.View
         coll.each @add_item
 
     load_more: =>
-        @collection.filters.offset += @collection.filters.limit
         return (@collection.fetch
             reset: false
             data: _.clone @filters)
