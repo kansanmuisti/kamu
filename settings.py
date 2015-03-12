@@ -177,7 +177,6 @@ INSTALLED_APPS = (
     'social',
     'parliament',
     'eduskunta',
-    'cms',
 )
 
 AUTHENTICATION_BACKENDS = (
