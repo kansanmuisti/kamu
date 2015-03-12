@@ -3,11 +3,10 @@
 <script type="text/javascript" src="{% static "js/vendor/bootstrap-datepicker.js" %}"></script>
 <script type="text/javascript" src="{% static "js/vendor/bootstrap-datepicker.fi.js" %}"></script>
 <div class="feed-filters">
+    <div class="main-filter-container">
     <div class="keyword-filter-group"  style="display: none">
         <label>{% trans "Issue" %}
-            <button type="button" class="discrete-toggle-btn search-toggle">
-                <i class="typcn typcn-zoom-outline"></i>
-            </button>
+            
         </label>
         <div class="filter-control">
             <div class="filter-control-keyword-slot">
@@ -23,10 +22,14 @@
                     <input type="text" class="tag-filter-input text-search form-control" placeholder="{% trans 'Search for a keyword' %}..."></input>
                 </div>
             </div>
-            
+            <button type="button" class="discrete-toggle-btn search-toggle">
+                <i class="typcn typcn-zoom-outline"></i>
+            </button>
 
         </div>
+        </div>
     </div>
+    <div class="side-filter-container">
     <div class="type-filter-group" style="display: none">
         <label>{% trans "Filter" %}</label>
         <div class="filter-control">
@@ -42,6 +45,7 @@
                 <input type="text" class="discrete-toggle-btn" name="to" placeholder="{% trans "Any time"%}" required />
             </div>
         </div>
+    </div>
     </div>
 </div>
 {% compress js inline %}

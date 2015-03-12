@@ -415,29 +415,40 @@ fieldset {
 }
 
 .feed-filters {
+    display: flex;
     .clearfix();
     padding: 10px;
     background: @gray-lighter;
     .shadow-heavy();
     z-index: 100;
     position: relative;
-    form {
+    
+    > * > label {
         margin: 0;
     }
-
     > * {
-        float: right;
-
         > label {
             margin: 0;
         }
-        padding-left: 10px;
-    }
-    
-    > .keyword-filter-group {
-        float: left;
+
     }
 
+    .main-filter-container {
+        flex-shrink: 0;
+    }
+
+    .side-filter-container {
+        flex-grow: 1;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        align-content: flex-end;
+        > * {
+            flex-shrink: 0;
+            flex-grow: 0;
+        }
+    }
+    
     .dropdown-menu {
         z-index: 101;
         background: @gray-lighter;
@@ -492,7 +503,7 @@ fieldset {
     }
 
     .filter-control-keyword-slot {
-        width: 16em;
+        width: 14em;
         display: inline-block;
         overflow: hidden;
         vertical-align: middle;
@@ -501,6 +512,11 @@ fieldset {
             z-index: 500;
             overflow: visible;
         }
+    }
+
+    .search-toggle {
+        > i {.large-icon;}
+        padding: 3px 6px;
     }
 }
 
