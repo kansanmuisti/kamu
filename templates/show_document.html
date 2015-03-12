@@ -57,6 +57,35 @@
             <div class="proposal-summary">{{doc.summary|linebreaks}}</div>
             {% endif %}
 
+            {% if doc.question %}
+            {% with member=doc.author %}
+            <div class="proposal-statement media side-opposition">
+                <a class="statement-portrait" href="{{member.get_absolute_url}}">
+                    {% thumbnail member.photo "64x64" as tn %}
+                    <img class="media-object" src="{{tn.url}}">
+                    {% endthumbnail %}
+                </a>
+                <div class="media-body proposal-statement-content">
+                    <h5 class="media-heading">{{member}} /{{member.party.abbreviation}}</h5>
+                    <div class="proposal-statement-text">
+                        {{doc.question|linebreaks}}
+                    </div>
+                </div>
+            </div>
+            {% endwith %}
+            {% endif %}
+
+            {% if doc.answer %}
+            <div class="proposal-statement media side-government">
+                <div class="media-body proposal-statement-content">
+                    <h5 class="media-heading">{{doc.answerer_title}} {{doc.answerer_name}}</h5>
+                    <div class="proposal-statement-text">
+                        {{doc.answer|linebreaks}}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
             {% if session_items %}
             <a id="statements"></a>
             <h2>{% trans "Statements" %}</h2>

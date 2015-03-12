@@ -512,10 +512,13 @@ def get_processing_stages(doc):
 
     return doc_stages
 
+
 def show_document(request, slug):
     doc = get_object_or_404(Document, url_name=slug)
-    if doc.summary:
-        doc.summary = doc.summary.replace('\n', '\n\n')
+    for attr_name in ('summary', 'answer', 'question'):
+        t = getattr(doc, attr_name)
+        if t:
+            setattr(doc, attr_name, t.replace('\n', '\n\n'))
     doc.processing_stages = get_processing_stages(doc)
 
     session_items = doc.plenarysessionitem_set
