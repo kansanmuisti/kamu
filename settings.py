@@ -175,7 +175,7 @@ INSTALLED_APPS = (
     'corsheaders',
 
     'social',
-    'parliament',
+    'parliament.apps.ParliamentConfig',
     'eduskunta',
 )
 
