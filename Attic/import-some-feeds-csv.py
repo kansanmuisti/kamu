@@ -197,17 +197,31 @@ imp.logger = logging.getLogger(__name__)
 imp.feed_updater = FeedUpdater(imp.logger)
 imp.replace = False
 
-reader = csv.reader(open('kansanedustajat-some.csv', 'r'), delimiter=',')
-for row in reader:
-    mp_name = row[0].decode('utf8')
-    member = Member.objects.get(name=mp_name)
-    fb = row[1]
-    tw = row[2]
-    if fb and fb != '-':
-        fb = parse_fb_feed(fb)
-        print "%s: %s" % (mp_name, fb)
-        imp.validate_fb_feed(MemberSocialFeed, member, fb)
-    if tw and tw != '-':
-        tw = parse_tw_feed(tw)
-        print "%s: %s" % (mp_name, tw)
-        imp.validate_twitter_feed(MemberSocialFeed, member, tw)
+if False:
+    reader = csv.reader(open('kansanedustajat-some.csv', 'r'), delimiter=',')
+    for row in reader:
+        mp_name = row[0].decode('utf8')
+        member = Member.objects.get(name=mp_name)
+        fb = row[1]
+        tw = row[2]
+        if fb and fb != '-':
+            fb = parse_fb_feed(fb)
+            print "%s: %s" % (mp_name, fb)
+            imp.validate_fb_feed(MemberSocialFeed, member, fb)
+        if tw and tw != '-':
+            tw = parse_tw_feed(tw)
+            print "%s: %s" % (mp_name, tw)
+            imp.validate_twitter_feed(MemberSocialFeed, member, tw)
+else:
+    reader = csv.DictReader(open('new-mp-feeds.csv', 'r'), delimiter=',')
+    for row in reader:
+        mp_name = row['mp'].decode('utf8')
+        member = Member.objects.get(name=mp_name)
+        if row['type'] == 'FB':
+            fb = parse_fb_feed(row['feed'])
+            print('%s: %s' % (member.name, fb))
+            imp.validate_fb_feed(MemberSocialFeed, member, fb)
+        if row['type'] == 'TW':
+            tw = parse_tw_feed(row['feed'])
+            print('%s: %s' % (member.name, tw))
+            imp.validate_twitter_feed(MemberSocialFeed, member, tw)
