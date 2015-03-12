@@ -1,30 +1,28 @@
 # -*- coding: utf-8 -*-
-import operator
 import datetime
 import json
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.core.cache import cache
-from django.db.models import Q, Min, Max, Sum, Count
-from django.db import connection
+from django.db.models import Q, Max, Sum, Count
 from django.http import HttpResponse
 from django.utils.translation import ugettext as _
-from django.shortcuts import render_to_response, get_list_or_404, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from sorl.thumbnail import get_thumbnail
 from parliament.models import *
 from social.models import Update
 from httpstatus import Http400
-from calendar import Calendar
-from datetime import date
-from dateutil.relativedelta import relativedelta
-from utils import time_func
 
-import parliament.member_views
 from parliament.api import MemberResource, KeywordResource, PartyResource, \
     DocumentResource
+
+FEED_FILTER_GROUPS = {
+    'social': _("Social"),
+    'parliament': _("Parliament")
+}
 
 FEED_ACTIONS = [
     {
@@ -200,10 +198,22 @@ def make_feed_filters(actor=False):
         if actor and a.get('no_actor', False):
             continue
         grp = a['group']
-        d = groups.get(grp, [])
-        d.append(a)
-        groups[grp] = d
+        if grp not in groups:
+            groups[grp] = {'name': FEED_FILTER_GROUPS[grp], 'items': []}
+        groups[grp]['items'].append(a)
     return groups
+
+
+def add_feed_filters(args, actor=False):
+    feed_filters = {
+        'buttons': make_feed_filters(actor=actor),
+        'groups': FEED_FILTER_GROUPS,
+        'disable_button': {
+            'label': _('All activities')
+        }
+    }
+    args['feed_filters'] = feed_filters
+
 
 def make_feed_actions():
     d = {}
@@ -235,12 +245,7 @@ def show_member(request, member, page=None):
         types, 'application/json')
     args['activity_type_weights_json'] = res.serialize(None,
         weights, 'application/json')
-    args['feed_filters'] = {
-            'buttons': make_feed_filters(actor=True),
-            'disable_button': {
-                'label': _('All activities')
-            }
-        }
+    add_feed_filters(args, actor=True)
     args['feed_actions_json'] = json.dumps(make_feed_actions(), ensure_ascii=False)
     kw_act = _get_member_activity_kws(member)
     kw_act_json = json.dumps(kw_act, ensure_ascii=False)
@@ -382,8 +387,10 @@ def main(request):
     return render_to_response('home.html', args,
                               context_instance=RequestContext(request))
 
+
 def list_sessions(request):
     return render_to_response('sessions.html', {}, context_instance=RequestContext(request))
+
 
 def get_embedded_resource_list(request, resource, options={}):
     old_GET = request.GET
@@ -404,6 +411,7 @@ def get_embedded_resource_list(request, resource, options={}):
     request.GET = old_GET
     return json
 
+
 def get_embedded_resource(request, resource, obj, options={}):
     old_GET = request.GET
     request.GET = options
@@ -414,6 +422,7 @@ def get_embedded_resource(request, resource, obj, options={}):
 
     request.GET = old_GET
     return json
+
 
 def list_topics(request):
     args = {}
@@ -443,27 +452,23 @@ def show_topic_by_name(request):
     url = reverse("parliament.views.show_topic", kwargs=dict(topic=kw.id, slug=kw.get_slug()))
     return redirect(url)
 
+
 def show_topic(request, topic, slug=None):
     # We don't use slug for anything.
     kw = get_object_or_404(Keyword, id=topic)
     kw_json = get_embedded_resource(request, KeywordResource, kw, {'related': '1', 'most_active': '1'})
     args = {'topic': kw, 'keyword_json': kw_json}
     args['feed_actions_json'] = json.dumps(make_feed_actions(), ensure_ascii=False)
-    args['feed_filters'] = {
-            'buttons': make_feed_filters(actor=True),
-            'disable_button': {
-                'label': _('All activities')
-            }
-        }
+    add_feed_filters(args, actor=True)
 
-
-    agr = kw.keywordactivity_set.aggregate(Max("activity__time")) 
+    agr = kw.keywordactivity_set.aggregate(Max("activity__time"))
     max_time = agr['activity__time__max']
     keyword_activity_end_date = max_time.date
     args['keyword_activity_end_date'] = keyword_activity_end_date
 
     return render_to_response('show_topic.html', args,
         context_instance=RequestContext(request))
+
 
 def list_members(request):
     args = {}
@@ -473,6 +478,7 @@ def list_members(request):
 
     return render_to_response('member/list.html',
             args, context_instance=RequestContext(request))
+
 
 def get_processing_stages(doc):
     stage_choices = DocumentProcessingStage.STAGE_CHOICES
@@ -494,7 +500,7 @@ def get_processing_stages(doc):
     for st in stages:
         add_stage(st.stage, st.date)
 
-    if not doc.type in doc.PROCESSING_FLOW:
+    if doc.type not in doc.PROCESSING_FLOW:
         return doc_stages
     flow = doc.PROCESSING_FLOW[doc.type]
     if st.stage not in flow:
@@ -529,8 +535,10 @@ def show_document(request, slug):
     return render_to_response('show_document.html', args,
         context_instance=RequestContext(request))
 
+
 def list_parties(request):
     return render_to_response('party/list.html', context_instance=RequestContext(request))
+
 
 def show_party_feed(request, abbreviation):
     party = get_object_or_404(Party, abbreviation=abbreviation)
@@ -546,13 +554,6 @@ def show_party_feed(request, abbreviation):
 
     governing = [gp for gp in GoverningParty.objects.filter(party=party).order_by('-begin') if gp.end != None]
 
-    feed_filters = {
-            'buttons': make_feed_filters(actor=True),
-            'disable_button': {
-                'label': _('All activities')
-            }
-        }
-
     args = dict(party=party,
                 party_json=party_json,
                 party_activity_end_date=party_activity_end_date,
@@ -560,6 +561,8 @@ def show_party_feed(request, abbreviation):
                 feed_filters=feed_filters,
                 keyword_activity = kw_act_json,
                 governing=governing)
+
+    add_feed_filters(args, actor=True)
 
     return render_to_response("party/feed.html", args,
         context_instance=RequestContext(request))

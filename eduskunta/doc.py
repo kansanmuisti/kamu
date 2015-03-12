@@ -123,7 +123,7 @@ class DocImporter(Importer):
             # quirks
             if doc_name in ('HE 25/2009', 'HE 57/2014', 'HE 29/2014') and phase == '2ndread':
                 el_name = names['akja2k'][1]
-            if doc_name in ('HE 29/2014', 'HE 3/2014', 'HE 215/2013', 'HE 203/2013', 'HE 288/2014') and phase == 'only2read':
+            if doc_name in ('HE 29/2014', 'HE 3/2014', 'HE 215/2013', 'HE 203/2013', 'HE 288/2014', 'HE 297/2014') and phase == 'only2read':
                 phase = '2ndread'
                 el_name = names['2kasit'][1]
             if doc_name == 'HE 112/2011':
@@ -447,7 +447,7 @@ class DocImporter(Importer):
             doc.keywords_changed = False
             return
 
-        print "Keywords or their order changed"
+        self.logger.debug("Keywords or their order changed: %s" % ', '.join(info['keywords']))
         doc.keywords_changed = True
         for kw in info['keywords']:
             try:
