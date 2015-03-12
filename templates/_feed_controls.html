@@ -4,11 +4,12 @@
 <script type="text/javascript" src="{% static "js/vendor/bootstrap-datepicker.fi.js" %}"></script>
 <div class="feed-filters">
     <div class="keyword-filter-group"  style="display: none">
-        <label>{% trans "Issue" %}</label>
-        <div class="filter-control">
-            <button type="button" class="btn btn-default search-toggle">
-                <i class="typcn typcn-medium typcn-zoom-outline"></i>
+        <label>{% trans "Issue" %}
+            <button type="button" class="discrete-toggle-btn search-toggle">
+                <i class="typcn typcn-zoom-outline"></i>
             </button>
+        </label>
+        <div class="filter-control">
             <div class="filter-control-keyword-slot">
                 <div class="filter-control-actual-keyword">
                     <span class="no-selected-keyword" style="display: none">{% trans "All issues" %}</span>
@@ -22,6 +23,7 @@
                     <input type="text" class="tag-filter-input text-search form-control" placeholder="{% trans 'Search for a keyword' %}..."></input>
                 </div>
             </div>
+            
 
         </div>
     </div>
@@ -35,9 +37,9 @@
         <label>{% trans "Timerange" %}</label>
         <div class="filter-control">
             <div class="input-daterange">
-                <input type="text" class="input-sm" name="from" placeholder="{% trans "Any time"%}" />
+                <input type="text" class="discrete-toggle-btn" name="from" placeholder="{% trans "Any time"%}" required />
                 &#8594;
-                <input type="text" class="input-sm" name="to" placeholder="{% trans "Any time"%}" />
+                <input type="text" class="discrete-toggle-btn" name="to" placeholder="{% trans "Any time"%}" required />
             </div>
         </div>
     </div>

@@ -393,6 +393,27 @@ fieldset {
     }
 }
 
+.discrete-toggle-btn {
+    .btn;
+    .btn-default;
+    background: transparent;
+    border: 0;
+
+    &:valid {
+        .btn.active;
+        .btn-default.active;
+        .btn-group.active;
+    }
+}
+
+.large-icon {
+    font-size: @font-size-large;
+}
+
+.small-icon {
+    font-size: @font-size-small;
+}
+
 .feed-filters {
     .clearfix();
     padding: 10px;
@@ -437,6 +458,7 @@ fieldset {
     .selected-keyword {
         white-space: nowrap;
     }
+
     .selected-keyword .keyword-link {
         .tag-banner;
         border-left: 0;
@@ -444,6 +466,14 @@ fieldset {
         display: inline-block;
         position: relative;
         border-radius: 0 3px 3px 0;
+        background-color: white;
+    }
+
+    .no-selected-keyword {
+        display: inline-block;
+        .tag-spacing;
+        .tag-text-styling;
+        opacity: 0.5;
     }
 
     .selected-keyword .remove-kw-filter {
@@ -478,7 +508,6 @@ fieldset {
     .input-daterange > input {
         outline: none;
         border: 0;
-        background: transparent;
         width: 8em;
     }
 }
