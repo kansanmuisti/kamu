@@ -35,6 +35,9 @@
 <script type="text/coffeescript" src="{% static "js/feed.coffee" %}"></script>
 <script type="text/coffeescript" src="{% static "js/activityfeedview.coffee" %}"></script>
 {% endcompress %}
+{% compress js %}
+<script type="text/javascript" src="{% static "js/vendor/twitter-text.js" %}"></script>
+{% endcompress %}
 
 <div class="modal fade" id="activity-graph-help" tabindex="-1" role="dialog">
   <div class="modal-dialog">
