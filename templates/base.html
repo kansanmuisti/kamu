@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="shortcut icon" href="{% static 'images/icons/favicon.ico' %}" />
-
+    
     <!-- fonts-->
     <link href='http://fonts.googleapis.com/css?family=Lato:400,900,400italic|Roboto+Condensed:700|Expletus+Sans:700' rel='stylesheet' type='text/css'>
 
@@ -188,8 +188,28 @@
         // Activate share button
         var share_opts = {
             ui: {
+                flyout: 'top right',
                 button_text: 'Jaa',
-                button_font: false
+                button_font: false,
+                icon_font: true
+            },
+            networks: {
+              google_plus: {
+                enabled: true
+              },
+              twitter: {
+                enabled: true
+              },
+              facebook: {
+                enabled: true,
+                app_id: '107387482616243'
+              },
+              pinterest: {
+                enabled: false
+              },
+              email: {
+                enabled: true
+              }
             }
         };
         new Share(".share-button", share_opts);
