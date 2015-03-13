@@ -397,7 +397,6 @@ fieldset {
     .btn;
     .btn-default;
     background: transparent;
-    border: 0;
     box-shadow: none;
     &:valid {
         .btn.active;
@@ -417,20 +416,13 @@ fieldset {
 .feed-filters {
     display: flex;
     .clearfix();
-    padding: 10px;
     background: @gray-lighter;
     .shadow-heavy();
     z-index: 100;
     position: relative;
     
-    > * > label {
-        margin: 0;
-    }
-    > * {
-        > label {
-            margin: 0;
-        }
-
+    > * > * {
+        padding: 10px;
     }
 
     .main-filter-container {
@@ -462,6 +454,12 @@ fieldset {
             border-radius: 0;
         }
     }
+    
+    .dropdown-toggle {
+        padding: 6px 6px;
+    }
+
+
 }
 
 
@@ -518,14 +516,14 @@ fieldset {
         > i {.large-icon;}
         padding: 3px 6px;
     }
-}
+
+    }
 
 .date-filter-group {
     .input-daterange > input {
-        outline: none;
-        border: 0;
         width: 8em;
     }
+    
 }
 
 .activity-graph {
