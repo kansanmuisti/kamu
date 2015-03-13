@@ -398,6 +398,11 @@ fieldset {
     .btn-default;
     background: transparent;
     box-shadow: none;
+    
+}
+
+input.discrete-toggle-btn {
+    .discrete-toggle-btn;
     &:valid {
         .btn.active;
         .btn-default.active;
@@ -411,6 +416,10 @@ fieldset {
 
 .small-icon {
     font-size: @font-size-small;
+}
+
+.slim-icon-btn {
+        padding: 6px 6px;
 }
 
 .feed-filters {
@@ -456,7 +465,7 @@ fieldset {
     }
     
     .dropdown-toggle {
-        padding: 6px 6px;
+        .slim-icon-btn;
     }
 
 
@@ -514,16 +523,25 @@ fieldset {
 
     .search-toggle {
         > i {.large-icon;}
+        .slim-icon-btn;
         padding: 3px 6px;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
     }
 
     }
 
 .date-filter-group {
-    .input-daterange > input {
-        width: 8em;
+    .date-input {
+        width: 7em;
     }
-    
+
+    // TODO: Make this look like "disabled"
+    // when there's no input
+    .clear-filter {
+        .slim-icon-btn;
+        border-right: 0;
+    }
 }
 
 .activity-graph {
