@@ -36,7 +36,7 @@ $(function() {
         <div class="proposal-content content">
             <header>
                 <h1>{{item.description}}</h1>
-                <h4>{{item.get_type_description}}</h4>
+                <h4>{{item.get_type_description|safe}}</h4>
                 <h4>{% trans "Plenary session" %} {{ item.plsess.date }}</h4>
             </header>
             {% if item.plenary_votes.count %}

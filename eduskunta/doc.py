@@ -285,9 +285,44 @@ class DocImporter(Importer):
         author = self.parse_mp(author_el)
         return author
 
-    def import_sgml_doc(self, info):
+    def parse_question_text(self, root_el, info):
+        question_el = root_el.xpath(".//kysosa[@kieli='suomi']")[0]
+        desc_els = question_el.xpath("./peruste/te")
+        paras = []
+        for p_el in desc_els:
+            text = self.clean_text(p_el.text_content())
+            paras.append(text)
+        info['summary'] = '\n'.join(paras)
+
+        q_els = question_el.xpath("./kysymys//ponsi")
+        paras = []
+        for p_el in q_els:
+            text = self.clean_text(p_el.text_content())
+            paras.append(text)
+        info['question'] = '\n'.join(paras)
+
+        ans_el_list = root_el.xpath(".//vnvast[@kieli='suomi']")
+        if not ans_el_list:
+            return
+
+        a_els = ans_el_list[0].xpath("./vastaus/te")
+        paras = []
+        for p_el in a_els:
+            text = self.clean_text(p_el.text_content())
+            paras.append(text)
+        info['answer'] = '\n'.join(paras)
+
+        pers_els = ans_el_list[0].xpath("./vnvallek//henkilo")[0]
+        info['answerer_title'] = self.clean_text(pers_els.xpath('asema')[0].text_content())
+        fn = self.clean_text(pers_els.xpath('etunimi')[0].text_content())
+        sn = self.clean_text(pers_els.xpath('sukunimi')[0].text_content())
+        info['answerer_name'] = '%s %s' % (sn, fn)
+
+    def import_sgml_doc(self, info, current_version):
         url = DOC_DL_URL % (info['type'], info['id'])
-        xml_fn = self.download_sgml_doc(info, url)
+        if not current_version:
+            current_version = '0'
+        xml_fn = self.download_sgml_doc(info, url, current_version=current_version)
         if not xml_fn:
             return None
         f = open(xml_fn, 'r')
@@ -301,23 +336,24 @@ class DocImporter(Importer):
         self.logger.info('%s %s: %s' % (info['type'], info['id'], text))
         info['subject'] = text
 
-        if info['type'].endswith('VM'):
-            xpath_list = ('.//asianvir', './/emasianv')
-        elif info['type'] == 'KK':
-            xpath_list = (".//kysosa[@kieli='suomi']//peruste",)
+        if info['type'] == 'KK':
+            self.parse_question_text(root, info)
         else:
-            xpath_list = ('.//peruste', './/paasis', './/yleisper')
-        for xpath in xpath_list:
-            l = root.xpath(xpath)
-            if not len(l):
-                continue
-            assert len(l) == 1
-            target_el = l[0]
-            break
-        else:
-            raise ParseError('Summary section not found')
+            if info['type'].endswith('VM'):
+                xpath_list = ('.//asianvir', './/emasianv')
+            else:
+                xpath_list = ('.//peruste', './/paasis', './/yleisper')
+            for xpath in xpath_list:
+                l = root.xpath(xpath)
+                if not len(l):
+                    continue
+                assert len(l) == 1
+                target_el = l[0]
+                break
+            else:
+                raise ParseError('Summary section not found')
 
-        info['summary'] = self.parse_te_paragraphs(target_el)
+            info['summary'] = self.parse_te_paragraphs(target_el)
         if info['type'] in ('KK', 'LA'):
             if info['type'] == 'KK':
                 author_root = root.xpath(".//kysosa[@kieli='suomi']")
@@ -449,6 +485,7 @@ class DocImporter(Importer):
 
         self.logger.debug("Keywords or their order changed: %s" % ', '.join(info['keywords']))
         doc.keywords_changed = True
+        doc.keywords.clear()
         for kw in info['keywords']:
             try:
                 kw_obj = Keyword.objects.get(name=kw)
@@ -507,13 +544,15 @@ class DocImporter(Importer):
         if info['type'] == 'HE':
             self.import_he(info)
         else:
-            ret = self.import_sgml_doc(info)
+            ret = self.import_sgml_doc(info, current_version=doc.version)
             if not ret:
                 return None
-        s = "%s %s" % (info['type'], info['id'])
+
+        doc.version = info.get('doc_version', None)
         doc.subject = info['subject']
-        if 'summary' in info:
-            doc.summary = info['summary']
+        for attr_name in ('summary', 'question', 'answer', 'answerer_name', 'answerer_title'):
+            if attr_name in info:
+                setattr(doc, attr_name, info[attr_name])
         if 'error' in info:
             doc.error = info['error']
         else:
@@ -581,7 +620,11 @@ class DocImporter(Importer):
             doc = self.import_doc(info)
             return
 
-        types = "(%s)" % '+or+'.join(DOC_TYPES.keys())
+        if options.get('doc_type', None):
+            doc_types = [options['doc_type']]
+        else:
+            doc_types = DOC_TYPES.keys()
+        types = "(%s)" % '+or+'.join(doc_types)
         url = DOC_LIST_URL % types
 
         from_year = options.get('from_year', None)

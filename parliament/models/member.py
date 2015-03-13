@@ -597,6 +597,13 @@ class MemberActivity(models.Model):
 
         return target
 
+    def get_search_index_content(self):
+        info = self.get_target_info()
+        kws = " ".join(kw['name'] for kw in info.get('keywords', []))
+        fields = [info.get(name, None) for name in ('subject', 'text', 'name')]
+        fields.append(kws)
+        return "\n".join(field for field in fields if field)
+
     def determine_last_modified_time(self):
         target_info = self.get_target_info()
         return target_info['last_modified_time']
@@ -613,7 +620,6 @@ class MemberActivity(models.Model):
     class Meta:
         app_label = 'parliament'
         ordering = ('time', 'member__name')
-
 
 class KeywordActivity(models.Model):
     activity = models.ForeignKey(MemberActivity, db_index=True)

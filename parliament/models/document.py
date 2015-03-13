@@ -91,6 +91,11 @@ class Document(UpdatableModel):
     author = models.ForeignKey('parliament.Member', null=True, db_index=True,
         help_text="Set if the document is authored by an MP")
 
+    question = models.TextField(blank=True, null=True)
+    answer = models.TextField(blank=True, null=True)
+    answerer_name = models.CharField(max_length=50, blank=True, null=True)
+    answerer_title = models.CharField(max_length=50, blank=True, null=True)
+
     version = models.CharField(max_length=10, null=True)
     error = models.CharField(max_length=50, blank=True, null=True)
 

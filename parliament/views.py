@@ -512,10 +512,13 @@ def get_processing_stages(doc):
 
     return doc_stages
 
+
 def show_document(request, slug):
     doc = get_object_or_404(Document, url_name=slug)
-    if doc.summary:
-        doc.summary = doc.summary.replace('\n', '\n\n')
+    for attr_name in ('summary', 'answer', 'question'):
+        t = getattr(doc, attr_name)
+        if t:
+            setattr(doc, attr_name, t.replace('\n', '\n\n'))
     doc.processing_stages = get_processing_stages(doc)
 
     session_items = doc.plenarysessionitem_set
@@ -558,7 +561,6 @@ def show_party_feed(request, abbreviation):
                 party_json=party_json,
                 party_activity_end_date=party_activity_end_date,
                 feed_actions_json=json.dumps(make_feed_actions(), ensure_ascii=False),
-                feed_filters=feed_filters,
                 keyword_activity = kw_act_json,
                 governing=governing)
 

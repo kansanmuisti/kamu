@@ -175,9 +175,8 @@ INSTALLED_APPS = (
     'corsheaders',
 
     'social',
-    'parliament',
+    'parliament.apps.ParliamentConfig',
     'eduskunta',
-    'cms',
 )
 
 AUTHENTICATION_BACKENDS = (

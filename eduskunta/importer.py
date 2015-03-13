@@ -171,15 +171,15 @@ class Importer(object):
             doc = html.fromstring(s)
             el = doc.xpath(".//a[contains(., 'Rakenteinen asiakirja')]")
 
-        if current_version:
-            ver_el = doc.xpath(".//div[@class='doclist-items']//div[@class='header']/span")
-            assert len(ver_el) == 1, "Version element not found"
-            m = re.search(r'([0-9]\.[0-9])', ver_el[0].text)
-            assert m, "Version number not found (%s)" % ver_el[0].text
-            doc_version = m.groups()[0]
-            if doc_version != current_version:
-                should_update_xml = True
-                self.logger.debug("SGML document updated (version %s, stored version %s)" % (doc_version, current_version))
+        ver_el = doc.xpath(".//div[@class='doclist-items']//div[@class='header']/span")
+        assert len(ver_el) >= 1, "Version element not found"
+        m = re.search(r'([0-9]\.[0-9])', ver_el[0].text)
+        assert m, "Version number not found (%s)" % ver_el[0].text
+        doc_version = m.groups()[0]
+        if current_version and doc_version != current_version:
+            should_update_xml = True
+            self.logger.debug("SGML document updated (version %s, stored version %s)" % (doc_version, current_version))
+        info['doc_version'] = doc_version
 
         if len(el) != 1:
             year = info['id'].split('/')[1]

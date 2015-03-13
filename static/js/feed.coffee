@@ -19,7 +19,8 @@ class @ActivityView extends Backbone.View
         @has_actor = options.has_actor
 
     process_summary: (text) ->
-        # TODO: Twitter processing
+        if @model.get('type') == 'TW'
+            return twttr.txt.autoLink text
         # Wrap text in <p> tags
         p_list = text.split '\n'
         p_list = ("<p>#{p}</p>" for p in p_list)

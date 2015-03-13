@@ -19,18 +19,23 @@ $ ->
     root_el = $(document)
     relel = (selector) -> root_el.find(selector)
     search_list = new MemberActivitySearchList()
-    hashstate.sub('q').on (value) ->
-        query = $.trim value
-        search_list.query query
+    
+    state = hashstate.sub 'as'
+    qstate = state.sub 'q'
+    qstate.on (value) ->
+        $("#main-search").val value ? ""
 
-    setup = new ActivityFeedControl hashstate.sub('search')
+    setup = new ActivityFeedControl state
     setup.feed_view new ActivityFeedView
         el: relel ".activity-feed"
         collection: search_list
     setup.controls relel ".feed-filters"
+    .date()
+
 
     $(".activity-tag-cloud-container").hide()
-    $(".filter-feed .feed-filtering").hide()
+    $(".activity-graph").hide()
+    #$(".filter-feed .feed-filtering").hide()
 </script>
 {% endcompress %}
 

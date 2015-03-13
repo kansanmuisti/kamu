@@ -35,6 +35,7 @@ class Command(BaseCommand):
         make_option('--single', metavar='ID', dest='single', help='Import only a single element'),
         make_option('--from-year', metavar='YEAR', dest='from_year', help='Start importing from YEAR'),
         make_option('--from-id', metavar='ID', dest='from_id', help='Start importing from ID'),
+        make_option('--doc-type', metavar='TYPE', dest='doc_type', help='Import only specific doc type'),
         make_option('--replace', action='store_true', dest='replace',
                     default=False, help='Replace values of existing objects'),
         make_option('--full', action='store_true', dest='full',
@@ -95,6 +96,8 @@ class Command(BaseCommand):
                 args['from_year'] = options['from_year']
             if options['from_id']:
                 args['from_id'] = options['from_id']
+            if options['doc_type']:
+                args['doc_type'] = options['doc_type']
             args['full'] = options['full']
             importer.import_docs(**args)
         if options['vote']:

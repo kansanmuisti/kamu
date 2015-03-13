@@ -285,6 +285,10 @@ fieldset {
               background: @gray-lighter;
               padding: 10px;
             }
+            .summary a {
+                text-decoration: none;
+                color: @mint;
+            }
         }
         .content-image {
             float: left;
@@ -414,30 +418,62 @@ fieldset {
     }
 }
 
+.discrete-toggle-btn {
+    .btn;
+    .btn-default;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    &:valid {
+        .btn.active;
+        .btn-default.active;
+        .btn-group.active;
+    }
+}
+
+.large-icon {
+    font-size: @font-size-large;
+}
+
+.small-icon {
+    font-size: @font-size-small;
+}
+
 .feed-filters {
+    display: flex;
     .clearfix();
     padding: 10px;
     background: @gray-lighter;
     .shadow-heavy();
     z-index: 100;
     position: relative;
-    form {
+    
+    > * > label {
         margin: 0;
     }
-
     > * {
-        float: right;
-
         > label {
             margin: 0;
         }
-        padding-left: 10px;
-    }
-    
-    > .keyword-filter-group {
-        float: left;
+
     }
 
+    .main-filter-container {
+        flex-shrink: 0;
+    }
+
+    .side-filter-container {
+        flex-grow: 1;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        align-content: flex-end;
+        > * {
+            flex-shrink: 0;
+            flex-grow: 0;
+        }
+    }
+    
     .dropdown-menu {
         z-index: 101;
         background: @gray-lighter;
@@ -458,6 +494,7 @@ fieldset {
     .selected-keyword {
         white-space: nowrap;
     }
+
     .selected-keyword .keyword-link {
         .tag-banner;
         border-left: 0;
@@ -465,6 +502,14 @@ fieldset {
         display: inline-block;
         position: relative;
         border-radius: 0 3px 3px 0;
+        background-color: white;
+    }
+
+    .no-selected-keyword {
+        display: inline-block;
+        .tag-spacing;
+        .tag-text-styling;
+        opacity: 0.5;
     }
 
     .selected-keyword .remove-kw-filter {
@@ -483,7 +528,7 @@ fieldset {
     }
 
     .filter-control-keyword-slot {
-        width: 16em;
+        width: 14em;
         display: inline-block;
         overflow: hidden;
         vertical-align: middle;
@@ -493,13 +538,17 @@ fieldset {
             overflow: visible;
         }
     }
+
+    .search-toggle {
+        > i {.large-icon;}
+        padding: 3px 6px;
+    }
 }
 
 .date-filter-group {
     .input-daterange > input {
         outline: none;
         border: 0;
-        background: transparent;
         width: 8em;
     }
 }
