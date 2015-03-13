@@ -246,6 +246,13 @@ class PlenaryVote(UpdatableModel):
         lines.append(self.subject)
         return ' '.join(lines)
 
+    def get_result(self):
+        vote_counts = self.get_vote_counts()
+        if vote_counts['Y'] > vote_counts['N']:
+            return 'Y'
+        else:
+            return 'N'
+
     @models.permalink
     def get_absolute_url(self):
         args = {'plsess': self.plenary_session.url_name, 'sess': self.number}

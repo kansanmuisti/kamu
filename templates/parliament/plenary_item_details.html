@@ -45,16 +45,20 @@ $(function() {
               {% for vote in item.plenary_votes.all %}
               <div class="voting-result-summary">
                 <h5 class="voting-setting">{{ vote.setting }}</h5>
-                <div class="voting-conclusion-container conclusion-yes"><span class="conclusion-title">Tulos</span><span class="conclusion-result"><i class="typcn typcn-thumbs-up"></i></span></div>
-                
+                <div class="voting-conclusion-container conclusion-yes">
+                  <span class="conclusion-title">{% trans "Result" %}</span>
+                  <span class="conclusion-result">
+                    <i class="typcn typcn-{% if vote.get_result == 'Y' %}thumbs-up{% else %}thumbs-down{% endif %}"></i>
+                  </span>
+                </div>
                 {% with vc=vote.get_vote_counts %}
-                <div class="voting-sum-container"><div class="voting-sum-icon sum-icon-yes outcome"><i class="typcn typcn-thumbs-up"></i>{{ vc.Y }}</div>
+                <div class="voting-sum-container"><div title="{% trans "Yay" %}" class="voting-sum-icon sum-icon-yes outcome"><i class="typcn typcn-thumbs-up"></i>{{ vc.Y }}</div>
                 <div class="voting-sum-graphic sum-marker-yes"><div class="voting-sum" style="width:{% widthratio vc.Y 200 100 %}%"></div></div></div>
-                <div class="voting-sum-container"><div class="voting-sum-icon sum-icon-no "><i class="typcn typcn-thumbs-down"></i>{{ vc.N }}</div>
+                <div class="voting-sum-container"><div title="{% trans "Nay" %}" class="voting-sum-icon sum-icon-no "><i class="typcn typcn-thumbs-down"></i>{{ vc.N }}</div>
                 <div class="voting-sum-graphic sum-marker-no"><div class="voting-sum" style="width:{% widthratio vc.N 200 100 %}%"></div></div></div>
-                <div class="voting-sum-container"><div class="voting-sum-icon sum-icon-empty "><i class="typcn typcn-minus-outline"></i>{{ vc.E }}</div>
+                <div class="voting-sum-container"><div title="{% trans "Empty" %}" class="voting-sum-icon sum-icon-empty "><i class="typcn typcn-minus-outline"></i>{{ vc.E }}</div>
                 <div class="voting-sum-graphic sum-marker-empty"><div class="voting-sum" style="width:{% widthratio vc.E 200 100 %}%"></div></div></div>
-                <div class="voting-sum-container"><div class="voting-sum-icon sum-icon-absent "><i class="typcn typcn-user-delete-outline"></i>{{ vc.A }}</div>
+                <div class="voting-sum-container"><div title="{% trans "Absent" %}" class="voting-sum-icon sum-icon-absent "><i class="typcn typcn-user-delete-outline"></i>{{ vc.A }}</div>
                 <div class="voting-sum-graphic sum-marker-absent"><div class="voting-sum" style="width:{% widthratio vc.A 200 100 %}%"></div></div></div>
                 
                 {% endwith %}
