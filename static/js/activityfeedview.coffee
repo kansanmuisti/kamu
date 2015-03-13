@@ -209,7 +209,7 @@ class @ActivityFeedControl
         date_state = @date_state
         daterange = el.find(".input-daterange")
         daterange.datepicker
-            clearBtn: true
+            clearBtn: false
             language: "fi"
             autoclose: true
             todayHiglight: true
@@ -229,6 +229,13 @@ class @ActivityFeedControl
                 if value?
                     value = moment(value, 'YYYY-MM-DD').toDate()
                 myel.datepicker 'update', value
+        
+        for myel in el.find('.clear-filter')
+            myel = $ myel
+            sub = date_state.sub(myel.data 'field')
+            myel.click do (sub) -> (ev) ->
+                sub.update undefined
+
             
         startel = el.find "[name=start]"
         endel = el.find "[name=end]"

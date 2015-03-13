@@ -422,8 +422,12 @@ fieldset {
     .btn;
     .btn-default;
     background: transparent;
-    border: 0;
     box-shadow: none;
+    
+}
+
+input.discrete-toggle-btn {
+    .discrete-toggle-btn;
     &:valid {
         .btn.active;
         .btn-default.active;
@@ -439,23 +443,20 @@ fieldset {
     font-size: @font-size-small;
 }
 
+.slim-icon-btn {
+        padding: 6px 6px;
+}
+
 .feed-filters {
     display: flex;
     .clearfix();
-    padding: 10px;
     background: @gray-lighter;
     .shadow-heavy();
     z-index: 100;
     position: relative;
     
-    > * > label {
-        margin: 0;
-    }
-    > * {
-        > label {
-            margin: 0;
-        }
-
+    > * > * {
+        padding: 10px;
     }
 
     .main-filter-container {
@@ -487,6 +488,12 @@ fieldset {
             border-radius: 0;
         }
     }
+    
+    .dropdown-toggle {
+        .slim-icon-btn;
+    }
+
+
 }
 
 
@@ -541,15 +548,24 @@ fieldset {
 
     .search-toggle {
         > i {.large-icon;}
+        .slim-icon-btn;
         padding: 3px 6px;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
     }
-}
+
+    }
 
 .date-filter-group {
-    .input-daterange > input {
-        outline: none;
-        border: 0;
-        width: 8em;
+    .date-input {
+        width: 7em;
+    }
+
+    // TODO: Make this look like "disabled"
+    // when there's no input
+    .clear-filter {
+        .slim-icon-btn;
+        border-right: 0;
     }
 }
 

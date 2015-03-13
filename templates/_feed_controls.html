@@ -40,9 +40,19 @@
         <label>{% trans "Timerange" %}</label>
         <div class="filter-control">
             <div class="input-daterange">
-                <input type="text" class="discrete-toggle-btn" name="from" placeholder="{% trans "Any time"%}" required />
+                <span class="btn-group from-date-field">
+                <button class="btn discrete-toggle-btn clear-filter" data-field="from">
+                    <i class="typcn typcn-times"></i>
+                </button>
+                <input type="text" class="discrete-toggle-btn date-input" name="from" placeholder="{% trans "Any time"%}" required />
+                </span>
                 &#8594;
-                <input type="text" class="discrete-toggle-btn" name="to" placeholder="{% trans "Any time"%}" required />
+                <span class="btn-group to-date-field">
+                <button class="btn discrete-toggle-btn clear-filter" data-field="to">
+                    <i class="typcn typcn-times"></i>
+                </button>
+                <input type="text" class="discrete-toggle-btn date-input" name="to" placeholder="{% trans "Any time"%}" required />
+                </span>
             </div>
         </div>
     </div>
