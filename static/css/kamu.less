@@ -1717,7 +1717,7 @@ main.party-list {
     }
   }
   /*li*/.plenary-session-item {
-    color: @gray;
+    color: @lead;
     display: block;
     margin-bottom: 5px;
     padding-bottom: 5px;
@@ -1725,7 +1725,6 @@ main.party-list {
     i {
       font-size: @font-size-large;
       line-height: 1;
-      color: @pine;
       margin-right: 5px;
     }
     .nr_votes, .nr_statements {
@@ -1759,42 +1758,102 @@ main.party-list {
  ***************************************************************/
 
 .voting-result-summary {
-    .clearfix;
-    background: @white;
-    border: 1px solid @pine;
-    padding: 10px;
+  .clearfix;
+  padding: 10px;
+  margin-bottom: 20px;
+  background: @gray-lighter;
+  
+  .voting-setting {
+    margin: 0;
+  }
   .voting-sum-container {
-    height: 25px;
+    .clearfix;
+  }
+  .voting-sum-graphic {
+    height: 10px;
     overflow: hidden;
-    background: @gray-lighter;
+    background: @white;
+    margin: 5px 0;
   }
   .voting-sum {
-    height: 10px;
-    margin: 5px;
+    height: 10px; 
   }
   .voting-sum-icon {
-    height: 25px;
+    height: 20px;
     width: 60px;
     float: left;
-    text-align: left;
+    font-weight: bold;
+    color: @gray;
+    font-size: 13px;
+    line-height: 20px;
       i {
+        margin-right: 5px;
         font-size: 20px;
         line-height: 20px;
       }
   }
   
-  .sum-no {
+  .sum-icon-yes i {
+    color: @pine;
+  }
+  
+  .sum-icon-no i {
+    color: @electric;
+  }
+  
+  .sum-icon-empty i {
+    color: @mint;
+  }
+  
+  .sum-icon-absent i {
+    color: @gray;
+  }
+  
+  .sum-marker-no .voting-sum {
     background: @electric;
   }
-  .sum-yes {
+  .sum-marker-yes .voting-sum {
     background: @pine;
   }
-  .sum-empty {
-    background: @lemon;
+  .sum-marker-empty .voting-sum {
+    background: @mint;
   }
-  .sum-absent {
-    background: @lead;
+  .sum-marker-absent .voting-sum  {
+    background: @gray;
   }
+  
+  .voting-conclusion-container {
+    .conclusion-title {
+      display: inline-block;
+      width: 60px;
+      font-weight: bold;
+      color: @gray;
+      font-size: 13px;
+      line-height: 20px;
+    }
+    .conclusion-result {
+      font-size: 25px;
+      line-height: 25px;
+      i {
+      }
+    }
+  }
+  
+  .conclusion-yes i {
+    color: @pine;
+  }
+  .conclusion-no i {
+    color: @electric;
+  }
+  .conclusion-empty i {
+    color: @mint;
+  }
+  .conclusion-absent i {
+    color: @gray;
+  }
+  .voting-more-details {
+  }
+
 }
 
 /* TT END */
