@@ -174,6 +174,8 @@ class Importer(object):
         ver_el = doc.xpath(".//div[@class='doclist-items']//div[@class='header']/span")
         assert len(ver_el) >= 1, "Version element not found"
         m = re.search(r'([0-9]\.[0-9])', ver_el[0].text)
+        if not m:
+            m = re.search(r'([0-9])', ver_el[0].text)
         assert m, "Version number not found (%s)" % ver_el[0].text
         doc_version = m.groups()[0]
         if current_version and doc_version != current_version:

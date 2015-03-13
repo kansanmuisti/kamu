@@ -33,6 +33,7 @@ SKIP_DOCS = [
     'HE 273/2009', # ???
     'KK 180/2012', # SGML doc not found
     'HE 214/2013', # corrupt HTML
+    'HE 257/2014',
 ]
 
 def should_download_doc(doc):
