@@ -491,7 +491,7 @@ def get_processing_stages(doc, pl_items):
         for c in stage_choices:
             if c[0] == stage_id:
                 s = c[1]
-                s = s.replace('&shy;', '-<br>')
+                s = s.replace('&shy;', '')
                 d['name'] = s
                 break
         else:

@@ -78,13 +78,13 @@
             <h2>Käsittelyt</h2>
             <ul class="proposal-progresses">
                   {% for stage in doc.processing_stages %}
-                  <li {% if stage.item %}data-item="{{ stage.item.pk }}" {% endif %}class="{% if stage.date %}passed{% else %}unpassed{% endif %}">
+                  <li class="{% if stage.date %}passed{% else %}unpassed{% endif %}">
                       <h4 class="progress-phase">{{stage.name|safe}} <i class="typcn typcn-arrow-down"></i></h4>
                       {% if stage.item %}{% with item=stage.item %}
                       <div class="progress-session">
-                        <h5><a href="/session/#url-to-this-session"> <i class="typcn typcn-group"></i>Täysistunto {{ item.plsess.date }}</a></h5>
-                        <span class="nr_votes"><i class="typcn typcn-tabs-outline" title="Votings"></i>{{ item.num_votes }}</span>
-                        <span class="nr_statements"><i class="typcn typcn-message-typing" title="Statements"></i>{{ item.num_statements }}</span>
+                        <h5><a href="{{ item.get_absolute_url }}"> <i class="typcn typcn-group"></i>Täysistunto {{ item.plsess.date }}</a></h5>
+                        <span class="nr_votes"><i class="typcn typcn-tabs-outline" title="{% trans "Plenary votes" %}"></i>{{ item.nr_votes }}</span>
+                        <span class="nr_statements"><i class="typcn typcn-message-typing" title="{% trans "Statements" %}"></i>{{ item.nr_statements }}</span>
                       </div>
                       {% endwith %}{% endif %}
                   </li>
