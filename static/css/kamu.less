@@ -616,8 +616,24 @@ input.discrete-toggle-btn {
     }
 }
 
+// Share button style overrides
 .share-button {
-  margin-bottom: 20px;;
+  margin-bottom: 20px;
+}
+
+.share-button.sharer-0 label {
+  background: @blueberry !important;
+  color: @lead !important;
+  font-size: @font-size-base !important;
+  padding: 3px 5px !important;
+}
+
+.share-button.sharer-0 label:hover {
+  background: @electric !important;
+}
+
+.share-button.sharer-0 .social ul li {
+  z-index: 600 !important; // TODO: This is not working?
 }
 
 .main-nav-container {
@@ -1094,7 +1110,7 @@ main.member-details {
     .badges {
         padding: 5px;
         margin: 10px 0 10px 0;
-        //background-color: @gray;
+        width: 50px;
         float: right;
 
         .terms {

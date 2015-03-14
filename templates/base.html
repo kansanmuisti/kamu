@@ -6,10 +6,38 @@
     <title>{% block title %}{% endblock %} | KAMU</title>
     <meta property="og:site_name" content="Kansan muisti" />
     <meta property="fb:app_id" content="107387482616243" />
+  
+  
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="shortcut icon" href="{% static 'images/icons/favicon.ico' %}" />
+    <meta name="description" content="Page description. No longer than 155 characters." />
 
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@kansanmuisti">
+    <meta name="twitter:title" content="Page Title">
+    <meta name="twitter:description" content="Page description less than 200 characters">
+    <meta name="twitter:creator" content="@kansanmuisti">
+    <meta name="twitter:image" content="{% static 'images/icons/twitter_shared_thumbnail_default.png' %}">
+
+    <meta property="og:title" content="Title Here" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="http://www.kansanmuisti.fi/" />
+    <meta property="og:image" content="{% static 'images/icons/fb_shared_thumbnail_default.png' %}" />
+    <meta property="og:description" content="Description Here" /> 
+    <meta property="og:site_name" content="Kansan muisti" />
+    <meta property="fb:admins" content="107387482616243" />
+  
+    <link rel="apple-touch-icon" sizes="114x114" href="{% static 'images/icons/apple-icon-114x114.png' %}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{% static 'images/icons/apple-icon-144x144.png' %}">
+    <link rel="icon" type="image/png" sizes="192x192"  href="{% static 'images/icons/android-icon-192x192.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{% static 'images/icons/favicon-96x96.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icons/favicon-16x16.png' %}">
+    <link rel="shortcut icon" href="{% static 'images/icons/favicon.ico' %}" />
+    <meta name="msapplication-TileColor" content="#8ed3cf">
+    <meta name="msapplication-TileImage" content="{% static 'images/icons/ms-icon-144x144.png' %}">
+    <meta name="theme-color" content="#8ed3cf">
+  
     <!-- fonts-->
     <link href='http://fonts.googleapis.com/css?family=Lato:400,900,400italic|Roboto+Condensed:700|Expletus+Sans:700' rel='stylesheet' type='text/css'>
 
@@ -184,12 +212,34 @@
 
     <script type="text/javascript">
         // Activate Bootstrap tooltips
-        $(".js-tooltip").tooltip();
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip();
+        })
         // Activate share button
         var share_opts = {
             ui: {
+                flyout: 'top right',
                 button_text: 'Jaa',
-                button_font: false
+                button_font: false,
+                icon_font: true
+            },
+            networks: {
+              google_plus: {
+                enabled: true
+              },
+              twitter: {
+                enabled: true
+              },
+              facebook: {
+                enabled: true,
+                app_id: '107387482616243'
+              },
+              pinterest: {
+                enabled: false
+              },
+              email: {
+                enabled: true
+              }
             }
         };
         new Share(".share-button", share_opts);
