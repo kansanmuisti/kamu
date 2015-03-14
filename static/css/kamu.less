@@ -275,7 +275,7 @@ fieldset {
                 line-height: 20px;
                 text-transform: none;
                 margin: 0 0 0.5em 0;
-                letter-spacing: -1px;
+                //letter-spacing: -1px;
                 a {
                     color: inherit;
                     text-decoration: none;
@@ -1111,7 +1111,7 @@ main.member-details {
         padding: 5px;
         margin: 10px 0 10px 0;
         width: 50px;
-        float: right;
+        float: left;
 
         .terms {
             .clearfix();
@@ -1242,8 +1242,12 @@ main.member-details {
   }
 }
 
+.sidebar-container {
+  z-index: 300 !important;
+}
+
 .affix {
-    z-index: 100;
+  z-index: 100;
 }
 .affix-placeholder {
     display: none;
@@ -1272,7 +1276,7 @@ main.member-details {
 }
 
 .affix-desktop {
-    position: static;
+    position: relative;
     @media (min-width: @screen-md-min) {
        .affix-hacks;
     }
@@ -1514,6 +1518,45 @@ main.party-list {
         content: normal;
     }
 }
+
+/*ul*/.proposal-progresses {
+  li {
+    list-style: none;
+  }
+}
+
+.progress-phase {
+  padding: 10px;
+  i {
+    float: right;
+    font-size: 50px;
+  }
+}
+
+.passed .progress-phase {
+  background: @mint;
+}
+
+.unpassed .progress-phase {
+  background: @gray-lighter;
+  color: @gray-light;
+  i {
+    display: none;
+    }
+}
+.progress-session { 
+  margin-left: 40px;
+  h5 {
+    margin: 0;
+  }
+  a {
+    color: @gray;
+  }
+}
+
+.unpassed .progress-session {
+    display:none;
+  }
 
 .proposal-content {
     header {
@@ -1785,6 +1828,41 @@ main.party-list {
 .nr_statements {
 }
 
+.voting-details-container {
+  .clearfix;
+}
+
+.votes-list {
+    width: 80%;
+    float: left;
+}
+.vote {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: @pine;
+}
+
+.voted-yes {
+  background: @pine;
+}
+
+.voted-no {
+  background: @electric;
+}
+
+.voter-details {
+  width: 20%;
+  height: 300px;
+  float: right;
+  background: @gray;
+}
+
+.voter-details-image {
+  width: 100px;
+  height: 150px;
+  background: @lemon;
+}
 /***************************************************************
  * Voting
  ***************************************************************/
