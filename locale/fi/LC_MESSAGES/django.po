@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-11 20:51+0200\n"
+"POT-Creation-Date: 2015-03-13 20:01+0200\n"
 "PO-Revision-Date: 2014-10-18 20:06+0300\n"
 "Last-Translator: Juha Yrjölä <juha.yrjola@iki.fi>\n"
 "Language-Team: Finnish <>\n"
@@ -130,63 +130,63 @@ msgstr "Kirjallinen kysymys"
 msgid "Interpellation"
 msgstr "Välikysymys"
 
-#: parliament/models/document.py:122
+#: parliament/models/document.py:127
 msgid "Introduced"
 msgstr "Vireille&shy;tulo"
 
-#: parliament/models/document.py:123
+#: parliament/models/document.py:128
 msgid "Debate"
 msgstr "Lähete&shy;keskustelu"
 
-#: parliament/models/document.py:124
+#: parliament/models/document.py:129
 msgid "In committee"
 msgstr "Valiokunta&shy;käsittely"
 
-#: parliament/models/document.py:125
+#: parliament/models/document.py:130
 msgid "On agenda"
 msgstr "Pöydälle&shy;pano"
 
-#: parliament/models/document.py:126
+#: parliament/models/document.py:131
 msgid "First reading"
 msgstr "I käsittely"
 
-#: parliament/models/document.py:127
+#: parliament/models/document.py:132
 msgid "Second reading"
 msgstr "II käsittely"
 
-#: parliament/models/document.py:128
+#: parliament/models/document.py:133
 msgid "Third reading"
 msgstr "III käsittely"
 
-#: parliament/models/document.py:129
+#: parliament/models/document.py:134
 msgid "Finished"
 msgstr "Käsittely päättynyt"
 
-#: parliament/models/document.py:130
+#: parliament/models/document.py:135
 msgid "Only reading"
 msgstr "Ainoa käsittely"
 
-#: parliament/models/document.py:131
+#: parliament/models/document.py:136
 msgid "Only and 2nd reading"
 msgstr "Ainoa ja II käsittely"
 
-#: parliament/models/document.py:132
+#: parliament/models/document.py:137
 msgid "Only and 3rd reading"
 msgstr "Ainoa ja III käsittely"
 
-#: parliament/models/document.py:133
+#: parliament/models/document.py:138
 msgid "Cancelled"
 msgstr "Peruutettu"
 
-#: parliament/models/document.py:134
+#: parliament/models/document.py:139
 msgid "Lapsed"
 msgstr "Rauennut"
 
-#: parliament/models/document.py:135
+#: parliament/models/document.py:140
 msgid "Suspended"
 msgstr "Jätetty lepäämään"
 
-#: parliament/models/document.py:136
+#: parliament/models/document.py:141
 msgid "In ministry"
 msgstr "Ministeriössä"
 
@@ -283,8 +283,8 @@ msgstr "tweettasi"
 msgid "published in Facebook"
 msgstr "julkaisi Facebookissa"
 
-#: parliament/views.py:41 templates/parliament/plenary_item_details.html:63
-#: templates/show_document.html:62
+#: parliament/views.py:41 templates/parliament/plenary_item_details.html:70
+#: templates/show_document.html:91
 msgid "Statements"
 msgstr "Puheenvuorot"
 
@@ -381,15 +381,15 @@ msgstr "Sisäinen virhe"
 msgid "Is interested in these topics"
 msgstr "Aktiivinen näissä aiheissa"
 
-#: templates/_feed_content.html:44
+#: templates/_feed_content.html:47
 msgid "MP activity graph"
 msgstr "Edustajan aktiivisuus"
 
-#: templates/_feed_content.html:58
+#: templates/_feed_content.html:61
 msgid "MP topic activity"
 msgstr "Edustajan aktiivisuus aiheessa"
 
-#: templates/_feed_controls.html:7
+#: templates/_feed_controls.html:8
 msgid "Issue"
 msgstr "Aihe"
 
@@ -401,15 +401,15 @@ msgstr "Kaikki aiheet"
 msgid "Search for a keyword"
 msgstr "Hae asiasanaa"
 
-#: templates/_feed_controls.html:29
+#: templates/_feed_controls.html:34
 msgid "Filter"
 msgstr "Rajaus"
 
-#: templates/_feed_controls.html:35
+#: templates/_feed_controls.html:40
 msgid "Timerange"
 msgstr "Aikaväli"
 
-#: templates/_feed_controls.html:38 templates/_feed_controls.html.py:40
+#: templates/_feed_controls.html:43 templates/_feed_controls.html.py:45
 msgid "Any time"
 msgstr "Milloin vain"
 
@@ -472,7 +472,7 @@ msgid "Most discussed topics"
 msgstr "Keskustelluimmat aiheet"
 
 #: templates/home.html:78 templates/parliament/plenary_item_details.html:40
-#: templates/show_document.html:66
+#: templates/show_document.html:95
 msgid "Plenary session"
 msgstr "Täysistunto"
 
@@ -725,6 +725,7 @@ msgstr "Ennuste"
 #: templates/opinions/show_party_congruences.html:56
 #: templates/opinions/show_question_session.html:77
 #: templates/opinions/show_question_session.html:109
+#: templates/parliament/plenary_item_details.html:55
 msgid "Yay"
 msgstr "Kyllä"
 
@@ -732,6 +733,7 @@ msgstr "Kyllä"
 #: templates/opinions/show_party_congruences.html:63
 #: templates/opinions/show_question_session.html:78
 #: templates/opinions/show_question_session.html:110
+#: templates/parliament/plenary_item_details.html:57
 msgid "Nay"
 msgstr "Ei"
 
@@ -932,9 +934,21 @@ msgstr "Täysistunnon päiväjärjestyksen kohdan asiakirjat"
 msgid "Plenary votes"
 msgstr "Äänestykset"
 
-#: templates/parliament/plenary_item_details.html:79
-#: templates/parliament/plenary_item_details.html:83
-#: templates/show_document.html:81
+#: templates/parliament/plenary_item_details.html:49
+msgid "Result"
+msgstr "Tulos"
+
+#: templates/parliament/plenary_item_details.html:59
+msgid "Empty"
+msgstr "Tyhjä"
+
+#: templates/parliament/plenary_item_details.html:61
+msgid "Absent"
+msgstr "Poissa"
+
+#: templates/parliament/plenary_item_details.html:86
+#: templates/parliament/plenary_item_details.html:90
+#: templates/show_document.html:110
 msgid "speaker"
 msgstr "puhemies"
 
@@ -1292,6 +1306,14 @@ msgstr "Aktiivisimmat puolueet tässä asiassa"
 #: templates/show_topic.html:35
 msgid "Who are active with this issue?"
 msgstr "Aktiivisimmat kansanedustajat tässä asiassa"
+
+#, fuzzy
+#~| msgid "Yay"
+#~ msgid "Yea"
+#~ msgstr "Kyllä"
+
+#~ msgid "No"
+#~ msgstr "Ei"
 
 #~ msgid "Input text"
 #~ msgstr "Syötä teksti"
