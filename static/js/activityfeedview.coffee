@@ -235,7 +235,8 @@ class @ActivityFeedControl
             sub = date_state.sub(myel.data 'field')
             myel.click do (sub) -> (ev) ->
                 sub.update undefined
-
+            sub.on do (myel) -> (value) ->
+                myel.toggleClass "disabled", not value?
             
         startel = el.find "[name=start]"
         endel = el.find "[name=end]"
