@@ -134,7 +134,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     "django.core.context_processors.request",
     "i18n.context_processors.other_languages",
-    "parliament.views.hack_stuff_to_template_context_because_django_sucks",
+    "parliament.views.kamu_context_processor",
 )
 
 

@@ -4,28 +4,21 @@ from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
 from django.conf import settings
 
-#from django.contrib import admin
-#admin.autodiscover()
-
 # Change the length of EmailFields to accommodate overlong
 # Facebook email addresses.
 from django.db.models.fields import EmailField, CharField
 def email_field_init(self, *args, **kwargs):
-  kwargs['max_length'] = kwargs.get('max_length', 200)
-  CharField.__init__(self, *args, **kwargs)
+    kwargs['max_length'] = kwargs.get('max_length', 200)
+    CharField.__init__(self, *args, **kwargs)
 EmailField.__init__ = email_field_init
 
-#urlpatterns = patterns('',
-#    (r'^admin/', include(admin.site.urls)),
-#)
 
 urlpatterns = patterns('parliament.views',
-    url(r'^$', 'main'),
     url(r'^ajax/parliament-activity/$', 'get_parliament_activity'),
     url(r'^ajax/mp-some-activity/$', 'get_mp_some_activity'),
 
+    url(r'^$', 'main'),
     url(r'^session/$', 'list_sessions'),
-    url(r'^session/calendar/(?P<month>\d+)-(?P<year>\d+)/$', 'list_sessions'),
     url(r'^session/(?P<plsess>[\w-]+)/(?P<item_nr>\d+)/$', 'show_item'),
     url(r'^session/(?P<plsess>[\w-]+)/(?P<item_nr>\d+)/(?P<subitem_nr>\d+)/$', 'show_item'),
 

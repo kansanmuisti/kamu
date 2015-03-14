@@ -126,6 +126,27 @@ MEMBER_LIST_FIELD_CATEGORIES = [
     }
 ]
 
+
+def truncate_chars(s, num):
+    """
+    Template filter to truncate a string to at most num characters respecting word
+    boundaries.
+    """
+    s = force_unicode(s)
+    length = int(num)
+    if len(s) > length:
+        length = length - 3
+        if s[length-1] == ' ' or s[length] == ' ':
+            s = s[:length].strip()
+        else:
+            words = s[:length].split()
+            if len(words) > 1:
+                del words[-1]
+            s = u' '.join(words)
+        s += '...'
+    return s
+
+
 party_json = None
 def get_parties(request):
     global party_json
@@ -144,10 +165,14 @@ def get_parties(request):
     party_json = json
     return json
 
-def hack_stuff_to_template_context_because_django_sucks(request):
+
+def kamu_context_processor(request):
+    canonical_url = request.build_absolute_uri(request.path)
     return {
-            'PARTY_LIST_JSON': get_parties(request)
-            }
+        'PARTY_LIST_JSON': get_parties(request),
+        'canonical_url': canonical_url
+    }
+
 
 def show_item(request, plsess, item_nr, subitem_nr=None):
     query = Q(plsess__url_name=plsess) & Q(number=item_nr)
@@ -156,7 +181,13 @@ def show_item(request, plsess, item_nr, subitem_nr=None):
     else:
         query &= Q(sub_number=subitem_nr)
     item = get_object_or_404(PlenarySessionItem, query)
-    return render_to_response('parliament/plenary_item_details.html', {'item': item},
+    args = {'item': item}
+
+    args['title'] = item.description
+    if item.sub_description:
+        args['description'] = item.sub_description
+
+    return render_to_response('parliament/plenary_item_details.html', args,
                               context_instance=RequestContext(request))
 
 def get_view_member(url_name):
@@ -384,11 +415,17 @@ def main(request):
     ]
     args['navbuttons'] = navbuttons
 
+    args['title'] = _('Front page')
+    args['description'] = "Kansan muisti -verkkopalvelussa voit seurata kansanedustajien puheenvuoroja ja äänestyksiä — siis vaalilupausten toteutumista käytännössä"
+
     return render_to_response('home.html', args,
                               context_instance=RequestContext(request))
 
 
 def list_sessions(request):
+    args = {}
+    args['title'] = _('Plenary sessions')
+    args['description'] = _('List of plenary sessions.')
     return render_to_response('sessions.html', {}, context_instance=RequestContext(request))
 
 
