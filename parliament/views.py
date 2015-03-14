@@ -480,9 +480,10 @@ def list_members(request):
             args, context_instance=RequestContext(request))
 
 
-def get_processing_stages(doc):
+def get_processing_stages(doc, pl_items):
     stage_choices = DocumentProcessingStage.STAGE_CHOICES
     stages = doc.documentprocessingstage_set.all()
+    item_docs = list(PlenarySessionItemDocument.objects.filter(doc=doc))
 
     doc_stages = []
     def add_stage(stage_id, date):
@@ -495,6 +496,11 @@ def get_processing_stages(doc):
                 break
         else:
             raise Exception("Processing stage %s invalid" % stage_id)
+
+        for item_doc in item_docs:
+            if item_doc.stage == stage_id:
+                d['item'] = item_doc.item
+                break
         doc_stages.append(d)
 
     for st in stages:
@@ -519,11 +525,11 @@ def show_document(request, slug):
         t = getattr(doc, attr_name)
         if t:
             setattr(doc, attr_name, t.replace('\n', '\n\n'))
-    doc.processing_stages = get_processing_stages(doc)
 
-    session_items = doc.plenarysessionitem_set
-    session_items = session_items.select_related("statement_set", "plsess")
-    session_items = session_items.filter(nr_statements__gt=0)
+    session_items = doc.plenarysessionitem_set.all()
+    session_items = session_items.select_related("plsess")
+
+    doc.processing_stages = get_processing_stages(doc, session_items)
 
     # Praise the power of Django's templates!
     for i in session_items:

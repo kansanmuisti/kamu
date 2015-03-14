@@ -9,10 +9,6 @@
 
 <div class="row">
     <div class="col-md-4">
-        <div class="box hide similar-citizens-initiatives">
-            <h4>{% trans "Similar Citizens' Initiatives" %}</h4>
-            <ol></ol>
-        </div>
         <div class="box hide similar-documents related-sidebar">
             <h4>{% trans "Similar documents" %}</h4>
             <ol></ol>
@@ -45,7 +41,7 @@
                 </div>
                 <ol class="proposal-progress">
                     {% for stage in doc.processing_stages %}
-                    <li class="{% if stage.date %}passed{% else %}unpassed{% endif %}">
+                    <li {% if stage.item %}data-item="{{ stage.item.pk }}" {% endif %}class="{% if stage.date %}passed{% else %}unpassed{% endif %}">
                         <span class="phase">{{stage.name|safe}} <!-- <span class="arrow"></span> --></span>
                     </li>
                     {% endfor %}
@@ -91,7 +87,7 @@
             <h2>{% trans "Statements" %}</h2>
             <div class="proposal-statements">
             {% for item in session_items %}
-                <div class="plenary-discussion">
+                <div data-item="{{ item.id }}" class="plenary-discussion">
                     <h4>{% trans "Plenary session" %} {{ item.plsess.date }}</h4>
                     {% for statement in item.statement_set.all %}
                     {% with member=statement.member governing_party=statement.member.party|governing:item.plsess.date %}

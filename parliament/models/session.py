@@ -63,6 +63,7 @@ class PlenarySession(UpdatableModel):
     def __unicode__(self):
         return self.name
 
+
 class PlenarySessionItem(models.Model):
     TYPES = (('agenda', _('Agenda item')),
              ('question', _('Question time')),
@@ -132,15 +133,18 @@ class PlenarySessionItem(models.Model):
     def __unicode__(self):
         return "%s %s: %s" % (self.get_short_id(), self.type, self.description)
 
+
 class PlenarySessionItemDocument(models.Model):
     item = models.ForeignKey(PlenarySessionItem, db_index=True)
     doc = models.ForeignKey(Document, db_index=True)
     order = models.PositiveIntegerField()
+    stage = models.CharField(max_length=50, null=True, blank=True)
 
     class Meta:
         app_label = 'parliament'
         ordering = ('order',)
         unique_together = (('item', 'doc'),)
+
 
 class Statement(models.Model):
     TYPES = (('normal', 'Statement'),
@@ -169,8 +173,8 @@ class Statement(models.Model):
         return "%s/%d (%s)" % (self.item.get_short_id(), self.index, unicode(self.member))
 
     def get_short_id(self):
-        return "%s/%d"%(self.item.get_short_id(), self.index)
-    
+        return "%s/%d" % (self.item.get_short_id(), self.index)
+
     def get_anchor_string(self):
         # Replace slash with dash here to work around some
         # History.js issues :'(
@@ -181,6 +185,7 @@ class Statement(models.Model):
         # page in the system.
         return self.item.get_preferred_view_url() + "#" + self.get_anchor_string()
 
+
 class PlenaryVoteManager(models.Manager):
     def between(self, begin=None, end=None):
         query = Q()
@@ -189,15 +194,18 @@ class PlenaryVoteManager(models.Manager):
         if end:
             query &= Q(plenary_session__date__lte=end)
         return self.filter(query)
+
     def by_name(self, name):
         f = name.split('/')
         nr = int(f[0])
         pls_name = '/'.join(f[1:])
         return self.get(Q(plenary_session__name=pls_name) & Q(number=nr))
 
+
 class PlenaryVote(UpdatableModel):
     plsess = models.ForeignKey(PlenarySession, db_index=True)
-    plsess_item = models.ForeignKey(PlenarySessionItem, db_index=True, null=True, blank=True, related_name='plenary_votes')
+    plsess_item = models.ForeignKey(PlenarySessionItem, db_index=True, null=True, blank=True,
+                                    related_name='plenary_votes')
     number = models.IntegerField()
     time = models.DateTimeField()
     subject = models.TextField()
@@ -280,6 +288,7 @@ class PlenaryVote(UpdatableModel):
         ordering = ('plsess__date', 'number')
         app_label = 'parliament'
 
+
 class PlenaryVoteDocument(models.Model):
     session = models.ForeignKey(PlenaryVote)
     doc = models.ForeignKey(Document)
@@ -303,10 +312,12 @@ class VoteManager(models.Manager):
             query &= Q(session=session.name)
 
         return Vote.objects.filter(query).count()
+
     def in_district(self, district, date_begin, date_end):
         qs = Member.objects.in_district(district, date_begin, date_end)
         qs = qs.values_list('id', flat=True).distinct()
         return Vote.objects.filter(member__in=qs)
+
 
 class Vote(models.Model):
     VOTE_CHOICES = [

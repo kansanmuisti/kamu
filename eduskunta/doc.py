@@ -7,7 +7,8 @@ from django import db
 from eduskunta.importer import Importer, ParseError
 from eduskunta.vote import VoteImporter
 from utils.http import HTTPError
-from parliament.models import Document, Keyword, DocumentProcessingStage, Member, DocumentSignature
+from parliament.models import Document, Keyword, DocumentProcessingStage, \
+    Member, DocumentSignature, PlenarySessionItem, PlenarySessionItemDocument
 
 DOC_LIST_URL = "http://www.eduskunta.fi/triphome/bin/vex3000.sh?TUNNISTE=%s&PVMVP1=1999"
 #DOC_LIST_URL = "http://www.eduskunta.fi/triphome/bin/vex3000.sh?TUNNISTE=%s&PVMVP1=2003&PVMVP2=2006"
@@ -150,6 +151,9 @@ class DocImporter(Importer):
                     continue
                 self.logger.warning("processing stage '%s' not found" % el_name)
                 continue
+
+            phase_info = {}
+
             if phase == 'committee':
                 el_list = parent_el.xpath(".//div[contains(., 'Valmistunut')]")
                 date_list = []
@@ -167,14 +171,32 @@ class DocImporter(Importer):
             else:
                 date_el = parent_el.xpath(".//div[.='Pvm']")
                 assert len(date_el) == 1
-                date = date_el[0].tail.strip()
-                (d, m, y) = date.split('.')
+                arr = date_el[0].getparent().text_content().strip().split()
+                assert len(arr) >= 2
+                (d, m, y) = arr[-1].split('.')
                 date = '-'.join((y, m, d))
+
+                min_el = parent_el.xpath(u".//div[.='Istuntopöytäkirja']")
+                if min_el and phase != 'cancelled':
+                    links = min_el[0].getparent().xpath('a')
+                    assert len(links) >= 1
+                    plsess_list = []
+                    for l in links:
+                        href = l.attrib['href']
+                        m = re.search(r'\{KEY\}=PTK\+(\d+/\d{4})', href)
+                        assert m, 'Plenary session id not found (phase %s)' % phase
+                        plsess_id = m.groups()[0]
+                        m = re.search(r'\{KNRO\}=(\d+)', href)
+                        assert m, 'Plenary session item number not found (phase %s)' % phase
+                        plitem_nr = m.groups()[0]
+                        plsess_list.append({'plsess': plsess_id, 'index': plitem_nr})
+                    phase_info['plsess_items'] = plsess_list
 
             if phase == 'finished':
                 finishing_phase = idx
 
-            phase_list.append((idx, phase, date))
+            phase_info.update({'index': idx, 'phase': phase, 'date': date})
+            phase_list.append(phase_info)
             #print "%s: %s" % (phase, date)
 
         if not finishing_phase:
@@ -186,15 +208,15 @@ class DocImporter(Importer):
                 is_finished = False
             if is_finished:
                 for p in phase_list:
-                    if p[1] in finishing_phases and p[1] != 'upcoming':
+                    if p['phase'] in finishing_phases:
                         finishing_phase = p
                         break
                 assert finishing_phase, 'Finishing phase not found'
 
-                idx = finishing_phase[0] + 1
-                max_idx = max([x[0] for x in phase_list])
+                idx = finishing_phase['index'] + 1
+                max_idx = max([x['index'] for x in phase_list])
                 assert max_idx < idx
-                phase_list.append((idx, 'finished', finishing_phase[2]))
+                phase_list.append({'index': idx, 'phase':'finished', 'date': finishing_phase['date']})
 
         info['phases'] = phase_list
 
@@ -214,11 +236,11 @@ class DocImporter(Importer):
             date = '-'.join((y, m, d))
             stages[s] = date
         phase_list = []
-        phase_list.append((0, 'intro', stages[u'Kysymys jätetty']))
+        phase_list.append({'index': 0, 'phase': 'intro', 'date': stages[u'Kysymys jätetty']})
         if u'Annettu tiedoksi ministeriölle' in stages:
-            phase_list.append((1, 'agenda', stages[u'Annettu tiedoksi ministeriölle']))
+            phase_list.append({'index': 1, 'phase': 'agenda', 'date': stages[u'Annettu tiedoksi ministeriölle']})
         if 'Vastaus annettu' in stages:
-            phase_list.append((2, 'finished', stages[u'Vastaus annettu']))
+            phase_list.append({'index': 2, 'phase': 'finished', 'date': stages[u'Vastaus annettu']})
         info['phases'] = phase_list
 
     def fetch_processing_info(self, info):
@@ -467,14 +489,28 @@ class DocImporter(Importer):
 
     def save_stages(self, doc, info):
         for st in info['phases']:
-            args = {'doc': doc, 'index': st[0]}
+            args = {'doc': doc, 'index': st['index']}
             try:
                 st_obj = DocumentProcessingStage.objects.get(**args)
             except DocumentProcessingStage.DoesNotExist:
                 st_obj = DocumentProcessingStage(**args)
-            st_obj.stage = st[1]
-            st_obj.date = st[2]
+            st_obj.stage = st['phase']
+            st_obj.date = st['date']
             st_obj.save()
+
+            for pli in st.get('plsess_items', []):
+                try:
+                    item = PlenarySessionItem.objects.get(plsess__name=pli['plsess'], number=pli['index'],
+                                                          sub_number=None)
+                except PlenarySessionItem.DoesNotExist:
+                    raise Exception('Plenary session item %s/%s not found' % (pli['plsess'], pli['index']))
+                try:
+                    item_doc = PlenarySessionItemDocument.objects.get(doc=doc, item=item)
+                    item_doc.stage = st['phase']
+                    item_doc.save(update_fields=['stage'])
+                except PlenarySessionItemDocument.DoesNotExist:
+                    pass
+
 
     def save_keywords(self, doc, info):
         old_kws = list([kw.name for kw in doc.keywords.all()])
@@ -560,9 +596,8 @@ class DocImporter(Importer):
             doc.error = None
         # Figure out the document date through the intro stage.
         for st in info['phases']:
-            (idx, stage, date) = st
-            if stage == 'intro':
-                doc.date = date
+            if st['phase'] == 'intro':
+                doc.date = st['date']
                 break
         if doc.date is None:
             raise ParseError("Document date could not be determined")
