@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-15 21:49+0200\n"
+"POT-Creation-Date: 2015-03-16 00:34+0200\n"
 "PO-Revision-Date: 2014-10-18 20:06+0300\n"
 "Last-Translator: Juha Yrjölä <juha.yrjola@iki.fi>\n"
 "Language-Team: Finnish <>\n"
@@ -284,7 +284,7 @@ msgid "published in Facebook"
 msgstr "julkaisi Facebookissa"
 
 #: parliament/views.py:41 templates/parliament/plenary_item_details.html:320
-#: templates/sessions.html:21 templates/show_document.html:92
+#: templates/sessions.html:21 templates/show_document.html:95
 msgid "Statements"
 msgstr "Puheenvuorot"
 
@@ -333,7 +333,7 @@ msgid "government bill was introduced"
 msgstr "hallitus esitti"
 
 #: parliament/views.py:98 templates/_feed_content.html:14
-#: templates/_mp_card_template.html:51 templates/party/list.html:54
+#: templates/_mp_card_template.html:52 templates/party/list.html:54
 msgid "Activity"
 msgstr "Aktiivisuus"
 
@@ -341,11 +341,11 @@ msgstr "Aktiivisuus"
 msgid "Name"
 msgstr "Nimi"
 
-#: parliament/views.py:104 templates/_mp_card_template.html:60
+#: parliament/views.py:104 templates/_mp_card_template.html:61
 msgid "Attendance"
 msgstr "Läsnäolo"
 
-#: parliament/views.py:107 templates/_mp_card_template.html:69
+#: parliament/views.py:107 templates/_mp_card_template.html:70
 msgid "Agreement with party"
 msgstr "Samanmielisyys puolueen kanssa"
 
@@ -456,7 +456,7 @@ msgstr "Milloin vain"
 msgid "district"
 msgstr "vaalipiiri"
 
-#: templates/_mp_card_template.html:83 templates/member/list.html:50
+#: templates/_mp_card_template.html:84 templates/member/list.html:38
 #: templates/party/mps.html:15
 msgid "minister"
 msgstr "ministeri"
@@ -469,16 +469,16 @@ msgstr "tietoa"
 msgid "About the site"
 msgstr "Tietoa Kamusta"
 
-#: templates/base.html:146
+#: templates/base.html:144
 msgid "Read more"
 msgstr "Lue lisää"
 
-#: templates/base.html:191
+#: templates/base.html:189
 msgid "Input search terms"
 msgstr "Syötä hakusanat"
 
-#: templates/base.html:193 templates/list_topics.html:21
-#: templates/member/list.html:16 templates/opinions/summary.html:136
+#: templates/base.html:191 templates/list_topics.html:21
+#: templates/member/list.html:15 templates/opinions/summary.html:136
 #: templates/party/mps.html:26
 msgid "Search"
 msgstr "Hae"
@@ -631,11 +631,11 @@ msgstr "Kaudet"
 msgid "Members of the Parliament"
 msgstr "Kansanedustajat"
 
-#: templates/member/list.html:18 templates/party/mps.html:28
+#: templates/member/list.html:16 templates/party/mps.html:28
 msgid "Search with name, party, district"
 msgstr "Hae nimen, puolueen ja vaalipiirin perusteella"
 
-#: templates/member/list.html:22 templates/party/mps.html:32
+#: templates/member/list.html:19 templates/party/mps.html:32
 msgid "Order"
 msgstr "Järjestä"
 
@@ -955,7 +955,7 @@ msgid "Käsitellyt dokumentit"
 msgstr ""
 
 #: templates/parliament/plenary_item_details.html:65
-#: templates/sessions.html:20 templates/show_document.html:91
+#: templates/sessions.html:20 templates/show_document.html:94
 msgid "Plenary votes"
 msgstr "Äänestykset"
 
@@ -1038,20 +1038,20 @@ msgid "No results found"
 msgstr "Ei hakuosumia"
 
 #: templates/show_document.html:17
-msgid "Author"
-msgstr "Laatija"
-
-#: templates/show_document.html:28
 msgid "Similar documents"
 msgstr "Samanlaisia esityksiä"
 
-#: templates/show_document.html:49
+#: templates/show_document.html:31
+msgid "Link to the original document"
+msgstr "Linkki alkuperäiseen asiakirjaan"
+
+#: templates/show_document.html:35
+msgid "Author"
+msgstr "Laatija"
+
+#: templates/show_document.html:52
 msgid "Proposal content"
 msgstr "Esityksen sisältö"
-
-#: templates/show_document.html:53
-msgid "Show original document"
-msgstr "Näytä alkuperäinen asiakirja"
 
 #: templates/show_topic.html:4
 msgid "Topic"
