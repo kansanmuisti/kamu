@@ -445,11 +445,12 @@ input.discrete-toggle-btn {
 }
 
 .slim-icon-btn {
-        padding: 6px 6px;
+        padding: 5px 5px;
 }
 
 .feed-filters {
     display: flex;
+    align-items: center;
     .clearfix();
     background: @gray-lighter;
     .shadow-heavy();
@@ -460,14 +461,22 @@ input.discrete-toggle-btn {
         padding: 10px;
     }
 
+    label {
+        font-size: @font-size-small;
+        color: @gray-dark;
+        text-transform: uppercase;
+        margin: 0;
+    }
+
     .main-filter-container {
-        flex-shrink: 0;
+        flex-shrink: 1;
+        align-items: center;
     }
 
     .side-filter-container {
         flex-grow: 1;
+        flex-shrink: 0;
         display: flex;
-        flex-wrap: wrap;
         justify-content: flex-end;
         align-content: flex-end;
         > * {
@@ -495,67 +504,90 @@ input.discrete-toggle-btn {
     }
 
 
+    .discrete-toggle-btn, btn {
+        .btn-sm;
+    }
+
 }
 
+.display-none {
+    display: none !important;
+}
+
+// There's probably a nicer way to do this
+// in less
+.sharp-left-edge {
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+}
+
+.sharp-right-edge {
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+}
 
 .keyword-filter-group {
+    .filter-control {
+        display: flex;
+        align-items: stretch;
+
+        > * {
+            display: flex;
+        }
+    }
+
     .selected-keyword {
         white-space: nowrap;
+        display: flex;
+        margin: 0;
+        box-sizing: border-box;
     }
 
     .selected-keyword .keyword-link {
+        flex-shrink: 0;
         .tag-banner;
+        margin: 0;
         border-left: 0;
-        margin-left: 0;
-        display: inline-block;
-        position: relative;
-        border-radius: 0 3px 3px 0;
+        border-top-left-radius: 0;
+        border-bottom-left: 0;
         background-color: white;
+        .sharp-left-edge;
     }
 
     .no-selected-keyword {
-        display: inline-block;
         .tag-spacing;
         .tag-text-styling;
         opacity: 0.5;
     }
 
     .selected-keyword .remove-kw-filter {
-        border-radius: 3px 0 0 3px;
-        border-left: 3px @gray-light solid;
-        background-color: @gray-light;
-        margin-right: 0;
-        display: inline-block;
-        color: black;
-        .tag-text-styling;
-        .tag-spacing;
-        padding-left: 0px;
-        padding-right: 2px;
-        padding-right: 0;
-        cursor: pointer;
+        flex-shrink: 0;
+        .discrete-toggle-btn;
+        .slim-icon-btn;
+        margin-left: 5px;
+        .sharp-right-edge; border-right: 0;
     }
 
     .filter-control-keyword-slot {
-        width: 14em;
-        display: inline-block;
         overflow: hidden;
-        vertical-align: middle;
-        position: relative;
         &:hover {
             z-index: 500;
             overflow: visible;
         }
     }
+    
+    .filter-control-search-keyword input {
+        .sharp-left-edge;
+    }
 
     .search-toggle {
-        > i {.large-icon;}
-        .slim-icon-btn;
-        padding: 3px 6px;
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
+        flex-shrink: 0;
+        &.active {
+            .sharp-right-edge; border-right: 0;
+        }
     }
 
-    }
+}
 
 .date-filter-group {
     .date-input {
