@@ -287,7 +287,7 @@ def show_member(request, member, page=None):
     kw_act_json = json.dumps(kw_act, ensure_ascii=False)
     args['keyword_activity'] = kw_act_json
     args['title'] = member.get_print_name()
-    args['description'] = "Kansanedustajan {0} kiinnostuksen "\
+    args['description'] = u"Kansanedustajan {0} kiinnostuksen "\
         "kohteet ja aktiivisuus eduskunnassa.".format(member.get_print_name())
     template = 'member/details.html'
 
@@ -634,7 +634,7 @@ def show_party_feed(request, abbreviation):
                 governing=governing)
 
     args['title'] = party.name
-    args['description'] = "Puolueen {0} "\
+    args['description'] = u"Puolueen {0} "\
         "aktiivisuus eduskunnassa ja sosiaalisessa "\
         "mediassa.".format(party.name)
     args['meta_image'] = request.build_absolute_uri(party.logo.url)
