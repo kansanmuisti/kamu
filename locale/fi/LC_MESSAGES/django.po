@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-13 20:01+0200\n"
+"POT-Creation-Date: 2015-03-15 21:49+0200\n"
 "PO-Revision-Date: 2014-10-18 20:06+0300\n"
 "Last-Translator: Juha Yrjölä <juha.yrjola@iki.fi>\n"
 "Language-Team: Finnish <>\n"
@@ -130,63 +130,63 @@ msgstr "Kirjallinen kysymys"
 msgid "Interpellation"
 msgstr "Välikysymys"
 
-#: parliament/models/document.py:127
+#: parliament/models/document.py:136
 msgid "Introduced"
 msgstr "Vireille&shy;tulo"
 
-#: parliament/models/document.py:128
+#: parliament/models/document.py:137
 msgid "Debate"
 msgstr "Lähete&shy;keskustelu"
 
-#: parliament/models/document.py:129
+#: parliament/models/document.py:138
 msgid "In committee"
 msgstr "Valiokunta&shy;käsittely"
 
-#: parliament/models/document.py:130
+#: parliament/models/document.py:139
 msgid "On agenda"
 msgstr "Pöydälle&shy;pano"
 
-#: parliament/models/document.py:131
+#: parliament/models/document.py:140
 msgid "First reading"
-msgstr "I käsittely"
+msgstr "Ensimmäinen käsittely"
 
-#: parliament/models/document.py:132
+#: parliament/models/document.py:141
 msgid "Second reading"
-msgstr "II käsittely"
+msgstr "Toinen käsittely"
 
-#: parliament/models/document.py:133
+#: parliament/models/document.py:142
 msgid "Third reading"
-msgstr "III käsittely"
+msgstr "Kolmas käsittely"
 
-#: parliament/models/document.py:134
+#: parliament/models/document.py:143
 msgid "Finished"
 msgstr "Käsittely päättynyt"
 
-#: parliament/models/document.py:135
+#: parliament/models/document.py:144
 msgid "Only reading"
 msgstr "Ainoa käsittely"
 
-#: parliament/models/document.py:136
+#: parliament/models/document.py:145
 msgid "Only and 2nd reading"
-msgstr "Ainoa ja II käsittely"
+msgstr "Ainoa ja toinen käsittely"
 
-#: parliament/models/document.py:137
+#: parliament/models/document.py:146
 msgid "Only and 3rd reading"
-msgstr "Ainoa ja III käsittely"
+msgstr "Ainoa ja kolmas käsittely"
 
-#: parliament/models/document.py:138
+#: parliament/models/document.py:147
 msgid "Cancelled"
 msgstr "Peruutettu"
 
-#: parliament/models/document.py:139
+#: parliament/models/document.py:148
 msgid "Lapsed"
 msgstr "Rauennut"
 
-#: parliament/models/document.py:140
+#: parliament/models/document.py:149
 msgid "Suspended"
 msgstr "Jätetty lepäämään"
 
-#: parliament/models/document.py:141
+#: parliament/models/document.py:150
 msgid "In ministry"
 msgstr "Ministeriössä"
 
@@ -255,15 +255,15 @@ msgstr "Toinen varapuhemies"
 msgid "Minister"
 msgstr "ministeri"
 
-#: parliament/models/session.py:67
+#: parliament/models/session.py:68
 msgid "Agenda item"
 msgstr "Päiväjärjestyksen kohta"
 
-#: parliament/models/session.py:68
+#: parliament/models/session.py:69
 msgid "Question time"
 msgstr "Kyselytunti"
 
-#: parliament/models/session.py:69
+#: parliament/models/session.py:70
 msgid "Budget proposal"
 msgstr "Talousarvioaloite"
 
@@ -283,8 +283,8 @@ msgstr "tweettasi"
 msgid "published in Facebook"
 msgstr "julkaisi Facebookissa"
 
-#: parliament/views.py:41 templates/parliament/plenary_item_details.html:70
-#: templates/show_document.html:91
+#: parliament/views.py:41 templates/parliament/plenary_item_details.html:320
+#: templates/sessions.html:21 templates/show_document.html:92
 msgid "Statements"
 msgstr "Puheenvuorot"
 
@@ -365,9 +365,48 @@ msgstr "Vaalikauden tilastot"
 msgid "Basic info"
 msgstr "Perustiedot"
 
-#: parliament/views.py:212
+#: parliament/views.py:254
 msgid "All activities"
 msgstr "Kaikki aktiviteetti"
+
+#: parliament/views.py:439 templates/home.html:3
+msgid "Front page"
+msgstr "Etusivu"
+
+#: parliament/views.py:448 templates/sessions.html:3
+msgid "Plenary sessions"
+msgstr "Täysistunnot"
+
+#: parliament/views.py:449
+msgid "List of plenary sessions."
+msgstr "Eduskunnan täysistunnot."
+
+#: parliament/views.py:493 templates/list_topics.html:4
+#: templates/list_topics.html.py:12
+msgid "Topics"
+msgstr "Aiheet"
+
+#: parliament/views.py:494
+msgid "List of topics."
+msgstr "Eduskunnan käsittelemät aiheet."
+
+#: parliament/views.py:541
+msgid "Members of Parliament"
+msgstr "Kansanedustajat"
+
+#: parliament/views.py:542
+msgid "List of Members of Parliament"
+msgstr "Eduskunnan kansanedustajat"
+
+#: parliament/views.py:616 templates/opinions/show_hypothetical_vote.html:121
+#: templates/opinions/show_question_session.html:213
+#: templates/party/list.html:4 templates/party/list.html.py:10
+msgid "Parties"
+msgstr "Puolueet"
+
+#: parliament/views.py:617
+msgid "List of parties in the parliament."
+msgstr "Eduskunnan puolueet."
 
 #: templates/404.html:3 templates/404.html.py:8
 msgid "Page not found"
@@ -393,23 +432,23 @@ msgstr "Edustajan aktiivisuus aiheessa"
 msgid "Issue"
 msgstr "Aihe"
 
-#: templates/_feed_controls.html:14
+#: templates/_feed_controls.html:16
 msgid "All issues"
 msgstr "Kaikki aiheet"
 
-#: templates/_feed_controls.html:22
+#: templates/_feed_controls.html:24
 msgid "Search for a keyword"
 msgstr "Hae asiasanaa"
 
-#: templates/_feed_controls.html:34
+#: templates/_feed_controls.html:33
 msgid "Filter"
 msgstr "Rajaus"
 
-#: templates/_feed_controls.html:40
+#: templates/_feed_controls.html:39
 msgid "Timerange"
 msgstr "Aikaväli"
 
-#: templates/_feed_controls.html:43 templates/_feed_controls.html.py:45
+#: templates/_feed_controls.html:46 templates/_feed_controls.html.py:53
 msgid "Any time"
 msgstr "Milloin vain"
 
@@ -430,17 +469,17 @@ msgstr "tietoa"
 msgid "About the site"
 msgstr "Tietoa Kamusta"
 
-#: templates/base.html:71
+#: templates/base.html:146
 msgid "Read more"
 msgstr "Lue lisää"
 
-#: templates/base.html:150
+#: templates/base.html:191
 msgid "Input search terms"
 msgstr "Syötä hakusanat"
 
-#: templates/base.html:152 templates/base.html.py:155
-#: templates/list_topics.html:21 templates/member/list.html:16
-#: templates/opinions/summary.html:136 templates/party/mps.html:26
+#: templates/base.html:193 templates/list_topics.html:21
+#: templates/member/list.html:16 templates/opinions/summary.html:136
+#: templates/party/mps.html:26
 msgid "Search"
 msgstr "Hae"
 
@@ -463,16 +502,11 @@ msgstr ""
 msgid "News"
 msgstr "Ajankohtaista"
 
-#: templates/home.html:3
-msgid "Front page"
-msgstr "Etusivu"
-
 #: templates/home.html:33
 msgid "Most discussed topics"
 msgstr "Keskustelluimmat aiheet"
 
-#: templates/home.html:78 templates/parliament/plenary_item_details.html:40
-#: templates/show_document.html:95
+#: templates/home.html:78 templates/parliament/plenary_item_details.html:27
 msgid "Plenary session"
 msgstr "Täysistunto"
 
@@ -519,10 +553,6 @@ msgstr "Liity Kansan muisti ry:hyn"
 #: templates/joining/new_member.html:11
 msgid "Send application"
 msgstr "Lähetä kaavake"
-
-#: templates/list_topics.html:4 templates/list_topics.html.py:12
-msgid "Topics"
-msgstr "Aiheet"
 
 #: templates/list_topics.html:18
 msgid "Browse keywords"
@@ -725,7 +755,7 @@ msgstr "Ennuste"
 #: templates/opinions/show_party_congruences.html:56
 #: templates/opinions/show_question_session.html:77
 #: templates/opinions/show_question_session.html:109
-#: templates/parliament/plenary_item_details.html:55
+#: templates/parliament/plenary_item_details.html:77
 msgid "Yay"
 msgstr "Kyllä"
 
@@ -733,7 +763,7 @@ msgstr "Kyllä"
 #: templates/opinions/show_party_congruences.html:63
 #: templates/opinions/show_question_session.html:78
 #: templates/opinions/show_question_session.html:110
-#: templates/parliament/plenary_item_details.html:57
+#: templates/parliament/plenary_item_details.html:79
 msgid "Nay"
 msgstr "Ei"
 
@@ -756,12 +786,6 @@ msgstr ""
 #: templates/opinions/show_question_session.html:189
 msgid "Whole parliament"
 msgstr "Koko eduskunta"
-
-#: templates/opinions/show_hypothetical_vote.html:121
-#: templates/opinions/show_question_session.html:213
-#: templates/party/list.html:4 templates/party/list.html.py:10
-msgid "Parties"
-msgstr "Puolueet"
 
 #: templates/opinions/show_party_congruences.html:3
 msgid "Promise statistics for"
@@ -926,29 +950,29 @@ msgstr[1] ""
 "\n"
 "%(nr_votes)s äänestystä\n"
 
-#: templates/parliament/plenary_item_details.html:26
-msgid "Plenary session item documents"
-msgstr "Täysistunnon päiväjärjestyksen kohdan asiakirjat"
-
 #: templates/parliament/plenary_item_details.html:43
+msgid "Käsitellyt dokumentit"
+msgstr ""
+
+#: templates/parliament/plenary_item_details.html:65
+#: templates/sessions.html:20 templates/show_document.html:91
 msgid "Plenary votes"
 msgstr "Äänestykset"
 
-#: templates/parliament/plenary_item_details.html:49
+#: templates/parliament/plenary_item_details.html:71
 msgid "Result"
 msgstr "Tulos"
 
-#: templates/parliament/plenary_item_details.html:59
+#: templates/parliament/plenary_item_details.html:81
 msgid "Empty"
 msgstr "Tyhjä"
 
-#: templates/parliament/plenary_item_details.html:61
+#: templates/parliament/plenary_item_details.html:83
 msgid "Absent"
 msgstr "Poissa"
 
-#: templates/parliament/plenary_item_details.html:86
-#: templates/parliament/plenary_item_details.html:90
-#: templates/show_document.html:110
+#: templates/parliament/plenary_item_details.html:336
+#: templates/parliament/plenary_item_details.html:340
 msgid "speaker"
 msgstr "puhemies"
 
@@ -1001,264 +1025,6 @@ msgstr "Hallituksessa"
 msgid "In opposition"
 msgstr "Oppositiossa"
 
-#: templates/registration/activate.html:3
-#: templates/registration/activation_complete.html:3
-msgid "Activation"
-msgstr "Aktivointi"
-
-#: templates/registration/activate.html:6
-#: templates/registration/activation_complete.html:6
-msgid "Kamu account activation"
-msgstr "Kamu-käyttäjätunnuksen aktivointi"
-
-#: templates/registration/activate.html:7
-msgid ""
-"The activation link you used is not valid.\n"
-"  Please check your link or register again."
-msgstr ""
-"Käyttämäsi aktivointtilinkki ei ole toiminnassa.\n"
-"Tarkista linkki sähköpostista tai rekisteröidy uudestaan."
-
-#: templates/registration/activation_complete.html:7
-msgid "Your account is now active and logged in."
-msgstr "Tunnuksesi on nyt käytössä ja kirjautunut Kamuun."
-
-#: templates/registration/activation_email.txt:1
-msgid "Please use the following link to activate your Kamu account:"
-msgstr ""
-
-#: templates/registration/activation_email.txt:5
-#, python-format
-msgid ""
-"Please note that this link will only be valid for %(expiration_days)s days."
-msgstr ""
-
-#: templates/registration/activation_email_subject.txt:1
-msgid "Activate your account"
-msgstr "Aktivoi tunnuksesi"
-
-#: templates/registration/login.html:3 templates/registration/login.html:42
-msgid "Login"
-msgstr "Kirjaudu sisään"
-
-#: templates/registration/login.html:5
-msgid "Kamu login"
-msgstr "Sisäänkirjautuminen Kamuun"
-
-#: templates/registration/login.html:21
-msgid ""
-"\n"
-"If you have a Facebook account, you can login or register using the button "
-"below.\n"
-msgstr ""
-"\n"
-"Jos sinulla on Facebook-tili, voit kirjautua sisään tai rekisteröityä "
-"klikkaamalla alla olevaa nappia.\n"
-
-#: templates/registration/login.html:27
-msgid ""
-"\n"
-"You can also login using your Kamu account.\n"
-msgstr ""
-"\n"
-"Voit myös kirjautua sisään Kamu-tunnuksillasi.\n"
-
-#: templates/registration/login.html:32
-msgid "Sorry, that's not a valid username or password"
-msgstr "Antamasi käyttäjätunnus tai salasana ei kelpaa."
-
-#: templates/registration/login.html:36
-msgid "User name:"
-msgstr "Käyttäjätunnus:"
-
-#: templates/registration/login.html:39
-msgid "Password:"
-msgstr "Salasana:"
-
-#: templates/registration/login.html:47
-msgid "Forgot your username or password?"
-msgstr "Unohditko käyttäjätunnuksesi tai salasanasi?"
-
-#: templates/registration/login.html:48
-msgid "Create a new account."
-msgstr "Luo uusi tunnus."
-
-#: templates/registration/login.html:50
-msgid ""
-"\n"
-"<p>The only personal information we will display publicly is your name. Any "
-"other information collected about you will remain private unless you choose "
-"to allow us to display it.</p>\n"
-"<p>We use your personal information only in an anonymized fashion, according "
-"to our privacy policy.</p>\n"
-msgstr ""
-"\n"
-"<p>Kerätyistä henkilötiedoista näytämme julkisesti ainoastaan nimesi. Muita "
-"tietoja näytämme ainoastaan siinä tapauksessa, että hyväksyt sen erikseen.</"
-"p>\n"
-"<p>Rekisteriselosteemme mukaisesti luovutamme tietojasi kolmansille "
-"osapuolille ainoastaan anonymisoituna.</p>\n"
-
-#: templates/registration/password_change_done.html:4
-#: templates/registration/password_change_done.html:8
-msgid "Password change successful"
-msgstr "Salasanan vaihto onnistui"
-
-#: templates/registration/password_change_done.html:10
-msgid "Your password was changed."
-msgstr "Salasanasi on vaihdettu."
-
-#: templates/registration/password_change_form.html:3
-#: templates/registration/password_change_form.html:15
-msgid "Password change"
-msgstr "Salasanan vaihto"
-
-#: templates/registration/password_change_form.html:11
-msgid "Please correct the error below."
-msgid_plural "Please correct the errors below."
-msgstr[0] "Korjaa alla oleva virhe."
-msgstr[1] "Korjaa alla olevat virheet."
-
-#: templates/registration/password_change_form.html:17
-msgid ""
-"Please enter your old password, for security's sake, and then enter your new "
-"password twice so we can verify you typed it in correctly."
-msgstr "Syötä vanha salasanasi ja kirjoita uusi salasanasi kahdesti."
-
-#: templates/registration/password_change_form.html:23
-msgid "Old password"
-msgstr "Vanha salasana:"
-
-#: templates/registration/password_change_form.html:28
-msgid "New password"
-msgstr "Uusi salasana:"
-
-#: templates/registration/password_change_form.html:33
-msgid "Password (again)"
-msgstr "Salasana (uudestaan)"
-
-#: templates/registration/password_change_form.html:39
-#: templates/registration/password_reset_confirm.html:19
-msgid "Change my password"
-msgstr "Vaihda salasana"
-
-#: templates/registration/password_reset_complete.html:4
-#: templates/registration/password_reset_complete.html:8
-msgid "Password reset complete"
-msgstr "Salasanan nollaus valmis"
-
-#: templates/registration/password_reset_complete.html:10
-msgid "Your password has been set.  You may go ahead and log in now."
-msgstr "Salasanasi on asetettu. Voit nyt kirjautua."
-
-#: templates/registration/password_reset_complete.html:12
-msgid "Log in"
-msgstr "Kirjaudu sisään"
-
-#: templates/registration/password_reset_confirm.html:4
-#: templates/registration/password_reset_form.html:4
-#: templates/registration/password_reset_form.html:8
-msgid "Password reset"
-msgstr "Salasanan nollaus"
-
-#: templates/registration/password_reset_confirm.html:10
-msgid "Enter new password"
-msgstr "Syötä uusi salasana"
-
-#: templates/registration/password_reset_confirm.html:12
-msgid ""
-"Please enter your new password twice so we can verify you typed it in "
-"correctly."
-msgstr ""
-"Syötä uusi salasanasi kaksi kertaa, jotta voimme varmistaa että syötit sen "
-"oikein."
-
-#: templates/registration/password_reset_confirm.html:16
-msgid "New password:"
-msgstr "Uusi salasana:"
-
-#: templates/registration/password_reset_confirm.html:18
-msgid "Confirm password:"
-msgstr "Varmista salasana:"
-
-#: templates/registration/password_reset_confirm.html:24
-msgid "Password reset unsuccessful"
-msgstr "Salasanan nollaus ei onnistunut"
-
-#: templates/registration/password_reset_confirm.html:26
-msgid ""
-"The password reset link was invalid, possibly because it has already been "
-"used.  Please request a new password reset."
-msgstr ""
-"Salasanan nollauslinkki oli virheellinen, mahdollisesti siksi että se on jo "
-"käytetty. Ole hyvä ja pyydä uusi salasanan nollaus."
-
-#: templates/registration/password_reset_done.html:4
-#: templates/registration/password_reset_done.html:8
-msgid "Password reset successful"
-msgstr "Salasanan nollaus onnistui"
-
-#: templates/registration/password_reset_done.html:10
-msgid ""
-"We've e-mailed you instructions for setting your password to the e-mail "
-"address you submitted. You should be receiving it shortly."
-msgstr ""
-"Uusi salasanasi on lähetetty antamaasi sähköpostiosoitteeseen. Se saapuu "
-"tuota pikaa."
-
-#: templates/registration/password_reset_email.html:2
-msgid ""
-"You're receiving this e-mail because you requested a password\n"
-"reset for your user account at kansanmuisti.fi."
-msgstr ""
-"Sait tämän viestin, koska pyysit uutta salasanaa tunnuksellesi\n"
-"kansanmuisti.fi sivustolla."
-
-#: templates/registration/password_reset_email.html:5
-msgid "Please go to the following page and choose a new password:"
-msgstr "Määrittele uusi salasanasi oheisella sivulla:"
-
-#: templates/registration/password_reset_email.html:9
-msgid "Your username, in case you've forgotten:"
-msgstr "Käyttäjätunnuksesi:"
-
-#: templates/registration/password_reset_form.html:10
-msgid ""
-"Forgotten your password? Enter your e-mail address below, and we'll e-mail "
-"instructions for setting a new one."
-msgstr ""
-"Unohditko salasanasi? Syötä alle sähköpostiosoitteesi, niin \n"
-"lähetämme sinulle ohjeet sen vaihtamiseksi."
-
-#: templates/registration/password_reset_form.html:14
-msgid "E-mail address:"
-msgstr "Sähköpostiosoite:"
-
-#: templates/registration/password_reset_form.html:14
-msgid "Reset my password"
-msgstr "Nollaa salasana"
-
-#: templates/registration/registration_complete.html:3
-#: templates/registration/registration_complete.html:8
-msgid "Registration complete"
-msgstr "Rekisteröinti vastaanotettu"
-
-#: templates/registration/registration_complete.html:9
-msgid "Your registration e-mail has been sent to the address you provided."
-msgstr "Sähköposti rekisteröitymisestäsi on lähetetty antamaasi osoitteeseen."
-
-#: templates/registration/registration_form.html:3
-msgid "Register"
-msgstr "Rekisteröidy"
-
-#: templates/registration/registration_form.html:6
-msgid "Create an account"
-msgstr "Luo uusi tunnus"
-
-#: templates/registration/registration_form.html:10
-msgid "Create the account"
-msgstr "Luo tunnus"
-
 #: templates/search.html:4 templates/search_keyword.html:3
 msgid "Search results"
 msgstr "Hakutulokset"
@@ -1271,25 +1037,21 @@ msgstr "Hakutulokset asiasanalle"
 msgid "No results found"
 msgstr "Ei hakuosumia"
 
-#: templates/sessions.html:3
-msgid "Plenary sessions"
-msgstr "Täysistunnot"
-
-#: templates/show_document.html:13
-msgid "Similar Citizens' Initiatives"
-msgstr "Samanlaisia kansalaisaloitteita"
-
 #: templates/show_document.html:17
-msgid "Similar documents"
-msgstr "Samanlaisia esityksiä"
-
-#: templates/show_document.html:38
 msgid "Author"
 msgstr "Laatija"
 
-#: templates/show_document.html:56
+#: templates/show_document.html:28
+msgid "Similar documents"
+msgstr "Samanlaisia esityksiä"
+
+#: templates/show_document.html:49
 msgid "Proposal content"
 msgstr "Esityksen sisältö"
+
+#: templates/show_document.html:53
+msgid "Show original document"
+msgstr "Näytä alkuperäinen asiakirja"
 
 #: templates/show_topic.html:4
 msgid "Topic"
@@ -1306,113 +1068,3 @@ msgstr "Aktiivisimmat puolueet tässä asiassa"
 #: templates/show_topic.html:35
 msgid "Who are active with this issue?"
 msgstr "Aktiivisimmat kansanedustajat tässä asiassa"
-
-#, fuzzy
-#~| msgid "Yay"
-#~ msgid "Yea"
-#~ msgstr "Kyllä"
-
-#~ msgid "No"
-#~ msgstr "Ei"
-
-#~ msgid "Input text"
-#~ msgstr "Syötä teksti"
-
-#~ msgid ""
-#~ "\n"
-#~ "%(count)s statement\n"
-#~ msgid_plural ""
-#~ "\n"
-#~ "%(count)s statements\n"
-#~ msgstr[0] ""
-#~ "\n"
-#~ "%(count)s puheenvuoro\n"
-#~ msgstr[1] ""
-#~ "\n"
-#~ "%(count)s puheenvuoroa\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "%(count)s voting session\n"
-#~ msgid_plural ""
-#~ "\n"
-#~ "%(count)s voting sessions\n"
-#~ msgstr[0] ""
-#~ "\n"
-#~ "%(count)s äänestys\n"
-#~ msgstr[1] ""
-#~ "\n"
-#~ "%(count)s äänestystä\n"
-
-#~ msgid "Active in these topics"
-#~ msgstr "Aktiivinen näissä aiheissa"
-
-#~ msgid "Recent actions of party MPs"
-#~ msgstr "Puolueen jäsenten viimeisimmät aktiviteetit"
-
-#~ msgid "Party activity graph"
-#~ msgstr "Puolueen aktiivisuus"
-
-#~ msgid "Party topic activity"
-#~ msgstr "Puolueen aktiivisuus aiheessa"
-
-#~ msgid ""
-#~ "\n"
-#~ "%(count)s plenary session\n"
-#~ msgid_plural ""
-#~ "\n"
-#~ "%(count)s plenary sessions\n"
-#~ msgstr[0] ""
-#~ "\n"
-#~ "%(count)s täysistunto\n"
-#~ msgstr[1] ""
-#~ "\n"
-#~ "%(count)s täysistuntoa\n"
-
-#~ msgid "Number of Yay votes"
-#~ msgstr "Jaa-äänien lukumäärä"
-
-#~ msgid "Number of Nay votes"
-#~ msgstr "Ei-äänien lukumäärä"
-
-#~ msgid "Number of Empty votes"
-#~ msgstr "Tyhjä-äänien lukumäärä"
-
-#~ msgid "Number of absentees"
-#~ msgstr "Poissaolevien lukumäärä"
-
-#~ msgid "Documents related to topic \"%(topic)s\""
-#~ msgstr "Asiakirjat, jotka liittyvät aiheeseen \"%(topic)s\""
-
-#~ msgid "Governing"
-#~ msgstr "Hallituksessa"
-
-#~ msgid "Votes"
-#~ msgstr "Äänet"
-
-#~ msgid "voted against own party"
-#~ msgstr "äänesti puoluettaan vastaan"
-
-#~ msgid "Dissents"
-#~ msgstr "Vastalauseet"
-
-#~ msgid "submitted a committee dissent"
-#~ msgstr "antoi vastalauseen valiokunnassa"
-
-#~ msgid ""
-#~ "\n"
-#~ "%(count)s party\n"
-#~ msgid_plural ""
-#~ "\n"
-#~ "%(count)s parties\n"
-#~ msgstr[0] ""
-#~ "\n"
-#~ "%(count)s puolue\n"
-#~ msgstr[1] ""
-#~ "\n"
-#~ "%(count)s puoluetta\n"
-
-#~ msgid "Includes all parties that presently have members in the parliament."
-#~ msgstr ""
-#~ "Mukana kaikki puolueet, joilla on tällä hetkellä kansanedustajia "
-#~ "eduskunnassa."
