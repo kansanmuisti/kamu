@@ -32,8 +32,8 @@ class @ActivityView extends Backbone.View
         obj = @model.toJSON()
         if @has_actor and obj.member
             obj.actor =
-                name: obj.member_name
-                url: URL_CONFIG['member_details'].replace 'MEMBER', obj.member_slug
+                name: "#{obj.member_info.print_name} /#{obj.member_info.party}"
+                url: URL_CONFIG['member_details'].replace 'MEMBER', obj.member_info.slug
                 thumbnail_url: obj.member + 'portrait/?dim=106x159'
         else
             obj.actor = null

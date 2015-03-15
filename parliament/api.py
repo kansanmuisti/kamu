@@ -544,10 +544,14 @@ class MemberActivityResource(KamuResource):
     def dehydrate(self, bundle):
         obj = bundle.obj
         if obj.member:
-            bundle.data['member_name'] = obj.member.name
-            bundle.data['member_slug'] = obj.member.url_name
+            member = {}
+            member['name'] = obj.member.name
+            member['print_name'] = obj.member.get_print_name()
+            member['slug'] = obj.member.url_name
             if obj.member.party:
-                bundle.data['party_name'] = party_dict[obj.member.party.id].name
+                member['party_name'] = party_dict[obj.member.party_id].name
+                member['party'] = party_dict[obj.member.party_id].abbreviation
+            bundle.data['member_info'] = member
 
         bundle.data['type'] = obj.type.pk
         d = obj.get_target_info()
