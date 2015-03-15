@@ -37,6 +37,8 @@ urlpatterns = patterns('parliament.views',
 
     url(r'^document/(?P<slug>[-\w]+)/$', 'show_document'),
 
+    url(r'^info/$', 'show_general_info'),
+
     url(r'^search/$', 'search'),
 )
 

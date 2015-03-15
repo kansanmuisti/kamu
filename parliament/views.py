@@ -204,9 +204,9 @@ def _get_member_activity_kws(member, since=Term.objects.latest().begin, n=20):
         .annotate(score=Sum("keywordactivity__activity__type__weight"))
         .order_by('-score')
         )
-    
+
     kw_act_list = kw_act_list[:n]
-    
+
     return [(r.name, r.score) for r in kw_act_list]
 
 def _get_party_activity_kws(party, since=Term.objects.latest().begin, n=20):
@@ -642,3 +642,11 @@ def search(request):
     args = dict(party_json=get_parties(request), query=q)
     args['feed_actions_json'] = json.dumps(make_feed_actions(), ensure_ascii=False)
     return render_to_response("search.html", args, context_instance=RequestContext(request))
+
+
+def show_general_info(request):
+    args = dict(title='Kansan muisti ry.')
+    args['description'] = "Kansan muisti ry on poliittisesti sitoutumaton, voittoa tavoittelematon " +\
+        "ja vapaaehtoisvoimin toimiva yhdistys, jonka tavoitteena on edistää demokratian " +\
+        "toteutumista yhteiskunnassa."
+    return render_to_response("general_info.html", args, context_instance=RequestContext(request))
