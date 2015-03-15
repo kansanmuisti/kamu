@@ -51,19 +51,19 @@
               <%= target.text %>
           </div>
           <% if (target.picture) { %>
-          <div class="share-target">
+          <div class="share-target <% if (!target.share_title) { %>no-title<% } %>">
             <a href="<%= target.share_link %>">
-              <img src="<%= target.picture %>">
-            </a>
-            <% if (target.share_caption) { %>
-              <p><%= target.share_caption %></p>
+              <img src="<%= target.picture %>">            
+            <% if (target.share_title) { %>
+              <p class="share-target-title"><%= target.share_title %></p>
             <% } %>
             <% if (target.share_description) { %>
-              <p><%= target.share_description %></p>
+              <p class="share-target-description"><%= target.share_description %></p>
             <% } %>
-            <% if (target.share_title) { %>
-              <p><%= target.share_title %></p>
+            <% if (target.share_caption) { %>
+              <p class="share-target-caption"><%= target.share_caption %></p>
             <% } %>
+            </a>
           </div>
           <% } %>
       </div>
