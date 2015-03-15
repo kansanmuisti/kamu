@@ -130,13 +130,15 @@
   <div class="party-highlight">
     <div class="party-thumbnail">
     <a href="<%= view_url %>">
-      <img title="<%- name %>" src="<%= thumbnail_url %>">
+      <img data-toggle="tooltip" title="<%- name %>" src="<%= thumbnail_url %>">
     </a>
     </div>
     <div class="party-activity">
+      <a href="#show-activity-breakdown">
       <div class="thumbnail-activity">
         <div class="thumbnail-activity-bar" style="width: <%- activity_percentage %>%"></div>
       </div>
+      </a>
     </div>
     <div class="party-issues">
       <ul class="party-activity--issues">

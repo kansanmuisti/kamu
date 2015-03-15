@@ -170,6 +170,19 @@ fieldset {
     background-color: @electric;
 }
 
+.btn-info, .btn-info:visited, .btn-info:link {
+  color: #ffffff;
+  background-color: @mint;
+  border: none;
+  &:hover, &:active {
+    background-color: darken(@mint,10%);
+  }
+  i {
+    font-size: 1.333em;
+    margin-right: 6px;
+  }
+}
+
 .newsfeed {
     > article {
         border-top: @gray-light solid 1px;
@@ -263,10 +276,11 @@ fieldset {
             }
         }
         .feed-content {
+            .clearfix;
+            overflow: auto;
             padding: 16px 0 0 0;
             float: left;
             width: 100%;
-            .clearfix;
             border-top: 1px solid @gray-lighter;
             h2 {
                 font-family: @font-family-base;
@@ -1550,17 +1564,21 @@ main.party-list {
 
 .progress-phase {
   padding: 10px;
-  i {
-    float: right;
-    font-size: 50px;
+  margin-bottom: 10px;
+  h4 {
+    margin: 0;
+    i {
+      line-height: .8em;
+      margin-right: 6px;
+    }
   }
 }
 
-.passed .progress-phase {
+.passed.progress-phase {
   background: @mint;
 }
 
-.unpassed .progress-phase {
+.unpassed.progress-phase {
   background: @gray-lighter;
   color: @gray-light;
   i {
@@ -1581,6 +1599,16 @@ main.party-list {
     display:none;
   }
 
+.document-summary {
+  i {
+    color: @electric;
+    font-size: 60px;
+  }
+  .type {
+    display: block;
+  }
+}
+
 .proposal-content {
     header {
         margin-bottom: 20px;
@@ -1589,7 +1617,7 @@ main.party-list {
             margin: 0 0 10px 0;
             font-family: @font-family-base;
             color: @pine;
-            font-size: @font-size-extra-large;
+            font-size: @font-size-large;
             line-height: 1.2;
         }
         .details {
@@ -1626,6 +1654,10 @@ main.party-list {
           }
         }
     }
+  .proposal-summary {
+    margin-bottom: 20px;
+    border-bottom: 1px solid @gray-light;
+  }
 }
 
 .proposal-statements {
@@ -1841,6 +1873,27 @@ main.party-list {
           font-size: @font-size-base;
         }
       }
+    }
+  }
+}
+
+/*ol*/.plenary-item-docs {
+  margin: 0 0 10px 0;
+  padding: 10px 0 0 0;
+  border-top: solid 1px @gray;
+  list-style: none;
+  li {
+    .clearfix;
+    border-bottom: solid 1px @gray;
+    padding: 0 0 10px 0;
+    a {
+      color: @pine;
+      font-weight: bold;
+    }
+    i {
+      font-size: 3em;
+      line-height: 0.8;
+      color: @electric;
     }
   }
 }

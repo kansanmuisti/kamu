@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "sidebarbase.html" %}
 {% load compress static i18n thumbnail parliament %}
 {% block title %}{{ item.description|truncatewords:10 }}{% endblock %}
 {% block head %}
@@ -12,36 +12,57 @@ $(function() {
 		$(this).text(mom.fromNow());
 	});
 	var now = moment();
+$(".proposal-summary").expander({slicePoint: 1000,hasBlocks: true});
+$(".proposal-statement-text").expander({slicePoint: 1000,hasBlocks: true});
+
 });
 
 </script>
 {% endblock %}
 
-{% block content %}
+{% block sidebar %}
+<div class="issue-card">
+            <header>
+                <h4>{{item.get_type_description|safe}}</h4>
+                <h5><a href="/sessions/#url-to-this-session">{% trans "Plenary session" %}<br/>{{ item.plsess.date }}</a></h5>
+            </header>
+    <div class="share-button"></div>
+</div>
 
-<div class="row">
-    <div class="col-md-4">
-        {% if item.docs.all %}
-        <div class="box plenary-session-item-documents related-sidebar">
-            <h4>{% trans "Plenary session item documents" %}</h4>
-            <ol>
+{% endblock %}
+
+{% block main_content %}
+
+<div class="">
+    <div class="">
+        <div class="proposal-content content">
+          <header>
+            <h1>{{item.description}}</h1>
+          
+            {% if item.docs.all %}
+            <h3>{% trans "Käsitellyt dokumentit" %}</h3>
+            
+            
+            <ol class="plenary-item-docs">
             {% for document in item.docs.all %}
-               <li><a href="{% url "parliament.views.show_document" slug=document.url_name %}">{{document.subject}}</a><br/>
-               <a title="{% trans "Link to document" %}" href="{{document.get_origin_url}}"><span class="typcn typcn-document"></span></a></li>
+
+               <li class="media">
+                 <i class="typcn typcn-clipboard media-left"></i>
+                 <a class="media-body" href="{% url "parliament.views.show_document" slug=document.url_name %}">{{document.subject}}</a>
+               </li>
             {% endfor %}
             </ol>
-        </div>
-        {% endif %}
-    </div>
-    <div class="col-md-11">
-        <div class="proposal-content content">
-            <header>
-                <h1>{{item.description}}</h1>
-                <h4>{{item.get_type_description|safe}}</h4>
-                <h4>{% trans "Plenary session" %} {{ item.plsess.date }}</h4>
-            </header>
+            {% endif %}
+            
+            <div class="proposal-summary">
+            {% if single_doc and single_doc.summary %}
+            {{ single_doc.summary|linebreaks }}
+            {% endif %}
+            </div>
+            
+          </header>
             {% if item.plenary_votes.count %}
-            <h2 id="votings">{% trans "Plenary votes" %}</h2>
+            <h3 id="votings">{% trans "Plenary votes" %}</h3>
             <div class="proposal-votings">
               {% for vote in item.plenary_votes.all %}
               <div class="voting-result-summary">
@@ -295,13 +316,8 @@ $(function() {
               {% endfor %}
             </div>
             {% endif %}
-            <div class="summary">
-            {% if single_doc and single_doc.summary %}
-            {{ single_doc.summary|linebreaks }}
-            {% endif %}
-            </div>
             {% if item.statement_set.count %}
-            <h2 id="statements">{% trans "Statements" %}</h2>
+            <h3 id="statements">{% trans "Statements" %}</h3>
             <div class="proposal-statements">
                 {% for statement in item.statement_set.all %}
                 {% with member=statement.member governing_party=statement.member.party|governing:item.plsess.date %}
