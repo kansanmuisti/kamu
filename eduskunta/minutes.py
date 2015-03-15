@@ -593,6 +593,7 @@ class MinutesImporter(Importer):
                 q_item.save()
                 for idx, st in enumerate(q_info['statements']):
                     self.save_statement(q_item, idx, st)
+                sub_items.append(q_item)
         elif item_info['type'] == 'agenda_item':
             if 'discussion' in item_info:
                 for idx, st in enumerate(item_info['discussion']):
