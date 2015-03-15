@@ -7,7 +7,7 @@
 
 {% block sidebar %}
 <div class="issue-card">
-    <div class="document-details">
+    <div class="document-summary">
         <i class="typcn typcn-clipboard"></i>
         <span class="type">{{doc.get_type_display}}</span>
         <small class="number">{{doc.name}}</small>
@@ -50,6 +50,8 @@
             <div class="proposal-summary">{{doc.summary|linebreaks}}</div>
             {% endif %}
 
+            <a class="btn btn-info" href="{{ doc.get_origin_url }}" target="_blank"><i class="typcn typcn-download"></i>{% trans "Show original document" %}</a>
+
             {% if doc.question %}
             {% with member=doc.author %}
             <div class="proposal-statement media side-opposition">
@@ -81,8 +83,8 @@
             <h2>Käsittelyt</h2>
             <ul class="proposal-progresses">
                   {% for stage in doc.processing_stages %}
-                  <li class="{% if stage.date %}passed{% else %}unpassed{% endif %}">
-                      <h4 class="progress-phase"><i class="typcn typcn-arrow-down"></i>{{stage.name|safe}}</h4>
+                  <li class="progress-phase {% if stage.date %}passed{% else %}unpassed{% endif %}">
+                      <h4><i class="typcn typcn-arrow-right-thick"></i>{{stage.name|safe}}</h4>
                       {% if stage.item %}{% with item=stage.item %}
                       <div class="progress-session">
                         <h5><a href="{{ item.get_absolute_url }}"> <i class="typcn typcn-group"></i>Täysistunto {{ item.plsess.date }}</a></h5>

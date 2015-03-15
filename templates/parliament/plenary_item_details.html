@@ -12,6 +12,9 @@ $(function() {
 		$(this).text(mom.fromNow());
 	});
 	var now = moment();
+$(".proposal-summary").expander({slicePoint: 1000,hasBlocks: true});
+$(".proposal-statement-text").expander({slicePoint: 1000,hasBlocks: true});
+
 });
 
 </script>
@@ -42,6 +45,7 @@ $(function() {
             
             <ol class="plenary-item-docs">
             {% for document in item.docs.all %}
+
                <li class="media">
                  <i class="typcn typcn-clipboard media-left"></i>
                  <a class="media-body" href="{% url "parliament.views.show_document" slug=document.url_name %}">{{document.subject}}</a>
@@ -49,6 +53,13 @@ $(function() {
             {% endfor %}
             </ol>
             {% endif %}
+            
+            <div class="proposal-summary">
+            {% if single_doc and single_doc.summary %}
+            {{ single_doc.summary|linebreaks }}
+            {% endif %}
+            </div>
+            
           </header>
             {% if item.plenary_votes.count %}
             <h3 id="votings">{% trans "Plenary votes" %}</h3>

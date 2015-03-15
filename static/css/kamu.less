@@ -170,6 +170,19 @@ fieldset {
     background-color: @electric;
 }
 
+.btn-info, .btn-info:visited, .btn-info:link {
+  color: #ffffff;
+  background-color: @mint;
+  border: none;
+  &:hover, &:active {
+    background-color: darken(@mint,10%);
+  }
+  i {
+    font-size: 1.333em;
+    margin-right: 6px;
+  }
+}
+
 .newsfeed {
     > article {
         border-top: @gray-light solid 1px;
@@ -1559,16 +1572,21 @@ main.party-list {
 
 .progress-phase {
   padding: 10px;
-  i {
-    font-size: 50px;
+  margin-bottom: 10px;
+  h4 {
+    margin: 0;
+    i {
+      line-height: .8em;
+      margin-right: 6px;
+    }
   }
 }
 
-.passed .progress-phase {
+.passed.progress-phase {
   background: @mint;
 }
 
-.unpassed .progress-phase {
+.unpassed.progress-phase {
   background: @gray-lighter;
   color: @gray-light;
   i {
@@ -1589,7 +1607,7 @@ main.party-list {
     display:none;
   }
 
-.document-details {
+.document-summary {
   i {
     color: @electric;
     font-size: 60px;
@@ -1644,6 +1662,10 @@ main.party-list {
           }
         }
     }
+  .proposal-summary {
+    margin-bottom: 20px;
+    border-bottom: 1px solid @gray-light;
+  }
 }
 
 .proposal-statements {
@@ -1864,7 +1886,7 @@ main.party-list {
 }
 
 /*ol*/.plenary-item-docs {
-  margin: 0;
+  margin: 0 0 10px 0;
   padding: 10px 0 0 0;
   border-top: solid 1px @gray;
   list-style: none;
