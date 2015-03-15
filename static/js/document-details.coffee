@@ -7,11 +7,6 @@ $(".proposal-summary").expander
     slicePoint: 1000
     hasBlocks: true
 
-$(".proposal-statement-content").expander
-    slicePoint: 1000
-    hasBlocks: true
-
-
 template = _.template $.trim $("#similar-document-item-template").html()
 
 $.ajax
