@@ -1,1 +1,0 @@
-{% load i18n %}Kansan muisti -- {% trans "Activate your account" %}
