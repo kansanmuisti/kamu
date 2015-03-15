@@ -291,6 +291,9 @@ def show_member(request, member, page=None):
         "kohteet ja aktiivisuus eduskunnassa.".format(member.get_print_name())
     template = 'member/details.html'
 
+    if member.photo:
+        args['meta_image'] = request.build_absolute_uri(member.photo.url)
+
     return render_to_response(template, args,
         context_instance=RequestContext(request))
 
@@ -518,7 +521,7 @@ def show_topic(request, topic, slug=None):
     args['keyword_activity_end_date'] = keyword_activity_end_date
 
     args['title'] = kw.name
-    args['description'] = "Aiheen {0} käsittely eduskunnassa.".format(kw.name)
+    args['description'] = u"Aiheen {0} käsittely eduskunnassa.".format(kw.name)
 
     return render_to_response('show_topic.html', args,
         context_instance=RequestContext(request))
@@ -634,6 +637,7 @@ def show_party_feed(request, abbreviation):
     args['description'] = "Puolueen {0} "\
         "aktiivisuus eduskunnassa ja sosiaalisessa "\
         "mediassa.".format(party.name)
+    args['meta_image'] = request.build_absolute_uri(party.logo.url)
 
     add_feed_filters(args, actor=True)
 
