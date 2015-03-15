@@ -59,6 +59,7 @@
     <!-- twitter bootstrap -->
     {% compress css %}
     <link type="text/css" href="{% static 'css/typicons/typicons.css' %}" rel="stylesheet" />
+    <link type="text/css" href="{% static "js/vendor/rickshaw.css" %}" rel="stylesheet" />
     {% endcompress %}
 
     <!-- own css -->
@@ -132,10 +133,7 @@
     <script type="text/javascript" src="{% static 'bootstrap/js/affix.js' %}"></script>
     <script type="text/coffeescript" src="{% static 'js/saneaffix.coffee' %}"></script>
     {% endcompress %}
-    {% compress css %}
-    <link type="text/css" href="{% static "js/vendor/rickshaw.css" %}" rel="stylesheet" />
-    {% endcompress %}
-    
+  
     <script type="text/javascript">
         GLOBAL_PARTY_LIST_JSON_HACK = {{PARTY_LIST_JSON|safe}}; 
         moment.locale("fi");
