@@ -24,7 +24,6 @@ class MostActiveMembersView extends Backbone.View
                 data.activity_percentage = 100
             el = $(@template data)
             @$el.append el
-            el.tooltip()
 
 members_view = new MostActiveMembersView()
 
@@ -44,7 +43,8 @@ class MostActivePartiesView extends Backbone.View
     add_all_items: =>
         max_score = ACTIVITY_BAR_CAP
         @$el.empty()
-        sorted = @collection.sortBy (x) -> x.get 'name'
+        sorted = @collection.sortBy (x) -> x.get 'member_count'
+        sorted.reverse()
         _.each sorted, (model) =>
             data = model.toJSON()
             data.thumbnail_url = model.get_logo_thumbnail 48, 48
@@ -59,5 +59,6 @@ class MostActivePartiesView extends Backbone.View
                 data.activity_percentage = 100
             el = $(@template data)
             @$el.append el
+            el.find('.party-thumbnail img').tooltip()
 
 parties_view = new MostActivePartiesView()
