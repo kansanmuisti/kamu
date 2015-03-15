@@ -60,9 +60,8 @@ $ ->
     render_sort_buttons relel(".list-sort-buttons"), state.sub 'sort'
     
     search = relel ".text-search"
-    search.input (val) ->
-        val = undefined if not val
-        state.update search: val
+    search.input ->
+        state.update search: search.val()
 
     lel = relel '.member-list-content'
     member_list_view = new MemberListView lel
