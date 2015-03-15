@@ -16,6 +16,7 @@
 {% compress js inline %}
 <script type="text/coffeescript">
 saneaffix_y $(".sidebar-container"), "affix-desktop"
+$(".sidebar-container .page-heading h1").finnishHyphenator()
 </script>
 {% endcompress %}
 {% endblock %}
