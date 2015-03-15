@@ -26,7 +26,8 @@ $(function() {
             <h4>{% trans "Plenary session item documents" %}</h4>
             <ol>
             {% for document in item.docs.all %}
-               <li><a href="{% url "parliament.views.show_document" slug=document.url_name %}">{{document.subject}}</a></li>
+               <li><a href="{% url "parliament.views.show_document" slug=document.url_name %}">{{document.subject}}</a><br/>
+               <a title="{% trans "Link to document" %}" href="{{document.get_origin_url}}"><span class="typcn typcn-document"></span></a></li>
             {% endfor %}
             </ol>
         </div>
@@ -294,6 +295,11 @@ $(function() {
               {% endfor %}
             </div>
             {% endif %}
+            <div class="summary">
+            {% if single_doc and single_doc.summary %}
+            {{ single_doc.summary|linebreaks }}
+            {% endif %}
+            </div>
             {% if item.statement_set.count %}
             <h2 id="statements">{% trans "Statements" %}</h2>
             <div class="proposal-statements">

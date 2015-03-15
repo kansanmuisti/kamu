@@ -114,6 +114,15 @@ class Document(UpdatableModel):
     def get_absolute_url(self):
         return ('parliament.views.show_document', (), {'slug': self.url_name})
 
+    def get_origin_url(self):
+        DOC_URL = "http://www.eduskunta.fi/triphome/bin/akxhref.sh?{KEY}=%s+vp"
+        HE_URL = "http://www.eduskunta.fi/triphome/bin/thw/?${base}=akirjat&${html}=akxpdf&${snhtml}=akxeiloydy&tunniste=%%27%s%%27"
+        origin_id = self.origin_id.replace(' ', '+')
+        if self.type == 'gov_bill':
+            return HE_URL % origin_id
+        else:
+            return DOC_URL % origin_id
+
     def __unicode__(self):
         return "%s %s" % (self.type, self.name)
 

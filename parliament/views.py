@@ -184,6 +184,12 @@ def show_item(request, plsess, item_nr, subitem_nr=None):
 
     args['title'] = item.description
     docs = item.docs.all()
+    if len(docs) == 1:
+        doc = docs[0]
+        if doc.summary:
+            doc.summary = doc.summary.replace('\n', '\n\n')
+        args['single_doc'] = doc
+
     if item.sub_description:
         args['description'] = item.sub_description
     elif docs:

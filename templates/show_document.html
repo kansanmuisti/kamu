@@ -47,6 +47,8 @@
             <div class="proposal-summary">{{doc.summary|linebreaks}}</div>
             {% endif %}
 
+            <a href="{{ doc.get_origin_url }}">{% trans "Link to original document" %}</a>
+
             {% if doc.question %}
             {% with member=doc.author %}
             <div class="proposal-statement media side-opposition">
