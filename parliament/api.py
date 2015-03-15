@@ -469,12 +469,14 @@ class PlenarySessionResource(KamuResource):
             'date': ALL,
             }
 
+
 class PlenarySessionItemResource(KamuResource):
     plenary_session = fields.ForeignKey(PlenarySessionResource, 'plsess')
     documents = fields.ManyToManyField('parliament.api.DocumentResource', 'docs', full=False)
     plenary_votes = fields.OneToManyField('parliament.api.PlenaryVoteResource', 'plenary_votes', full=False, null=True)
+
     class Meta:
-        queryset = PlenarySessionItem.objects.all()
+        queryset = PlenarySessionItem.objects.order_by('number', 'sub_number')
         resource_name = 'plenary_session_item'
         filtering = {
             'plenary_session': ALL_WITH_RELATIONS,
@@ -483,6 +485,7 @@ class PlenarySessionItemResource(KamuResource):
             'nr_statements': ALL,
         }
         ordering = ['plenary_session']
+
 
 class PlenaryVoteResource(KamuResource):
     plenary_session = fields.ForeignKey(PlenarySessionResource, 'plsess')
@@ -499,9 +502,11 @@ class PlenaryVoteResource(KamuResource):
             'session_item': ALL_WITH_RELATIONS,
         }
 
+
 class VoteResource(KamuResource):
     plenary_vote = fields.ForeignKey(PlenaryVoteResource, 'session')
     member = fields.ForeignKey(MemberResource, 'member')
+
     class Meta:
         queryset = Vote.objects.all()
         filtering = {
@@ -509,6 +514,7 @@ class VoteResource(KamuResource):
           'member': ALL_WITH_RELATIONS,
           'vote': ['in', 'exact']
         }
+
 
 class StatementResource(KamuResource):
     member = fields.ForeignKey('parliament.api.MemberResource', 'member', null=True)
@@ -529,6 +535,7 @@ class MemberActivityTypeResource(KamuResource):
         filtering = {
             'type': ['exact', 'in']
         }
+
 
 class MemberActivityResource(KamuResource):
     member = fields.ForeignKey('parliament.api.MemberResource', 'member', null=True)
@@ -585,6 +592,7 @@ class MemberActivityResource(KamuResource):
             'member': ALL_WITH_RELATIONS
         }
 
+
 class KeywordActivityResource(KamuResource):
     activity = fields.ForeignKey(MemberActivityResource, 'activity', full=True)
     keyword = fields.ForeignKey('parliament.api.KeywordResource', 'keyword')
@@ -597,10 +605,12 @@ class KeywordActivityResource(KamuResource):
             'activity': ALL_WITH_RELATIONS
         }
 
+
 class FundingSourceResource(KamuResource):
     class Meta:
         queryset = FundingSource.objects.all()
         resource_name = 'funding_source'
+
 
 class FundingResource(KamuResource):
     member = fields.ForeignKey(MemberResource, 'member')
@@ -608,16 +618,20 @@ class FundingResource(KamuResource):
     class Meta:
         queryset = Funding.objects.all()
 
+
 class SeatResource(KamuResource):
     class Meta:
         queryset = Seat.objects.all()
 
+
 class MemberSeatResource(KamuResource):
     seat = fields.ForeignKey(SeatResource, 'seat', full=True)
     member = fields.ForeignKey(MemberResource, 'member')
+
     class Meta:
         queryset = MemberSeat.objects.all()
         resource_name = 'member_seat'
+
 
 class DocumentResource(KamuResource):
     def dehydrate(self, bundle):
@@ -626,6 +640,7 @@ class DocumentResource(KamuResource):
 
     class Meta:
         queryset = Document.objects.all()
+
 
 class KeywordResource(KamuResource):
     class Meta:

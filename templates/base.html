@@ -21,14 +21,21 @@
     <meta name="twitter:description" content="{{ description }}">
     {% endif %}
     <meta name="twitter:creator" content="@kansanmuisti">
+    {% if meta_image %}
+    <meta name="twitter:image" content="{{ meta_image }}">
+    {% else %}
     <meta name="twitter:image" content="http://{{ request.get_host }}{% static 'images/icons/twitter_shared_thumbnail_default.png' %}">
-
+    {% endif %}
     {% if title %}
     <meta property="og:title" content="{{ title }}" />
     {% endif %}
     <meta property="og:type" content="article" />
     <meta property="og:url" content="{{ canonical_url }}" />
+    {% if meta_image %}
+    <meta property="og:image" content="{{ meta_image }}" />
+    {% else %}
     <meta property="og:image" content="http://{{ request.get_host }}{% static 'images/icons/fb_shared_thumbnail_default.png' %}" />
+    {% endif %}
     {% if description %}
     <meta property="og:description" content="{{ description }}" /> 
     {% endif %}

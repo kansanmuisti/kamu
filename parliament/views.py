@@ -132,7 +132,6 @@ def truncate_chars(s, num):
     Template filter to truncate a string to at most num characters respecting word
     boundaries.
     """
-    s = force_unicode(s)
     length = int(num)
     if len(s) > length:
         length = length - 3
@@ -184,17 +183,23 @@ def show_item(request, plsess, item_nr, subitem_nr=None):
     args = {'item': item}
 
     args['title'] = item.description
+    docs = item.docs.all()
     if item.sub_description:
         args['description'] = item.sub_description
+    elif docs:
+        if docs[0].summary:
+            args['description'] = truncate_chars(docs[0].summary, 150)
 
     return render_to_response('parliament/plenary_item_details.html', args,
                               context_instance=RequestContext(request))
+
 
 def get_view_member(url_name):
     member = get_object_or_404(Member, url_name=url_name)
     current_district = member.districtassociation_set.order_by('-begin')[0].district
     member.current_district = current_district
     return member
+
 
 def _get_member_activity_kws(member, since=Term.objects.latest().begin, n=20):
     kw_act_list = (
@@ -281,10 +286,17 @@ def show_member(request, member, page=None):
     kw_act = _get_member_activity_kws(member)
     kw_act_json = json.dumps(kw_act, ensure_ascii=False)
     args['keyword_activity'] = kw_act_json
+    args['title'] = member.get_print_name()
+    args['description'] = "Kansanedustajan {0} kiinnostuksen "\
+        "kohteet ja aktiivisuus eduskunnassa.".format(member.get_print_name())
     template = 'member/details.html'
+
+    if member.photo:
+        args['meta_image'] = request.build_absolute_uri(member.photo.url)
 
     return render_to_response(template, args,
         context_instance=RequestContext(request))
+
 
 def _get_parliament_activity(request, offset):
     q = Q(nr_votes__gt=0) | Q(nr_statements__gt=0)
@@ -300,6 +312,7 @@ def _get_parliament_activity(request, offset):
 
     return {'offset': offset + 5, 'html': act_html}
 
+
 def get_parliament_activity(request):
     offset = request.GET.get('offset', 0)
     try:
@@ -311,6 +324,7 @@ def get_parliament_activity(request):
 
     data = _get_parliament_activity(request, offset)
     return HttpResponse(json.dumps(data), mimetype="application/json")
+
 
 def _get_mp_some_activity(request, offset):
     q = Update.objects.filter(feed__in=MemberSocialFeed.objects.all())
@@ -333,6 +347,7 @@ def _get_mp_some_activity(request, offset):
                                  {'some_updates': some_updates},
                                  context_instance=RequestContext(request))
     return {'offset': offset + 5, 'html': some_html}
+
 
 def get_mp_some_activity(request):
     offset = request.GET.get('offset', 0)
@@ -469,6 +484,8 @@ def list_topics(request):
 
     opts['since'] = 'month'
     args['recent_topics_json'] = get_embedded_resource_list(request, KeywordResource, opts)
+    args['title'] = _('Topics')
+    args['description'] = _('List of topics.')
 
     """
     term_start = Term.objects.latest().begin
@@ -503,6 +520,9 @@ def show_topic(request, topic, slug=None):
     keyword_activity_end_date = max_time.date
     args['keyword_activity_end_date'] = keyword_activity_end_date
 
+    args['title'] = kw.name
+    args['description'] = u"Aiheen {0} käsittely eduskunnassa.".format(kw.name)
+
     return render_to_response('show_topic.html', args,
         context_instance=RequestContext(request))
 
@@ -512,6 +532,8 @@ def list_members(request):
     args['party_json'] = get_parties(request)
     args['list_fields_json'] = json.dumps(MEMBER_LIST_FIELDS)
     args['MEMBER_LIST_FIELD_CATEGORIES'] = json.dumps(MEMBER_LIST_FIELD_CATEGORIES)
+    args['title'] = _("Members of Parliament")
+    args['description'] = _("List of Members of Parliament")
 
     return render_to_response('member/list.html',
             args, context_instance=RequestContext(request))
@@ -583,7 +605,11 @@ def show_document(request, slug):
 
 
 def list_parties(request):
-    return render_to_response('party/list.html', context_instance=RequestContext(request))
+    args = {}
+    args['title'] = _('Parties')
+    args['description'] = _('List of parties in the parliament.')
+    return render_to_response('party/list.html', args,
+                              context_instance=RequestContext(request))
 
 
 def show_party_feed(request, abbreviation):
@@ -604,8 +630,14 @@ def show_party_feed(request, abbreviation):
                 party_json=party_json,
                 party_activity_end_date=party_activity_end_date,
                 feed_actions_json=json.dumps(make_feed_actions(), ensure_ascii=False),
-                keyword_activity = kw_act_json,
+                keyword_activity=kw_act_json,
                 governing=governing)
+
+    args['title'] = party.name
+    args['description'] = "Puolueen {0} "\
+        "aktiivisuus eduskunnassa ja sosiaalisessa "\
+        "mediassa.".format(party.name)
+    args['meta_image'] = request.build_absolute_uri(party.logo.url)
 
     add_feed_filters(args, actor=True)
 
