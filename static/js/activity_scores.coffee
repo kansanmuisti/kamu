@@ -1,4 +1,6 @@
 
+
+SECS_IN_MONTH = 86400 * 27
 class @ActivityScoresView extends Backbone.View
     initialize: (@collection, options) ->
         @options = _.extend {}, options
@@ -14,36 +16,118 @@ class @ActivityScoresView extends Backbone.View
 
         @user_filters = {}
         @type_filter = null
-        @higlight_range = {}
+        @highlight_range = {}
         
-        @hack_selection = =>
-            return if not @plot
-            x = @plot.getAxes().xaxis
-            {from, to} = @higlight_range
-            if not from? and not to?
-                @plot.setSelection(xaxis: {})
-                return
-            @plot.setSelection
-                xaxis:
-                    from: @higlight_range.from ? x.min
-                    to: @higlight_range.to ? x.max
+        $el = $ @el
 
-        @el.on "plotpan", @hack_selection
+        MonthlyBar = Rickshaw.Class.create Rickshaw.Graph.Renderer.Bar,
+            name: "monthbarhack"
 
-        @el.on "plotclick", (event, pos, item) =>
-            if pos.x > @higlight_range.from and pos.x < @higlight_range.to
+            barWidth: (series) ->
+                origin = series.stack[0]
+                if not origin?
+                    return 0
+                @graph.x origin.x + SECS_IN_MONTH * (1-@gapSize)
+
+            domain: ($super) ->
+                domain = $super()
+                domain.x = [domain.x[0], domain.x[1] + SECS_IN_MONTH]
+                return domain
+
+            _frequentInterval: ->
+                magnitude: 0, count: 0
+        
+        @member_series =
+            color: "#00c0c0"
+            name: "Activity"
+            data: []
+            renderer: "monthbarhack"
+
+        @avg_series =
+            color: "#6f59bc"
+            name: "Average activity"
+            data: []
+            renderer: "line"
+
+            
+        
+        Rickshaw.Graph.Renderer.monthbar = MonthlyBar
+        @graph = new Rickshaw.Graph
+            width: $el.width()
+            height: $el.height()
+            element: $el[0]
+            renderer: "multi"
+            series: [@member_series, @avg_series]
+        $(window).resize =>
+            # Come on! Do scalable by default
+            # people!
+            @graph.configure
+                width: $el.width()
+                height: $el.height()
+            @graph.update()
+        @member_series.renderer.graph = @graph
+        
+        xaxis = new Rickshaw.Graph.Axis.Time graph: @graph
+        @graph.render()
+        xaxis.render()
+        
+        $(@graph.vis[0][0]).click (ev) =>
+            x = @graph.x.invert ev.offsetX
+            if x > @highlight_range.from and x < @highlight_range.to
                 @el.trigger "plotdaterange", undefined
                 return
             # Round to nearest month. For some
             # reason won't work with moment.js
-            from = new Date pos.x
+            from = new Date x*1000
             from.setDate 1
-            to = new Date from.getTime()
-            to.setMonth from.getMonth() + 1
+            to = new Date from.getFullYear(), from.getMonth()+1, 0
 
             @el.trigger "plotdaterange",
                 from: moment(from).format "YYYY-MM-DD"
                 to: moment(to).format "YYYY-MM-DD"
+        
+        @graph.onUpdate =>
+            # Hopefully everything is removed already
+            el = $ @graph.vis[0][0]
+            {from, to} = @highlight_range
+            return if not from? and not to?
+            [min, max] = @graph.dataDomain()
+            from = from ? min
+            to = to ? max
+            
+            @graph.vis.selectAll 'g'
+            .attr "mask", "url(#selmask)"
+            
+            defs = @graph.vis.insert "defs", ":first-child"
+            mask = defs.append "mask"
+            .attr 'id', 'selmask'
+            
+            mask.append "rect"
+            .attr 'x', 0
+            .attr 'y', 0
+            .attr 'width', "100%"
+            .attr 'height', "100%"
+            .attr 'fill', "#222"
+
+            mask.append "rect"
+            .attr 'x', @graph.x from
+            .attr 'width', @graph.x(to) - @graph.x(from)
+            .attr 'y', 0
+            .attr 'height', '100%'
+            .attr 'fill', 'white'
+            
+            @graph.vis.append("g").append "rect"
+            .attr 'x', @graph.x from
+            .attr 'width', @graph.x(to) - @graph.x(from)
+            .attr 'y', "100%"
+            .attr 'height', 2
+            .attr 'stroke', 'black'
+            .attr 'stroke-opacity', 0.5
+            .attr 'stroke-width', 6
+            .attr 'fill', 'none'
+        
+
+    
 
         #@reset()
     
@@ -62,11 +146,11 @@ class @ActivityScoresView extends Backbone.View
         else
             @type_filter = []
         
-        @higlight_range = {}
+        @highlight_range = {}
         if date? and date.from?
-            @higlight_range.from = moment(date.from, "YYYY-MM-DD").toDate().getTime()
+            @highlight_range.from = moment(date.from, "YYYY-MM-DD").toDate().getTime() / 1000
         if date? and date.to?
-            @higlight_range.to = moment(date.to, "YYYY-MM-DD").add(1, 'day').toDate().getTime()
+            @highlight_range.to = moment(date.to, "YYYY-MM-DD").add(1, 'day').toDate().getTime() / 1000
         
         # We really need a full reset only when keywords change,
         # but the query will be probably cached any way,
@@ -88,18 +172,18 @@ class @ActivityScoresView extends Backbone.View
         year = time.getFullYear()
         month = time.getMonth()
         day = time.getDate()
-        end_time = new Date(year, month, day)
+        end_time = new Date(year, month+1, day)
+        @time_range =
+            start: start_time
+            end: end_time
         end_time_str = end_time.getFullYear() + "-" + \
-                       (end_time.getMonth() + 1) + "-" + \
+                       (end_time.getMonth()+1) + "-" + \
                        end_time.getDate()
-
-        @plot_global_options = @get_plot_global_options(start_time, end_time)
 
         resolution = 'month'
 
         @scores_fetched = $.Deferred()
         @avg_scores_fetched = $.Deferred()
-
         params = _.extend {}, @user_filters,
             resolution: resolution
             since: start_time_str
@@ -127,9 +211,44 @@ class @ActivityScoresView extends Backbone.View
     draw_plot: ->
         if @plot_series.length == 0
             return
+        
+        flot2rickshaw = ([x, y]) -> x: x/1000.0, y: y
 
-        @plot = $.plot $(@el), @plot_series, @plot_global_options
-        @hack_selection()
+        st = @time_range.start.getTime()/1000
+        et = @time_range.end.getTime()/1000
+        # Hackidi hack to force the data domain.
+        data = [x: st, y: null]
+        data.push @plot_series[0].data.map(flot2rickshaw)...
+        data.push x: et, y: null
+        @member_series.data = data
+        
+        if avg = @plot_series[1]
+            conv = avg.data.map flot2rickshaw
+            for c in conv
+                c.x += SECS_IN_MONTH/2.0 # Point to mid month
+            
+            data = [x: st, y: null]
+            for v, i in conv
+                data.push v
+                # If we don't have a data for the next month,
+                # hack zeros to "flesh out" the values
+                continue if not (next = conv[i+1])
+                if next.x - v.x > SECS_IN_MONTH*1.5
+                    data.push x: v.x+SECS_IN_MONTH, y: 0
+                    data.push x: next.x-SECS_IN_MONTH, y: 0
+            
+            data.push x: et, y: null
+            @avg_series.data = data
+            @avg_series.disabled = false
+        else
+            # So many corner cases :(
+            @avg_series.data = [
+                {x: st, y: null},
+                {x: et, y: null}
+            ]
+            @avg_series.disabled = true
+        @graph.renderer.domain()
+        @graph.update()
 
     get_histogram: (score_list) ->
         if score_list.length == 0
@@ -163,7 +282,7 @@ class @ActivityScoresView extends Backbone.View
                 data_idx += 1
             
             # Hack the bar to be almost centered
-            time = new Date(time).getTime() + 14*24*60*60*1000
+            time = new Date(time).getTime()
             
             column = [time, score]
             act_histogram.push column
@@ -179,42 +298,23 @@ class @ActivityScoresView extends Backbone.View
 
         if @avg_act_collection
             [avg_histogram, avg_max_score] = @get_histogram @avg_act_collection.models
-            max_score = Math.max max_score, avg_max_score
-            draw_avg = avg_histogram.length != 0
+            draw_avg = true
         else
             draw_avg = false
-
-        @plot_global_options['yaxis']['max'] = max_score
-        @plot_global_options['series'] =
-            curvedLines:
-                active: draw_avg
-                monotonicFit: true
-        @plot_global_options['selection'] = mode: 'x', disableMouse: true
 
         @plot_series = []
         @plot_series.push
             data: act_histogram
-            color: "#00c0c0"
-            bars:
-                show: true
-                fill: 1
-                barWidth: 16 * 24 * 60 * 60 * 1000     # milliseconds
-                align: "center"
 
         if draw_avg
             @plot_series.push
                 data: avg_histogram
-                color: "rgba(255, 255, 255, 0.6)"
-                shadowSize: 0
-                lines:
-                    show: true
-                curvedLines:
-                    apply: true
 
         @draw_plot()
 
         return @
 
+###
     get_plot_global_options: (start_time, end_time) ->
         x_start = end_time.getTime() - (2 * 365 + 20) * 24 * 60 * 60 * 1000
         if x_start < start_time.getTime()
@@ -250,3 +350,4 @@ class @ActivityScoresView extends Backbone.View
                     right: 0
                 clickable: true
         }
+###

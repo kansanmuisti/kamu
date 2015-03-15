@@ -130,12 +130,13 @@
     <script type="text/javascript" src="{% static "js/vendor/backbone.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/backbone-tastypie.js" %}"></script>
     {% endcompress %}
+    <link type="text/css" href="{% static "js/vendor/rickshaw.css" %}" rel="stylesheet" />
+    {% compress css %}
+    <script type="text/javascript" src="{% static "js/vendor/rickshaw.js" %}"></script>
+    {% endcompress %}
     {% compress js %}
-    <script type="text/javascript" src="{% static "js/vendor/jquery.flot.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/vendor/jquery.flot.time.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/vendor/jquery.flot.navigate.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/vendor/jquery.flot.curvedlines.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/vendor/jquery.flot.selection.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/vendor/d3.v3.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/vendor/rickshaw.js" %}"></script>
     {% endcompress %}
     
     {% compress js %}
