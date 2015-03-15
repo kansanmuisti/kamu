@@ -123,7 +123,7 @@ class PlenarySessionItem(models.Model):
 
     def get_type_description(self):
         parts = [
-            self.get_type_display(),
+            self.get_type_display() if self.type != 'agenda' else None,
             self.sub_description,
             self.get_processing_stage_str() if self.processing_stage else ''
         ]
