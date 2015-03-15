@@ -10,36 +10,24 @@
     <header class="page-heading">
         <h1>{% trans "Members of the Parliament" %}</h1>
     </header>
-    <div class="feed-filters">
-        <form class="form-horizontal">
-            <div class="form-group">
-                <label class="col-lg-2 control-label">{% trans "Search" %}</label>
-                <div class="col-lg-6">
-                    <input type="text" class="text-search form-control" placeholder="{% trans 'Search with name, party, district' %}...">
+    <div class="feed-filters list-view-filters">
+        <div class="search-container ">
+            <label>{% trans "Search" %}</label>
+            <input type="text" class="text-search form-control" placeholder="{% trans 'Search with name, party, district' %}...">
+        </div>
+        <div class="order-container">
+                <label>{% trans "Order" %}</label>
+                <div class="list-sort-buttons">
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-lg-2 control-label">{% trans "Order" %}</label>
-                <div class="col-lg-10">
-                    <div class="btn-toolbar">
-                        <div class="member-list-sort-buttons">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
 <div>
     <div class="spinner-container"></div>
-    <ul class="member-list row">
+    <ul class="member-list-content row">
     </ul>
 </div>
-
-<script id="member-list-sort-button-template" type="text/template">
-    <button data-col="<%= id %>" class="btn btn-default" type="button"><%= name %></button>
-</script>
 
 {% include "_mp_card_template.html" %}
 
@@ -57,14 +45,70 @@
 {% compress js %}
 <script type="text/coffeescript" src="{% static "js/member-list.coffee" %}"></script>
 <script type="text/coffeescript">
+
+
 $ ->
-    # TODO: The party list is a horrible hack!
-    window.party_list = new PartyList party_json
-    member_list_view = new MemberListView
-    sort_buttons_view = new MemberListSortButtonsView
-        member_list_view: member_list_view
-    sort_buttons_view.render()
+
+    root_el = $(document)
+    relel = (selector) -> root_el.find(selector)
     
+    spin = relel(".spinner-container").spin()
+
+    state = hashstate.sub('mpl')
+    sstate = state.sub 'sort'
+    sstate.update by: sstate.get('by') ? 'activity_score'
+    render_sort_buttons relel(".list-sort-buttons"), state.sub 'sort'
+    
+    search = relel ".text-search"
+    search.input (val) ->
+        val = undefined if not val
+        state.update search: val
+
+    lel = relel '.member-list-content'
+    member_list_view = new MemberListView lel
+    member_list_view.ready.then ->
+        spin.spin false
+        state.on member_list_view.filter
+
+render_sort_buttons = ($el, state) ->
+    category_elements = {}
+    default_category = null
+    for cat in MEMBER_LIST_FIELD_CATEGORIES
+        cat_el = $ """
+            <div class="sort-group">
+                <label>#{cat.name}</label>
+                <div class="btn-group btn-group-sm"></div>
+            </div>
+            """
+        cat_el.appendTo $el
+        cat_el = cat_el.find ".btn-group"
+        for field in cat.fields ? []
+            category_elements[field] = cat_el
+        default_category = cat_el
+        
+    for f in MEMBER_LIST_FIELDS
+        button_el = """
+            <button data-col="#{f.id}" class="btn btn-default" type="button">
+            #{f.name}<i class="typcn"></i>
+            </button>"""
+        cat = category_elements[f.id] ? default_category
+        cat.append button_el
+    
+    for btn in $el.find "[data-col]" then do (btn) ->
+        btn = $ btn
+        col = btn.data 'col'
+        btn.click ->
+            state.update
+                by: col
+                asc: btn.hasClass("active") and not btn.hasClass("ascending")
+
+        state.on (val={}) ->
+            if val.by != col
+                btn.removeClass "active"
+                btn.removeClass "ascending"
+                return
+            btn.addClass "active"
+            btn.toggleClass "ascending", Boolean val.asc
 
 </script>
 {% endcompress %}

@@ -1048,7 +1048,7 @@ ul.highlight-parties {
  ***************************************************************/
 
 main.member-list {
-    ul.member-list {
+    ul.member-list-content {
         list-style: none;
         > li {
             .make-col-sm-half();
@@ -1162,14 +1162,6 @@ main.member-list {
   }
 }
 
-.member-list-sort-buttons > fieldset {
-	float: left;
-	padding-left: 10px;
-
-	legend {
-		font-size: x-small;
-	}
-}
 
 /***************************************************************
  * Member details (used by party details as well)
@@ -1348,6 +1340,15 @@ main.member-details {
     @media (min-width: @screen-md-min) {
        .affix-hacks;
     }
+}
+
+.sort-group button {
+    // Copypasted from typicons css.
+    // Not gonna write tens of lines of
+    // JS/HTML-hacks just for this
+    > i:before { content: ''; }
+    &.active > i:before { content: '\e024'; } // typcn-arrow-down
+    &.active.ascending > i:before { content: '\e009'; } // typcn-arrow-up
 }
 
 /***************************************************************
