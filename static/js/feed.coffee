@@ -21,6 +21,8 @@ class @ActivityView extends Backbone.View
     process_summary: (text) ->
         if @model.get('type') == 'TW'
             return twttr.txt.autoLink text
+        if @model.get('type') == 'FB'
+            text = text.autoLink()
         # Wrap text in <p> tags
         p_list = text.split '\n'
         p_list = ("<p>#{p}</p>" for p in p_list)
