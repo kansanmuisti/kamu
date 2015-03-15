@@ -249,7 +249,7 @@ class FeedUpdater(object):
         for tw in tw_list:
             tw_obj = Update(feed=feed)
             tw_obj.origin_id = tw['id']
-            tw_obj.origin_data = tw
+            tw_obj.origin_data = json.dumps(tw, ensure_ascii=False)
             text = tw['text']
             tw_obj.text = text.replace('&gt;', '>').replace('&lt;', '<').replace('&#39;', "'")
             date = calendar.timegm(email.utils.parsedate(tw['created_at']))
