@@ -4,38 +4,39 @@
 <script type="text/javascript" src="{% static "js/vendor/bootstrap-datepicker.fi.js" %}"></script>
 <div class="feed-filters">
     <div class="main-filter-container">
-    <div class="keyword-filter-group"  style="display: none">
-        <label>{% trans "Issue" %}</label>
+    <div class="keyword-filter-group display-none">
+        <!-- <label>{% trans "Issue" %}</label> -->
         <div class="filter-control">
-            <div class="filter-control-keyword-slot">
-                <div class="filter-control-actual-keyword">
-                    <span class="no-selected-keyword" style="display: none">{% trans "All issues" %}</span>
-                    <div class="selected-keyword" style="display: none">
-                        <a class="remove-kw-filter">
-                            <i class="typcn typcn-times"></i>
-                        </a><a class="keyword-link"></a>
-                    </div>
-                </div>
-                <div class="filter-control-search-keyword" style="display: none">
-                    <input type="text" class="tag-filter-input text-search form-control" placeholder="{% trans 'Search for a keyword' %}..."></input>
-                </div>
-            </div>
-            <button type="button" class="discrete-toggle-btn search-toggle">
+            <button type="button" class="btn discrete-toggle-btn search-toggle">
                 <i class="typcn typcn-zoom-outline"></i>
             </button>
 
+            <div class="filter-control-keyword-slot">
+                <div class="filter-control-actual-keyword">
+                    <span class="no-selected-keyword display-none">{% trans "All issues" %}</span>
+                    <div class="selected-keyword display-none">
+                        <button class="btn btn-default remove-kw-filter">
+                            <i class="typcn typcn-times"></i>
+                        </button><a class="keyword-link"></a>
+                    </div>
+                </div>
+                <div class="filter-control-search-keyword display-none">
+                    <input type="text" class="tag-filter-input text-search form-control" placeholder="{% trans 'Search for a keyword' %}..."></input>
+                </div>
+            </div>
+         
         </div>
         </div>
     </div>
     <div class="side-filter-container">
-    <div class="type-filter-group" style="display: none">
+    <div class="type-filter-group display-none">
         <label>{% trans "Filter" %}</label>
         <div class="filter-control">
             {% include "_feed_filters.html" %}
         </div>
     </div>
-    <div class="date-filter-group" style="display: none">
-        <label>{% trans "Timerange" %}</label>
+    <!--<div class="date-filter-group display-none">
+        <!--<label>{% trans "Timerange" %}</label>
         <div class="filter-control">
             <div class="input-daterange">
                 <span class="btn-group from-date-field">
@@ -52,8 +53,8 @@
                 <input type="text" class="discrete-toggle-btn date-input" name="to" placeholder="{% trans "Any time"%}" required />
                 </span>
             </div>
-        </div>
-    </div>
+            </div>
+            </div>-->
     </div>
 </div>
 {% compress js inline %}

@@ -127,7 +127,7 @@ class @ActivityFeedControl
         for funcname of @
             continue if not ctrl = funcname.match(ctrlmatch)?[1]
             proxy[ctrl] = do (funcname, ctrl) => =>
-                @[funcname] el.find(".#{ctrl}-filter-group").show()
+                @[funcname] el.find(".#{ctrl}-filter-group").removeClass "display-none"
                 return proxy
         proxy.all_except = (ignore...) ->
             ignore.push "all_except"
@@ -143,8 +143,8 @@ class @ActivityFeedControl
             if not show?
                 show = not search_toggle.hasClass "active"
             search_toggle.toggleClass "active", show
-            el.find(".filter-control-actual-keyword").toggle not show
-            el.find(".filter-control-search-keyword").toggle show
+            el.find(".filter-control-actual-keyword").toggleClass "display-none", show
+            el.find(".filter-control-search-keyword").toggleClass "display-none", not show
 
             if show
                 el.find(".tag-filter-input").focus()
@@ -152,8 +152,9 @@ class @ActivityFeedControl
         search_toggle.click -> toggle_search()
 
         kw_state.on (value) ->
-            el.find(".no-selected-keyword").toggle not value?
-            kw = el.find(".selected-keyword").toggle value?
+            has_kw = Boolean value
+            el.find(".no-selected-keyword").toggleClass "display-none", has_kw
+            kw = el.find(".selected-keyword").toggleClass "display-none", not has_kw
             link = el.find(".keyword-link")
             .text value ? ""
             if value?
