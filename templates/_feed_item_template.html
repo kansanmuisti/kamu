@@ -37,19 +37,35 @@
       </div>
       <% if (target) { %>
       <div class="feed-content">
-      <% if (target.keywords && target.keywords.length) { %>
+          <% if (target.keywords && target.keywords.length) { %>
           <div class="labels">
-          <% _.each(target.keywords, function(kw) { %>
+              <% _.each(target.keywords, function(kw) { %>
               <a href='<%= kw.view_url %>'><span class="issue-tag-small"><%= kw.name %></span></a>
-          <% }); %>
+              <% }); %>
           </div>
-      <% } %>
-      <% if (target.subject) { %>
+          <% } %>
+          <% if (target.subject) { %>
           <h2><a href="<%= target.url %>"><%= target.subject %></a></h2>
-      <% } %>
+          <% } %>
           <div class="summary">
               <%= target.text %>
           </div>
+          <% if (target.picture) { %>
+          <div class="share-target">
+            <a href="<%= target.share_link %>">
+              <img src="<%= target.picture %>">
+            </a>
+            <% if (target.share_caption) { %>
+              <p><%= target.share_caption %></p>
+            <% } %>
+            <% if (target.share_description) { %>
+              <p><%= target.share_description %></p>
+            <% } %>
+            <% if (target.share_title) { %>
+              <p><%= target.share_title %></p>
+            <% } %>
+          </div>
+          <% } %>
       </div>
       <% } %>
     </div>

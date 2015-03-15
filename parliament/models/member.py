@@ -561,6 +561,9 @@ class MemberActivity(models.Model):
             target['text'] = o.text
             target['url'] = o.get_origin_url()
             target['last_modified_time'] = o.last_modified_time
+            for a in ('picture', 'share_caption', 'share_description',
+                      'share_link', 'share_title'):
+                target[a] = getattr(o, a)
         elif acttype == 'ST':
             if type(self) == MemberActivity:
                 o = self.statementactivity.statement
