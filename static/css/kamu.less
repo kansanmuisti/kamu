@@ -301,7 +301,38 @@ fieldset {
             }
             .summary a {
                 text-decoration: none;
-                color: @mint;
+                color: @blueberry;
+            }
+            .share-target a {
+              display: block;
+              .clearfix;
+              padding: 10px;
+              border: 1px solid @gray-light;
+              color: @lead;
+              &:hover {
+                color: @blueberry;
+                text-decoration: none;
+              }
+            }
+            .share-target.no-title a {
+              display: inline-block;
+            }
+          
+            .share-target img {
+              float: left;
+              margin: 0 10px 10px 0;
+            }
+            
+            .share-target.no-title img {
+              margin: 0;
+            }
+            .share-target-caption {
+              font-size: @font-size-small;
+            }
+            .share-target-description {
+            }
+            .share-target-title {
+              font-weight: bold;
             }
         }
         .content-image {
@@ -1568,7 +1599,7 @@ main.party-list {
   h4 {
     margin: 0;
     i {
-      line-height: .8em;
+      width: 100px;
       margin-right: 6px;
     }
   }
@@ -1586,12 +1617,23 @@ main.party-list {
     }
 }
 .progress-session { 
-  margin-left: 40px;
+  margin: 5px 0 0 20px !important;
+  i {
+    color: @pine;
+    font-size: @font-size-large;
+  }
   h5 {
     margin: 0;
   }
   a {
-    color: @gray;
+    color: @pine;
+  }
+  .nr_votes, .nr_statements {
+    font-size: @font-size-small;
+    i {
+      font-size: @font-size-base;
+      line-height: .6em;
+    }
   }
 }
 
@@ -1600,12 +1642,8 @@ main.party-list {
   }
 
 .document-summary {
-  i {
-    color: @electric;
-    font-size: 60px;
-  }
-  .type {
-    display: block;
+  .document-number {
+    margin: 0 0 20px 0;
   }
 }
 
@@ -1622,6 +1660,7 @@ main.party-list {
         }
         .details {
             .clearfix();
+            margin-top: 20px;
             padding: 5px 0 5px 0;
             border-top: 1px @gray-lighter solid;
             border-bottom: 1px @gray-lighter solid;
@@ -1636,11 +1675,12 @@ main.party-list {
         }
         .number {
         }
-    }
+    } 
 
     .document-author {
         .clearfix();
         width: 50%;
+        float: left;
         .author-label {
             font-weight: 700;
         }
@@ -1653,6 +1693,17 @@ main.party-list {
             border-color: @mint;
           }
         }
+    }
+    
+    .document-download {
+      color: @pine;
+      i {
+        font-size: 1.2em;
+      }
+      &:hover {
+        background: @gray-lighter;
+        text-decoration: none;
+      }
     }
   .proposal-summary {
     margin-bottom: 20px;

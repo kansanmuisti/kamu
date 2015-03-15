@@ -7,20 +7,9 @@
 
 {% block sidebar %}
 <div class="issue-card">
-    <div class="document-summary">
-        <i class="typcn typcn-clipboard"></i>
-        <span class="type">{{doc.get_type_display}}</span>
-        <small class="number">{{doc.name}}</small>
-
-        {% if doc.author %}
-        <div class="document-author">
-            <span class="author-label">{% trans "Author" %}</span>
-            <a href="{{doc.author.get_absolute_url}}">{{doc.author.get_print_name}}</a>
-            {% thumbnail doc.author.photo "64x96" as tn %}
-            <a href="{{doc.author.get_absolute_url}}"><img src="{{tn.url}}"></a>
-            {% endthumbnail %}
-        </div>
-        {% endif %}
+    <div class="document-summary">      
+        <h1>{{doc.get_type_display}}</h1>
+        <h2 class="document-number">{{doc.name}}</h2>
     </div>
     <div class="share-button"></div>
 </div>
@@ -36,6 +25,20 @@
         <div class="proposal-content content">
           <header>
             <h1>{{doc.subject}}</h1>
+            <span class="type">{{doc.get_type_display}}</span>
+            <small class="number">{{doc.name}}</small>
+            <br>
+            <a class="document-download" href="{{ doc.get_origin_url }}" target="_blank"><i class="typcn typcn-download"></i>{% trans "Link to the original document" %}</a>
+            <div class="details">
+              {% if doc.author %}
+              <div class="document-author">
+                <span class="author-label">{% trans "Author" %}</span>
+                <a href="{{doc.author.get_absolute_url}}">{{doc.author.get_print_name}}</a>
+                {% thumbnail doc.author.photo "64x96" as tn %}
+                <a href="{{doc.author.get_absolute_url}}"><img src="{{tn.url}}"></a>
+                {% endthumbnail %}
+              </div>
+              {% endif %}
               <div class="labels">
                   {% for kw in doc.keywords.all %}
                   <a class="issue-tag-small" 
@@ -43,15 +46,13 @@
                     >{{kw.name}}</a>
                   {% endfor %}
               </div>
+            </div>
           </header>
-          
             {% if doc.summary %}
             <h4>{% trans "Proposal content" %}</h4>
             <div class="proposal-summary">{{doc.summary|linebreaks}}</div>
             {% endif %}
-
-            <a class="btn btn-info" href="{{ doc.get_origin_url }}" target="_blank"><i class="typcn typcn-download"></i>{% trans "Show original document" %}</a>
-
+          
             {% if doc.question %}
             {% with member=doc.author %}
             <div class="proposal-statement media side-opposition">
@@ -86,10 +87,13 @@
                   <li class="progress-phase {% if stage.date %}passed{% else %}unpassed{% endif %}">
                       <h4><i class="typcn typcn-arrow-right-thick"></i>{{stage.name|safe}}</h4>
                       {% for item in stage.items %}
-                      <div class="progress-session">
-                        <h5><a href="{{ item.get_absolute_url }}"> <i class="typcn typcn-group"></i>Täysistunto {{ item.plsess.date }}</a></h5>
+                      <div class="progress-session media">
+                        <i class="typcn typcn-group media-left"></i> 
+                        <div class="media-body">
+                        <h5><a href="{{ item.get_absolute_url }}">Täysistunto {{ item.plsess.date }}</a></h5>
                         <span class="nr_votes"><i class="typcn typcn-tabs-outline" title="{% trans "Plenary votes" %}"></i>{{ item.nr_votes }}</span>
                         <span class="nr_statements"><i class="typcn typcn-message-typing" title="{% trans "Statements" %}"></i>{{ item.nr_statements }}</span>
+                          </div>
                       </div>
                       {% endfor %}
                   </li>
