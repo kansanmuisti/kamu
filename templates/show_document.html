@@ -85,13 +85,13 @@
                   {% for stage in doc.processing_stages %}
                   <li class="progress-phase {% if stage.date %}passed{% else %}unpassed{% endif %}">
                       <h4><i class="typcn typcn-arrow-right-thick"></i>{{stage.name|safe}}</h4>
-                      {% if stage.item %}{% with item=stage.item %}
+                      {% for item in stage.items %}
                       <div class="progress-session">
                         <h5><a href="{{ item.get_absolute_url }}"> <i class="typcn typcn-group"></i>Täysistunto {{ item.plsess.date }}</a></h5>
                         <span class="nr_votes"><i class="typcn typcn-tabs-outline" title="{% trans "Plenary votes" %}"></i>{{ item.nr_votes }}</span>
                         <span class="nr_statements"><i class="typcn typcn-message-typing" title="{% trans "Statements" %}"></i>{{ item.nr_statements }}</span>
                       </div>
-                      {% endwith %}{% endif %}
+                      {% endfor %}
                   </li>
                   {% endfor %}
             </ul>

@@ -562,10 +562,11 @@ def get_processing_stages(doc, pl_items):
         else:
             raise Exception("Processing stage %s invalid" % stage_id)
 
+        stage_items = []
         for item_doc in item_docs:
             if item_doc.stage == stage_id:
-                d['item'] = item_doc.item
-                break
+                stage_items.append(item_doc.item)
+        d['items'] = stage_items
         doc_stages.append(d)
 
     for st in stages:
