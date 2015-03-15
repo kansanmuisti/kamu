@@ -554,6 +554,7 @@ input.discrete-toggle-btn {
     }
 
     .no-selected-keyword {
+        display: inline-block;
         .tag-spacing;
         .tag-text-styling;
         opacity: 0.5;
@@ -567,8 +568,9 @@ input.discrete-toggle-btn {
         .sharp-right-edge; border-right: 0;
     }
 
-    .filter-control-keyword-slot {
+    .filter-control-actual-keyword {
         overflow: hidden;
+        min-width: 5em;
         &:hover {
             z-index: 500;
             overflow: visible;
@@ -599,16 +601,6 @@ input.discrete-toggle-btn {
         .slim-icon-btn;
         border-right: 0;
     }
-}
-
-.activity-graph {
-    height: 200px;
-}
-
-.flot-tick-label {
-    font-family: @brand-font-family;
-    font-size: ceil(@font-size-base * 0.6);
-    text-transform: uppercase;
 }
 
 .form-control:focus {
@@ -2088,7 +2080,7 @@ main.party-list {
 
 .activity-graph {
   //background: @white;
-  padding: 10px;
+  padding: 0;
   height: 120px;
 }
 
