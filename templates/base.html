@@ -4,7 +4,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>{% if title %}{{ title }}{% else %}{% block title %}{% endblock %}{% endif %} | KAMU</title>
-    <meta property="og:site_name" content="Kansan muisti" />
     <meta property="fb:app_id" content="107387482616243" />
   
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
@@ -22,14 +21,14 @@
     <meta name="twitter:description" content="{{ description }}">
     {% endif %}
     <meta name="twitter:creator" content="@kansanmuisti">
-    <meta name="twitter:image" content="{% static 'images/icons/twitter_shared_thumbnail_default.png' %}">
+    <meta name="twitter:image" content="http://{{ request.get_host }}{% static 'images/icons/twitter_shared_thumbnail_default.png' %}">
 
     {% if title %}
     <meta property="og:title" content="{{ title }}" />
     {% endif %}
     <meta property="og:type" content="article" />
     <meta property="og:url" content="{{ canonical_url }}" />
-    <meta property="og:image" content="{% static 'images/icons/fb_shared_thumbnail_default.png' %}" />
+    <meta property="og:image" content="http://{{ request.get_host }}{% static 'images/icons/fb_shared_thumbnail_default.png' %}" />
     {% if description %}
     <meta property="og:description" content="{{ description }}" /> 
     {% endif %}
