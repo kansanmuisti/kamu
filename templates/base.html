@@ -103,22 +103,8 @@
     {% compress js %}
     <script type="text/javascript" src="{% static "js/vendor/jquery-1.11.0.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/moment-with-locales.js" %}"></script>
-    <script type="text/javascript">
-        GLOBAL_PARTY_LIST_JSON_HACK = {{PARTY_LIST_JSON|safe}}; 
-        moment.locale("fi");
-    </script>
     <script type="text/javascript" src="{% static "js/vendor/share.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/jquery.expander.js" %}"></script>
-    <script type="text/coffeescript">
-        expander_defaults =
-            expandText: '{% trans "Read more" %}' + '<i class="typcn typcn-arrow-down"></i>'
-            expandEffect: 'fadeIn'
-            sliceOn: '</p>'
-            widow: 15
-            userCollapse: true
-            userCollapseText: 'Pienennä <i class="typcn typcn-arrow-up"></i>'
-        $.extend $.fn.expander.defaults, expander_defaults
-    </script>
     <script type="text/coffeescript" src="{% static "js/tagcloud.coffee" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/spin.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/jquery.spin.js" %}"></script>
@@ -131,22 +117,11 @@
     <script type="text/javascript" src="{% static "js/vendor/lunr.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/jquery.oninput.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/typeahead.bundle.js" %}"></script>
-    {% endcompress %}
-    {% compress js %}
     <script type="text/javascript" src="{% static "js/vendor/underscore.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/backbone.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/backbone-tastypie.js" %}"></script>
-    {% endcompress %}
-    <link type="text/css" href="{% static "js/vendor/rickshaw.css" %}" rel="stylesheet" />
-    {% compress css %}
-    <script type="text/javascript" src="{% static "js/vendor/rickshaw.js" %}"></script>
-    {% endcompress %}
-    {% compress js %}
     <script type="text/javascript" src="{% static "js/vendor/d3.v3.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/rickshaw.js" %}"></script>
-    {% endcompress %}
-    
-    {% compress js %}
     <script type="text/javascript" src="{% static "js/vendor/jquery.history.js" %}"></script>
     <script type="text/coffeescript" src="{% static "js/vendor/saneparam.coffee" %}"></script>
     <script type="text/coffeescript" src="{% static "js/vendor/hashstate.coffee" %}"></script>
@@ -154,6 +129,26 @@
     <script type="text/coffeescript" src="{% static "js/vendor/jquery.gimmesomemore.coffee" %}"></script>
     <script type="text/javascript" src="{% static 'bootstrap/js/affix.js' %}"></script>
     <script type="text/coffeescript" src="{% static 'js/saneaffix.coffee' %}"></script>
+    {% endcompress %}
+    {% compress css %}
+    <link type="text/css" href="{% static "js/vendor/rickshaw.css" %}" rel="stylesheet" />
+    {% endcompress %}
+    
+    <script type="text/javascript">
+        GLOBAL_PARTY_LIST_JSON_HACK = {{PARTY_LIST_JSON|safe}}; 
+        moment.locale("fi");
+    </script>
+    {% compress js inline %}
+    <script type="text/coffeescript">
+        expander_defaults =
+            expandText: '{% trans "Read more" %}' + '<i class="typcn typcn-arrow-down"></i>'
+            expandEffect: 'fadeIn'
+            sliceOn: '</p>'
+            widow: 15
+            userCollapse: true
+            userCollapseText: 'Pienennä <i class="typcn typcn-arrow-up"></i>'
+        $.extend $.fn.expander.defaults, expander_defaults
+    </script>
     {% endcompress %}
 
     {% block head %}{% endblock %}
@@ -195,9 +190,6 @@
                   </div>
                   <button type="submit" class="btn btn-sm navbar-btn">{% trans 'Search' %}</button>
                 </form>
-                <!-- FIXME <form class="navbar-form">
-                    <input type="text" class="form-control input-sm" placeholder="{% trans 'Search' %}">
-                </form> -->
             </div>
         </nav>
     </div>
