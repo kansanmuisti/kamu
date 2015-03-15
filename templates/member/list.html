@@ -48,7 +48,6 @@
 
 
 $ ->
-
     root_el = $(document)
     relel = (selector) -> root_el.find(selector)
     
@@ -62,6 +61,8 @@ $ ->
     search = relel ".text-search"
     search.input ->
         state.update search: search.val()
+    state.sub('search').on (val) ->
+        search.val val
 
     lel = relel '.member-list-content'
     member_list_view = new MemberListView lel

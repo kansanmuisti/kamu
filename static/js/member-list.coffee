@@ -94,6 +94,11 @@ class @MemberListView
         # asynchronous rendering of the elements. Maybe.
         # In some profiling runs clearing the parent element took
         # almost all the time.
+        
+        # Hide the element temporarily, so the browser may be
+        # sane enough not to layout the stuff while we mess
+        # with the DOM
+        @$el.addClass "display-none"
         @$el.empty()
         if not search?
             result = (@children[key] for key of @children)
@@ -115,6 +120,7 @@ class @MemberListView
         if hits.length == 0
             @$el.find(".activity_score-statistics-bar").removeClass "display-none"
 
+        @$el.removeClass "display-none"
 
     _process_children: (collection) =>
         for model in collection.models
