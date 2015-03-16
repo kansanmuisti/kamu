@@ -82,4 +82,4 @@ class MemberActivityIndex(indexes.SearchIndex, indexes.Indexable):
     def build_queryset(self, using=None, start_date=None, end_date=None):
         queryset = super(MemberActivityIndex, self).build_queryset(using, start_date, end_date)
         # FIXME
-        return queryset[:1000]
+        return queryset
