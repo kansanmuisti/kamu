@@ -14,7 +14,7 @@ $(function() {
 	var now = moment();
 $(".proposal-summary").expander({slicePoint: 1000,hasBlocks: true});
 $(".proposal-statement-text").expander({slicePoint: 1000,hasBlocks: true});
-
+$(".dropdown-toggle").dropdown();
 });
 
 </script>
@@ -23,18 +23,10 @@ $(".proposal-statement-text").expander({slicePoint: 1000,hasBlocks: true});
 {% block sidebar %}
 <div class="issue-card">
     <header>
-        <h4>{{item.get_type_description|safe}}</h4>
-        <h5><a href="/sessions/#url-to-this-session">{% trans "Plenary session" %}<br/>{{ item.plsess.date }}</a></h5>
+        <h1>{{item.get_type_description|safe}}</h1>
+        <h4>{% trans "Plenary session" %}<br/>{{ item.plsess.date }}</h4>
     </header>
-    <ol>
-    {% for sister in sister_items %}
-        {% if sister.pk == item.pk %}
-        <li><a class="disabled" href="{{ sister.get_absolute_url }}">{{ sister.description }}</a></li>
-        {% else %}
-        <li><a href="{{ sister.get_absolute_url }}">{{ sister.description }}</a></li>
-        {% endif %}
-    {% endfor %}
-    </ol>
+    
     {% include "_share_button.html" %}
 </div>
 
@@ -47,7 +39,22 @@ $(".proposal-statement-text").expander({slicePoint: 1000,hasBlocks: true});
         <div class="proposal-content content">
           <header>
             <h1>{{item.description}}</h1>
-          
+            <div class="dropdown plenary-session-list">
+                <button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Tämän täysistunnon käsittelyt
+    <span class="caret"></span>
+  </button>
+              <ol class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+              {% for sister in sister_items %}
+                  {% if sister.pk == item.pk %}
+                  <li class="disabled"><a href="{{ sister.get_absolute_url }}">{{ sister.description }}</a></li>
+                  {% else %}
+                  <li><a href="{{ sister.get_absolute_url }}">{{ sister.description }}</a></li>
+                  {% endif %}
+              {% endfor %}
+              </ol>
+            </div>
+            
             {% if item.docs.all %}
             <h3>Käsitellyt asiat</h3>
             <ol class="plenary-item-docs">
@@ -91,233 +98,6 @@ $(".proposal-statement-text").expander({slicePoint: 1000,hasBlocks: true});
                 
                 {% endwith %}
 
-              </div>
-              <div class="voting-details-container">
-                <div class="votes-list">
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                <div class="vote voted-yes" data-mp="jaaskelainen-pietari"></div>
-                
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                <div class="vote voted-no" data-mp="niikko-mika"></div>
-                </div>
-                <div class="voter-details">
-                  <div class="voter-details-image"></div>
-                  <div class="voter-details-name">Mika Niikko</div>
-                </div>
               </div>
               {% endfor %}
             </div>
