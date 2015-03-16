@@ -109,7 +109,7 @@ class @ActivityScoresView extends Backbone.View
             from = new Date x*1000
             from.setDate 1
             to = new Date from.getFullYear(), from.getMonth()+1, 0
-            if to <= @time_range.end
+            if to < @time_range.end
                 to = moment(to).format "YYYY-MM-DD"
             else
                 to = undefined
@@ -195,7 +195,7 @@ class @ActivityScoresView extends Backbone.View
     reset: ->
         @_reset_pending = true
         t = new Date(@options.end_date)
-        end_time = new Date(t.getFullYear(), t.getMonth(), 0)
+        end_time = new Date(t.getFullYear(), t.getMonth()+1, 0)
         start_time = new Date(t.getFullYear()-4, t.getMonth(), 1)
         
         @time_range =
