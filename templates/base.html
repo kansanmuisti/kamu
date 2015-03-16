@@ -215,7 +215,7 @@
     <script type="text/coffeescript" src="{% static "js/base.coffee" %}"></script>
     {% endcompress %}
 
-    <main class="container {% block main_class %}generic{% endblock %}">
+    <main class="container {% block main_class %}generic{% endblock %} autoscroll-protected-top">
     {% block content %}{% endblock %}
     </main>
 
