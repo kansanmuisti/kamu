@@ -9,12 +9,14 @@
             },
             "autosuggest_exact": {
                 "type": "string",
+                "analyzer": null,
                 "search_quote_analyzer": "autosuggest_exact_query",
                 "search_analyzer": "autosuggest_exact_query",
                 "index_analyzer": "autosuggest_exact"
             },
             "text": {
                 "type": "string",
+                "analyzer": null,
                 "index_analyzer": "fulltext_index",
                 "search_analyzer": "fulltext_query"
             },

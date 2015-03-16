@@ -5,7 +5,8 @@
                 "tokenizer": "finnish",
                 "filter": [
                     "lowercase",
-                    "voikko_filter"
+                    "voikko_filter",
+                    "lowercase"
                 ]
             },
             "fulltext_query": {
@@ -14,7 +15,8 @@
                     "lowercase",
                     "keyword_repeat",
                     "voikko_filter_noncompounds",
-                    "unique"
+                    "unique",
+                    "lowercase"
                 ]
             },
             "autosuggest_query": {
