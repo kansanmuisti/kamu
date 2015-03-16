@@ -10,6 +10,7 @@ from django.http import HttpResponse
 from django.utils.translation import ugettext as _
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.http import Http404
 from django.template.loader import render_to_string
 from sorl.thumbnail import get_thumbnail
 from parliament.models import *
@@ -521,6 +522,8 @@ def show_topic(request, topic, slug=None):
     args['feed_actions_json'] = json.dumps(make_feed_actions(), ensure_ascii=False)
     add_feed_filters(args, actor=True)
 
+    if not kw.keywordactivity_set.count():
+        raise Http404()
     agr = kw.keywordactivity_set.aggregate(Max("activity__time"))
     max_time = agr['activity__time__max']
     keyword_activity_end_date = max_time.date
