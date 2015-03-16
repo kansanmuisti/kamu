@@ -5,6 +5,7 @@ from parliament.models import Member, Keyword, MemberActivity
 class MemberIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, model_attr='name', use_template=False)
     autosuggest = indexes.EdgeNgramField(model_attr='name')
+    time = indexes.DateTimeField(null=True)
 
     def get_updated_field(self):
         return 'last_modified_time'
@@ -24,6 +25,7 @@ class MemberIndex(indexes.SearchIndex, indexes.Indexable):
 class KeywordIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, model_attr='name', use_template=False)
     autosuggest = indexes.EdgeNgramField(model_attr='name')
+    time = indexes.DateTimeField(null=True)
 
     def get_updated_field(self):
         return 'last_modified_time'
