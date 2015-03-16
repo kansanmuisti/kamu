@@ -173,6 +173,7 @@ INSTALLED_APPS = (
     'tastypie',
     'haystack',
     'corsheaders',
+    'envelope',
 
     'social',
     'parliament',
