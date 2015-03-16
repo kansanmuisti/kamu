@@ -802,16 +802,12 @@ class KamuSearchResource(SearchResource):
             return objects
         query = request.GET.get('q', None)
         if query:
-            objects = objects.filter(text=AutoQuery(query)).highlight()
-            start = datetime.date(1999, 1, 1)
-            end = datetime.datetime.now()
-            objects = objects.date_facet('time', start, end, 'month')
+            objects = objects.filter(text=AutoQuery(query)).models(MemberActivity).highlight()
+            objects = objects.order_by('-time')
         else:
             input_str = request.GET.get('input', None)
             if input_str:
                 objects = objects.filter(autosuggest=input_str.lower())
-
-        objects = objects.order_by('-time')
 
         return objects.load_all()
 
