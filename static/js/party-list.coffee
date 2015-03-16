@@ -53,6 +53,7 @@ class @PartyListItemView extends Backbone.View
         template_variables.view_url = @model.get_view_url()
         # Appending not a good idea?
         @$el.append @template template_variables
+        @$el.find('.badge').tooltip()
         return @
 
 # Initialize the page contents

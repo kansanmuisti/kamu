@@ -7,6 +7,7 @@ class MemberListItemView extends Backbone.View
         html = $($.trim(@template attr))
         @$el = html
         @el = @$el[0]
+        @$el.find('.badge').tooltip()
         @_is_rendered = true
 
     render: (sort) =>
