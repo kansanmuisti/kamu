@@ -1,29 +1,29 @@
 #!/usr/bin/python
 
-from django.core.management import setup_environ
 import sys
 import os
 import operator
 import logging
+from django.conf import settings
 
 sys.path.append(os.path.dirname(__file__) + '/../..')
 sys.path.append(os.path.dirname(__file__) + '/..')
 
-from kamu import settings
+import django
+django.setup()
 
-setup_environ(settings)
-
-from django import db
 from django.db import connection
+from django import db
 from parliament.models import *
 
+
 def get_vote_choice(count):
-        if count['Y'] > count['N']:
-                return 'Y'
-        elif count['Y'] < count['N']:
-                return 'N'
-        else: # equal
-                return '?'
+    if count['Y'] > count['N']:
+        return 'Y'
+    elif count['Y'] < count['N']:
+        return 'N'
+    else: # equal
+        return '?'
 
 def process_votes(pl, ml, sess):
     total_count = {}
