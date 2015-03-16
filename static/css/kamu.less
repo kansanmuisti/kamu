@@ -816,6 +816,87 @@ main {
   background-color: @gray-lighter;
 }
 
+/***************************************************************
+ * Tag cloud styles
+ ***************************************************************/
+
+.feature-tagcloud {
+    background: @pine;
+    //overflow: hidden;
+    h4 {
+        color: @mint;
+    }
+    .tagcloud-navi a { 
+        color: @white;
+        &:hover {
+            color: @gray-darker;
+        }
+    }
+}
+
+.tagcloud {
+    font-size: 1em;
+    .items {
+        .list-inline;
+        font-family: @brand-font-family;
+        text-transform: uppercase;
+        font-weight: 700;
+        li {
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+            }
+        a {
+            max-width: 100%;
+            display: inline-block;
+            padding: .3em .3em 0 .7em;
+            line-height: 1em;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        a:hover {
+            padding-left: .3em;
+            background: @gray-lighter;
+            border-radius: .3em;
+            border-left: .4em solid @gray-light;
+            color: @pine;
+            text-decoration: none;
+            .shadow-light();
+            z-index: 501;
+        }
+    }
+}
+
+.tagcloud--select {
+    
+    .tagcloud__content {
+       a {
+         color: @gray-lighter ;
+         padding: 5px 5px 0 5px;
+         background: @gray-light;
+         border-radius:3px;
+         &.active {
+            color: @white;
+            background: @mint;
+            outline: 0;
+            -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+            box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+        }
+        }
+        
+    }
+}
+
+.tagcloud__actions {
+  text-align: right;
+    a {
+      color: @gray-light;
+    }
+}
+
+.tagcloud__reset {
+  float: left;
+}
 
 /***************************************************************
  * Home page 
@@ -1539,12 +1620,6 @@ main.party-list {
         margin-bottom: 20px;
         min-height: 100px;
     }
-    .tagcloud-navi a {
-        color: @white;
-        &:hover {
-            color: @gray-darker;
-        }
-    }
 }
 
 .issue-tag-list {
@@ -1560,20 +1635,6 @@ main.party-list {
     .boxed;
     .shadowboxed-bg;
     background-color: @gray-lighter;
-}
-
-.feature-tagcloud {
-    background: @pine;
-    overflow: hidden;
-    h4 {
-        color: @mint;
-    }
-    .tagcloud-navi a { 
-        color: @white;
-        &:hover {
-            color: @gray-darker;
-        }
-    }
 }
 
 /***************************************************************
@@ -2181,65 +2242,8 @@ main.party-list {
   }
 }
 
-.tagcloud {
-    font-size: 1em;
-    .items {
-        .list-inline;
-        font-family: @brand-font-family;
-        text-transform: uppercase;
-        font-weight: 700;
-        li {
-            margin: 0;
-            padding: 0;
-            }
-        a {
-            padding: .3em .3em 0 .7em;
-            line-height: 1.5em;
-            white-space: nowrap;
-        }
-        a:hover {
-            padding-left: .3em;
-            background: @gray-lighter;
-            border-radius: .3em;
-            border-left: .4em solid @gray-light;
-            color: @pine;
-            text-decoration: none;
-            .shadow-light();
-            z-index: 501;
-        }
-    }
-}
 
-.tagcloud--select {
-    
-    .tagcloud__content {
-       a {
-         color: @gray-lighter ;
-         padding: 5px 5px 0 5px;
-         background: @gray-light;
-         border-radius:3px;
-         &.active {
-            color: @white;
-            background: @mint;
-            outline: 0;
-            -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-            box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-        }
-        }
-        
-    }
-}
 
-.tagcloud__actions {
-  text-align: right;
-    a {
-      color: @gray-light;
-    }
-}
-
-.tagcloud__reset {
-  float: left;
-}
 
 .morelink__subject {
    //font-style: italic;
