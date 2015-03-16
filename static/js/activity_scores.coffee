@@ -1,7 +1,7 @@
 SECS_IN_MONTH = 86400 * 27
 
-Date.prototype._nextMonth = ->
-    new Date @.getFullYear(), @.getMonth()+1, 1
+Date.prototype._nextMonth = (dir=1) ->
+    new Date @.getFullYear(), @.getMonth()+dir, 1
 
 dateToEpoch = (d) ->
     d.getTime()/1000.0
@@ -194,34 +194,22 @@ class @ActivityScoresView extends Backbone.View
     
     reset: ->
         @_reset_pending = true
-        time = new Date(@options.end_date)
-        year = time.getFullYear()
-        month = time.getMonth()
-        start_time = new Date(year - 4, month + 1, 1)
-        start_time_str = start_time.getFullYear() + "-" +  \
-                          (start_time.getMonth() + 1) + "-" + \
-                          start_time.getDate()
-
-        time =  new Date(new Date(year, month + 1, 1).getTime() - 1)
-        year = time.getFullYear()
-        month = time.getMonth()
-        day = time.getDate()
-        end_time = new Date(year, month+1, day)
+        t = new Date(@options.end_date)
+        end_time = new Date(t.getFullYear(), t.getMonth(), 0)
+        start_time = new Date(t.getFullYear()-4, t.getMonth(), 1)
+        
         @time_range =
             start: start_time
             end: end_time
-        end_time_str = end_time.getFullYear() + "-" + \
-                       (end_time.getMonth()+1) + "-" + \
-                       end_time.getDate()
-
+        
         resolution = 'month'
 
         @scores_fetched = $.Deferred()
         @avg_scores_fetched = $.Deferred()
         params = _.extend {}, @user_filters,
             resolution: resolution
-            since: start_time_str
-            until: end_time_str
+            since: moment(start_time._nextMonth(-1)).format "YYYY-MM-DD"
+            until: moment(end_time).format "YYYY-MM-DD"
             limit: 0
 
         @collection.fetch
