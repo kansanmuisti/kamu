@@ -778,6 +778,7 @@ input.discrete-toggle-btn {
 
 #feedback {
 	position: fixed;
+    z-index: 555;
 	left: 0;
 	bottom: 0;
 	height: 250px;
@@ -2117,6 +2118,25 @@ main.party-list {
         }
       }
     }
+  }
+}
+
+// plenary item list dropdown
+
+.fill-width.dropdown {
+    position: static;
+}
+.fill-width.dropdown > .dropdown-menu {
+    left: auto;
+    position: absolute;
+}
+.fill-width.dropdown > .dropdown-menu > li > a {
+   white-space: normal; 
+}
+
+.plenary-session-list {
+  li > a {
+    white-space: normal; 
   }
 }
 
