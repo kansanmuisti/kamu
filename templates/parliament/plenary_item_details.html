@@ -26,6 +26,15 @@ $(".proposal-statement-text").expander({slicePoint: 1000,hasBlocks: true});
         <h4>{{item.get_type_description|safe}}</h4>
         <h5><a href="/sessions/#url-to-this-session">{% trans "Plenary session" %}<br/>{{ item.plsess.date }}</a></h5>
     </header>
+    <ol>
+    {% for sister in sister_items %}
+        {% if sister.pk == item.pk %}
+        <li><a class="disabled" href="{{ sister.get_absolute_url }}">{{ sister.description }}</a></li>
+        {% else %}
+        <li><a href="{{ sister.get_absolute_url }}">{{ sister.description }}</a></li>
+        {% endif %}
+    {% endfor %}
+    </ol>
     {% include "_share_button.html" %}
 </div>
 
