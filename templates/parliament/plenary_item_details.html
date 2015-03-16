@@ -40,12 +40,9 @@ $(".proposal-statement-text").expander({slicePoint: 1000,hasBlocks: true});
             <h1>{{item.description}}</h1>
           
             {% if item.docs.all %}
-            <h3>{% trans "Käsitellyt dokumentit" %}</h3>
-            
-            
+            <h3>Käsitellyt asiat</h3>
             <ol class="plenary-item-docs">
             {% for document in item.docs.all %}
-
                <li class="media">
                  <i class="typcn typcn-clipboard media-left"></i>
                  <a class="media-body" href="{% url "parliament.views.show_document" slug=document.url_name %}">{{document.subject}}</a>

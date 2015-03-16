@@ -71,8 +71,11 @@ class @ActivityScoresView extends Backbone.View
         @graph.render()
         xaxis.render()
         
-        $(@graph.vis[0][0]).click (ev) =>
-            x = @graph.x.invert ev.offsetX
+        canvas = $ @graph.vis[0][0]
+        $(@graph.vis[0][0]).click (e) =>
+            # Come on world! This is sort of basic stuff!
+            px = e.offsetX ? (e.clientX - $(canvas).offset().left)
+            x = @graph.x.invert px
             if x > @highlight_range.from and x < @highlight_range.to
                 @el.trigger "plotdaterange", undefined
                 return

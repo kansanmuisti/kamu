@@ -28,7 +28,7 @@
             <span class="type">{{doc.get_type_display}}</span>
             <small class="number">{{doc.name}}</small>
             <br>
-            <a class="document-download" href="{{ doc.get_origin_url }}" target="_blank"><i class="typcn typcn-download"></i>{% trans "Link to the original document" %}</a>
+            <a class="document-download" href="{{ doc.get_origin_url }}"><i class="typcn typcn-download"></i>{% trans "Link to the original document" %}</a>
             <div class="details">
               {% if doc.author %}
               <div class="document-author">
