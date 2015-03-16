@@ -44,6 +44,15 @@ search_handler = (ev) ->
     query = $.trim $("#main-search").val()
     window.location = URL_CONFIG['search'] + '?as.q=' + query
 
+# Could be a bit nicer if this would react to scrolling,
+# but not a biggie, and at least we can't get into a scroll-loop here.
+dejerk = ->
+    top = (i, e) -> $(e).offset().top
+    max = Math.max $(".autoscroll-protected-top").map(top)...
+    $("body").css "min-height", max + $(window).height()
+$(window).resize dejerk
+$ dejerk
+
 $ ->
     install_typeahead()
     $("#main-search-form").on 'submit', search_handler

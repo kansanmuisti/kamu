@@ -42,6 +42,11 @@ urlpatterns = patterns('parliament.views',
     url(r'^search/$', 'search'),
 )
 
+urlpatterns += patterns('',
+    url(r'^contact/', include('envelope.urls')),
+)
+
+
 from tastypie.api import Api
 from parliament.api import all_resources
 from social.api import UpdateResource, FeedResource

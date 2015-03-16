@@ -1,6 +1,27 @@
-
-
 SECS_IN_MONTH = 86400 * 27
+
+Date.prototype._nextMonth = ->
+    new Date @.getFullYear(), @.getMonth()+1, 1
+
+dateToEpoch = (d) ->
+    d.getTime()/1000.0
+getMonths = (from, to) ->
+    res = [from]
+    while from <= to
+        res.push from = from._nextMonth()
+    res
+
+zerofiller = (xrng) -> (items) ->
+    for x, i in xrng
+        y = 0
+        ix = items[0]?.x
+        if ix <= x and not (ix >= xrng[i+1])
+            y = items[0].y
+            items = items[1..]
+        x: x, y: y
+            
+
+
 class @ActivityScoresView extends Backbone.View
     initialize: (@collection, options) ->
         @options = _.extend {}, options
@@ -38,25 +59,28 @@ class @ActivityScoresView extends Backbone.View
                 magnitude: 0, count: 0
         
         @member_series =
-            color: "#00c0c0"
+            color: "rgba(0, 192, 192, 1.0)"
             name: "Activity"
             data: []
-            renderer: "monthbarhack"
+            stack: false
+            renderer: "stack"
+            interpolation: "step-after"
 
         @avg_series =
-            color: "#6f59bc"
+            color: "rgba(0, 0, 0, 0.3)"
             name: "Average activity"
             data: []
+            stack: false
             renderer: "line"
-
-            
+            interpolation: "step-after"
         
-        Rickshaw.Graph.Renderer.monthbar = MonthlyBar
         @graph = new Rickshaw.Graph
             width: $el.width()
             height: $el.height()
             element: $el[0]
             renderer: "multi"
+            interpolation: "step-after"
+            stack: false
             series: [@member_series, @avg_series]
         $(window).resize =>
             # Come on! Do scalable by default
@@ -65,7 +89,6 @@ class @ActivityScoresView extends Backbone.View
                 width: $el.width()
                 height: $el.height()
             @graph.update()
-        @member_series.renderer.graph = @graph
         
         xaxis = new Rickshaw.Graph.Axis.Time graph: @graph
         @graph.render()
@@ -215,42 +238,22 @@ class @ActivityScoresView extends Backbone.View
         if @plot_series.length == 0
             return
         
-        flot2rickshaw = ([x, y]) -> x: x/1000.0, y: y
-
-        st = @time_range.start.getTime()/1000
-        et = @time_range.end.getTime()/1000
-        # Hackidi hack to force the data domain.
-        data = [x: st, y: null]
-        data.push @plot_series[0].data.map(flot2rickshaw)...
-        data.push x: et, y: null
-        @member_series.data = data
+        filler = zerofiller getMonths @time_range.start, @time_range.end
+        mangle = (data) ->
+            for [x, y] in data
+                x: dateToEpoch(x), y: y
+        @member_series.data = mangle @plot_series[0].data
         
         if avg = @plot_series[1]
-            conv = avg.data.map flot2rickshaw
-            for c in conv
-                c.x += SECS_IN_MONTH/2.0 # Point to mid month
-            
-            data = [x: st, y: null]
-            for v, i in conv
-                data.push v
-                # If we don't have a data for the next month,
-                # hack zeros to "flesh out" the values
-                continue if not (next = conv[i+1])
-                if next.x - v.x > SECS_IN_MONTH*1.5
-                    data.push x: v.x+SECS_IN_MONTH, y: 0
-                    data.push x: next.x-SECS_IN_MONTH, y: 0
-            
-            data.push x: et, y: null
-            @avg_series.data = data
+            @avg_series.data = mangle avg.data
             @avg_series.disabled = false
         else
             # So many corner cases :(
             @avg_series.data = [
-                {x: st, y: null},
-                {x: et, y: null}
+                {x: @time_range.start, y: null},
+                {x: @time_range.end, y: null}
             ]
             @avg_series.disabled = true
-        @graph.renderer.domain()
         @graph.update()
 
     get_histogram: (score_list) ->
@@ -284,8 +287,7 @@ class @ActivityScoresView extends Backbone.View
                 score += act.score
                 data_idx += 1
             
-            # Hack the bar to be almost centered
-            time = new Date(time).getTime()
+            time = new Date(time)
             
             column = [time, score]
             act_histogram.push column
@@ -317,40 +319,3 @@ class @ActivityScoresView extends Backbone.View
 
         return @
 
-###
-    get_plot_global_options: (start_time, end_time) ->
-        x_start = end_time.getTime() - (2 * 365 + 20) * 24 * 60 * 60 * 1000
-        if x_start < start_time.getTime()
-            x_start = start_time.getTime()
-        return {
-            pan:
-                interactive: true
-            xaxis:
-                mode: "time"
-                tickLength: 5
-                tickFormatter: (val, axis) ->
-                    d = new Date(val)
-
-                    if d.getMonth() == 0
-                        format_str = "MMM<br>YYYY"
-                    else
-                        format_str = "MMM"
-                    return moment(d).format(format_str)
-                min: x_start
-                max: end_time.getTime()
-                panRange: [start_time.getTime() - 20 * 24 * 60 * 60 * 1000, end_time.getTime()]
-
-            yaxis:
-                show: false
-                panRange: false
-                min: 0
-
-            grid:
-                borderWidth:
-                    top: 0
-                    bottom: 1
-                    left: 0
-                    right: 0
-                clickable: true
-        }
-###
