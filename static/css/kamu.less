@@ -695,6 +695,11 @@ input.discrete-toggle-btn {
     min-width: 200px;
 }
 
+.fb-comments, .fb-comments iframe[style], .fb-comments span {
+   width: 100% !important;
+    min-width: 200px;
+}
+
 .page-head {
     background-color: @top-header-bg-color;
     background: url("@{image-url}/header-bg.png");
@@ -721,7 +726,28 @@ input.discrete-toggle-btn {
     }
 }
 
+// Site search typehead  styles
+
+.tt-suggestion {
+    .clearfix;
+    border-bottom: @gray-light solid 1px;
+}
+
+.tt-suggestion-data {
+  .text {
+  }
+  .image {
+  }
+}
+
 // Share button style overrides
+
+.share-widget {
+  .clearfix;
+  margin-bottom: 10px;
+  //text-align: right;
+}
+
 .share-button {
   margin-bottom: 20px;
 }
@@ -1212,6 +1238,7 @@ main.member-details {
 
         .terms {
             .clearfix();
+            margin-bottom: 10px;
             .contents {
                 width: 36px;
                 height: 36px;

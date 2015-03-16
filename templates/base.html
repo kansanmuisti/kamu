@@ -59,6 +59,7 @@
     <!-- twitter bootstrap -->
     {% compress css %}
     <link type="text/css" href="{% static 'css/typicons/typicons.css' %}" rel="stylesheet" />
+    <link type="text/css" href="{% static "js/vendor/social-likes_birman.css" %}" rel="stylesheet" />
     <link type="text/css" href="{% static "js/vendor/rickshaw.css" %}" rel="stylesheet" />
     {% endcompress %}
 
@@ -104,7 +105,7 @@
     {% compress js %}
     <script type="text/javascript" src="{% static "js/vendor/jquery-1.11.0.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/moment-with-locales.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/vendor/share.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/vendor/social-likes.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/jquery.expander.js" %}"></script>
     <script type="text/coffeescript" src="{% static "js/tagcloud.coffee" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/spin.js" %}"></script>
@@ -218,40 +219,6 @@
     {% block content %}{% endblock %}
     </main>
 
-    <script type="text/javascript">
-        // Activate Bootstrap tooltips
-        $(function () {
-          $('[data-toggle="tooltip"]').tooltip();
-        })
-        // Activate share button
-        var share_opts = {
-            ui: {
-                flyout: 'top right',
-                button_text: 'Jaa',
-                button_font: false,
-                icon_font: true
-            },
-            networks: {
-              google_plus: {
-                enabled: true
-              },
-              twitter: {
-                enabled: true
-              },
-              facebook: {
-                enabled: true,
-                app_id: '107387482616243'
-              },
-              pinterest: {
-                enabled: false
-              },
-              email: {
-                enabled: true
-              }
-            }
-        };
-        new Share(".share-button", share_opts);
-    </script>
 <!--
     <footer class="page-footer">
         <div class="copyright">

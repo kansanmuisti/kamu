@@ -22,11 +22,11 @@ $(".proposal-statement-text").expander({slicePoint: 1000,hasBlocks: true});
 
 {% block sidebar %}
 <div class="issue-card">
-            <header>
-                <h4>{{item.get_type_description|safe}}</h4>
-                <h5><a href="/sessions/#url-to-this-session">{% trans "Plenary session" %}<br/>{{ item.plsess.date }}</a></h5>
-            </header>
-    <div class="share-button"></div>
+    <header>
+        <h4>{{item.get_type_description|safe}}</h4>
+        <h5><a href="/sessions/#url-to-this-session">{% trans "Plenary session" %}<br/>{{ item.plsess.date }}</a></h5>
+    </header>
+    {% include "_share_button.html" %}
 </div>
 
 {% endblock %}

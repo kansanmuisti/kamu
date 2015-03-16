@@ -11,7 +11,7 @@
         <h1>{{doc.get_type_display}}</h1>
         <h2 class="document-number">{{doc.name}}</h2>
     </div>
-    <div class="share-button"></div>
+    {% include "_share_button.html" %}
 </div>
 <div class="box hide similar-documents related-sidebar">
     <h4>{% trans "Similar documents" %}</h4>
