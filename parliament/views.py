@@ -197,6 +197,8 @@ def show_item(request, plsess, item_nr, subitem_nr=None):
         if docs[0].summary:
             args['description'] = truncate_chars(docs[0].summary, 150)
 
+    args['sister_items'] = item.plsess.plenarysessionitem_set.order_by('number', 'sub_number')
+
     return render_to_response('parliament/plenary_item_details.html', args,
                               context_instance=RequestContext(request))
 
