@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-16 00:34+0200\n"
+"POT-Creation-Date: 2015-03-17 00:37+0200\n"
 "PO-Revision-Date: 2014-10-18 20:06+0300\n"
 "Last-Translator: Juha Yrjölä <juha.yrjola@iki.fi>\n"
 "Language-Team: Finnish <>\n"
@@ -267,144 +267,140 @@ msgstr "Kyselytunti"
 msgid "Budget proposal"
 msgstr "Talousarvioaloite"
 
-#: parliament/views.py:23
+#: parliament/views.py:24
 msgid "Social"
 msgstr "Media"
 
-#: parliament/views.py:24
+#: parliament/views.py:25
 msgid "Parliament"
 msgstr "Eduskunta"
 
-#: parliament/views.py:32
+#: parliament/views.py:33
 msgid "tweeted"
 msgstr "tweettasi"
 
-#: parliament/views.py:38
+#: parliament/views.py:39
 msgid "published in Facebook"
 msgstr "julkaisi Facebookissa"
 
-#: parliament/views.py:41 templates/parliament/plenary_item_details.html:320
+#: parliament/views.py:42 templates/parliament/plenary_item_details.html:106
 #: templates/sessions.html:21 templates/show_document.html:95
 msgid "Statements"
 msgstr "Puheenvuorot"
 
-#: parliament/views.py:44
+#: parliament/views.py:45
 msgid "made a plenary statement"
 msgstr "käytti puheenvuoron"
 
-#: parliament/views.py:47
+#: parliament/views.py:48
 msgid "Signatures"
 msgstr "Allekirjoitukset"
 
-#: parliament/views.py:50
+#: parliament/views.py:51
 msgid "signed"
 msgstr "allekirjoitti"
 
-#: parliament/views.py:52
+#: parliament/views.py:53
 msgid "signed an initiative"
 msgstr "allekirjoitti lakialoitteen"
 
-#: parliament/views.py:53
+#: parliament/views.py:54
 msgid "signed a written question"
 msgstr "allekirjoitti kirjallisen kysymyksen"
 
-#: parliament/views.py:57
+#: parliament/views.py:58
 msgid "Own initiatives"
 msgstr "Omat aloitteet"
 
-#: parliament/views.py:60
+#: parliament/views.py:61
 msgid "sponsored an initiative"
 msgstr "laati lakialoitteen"
 
-#: parliament/views.py:63
+#: parliament/views.py:64
 msgid "Written questions"
 msgstr "Kirjalliset kysymykset"
 
-#: parliament/views.py:66
+#: parliament/views.py:67
 msgid "submitted a written question"
 msgstr "laati kirjallisen kysymyksen"
 
-#: parliament/views.py:70
+#: parliament/views.py:71
 msgid "Government bills"
 msgstr "Hallituksen esitykset"
 
-#: parliament/views.py:73
+#: parliament/views.py:74
 msgid "government bill was introduced"
 msgstr "hallitus esitti"
 
-#: parliament/views.py:98 templates/_feed_content.html:14
+#: parliament/views.py:99 templates/_feed_content.html:14
 #: templates/_mp_card_template.html:52 templates/party/list.html:54
 msgid "Activity"
 msgstr "Aktiivisuus"
 
-#: parliament/views.py:101
+#: parliament/views.py:102
 msgid "Name"
 msgstr "Nimi"
 
-#: parliament/views.py:104 templates/_mp_card_template.html:61
+#: parliament/views.py:105 templates/_mp_card_template.html:61
 msgid "Attendance"
 msgstr "Läsnäolo"
 
-#: parliament/views.py:107 templates/_mp_card_template.html:70
+#: parliament/views.py:108 templates/_mp_card_template.html:70
 msgid "Agreement with party"
 msgstr "Samanmielisyys puolueen kanssa"
 
-#: parliament/views.py:110 templates/_mp_card_template.html:41
+#: parliament/views.py:111 templates/_mp_card_template.html:41
 msgid "Number of terms"
 msgstr "Kaudet"
 
-#: parliament/views.py:113
+#: parliament/views.py:114
 msgid "Age"
 msgstr "Ikä"
 
-#: parliament/views.py:120
+#: parliament/views.py:121
 msgid "Term's statistics"
 msgstr "Vaalikauden tilastot"
 
-#: parliament/views.py:125
+#: parliament/views.py:126
 msgid "Basic info"
 msgstr "Perustiedot"
 
-#: parliament/views.py:254
+#: parliament/views.py:257
 msgid "All activities"
 msgstr "Kaikki aktiviteetti"
 
-#: parliament/views.py:439 templates/home.html:3
-msgid "Front page"
-msgstr "Etusivu"
-
-#: parliament/views.py:448 templates/sessions.html:3
+#: parliament/views.py:451 templates/sessions.html:3
 msgid "Plenary sessions"
 msgstr "Täysistunnot"
 
-#: parliament/views.py:449
+#: parliament/views.py:452
 msgid "List of plenary sessions."
 msgstr "Eduskunnan täysistunnot."
 
-#: parliament/views.py:493 templates/list_topics.html:4
+#: parliament/views.py:496 templates/list_topics.html:4
 #: templates/list_topics.html.py:12
 msgid "Topics"
 msgstr "Aiheet"
 
-#: parliament/views.py:494
+#: parliament/views.py:497
 msgid "List of topics."
 msgstr "Eduskunnan käsittelemät aiheet."
 
-#: parliament/views.py:541
+#: parliament/views.py:546
 msgid "Members of Parliament"
 msgstr "Kansanedustajat"
 
-#: parliament/views.py:542
+#: parliament/views.py:547
 msgid "List of Members of Parliament"
 msgstr "Eduskunnan kansanedustajat"
 
-#: parliament/views.py:616 templates/opinions/show_hypothetical_vote.html:121
+#: parliament/views.py:621 templates/opinions/show_hypothetical_vote.html:121
 #: templates/opinions/show_question_session.html:213
 #: templates/party/list.html:4 templates/party/list.html.py:10
 msgid "Parties"
 msgstr "Puolueet"
 
-#: parliament/views.py:617
+#: parliament/views.py:622
 msgid "List of parties in the parliament."
 msgstr "Eduskunnan puolueet."
 
@@ -420,11 +416,15 @@ msgstr "Sisäinen virhe"
 msgid "Is interested in these topics"
 msgstr "Aktiivinen näissä aiheissa"
 
-#: templates/_feed_content.html:47
+#: templates/_feed_content.html:28
+msgid "No activity"
+msgstr "Ei aktiivisuutta valituilla rajauksilla"
+
+#: templates/_feed_content.html:51
 msgid "MP activity graph"
 msgstr "Edustajan aktiivisuus"
 
-#: templates/_feed_content.html:61
+#: templates/_feed_content.html:65
 msgid "MP topic activity"
 msgstr "Edustajan aktiivisuus aiheessa"
 
@@ -469,15 +469,15 @@ msgstr "tietoa"
 msgid "About the site"
 msgstr "Tietoa Kamusta"
 
-#: templates/base.html:144
+#: templates/base.html:146
 msgid "Read more"
 msgstr "Lue lisää"
 
-#: templates/base.html:189
+#: templates/base.html:191
 msgid "Input search terms"
 msgstr "Syötä hakusanat"
 
-#: templates/base.html:191 templates/list_topics.html:21
+#: templates/base.html:193 templates/list_topics.html:21
 #: templates/member/list.html:15 templates/opinions/summary.html:136
 #: templates/party/mps.html:26
 msgid "Search"
@@ -498,23 +498,31 @@ msgstr ""
 "  <p>Kiitos palautteestasi!</p>\n"
 "  "
 
+#: templates/envelope/contact.html:14
+msgid "Send!"
+msgstr ""
+
 #: templates/full_news.html:4
 msgid "News"
 msgstr "Ajankohtaista"
 
-#: templates/home.html:33
+#: templates/home.html:3
+msgid "Front page"
+msgstr "Etusivu"
+
+#: templates/home.html:42
 msgid "Most discussed topics"
 msgstr "Keskustelluimmat aiheet"
 
-#: templates/home.html:78 templates/parliament/plenary_item_details.html:27
+#: templates/home.html:87 templates/parliament/plenary_item_details.html:27
 msgid "Plenary session"
 msgstr "Täysistunto"
 
-#: templates/home.html:87
+#: templates/home.html:96
 msgid "Browse topics"
 msgstr "Selaa aiheita"
 
-#: templates/home.html:110
+#: templates/home.html:119
 msgid "Show more items"
 msgstr "Näytä lisää asioita"
 
@@ -623,7 +631,7 @@ msgstr "Eduskuntaryhmät"
 msgid "Electoral districts"
 msgstr "Vaalipiirit"
 
-#: templates/member/details.html:39
+#: templates/member/details.html:38
 msgid "Terms"
 msgstr "Kaudet"
 
@@ -755,7 +763,7 @@ msgstr "Ennuste"
 #: templates/opinions/show_party_congruences.html:56
 #: templates/opinions/show_question_session.html:77
 #: templates/opinions/show_question_session.html:109
-#: templates/parliament/plenary_item_details.html:77
+#: templates/parliament/plenary_item_details.html:90
 msgid "Yay"
 msgstr "Kyllä"
 
@@ -763,7 +771,7 @@ msgstr "Kyllä"
 #: templates/opinions/show_party_congruences.html:63
 #: templates/opinions/show_question_session.html:78
 #: templates/opinions/show_question_session.html:110
-#: templates/parliament/plenary_item_details.html:79
+#: templates/parliament/plenary_item_details.html:92
 msgid "Nay"
 msgstr "Ei"
 
@@ -950,29 +958,25 @@ msgstr[1] ""
 "\n"
 "%(nr_votes)s äänestystä\n"
 
-#: templates/parliament/plenary_item_details.html:43
-msgid "Käsitellyt dokumentit"
-msgstr ""
-
-#: templates/parliament/plenary_item_details.html:65
+#: templates/parliament/plenary_item_details.html:78
 #: templates/sessions.html:20 templates/show_document.html:94
 msgid "Plenary votes"
 msgstr "Äänestykset"
 
-#: templates/parliament/plenary_item_details.html:71
+#: templates/parliament/plenary_item_details.html:84
 msgid "Result"
 msgstr "Tulos"
 
-#: templates/parliament/plenary_item_details.html:81
+#: templates/parliament/plenary_item_details.html:94
 msgid "Empty"
 msgstr "Tyhjä"
 
-#: templates/parliament/plenary_item_details.html:83
+#: templates/parliament/plenary_item_details.html:96
 msgid "Absent"
 msgstr "Poissa"
 
-#: templates/parliament/plenary_item_details.html:336
-#: templates/parliament/plenary_item_details.html:340
+#: templates/parliament/plenary_item_details.html:122
+#: templates/parliament/plenary_item_details.html:126
 msgid "speaker"
 msgstr "puhemies"
 
