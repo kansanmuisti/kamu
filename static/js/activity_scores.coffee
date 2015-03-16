@@ -21,7 +21,6 @@ zerofiller = (xrng) -> (items) ->
         [x, y]
             
 
-
 class @ActivityScoresView extends Backbone.View
     initialize: (@collection, options) ->
         @options = _.extend {}, options
@@ -58,10 +57,11 @@ class @ActivityScoresView extends Backbone.View
             _frequentInterval: ->
                 magnitude: 0, count: 0
         
+        dummy_data = []
         @member_series =
             color: "rgba(0, 192, 192, 1.0)"
             name: "Activity"
-            data: []
+            data: dummy_data.slice()
             stack: false
             renderer: "stack"
             interpolation: "step-after"
@@ -69,7 +69,7 @@ class @ActivityScoresView extends Backbone.View
         @avg_series =
             color: "rgba(0, 0, 0, 0.3)"
             name: "Average activity"
-            data: []
+            data: dummy_data.slice()
             stack: false
             renderer: "line"
             interpolation: "step-after"
@@ -91,6 +91,8 @@ class @ActivityScoresView extends Backbone.View
             @graph.update()
         
         xaxis = new Rickshaw.Graph.Axis.Time graph: @graph
+        
+
         @graph.render()
         xaxis.render()
         
@@ -99,24 +101,30 @@ class @ActivityScoresView extends Backbone.View
             # Come on world! This is sort of basic stuff!
             px = e.offsetX ? (e.clientX - $(canvas).offset().left)
             x = @graph.x.invert px
-            if x > @highlight_range.from and x < @highlight_range.to
-                @el.trigger "plotdaterange", undefined
-                return
+            #if x > @highlight_range.from and x < @highlight_range.to
+            #    @el.trigger "plotdaterange", undefined
+            #    return
             # Round to nearest month. For some
             # reason won't work with moment.js
             from = new Date x*1000
             from.setDate 1
             to = new Date from.getFullYear(), from.getMonth()+1, 0
-
+            if to <= @time_range.end
+                to = moment(to).format "YYYY-MM-DD"
+            else
+                to = undefined
             @el.trigger "plotdaterange",
-                from: moment(from).format "YYYY-MM-DD"
-                to: moment(to).format "YYYY-MM-DD"
+                #from: moment(from).format "YYYY-MM-DD"
+                from: undefined
+                to: to
         
         @graph.onUpdate =>
             # Hopefully everything is removed already
             el = $ @graph.vis[0][0]
             {from, to} = @highlight_range
-            return if not from? and not to?
+            from ?= dateToEpoch @time_range.start
+            to ?= dateToEpoch @time_range.end
+            #return if not from? and not to?
             [min, max] = @graph.dataDomain()
             from = from ? min
             to = to ? max
@@ -145,11 +153,11 @@ class @ActivityScoresView extends Backbone.View
             @graph.vis.append("g").append "rect"
             .attr 'x', @graph.x from
             .attr 'width', @graph.x(to) - @graph.x(from)
-            .attr 'y', "100%"
-            .attr 'height', 2
+            .attr 'y', 0
+            .attr 'height', "100%"
             .attr 'stroke', 'black'
-            .attr 'stroke-opacity', 0.5
-            .attr 'stroke-width', 6
+            .attr 'stroke-opacity', 0.3
+            .attr 'stroke-width', 2
             .attr 'fill', 'none'
         
 
