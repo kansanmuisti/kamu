@@ -17,6 +17,8 @@ MANAGERS = ADMINS
 # This is used at least for new supporting members
 NOTIFICATIONS = ADMINS
 
+ENVELOPE_USE_HTML_EMAIL = False
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
