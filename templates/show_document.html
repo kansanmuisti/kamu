@@ -85,7 +85,7 @@
             <ul class="proposal-progresses">
                   {% for stage in doc.processing_stages %}
                   <li class="progress-phase {% if stage.date %}passed{% else %}unpassed{% endif %}">
-                      <h4><i class="typcn typcn-arrow-right-thick"></i>{{stage.name|safe}}</h4>
+                      <h4><i class="typcn {% if stage.date %}typcn-input-checked{% else %}typcn-media-stop-outline{% endif %}"></i>{{stage.name|safe}}</h4>
                       {% for item in stage.items %}
                       <div class="progress-session media">
                         <i class="typcn typcn-group media-left"></i> 
