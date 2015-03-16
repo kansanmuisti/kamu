@@ -442,7 +442,8 @@ class MemberResource(KamuResource):
         return bundle
 
     class Meta:
-        queryset = Member.objects.all().exclude(origin_id__startswith='nonmp')
+        queryset = Member.objects.all().exclude(origin_id__startswith='nonmp')\
+            .select_related('party')
         ordering = ['activity_score', 'origin_id']
         filtering = {
             'party': ALL_WITH_RELATIONS,
@@ -783,10 +784,11 @@ class MemberUpdateResource(UpdateResource):
         queryset = Update.objects.all()
         resource_name = 'update'
 
+
 class KamuSearchResource(SearchResource):
     def dehydrate(self, bundle):
         obj = bundle.obj
-        if not obj.model in res_by_model:
+        if obj.model not in res_by_model:
             return bundle
         res = res_by_model[obj.model](api_name='v1')
         target_bundle = res.build_bundle(obj=obj.object, request=bundle.request)
@@ -794,6 +796,7 @@ class KamuSearchResource(SearchResource):
         out = res.full_dehydrate(target_bundle)
         bundle.data = out.data
         bundle.data['score'] = obj.score
+        bundle.data['object_type'] = obj.model_name
         if obj.highlighted:
             bundle.data['highlighted_text'] = obj.highlighted
 

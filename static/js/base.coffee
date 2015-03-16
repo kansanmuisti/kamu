@@ -19,10 +19,22 @@ install_typeahead = ->
             d.print_name
         templates:
             suggestion: (data) ->
-                obj = new Member data
-                data.view_url = obj.get_view_url()
-                data.image_url = obj.get_portrait_thumbnail 48
-                data.text = obj.get 'print_name'
+                data.image_url = null
+                if data.object_type == 'member'
+                    obj = new Member data
+                    data.view_url = obj.get_view_url()
+                    data.image_url = obj.get_portrait_thumbnail 48
+                    data.text = obj.get 'print_name'
+                else if data.object_type == 'keyword'
+                    obj = new Keyword data
+                    data.view_url = obj.get_view_url()
+                    data.text = obj.get 'name'
+                else if data.object_type == 'memberactivity'
+                    obj = new MemberActivity data
+                    target = obj.get('target')
+                    data.view_url = target.url
+                    data.text = "#{target.name}: #{target.subject}"
+                    console.log data
                 return result_template data
 
     $("#main-search").typeahead args, datasets
