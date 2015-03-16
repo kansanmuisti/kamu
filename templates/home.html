@@ -5,6 +5,15 @@
 {% block main_class %}home-page{% endblock %}
 
 {% block content %}
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&appId=107387482616243&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
 <div class="top-feature-box">
     <header>
         <p class="lead"><strong>Kansan muisti</strong> -verkkopalvelussa voit seurata kansanedustajien puheenvuoroja ja äänestyksiä<br> — siis vaalilupausten toteutumista käytännössä.</p>
@@ -109,6 +118,9 @@
     {{parl_act_html|safe}}
     <!--<div id="parliament-showmore" class="showmore-link"><a href="#">{% trans "Show more items" %} &or;</a></div>-->
   </section>
+</div>
+<div class="facebook-likebox box">
+    <div class="fb-like-box" data-href="https://www.facebook.com/kansanmuisti" data-colorscheme="light" data-show-faces="true" data-header="true" data-stream="true" data-show-border="true"></div>
 </div>
 </div> <!-- end side-col -->
 </div> <!-- end row -->

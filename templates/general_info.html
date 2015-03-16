@@ -6,6 +6,15 @@
 {% block main_class %}general-info{% endblock %}
 
 {% block content %}
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&appId=107387482616243&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
 <div class="box">
 
 <h1>Kansan muisti ry.</h1>
@@ -51,6 +60,10 @@ etunimi.sukunimi@kansanmuisti.fi
 <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
 <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
 </form>
+  
+<h3>Kommentoi Kansan muistia</h3>
+  
+<div class="fb-comments" data-href="http://www.kansanmuisti.fi/info" data-numposts="5" data-colorscheme="light" data-width="100%"></div>
 
 </div>
 {% endblock %}
