@@ -16,6 +16,9 @@
                 "type": "string",
                 "index_analyzer": "fulltext_index",
                 "search_analyzer": "fulltext_query"
+            },
+            "time": {
+                "type": "date"
             }
         }
     }

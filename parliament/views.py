@@ -436,7 +436,7 @@ def main(request):
     ]
     args['navbuttons'] = navbuttons
 
-    args['title'] = _('Front page')
+    args['title'] = 'Kansan muisti'
     args['description'] = "Kansan muisti -verkkopalvelussa voit seurata kansanedustajien puheenvuoroja ja äänestyksiä — siis vaalilupausten toteutumista käytännössä"
 
     return render_to_response('home.html', args,

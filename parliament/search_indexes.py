@@ -1,11 +1,11 @@
 from haystack import indexes
-from parliament.models import Member, Statement, Document, MemberActivity
-from social.models import Update
+from parliament.models import Member, Keyword, MemberActivity
 
 
 class MemberIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, model_attr='name', use_template=False)
     autosuggest = indexes.EdgeNgramField(model_attr='name')
+    time = indexes.DateTimeField(null=True)
 
     def get_updated_field(self):
         return 'last_modified_time'
@@ -22,11 +22,32 @@ class MemberIndex(indexes.SearchIndex, indexes.Indexable):
         return data
 
 
+class KeywordIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, model_attr='name', use_template=False)
+    autosuggest = indexes.EdgeNgramField(model_attr='name')
+    time = indexes.DateTimeField(null=True)
+
+    def get_updated_field(self):
+        return 'last_modified_time'
+
+    def get_model(self):
+        return Keyword
+
+    def index_queryset(self, using=None):
+        return self.get_model().objects.all()
+
+    def prepare(self, obj):
+        data = super(KeywordIndex, self).prepare(obj)
+        data['boost'] = 1.5
+        return data
+
+
 class MemberActivityIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True)
     time = indexes.DateTimeField(model_attr='time')
     type = indexes.CharField(model_attr='type__type', faceted=True)
     member = indexes.CharField(model_attr='member__name', faceted=True, null=True)
+    autosuggest = indexes.EdgeNgramField(null=True)
 
     def get_updated_field(self):
         return 'last_modified_time'
@@ -42,6 +63,13 @@ class MemberActivityIndex(indexes.SearchIndex, indexes.Indexable):
             text.append(target['text'])
         return '\n'.join(text)
 
+    def prepare_autosuggest(self, obj):
+        target = obj.get_target_info()
+        if 'subject' in target:
+            return target['subject']
+        else:
+            return None
+
     def get_model(self):
         return MemberActivity
 
@@ -49,3 +77,8 @@ class MemberActivityIndex(indexes.SearchIndex, indexes.Indexable):
         # Exclude signature events from indexing.
         queryset = MemberActivity.objects.exclude(type='SI')
         return queryset
+
+    def build_queryset(self, using=None, start_date=None, end_date=None):
+        queryset = super(MemberActivityIndex, self).build_queryset(using, start_date, end_date)
+        # FIXME
+        return queryset[:1000]

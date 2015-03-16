@@ -327,7 +327,7 @@ class Vote(models.Model):
         ('E', u'Empty'),
         ('S', u'Speaker')
     ]
-    session = models.ForeignKey(PlenaryVote)
+    session = models.ForeignKey(PlenaryVote, db_index=True)
     vote = models.CharField(max_length=1, choices=VOTE_CHOICES, db_index=True)
     member = models.ForeignKey('Member', db_index=True)
     party = models.CharField(max_length=10)
@@ -343,3 +343,4 @@ class Vote(models.Model):
 
     class Meta:
         app_label = 'parliament'
+        index_together = (('session', 'vote'),)
