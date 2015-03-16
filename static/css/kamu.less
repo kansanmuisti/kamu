@@ -368,7 +368,19 @@ fieldset {
                 margin-left: 0;
             }
         }
+    }
+}
 
+.activity-feed-container {
+    .zero-results {
+        display: none;
+        text-align: center;
+    }
+
+    .activity-feed:empty ~ .activity-feed-end.no-more-content {
+        .zero-results {
+            display: block;
+        }
     }
 }
 
