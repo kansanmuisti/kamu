@@ -623,6 +623,7 @@ class MemberActivity(models.Model):
     class Meta:
         app_label = 'parliament'
         ordering = ('time', 'member__name')
+        index_together = ('member', 'time')
 
 class KeywordActivity(models.Model):
     activity = models.ForeignKey(MemberActivity, db_index=True)
