@@ -142,7 +142,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.gzip.GZipMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'httpstatus.middleware.HttpStatusErrorsMiddleware',
     # ProfilerMiddleware needs to be last
     #'profiler.middleware.ProfilerMiddleware',

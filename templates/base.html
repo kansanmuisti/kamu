@@ -223,7 +223,7 @@
 <div id="feedback">
 	<div id="feedback-form" style='display:none;' class="col-xs-4 col-md-4 panel panel-default">
 		<form method="POST" action="{% url 'envelope-contact' %}" class="form panel-body" role="form">
-            {% csrf_token %}
+            {# {% csrf_token %} #}
 			<div class="form-group">
 				<input class="form-control" name="email" autofocus placeholder="Sähköposti" type="email" />
 			</div>
