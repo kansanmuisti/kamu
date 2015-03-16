@@ -786,8 +786,11 @@ class MemberUpdateResource(UpdateResource):
 class KamuSearchResource(SearchResource):
     def dehydrate(self, bundle):
         obj = bundle.obj
-        res = MemberActivityResource(api_name='v1')
+        if not obj.model in res_by_model:
+            return bundle
+        res = res_by_model[obj.model](api_name='v1')
         target_bundle = res.build_bundle(obj=obj.object, request=bundle.request)
+
         out = res.full_dehydrate(target_bundle)
         bundle.data = out.data
         bundle.data['score'] = obj.score
