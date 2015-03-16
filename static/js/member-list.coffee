@@ -9,15 +9,47 @@ class MemberListItemView extends Backbone.View
         @el = @$el[0]
         @_is_rendered = true
 
-    render: =>
+    render: (sort) =>
+        hits = @$el.find(".statistics-bars > *").addClass "display-none"
+        .filter(".#{sort}-statistics-bar").removeClass "display-none"
+        if hits.length == 0
+            @$el.find(".activity_score-statistics-bar").removeClass "display-none"
         if not @_is_rendered
             @_do_render()
         return @
+
+despam = (f, me) ->
+    prev = $.Deferred().resolve()
+    (args...) ->
+        prev.reject "cancelled"
+        prev.always ->
+            prev = f.apply me, args
+
+async_map = (a, f, {delay}={}) ->
+    promise = $.Deferred()
+    result = []
+    run = ->
+        return if promise.state() != "pending"
+        return promise.resolve result if not a.length
+        try
+            result.push f a[0]
+        catch error
+            promise.reject(error)
+            return
+        a = a[1..]
+        setTimeout run, delay ? 0
+    run()
+
+    return promise
+
 
 class @MemberListView
     constructor: (el, options={}) ->
         @$el = el
         @extra_filters = options.filters
+        @opts = _.extend
+            itemDelay: 0
+            options
 
         @children = {}
 
@@ -69,7 +101,8 @@ class @MemberListView
                 limit: 500
         
         data = _.extend data, @extra_filters
-
+        
+        @filter = despam @filter, @
         @collection = new MemberList
         @ready = @collection.fetch
             reset: true
@@ -88,18 +121,11 @@ class @MemberListView
             if ranking > 1.0
                 ranking = 1.0
             stats['activity_ranking'] = ranking
-
+    
     filter: ({search, sort}) =>
-        # TODO: This would be more responsive with
-        # asynchronous rendering of the elements. Maybe.
-        # In some profiling runs clearing the parent element took
-        # almost all the time.
-        
-        # Hide the element temporarily, so the browser may be
-        # sane enough not to layout the stuff while we mess
-        # with the DOM
         @$el.addClass "display-none"
         @$el.empty()
+        @$el.removeClass "display-none"
         if not search?
             result = (@children[key] for key of @children)
         else
@@ -111,17 +137,11 @@ class @MemberListView
         result.sort sort_func
         
         children = []
-        for hit in result
-            hit.render(sort.by)
-            children.push hit.el
-        @$el.append children
-        hits = @$el.find(".statistics-bars > *").addClass "display-none"
-        .filter(".#{sort.by}-statistics-bar").removeClass "display-none"
-        if hits.length == 0
-            @$el.find(".activity_score-statistics-bar").removeClass "display-none"
-
-        @$el.removeClass "display-none"
-
+        render = (hit) =>
+            result = hit.render(sort.by).el
+            @$el.append result
+        async_map result, render, delay: @opts.itemDelay
+       
     _process_children: (collection) =>
         for model in collection.models
             item_view = new MemberListItemView model: model
