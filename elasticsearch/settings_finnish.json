@@ -28,10 +28,7 @@
             "edgengram_analyzer": {
                 "filter": [
                     "lowercase",
-                    "keyword_repeat",
-                    "voikko_filter",
-                    "haystack_edgengram",
-                    "unique"
+                    "haystack_edgengram"
                 ],
                 "tokenizer": "finnish",
                 "type": "custom"
