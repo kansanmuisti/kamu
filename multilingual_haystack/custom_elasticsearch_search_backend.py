@@ -44,8 +44,9 @@ class CustomEsSearchBackend(es_backend.ElasticsearchSearchBackend):
         for index_fieldname, mapping in self.custom_mappings.items():
             target = mappings.setdefault(index_fieldname, {})
             for key, value in mapping.items():
-                if value is None and key in target:
-                    del target[key]
+                if value is None:
+                    if key in target:
+                        del target[key]
                 else:
                     target[key] = value
         return (content_field_name, mappings)
