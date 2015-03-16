@@ -505,23 +505,41 @@ input.discrete-toggle-btn {
 }
 
 .feed-filters {
-    display: flex;
-    align-items: center;
     .clearfix();
+    padding: 10px;
     background: @gray-lighter;
     .shadow-heavy();
     z-index: 100;
     position: relative;
     
-    > * > * {
-        padding: 10px;
+    .search-container {
+      .make-md-column(7);
+      margin-bottom: 20px;
+      padding-right: 30px;
+      label {
+        font-size: base;
+      }
+      input {
+      }
     }
-
-    label {
-        font-size: @font-size-small;
-        color: @gray-dark;
-        text-transform: uppercase;
-        margin: 0;
+  
+    .order-container {
+      .make-md-column(8);
+      margin-bottom: 10px;
+      .sort-group {
+        display: inline-block;
+        margin-bottom: 5px;
+        label {
+          display: block;
+          font-size: @font-size-small;
+          color: @gray;
+          text-transform: uppercase;
+          margin: 0 0 5px 0;
+        }
+        .btn-group {
+          margin-right: 10px;
+        }
+      }
     }
 
     .main-filter-container {
@@ -669,6 +687,13 @@ input.discrete-toggle-btn {
 /***************************************************************
  * Components on all pages
  ***************************************************************/
+
+.fb_iframe_widget,
+.fb_iframe_widget span,
+.fb_iframe_widget span iframe[style] {
+    width: 100% !important;
+    min-width: 200px;
+}
 
 .page-head {
     background-color: @top-header-bg-color;
