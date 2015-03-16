@@ -543,20 +543,28 @@ input.discrete-toggle-btn {
     }
 
     .main-filter-container {
-        flex-shrink: 1;
-        align-items: center;
+        .make-sm-column(7);
+        //flex-shrink: 1;
+        //align-items: center;
     }
 
     .side-filter-container {
-        flex-grow: 1;
-        flex-shrink: 0;
-        display: flex;
-        justify-content: flex-end;
-        align-content: flex-end;
-        > * {
-            flex-shrink: 0;
-            flex-grow: 0;
+        .make-sm-column(8);
+        .type-filter-group {
+          text-align: right;
         }
+        .filter-control {
+          display: inline-block;
+        }
+        //flex-grow: 1;
+        //flex-shrink: 0;
+        //display: flex;
+        //justify-content: flex-end;
+        //align-content: flex-end;
+        //> * {
+        //    flex-shrink: 0;
+        //    flex-grow: 0;
+        //}
     }
     
     .dropdown-menu {
@@ -767,6 +775,68 @@ input.discrete-toggle-btn {
   z-index: 600 !important; // TODO: This is not working?
 }
 
+// Feedback button styles
+// https://github.com/spektom/bootstrap-feedback-form
+
+#feedback {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	height: 250px;
+	margin-left: -3px;
+	margin-bottom: -3px;
+}
+
+#feedback-form {
+	float: left;
+	width: 300px;
+	height: 100%;
+	z-index: 1000;
+	padding-left: 5px;
+	padding-right: 10px;
+	background-clip: 'padding-box';
+	border: 1px solid rgba(0,0,0,.2);
+	-moz-border-radius: 0px;
+	-webkit-border-radius: 0px;
+	border-radius: 0px;
+	-webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+	-moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+	box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+#feedback-tab {
+	float: right;
+	color: #fff;
+    font-family: @headings-font-family;
+    text-transform: uppercase;
+	font-size: 20px;
+	cursor: pointer;
+	text-align: center;
+	width: 120px;
+	height: 42px;
+	background-color: rgba(0,0,0,0.5);
+	margin-top: 60px;
+	margin-left: -42px;
+	padding-top: 5px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	-webkit-transform: rotate(90deg);
+	-moz-transform: rotate(90deg);
+	-ms-transform: rotate(90deg);
+	-o-transform: rotate(90deg);
+	transform: rotate(90deg);
+}
+
+#feedback-tab:hover {
+	background-color: rgba(0,0,0,0.4);
+}
+
+#feedback-form textarea {
+	resize: none;
+}
+
+
 .main-nav-container {
     background-color: @navbar-default-bg;
     nav {
@@ -816,6 +886,87 @@ main {
   background-color: @gray-lighter;
 }
 
+/***************************************************************
+ * Tag cloud styles
+ ***************************************************************/
+
+.feature-tagcloud {
+    background: @pine;
+    //overflow: hidden;
+    h4 {
+        color: @mint;
+    }
+    .tagcloud-navi a { 
+        color: @white;
+        &:hover {
+            color: @gray-darker;
+        }
+    }
+}
+
+.tagcloud {
+    font-size: 1em;
+    .items {
+        .list-inline;
+        font-family: @brand-font-family;
+        text-transform: uppercase;
+        font-weight: 700;
+        li {
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+            }
+        a {
+            max-width: 100%;
+            display: inline-block;
+            padding: .3em .3em 0 .7em;
+            line-height: 1em;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        a:hover {
+            padding-left: .3em;
+            background: @gray-lighter;
+            border-radius: .3em;
+            border-left: .4em solid @gray-light;
+            color: @pine;
+            text-decoration: none;
+            .shadow-light();
+            z-index: 501;
+        }
+    }
+}
+
+.tagcloud--select {
+    
+    .tagcloud__content {
+       a {
+         color: @gray-lighter ;
+         padding: 5px 5px 0 5px;
+         background: @gray-light;
+         border-radius:3px;
+         &.active {
+            color: @white;
+            background: @mint;
+            outline: 0;
+            -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+            box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+        }
+        }
+        
+    }
+}
+
+.tagcloud__actions {
+  text-align: right;
+    a {
+      color: @gray-light;
+    }
+}
+
+.tagcloud__reset {
+  float: left;
+}
 
 /***************************************************************
  * Home page 
@@ -1539,12 +1690,6 @@ main.party-list {
         margin-bottom: 20px;
         min-height: 100px;
     }
-    .tagcloud-navi a {
-        color: @white;
-        &:hover {
-            color: @gray-darker;
-        }
-    }
 }
 
 .issue-tag-list {
@@ -1560,20 +1705,6 @@ main.party-list {
     .boxed;
     .shadowboxed-bg;
     background-color: @gray-lighter;
-}
-
-.feature-tagcloud {
-    background: @pine;
-    overflow: hidden;
-    h4 {
-        color: @mint;
-    }
-    .tagcloud-navi a { 
-        color: @white;
-        &:hover {
-            color: @gray-darker;
-        }
-    }
 }
 
 /***************************************************************
@@ -2181,65 +2312,8 @@ main.party-list {
   }
 }
 
-.tagcloud {
-    font-size: 1em;
-    .items {
-        .list-inline;
-        font-family: @brand-font-family;
-        text-transform: uppercase;
-        font-weight: 700;
-        li {
-            margin: 0;
-            padding: 0;
-            }
-        a {
-            padding: .3em .3em 0 .7em;
-            line-height: 1.5em;
-            white-space: nowrap;
-        }
-        a:hover {
-            padding-left: .3em;
-            background: @gray-lighter;
-            border-radius: .3em;
-            border-left: .4em solid @gray-light;
-            color: @pine;
-            text-decoration: none;
-            .shadow-light();
-            z-index: 501;
-        }
-    }
-}
 
-.tagcloud--select {
-    
-    .tagcloud__content {
-       a {
-         color: @gray-lighter ;
-         padding: 5px 5px 0 5px;
-         background: @gray-light;
-         border-radius:3px;
-         &.active {
-            color: @white;
-            background: @mint;
-            outline: 0;
-            -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-            box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-        }
-        }
-        
-    }
-}
 
-.tagcloud__actions {
-  text-align: right;
-    a {
-      color: @gray-light;
-    }
-}
-
-.tagcloud__reset {
-  float: left;
-}
 
 .morelink__subject {
    //font-style: italic;

@@ -131,6 +131,7 @@
     <script type="text/coffeescript" src="{% static "js/vendor/jquery.gimmesomemore.coffee" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/jquery.finnishhyphenator.js" %}"></script>
     <script type="text/javascript" src="{% static "js/vendor/autolink.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/vendor/feedback.js" %}"></script>
     <script type="text/javascript" src="{% static 'bootstrap/js/affix.js' %}"></script>
     <script type="text/coffeescript" src="{% static 'js/saneaffix.coffee' %}"></script>
     {% endcompress %}
@@ -218,7 +219,21 @@
     <main class="container {% block main_class %}generic{% endblock %} autoscroll-protected-top">
     {% block content %}{% endblock %}
     </main>
-
+  
+<div id="feedback">
+	<div id="feedback-form" style='display:none;' class="col-xs-4 col-md-4 panel panel-default">
+		<form method="POST" action="/feedback" class="form panel-body" role="form">
+			<div class="form-group">
+				<input class="form-control" name="email" autofocus placeholder="Sähköposti" type="email" />
+			</div>
+			<div class="form-group">
+				<textarea class="form-control" name="body" required placeholder="Kirjoita palautetta sivustosta..." rows="5"></textarea>
+			</div>
+			<button class="btn btn-primary pull-right" type="submit">Lähetä</button>
+		</form>
+	</div>
+	<div id="feedback-tab">Palaute</div>
+</div>
 <!--
     <footer class="page-footer">
         <div class="copyright">
