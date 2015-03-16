@@ -1,5 +1,5 @@
 from haystack import indexes
-from parliament.models import Member, Keyword, MemberActivity
+from parliament.models import Member, Keyword, MemberActivity, Term
 
 
 class MemberIndex(indexes.SearchIndex, indexes.Indexable):
@@ -14,7 +14,8 @@ class MemberIndex(indexes.SearchIndex, indexes.Indexable):
         return Member
 
     def index_queryset(self, using=None):
-        return self.get_model().objects.current()
+        term = Term.objects.latest()
+        return self.get_model().objects.active_in_term(term)
 
     def prepare(self, obj):
         data = super(MemberIndex, self).prepare(obj)

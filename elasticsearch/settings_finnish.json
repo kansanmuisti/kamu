@@ -21,10 +21,7 @@
                 "tokenizer": "finnish",
                 "filter": [
                     "lowercase",
-                    "keyword_repeat",
-                    "voikko_filter_noncompounds",
-                    "autosuggest_truncate",
-                    "unique"
+                    "autosuggest_truncate"
                 ],
                 "type": "custom"
             },

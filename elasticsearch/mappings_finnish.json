@@ -3,6 +3,7 @@
         "properties": {
             "autosuggest": {
                 "type": "string",
+                "analyzer": null,
                 "search_analyzer": "autosuggest_query",
                 "index_analyzer": "edgengram_analyzer"
             },

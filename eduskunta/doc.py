@@ -237,10 +237,12 @@ class DocImporter(Importer):
             stages[s] = date
         phase_list = []
         phase_list.append({'index': 0, 'phase': 'intro', 'date': stages[u'Kysymys jätetty']})
+        idx = 1
         if u'Annettu tiedoksi ministeriölle' in stages:
-            phase_list.append({'index': 1, 'phase': 'agenda', 'date': stages[u'Annettu tiedoksi ministeriölle']})
+            phase_list.append({'index': idx, 'phase': 'agenda', 'date': stages[u'Annettu tiedoksi ministeriölle']})
+            idx += 1
         if 'Vastaus annettu' in stages:
-            phase_list.append({'index': 2, 'phase': 'finished', 'date': stages[u'Vastaus annettu']})
+            phase_list.append({'index': idx, 'phase': 'finished', 'date': stages[u'Vastaus annettu']})
         info['phases'] = phase_list
 
     def fetch_processing_info(self, info):
