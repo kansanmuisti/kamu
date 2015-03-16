@@ -328,7 +328,7 @@ class Vote(models.Model):
         ('S', u'Speaker')
     ]
     session = models.ForeignKey(PlenaryVote, db_index=True)
-    vote = models.CharField(max_length=1, choices=VOTE_CHOICES, db_index=True)
+    vote = models.CharField(max_length=1, choices=VOTE_CHOICES)
     member = models.ForeignKey('Member', db_index=True)
     party = models.CharField(max_length=10)
 
