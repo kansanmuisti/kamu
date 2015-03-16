@@ -14,5 +14,6 @@
                 anchor.offset().top
     
     myel.on "affixed.bs.affix", hack_sizes
+    $ hack_sizes
     $(window).resize hack_sizes
 
