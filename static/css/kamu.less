@@ -440,24 +440,32 @@ fieldset {
         padding-left: 0;
         .tag-text-styling;
         li {
+            display: inline-block;
+            max-width: 100%;
+            margin: 0 10px 5px 0;
             a {
+                display: block;
+                max-width: 100%;
                 position: relative;
+                padding: .2em .2em 0 .6em;
                 text-decoration: none;
-                padding: .3em .3em 0 .7em;
-                line-height: 1;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+                line-height: .9;
                 color: @gray;
                 border-radius: .4em;
                 &:hover {
-                    padding-left: .3em;
-                    background-color: @gray-lighter;
+                    padding-left: .2em;
+                    background: @gray-lighter;
                     color: @pine;
                     text-decoration: none;
                     border-left: solid .4em @gray-light;
+                    outline: 0;
                     .shadow-light();
                     z-index: 50;
                 }
                 &.active {
-                    padding-left: .3em;
+                    padding-left: .2em;
                     color: @white;
                     background: @mint;
                     border-left: solid .4em @pine;
@@ -469,8 +477,6 @@ fieldset {
 
                 cursor: pointer;
             }
-            display: inline-block;
-            margin: 0 10px 5px 0;
         }
     }
 }
@@ -543,28 +549,20 @@ input.discrete-toggle-btn {
     }
 
     .main-filter-container {
-        .make-sm-column(7);
-        //flex-shrink: 1;
-        //align-items: center;
+        .make-xs-column(7);
     }
 
     .side-filter-container {
-        .make-sm-column(8);
+        .make-xs-column(8);
         .type-filter-group {
           text-align: right;
+          label {
+            display: none;
+          }
         }
         .filter-control {
           display: inline-block;
         }
-        //flex-grow: 1;
-        //flex-shrink: 0;
-        //display: flex;
-        //justify-content: flex-end;
-        //align-content: flex-end;
-        //> * {
-        //    flex-shrink: 0;
-        //    flex-grow: 0;
-        //}
     }
     
     .dropdown-menu {
@@ -896,12 +894,10 @@ main {
     h4 {
         color: @mint;
     }
-    .tagcloud-navi a { 
-        color: @white;
-        &:hover {
-            color: @gray-darker;
-        }
-    }
+}
+
+.tagcloud-navi a { 
+    color: @white;
 }
 
 .tagcloud {
