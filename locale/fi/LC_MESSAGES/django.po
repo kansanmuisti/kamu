@@ -88,7 +88,7 @@ msgstr "SP"
 
 #: parliament/member_views.py:178
 msgid "Agreement with party majority"
-msgstr "Samanmielisyys puolueen enemmistön kanssa"
+msgstr "Ryhmäkuri"
 
 #: parliament/member_views.py:179
 msgid "SA"
