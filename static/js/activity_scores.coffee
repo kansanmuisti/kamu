@@ -14,11 +14,11 @@ getMonths = (from, to) ->
 zerofiller = (xrng) -> (items) ->
     for x, i in xrng
         y = 0
-        ix = items[0]?.x
+        ix = items[0]?[0]
         if ix <= x and not (ix >= xrng[i+1])
-            y = items[0].y
+            y = items[0][1]
             items = items[1..]
-        x: x, y: y
+        [x, y]
             
 
 
@@ -240,7 +240,7 @@ class @ActivityScoresView extends Backbone.View
         
         filler = zerofiller getMonths @time_range.start, @time_range.end
         mangle = (data) ->
-            for [x, y] in data
+            for [x, y] in filler(data)
                 x: dateToEpoch(x), y: y
         @member_series.data = mangle @plot_series[0].data
         
