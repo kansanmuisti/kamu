@@ -56,11 +56,11 @@ class MemberActivityIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_text(self, obj):
         target = obj.get_target_info()
         text = []
-        if 'name' in target:
+        if target.get('name', None):
             text.append(target['name'])
-        if 'subject' in target:
+        if target.get('subject', None):
             text.append(target['subject'])
-        if 'text' in target:
+        if target.get('text', None):
             text.append(target['text'])
         return '\n'.join(text)
 
