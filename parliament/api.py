@@ -492,6 +492,28 @@ class PlenaryVoteResource(KamuResource):
     plenary_session = fields.ForeignKey(PlenarySessionResource, 'plsess')
     session_item = fields.ForeignKey(PlenarySessionItemResource, 'plsess_item')
 
+    def dehydrate(self, bundle):
+        if bundle.request.GET.get('votes', '').lower() in ('true', '1'):
+            votes = bundle.obj.vote_set.all().select_related('member')
+            votes_data = []
+            vote_date = bundle.obj.plsess.date
+            districts = DistrictAssociation.objects.between(vote_date, vote_date)
+            mp_districts = {x.member_id: x for x in districts}
+            for v_obj in votes:
+                d = {'vote': v_obj.vote}
+                member = v_obj.member
+                mp = {'name': member.name, 'print_name': member.get_print_name()}
+                mp['party'] = party_dict[member.party_id].abbreviation
+                mp['birth_date'] = member.birth_date
+                mp['gender'] = member.gender
+                district = mp_districts.get(member.id, None)
+                if district:
+                    mp['district'] = district.name
+                d['member'] = mp
+                votes_data.append(d)
+            bundle.data['votes'] = votes_data
+        return bundle
+
     def dehydrate_vote_counts(self, bundle):
         return bundle.obj.get_vote_counts()
 
