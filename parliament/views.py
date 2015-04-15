@@ -384,7 +384,7 @@ def _get_most_active_mps():
     return mp_list[0:10]
 
 def _get_discussed_topics():
-    begin = datetime.date.today() - datetime.timedelta(days=30)
+    begin = datetime.date.today() - datetime.timedelta(days=90)
     items = PlenarySessionItem.objects.filter(
         nr_statements__isnull=False,
         plsess__date__gt=begin,
