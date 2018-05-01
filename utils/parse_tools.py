@@ -42,7 +42,7 @@ MEMBER_NAME_TRANSFORMS = {
 }
 
 def fix_mp_name(name):
-    if not isinstance(name, unicode):
+    if not isinstance(name, str):
 	name = name.decode('utf8')
     if name.encode('utf8') in MEMBER_NAME_TRANSFORMS:
         name = MEMBER_NAME_TRANSFORMS[name.encode('utf8')].decode('utf8')

@@ -1,10 +1,10 @@
-import urlparse
+import urllib.parse
 import pprint
 import requests
 import logging
 import datetime
 import email.utils
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import calendar
 import time
 import json
@@ -67,7 +67,7 @@ class FeedUpdater(object):
         self.fb_graph = pyfaceb.FBGraph(token)
 
         tw_args = {}
-        for key in TWITTER_SETTING_MAP.keys():
+        for key in list(TWITTER_SETTING_MAP.keys()):
             val = getattr(settings, key, None)
             if not val:
                 tw_args = {}
@@ -167,7 +167,7 @@ class FeedUpdater(object):
         except Feed.DoesNotExist:
             self.logger.debug("feed %s (%s) not found" % (tw_user['id'], tw_user['screen_name']))
             return
-        self.logger.debug("tweet for feed %s" % unicode(feed))
+        self.logger.debug("tweet for feed %s" % str(feed))
         feed.last_update = datetime.datetime.now()
         feed.interest = tw_user['followers_count']
         feed.picture = tw_user['profile_image_url']
@@ -288,7 +288,7 @@ class FeedUpdater(object):
 
     @transaction.commit_on_success
     def process_facebook_feed(self, feed, full_update=False):
-        self.logger.info('Processing feed %s' % unicode(feed))
+        self.logger.info('Processing feed %s' % str(feed))
 
         # First update the feed itself
         feed_info = self._fb_get(feed.origin_id)
@@ -304,7 +304,7 @@ class FeedUpdater(object):
             since = datetime.datetime.now() - datetime.timedelta(weeks=2*4)
             since = int(time.mktime(since.timetuple()))
             filter_args = "&since=%d" % since
-            self.logger.debug('%s is a personal feed' % unicode(feed))
+            self.logger.debug('%s is a personal feed' % str(feed))
         else:
             feed.is_personal = False
             filter_args = ""
@@ -388,7 +388,7 @@ class FeedUpdater(object):
 
             if not 'paging' in g:
                 break
-            next_args = urlparse.parse_qs(urlparse.urlparse(g['paging']['next']).query)
+            next_args = urllib.parse.parse_qs(urllib.parse.urlparse(g['paging']['next']).query)
             until = int(next_args['until'][0])
             # If we didn't have any of the updates, get a bigger batch next
             # time.

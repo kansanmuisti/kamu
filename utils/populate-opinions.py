@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
-import http_cache
+from . import http_cache
 from optparse import OptionParser
 
 from django.core.management import setup_environ
@@ -22,9 +22,9 @@ sys.path.insert(2, os.path.normpath(app_path + '/..'))
 from kamu import settings
 setup_environ(settings)
 
-import hs2011_opinions
-import mtv2007_opinions
-import yle2011_opinions
+from . import hs2011_opinions
+from . import mtv2007_opinions
+from . import yle2011_opinions
 
 parser = OptionParser()
 parser.add_option('--mtv2007', action='store_true', dest='mtv2007',

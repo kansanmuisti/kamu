@@ -31,8 +31,8 @@ try:
             except ValueError:
                 # no lexer found - use the text one instead of an exception
                 lexer = TextLexer()
-            formatter = options and VARIANTS[options.keys()[0]] or DEFAULT
-            parsed = highlight(u'\n'.join(content), lexer, formatter)
+            formatter = options and VARIANTS[list(options.keys())[0]] or DEFAULT
+            parsed = highlight('\n'.join(content), lexer, formatter)
             return [nodes.raw('', parsed, format='html')]
         pygments_directive.arguments = (1, 0, 1)
         pygments_directive.content = 1

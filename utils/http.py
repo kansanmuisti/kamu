@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import hashlib
-from urllib2 import HTTPError
+from urllib.error import HTTPError
 
 class HttpFetcher(object):
     cache_dir = None
@@ -34,11 +34,11 @@ class HttpFetcher(object):
         if self.cache_dir:
             fname = self.get_fname(url, prefix)
         if not fname or not os.access(fname, os.R_OK):
-            opener = urllib2.build_opener(urllib2.HTTPHandler)
+            opener = urllib.request.build_opener(urllib.request.HTTPHandler)
             opener.addheaders = [('User-agent', 'Mozilla/5.0')]
             try:
                 f = opener.open(url)
-            except urllib2.URLError:
+            except urllib.error.URLError:
                 if error_ok:
                     return None
                 raise

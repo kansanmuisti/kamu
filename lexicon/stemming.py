@@ -10,19 +10,19 @@ stripper = re.compile(r'[^\w\-:]', re.U)
 
 def string_to_words(s):
     s = s.lower()
-    s = stripper.sub(u' ', s)
+    s = stripper.sub(' ', s)
     words = s.split()
     return words
 
 class Stemmer(object):
     FI_PROJECT = 'sukija/suomi.pro'
     FI_TRANSFORMS = {
-        u'kuu': ([u'kuu', u'kuin'], [u'kuin']),
-        u'siitä': ([u'siitä', u'siittää', u'se'], [u'se']),
-        u'myödä': ([u'myödä', u'myös'], [u'myös']),
-        u'silta': ([u'silta', u'silla', u'silloin'], [u'silloin']),
-        u'tähkä': ([u'tähkä', u'tämä'], [u'tämä']),
-        u'paljo': ([u'paljo'], [u'paljon']),
+        'kuu': (['kuu', 'kuin'], ['kuin']),
+        'siitä': (['siitä', 'siittää', 'se'], ['se']),
+        'myödä': (['myödä', 'myös'], ['myös']),
+        'silta': (['silta', 'silla', 'silloin'], ['silloin']),
+        'tähkä': (['tähkä', 'tämä'], ['tämä']),
+        'paljo': (['paljo'], ['paljon']),
     }
 
         # We support only Finnish for now
@@ -57,7 +57,7 @@ class Stemmer(object):
             if self.lib.get_value_type(result) != 4:
                 raise Exception('Unknown libmalaga result type!')
             s = ctypes.c_char_p(self.lib.get_value_string(result))
-            ret.append(unicode(s.value, 'utf-8'))
+            ret.append(str(s.value, 'utf-8'))
             self.libc.free(s)
             result = self.lib.next_analysis_result()
         self.lock.release()
@@ -75,7 +75,7 @@ class Stemmer(object):
 
     def convert_string(self, s, flat=False):
         words = string_to_words(s)
-        ret = map(lambda x: self.convert_word(x, flat), words)
+        ret = [self.convert_word(x, flat) for x in words]
         if flat:
             ret = list(chain.from_iterable(ret))
         """for idx, w in enumerate(ret):

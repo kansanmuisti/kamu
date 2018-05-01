@@ -54,7 +54,7 @@ def find_district(request, begin, end):
         if DISTRICT_KEY in request.session:
             del request.session[DISTRICT_KEY]
         county_name = request.GET[COUNTY_KEY];
-        if county_name != u'All counties':
+        if county_name != 'All counties':
             try:
                 county = County.objects.get(name=county_name)
                 district = county.get_district_name()
@@ -78,7 +78,7 @@ def find_district(request, begin, end):
             return district
 
 def generate_modified_query(request, mod_key, mod_val, remove=[]):
-    params = dict(request.GET.items())
+    params = dict(list(request.GET.items()))
     for k in remove:
         if k in params:
             del params[k]
@@ -133,7 +133,7 @@ def generate_header_html(hdr):
                 img_src = settings.MEDIA_URL + col['img']
             else:
                 img_src = DjangoThumbnail(col['img'], col['img_dim'].split('x'))
-                img_src = unicode(img_src)
+                img_src = str(img_src)
             if 'title' in col:
                 title = 'title="%s" ' % (col['title'])
             else:

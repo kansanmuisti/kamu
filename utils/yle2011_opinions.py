@@ -3,13 +3,13 @@ import codecs
 import csv
 import difflib
 import sys
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import re
 
 from lxml import etree, html
 
-import http_cache
-import parse_tools
+from . import http_cache
+from . import parse_tools
 
 from opinions.models import QuestionSource, Question, Option, Answer
 from votes.models import Member, Term, DistrictAssociation
@@ -35,7 +35,7 @@ def parse_district(district):
         assert '.rt-1.' in href
         m = re.match(r'(\d+) ([\w -]+), ([\w \-\"\.()]+)$', el.text, re.U)
         if not m:
-            print "Skipping %s" % el.text.encode('utf8')
+            print("Skipping %s" % el.text.encode('utf8'))
             continue
         last_name, first_name = m.groups()[1:]
         cand_list.append((last_name, first_name, href))
@@ -92,7 +92,7 @@ def parse_mp(src, lname, fname, href):
         mp = mp_dict[name]
         mp.found = True
 
-    print mp
+    print(mp)
 
     s = http_cache.open_url(href, 'opinions')
     doc = html.fromstring(s)
@@ -156,13 +156,13 @@ def parse():
     src, c = QuestionSource.objects.get_or_create(name='Ylen vaalikone', year=2011,
                                                   url_name='yle2011')
     for district in range(1, 16):
-        print "District %d" % district
+        print("District %d" % district)
         cand_list = parse_district(district)
         for cand in cand_list:
             parse_mp(src, *cand)
     for mp in mp_list:
         if not mp.found:
             da = DistrictAssociation.objects.for_member_in_term(mp, term)
-            print "not found for %s /%s (%s)" % (mp, mp.party.name.encode('utf8'),
-                da[0].name.encode('utf8'))
+            print("not found for %s /%s (%s)" % (mp, mp.party.name.encode('utf8'),
+                da[0].name.encode('utf8')))
 

@@ -732,13 +732,13 @@ class KeywordResource(KamuResource):
                 party_dict[p.id] = p
             for mp in mp_list:
                 party_dict[mp.party_id].score += mp.score
-            for p in party_dict.values():
+            for p in list(party_dict.values()):
                 if p.mp_count:
                     p.score /= p.mp_count
                 else:
                     assert p.score == 0
 
-            party_list = party_dict.values()
+            party_list = list(party_dict.values())
             party_list = sorted(party_list, key=lambda p: p.score, reverse=True)
 
             d = {}

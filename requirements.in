@@ -1,21 +1,20 @@
-Django>=1.7
+Django<1.9
 Markdown
-BeautifulSoup
+BeautifulSoup4
 python-dateutil
 simplejson
 django-tastypie
 twython>=3.0.0
 pygments
 django-compressor>=1.3
-twitter-text-py
+twitter-text-python
 sorl-thumbnail>=11.12.1b
 django-extensions
-pyfaceb>=0.2.4
+##pyfaceb>=0.2.4
 requests>=1.1.0
 requests-cache
-ansible
-django-tastypie-swagger
-django-haystack
+#django-tastypie-swagger
+django-haystack<2.8
 elasticsearch
 django-appconf
 mimeparse
@@ -23,5 +22,5 @@ psycopg2
 lxml
 django-sortedm2m
 django-cors-headers
--e git+https://github.com/juyrjola/django-envelope#egg=django-envelope
-
+django-envelope<1.3
+Pillow

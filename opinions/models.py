@@ -59,7 +59,7 @@ class Question(models.Model):
         return ('opinions.views.show_question', (), args)
 
     def __unicode__(self):
-        return u"%s/%d" % (self.source, self.order)
+        return "%s/%d" % (self.source, self.order)
 
 class Option(models.Model):
     question = models.ForeignKey(Question)
@@ -105,7 +105,7 @@ class Option(models.Model):
         return Party.objects.raw(query, [self.question_id, self.id])
 
     def __unicode__(self):
-        return u'%s: %s' % (self.question, self.name)
+        return '%s: %s' % (self.question, self.name)
 
 class Answer(models.Model):
     member = models.ForeignKey(Member)
@@ -117,7 +117,7 @@ class Answer(models.Model):
         unique_together = (('member', 'option'), )
 
     def __unicode__(self):
-        return u'%s %s' % (self.member, self.option)
+        return '%s %s' % (self.member, self.option)
 
 class VoteOptionCongruenceManager(models.Manager):
     def user_has_congruences(self, user):
@@ -381,7 +381,7 @@ class VoteOptionCongruence(models.Model):
     def __unicode__(self):
         args = (self.option.question.source, self.option.question.order,
                 self.option.order, self.vote, self.user, self.congruence)
-        return u"%s/%d/%d-%s (%s): %0.02f" % args
+        return "%s/%d/%d-%s (%s): %0.02f" % args
 
     class Meta:
         unique_together = (('user', 'option', 'session', 'vote'), )

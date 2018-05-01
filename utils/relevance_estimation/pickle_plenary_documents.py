@@ -5,7 +5,7 @@ import sys
 import os
 import re
 import shelve
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 sys.path.append(os.path.abspath(__file__ + '/../../../..'))
 sys.path.append(os.path.abspath(__file__ + '/../../..'))
@@ -31,14 +31,14 @@ def get_plenary_documents(dst):
             if name in dst:
                 continue
 
-            (number, year) = map(int, match.groups())
+            (number, year) = list(map(int, match.groups()))
             uri = he_uri % (number, year)
 
-            print >> sys.stderr, 'Fetching data for %s' % name
+            print('Fetching data for %s' % name, file=sys.stderr)
             try:
-                data = urllib.urlopen(uri).read()
-            except IOError, e:
-                print >> sys.stderr, 'Reading data for %s failed' % name
+                data = urllib.request.urlopen(uri).read()
+            except IOError as e:
+                print('Reading data for %s failed' % name, file=sys.stderr)
                 continue
             dst[name] = data
 

@@ -17,12 +17,12 @@ SPEAKER_ADDRESSING = (
     'Arvoisa herra puhemies', 'Puhemies',
     'Herr talman',
     'Rouva puhemies', 'Arvoisa rouva puhemies',
-    u'Ärade talman', u'Värderade talman',
-    u'Ärade herr talman', 'Fru talman',
-    u'Värderade herr talman',
+    'Ärade talman', 'Värderade talman',
+    'Ärade herr talman', 'Fru talman',
+    'Värderade herr talman',
     'Arvoisa eduskunnan puhemies',
     'Kunnioitettu puhemies', 'Arvoisa puhemies',
-    u'Värderade fru talman',
+    'Värderade fru talman',
     'Arvoisa puheenjohtaja', 'Arvon puhemies',
     'Arvoisa herra puheenjohtaja',
     'Arvostettu puhemies', 'Talman',
@@ -56,13 +56,13 @@ class MinutesImporter(Importer):
     DOC_ID_MATCH = r'(\w+)\s(\w+/\d{4})\svp'
     SGML_TO_XML = 'sgml-to-xml.sh'
 
-    NON_MP_NAMES = (u'Mikko Puumalainen', u'Raimo Tammilehto', u'Kalevi Hemilä',
-                    u'Kari Häkämies', u'Carl Haglund', u'Laura Räty', u'Antti Rinne')
+    NON_MP_NAMES = ('Mikko Puumalainen', 'Raimo Tammilehto', 'Kalevi Hemilä',
+                    'Kari Häkämies', 'Carl Haglund', 'Laura Räty', 'Antti Rinne')
     NON_MP_ROLES = ('Eduskunnan oikeusasiamies',
                     'Valtioneuvoston oikeuskansleri',
                     'Valtiovarainministeri', 'Sosiaali- ja terveysministeri')
 
-    TERM_DASH = u'\u2013'
+    TERM_DASH = '\u2013'
     TERMS = [
         {'display_name': '2011'+TERM_DASH+'2014', 'begin': '2011-04-20', 'end': None,
          'name': '2011-2014'},
@@ -360,7 +360,7 @@ class MinutesImporter(Importer):
                         subject.text = 'Keskustelu'
                 s = self.clean_text(subject.text).strip(':')
                 if s not in ('Yleiskeskustelu', 'Keskustelu'):
-                    print s
+                    print(s)
                     assert False
                 item_info['sub_desc'] = 'Yleiskeskustelu'
                 for st_el in disc_el.xpath('pvuoro'):
@@ -409,8 +409,8 @@ class MinutesImporter(Importer):
             for ref_el in vote_ref_list:
                 attr = ref_el.attrib
                 # WORKAROUND
-                if u'\xa8' in attr['aannro']:
-                    attr['aannro'] = attr['aannro'].replace(u'\xa8', '')
+                if '\xa8' in attr['aannro']:
+                    attr['aannro'] = attr['aannro'].replace('\xa8', '')
                 vote_id = (int(attr['vpvuosi']), attr['istnro'], int(attr['aannro']))
 
                 vote_pl_id = "%s/%d" % (vote_id[1], vote_id[0])
@@ -508,7 +508,7 @@ class MinutesImporter(Importer):
             mp = self.mp_by_hnro.get(st_info['speaker_id'])
         elif st_info['type'] == "speaker":
             speaker_dispname = (" ".join([st_info['first_name'], st_info['surname']]))
-            speaker_dispname = self.clean_text(speaker_dispname.replace(u"\u00a0", u" "))
+            speaker_dispname = self.clean_text(speaker_dispname.replace("\u00a0", " "))
             if speaker_dispname == "Pekka Ravis" or speaker_dispname == "Pekak Ravi":
                 speaker_dispname = "Pekka Ravi"
             if speaker_dispname == "Anssi Jotsenlahti":
@@ -529,7 +529,7 @@ class MinutesImporter(Importer):
                 if st_info.get('role') in self.NON_MP_ROLES:
                     name = st_info['role']
                 else:
-                    print st_info
+                    print(st_info)
                     raise ParseError("MP not found")
 
         try:
@@ -683,7 +683,7 @@ class MinutesImporter(Importer):
                 if not self.replace:
                     continue
             except Term.DoesNotExist:
-                self.logger.info(u'Adding term %s' % name)
+                self.logger.info('Adding term %s' % name)
                 nt = Term()
             nt.name = name
             nt.begin = begin

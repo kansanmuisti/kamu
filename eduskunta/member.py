@@ -67,7 +67,7 @@ MEMBER_NAME_TRANSFORMS = {
 
 
 def fix_mp_name(name):
-    if not isinstance(name, unicode):
+    if not isinstance(name, str):
         name = name.decode('utf8')
     if name.encode('utf8') in MEMBER_NAME_TRANSFORMS:
         name = MEMBER_NAME_TRANSFORMS[name.encode('utf8')].decode('utf8')
@@ -85,7 +85,7 @@ def figure_mp_gender(name):
         name_els = doc.xpath('//table[@class="resultTable"]//td/a')
         mps = []
         for td in name_els:
-            n = unicode(td.text.split('/')[0].strip()).replace(u'\u00a0', ' ')
+            n = str(td.text.split('/')[0].strip()).replace('\u00a0', ' ')
             mps.append(n)
         return gender
 
@@ -104,23 +104,23 @@ def figure_mp_gender(name):
 
     # Plan B: Use genderizer to determine gender
     gender_names = {
-        u'Hannakaisa': 'f',
-        u'Merikukka': 'f',
-        u'Toimi': 'm',
-        u'Valto': 'm',
-        u'Oiva': 'm',
-        u'Tatja': 'f',
-        u'Kalervo': 'm',
-        u'Rauha': 'f',
-        u'Ola': 'm',
-        u'Iivo': 'm',
-        u'Virpa': 'f',
-        u'Mauri': 'm',
-        u'Cai': 'm',
-        u'Lahja': 'f',
-        u'Miapetra': 'f',
-        u'Pietari': 'm',
-        u'Taito': 'm',
+        'Hannakaisa': 'f',
+        'Merikukka': 'f',
+        'Toimi': 'm',
+        'Valto': 'm',
+        'Oiva': 'm',
+        'Tatja': 'f',
+        'Kalervo': 'm',
+        'Rauha': 'f',
+        'Ola': 'm',
+        'Iivo': 'm',
+        'Virpa': 'f',
+        'Mauri': 'm',
+        'Cai': 'm',
+        'Lahja': 'f',
+        'Miapetra': 'f',
+        'Pietari': 'm',
+        'Taito': 'm',
     }
 
     n = name
@@ -149,20 +149,20 @@ def figure_mp_gender(name):
     return None
 
 FIELD_MAP = {
-    'name': u'Täydellinen nimi',
-    'phone': u'Puhelin',
-    'email': u'Sähköposti',
-    'occupation': u'Ammatti / Arvo',
-    'birth': u'Syntymäaika ja -paikka',
-    'home_county': u'Nykyinen kotikunta',
-    'districts': u'Vaalipiiri',
-    'parties': u'Eduskuntaryhmät',
-    'current_posts': u'Nykyiset toimielinjäsenyydet ja tehtävät',
-    'previous_posts': u'Aiemmat jäsenyydet ja tehtävät eduskunnan toimielimissä',
-    'prime_ministerships': u'Pääministeri',
-    'ministerships': u'Ministeri',
-    'parliament_groups': u'Eduskuntaryhmät',
-    'parliament_group_tasks': u'Tehtävät eduskuntaryhmässä'
+    'name': 'Täydellinen nimi',
+    'phone': 'Puhelin',
+    'email': 'Sähköposti',
+    'occupation': 'Ammatti / Arvo',
+    'birth': 'Syntymäaika ja -paikka',
+    'home_county': 'Nykyinen kotikunta',
+    'districts': 'Vaalipiiri',
+    'parties': 'Eduskuntaryhmät',
+    'current_posts': 'Nykyiset toimielinjäsenyydet ja tehtävät',
+    'previous_posts': 'Aiemmat jäsenyydet ja tehtävät eduskunnan toimielimissä',
+    'prime_ministerships': 'Pääministeri',
+    'ministerships': 'Ministeri',
+    'parliament_groups': 'Eduskuntaryhmät',
+    'parliament_group_tasks': 'Tehtävät eduskuntaryhmässä'
 }
 
 
@@ -218,9 +218,9 @@ def parse_committee_membership(line):
 
     if committee_name.endswith('valiokunta'):
         org_type = 'committee'
-    elif committee_name.lower() == u'puhemiehistö':
+    elif committee_name.lower() == 'puhemiehistö':
         org_type = 'speakers'
-        print line.encode('utf8')
+        print(line.encode('utf8'))
     else:
         #print "Skipping " + committee_name
         return None
@@ -243,7 +243,7 @@ def parse_committee_membership(line):
             if org_type == 'speakers':
                 role_str = role_str.lower()
                 # Skip electee speaker roles
-                if role_str == u'ipm':
+                if role_str == 'ipm':
                     continue
                 role = SPEAKER_ROLE_MAP[role_str]
             else:
@@ -534,7 +534,7 @@ class MemberImporter(Importer):
 
         def find_with_attrs(obj_list, arg_dict):
             for o in obj_list:
-                for (key, val) in arg_dict.items():
+                for (key, val) in list(arg_dict.items()):
                     oattr = getattr(o, key)
                     if oattr != val:
                         #print "mismatch: %s (%s) vs. %s (%s)" % (oattr, type(oattr), val, type(val))
@@ -647,7 +647,7 @@ class MemberImporter(Importer):
     def get_wikipedia_links(self):
         MP_LINK = 'http://fi.wikipedia.org/wiki/Luokka:Nykyiset_kansanedustajat'
 
-        print "Populating Wikipedia links to current MPs..."
+        print("Populating Wikipedia links to current MPs...")
         mp_list = list(Member.objects.current())
         mp_names = [mp.name for mp in mp_list]
         s = self.http.open_url(MP_LINK, 'wikipedia')
@@ -672,9 +672,9 @@ class MemberImporter(Importer):
                 if len(matches) > 1:
                     raise Exception("Multiple matches for '%s'" % name)
                 elif not matches:
-                    print "No match found for '%s'" % name
+                    print("No match found for '%s'" % name)
                     continue
-                print("Mapping '%s' to %s'" % (name, matches[0]))
+                print(("Mapping '%s' to %s'" % (name, matches[0])))
                 for mp in mp_list:
                     if mp.name == matches[0]:
                         break
@@ -686,7 +686,7 @@ class MemberImporter(Importer):
             mp.save()
         for mp in mp_list:
             if not hasattr(mp, 'found'):
-                print "%s not found" % mp
+                print("%s not found" % mp)
 
     def import_members(self, **args):
         if not MemberActivityType.objects.count():
@@ -749,14 +749,14 @@ class MemberImporter(Importer):
         self.logger.info("Adding Carl Haglund as a pseudo-MP for purposes of minister counting")
 
         haglund_info = {
-            'birthdate': u'1979-03-29',
-            'birthplace': u'Espoo',
+            'birthdate': '1979-03-29',
+            'birthplace': 'Espoo',
             'email': 'carl.haglund@eduskunta.fi',
             'given_names': 'Carl Christoffer',
             'home_county': 'Espoo',
             'id': "nonmp_0001",
             'info_url': 'http://valtioneuvosto.fi/hallitus/jasenet/puolustusministeri/fi.jsp',
-            'name': u'Carl Haglund',
+            'name': 'Carl Haglund',
             # Following two are a minimal hack to make Carl only show up in the
             # minister calculations. See save_member
             'party': 'r',
@@ -766,7 +766,7 @@ class MemberImporter(Importer):
             'districts': {},
             'posts': [{'begin': datetime(year=2012, month=7, day=5).date(),
                     'end': None,
-                    'label': u'puolustusministeri',
+                    'label': 'puolustusministeri',
                     'role': 'minister'}],
             'surname': 'Haglund'}
         self.save_member(haglund_info)

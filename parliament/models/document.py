@@ -60,7 +60,7 @@ class KeywordActivityScore(models.Model):
     calc_time = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return u"%s (%s): %d points" % (self.keyword.name, self.term, self.score)
+        return "%s (%s): %d points" % (self.keyword.name, self.term, self.score)
 
     class Meta:
         app_label = 'parliament'

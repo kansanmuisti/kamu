@@ -31,7 +31,7 @@ class RadioInputWithSanerLabel:
             label_for = ''
         
         choice_label = conditional_escape(force_unicode(self.choice_label))
-        ret = mark_safe(u'<span title="%s">%s <label%s>%s</label></span>' % (
+        ret = mark_safe('<span title="%s">%s <label%s>%s</label></span>' % (
                    choice_label, self.tag(), label_for, choice_label))
         return ret
 
@@ -39,7 +39,7 @@ class RadioInputWithSanerLabel:
 class RadioFieldRendererWithSanerLabels(forms.RadioSelect.renderer):
     def __iter__(self):
         insane_input = forms.RadioSelect.renderer.__iter__(self)
-        while True: yield RadioInputWithSanerLabel(insane_input.next())
+        while True: yield RadioInputWithSanerLabel(next(insane_input))
 
     def __getitem__(self, *args):
         insane_input = forms.RadioFieldRenderer.__getitem__(self, *args)

@@ -23,22 +23,22 @@ import djapian
 
 mem = Member.objects.annotate(Count('statement'))
 for m in mem[0:16]:
-        print m
-        print m.statement__count
+        print(m)
+        print(m.statement__count)
 
 exit(1)
 
 mem = Member.objects.active_in('2007-01-01', '2009-01-01')
-print "%d objects" % (len(mem))
+print("%d objects" % (len(mem)))
 for per in PERIODS[0:1]:
     for m in mem[0:4]:
-        print per['query_name']
+        print(per['query_name'])
         ms = m.get_stats(per['begin'], per['end'])
-        print m
-        print ms
+        print(m)
+        print(ms)
 #        print m
 #for pa in pa_list:
 #        print pa.member_id
 
 for q in connection.queries:
-        print q
+        print(q)

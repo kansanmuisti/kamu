@@ -125,4 +125,4 @@ class Command(BaseCommand):
                 # Then for all time
                 all_time = kw.store_activity_score()
                 if verbosity >= 3:
-                    print("%s: all time %d, recent term %d" % (kw, all_time.score, recent.score))
+                    print(("%s: all time %d, recent term %d" % (kw, all_time.score, recent.score)))

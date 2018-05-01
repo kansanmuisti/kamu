@@ -105,7 +105,7 @@ class GoverningParty(models.Model):
         app_label = 'parliament'
 
     def __unicode__(self):
-        return u"%s %s - %s : %s" % (self.party, self.begin, self.end, self.government)
+        return "%s %s - %s : %s" % (self.party, self.begin, self.end, self.government)
 
 
 class Government(models.Model):
@@ -122,4 +122,4 @@ class Government(models.Model):
             endyear = self.end.year
         else:
             endyear = None
-        return u"%s (%s - %s)" % (self.name, self.begin.year, endyear)
+        return "%s (%s - %s)" % (self.name, self.begin.year, endyear)

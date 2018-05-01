@@ -12,26 +12,26 @@ from .member import fix_mp_name
 VOTE_MAP = {
     'Jaa': 'Y',
     'Ei': 'N',
-    u'Tyhjää': 'E',
+    'Tyhjää': 'E',
     'Poissa': 'A',
 }
 
 PROCESSING_STEP = {
-	u'Ensimmäinen käsittely': '1H',
-	u'Toinen käsittely': '2H',
-	u'Ainoa käsittely': 'OH',
-	u'Yksi käsittely': 'OH',
-	u'Ulkopuolella päiväjärjestyksen': 'OA',
-	u'Osittain ainoa, osittain toinen käsittely': '2H-OH',
-	u'Toinen käsittely, ainoa käsittely': '2H-OH',
-	u'Jatkettu ensimmäinen käsittely': '1H',
-	u'Palautekeskustelu': '??',
-	u'Lähetekeskustelu': '??',
-	u'Vaalit': 'EL',
-	u'Vaaleja': 'EL',
-	u'Täysistuntokäsittely': 'PV',
-	u'Ilmoituksia': '??',
-	u'Kolmas käsittely': '??',
+	'Ensimmäinen käsittely': '1H',
+	'Toinen käsittely': '2H',
+	'Ainoa käsittely': 'OH',
+	'Yksi käsittely': 'OH',
+	'Ulkopuolella päiväjärjestyksen': 'OA',
+	'Osittain ainoa, osittain toinen käsittely': '2H-OH',
+	'Toinen käsittely, ainoa käsittely': '2H-OH',
+	'Jatkettu ensimmäinen käsittely': '1H',
+	'Palautekeskustelu': '??',
+	'Lähetekeskustelu': '??',
+	'Vaalit': 'EL',
+	'Vaaleja': 'EL',
+	'Täysistuntokäsittely': 'PV',
+	'Ilmoituksia': '??',
+	'Kolmas käsittely': '??',
 }
 
 def parse_vote(mp, vote):
@@ -102,7 +102,7 @@ class VoteImporter(Importer):
             raise ParseError('vote header not found')
         hdr_el = hdr_el[0]
         s = self.clean_text(hdr_el.xpath('caption')[0].text)
-        m = re.match(ur'Äänestys (\d+) klo (\d{2}\.\d{2})', s, re.U)
+        m = re.match(r'Äänestys (\d+) klo (\d{2}\.\d{2})', s, re.U)
         info['time'] = m.groups()[1]
 
         el = hdr_el.xpath('tbody/tr')[0].xpath('td')[1]
@@ -232,5 +232,5 @@ class VoteImporter(Importer):
                 for plvote in list(year_votes):
                     vote_id = '%d/%s' % (plvote.number, plvote.plsess.name)
                     if vote_id not in seen_votes:
-                        print("Vote %s not found anymore" % vote_id)
+                        print(("Vote %s not found anymore" % vote_id))
                         plvote.delete()

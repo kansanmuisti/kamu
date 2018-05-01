@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+
 
 import os
 import json
@@ -48,9 +48,9 @@ class Command(BaseCommand):
 
         if options['rebuild']:
             if options['single']:
-                print "You can't give both 'rebuild' and 'single' options."
+                print("You can't give both 'rebuild' and 'single' options.")
                 exit(1)
-            print "Deleting index..."
+            print("Deleting index...")
             self.session.delete(self.get_index_url())
             docs = Document.objects.all()
         elif options['age']:
@@ -72,18 +72,18 @@ class Command(BaseCommand):
         for idx, doc in enumerate(docs):
             self.send_doc(doc, index=index)
             if idx % 100 == 99:
-                print "%d of %d documents sent" % (idx + 1, count) 
+                print("%d of %d documents sent" % (idx + 1, count)) 
 
         if options['rebuild']:
             data = {'train': True}
-            print "Training..."
+            print("Training...")
             r = self.session.post(self.get_index_url(), data=json.dumps(data), headers=headers)
             if r.status_code != 200:
                 raise Exception("Train failed with %d: %s" % (r.status_code, r.content))
                 exit(1)
         else:
-            print "Indexing..."
+            print("Indexing...")
             r = self.session.post(self.get_index_url(), data={})
             if r.status_code != 200:
                 raise Exception("Index failed with %d: %s" % (r.status_code, r.content))
-        print "All done."
+        print("All done.")

@@ -1,5 +1,6 @@
 from django.db import models
-from twitter_text import TwitterText
+from ttp import ttp
+
 
 class Feed(models.Model):
     TYPE_CHOICES = (
@@ -80,8 +81,9 @@ class Update(models.Model):
 
     def render_html(self):
         if self.feed.type == 'TW':
-            tt = TwitterText(self.text)
-            return tt.autolink.auto_link()
+            p = ttp.Parser()
+            tt = p.parse(self.text)
+            return tt.html
         else:
             return self.text
 

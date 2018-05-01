@@ -95,7 +95,7 @@ class MarkupField(models.TextField):
         if isinstance(markup_choices, dict):
             raise DeprecationWarning('passing a dictionary as markup_choices is deprecated')
             self.markup_choices_dict = markup_choices
-            self.markup_choices_list = markup_choices.keys()
+            self.markup_choices_list = list(markup_choices.keys())
         else:
             self.markup_choices_list = [mc[0] for mc in markup_choices]
             self.markup_choices_dict = dict(markup_choices)
@@ -115,7 +115,7 @@ class MarkupField(models.TextField):
 
     def contribute_to_class(self, cls, name):
         if not cls._meta.abstract:
-            choices = zip(self.markup_choices_list, self.markup_choices_list)
+            choices = list(zip(self.markup_choices_list, self.markup_choices_list))
             markup_type_field = models.CharField(max_length=30,
                 choices=choices, default=self.default_markup_type,
                 editable=self.markup_type_editable, blank=self.blank)

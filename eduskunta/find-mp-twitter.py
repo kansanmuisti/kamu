@@ -29,7 +29,7 @@ def read_twitter_lists():
             for user in users:
                 if user['id'] not in mps:
                     mps[user['id']] = user
-                print "%s:%s" % (user['name'], user['id'])
+                print("%s:%s" % (user['name'], user['id']))
             cursor = results['next_cursor']
             if not cursor:
                 break
@@ -53,11 +53,11 @@ MP_TRANSFORM = {
     "outi alanko-kahiluot": "Outi Alanko-Kahiluoto",
 }
 
-print "%d Twitter feeds found" % len(tw_mps.keys())
+print("%d Twitter feeds found" % len(list(tw_mps.keys())))
 
 mp_list = list(Member.objects.all())
 
-for (tw_id, tw_info) in tw_mps.items():
+for (tw_id, tw_info) in list(tw_mps.items()):
     for mp in mp_list:
         name = tw_info['name'].lower()
         if name in MP_TRANSFORM:
@@ -65,7 +65,7 @@ for (tw_id, tw_info) in tw_mps.items():
         if mp.get_print_name().lower() == name.lower():
             break
     else:
-        print "%s: no match" % tw_info['name']
+        print("%s: no match" % tw_info['name'])
         continue
     try:
         feed = MemberSocialFeed.objects.get(member=mp, type='TW', origin_id=tw_id)

@@ -5,8 +5,8 @@ import sys
 
 from opinions.models import QuestionSource, Question, Option, Answer
 from votes.models import Member
-import http_cache
-import parse_tools
+from . import http_cache
+from . import parse_tools
 
 CSV_URL = 'http://www.kansanmuisti.fi/storage/vaalikone/mtv2007/Eduskuntavaalikonedata_2007.csv'
 
@@ -38,14 +38,14 @@ def handle_row(src, q_info, row):
     name = parse_tools.fix_mp_name(row[0])
     mp = Member.objects.filter(name=name)
     if not mp:
-        print "%s not found" % name
+        print("%s not found" % name)
         return
     mp = mp[0]
-    print "%s" % mp
+    print("%s" % mp)
     for q in q_info:
         q_idx, i_idx, order, txt = q
         if not row[q_idx]:
-            print "\tMissing value for column %d" % q_idx
+            print("\tMissing value for column %d" % q_idx)
             continue
         val = int(row[q_idx])
         opt_idx = int(val * OPTION_STEPS // ANSWER_MAX)
@@ -66,8 +66,8 @@ def parse():
     src, c = QuestionSource.objects.get_or_create(name='MTV3 vaalikone', year=2007,
                                                   url_name='mtv2007')
     reader = csv.reader(s.splitlines(), delimiter=',', quotechar='"')
-    reader.next()
-    hdr = reader.next()
+    next(reader)
+    hdr = next(reader)
     # 2d questions
     q_list = [idx for idx, s in enumerate(hdr) if s.startswith('[2d_x]')]
     i_list = [idx for idx, s in enumerate(hdr) if s.startswith('[2d_y]')]
@@ -77,14 +77,14 @@ def parse():
     q_list.extend(q2_list)
     i_list.extend([-1] * len(q2_list))
 
-    o_list = range(0, len(q_list))
+    o_list = list(range(0, len(q_list)))
 
     txt_list = [hdr[idx][7:].replace('_', ',') for idx in q_list]
     for i in o_list:
         if q_list[i] in range(56, 64):
             txt_list[i] = "Hallituspuolueena " + txt_list[i]
 
-    q_info_list = zip(q_list, i_list, o_list, txt_list)
+    q_info_list = list(zip(q_list, i_list, o_list, txt_list))
     for q in q_info_list:
         insert_question(src, q)
     for row in reader:

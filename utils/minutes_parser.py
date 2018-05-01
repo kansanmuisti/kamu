@@ -1,23 +1,23 @@
 import re
 from lxml import etree, html
 
-MONTHS = [ 'tammi', 'helmi', 'maalis', 'huhti', 'touko', u'kes\u00e4',
-        u'hein\u00e4', 'elo', 'syys', 'loka', 'marras', 'joulu' ]
+MONTHS = [ 'tammi', 'helmi', 'maalis', 'huhti', 'touko', 'kes\u00e4',
+        'hein\u00e4', 'elo', 'syys', 'loka', 'marras', 'joulu' ]
 
 NAME_TRANSFORMS = {
         'Timo Korhonen': 'Timo V. Korhonen',
         'Pirkko 6-Lerner': 'Pirkko Ruohonen-Lerner',
         'Tanja Saarela': 'Tanja Karpela',
-        u'Tapani T\u00f6ll i': u'Tapani T\u00f6lli',
+        'Tapani T\u00f6ll i': 'Tapani T\u00f6lli',
         'Tommy Taberman': 'Tommy Tabermann',
-        u'Eero Akaan -Penttil\u00e4': u'Eero Akaan-Penttil\u00e4',
-        u'Eero Akaan- Penttil\u00e4': u'Eero Akaan-Penttil\u00e4',
+        'Eero Akaan -Penttil\u00e4': 'Eero Akaan-Penttil\u00e4',
+        'Eero Akaan- Penttil\u00e4': 'Eero Akaan-Penttil\u00e4',
         'Miapetra Kumpula': 'Miapetra Kumpula-Natri',
         'Riikka Moilanen -Savolainen': 'Riikka Moilanen-Savolainen',
         'Martin Saarikanga s': 'Martin Saarikangas',
         'Sirpa Asko -Seljavaara': 'Sirpa Asko-Seljavaara',
         'Sirpa Asko- Seljavaara': 'Sirpa Asko-Seljavaara',
-        u'Jaana Yl\u00e4 -Mononen': u'Jaana Yl\u00e4-Mononen',
+        'Jaana Yl\u00e4 -Mononen': 'Jaana Yl\u00e4-Mononen',
         'Merikukka Forsius-Harkimo': 'Merikukka Forsius',
 }
 
@@ -49,7 +49,7 @@ def parse_minutes(html_str, url):
         text = hdr[0].text.strip().lower()
         if "jumalanpalvelus" in text or "avajaiset" in text or "vaalikauden" in text:
                 return None
-        text = text.replace(u'p\u00e4iv\u00e4n\u00e4', '')
+        text = text.replace('p\u00e4iv\u00e4n\u00e4', '')
         grps = re.search(r'(?u)\d+\s*\. .+na\s+(\d{1,2})[. ]{1,3}(\w+)kuuta\s+(\d{4})', text)
         if not grps:
                 raise Exception("Invalid date: " + text)
@@ -62,12 +62,12 @@ def parse_minutes(html_str, url):
         return minutes
 
 REPLACE_CHARS = [
-        (u'\u009a', u'\u0161'),
-        (u'\u008a', u'\u0160'),
-        (u'\u2002', u'\u0020'),
-        (u'\u2003', u'\u0020'),
-        (u'\u2009', u'\u0020'),
-        (u'\u00a0', u'\u0020')
+        ('\u009a', '\u0161'),
+        ('\u008a', '\u0160'),
+        ('\u2002', '\u0020'),
+        ('\u2003', '\u0020'),
+        ('\u2009', '\u0020'),
+        ('\u00a0', '\u0020')
 ]
 
 def process_line(line):

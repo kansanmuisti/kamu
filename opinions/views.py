@@ -417,7 +417,8 @@ def match_session(request):
     try:
         src = QuestionSource.objects.get(url_name=src_name)
         question = Question.objects.get(source=src, order=q_nr)
-    except QuestionSource.DoesNotExist, Question.DoesNotExist:
+    except QuestionSource.DoesNotExist as xxx_todo_changeme:
+        Question.DoesNotExist = xxx_todo_changeme
         raise Http404()
 
     if 'remove' in request.POST:

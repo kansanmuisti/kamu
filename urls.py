@@ -48,8 +48,8 @@ urlpatterns += patterns('',
 
 
 from tastypie.api import Api
-from parliament.api import all_resources
-from social.api import UpdateResource, FeedResource
+from .parliament.api import all_resources
+from .social.api import UpdateResource, FeedResource
 
 v1_api = Api(api_name='v1')
 for res in all_resources:

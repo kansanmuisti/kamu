@@ -1,5 +1,5 @@
 from sgmllib import SGMLParser, SGMLParseError
-import htmlentitydefs
+import html.entities
 import re
 
 MEMBER_NAME_TRANSFORMS = {
@@ -29,7 +29,7 @@ class Parser(SGMLParser):
                 self.vote_list = []
                 self.desc = {}
                 SGMLParser.reset(self)
-                self.entitydefs = htmlentitydefs.entitydefs
+                self.entitydefs = html.entities.entitydefs
 
         def start_table(self, attrs):
                 if self.is_in_list:
@@ -77,11 +77,11 @@ class Parser(SGMLParser):
                         return
 
                 VOTE_CHOICES = {
-                        u'Jaa': 'Y',
-                        u'Ei': 'N',
-                        u'Tyhj\u00e4\u00e4': 'E',
-                        u'Poissa': 'A',
-                        u'Puhemies': 'S'
+                        'Jaa': 'Y',
+                        'Ei': 'N',
+                        'Tyhj\u00e4\u00e4': 'E',
+                        'Poissa': 'A',
+                        'Puhemies': 'S'
                 }
                 if self.td_parse_nr != 2:
                         return
@@ -93,13 +93,13 @@ class Parser(SGMLParser):
                 name = name.rstrip()
 
                 if (vote != 'Jaa' and vote != 'Ei' and
-                    vote != u'Tyhj\u00e4\u00e4' and vote != 'Poissa' and
+                    vote != 'Tyhj\u00e4\u00e4' and vote != 'Poissa' and
                     vote != 'Tyhj'):
-                        print self.name
-                        print vote
+                        print(self.name)
+                        print(vote)
                         raise Exception("invalid vote value")
 
-                s = u' puhemiehen\u00e4'
+                s = ' puhemiehen\u00e4'
                 if party.endswith(s):
                         if vote != 'Poissa':
                                 raise Exception("invalid puhemies vote")
@@ -154,7 +154,7 @@ class Parser(SGMLParser):
                 self.info = ""
         def __parse_info(self, text):
                 text = text.decode('iso8859-1')
-                text = text.replace(u'\u009a', u'\u0161')
+                text = text.replace('\u009a', '\u0161')
                 if not self.info:
                         text = text.lstrip()
                 self.info += text

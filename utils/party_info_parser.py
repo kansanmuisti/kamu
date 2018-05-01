@@ -1,5 +1,5 @@
 from sgmllib import SGMLParser
-import htmlentitydefs
+import html.entities
 
 class Parser(SGMLParser):
         def __clear_state(self):
@@ -11,8 +11,8 @@ class Parser(SGMLParser):
                 self.desc = {}
                 self.__clear_state()
                 SGMLParser.reset(self)
-                self.entitydefs = htmlentitydefs.entitydefs
-                self.entitydefs['nbsp'] = u'\u0020'
+                self.entitydefs = html.entities.entitydefs
+                self.entitydefs['nbsp'] = '\u0020'
 
         def start_div(self, attrs):
                 for name, value in attrs:

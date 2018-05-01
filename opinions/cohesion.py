@@ -1,6 +1,7 @@
 import numpy as np
 import functools
 import itertools
+from functools import reduce
 
 if __name__ == '__main__':
 	import sys
@@ -16,11 +17,11 @@ from votes.models import TermMember, Term, Member, Party
 from django.db.models import Count
 
 YLE_LIKERT_MAP = {
-	u't\xe4ysin samaa mielt\xe4': 1,
-	u'jokseenkin samaa mielt\xe4': 0.5,
-	u'jokseenkin eri mielt\xe4': -0.5,
-	u't\xe4ysin eri mielt\xe4': -1,
-	u'en osaa sanoa': 0
+	't\xe4ysin samaa mielt\xe4': 1,
+	'jokseenkin samaa mielt\xe4': 0.5,
+	'jokseenkin eri mielt\xe4': -0.5,
+	't\xe4ysin eri mielt\xe4': -1,
+	'en osaa sanoa': 0
 	}
 
 def option_likert_value(option):
@@ -112,8 +113,8 @@ def cabinet_size(party_sizes, cabinet):
 
 def get_majority_cabinets(party_sizes):
 	cab_size = functools.partial(cabinet_size, party_sizes)
-	total_members = sum(party_sizes.itervalues())
-	possibilities = get_cabinet_combinations(party_sizes.keys())
+	total_members = sum(party_sizes.values())
+	possibilities = get_cabinet_combinations(list(party_sizes.keys()))
 	possibilities = (c for c in possibilities if cab_size(c) > total_members/2)
 	return possibilities
 
@@ -139,7 +140,7 @@ class CabinetStats:
 
 	@property
 	def questions(self):
-		return map(int, np.unique(self.stats['question']))
+		return list(map(int, np.unique(self.stats['question'])))
 	
 	def answers(self, question=None):
 		my_answers = np_in(self.all_answers['party'], self.cabinet)
@@ -161,7 +162,7 @@ class AllCabinetStats(dict):
 
 	def __init__(self, stats, party_sizes, answers):
 		stats = ((tuple(sorted(key)), value)
-				for key, value in stats.iteritems())
+				for key, value in stats.items())
 		dict.__init__(self, stats)
 		self.party_sizes = party_sizes
 		self.answers = answers
@@ -180,7 +181,7 @@ class AllCabinetStats(dict):
 	
 	@property
 	def questions(self):
-		return self(self.iterkeys().next()).questions
+		return self(next(iter(self.keys()))).questions
 
 	def all_cohesions(self, questions=None):
 		if questions:
@@ -195,14 +196,14 @@ class AllCabinetStats(dict):
     		cab_cohesion = lambda c: self(c, questions).cohesion()
     		cab_size = lambda c: cabinet_size(self.party_sizes, c)
 		cabinet_cohesions = [(cab_cohesion(c), c, cab_size(c))
-       					for c in self.iterkeys()]
-		cabinet_cohesions.sort(key=lambda (coh, cab, size): (coh, -size))
+       					for c in self.keys()]
+		cabinet_cohesions.sort(key=lambda coh_cab_size: (coh_cab_size[0], -coh_cab_size[2]))
 		self.cohesion_cache[key] = cabinet_cohesions
 		
 		return cabinet_cohesions
 
 	def majority_cohesions(self, questions=None):
-		total_members = sum(self.party_sizes.itervalues())
+		total_members = sum(self.party_sizes.values())
 		cohesions = self.all_cohesions(questions)
 		cohesions = [c for c in cohesions if c[2] > total_members/2]
 		return cohesions
@@ -218,7 +219,7 @@ def get_all_cabinet_statistics(questions, term):
 	party_sizes = get_party_sizes(term)
 	
 	data = {}
-	for cabinet in get_cabinet_combinations(party_sizes.keys()):
+	for cabinet in get_cabinet_combinations(list(party_sizes.keys())):
 		stats = cabinet_party_binary_question_cohesions(answers, cabinet)
 		data[cabinet] = stats
 	
@@ -227,15 +228,15 @@ def get_all_cabinet_statistics(questions, term):
 	return all_stats
 
 def cached_all_cabinet_statistics(*args):
-	import cPickle
+	import pickle
 	cachepath = '/tmp/cabinet_cohesions.pickle'
 	try:
-		return cPickle.load(open(cachepath))
+		return pickle.load(open(cachepath))
 	except:
 		pass
 
 	stats = get_all_cabinet_statistics(*args)
-	cPickle.dump(stats, open(cachepath, 'w'))
+	pickle.dump(stats, open(cachepath, 'w'))
 	return stats
 
 def test():
@@ -243,10 +244,10 @@ def test():
 	questions = QuestionSource.objects.get(url_name='yle2011').question_set.all()
 	stats = cached_all_cabinet_statistics(questions, term)
 	#print len(map(stats.total_cohesion, stats.keys()))
-	print stats.majority_cohesions()
-	print stats.majority_cohesions()
+	print(stats.majority_cohesions())
+	print(stats.majority_cohesions())
 	print_rows = []
-	for cabinet in stats.keys():
+	for cabinet in list(stats.keys()):
 		questions = (100, 101)
 		cabstats = stats(cabinet, questions)
 		row = "%.1f\n"%(cabstats.cohesion()*100)
@@ -255,7 +256,7 @@ def test():
 		print_rows.append((cabstats.cohesion(), row))
 
 	for c, row in sorted(print_rows, reverse=True):
-		print row
+		print(row)
 	
 
 if __name__ == '__main__':

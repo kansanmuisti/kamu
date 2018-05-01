@@ -19,8 +19,8 @@ for mp in mp_list:
     feeds = {f.type: f for f in mp.membersocialfeed_set.all()}
     cand = cand_dict[name]
     if cand['twitter'] and cand['twitter'] != 'NULL' and 'TW' not in feeds:
-        print('%s: TW: %s' % (mp.get_print_name(), cand['twitter']))
+        print(('%s: TW: %s' % (mp.get_print_name(), cand['twitter'])))
         writer.writerow({'mp': mp.name.encode('utf8'), 'type': 'TW', 'feed': cand['twitter']})
     if cand['facebook'] and cand['facebook'] != 'NULL' and 'FB' not in feeds:
-        print('%s: FB: %s' % (mp.get_print_name(), cand['facebook']))
+        print(('%s: FB: %s' % (mp.get_print_name(), cand['facebook'])))
         writer.writerow({'mp': mp.name.encode('utf8'), 'type': 'FB', 'feed': cand['facebook']})

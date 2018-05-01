@@ -22,22 +22,22 @@ class Lexicon(object):
     def dump(self, output=None):
         if output is None:
             output = sys.stdout
-        items = self.items()
+        items = list(self.items())
         for (word, freq) in items[::-1]:
-            s = u'%i %s\n' % (freq, word)
+            s = '%i %s\n' % (freq, word)
             output.write(s.encode('utf-8'))
 
     def items(self):
-        items = self.data.items()
-        items.sort(key=lambda (w, f): f)
+        items = list(self.data.items())
+        items.sort(key=lambda w_f: w_f[1])
         return items[::-1]
 
-stripper = re.compile(u'(?u)[^a-zäöå\-]')
+stripper = re.compile('(?u)[^a-zäöå\-]')
 
 
 def string_to_words(s):
     s = s.lower()
-    s = stripper.sub(u' ', s)
+    s = stripper.sub(' ', s)
     words = s.split()
     return words
 
@@ -46,7 +46,7 @@ def read_lexicon(input):
     data = {}
     input = codecs.getreader('utf-8')(input)
     for row in input:
-        row = unicode(row)
+        row = str(row)
         (freq, word) = row.split()
         freq = int(freq)
         data[word] = int(freq)

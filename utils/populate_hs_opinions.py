@@ -63,13 +63,13 @@ def initialize_schema(questions, options, srcname, srcyear, slug):
             year=srcyear, url_name=slug)
 
     question_mapping = {}
-    for (id, question) in questions.items():
+    for (id, question) in list(questions.items()):
         (qm, c) = Question.objects.get_or_create(text=question['Question'],
                 source=src)
         question_mapping[id] = qm
 
     option_mapping = {}
-    for (id, option) in options.items():
+    for (id, option) in list(options.items()):
         (om, c) = Option.objects.get_or_create(question=question_mapping[option['Question_id']],
                 name=option['Answer_text'],
                 order=option['AnswerAlternative_number'])
@@ -88,12 +88,12 @@ def get_candidate_mapping(candidates):
             # print >>sys.stderr, "No match for %s"%fullname
             continue
         elif matches.count() > 1:
-            print matches
-            print >> sys.stderr, 'Ambiguous match for %s' % fullname
+            print(matches)
+            print('Ambiguous match for %s' % fullname, file=sys.stderr)
             continue
         mapping[member['Candidate_id']] = matches[0]
 
-    print >> sys.stderr, '%i members accepted' % len(mapping)
+    print('%i members accepted' % len(mapping), file=sys.stderr)
     return mapping
 
 

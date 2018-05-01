@@ -5,7 +5,7 @@ from django.contrib.admin.widgets import AdminTextareaWidget
 class MarkupTextarea(forms.widgets.Textarea):
 
     def render(self, name, value, attrs=None):
-        if value is not None and not isinstance(value, unicode):
+        if value is not None and not isinstance(value, str):
             value = value.raw
         return super(MarkupTextarea, self).render(name, value, attrs)
 

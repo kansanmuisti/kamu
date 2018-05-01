@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from __future__ import division
+
 
 import sys
 import csv
@@ -41,7 +41,7 @@ class BaseForms(object):
             if self.lib.get_value_type(result) != 4:
                 assert True, 'Unknown libmalaga result type!'
             s = ctypes.c_char_p(self.lib.get_value_string(result))
-            ret.append(unicode(s.value, 'utf-8'))
+            ret.append(str(s.value, 'utf-8'))
             self.libc.free(s)
             result = self.lib.next_analysis_result()
         ret = list(set(ret))
@@ -79,19 +79,19 @@ split_compound_word = CompoundSplitter()
 
 def text_to_basewords(s):
     words = string_to_words(s)
-    words = list(itertools.chain(*map(base_forms, words)))
+    words = list(itertools.chain(*list(map(base_forms, words))))
     return words
 
 
 def text_to_word_features(s):
     words = text_to_basewords(s)
-    words.extend(itertools.chain(*map(split_compound_word, words)))
+    words.extend(itertools.chain(*list(map(split_compound_word, words))))
     return words
 
 
 def lexicon_magnitude(l, full):
     mag = 0
-    for (w, freq) in l.items():
+    for (w, freq) in list(l.items()):
         mag += (freq / full.data[w]) ** 2
     return math.sqrt(mag)
 
@@ -130,9 +130,9 @@ def get_session_word_features_full(session, document_store, cache=None):
 
         if name not in cache:
             doc = document_store[name]
-            doc = unicode(doc, 'iso8859-1')
+            doc = str(doc, 'iso8859-1')
             docwords = text_to_word_features(doc)
-            cache[name] = u' '.join(docwords)
+            cache[name] = ' '.join(docwords)
         else:
             docwords = cache[name].split(' ')
         
@@ -153,7 +153,7 @@ def get_session_word_features(session, cache=None, document_store=None):
             if(doc is None): continue
             #doc = unicode(doc, 'iso8859-1')
             docwords = text_to_word_features(doc)
-            cache[name] = u' '.join(docwords)
+            cache[name] = ' '.join(docwords)
         else:
             docwords = cache[name].split(' ')
         
@@ -170,7 +170,7 @@ def _estimate_relations(cache, docs=None):
     question_objects = Question.objects.all()
     n_questions = question_objects.count()
     for (i, question) in enumerate(question_objects):
-        print >>sys.stderr, "Handling question %i/%i"%(i+1, n_questions)
+        print("Handling question %i/%i"%(i+1, n_questions), file=sys.stderr)
         name = 'question_%i' % question.id
 
         if name not in cache:
@@ -195,13 +195,13 @@ def _estimate_relations(cache, docs=None):
 
     sessions = {}
     handled = []
-    session_objects = Session.objects.filter(subject__contains=u'Hyv')
+    session_objects = Session.objects.filter(subject__contains='Hyv')
     n_sessions = session_objects.count()
     for (i, session) in enumerate(session_objects):
         #if session.info in handled:
         #    continue
         #handled.append(session.info)
-        print >>sys.stderr, "Handling session %i/%i"%(i+1, n_sessions)
+        print("Handling session %i/%i"%(i+1, n_sessions), file=sys.stderr)
         # TODO: Filter by actual period
 
         if session.plenary_session.date.year < 2007:
@@ -218,7 +218,7 @@ def _estimate_relations(cache, docs=None):
         itemlexicon.add(*words)
         sessions[session] = itemlexicon
         
-    prod = itertools.product(questions.keys(), sessions.keys())
+    prod = itertools.product(list(questions.keys()), list(sessions.keys()))
     minr = 1
     maxr = 0
     relevances = []
@@ -233,8 +233,7 @@ def _estimate_relations(cache, docs=None):
 
     # TODO: This is not very nice, we should have a better
     # ....relevancy measure instead
-    relevances = map(lambda (r, q, s): ((r - minr) / (maxr - minr), q, s),
-                     relevances)
+    relevances = [((r_q_s[0] - minr) / (maxr - minr), r_q_s[1], r_q_s[2]) for r_q_s in relevances]
 
     for (relevance, question, session) in relevances:
         try:

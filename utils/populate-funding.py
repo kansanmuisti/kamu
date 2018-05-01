@@ -2,7 +2,7 @@
 
 import os
 import sys
-import http_cache
+from . import http_cache
 from optparse import OptionParser
 
 from django.core.management import setup_environ
@@ -25,7 +25,7 @@ setup_environ(settings)
 from django.db import connection, transaction
 from django import db
 
-import funding_2007, funding_2011
+from . import funding_2007, funding_2011
 
 parser = OptionParser()
 parser.add_option('--f2007', action='store', type='string', dest='f2007',

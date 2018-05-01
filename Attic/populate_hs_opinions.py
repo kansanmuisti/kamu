@@ -33,9 +33,9 @@ def get_member_match(name, choices, candidates):
     # return None # Comment to enable fuzzy matching....
 
     close = difflib.get_close_matches(name, choices, cutoff=0.8)
-    close = filter(lambda x: x not in candidates, close)
+    close = [x for x in close if x not in candidates]
     if close:
-        print >> sys.stderr, 'Close to %s: %s' % (name, ', '.join(close))
+        print('Close to %s: %s' % (name, ', '.join(close)), file=sys.stderr)
 
     return None
 
@@ -43,14 +43,14 @@ def get_member_match(name, choices, candidates):
 def populate_answers(input, questions, src):
     answers = list(csv.reader(input, delimiter='@'))
     allnames = map(lambda x: x.name, Member.objects.all())[:]
-    candidatenames = set(map(lambda x: x[0], answers))
+    candidatenames = set([x[0] for x in answers])
 
-    members = dict(map(lambda n: (n, get_member_match(n, allnames,
-                   candidatenames)), candidatenames))
+    members = dict([(n, get_member_match(n, allnames,
+                   candidatenames)) for n in candidatenames])
 
-    accepted = len(filter(lambda x: x is not None, members.values()))
-    print >> sys.stderr, 'Accepted %i of %i candidates' % (accepted,
-            len(members))
+    accepted = len([x for x in list(members.values()) if x is not None])
+    print('Accepted %i of %i candidates' % (accepted,
+            len(members)), file=sys.stderr)
     for answer in answers:
         (name, q, a, expl) = answer
         member = members[name]
@@ -60,7 +60,7 @@ def populate_answers(input, questions, src):
         try:
             qm = Question.objects.get(text=q, source=src)
         except Question.DoesNotExist:
-            print >> sys.stderr, "Unknown question '%s'" % q
+            print("Unknown question '%s'" % q, file=sys.stderr)
             continue
 
         om = None
@@ -68,8 +68,8 @@ def populate_answers(input, questions, src):
             try:
                 om = Option.objects.get(question=qm, name=a)
             except Option.DoesNotExist:
-                print >> sys.stderr, "Unknown option '%s' for question '%s'" \
-                    % (a, q)
+                print("Unknown option '%s' for question '%s'" \
+                    % (a, q), file=sys.stderr)
                 continue
 
         Answer.objects.get_or_create(member=member, option=om,
@@ -79,7 +79,7 @@ def populate_answers(input, questions, src):
 def initialize_schema(questions, srcname, srcyear):
     (src, c) = QuestionSource.objects.get_or_create(name=srcname, year=srcyear)
 
-    for (question, options) in questions.items():
+    for (question, options) in list(questions.items()):
         (qm, c) = Question.objects.get_or_create(text=question, source=src)
         for option in options:
             Option.objects.get_or_create(question=qm, name=option)

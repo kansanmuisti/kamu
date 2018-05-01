@@ -5,6 +5,6 @@ def time_func(f):
         time1 = time.time()
         ret = f(*args, **kwargs)
         time2 = time.time()
-        print '%s function took %0.3f ms' % (f.func_name, (time2-time1)*1000.0)
+        print('%s function took %0.3f ms' % (f.__name__, (time2-time1)*1000.0))
         return ret
     return wrap

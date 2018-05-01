@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+
 import sys
 import urls
 import inspect
@@ -24,7 +24,7 @@ def resource_api_string(resource, output):
 
 	common_params = []
 	custom_params = getattr(resource.Meta, 'custom_parameters', {})
-	for param, spec in custom_params.iteritems():
+	for param, spec in custom_params.items():
 		common_params.append("@apiParam {%s} %s %s\n"%(
 			spec['type'], param, spec['descr']))
 	
@@ -47,7 +47,7 @@ def resource_api_string(resource, output):
 		output.write("@apiDescription %s\n"%docstring)
 	output.write(common_params)
 	
-	for field_name, field in schema['fields'].iteritems():
+	for field_name, field in schema['fields'].items():
 		field.update(dict(name=field_name))
 		output.write("@apiSuccess {%(type)s} %(name)s %(help_text)s\n"%field)
 	output.write('"""\n')
@@ -74,7 +74,7 @@ def resource_api_string(resource, output):
 	output.write('"""\n\n')
 
 def build_api_docs(api, output=sys.stdout):
-	for resource in api._registry.itervalues():
+	for resource in api._registry.values():
 		resource_api_string(resource, output)
 
 class Command(BaseCommand):

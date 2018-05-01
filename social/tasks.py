@@ -9,6 +9,6 @@ class UpdateFeedsTask(PeriodicTask):
     def run(self, **kwargs):
         logger = self.get_logger()
         updater = FeedUpdater(logger)
-        print "Updating feeds"
+        print("Updating feeds")
         updater.update_feeds()
-        print "Feed update done"
+        print("Feed update done")

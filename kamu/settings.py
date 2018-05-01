@@ -3,6 +3,9 @@ import os
 import sys
 import json
 
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 JS_DEBUG = False
@@ -30,9 +33,6 @@ DATABASES = {
     }
 }
 
-
-SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
-
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -46,7 +46,7 @@ LANGUAGES_EXT=(('en', 'English', 'in English'),
 LANGUAGES=[(l[0], l[1]) for l in LANGUAGES_EXT]
 
 LOCALE_PATHS = [
-    SITE_ROOT + '/locale'
+    BASE_DIR + '/locale'
 ]
 
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -101,7 +101,7 @@ CACHES = {
 
 
 def read_config(name):
-    f = open(os.path.join(SITE_ROOT, 'elasticsearch/{}.json'.format(name)))
+    f = open(os.path.join(BASE_DIR, 'elasticsearch/{}.json'.format(name)))
     return json.load(f)
 
 HAYSTACK_CONNECTIONS = {
@@ -211,25 +211,19 @@ FACEBOOK_DOMAIN = None
 
 KAMU_OPINIONS_MAGIC_USER = 'kamu'
 
-TASTYPIE_SWAGGER_API_MODULE = 'urls.v1_api'
-
 FAST_TEST = False
 
 NUMBER_OF_MPS = 200
 
-try:
-    from settings_local import *
-except ImportError:
-    pass
 
-if 'LOCAL_INSTALLED_APPS' in locals():
-    INSTALLED_APPS += LOCAL_INSTALLED_APPS
-    del LOCAL_INSTALLED_APPS
-if 'LOCAL_MIDDLEWARE_CLASSES' in locals():
-    MIDDLEWARE_CLASSES += LOCAL_MIDDLEWARE_CLASSES
-    del LOCAL_MIDDLEWARE_CLASSES
-
-if FAST_TEST and 'test' in sys.argv:
-    DATABASE_NAME = 'kamu.db'
-    DATABASE_ENGINE = 'sqlite3'
-    SOUTH_TESTS_MIGRATE = False
+# local_settings.py can be used to override environment-specific settings
+# like database and email that differ between development and production.
+f = os.path.join(BASE_DIR, "local_settings.py")
+if os.path.exists(f):
+    import sys
+    import imp
+    module_name = "%s.local_settings" % ROOT_URLCONF.split('.')[0]
+    module = imp.new_module(module_name)
+    module.__file__ = f
+    sys.modules[module_name] = module
+    exec(open(f, "rb").read())

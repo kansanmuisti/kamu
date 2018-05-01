@@ -1,5 +1,5 @@
 from sgmllib import SGMLParser
-import htmlentitydefs
+import html.entities
 
 class Parser(SGMLParser):
         def __clear_state(self):
@@ -12,8 +12,8 @@ class Parser(SGMLParser):
                 self.mop_list = []
                 self.__clear_state()
                 SGMLParser.reset(self)
-                self.entitydefs = htmlentitydefs.entitydefs
-                self.entitydefs['nbsp'] = u'\u0020'
+                self.entitydefs = html.entities.entitydefs
+                self.entitydefs['nbsp'] = '\u0020'
 
         # Look for '<div class="list-items">' first.
         def start_table(self, attrs):
@@ -40,7 +40,7 @@ class Parser(SGMLParser):
 #                                value = value.replace("bin/hx5000.sh", "bin/thw/trip/")
                                 self.last_link = value
                                 self.is_in_mop = True
-                                self.name = u""
+                                self.name = ""
                                 break
         def end_a(self):
                 if not self.is_in_mop:
@@ -51,7 +51,7 @@ class Parser(SGMLParser):
                 firstnames = names[-1]
                 surname = surname.lstrip()
                 firstnames = firstnames.strip()
-                print firstnames + ':' + surname
+                print(firstnames + ':' + surname)
                 self.mop_list.append({'surname': surname, 'link': self.last_link,
                                 'firstnames': firstnames})
 

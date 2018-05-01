@@ -101,7 +101,7 @@ def tally_votes(party_list, member_list, begin, end):
     while len(session_list):
         sess = session_list[0]
         if idx % 50 == 0:
-            print "%4d (left %d)" % (idx, len(session_list))
+            print("%4d (left %d)" % (idx, len(session_list)))
             db.reset_queries()
         process_votes(pl, ml, sess)
         idx += 1
@@ -149,7 +149,7 @@ logger = init_logging()
 
 for term in Term.objects.all():
     (begin, end) = (term.begin, term.end)
-    print "%s to %s" % (begin, end)
+    print("%s to %s" % (begin, end))
 
     member_list = Member.objects.active_in(term.begin, term.end).select_related('party')
     party_list = Party.objects.all()

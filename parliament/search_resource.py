@@ -23,6 +23,7 @@ from haystack.query import SearchQuerySet, SQ
 from tastypie import fields
 from tastypie.bundle import Bundle
 from tastypie.resources import Resource, ResourceOptions, DeclarativeMetaclass
+from functools import reduce
 
 
 class SearchOptions(ResourceOptions):
@@ -50,7 +51,7 @@ class SearchDeclarativeMetaclass(DeclarativeMetaclass):
         new_class._meta = SearchOptions(opts)
         include_fields = getattr(new_class._meta, 'fields', [])
         excludes = getattr(new_class._meta, 'excludes', [])
-        field_names = new_class.base_fields.keys()
+        field_names = list(new_class.base_fields.keys())
         
         for field_name in field_names:
             if field_name == 'resource_uri':
@@ -72,7 +73,7 @@ class SearchDeclarativeMetaclass(DeclarativeMetaclass):
         return new_class
         
 
-class SearchResource(Resource):
+class SearchResource(Resource, metaclass=SearchDeclarativeMetaclass):
     """
     Blueprint for implementing an HTTP API to access documents in a
     search engine via Haystack. The design of the class adds some
@@ -90,7 +91,6 @@ class SearchResource(Resource):
        utilize any subclasses you may be using in your project.
 
     """
-    __metaclass__ = SearchDeclarativeMetaclass
     
     # Each method in this class definition comes from its parent class. Any
     # unusual or completely new behavior is documented. For documentation
@@ -129,7 +129,7 @@ class SearchResource(Resource):
         if filters is None:
             filters = {}
 
-        for param, value in filters.items():
+        for param, value in list(filters.items()):
             
             if param not in self._meta.index_fields:
                 continue
@@ -144,10 +144,10 @@ class SearchResource(Resource):
                                                                   token)))
 
             terms.append(reduce(operator.or_,
-                                filter(lambda x: x, field_queries)))
+                                [x for x in field_queries if x]))
 
         if terms:
-            return reduce(operator.and_, filter(lambda x: x, terms))
+            return reduce(operator.and_, [x for x in terms if x])
         else:
             return terms
         

@@ -142,7 +142,7 @@ def truncate_chars(s, num):
             words = s[:length].split()
             if len(words) > 1:
                 del words[-1]
-            s = u' '.join(words)
+            s = ' '.join(words)
         s += '...'
     return s
 
@@ -296,7 +296,7 @@ def show_member(request, member, page=None):
     kw_act_json = json.dumps(kw_act, ensure_ascii=False)
     args['keyword_activity'] = kw_act_json
     args['title'] = member.get_print_name()
-    args['description'] = u"Kansanedustajan {0} kiinnostuksen "\
+    args['description'] = "Kansanedustajan {0} kiinnostuksen "\
         "kohteet ja aktiivisuus eduskunnassa.".format(member.get_print_name())
     template = 'member/details.html'
 
@@ -532,7 +532,7 @@ def show_topic(request, topic, slug=None):
     args['keyword_activity_end_date'] = keyword_activity_end_date
 
     args['title'] = kw.name
-    args['description'] = u"Aiheen {0} käsittely eduskunnassa.".format(kw.name)
+    args['description'] = "Aiheen {0} käsittely eduskunnassa.".format(kw.name)
 
     return render_to_response('show_topic.html', args,
         context_instance=RequestContext(request))
@@ -646,7 +646,7 @@ def show_party_feed(request, abbreviation):
                 governing=governing)
 
     args['title'] = party.name
-    args['description'] = u"Puolueen {0} "\
+    args['description'] = "Puolueen {0} "\
         "aktiivisuus eduskunnassa ja sosiaalisessa "\
         "mediassa.".format(party.name)
     args['meta_image'] = request.build_absolute_uri(party.logo.url)

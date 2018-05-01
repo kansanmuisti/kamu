@@ -28,7 +28,7 @@ from django import db
 from kamu.cms.models import Category, Newsitem, Item, Content, Revision
 
 def process_file(root, filename, category_name, mu_type):
-    print "Processing file %s" % os.path.join(root, filename)
+    print("Processing file %s" % os.path.join(root, filename))
 
     #Special case for newsitems
     if filename.startswith("news"):
@@ -37,7 +37,7 @@ def process_file(root, filename, category_name, mu_type):
     category = Category.objects.filter(name=category_name)
 
     if category.count() == 0:
-        print "Creating category %s" % category_name
+        print("Creating category %s" % category_name)
         category = Category(name=category_name)
         category.save()
     else:
@@ -45,7 +45,7 @@ def process_file(root, filename, category_name, mu_type):
         category = category[0]
 
     if category_name == "news":
-        print "Processing newsitem with date %s" % newsdate
+        print("Processing newsitem with date %s" % newsdate)
         item = Newsitem.objects.filter(category=category, date=newsdate)
         # FIXME: Many newsitems per date
         if not item.count():
@@ -57,7 +57,7 @@ def process_file(root, filename, category_name, mu_type):
     else:
         item = Item.objects.filter(category=category)
         if item.count() == 0:
-            print "Creating_item under category %s" % category_name
+            print("Creating_item under category %s" % category_name)
             item = Item(category=category)
             item.save()
         else:
@@ -67,7 +67,7 @@ def process_file(root, filename, category_name, mu_type):
 
     content = Content.objects.filter(item=item, language=language)
     if content.count() == 0:
-        print "Creating content for item %s with lang %s" % (item, language)
+        print("Creating content for item %s with lang %s" % (item, language))
         content = Content(item=item, language=language)
         content.save()
     else:
@@ -75,7 +75,7 @@ def process_file(root, filename, category_name, mu_type):
         revision = content.get_latest_revision()
         mtime = datetime.fromtimestamp(os.path.getmtime(full_fname))
         if revision and revision.date >= mtime:
-            print "\tSkipping based on file mtime"
+            print("\tSkipping based on file mtime")
             return
 
     f = codecs.open(full_fname, mode="r", encoding="utf8")
@@ -105,7 +105,7 @@ def process_file(root, filename, category_name, mu_type):
                         summary_markup_type=mu_type, data=content_data,
                         data_markup_type=mu_type)
     revision.save()
-    print "Prepared revision %s" % revision
+    print("Prepared revision %s" % revision)
 
 # FIXME. This loop does not handle ordering of newsitems within
 # the same day.
@@ -121,7 +121,7 @@ for root, dirs, files in os.walk(content_path):
         mu_type = mu_type[1:]
 
         if mu_type not in allowed_markups:
-            print "Ignoring file %s" % filename
+            print("Ignoring file %s" % filename)
             continue
 
         process_file(root, filename, category_name, mu_type)

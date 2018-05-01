@@ -115,7 +115,7 @@ Collaborative International Dictionary of English v.0.48.
 
 '''
 
-from __future__ import division
+
 
 DEBUG = False
 PERSONAL = False
@@ -268,7 +268,7 @@ VERSION = '1.20'  # 2010 Mar 10
 import sys
 import os
 import codecs
-import StringIO
+import io
 import re
 import textwrap  # 2007 May 25
 if DEBUG:
@@ -815,7 +815,7 @@ class InputUnit(object):
         self.end = len(self.lines) - 1
         return self
 
-    def next(self):  # 2006 Dec 05
+    def __next__(self):  # 2006 Dec 05
         if self.ndx > self.end:
             raise StopIteration
         elif self.ndx == self.end:
@@ -830,7 +830,7 @@ class InputUnit(object):
 
     def readline(self):  # 2006 Dec 05
         try:
-            result = self.next()
+            result = next(self)
         except StopIteration:
             result = NULL
         return result
@@ -1103,8 +1103,8 @@ class Comments(dict):
         lines = tokenize.generate_tokens(INPUT.readline)
         for (token_type, token_string, start, end, line) in lines:
             if DEBUG:
-                print (token.tok_name)[token_type], token_string, start, \
-                    end, line
+                print((token.tok_name)[token_type], token_string, start, \
+                    end, line)
             (self.max_lineno, scol) = start
             (erow, ecol) = end
             if token_type in [tokenize.COMMENT, tokenize.NL]:
@@ -1607,7 +1607,7 @@ def transform(indent, lineno, node):
         result = NodeWith(indent, lineno, node.expr, node.vars, node.body)
     elif isinstance_(node, 'Yield'):
         result = NodeYield(indent, lineno, node.value)
-    elif isinstance(node, basestring):
+    elif isinstance(node, str):
         result = NodeStr(indent, lineno, node)
     elif isinstance(node, int):
         result = NodeInt(indent, lineno, node)
@@ -1794,7 +1794,7 @@ class NodeStr(Node):
 
     def set_as_str(self, str_):
         self.str = str_
-        if isinstance(self.str, unicode):
+        if isinstance(self.str, str):
             pass
         elif not RECODE_STRINGS:  # 2006 Dec 01
             pass
@@ -4681,9 +4681,9 @@ def tidy_up(file_in=sys.stdin, file_out=sys.stdout):  # 2007 Jan 22
 
 if __name__ == "__main__":  # 2007 Jan 22
     if DEBUG:
-        print 'Begin doctests.'
+        print('Begin doctests.')
         doctest.testmod()
-        print '  End doctests.'
+        print('  End doctests.')
     if len(sys.argv) > 1:
         file_in = sys.argv[1]
     else:

@@ -1,6 +1,6 @@
 import re
 from sgmllib import SGMLParser
-import htmlentitydefs
+import html.entities
 
 class Parser(SGMLParser):
         def __clear_state(self):
@@ -15,8 +15,8 @@ class Parser(SGMLParser):
                 self.__clear_state()
                 self.is_lame_frame = is_lame_frame
                 SGMLParser.reset(self)
-                self.entitydefs = htmlentitydefs.entitydefs
-                self.entitydefs['nbsp'] = u'\u0020'
+                self.entitydefs = html.entities.entitydefs
+                self.entitydefs['nbsp'] = '\u0020'
 
         def start_frame(self, attrs):
                 if not self.is_lame_frame:
@@ -166,7 +166,7 @@ class Parser(SGMLParser):
                         start = '-'.join(reversed(start))
                         self.desc[table_name].append({'name': name, 'start': start})
                 elif len(m) != 1 or (m[0] and m[0] != ','):
-                        print m
+                        print(m)
                         raise Exception("empty district/party association")
                 self.text = ""
         def end_tr(self):
@@ -216,8 +216,8 @@ class Parser(SGMLParser):
                         self.end_tr()
         '''
         def error(self, msg):
-                print "error: " + msg
-                print self.getpos()
+                print("error: " + msg)
+                print(self.getpos())
                 return
 
         def get_desc(self):

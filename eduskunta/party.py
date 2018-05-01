@@ -6,7 +6,7 @@ from lxml import etree, html
 from eduskunta.importer import Importer, ParseError
 from parliament.models.party import Party, GoverningParty, Government
 
-PG_MAP = u'''Kansallisen kokoomuksen eduskuntaryhmä /kok
+PG_MAP = '''Kansallisen kokoomuksen eduskuntaryhmä /kok
     Sosialidemokraattinen eduskuntaryhmä /sd
     Perussuomalaisten eduskuntaryhmä /ps
     Keskustan eduskuntaryhmä /kesk
@@ -43,7 +43,7 @@ class PartyImporter(Importer):
             except Party.DoesNotExist:
                 party = Party(abbreviation=abbr)
             party.name = long_name
-            self.logger.info(u"importing party %s/%s" % (party.name, party.abbreviation))
+            self.logger.info("importing party %s/%s" % (party.name, party.abbreviation))
             party.logo = logo
             party.vis_color = vis_color
             party.save()
@@ -67,7 +67,7 @@ class PartyImporter(Importer):
                 gov.end = None
             else:
                 gov.end = end
-            self.logger.info(u"importing government %s / %s - %s" % (gov.name, gov.begin, gov.end))
+            self.logger.info("importing government %s / %s - %s" % (gov.name, gov.begin, gov.end))
             gov.save()
 
     def import_governingparties(self):
@@ -98,5 +98,5 @@ class PartyImporter(Importer):
                 gp.end = None
             else:
                 gp.end = end
-            self.logger.info(u"importing governing party %s / %s - %s" % (gp.party, gp.begin, gp.end))
+            self.logger.info("importing governing party %s / %s - %s" % (gp.party, gp.begin, gp.end))
             gp.save()

@@ -3,7 +3,7 @@ from django.db import transaction, reset_queries
 
 if True:
     with transaction.atomic():
-        print("Documents %d" % Document.objects.count())
+        print(("Documents %d" % Document.objects.count()))
 
         for idx, doc in enumerate(Document.objects.all()):
             if idx % 1000 == 0:
@@ -14,7 +14,7 @@ if True:
 
 if True:
     with transaction.atomic():
-        print("Signatures %d" % DocumentSignature.objects.count())
+        print(("Signatures %d" % DocumentSignature.objects.count()))
 
         for idx, sign in enumerate(DocumentSignature.objects.all()):
             if idx % 1000 == 0:
@@ -25,7 +25,7 @@ if True:
 
 if True:
     with transaction.atomic():
-        print("Statements %d" % Statement.objects.count())
+        print(("Statements %d" % Statement.objects.count()))
 
         for idx, st in enumerate(Statement.objects.all()):
             if idx % 1000 == 0:

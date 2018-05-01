@@ -13,16 +13,16 @@ from optparse import OptionParser
 from BeautifulSoup import BeautifulSoup
 from lxml import etree, html
 
-import vote_list_parser
-import mop_list_parser
-import mop_info_parser
-import party_list_parser
-import party_info_parser
-import minutes_parser
+from . import vote_list_parser
+from . import mop_list_parser
+from . import mop_info_parser
+from . import party_list_parser
+from . import party_info_parser
+from . import minutes_parser
 
-import http_cache
-import parse_tools
-from http_cache import create_path_for_file
+from . import http_cache
+from . import parse_tools
+from .http_cache import create_path_for_file
 
 from django.core.management import setup_environ
 
@@ -50,7 +50,7 @@ from kamu.votes.models import *
 until_pl = None
 from_pl = None
 
-TERM_DASH = u'\u2013'
+TERM_DASH = '\u2013'
 TERMS = [
     {'display_name': '2011'+TERM_DASH+'2014', 'begin': '2011-04-20', 'end': None,
      'name': '2011-2014'},
@@ -68,7 +68,7 @@ def fill_terms():
         try:
             nt = Term.objects.get(name=term['name'])
         except Term.DoesNotExist:
-            print(u'Adding term %s' % term['display_name'])
+            print(('Adding term %s' % term['display_name']))
             nt = Term()
         nt.name = term['name']
         nt.begin = term['begin']
@@ -122,13 +122,13 @@ def process_parties(db_insert):
         fname = static_path + party_logo_path + fname
         create_path_for_file(fname)
         if not os.path.exists(fname):
-            print 'Fetching logo ' + logo_url
+            print('Fetching logo ' + logo_url)
             s = http_cache.open_url(logo_url, 'party')
             f = open(fname, 'wb')
             f.write(s)
             f.close()
         else:
-            print 'Skipping logo ' + party['logo']
+            print('Skipping logo ' + party['logo'])
 
         if not db_insert:
             continue
@@ -169,15 +169,15 @@ def process_mops(party_list, update=False, db_insert=False):
 
     parser = mop_info_parser.Parser()
     for mp in mop_list:
-        print '%3d: %s, %s' % (mop_list.index(mp), mp['surname'],
-                               mp['firstnames'])
+        print('%3d: %s, %s' % (mop_list.index(mp), mp['surname'],
+                               mp['firstnames']))
         s = http_cache.open_url(url_base + mp['link'], 'member')
         parser.reset(is_lame_frame=True)
         parser.feed(s)
         parser.close()
         mp.update(parser.get_desc())
 
-        print '%3d: person number %s' % (mop_list.index(mp), mp['hnro'])
+        print('%3d: person number %s' % (mop_list.index(mp), mp['hnro']))
 
         try:
             member = Member.objects.get(pk=mp['hnro'])
@@ -203,13 +203,13 @@ def process_mops(party_list, update=False, db_insert=False):
         photo_fname = static_path + mp_photo_path + mp['photo']
         create_path_for_file(photo_fname)
         if not os.path.exists(photo_fname):
-            print 'Fetching photo ' + photo_url
+            print('Fetching photo ' + photo_url)
             s = http_cache.open_url(photo_url, 'member')
             f = open(photo_fname, 'wb')
             f.write(s)
             f.close()
         else:
-            print 'Skipping photo ' + mp['photo']
+            print('Skipping photo ' + mp['photo'])
 
         party_name = None
         if 'party' in mp:
@@ -225,7 +225,7 @@ def process_mops(party_list, update=False, db_insert=False):
             party = find_party(party_list, assoc['name'])
             if party == None:
                 if not end:
-                    print assoc
+                    print(assoc)
                     raise Exception('party not found')
                     # FIXME: Maybe add the party?
                 assoc['name'] = None
@@ -300,18 +300,18 @@ def get_mp_homepage_link(mp, force_update=False):
         return
     elem = b[0].getparent()
     href = elem.getnext().getchildren()[0].attrib['href']
-    print "%s: %s" % (mp.name, href)
+    print("%s: %s" % (mp.name, href))
     # Try to fetch the homepage
     s = http_cache.open_url(href, 'misc', skip_cache=True, error_ok=True)
     if s:
         mp.homepage_link = href
     else:
-        print "\tFailed to fetch"
+        print("\tFailed to fetch")
 
 def get_wikipedia_links():
     MP_LINK = 'http://fi.wikipedia.org/wiki/Luokka:Nykyiset_kansanedustajat'
 
-    print "Populating Wikipedia links to MP's..."
+    print("Populating Wikipedia links to MP's...")
     mp_list = Member.objects.all()
     mp_names = [mp.name for mp in mp_list]
     s = http_cache.open_url(MP_LINK, 'misc')
@@ -335,9 +335,9 @@ def get_wikipedia_links():
             if len(matches) > 1:
                 raise Exception("Multiple matches for '%s'" % name)
             elif not matches:
-                print "No match found for '%s'" % name
+                print("No match found for '%s'" % name)
                 continue
-            print("Mapping '%s' to %s'" % (name, matches[0]))
+            print(("Mapping '%s' to %s'" % (name, matches[0])))
             mp = Member.objects.get(name=matches[0])
         mp.wikipedia_link = href
         get_mp_homepage_link(mp)
@@ -389,7 +389,7 @@ def insert_keyword(kword, max_len, trim_re):
     for c in kword.attrs:
         if c[0] == 'class':
             return
-    kword_str = unicode(kword.contents[0].string)
+    kword_str = str(kword.contents[0].string)
     kword_str = trim_re.sub('', kword_str)            # strip any trailing ' ]'
     kword_str = kword_str[:max_len]
 
@@ -660,7 +660,7 @@ def process_session_kws():
         if not next_link:
             next_link = url_base + VOTE_URL % year
         (vote_links, next_link) = read_links(False, next_link, False)
-        print 'Got links for total of %d sessions' % len(vote_links)
+        print('Got links for total of %d sessions' % len(vote_links))
         for link in vote_links:
             nr = vote_links.index(link)
 
@@ -686,7 +686,7 @@ def insert_minutes(minutes, mins):
     return pl_sess
 
 
-OK_UNKNOWNS = ['Alexander Stubb', u'Petri J\u00e4\u00e4skel\u00e4inen',
+OK_UNKNOWNS = ['Alexander Stubb', 'Petri J\u00e4\u00e4skel\u00e4inen',
                'Jaakko Jonkka', 'Riitta-Leena Paunio', 'Mikko Puumalainen']
 
 
@@ -695,7 +695,7 @@ def insert_discussion(full_update, pl_sess, disc, dsc_nr, members):
     for spkr in disc:
         if not spkr['name'] in members:
             if not spkr['name'] in OK_UNKNOWNS:
-                print spkr['name']
+                print(spkr['name'])
                 raise Exception('Unknown member: ' + spkr['name'])
             member = None
         else:
@@ -719,11 +719,11 @@ def insert_discussion(full_update, pl_sess, disc, dsc_nr, members):
                   214, 252, 229, 197, 167, 353, 228, 160, 246, 250, 8230,
                   243, 235, 244, 231]
             if ord(n) >= 128 and ord(n) not in OK:
-                print '%d: %c' % (ord(n), n)
+                print('%d: %c' % (ord(n), n))
                 start = st.text.index(n) - 20
                 if start < 0:
                     start = 0
-                print st.text[start:]
+                print(st.text[start:])
                 match = True
         st.html = spkr['html']
         st.save()
@@ -746,10 +746,10 @@ def process_minutes(full_update):
     next_link = url_base + MINUTES_URL
     while next_link:
         (info_list, next_link) = read_listing('minutes', next_link, new_only=not full_update)
-        print 'Got links for total of %d minutes' % len(info_list)
+        print('Got links for total of %d minutes' % len(info_list))
         for idx, info in enumerate(info_list):
             url = info['minutes_link']
-            print '%4d. %s' % (idx, info['id'])
+            print('%4d. %s' % (idx, info['id']))
             if start_from:
                 if info['id'] == start_from:
                     start_from = None
@@ -773,7 +773,7 @@ def process_minutes(full_update):
             pl_sess = insert_minutes(minutes, mins)
             try:
                 for l in minutes['cnv_links']:
-                    print l
+                    print(l)
                     s = http_cache.open_url(l, 'minutes')
                     disc = minutes_parser.parse_discussion(s, l)
                     insert_discussion(full_update, pl_sess, disc,
@@ -896,7 +896,7 @@ def download_he(info, doc):
     logger.info('%s: %s' % (doc, doc.subject))
 
     m = re.match('(\d+)/(\d{4})', info['id'])
-    number, year = map(int, m.groups())
+    number, year = list(map(int, m.groups()))
     url = HE_URL % (number, year)
     s = http_cache.open_url(url, 'docs', error_ok=True)
     if len(s) > 2*1024*1024:
@@ -905,7 +905,7 @@ def download_he(info, doc):
     if not s:
         (s, url) = http_cache.open_url(info['doc_link'], 'docs', return_url=True)
         if '<!-- akxereiloydy.thw -->' in s or '<!-- akx5000.thw -->' in s:
-            print "\tNot found!"
+            print("\tNot found!")
             return doc
         html_doc = html.fromstring(s)
         frames = html_doc.xpath(".//frame")
@@ -916,12 +916,12 @@ def download_he(info, doc):
                 break
         html_doc.make_links_absolute(url)
         url = link_elem.attrib['src']
-        print "\tGenerated and found!"
+        print("\tGenerated and found!")
         s = http_cache.open_url(url, 'docs')
     # First check if's not a valid HE doc, the surest way to
     # detect it appears to be the length. *sigh*
     if len(s) < 1500:
-        print "\tJust PDF"
+        print("\tJust PDF")
         return doc
     html_doc = html.fromstring(s)
     elem_list = html_doc.xpath(".//p[@class='Normaali']")
@@ -935,8 +935,8 @@ def download_he(info, doc):
         if elem:
             break
     if not elem:
-        print "\tNo header found: %d" % len(s)
-        print http_cache.get_fname(url, 'docs')
+        print("\tNo header found: %d" % len(s))
+        print(http_cache.get_fname(url, 'docs'))
         return doc
     # Choose the first header. Sometimes they are replicated. *sigh*
     elem = elem[0].getnext()
@@ -946,7 +946,7 @@ def download_he(info, doc):
         elem = elem.getnext()
     while elem is not None:
         if elem.tag != 'p':
-            print elem.tag
+            print(elem.tag)
             break
         OK_CLASS = ('LLKappalejako', 'LLJohtolauseKappaleet',
                     'LLVoimaantulokappale',
@@ -959,12 +959,12 @@ def download_he(info, doc):
     BREAK_CLASS = ('LLNormaali', 'LLYleisperustelut', 'LLPerustelut',
                    'LLNormaali-0020Char', 'Normaali', 'LLSisallysluettelo')
     if 'class' in elem.attrib and elem.attrib['class'] not in BREAK_CLASS:
-        print "\tMystery class: %s" % elem.attrib
-        print http_cache.get_fname(url, 'docs')
+        print("\tMystery class: %s" % elem.attrib)
+        print(http_cache.get_fname(url, 'docs'))
         return doc
     if not p_list:
-        print "\tNo summary found"
-        print http_cache.get_fname(url, 'docs')
+        print("\tNo summary found")
+        print(http_cache.get_fname(url, 'docs'))
         return doc
 
     text_list = []
@@ -976,7 +976,7 @@ def download_he(info, doc):
         if elem.getchildren():
             for ch in elem.getchildren():
                 text += append_text(ch, no_append=True)
-        if len(text) < 15 and u'\u2014' in text:
+        if len(text) < 15 and '\u2014' in text:
             return
         if no_append:
             return text
@@ -1167,7 +1167,7 @@ def verify_sessions():
     sess_list = list(Session.objects.all())
     for sess in sess_list:
         if str(sess) not in found_sess_dict:
-            print str(sess)
+            print(str(sess))
 
 parser = OptionParser()
 parser.add_option('-p', '--parties', action='store_true', dest='parties',

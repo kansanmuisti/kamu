@@ -2,7 +2,7 @@ import csv
 
 from votes.models import Member, TermMember, Term, MemberStats
 
-import parse_tools
+from . import parse_tools
 
 TERM="2007-2010"
 
@@ -17,7 +17,7 @@ def parse(input_file):
         budget = row[4].strip().replace(',', '')
         name = "%s %s" % (last_name, first_name)
         name = parse_tools.fix_mp_name(name)
-        print "%-20s %-20s %10s" % (first_name, last_name, budget)
+        print("%-20s %-20s %10s" % (first_name, last_name, budget))
         try:
             member = Member.objects.get(name=name)
             tm = TermMember.objects.get(member=member, term=term)

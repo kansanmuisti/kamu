@@ -3,12 +3,12 @@ import codecs
 import csv
 import difflib
 import sys
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 
 from opinions.models import QuestionSource, Question, Option, Answer
 from votes.models import Member
-import http_cache
-import parse_tools
+from . import http_cache
+from . import parse_tools
 
 URL_BASE = 'http://www.kansanmuisti.fi/storage/vaalikone/hs2011/'
 CSV_URL = URL_BASE + 'HS-vaalikone2011.csv'
@@ -40,7 +40,7 @@ def handle_row(src, row, writer=None):
     mp = Member.objects.filter(name=name)
     if not mp:
         if is_mp != '0':
-            print name
+            print(name)
         return
     mp = mp[0]
 
@@ -109,7 +109,7 @@ def parse():
 
     s = http_cache.open_url(CSV_URL, 'opinions')
     reader = csv.reader(s.splitlines(), delimiter=',', quotechar='"')
-    hdr = reader.next()
+    hdr = next(reader)
     questions = [s.decode('utf8') for s in hdr[16::3]]
     q_list = []
     for idx, q in enumerate(questions):

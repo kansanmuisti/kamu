@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import hashlib
 
 cache_dir = None
@@ -25,11 +25,11 @@ def open_url(url, prefix, skip_cache=False, error_ok=False, return_url=False):
     if cache_dir and not skip_cache:
         fname = get_fname(url, prefix)
     if not fname or not os.access(fname, os.R_OK):
-        opener = urllib2.build_opener(urllib2.HTTPHandler)
+        opener = urllib.request.build_opener(urllib.request.HTTPHandler)
         opener.addheaders = [('User-agent', 'Mozilla/5.0')]
         try:
             f = opener.open(url)
-        except urllib2.URLError:
+        except urllib.error.URLError:
             if error_ok:
                 return None
             raise

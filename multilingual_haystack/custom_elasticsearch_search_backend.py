@@ -7,7 +7,7 @@ def update(d, u):
     Recursively update dict d with
     values at all levels of dict u
     """
-    for k, v in u.items():
+    for k, v in list(u.items()):
         if isinstance(v, collections.Mapping):
             r = update(d.get(k, {}), v)
             d[k] = r
@@ -41,9 +41,9 @@ class CustomEsSearchBackend(es_backend.ElasticsearchSearchBackend):
         if not self.custom_mappings:
             return (content_field_name, mappings)
 
-        for index_fieldname, mapping in self.custom_mappings.items():
+        for index_fieldname, mapping in list(self.custom_mappings.items()):
             target = mappings.setdefault(index_fieldname, {})
-            for key, value in mapping.items():
+            for key, value in list(mapping.items()):
                 if value is None:
                     if key in target:
                         del target[key]

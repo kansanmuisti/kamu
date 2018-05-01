@@ -8,7 +8,7 @@ for t in types:
     act_qs = MemberActivity.objects.filter(type=t, time__gte=start_date)
     act_count = act_qs.count()
     mp_count = Member.objects.filter(memberactivity__in=act_qs).distinct().count()
-    print("%s: %d %d" % (t.type, act_count, mp_count))
+    print(("%s: %d %d" % (t.type, act_count, mp_count)))
     if mp_count:
         t.count = act_count / (1.0 * mp_count)
     else:
@@ -20,5 +20,5 @@ for t in types:
 for t in types:
     if not t.count:
         continue
-    print("%s: %f" % (t.type, st_count * 1.0 / t.count))
+    print(("%s: %f" % (t.type, st_count * 1.0 / t.count)))
 

@@ -5,7 +5,7 @@ import BeautifulSoup as bs
 import re
 import collections
 import sys
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import unicodedata
 import htmllib
 
@@ -28,7 +28,7 @@ def fix_whitespace(s):
 # ....p.feed(s)
 # ....return p.save_end()
 
-import htmlentitydefs
+import html.entities
 
 
 def unescape_html(text):
@@ -49,11 +49,11 @@ def unescape_html(text):
 
             try:
                 if text[:3] == '&#x':
-                    return unichr(int(text[3:-1], 16))
+                    return chr(int(text[3:-1], 16))
                 else:
-                    return unichr(int(text[2:-1]))
+                    return chr(int(text[2:-1]))
             except ValueError:
-                print 'Value Error'
+                print('Value Error')
                 pass
         else:
 
@@ -68,7 +68,7 @@ def unescape_html(text):
                 elif text[1:-1] == 'lt':
                     text = '&amp;lt;'
                 else:
-                    text = unichr(htmlentitydefs.name2codepoint[text[1:-1]])
+                    text = chr(html.entities.name2codepoint[text[1:-1]])
             except KeyError:
                 pass
         return text  # leave as is
@@ -91,18 +91,17 @@ def get_candidate_page_uris(indexpage):
 
     linkexp = 'naytaehdokas/.+?/\d+/\d+'
     links = tree.findAll('a')
-    links = filter(lambda a: bool(re.search(linkexp, a['href'])), links)
+    links = [a for a in links if bool(re.search(linkexp, a['href']))]
 
-    uris = map(lambda a: a['href'], links)
-    uris = map(strip_non_ascii, uris)
+    uris = [a['href'] for a in links]
+    uris = list(map(strip_non_ascii, uris))
 
     # uris = map(lambda u: u+'/123', uris)
 
-    firstnames = map(lambda l: fix_input_string(l.contents[3]), links)
-    lastnames = map(lambda l: fix_input_string(l.contents[2].contents[0]),
-                    links)
-    names = zip(lastnames, firstnames)
-    links = map(lambda a: candidatelink(*a), zip(uris, names))
+    firstnames = [fix_input_string(l.contents[3]) for l in links]
+    lastnames = [fix_input_string(l.contents[2].contents[0]) for l in links]
+    names = list(zip(lastnames, firstnames))
+    links = [candidatelink(*a) for a in zip(uris, names)]
     return links
 
 
@@ -138,20 +137,20 @@ def get_candidate_answers(page):
     tree = bs.BeautifulSoup(page)
     nodes = tree.findAll('td', {'class': 'pro75', 'bgcolor': '#eeeeee'})
 
-    nodes = filter(lambda n: len(n.contents) > 0, nodes)
-    nodes = filter(lambda n: len(n.contents[0]) > 0, nodes)
-    nodes = filter(lambda n: len(n.contents[0].contents) > 0, nodes)
-    questions = map(lambda n: n.contents[0].contents[0].strip(), nodes)
-    questions = map(fix_input_string, questions)
+    nodes = [n for n in nodes if len(n.contents) > 0]
+    nodes = [n for n in nodes if len(n.contents[0]) > 0]
+    nodes = [n for n in nodes if len(n.contents[0].contents) > 0]
+    questions = [n.contents[0].contents[0].strip() for n in nodes]
+    questions = list(map(fix_input_string, questions))
 
-    answertables = map(lambda n: n.parent.findNextSibling('tr'), nodes)
+    answertables = [n.parent.findNextSibling('tr') for n in nodes]
 
-    if any(map(lambda x: x is None, answertables)):
-        print >> sys.stderr, 'Broken page!'
-    answertables = filter(lambda a: a is not None, answertables)
+    if any([x is None for x in answertables]):
+        print('Broken page!', file=sys.stderr)
+    answertables = [a for a in answertables if a is not None]
 
-    answers = map(parse_answers_table, answertables)
-    qa = map(lambda a: candidateanswer(a[0], *a[1]), zip(questions, answers))
+    answers = list(map(parse_answers_table, answertables))
+    qa = [candidateanswer(a[0], *a[1]) for a in zip(questions, answers)]
     return qa
 
 
@@ -161,24 +160,24 @@ def get_candidate_answers(page):
 
 def get_vaalikone_district_pages(baseaddr):
     template = baseaddr + 'listaehdokkaat.htm?ID=%i'
-    ids = range(1016, 1030)
-    return map(lambda i: template % i, ids)
+    ids = list(range(1016, 1030))
+    return [template % i for i in ids]
 
 
 def pretty_print_answers(answers):
     for a in answers:
-        print a.question.encode('utf-8')
+        print(a.question.encode('utf-8'))
         for (i, opt) in enumerate(a.options):
             if a.answer == i:
-                print '*',
+                print('*', end=' ')
             else:
-                print ' ',
-            print opt.encode('utf-8')
-        print
+                print(' ', end=' ')
+            print(opt.encode('utf-8'))
+        print()
 
 
 def dump_answer_csv(candidate, answers):
-    fullname = u' '.join(candidate)
+    fullname = ' '.join(candidate)
 
     # fullname = candidate.
 
@@ -189,15 +188,15 @@ def dump_answer_csv(candidate, answers):
             astring = a.options[a.answer]
 
         row = (fullname, a.question, astring, a.explanation)
-        print u'@'.join(row).encode('utf-8')
+        print('@'.join(row).encode('utf-8'))
 
 
 def read_uri(uri, tries=3):
     for i in range(1, tries + 1):
         try:
-            return urllib.urlopen(uri).read()
-        except IOError, e:
-            print >> sys.stderr, 'Try %i/%i failed: %s' % (i, tries, e)
+            return urllib.request.urlopen(uri).read()
+        except IOError as e:
+            print('Try %i/%i failed: %s' % (i, tries, e), file=sys.stderr)
     raise e
 
 
@@ -206,7 +205,7 @@ def rip_vaalikone(question_file):
     districturis = get_vaalikone_district_pages(baseaddr)
     questions = {}
     for duri in districturis:
-        dpage = urllib.urlopen(duri).read()
+        dpage = urllib.request.urlopen(duri).read()
 
         # print dpage
 
@@ -216,7 +215,7 @@ def rip_vaalikone(question_file):
                 uri = curi.uri
             else:
                 uri = baseaddr + curi.uri
-            print >> sys.stderr, uri
+            print(uri, file=sys.stderr)
             cpage = read_uri(uri)
             answers = get_candidate_answers(cpage)
             for a in answers:
@@ -233,7 +232,7 @@ def rip_vaalikone(question_file):
 
             dump_answer_csv(curi.name, answers)
 
-    for (q, a) in questions.items():
+    for (q, a) in list(questions.items()):
         question_file.write(('%s@%s\n' % (q, '@'.join(a))).encode('utf-8'))
 
 

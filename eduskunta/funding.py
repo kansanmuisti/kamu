@@ -7,12 +7,12 @@ from eduskunta.member import fix_mp_name
 from parliament.models import Member, Term, Funding, FundingSource
 
 HS_SRC_TO_TYPE = {
-    u'Omat varat': 'own',
-    u'Yksityislahjoitus': 'ind',
-    u'Laina': 'loan',
-    u'Tuntemattomat yksityislahjoittajat': 'u_ind',
-    u'Tuntemattomat yhteisölahjoittajat': 'u_com',
-    u'Tuntematon välitetty tuki': 'oth',
+    'Omat varat': 'own',
+    'Yksityislahjoitus': 'ind',
+    'Laina': 'loan',
+    'Tuntemattomat yksityislahjoittajat': 'u_ind',
+    'Tuntemattomat yhteisölahjoittajat': 'u_com',
+    'Tuntematon välitetty tuki': 'oth',
 }
 
 class FundingImporter(Importer):
@@ -22,7 +22,7 @@ class FundingImporter(Importer):
         self.logger.debug("fetching funding from HS")
         s = self.open_url(self.Y2011_URL, 'funding')
         reader = csv.reader(s.splitlines(), delimiter=';')
-        row = reader.next() # header
+        row = next(reader) # header
 
         mp_funding = []
         for row in reader:

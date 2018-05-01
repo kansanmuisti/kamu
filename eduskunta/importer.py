@@ -41,7 +41,7 @@ class Importer(object):
 
     def clean_text(self, text):
         text = text.replace('\n', ' ')
-        text = text.replace(u'\u00a0', ' ')
+        text = text.replace('\u00a0', ' ')
         # remove consecutive whitespaces
         return re.sub(r'\s\s+', ' ', text, re.U).strip()
 
@@ -136,7 +136,7 @@ class Importer(object):
             assert p
 
             parsed_el = self.process_list_element(list_type, p)
-            label_el = el.xpath(u".//table//td/i[text()='Päivitetty']")
+            label_el = el.xpath(".//table//td/i[text()='Päivitetty']")
             if label_el:
                 time_el = label_el[0].getparent().getparent().getchildren()[1]
                 time = datetime.strptime(time_el.text.strip(), '%d.%m.%Y %H:%M:%S')

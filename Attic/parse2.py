@@ -2,7 +2,7 @@
 
 import os
 import sys
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import pprint
 import feedparser
 from BeautifulSoup import BeautifulSoup
@@ -24,12 +24,12 @@ from kamu.lifestream.models import Lifestream, Feed, Item
 PATH = 'm2/'
 
 def get_feed_link(url):
-    opener = urllib2.build_opener(urllib2.HTTPHandler)
+    opener = urllib.request.build_opener(urllib.request.HTTPHandler)
     try:
         f = opener.open(url)
-    except urllib2.HTTPError:
+    except urllib.error.HTTPError:
         return None
-    except urllib2.URLError:
+    except urllib.error.URLError:
         return None
     s = f.read()
     f.close()
@@ -65,7 +65,7 @@ for f_name in f_list:
 
     html_doc = html.fromstring(s)
     name = html_doc.xpath(".//div[@id='profile']/h2")[0].text
-    print "%3d. %3s: %s" % (f_list.index(f_name), f_name, name)
+    print("%3d. %3s: %s" % (f_list.index(f_name), f_name, name))
 
     links = html_doc.xpath(".//div[@class='col col2']//a[starts-with(@href,'http://')]")
     twit_user = blog_link = None
@@ -96,15 +96,15 @@ for f_name in f_list:
     feed_list = Feed.objects.filter(lifestream=ls)
 
     if twit_user:
-        print "\tTwitter: %s" % twit_user
+        print("\tTwitter: %s" % twit_user)
         if not member.twitter_account:
             member.twitter_account = twit_user
             member.save()
     if blog_link:
-        print "\tBlog: %s" % blog_link
+        print("\tBlog: %s" % blog_link)
 
     if twit_user and not feed_list.filter(domain='twitter'):
-        print "\tNew Twitter!"
+        print("\tNew Twitter!")
         twit_link = get_feed_link('http://twitter.com/%s' % twit_user)
         if not twit_link:
             raise Exception("Twitter RSS feed not found!")
@@ -116,10 +116,10 @@ for f_name in f_list:
         feed.save()
 
     if blog_link and not feed_list.filter(domain='blog'):
-        print "\tNew blog!"
+        print("\tNew blog!")
         feed_link = get_feed_link(blog_link)
         if not feed_link:
-            print "\tBut no RSS feed found!"
+            print("\tBut no RSS feed found!")
             continue
         feed = Feed(lifestream=ls, domain='blog')
         feed.url = feed_link
@@ -129,4 +129,4 @@ for f_name in f_list:
             feed.plugin_class_name = 'social.feeds.VihreaPlugin'
         feed.save()
 
-    print ""
+    print("")

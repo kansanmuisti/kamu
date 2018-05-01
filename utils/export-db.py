@@ -40,11 +40,11 @@ def dump_votes(output):
     f = open(output, mode="w")
     writer = csv.writer(f, delimiter=',', quotechar='"')
     for sess in sess_list:
-        print sess
+        print(sess)
         vote_list = Vote.objects.filter(session=sess).order_by('member__name').select_related('party', 'member')
-        s1 = unicode(sess).encode('utf8')
+        s1 = str(sess).encode('utf8')
         for vote in vote_list:
-            s2 = unicode(vote.member).encode('utf8')
+            s2 = str(vote.member).encode('utf8')
             s3 = vote.party
             s4 = str(vote.vote)
             writer.writerow([s1, s2, s3, s4])
@@ -57,11 +57,11 @@ def dump_keywords(output):
     f = open(output, mode="w")
     writer = csv.writer(f, delimiter=',', quotechar='"')
     for sess in sess_list:
-        print sess
+        print(sess)
         kw_list = SessionKeyword.objects.filter(session=sess).order_by('keyword__name').select_related('keyword')
-        s1 = unicode(sess).encode('utf8')
+        s1 = str(sess).encode('utf8')
         for kw in kw_list:
-            s2 = unicode(kw.keyword.name).encode('utf8')
+            s2 = str(kw.keyword.name).encode('utf8')
             writer.writerow([s1, s2])
 
 from opinions.models import QuestionSource, Question, Option, \
@@ -74,7 +74,7 @@ def dump_congruence(output):
     f = open(output, mode='w')
     writer = csv.writer(f, delimiter=',', quotechar='"')
     for voc in voc_list:
-        print voc
+        print(voc)
         s1 = str(voc.option.question.source.url_name)
         s2 = str(voc.option.question.order)
         s3 = str(voc.option.order)

@@ -143,7 +143,7 @@ class Member(UpdatableModel):
                     continue
                 term.found = True
 
-        return filter(lambda x: x.found, term_list)
+        return [x for x in term_list if x.found]
 
     def get_age(self):
         born = self.birth_date
@@ -336,7 +336,7 @@ class DistrictAssociation(models.Model):
             name = self.district.name
         else:
             name = self.name
-        return u"%s in district %s %s - %s" % (self.member, name, self.begin, self.end)
+        return "%s in district %s %s - %s" % (self.member, name, self.begin, self.end)
 
     class Meta:
         app_label = 'parliament'
@@ -393,7 +393,7 @@ class CommitteeAssociation(models.Model):
             role = 'member'
         else:
             role = self.role
-        return u"%s %s in %s from %s to %s" % (self.member, role, self.committee, self.begin, self.end)
+        return "%s %s in %s from %s to %s" % (self.member, role, self.committee, self.begin, self.end)
 
 class SpeakerAssociation(models.Model):
     ROLE_CHOICES = (
@@ -412,7 +412,7 @@ class SpeakerAssociation(models.Model):
         app_label = 'parliament'
 
     def __unicode__(self):
-        return u"%s (%s) from %s to %s" % (self.member, self.role, self.begin, self.end)
+        return "%s (%s) from %s to %s" % (self.member, self.role, self.begin, self.end)
 
 
 class MinistryAssociation(models.Model):
@@ -431,7 +431,7 @@ class MinistryAssociation(models.Model):
         app_label = 'parliament'
 
     def __unicode__(self):
-        return u"%s %s (%s) from %s to %s" % (self.member, self.label, self.role, self.begin, self.end)
+        return "%s %s (%s) from %s to %s" % (self.member, self.label, self.role, self.begin, self.end)
 
 
 class MemberActivityManager(models.Manager):
@@ -506,7 +506,7 @@ class MemberActivityType(models.Model):
     weight = models.FloatField()
 
     def __unicode__(self):
-        return u"%s: %s (weight %d)" % (self.type, self.name, self.weight)
+        return "%s: %s (weight %d)" % (self.type, self.name, self.weight)
 
     class Meta:
         app_label = 'parliament'
@@ -618,7 +618,7 @@ class MemberActivity(models.Model):
         return ret
 
     def __unicode__(self):
-        return u"%s: %s: %s" % (self.time, self.type, unicode(self.member))
+        return "%s: %s: %s" % (self.time, self.type, str(self.member))
 
     class Meta:
         app_label = 'parliament'
@@ -630,9 +630,9 @@ class KeywordActivity(models.Model):
     keyword = models.ForeignKey(Keyword, db_index=True)
 
     def __unicode__(self):
-        kw = unicode(self.keyword)
-        act = unicode(self.activity)
-        return u"Activity on %s: %s" % (kw, act)
+        kw = str(self.keyword)
+        act = str(self.activity)
+        return "Activity on %s: %s" % (kw, act)
 
     class Meta:
         app_label = 'parliament'
@@ -744,7 +744,7 @@ class StatementActivity(MemberActivity):
         for doc in docs:
             for kw in doc.keywords.all():
                 kw_dict[kw.id] = kw
-        return kw_dict.values()
+        return list(kw_dict.values())
 
     def save(self, *args, **kwargs):
         self.type = MemberActivityType.objects.get(type=self.TYPE)

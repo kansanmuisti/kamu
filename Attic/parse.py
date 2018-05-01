@@ -2,7 +2,7 @@
 
 import os
 import sys
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import pprint
 import feedparser
 from BeautifulSoup import BeautifulSoup
@@ -30,25 +30,25 @@ for f_name in f_list:
     f.close()
     soup = BeautifulSoup(s)
     elem_list = soup.findAll('div', {"class": "seeother"})
-    print "%3d. %s" % (f_list.index(f_name), f_name)
+    print("%3d. %s" % (f_list.index(f_name), f_name))
     elem = elem_list[0].find('a')
-    if elem.contents[0] != u'Wikipedia':
+    if elem.contents[0] != 'Wikipedia':
         raise Exception()
     wiki_link = elem['href']
     elem = soup.find('a', {'class': 'item_url'})
     blog_link = elem['href']
 
-    name = urllib2.unquote(f_name).replace('_', ' ')
+    name = urllib.parse.unquote(f_name).replace('_', ' ')
     member = Member.objects.get_with_print_name(name)
 
-    print blog_link
+    print(blog_link)
 
-    opener = urllib2.build_opener(urllib2.HTTPHandler)
+    opener = urllib.request.build_opener(urllib.request.HTTPHandler)
     try:
         f = opener.open(blog_link)
-    except urllib2.HTTPError:
+    except urllib.error.HTTPError:
         continue
-    except urllib2.URLError:
+    except urllib.error.URLError:
         continue
     s = f.read()
     f.close()
@@ -97,4 +97,4 @@ for f_name in f_list:
                 feed.plugin_class_name = 'social.feeds.VihreaPlugin'
             feed.save()
 
-    print ""
+    print("")

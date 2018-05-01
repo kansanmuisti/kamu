@@ -1,5 +1,5 @@
 import csv
-import http_cache, parse_tools
+from . import http_cache, parse_tools
 from votes.models import Member, TermMember, Term, MemberStats
 
 TERM="2011-2014"
@@ -36,7 +36,7 @@ def process_mp(mp, url):
     ms = MemberStats.objects.get(begin=term.begin, end=term.end, member=mp)
     ms.election_budget = election_budget
     ms.save()
-    print "%30s: %.0f" % (mp.name, election_budget)
+    print("%30s: %.0f" % (mp.name, election_budget))
 
 def process_district(district):
     url = URL_BASE % district
@@ -54,7 +54,7 @@ def process_district(district):
 #            print ch.text
             m = re.match('([\w -]+)[ ]{2,}([\w -]+)', ch.text, re.U)
             if not m:
-                print "Skipping %s" % ch.text
+                print("Skipping %s" % ch.text)
                 continue
             fnames = m.groups()[0].strip()
             lname = m.groups()[1].strip()
@@ -87,11 +87,11 @@ def parse(input_file):
         mp.found = False
     f = open(input_file, 'r')
     reader = csv.reader(f, delimiter=';', quotechar="'")
-    reader.next() # skip header
+    next(reader) # skip header
     for row in reader:
         first_names = row[0].strip(" '").decode('utf8').split(' ')
         last_name = row[1].strip(" '").decode('utf8')
-        last_name = unicode(last_name).replace(u'&eacute;', u'\u00e9')
+        last_name = str(last_name).replace('&eacute;', '\u00e9')
         name = '%s %s' % (last_name, first_names[0])
         name = parse_tools.fix_mp_name(name)
         try:
@@ -101,7 +101,7 @@ def parse(input_file):
             continue
         member.found = True
         funding = float(row[6].replace(',', '.'))
-        print "%30s: %.2f" % (unicode(member), funding)
+        print("%30s: %.2f" % (str(member), funding))
         ms = MemberStats.objects.get(begin=term.begin, end=term.end, member=member)
         ms.election_budget = funding
         ms.save()
@@ -109,7 +109,7 @@ def parse(input_file):
     for mp in mp_list:
         if mp.found:
             continue
-        print "Funding data for MP '%s' not found" % unicode(mp)
+        print("Funding data for MP '%s' not found" % str(mp))
 
         """budget = row[4].strip().replace(',', '')
         name = "%s %s" % (last_name, first_name)

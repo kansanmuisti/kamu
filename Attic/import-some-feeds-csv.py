@@ -42,8 +42,8 @@ class FeedImporter(object):
         import pyfaceb
         from social.models import BrokenFeed
 
-        person_name = unicode(member).encode('utf8')
-        feed_name = unicode(feed_name).encode('utf8')
+        person_name = str(member).encode('utf8')
+        feed_name = str(feed_name).encode('utf8')
         self.logger.debug("%s: Validating FB feed %s" % (person_name, feed_name))
 
         # Attempt to find the feed with different parameters
@@ -58,7 +58,7 @@ class FeedImporter(object):
                 cf = feed_cls.objects.get(type='FB', **args)
                 self.logger.debug("%s: Feed %s found" % (person_name, feed_name))
                 if cf.member != member:
-                    other_name = unicode(cf.member).encode('utf8')
+                    other_name = str(cf.member).encode('utf8')
                     self.logger.warning("%s: Found FB feed (%s) was for %s" %
                         (person_name, feed_name, other_name))
                 if not self.replace:
@@ -102,7 +102,7 @@ class FeedImporter(object):
         if bf:
             bf.delete()
 
-        origin_id = unicode(graph['id'])
+        origin_id = str(graph['id'])
         if not cf:
             try:
                 cf = feed_cls.objects.get(type='FB', origin_id=origin_id)
@@ -129,8 +129,8 @@ class FeedImporter(object):
         from social.models import BrokenFeed
         from twython import TwythonError
 
-        person_name = unicode(member).encode('utf8')
-        feed_name = unicode(feed_name).encode('utf8')
+        person_name = str(member).encode('utf8')
+        feed_name = str(feed_name).encode('utf8')
         self.logger.debug("%s: Validating Twitter feed %s" % (person_name, feed_name))
 
         twitter = self.feed_updater.twitter
@@ -145,7 +145,7 @@ class FeedImporter(object):
             mf = feed_cls.objects.get(type='TW', **orm_args)
             self.logger.debug("%s: Feed %s found" % (person_name, feed_name))
             if mf.member != member:
-                other_name = unicode(mf.member).encode('utf8')
+                other_name = str(mf.member).encode('utf8')
                 self.logger.warning("%s: Found TW feed (%s) was for %s" %
                     (person_name, feed_name, other_name))
             if not self.replace:
@@ -206,11 +206,11 @@ if False:
         tw = row[2]
         if fb and fb != '-':
             fb = parse_fb_feed(fb)
-            print "%s: %s" % (mp_name, fb)
+            print("%s: %s" % (mp_name, fb))
             imp.validate_fb_feed(MemberSocialFeed, member, fb)
         if tw and tw != '-':
             tw = parse_tw_feed(tw)
-            print "%s: %s" % (mp_name, tw)
+            print("%s: %s" % (mp_name, tw))
             imp.validate_twitter_feed(MemberSocialFeed, member, tw)
 else:
     reader = csv.DictReader(open('new-mp-feeds.csv', 'r'), delimiter=',')
@@ -219,9 +219,9 @@ else:
         member = Member.objects.get(name=mp_name)
         if row['type'] == 'FB':
             fb = parse_fb_feed(row['feed'])
-            print('%s: %s' % (member.name, fb))
+            print(('%s: %s' % (member.name, fb)))
             imp.validate_fb_feed(MemberSocialFeed, member, fb)
         if row['type'] == 'TW':
             tw = parse_tw_feed(row['feed'])
-            print('%s: %s' % (member.name, tw))
+            print(('%s: %s' % (member.name, tw)))
             imp.validate_twitter_feed(MemberSocialFeed, member, tw)

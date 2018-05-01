@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from django.db import models
 from django.db.models import Q
 from django.template.defaultfilters import slugify
@@ -5,10 +6,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.html import linebreaks
 from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
+from django.utils.encoding import python_2_unicode_compatible
 
 from parliament.models.document import *
 from parliament.models.member import *
 from parliament.models.base import UpdatableModel
+
 
 class TermManager(models.Manager):
     def get_for_date(self, date):
@@ -20,6 +23,8 @@ class TermManager(models.Manager):
     def visible(self):
         return self.filter(visible=True)
 
+
+@python_2_unicode_compatible
 class Term(models.Model):
     name = models.CharField(max_length=40)
     display_name = models.CharField(max_length=40)
@@ -29,12 +34,13 @@ class Term(models.Model):
 
     objects = TermManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
         ordering = ('-begin', )
         app_label = 'parliament'
+
 
 class PlenarySessionManager(models.Manager):
     def between(self, begin = None, end = None):
@@ -45,6 +51,8 @@ class PlenarySessionManager(models.Manager):
             query &= Q(date__lte=end)
         return self.filter(query)
 
+
+@python_2_unicode_compatible
 class PlenarySession(UpdatableModel):
     name = models.CharField(max_length=20)
     term = models.ForeignKey(Term, db_index=True)
@@ -60,10 +68,11 @@ class PlenarySession(UpdatableModel):
         ordering = ('-date', )
         app_label = 'parliament'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
+@python_2_unicode_compatible
 class PlenarySessionItem(models.Model):
     TYPES = (('agenda', _('Agenda item')),
              ('question', _('Question time')),
@@ -119,7 +128,7 @@ class PlenarySessionItem(models.Model):
         for st in stages:
             if st[0] == self.processing_stage:
                 break
-        return unicode(st[1])
+        return str(st[1])
 
     def get_type_description(self):
         parts = [
@@ -127,13 +136,14 @@ class PlenarySessionItem(models.Model):
             self.sub_description,
             self.get_processing_stage_str() if self.processing_stage else ''
         ]
-        parts = filter(None, parts)
+        parts = [_f for _f in parts if _f]
         return ", ".join(parts)
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s %s: %s" % (self.get_short_id(), self.type, self.description)
 
 
+@python_2_unicode_compatible
 class PlenarySessionItemDocument(models.Model):
     item = models.ForeignKey(PlenarySessionItem, db_index=True)
     doc = models.ForeignKey(Document, db_index=True)
@@ -146,6 +156,7 @@ class PlenarySessionItemDocument(models.Model):
         unique_together = (('item', 'doc'),)
 
 
+@python_2_unicode_compatible
 class Statement(models.Model):
     TYPES = (('normal', 'Statement'),
              ('speaker', 'Speaker statement'),)
@@ -169,8 +180,8 @@ class Statement(models.Model):
         """Text of statement with linefeeds doubled. For use with django |linebreaks"""
         return mark_safe(linebreaks(self.text.replace('\n', '\n\n')))
 
-    def __unicode__(self):
-        return "%s/%d (%s)" % (self.item.get_short_id(), self.index, unicode(self.member))
+    def __str__(self):
+        return "%s/%d (%s)" % (self.item.get_short_id(), self.index, str(self.member))
 
     def get_short_id(self):
         return "%d" % (self.item.get_short_id(), self.index)
@@ -202,6 +213,7 @@ class PlenaryVoteManager(models.Manager):
         return self.get(Q(plenary_session__name=pls_name) & Q(number=nr))
 
 
+@python_2_unicode_compatible
 class PlenaryVote(UpdatableModel):
     plsess = models.ForeignKey(PlenarySession, db_index=True)
     plsess_item = models.ForeignKey(PlenarySessionItem, db_index=True, null=True, blank=True,
@@ -281,7 +293,7 @@ class PlenaryVote(UpdatableModel):
         arg['keywords'] = [k.keyword.name for k in kw_list]
         return arg
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.number) + '/' + self.plsess.name
 
     class Meta:
@@ -289,6 +301,7 @@ class PlenaryVote(UpdatableModel):
         app_label = 'parliament'
 
 
+@python_2_unicode_compatible
 class PlenaryVoteDocument(models.Model):
     session = models.ForeignKey(PlenaryVote)
     doc = models.ForeignKey(Document)
@@ -319,13 +332,14 @@ class VoteManager(models.Manager):
         return Vote.objects.filter(member__in=qs)
 
 
+@python_2_unicode_compatible
 class Vote(models.Model):
     VOTE_CHOICES = [
-        ('Y', u'Yes'),
-        ('N', u'No'),
-        ('A', u'Absent'),
-        ('E', u'Empty'),
-        ('S', u'Speaker')
+        ('Y', 'Yes'),
+        ('N', 'No'),
+        ('A', 'Absent'),
+        ('E', 'Empty'),
+        ('S', 'Speaker')
     ]
     session = models.ForeignKey(PlenaryVote, db_index=True)
     vote = models.CharField(max_length=1, choices=VOTE_CHOICES)
@@ -338,8 +352,8 @@ class Vote(models.Model):
         return {'member': str(self.member), 'party': self.party,
                 'vote': self.vote}
 
-    def __unicode__(self):
-        return unicode(self.session) + u' / ' + unicode(self.member.name)
+    def __str__(self):
+        return str(self.session) + ' / ' + str(self.member.name)
 
     class Meta:
         app_label = 'parliament'

@@ -29,7 +29,7 @@ class SeatImporter(Importer):
             seat.y = y
             seat.save()
             count += 1
-        self.logger.info(u"%d seat coordinates imported" % count)
+        self.logger.info("%d seat coordinates imported" % count)
         f.close()
 
         count = 0
@@ -53,5 +53,5 @@ class SeatImporter(Importer):
             mps.end = end
             mps.save()
             count += 1
-        self.logger.info(u"%d MP seatings imported" % count)
+        self.logger.info("%d MP seatings imported" % count)
         f.close()

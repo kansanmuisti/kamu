@@ -83,18 +83,18 @@ class DocImporter(Importer):
             3: 'finished'
         }
         names = {
-            'vireil': ('intro', (u'Annettu eduskunnalle', u'Aloite jätetty')),
-            'lahete': ('debate', u'Lähetekeskustelu'),
-            'valiok': ('committee', u'Valiokuntakäsittely'),
-            'poydal': ('agenda', u'Valiokunnan mietinnön pöydällepano'),
-            '1kasit': ('1stread', u'Ensimmäinen käsittely'),
-            '2kasit': ('2ndread', u'Toinen käsittely'),
-            '3kasit': ('3ndread', u'Kolmas käsittely'),
+            'vireil': ('intro', ('Annettu eduskunnalle', 'Aloite jätetty')),
+            'lahete': ('debate', 'Lähetekeskustelu'),
+            'valiok': ('committee', 'Valiokuntakäsittely'),
+            'poydal': ('agenda', 'Valiokunnan mietinnön pöydällepano'),
+            '1kasit': ('1stread', 'Ensimmäinen käsittely'),
+            '2kasit': ('2ndread', 'Toinen käsittely'),
+            '3kasit': ('3ndread', 'Kolmas käsittely'),
             'paat': ('finished', None),
-            'akasit': ('onlyread', u'Ainoa käsittely'),
-            'akja2k': ('only2read', u'Ainoa ja toinen käsittely'),
-            '3kjaak': ('only3read', u'Kolmas ja ainoa käsittely'),
-            'peru': ('cancelled', u'Ilmoitus peruuttamisesta'),
+            'akasit': ('onlyread', 'Ainoa käsittely'),
+            'akja2k': ('only2read', 'Ainoa ja toinen käsittely'),
+            '3kjaak': ('only3read', 'Kolmas ja ainoa käsittely'),
+            'peru': ('cancelled', 'Ilmoitus peruuttamisesta'),
             'rauennut': ('lapsed', None),
             'raue': ('lapsed', None),
             'jatlep': ('suspended', None),
@@ -177,7 +177,7 @@ class DocImporter(Importer):
                 (d, m, y) = arr[-1].split('.')
                 date = '-'.join((y, m, d))
 
-                min_el = parent_el.xpath(u".//div[.='Istuntopöytäkirja']")
+                min_el = parent_el.xpath(".//div[.='Istuntopöytäkirja']")
                 if min_el and phase != 'cancelled':
                     links = min_el[0].getparent().xpath('a')
                     assert len(links) >= 1
@@ -226,7 +226,7 @@ class DocImporter(Importer):
         stages = {}
         for el in el_list:
             s = self.clean_text(el.text_content())
-            if unicode(s) in (u'Asiasanat', u'Päätökset'):
+            if str(s) in ('Asiasanat', 'Päätökset'):
                 continue
             date_el = el.xpath("../..//div[.='Pvm']")
             if not date_el:
@@ -237,13 +237,13 @@ class DocImporter(Importer):
             date = '-'.join((y, m, d))
             stages[s] = date
         phase_list = []
-        phase_list.append({'index': 0, 'phase': 'intro', 'date': stages[u'Kysymys jätetty']})
+        phase_list.append({'index': 0, 'phase': 'intro', 'date': stages['Kysymys jätetty']})
         idx = 1
-        if u'Annettu tiedoksi ministeriölle' in stages:
-            phase_list.append({'index': idx, 'phase': 'agenda', 'date': stages[u'Annettu tiedoksi ministeriölle']})
+        if 'Annettu tiedoksi ministeriölle' in stages:
+            phase_list.append({'index': idx, 'phase': 'agenda', 'date': stages['Annettu tiedoksi ministeriölle']})
             idx += 1
         if 'Vastaus annettu' in stages:
-            phase_list.append({'index': idx, 'phase': 'finished', 'date': stages[u'Vastaus annettu']})
+            phase_list.append({'index': idx, 'phase': 'finished', 'date': stages['Vastaus annettu']})
         info['phases'] = phase_list
 
     def fetch_processing_info(self, info):
@@ -415,7 +415,7 @@ class DocImporter(Importer):
             elem = elem.getnext()
         while elem is not None:
             if elem.tag != 'p':
-                print elem.tag
+                print(elem.tag)
                 break
             OK_CLASS = ('LLKappalejako', 'LLJohtolauseKappaleet',
                         'LLVoimaantulokappale',
@@ -445,7 +445,7 @@ class DocImporter(Importer):
             if elem.getchildren():
                 for ch in elem.getchildren():
                     text += append_text(ch, no_append=True)
-            if len(text) < 15 and u'\u2014' in text:
+            if len(text) < 15 and '\u2014' in text:
                 return
             if no_append:
                 return text
@@ -662,7 +662,7 @@ class DocImporter(Importer):
         if options.get('doc_type', None):
             doc_types = [options['doc_type']]
         else:
-            doc_types = DOC_TYPES.keys()
+            doc_types = list(DOC_TYPES.keys())
         types = "(%s)" % '+or+'.join(doc_types)
         url = DOC_LIST_URL % types
 
@@ -689,7 +689,7 @@ class DocImporter(Importer):
         self.updated = 0
 
         while url:
-            print url
+            print(url)
             updated_begin = self.updated
             ret = self.read_listing('docs', url)
             doc_list = ret[0]
