@@ -26,8 +26,8 @@ class AssociationQuerySet(models.query.QuerySet):
 
 class AssociationManager(models.Manager):
     def current(self):
-        return self.get_query_set().current()
-    def get_query_set(self):
+        return self.get_queryset().current()
+    def get_queryset(self):
         return AssociationQuerySet(self.model, using=self._db)
 
 
@@ -367,7 +367,7 @@ class CommitteeAssociationManager(AssociationManager):
             qs = self.select_related('committee')
             return sorted(qs, key=key)
 
-    def get_query_set(self):
+    def get_queryset(self):
         return CommitteeAssociationManager.QuerySet(self.model, using=self._db)
 
 class CommitteeAssociation(models.Model):
