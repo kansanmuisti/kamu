@@ -316,9 +316,7 @@ def _get_parliament_activity(request, offset):
         st_list = item.statement_set.all().exclude(type='speaker')
         if st_list:
             item.statement = st_list[0]
-    act_html = render_to_string('parliament/_plitem_list.html', {'items': pl_items},
-                                context_instance=RequestContext(request))
-
+    act_html = render_to_string('parliament/_plitem_list.html', {'items': pl_items}, request)
     return {'offset': offset + 5, 'html': act_html}
 
 
@@ -354,7 +352,7 @@ def _get_mp_some_activity(request, offset):
         some_updates.append(d)
     some_html = render_to_string('parliament/_some_update_list.html',
                                  {'some_updates': some_updates},
-                                 context_instance=RequestContext(request))
+                                 context=RequestContext(request))
     return {'offset': offset + 5, 'html': some_html}
 
 
@@ -383,6 +381,7 @@ def _get_most_active_mps():
     cache.set('most_active_mps', mp_list, 8*60*60)
     return mp_list[0:10]
 
+
 def _get_discussed_topics():
     begin = datetime.date.today() - datetime.timedelta(days=90)
     items = PlenarySessionItem.objects.filter(
@@ -409,6 +408,7 @@ def _get_discussed_topics():
         discussed_topics.append(topic)
     
     return discussed_topics
+
 
 def main(request):
     args = {}
@@ -612,8 +612,7 @@ def show_document(request, slug):
     args = {'doc': doc, 'session_items': session_items}
     args['document_json'] = get_embedded_resource(request, DocumentResource, doc)
 
-    return render_to_response('show_document.html', args,
-        context_instance=RequestContext(request))
+    return render_to_response('show_document.html', args, request)
 
 
 def list_parties(request):
