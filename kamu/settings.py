@@ -72,7 +72,7 @@ MEDIA_TMP_DIR = 'tmp/'
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = '/media/'
 
-STATIC_ROOT = os.path.dirname(__file__) + '/static/'
+STATIC_ROOT = BASE_DIR + '/static/'
 STATIC_URL = '/static/'
 
 STATICFILES_FINDERS = (
