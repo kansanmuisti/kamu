@@ -1,4 +1,5 @@
 from django.db import models
+from django.apps import apps
 from sortedm2m.fields import SortedManyToManyField
 from django.conf import settings
 from django.template.defaultfilters import slugify
@@ -11,7 +12,7 @@ class Keyword(models.Model):
     # To avoid recursive imports..
     def get_activity_objects(self):
         if not hasattr(self, 'activity_objects'):
-            activity = models.get_model('parliament', 'MemberActivity')
+            activity = apps.get_model('parliament', 'MemberActivity')
             self.activity_objects = activity.objects
 
         return self.activity_objects
@@ -39,7 +40,7 @@ class Keyword(models.Model):
         for act in scores:
             score_sum += act['score']
 
-        act_score_class = models.get_model('parliament', 'KeywordActivityScore')
+        act_score_class = apps.get_model('parliament', 'KeywordActivityScore')
         args = {'keyword': self, 'term': term}
         try:
             obj = act_score_class.objects.get(**args)

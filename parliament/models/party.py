@@ -1,4 +1,5 @@
 from django.db import models
+from django.apps import apps
 from django.db.models import Q
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
@@ -33,20 +34,20 @@ class Party(UpdatableModel):
     # To avoid recursive imports..
     def get_activity_objects(self):
         if not hasattr(self, 'activity_objects'):
-            activity = models.get_model('parliament', 'MemberActivity')
+            activity = apps.get_model('parliament', 'MemberActivity')
             self.activity_objects = activity.objects
 
         return self.activity_objects
 
     def get_party_association_objects(self):
         if not hasattr(self, 'party_association_objects'):
-            party_association = models.get_model('parliament', 'PartyAssociation')
+            party_association = apps.get_model('parliament', 'PartyAssociation')
             self.party_association_objects = party_association.objects
 
         return self.party_association_objects
 
     def get_activity_score(self, begin=None, end=None):
-        MemberActivity = models.get_model('parliament', 'MemberActivity')
+        MemberActivity = apps.get_model('parliament', 'MemberActivity')
         activities = MemberActivity.objects.filter(member__party=self)
         if begin:
             activities = activities.filter(time__gte=begin)
