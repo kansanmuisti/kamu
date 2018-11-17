@@ -440,7 +440,6 @@ def main(request):
 
     args['title'] = 'Kansan muisti'
     args['description'] = "Kansan muisti -verkkopalvelussa voit seurata kansanedustajien puheenvuoroja ja äänestyksiä — siis vaalilupausten toteutumista käytännössä"
-    print("HERE")
     return render(request, 'home.html', args)
 
 
