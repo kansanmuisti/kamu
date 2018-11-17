@@ -200,7 +200,7 @@ def show_item(request, plsess, item_nr, subitem_nr=None):
     args['sister_items'] = item.plsess.plenarysessionitem_set.order_by('number', 'sub_number')
 
     return render_to_response('parliament/plenary_item_details.html', args,
-                              context_instance=RequestContext(request))
+                              RequestContext(request))
 
 
 def get_view_member(url_name):
@@ -304,7 +304,7 @@ def show_member(request, member, page=None):
         args['meta_image'] = request.build_absolute_uri(member.photo.url)
 
     return render_to_response(template, args,
-        context_instance=RequestContext(request))
+        RequestContext(request))
 
 
 def _get_parliament_activity(request, offset):
@@ -442,15 +442,14 @@ def main(request):
     args['title'] = 'Kansan muisti'
     args['description'] = "Kansan muisti -verkkopalvelussa voit seurata kansanedustajien puheenvuoroja ja äänestyksiä — siis vaalilupausten toteutumista käytännössä"
 
-    return render_to_response('home.html', args,
-                              context_instance=RequestContext(request))
+    return render_to_response('home.html', args, RequestContext(request))
 
 
 def list_sessions(request):
     args = {}
     args['title'] = _('Plenary sessions')
     args['description'] = _('List of plenary sessions.')
-    return render_to_response('sessions.html', {}, context_instance=RequestContext(request))
+    return render_to_response('sessions.html', {}, RequestContext(request))
 
 
 def get_embedded_resource_list(request, resource, options={}):
@@ -506,7 +505,7 @@ def list_topics(request):
     """
 
     return render_to_response('list_topics.html', args,
-        context_instance=RequestContext(request))
+        RequestContext(request))
 
 
 def show_topic_by_name(request):
@@ -535,7 +534,7 @@ def show_topic(request, topic, slug=None):
     args['description'] = "Aiheen {0} käsittely eduskunnassa.".format(kw.name)
 
     return render_to_response('show_topic.html', args,
-        context_instance=RequestContext(request))
+        RequestContext(request))
 
 
 def list_members(request):
@@ -547,7 +546,7 @@ def list_members(request):
     args['description'] = _("List of Members of Parliament")
 
     return render_to_response('member/list.html',
-            args, context_instance=RequestContext(request))
+            args, RequestContext(request))
 
 
 def get_processing_stages(doc, pl_items):
@@ -620,7 +619,7 @@ def list_parties(request):
     args['title'] = _('Parties')
     args['description'] = _('List of parties in the parliament.')
     return render_to_response('party/list.html', args,
-                              context_instance=RequestContext(request))
+                              RequestContext(request))
 
 
 def show_party_feed(request, abbreviation):
@@ -653,7 +652,7 @@ def show_party_feed(request, abbreviation):
     add_feed_filters(args, actor=True)
 
     return render_to_response("party/feed.html", args,
-        context_instance=RequestContext(request))
+        RequestContext(request))
 
 
 def show_party_mps(request, abbreviation):
@@ -669,7 +668,7 @@ def show_party_mps(request, abbreviation):
                 list_fields_json=json.dumps(MEMBER_LIST_FIELDS),
                 governing=governing)
 
-    return render_to_response("party/mps.html", args, context_instance=RequestContext(request))
+    return render_to_response("party/mps.html", args, RequestContext(request))
 
 
 def show_party_committees(request, abbreviation):
@@ -677,14 +676,14 @@ def show_party_committees(request, abbreviation):
 
     args = dict(party=party,)
 
-    return render_to_response("party/committee_seats.html", args, context_instance=RequestContext(request))
+    return render_to_response("party/committee_seats.html", args, RequestContext(request))
 
 
 def search(request):
     q = request.GET.get('q', '').strip()
     args = dict(party_json=get_parties(request), query=q)
     args['feed_actions_json'] = json.dumps(make_feed_actions(), ensure_ascii=False)
-    return render_to_response("search.html", args, context_instance=RequestContext(request))
+    return render_to_response("search.html", args, RequestContext(request))
 
 
 def show_general_info(request):
@@ -692,4 +691,4 @@ def show_general_info(request):
     args['description'] = "Kansan muisti ry on poliittisesti sitoutumaton, voittoa tavoittelematon " +\
         "ja vapaaehtoisvoimin toimiva yhdistys, jonka tavoitteena on edistää demokratian " +\
         "toteutumista yhteiskunnassa."
-    return render_to_response("general_info.html", args, context_instance=RequestContext(request))
+    return render_to_response("general_info.html", args, RequestContext(request))
