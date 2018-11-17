@@ -5,7 +5,6 @@ from django.conf.urls.static import static
 from django.conf import settings
 from parliament import views as pv
 
-
 urlpatterns = [
     url(r'^ajax/parliament-activity/$', pv.get_parliament_activity),
     url(r'^ajax/mp-some-activity/$', pv.get_mp_some_activity),
@@ -34,6 +33,13 @@ urlpatterns = [
 
     url(r'^search/$', pv.search),
 ]
+
+
+# A hack to automatically take name of the callback function as the
+# url name. Seems to be compatible with the older stuff.
+def hackpattern(pattern):
+    return url(pattern.regex.pattern, pattern.callback, name=pattern.lookup_str)
+urlpatterns = list(map(hackpattern, urlpatterns))
 
 
 urlpatterns += [
