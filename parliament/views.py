@@ -172,7 +172,6 @@ def kamu_context_processor(request):
         'PARTY_LIST_JSON': get_parties(request),
         'canonical_url': canonical_url
     }
-    print(ret)
     return ret
 
 
