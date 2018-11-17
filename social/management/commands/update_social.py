@@ -17,6 +17,7 @@ class Command(BaseCommand):
         make_option('--cached', action='store_true', dest='cached', default=False,
             help='Use local cache for HTTP requests'),
         make_option('--type', action='store', dest='type', help='Types of feed to update'),
+        make_option('--feed-id', action='store', dest='feed_id', help='Update only single feed'),
     )
 
     def handle(self, *args, **options):
@@ -28,4 +29,5 @@ class Command(BaseCommand):
         update_opts = {}
         if 'type' in options and options['type']:
             update_opts['type'] = options['type'].split(',')
+        update_opts['feed_id'] = options.get('feed_id', None)
         self.updater.update_feeds(**update_opts)

@@ -414,6 +414,12 @@ class FeedUpdater(object):
         feed_types = ("TW", "FB")
         if 'type' in opts:
             feed_types = opts['type']
+        single_feed = opts.get('feed_id', None)
+        if single_feed:
+            feed = Feed.objects.get(id=single_feed)
+            asdfasdfasdf
+            self.process_feed()
+
         for ft in feed_types:
             feed_list = self.find_feeds_to_update(ft)
             for feed in feed_list:

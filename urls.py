@@ -1,64 +1,58 @@
 # -*- coding: utf-8 -*-
 
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.conf import settings
-
-# Change the length of EmailFields to accommodate overlong
-# Facebook email addresses.
-from django.db.models.fields import EmailField, CharField
-def email_field_init(self, *args, **kwargs):
-    kwargs['max_length'] = kwargs.get('max_length', 200)
-    CharField.__init__(self, *args, **kwargs)
-EmailField.__init__ = email_field_init
+from parliament import views as pv
 
 
-urlpatterns = patterns('parliament.views',
-    url(r'^ajax/parliament-activity/$', 'get_parliament_activity'),
-    url(r'^ajax/mp-some-activity/$', 'get_mp_some_activity'),
+urlpatterns = [
+    url(r'^ajax/parliament-activity/$', pv.get_parliament_activity),
+    url(r'^ajax/mp-some-activity/$', pv.get_mp_some_activity),
 
-    url(r'^$', 'main'),
-    url(r'^session/$', 'list_sessions'),
-    url(r'^session/(?P<plsess>[\w-]+)/(?P<item_nr>\d+)/$', 'show_item'),
-    url(r'^session/(?P<plsess>[\w-]+)/(?P<item_nr>\d+)/(?P<subitem_nr>\d+)/$', 'show_item'),
+    url(r'^$', pv.main),
+    url(r'^session/$', pv.list_sessions),
+    url(r'^session/(?P<plsess>[\w-]+)/(?P<item_nr>\d+)/$', pv.show_item),
+    url(r'^session/(?P<plsess>[\w-]+)/(?P<item_nr>\d+)/(?P<subitem_nr>\d+)/$', pv.show_item),
 
-    url(r'^member/$', 'list_members'),
-    url(r'^member/(?P<member>[-\w]+)/$', 'show_member'),
-    url(r'^member/(?P<member>[-\w]+)/(?P<page>[-\w]+)/$', 'show_member'),
+    url(r'^member/$', pv.list_members),
+    url(r'^member/(?P<member>[-\w]+)/$', pv.show_member),
+    url(r'^member/(?P<member>[-\w]+)/(?P<page>[-\w]+)/$', pv.show_member),
 
-    url(r'^party/$', 'list_parties'),
-    url(r'^party/(?P<abbreviation>[-\w]+)/$', 'show_party_feed'),
-    url(r'^party/(?P<abbreviation>[-\w]+)/mps/$', 'show_party_mps'),
-    url(r'^party/(?P<abbreviation>[-\w]+)/committees/$', 'show_party_committees'),
+    url(r'^party/$', pv.list_parties),
+    url(r'^party/(?P<abbreviation>[-\w]+)/$', pv.show_party_feed),
+    url(r'^party/(?P<abbreviation>[-\w]+)/mps/$', pv.show_party_mps),
+    url(r'^party/(?P<abbreviation>[-\w]+)/committees/$', pv.show_party_committees),
 
-    url(r'^topic/$', 'list_topics'),
-    url(r'^topic/(?P<topic>\d+)-(?P<slug>[-\w]+)/$', 'show_topic'),
-    url(r'^topic_by_name/$', 'show_topic_by_name'),
+    url(r'^topic/$', pv.list_topics),
+    url(r'^topic/(?P<topic>\d+)-(?P<slug>[-\w]+)/$', pv.show_topic),
+    url(r'^topic_by_name/$', pv.show_topic_by_name),
 
-    url(r'^document/(?P<slug>[-\w]+)/$', 'show_document'),
+    url(r'^document/(?P<slug>[-\w]+)/$', pv.show_document),
 
-    url(r'^info/$', 'show_general_info'),
+    url(r'^info/$', pv.show_general_info),
 
-    url(r'^search/$', 'search'),
-)
+    url(r'^search/$', pv.search),
+]
 
-urlpatterns += patterns('',
+
+urlpatterns += [
     url(r'^contact/', include('envelope.urls')),
-)
+]
 
 
 from tastypie.api import Api
-from .parliament.api import all_resources
-from .social.api import UpdateResource, FeedResource
+from parliament.api import all_resources
+from social.api import UpdateResource, FeedResource
 
 v1_api = Api(api_name='v1')
 for res in all_resources:
     v1_api.register(res())
 v1_api.register(FeedResource())
 
-urlpatterns += patterns('',
+urlpatterns += [
     url(r'^api/', include(v1_api.urls)),
-)
+]
 
 if settings.DEBUG:
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
