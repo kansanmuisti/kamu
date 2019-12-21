@@ -114,10 +114,10 @@ def get_new_vaski_messages():
         with open('last_pk.txt', 'w') as f:
             f.write(str(pk))
 
-def dump_salidb(name, pk_name):
+def dump_salidb(name, pk_name, max_hits=9999999999999):
     url = lambda pk: f"https://avoindata.eduskunta.fi/api/v1/tables/{name}/batch?pkStartValue={pk}&pkName={pk_name}"
     pk = get_persistent_int(name, 0)
-    while True:
+    for i in range(max_hits):
         print(name, pk)
         data = requests.get(url(pk))
         data.raise_for_status()
