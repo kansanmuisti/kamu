@@ -82,8 +82,8 @@ STATICFILES_FINDERS = (
 )
 
 COMPRESS_PRECOMPILERS = (
-    ('text/less', 'lessc {infile} {outfile}'),
-    ('text/coffeescript', 'coffee --compile --stdio'),
+    ('text/less', 'node_modules/.bin/lessc {infile} {outfile}'),
+    ('text/coffeescript', 'node_modules/.bin/coffee --compile --stdio'),
 )
 COMPRESS_JS_FILTERS = []
 

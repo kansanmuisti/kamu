@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "coffee-script": "^1.12.7",
+    "lessc": "^1.0.2"
+  }
+}
