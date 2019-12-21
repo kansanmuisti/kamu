@@ -104,7 +104,7 @@ class PlenarySessionItem(models.Model):
         self.nr_statements = self.statement_set.exclude(type='speaker').count()
 
     def get_short_id(self):
-        if self.sub_number >= 0:
+        if self.sub_number is not None and self.sub_number >= 0:
             return "%s/%d/%d" % (str(self.plsess), self.number,
                                  self.sub_number)
         else:

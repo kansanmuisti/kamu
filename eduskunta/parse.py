@@ -89,10 +89,13 @@ class SaneElement:
         self.el = el
 
     def __str__(self):
-        return str(replace_ns(self.el.tag))
+        return str(self.tag)
 
     def __repr__(self):
         return self.__str__()
+
+    def __getitem__(self, key):
+        return self.attrib[key]
 
     def xpath(self, path):
         ret = list(self.el.xpath(path, namespaces=NSMAP))
@@ -116,21 +119,26 @@ class SaneElement:
         return [SaneElement(x) for x in list(ret)]
 
     def print(self, levels=1, out=sys.stdout, _level=0):
-        ind = '  '*_level
+        ind = '  ' * _level
         line = lambda v: out.write(f"{ind}{v}\n")
 
         line(f"-{self}")
         for key, val in self.attrib.items():
             line(f'  @{key} = {val}')
-        
-        text = self.text.strip()
+
+        text = (self.text or '').strip()
         if text:
             line(f"  *{text.strip()}")
-        
-        if _level >= levels: return
+
+        if _level >= levels:
+            return
+
         for child in self.getchildren():
-            child.print(levels, out, _level+1)
-            
+            child.print(levels, out, _level + 1)
+
+    @property
+    def tag(self):
+        return replace_ns(self.el.tag)
 
     @property
     def text(self):
@@ -152,28 +160,84 @@ class EduskuntaDoc:
             dt = LOCAL_TZ.localize(dt)
         return dt
 
-    def parse_common(self):
+    def parse_identifier(self, s):
+        m = re.match(r'([A-Z]+) ([0-9]+/[0-9]{4}) vp', s)
+        return m.groups()
+
+    def parse_header(self):
         obj = self.doc.xpath('//jme:JulkaisuMetatieto')[0]
-        self.identifier = obj.attrib['met1:eduskuntaTunnus']
+        id_str = obj.attrib['met1:eduskuntaTunnus']
+        self.type, self.identifier = self.parse_identifier(id_str)
         self.created_at = self.parse_date(obj.attrib['met1:laadintaPvm'])
 
     def __init__(self, xmlstr: str):
         self.doc = SaneElement(etree.fromstring(xmlstr))
-        self.parse_common()
+        self.doc.print()
+        self.parse_header()
 
 
 class PlenarySessionDoc(EduskuntaDoc):
+    def parse_item(self, el):
+        el.print()
+        item_number = el.xpathone('vsk1:KohtaNumero').text
+        item = {}
+        if el.tag == 'vsk:Asiakohta':
+            item['description'] = el.xpath('.//met1:NimekeTeksti')[0].text
+            print(item['description'])
+            item_type, identifier = self.parse_identifier(el['met1:eduskuntaTunnus'])
+            if item_type == 'SKT':
+                item['type'] = 'question'
+            elif item_type in (
+                'HE', 'VAP', 'VAA', 'K', 'LA', 'VNT', 'VNS',
+                'KAA', 'PNE', 'VK', 'ETJ', 'VN', 'LJL', 'PI',
+                'KA', 'O', 'M', 'TPA'
+            ):
+                item['type'] = 'agenda'
+            else:
+                raise Exception('Unknown type: %s' % item_type)
+        else:
+            item['description'] = el.xpathone('.//sis1:OtsikkoTeksti').text
+            item['type'] = 'agenda'
+
+        n = item_number.split('.')
+        item['number'] = int(n.pop(0))
+        if n:
+            item['sub_number'] = int(n.pop(0))
+        else:
+            item['sub_number'] = None
+        self.items.append(item)
+
     def parse(self):
+        assert self.type == 'PTK'
         self.root = root = self.doc.xpathone('//ptk:Poytakirja')
-        begins_at = self.parse_dt(root.attrib['vsk1:kokousAloitusHetki'])
-        ends_at = self.parse_dt(root.attrib['vsk1:kokousLopetusHetki'])
-        root.print()
-        print(begins_at, ends_at)
-        #pprint(self.root)
-        #pprint(self.root.attrib)
+        self.begins_at = self.parse_dt(root['vsk1:kokousAloitusHetki'])
+        self.ends_at = self.parse_dt(root['vsk1:kokousLopetusHetki'])
+        self.version = root['met1:versioTeksti']
+        self.items = []
+
+        items = root.getchildren()
+        for item in items:
+            if item.tag not in ('vsk:Asiakohta', 'vsk:MuuAsiakohta'):
+                continue
+            self.parse_item(item)
+
+    def to_dict(self):
+        ret = {
+            'name': self.identifier,
+            'date': self.begins_at.date(),
+            'url_name': self.identifier.replace('/', '-'),
+            'origin_id': self.identifier,
+            'origin_version': self.version,
+        }
+        return ret
 
 
 if __name__ == '__main__':
-    s = open('xml/PlenarySessionMainPage_fi/2015/2015-01-09T15:54:03.624000+02:00.xml', 'r').read()
-    doc = PlenarySessionDoc(s)
-    doc.parse()
+    for idx, fpath in enumerate(glob.glob('xml/PlenarySessionMainPage_fi/2016/*.xml')):
+        fname = fpath.split('/')[-1]
+        print(fpath)
+        s = open(fpath, 'r').read()
+        doc = PlenarySessionDoc(s)
+        doc.parse()
+        if idx == 5:
+            break
