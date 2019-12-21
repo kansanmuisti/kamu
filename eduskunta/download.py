@@ -1,6 +1,7 @@
 import os
 import collections
 import requests
+import json
 import requests_cache
 from dateutil import parser as dateutil_parser
 from pygments import highlight
@@ -13,6 +14,18 @@ from lxml import etree
 
 #requests_cache.install_cache('eduskunta')
 
+def get_persistent_int(name, default=None):
+    path = f"last_ids/{name}.txt"
+    try:
+        with open(path, 'r') as f:
+            return int(f.read())
+    except IOError:
+        return default
+
+def set_persistent_int(name, value):
+    path = f"last_ids/{name}.txt"
+    with open(path, 'w') as f:
+        f.write(str(value))
 
 def process_vaski_result(data):
     columns = data['columnNames']
@@ -101,5 +114,34 @@ def get_new_vaski_messages():
         with open('last_pk.txt', 'w') as f:
             f.write(str(pk))
 
+def dump_salidb(name, pk_name):
+    url = lambda pk: f"https://avoindata.eduskunta.fi/api/v1/tables/{name}/batch?pkStartValue={pk}&pkName={pk_name}"
+    pk = get_persistent_int(name, 0)
+    while True:
+        print(name, pk)
+        data = requests.get(url(pk))
+        data.raise_for_status()
+        data = data.json()
+        pkcol = data['columnNames'].index(pk_name)
+        
+        if len(data['rowData']) == 0: break
 
-get_new_vaski_messages()
+        maxpk = max(int(d[pkcol]) for d in data['rowData'])
+
+        fname = f"xml/salidb/{name}-{pk}-{maxpk}.json"
+        
+        json.dump(data, open(fname, 'w'))
+        pk = maxpk + 1
+        set_persistent_int(name, pk)
+
+def dump_salidbs():
+    data = requests.get("https://avoindata.eduskunta.fi/api/v1/tables/PrimaryKeys/rows").json()
+    cols = data['columnNames']
+    rows = [dict(zip(cols, row)) for row in data['rowData']]
+    for row in rows:
+        if not row['TableName'].startswith('SaliDB'): continue
+        dump_salidb(row['TableName'], row['PrimaryKeyName'])
+
+if __name__ == '__main__':
+    get_new_vaski_messages()
+    dump_salidbs()
