@@ -28,9 +28,9 @@ class Funding(models.Model):
         ('oth', _('Other')),
     )
     type = models.CharField(max_length=6, choices=TYPES)
-    member = models.ForeignKey(Member, db_index=True)
-    term = models.ForeignKey(Term)
-    source = models.ForeignKey(FundingSource, null=True, blank=True)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, db_index=True)
+    term = models.ForeignKey(Term, on_delete=models.CASCADE)
+    source = models.ForeignKey(FundingSource, on_delete=models.CASCADE, null=True, blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:

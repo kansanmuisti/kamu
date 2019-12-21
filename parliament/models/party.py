@@ -25,11 +25,9 @@ class Party(UpdatableModel):
             qs |= Q(end__gte=date)
             qs &= Q(begin__lte=date)
         return bool(self.governingparty_set.filter(qs))
-    
-    @models.permalink
+
     def get_absolute_url(self):
         return ('parliament.views.show_party_feed', (), {'abbreviation': self.abbreviation})
-
 
     # To avoid recursive imports..
     def get_activity_objects(self):
@@ -97,10 +95,10 @@ class Party(UpdatableModel):
 
 class GoverningParty(models.Model):
     """ Keeps track when the party has been in the government """
-    party = models.ForeignKey(Party, db_index=True)
+    party = models.ForeignKey(Party, on_delete=models.CASCADE, db_index=True)
     begin = models.DateField(help_text="Beginning of government participation")
     end = models.DateField(null=True, help_text="End of government participation")
-    government = models.ForeignKey("Government", help_text="Government wherein the party participated")
+    government = models.ForeignKey("Government", on_delete=models.CASCADE, help_text="Government wherein the party participated")
 
     class Meta:
         app_label = 'parliament'

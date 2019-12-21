@@ -2,7 +2,7 @@ import operator
 from django.conf import settings
 from django.http import Http404, HttpResponse
 from django.shortcuts import render_to_response, get_list_or_404, get_object_or_404
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.db.models import Q, Count
 from django.template import RequestContext

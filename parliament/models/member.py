@@ -79,7 +79,7 @@ class Member(UpdatableModel):
     email = models.EmailField(null=True, blank=True)
     phone = models.CharField(max_length=20, null=True, blank=True)
 
-    party = models.ForeignKey(Party, blank=True, null=True)
+    party = models.ForeignKey(Party, on_delete=models.CASCADE, blank=True, null=True)
     photo = models.ImageField(upload_to='images/members')
     info_link = models.URLField()
     wikipedia_link = models.URLField(blank=True, null=True)
@@ -193,7 +193,6 @@ class Member(UpdatableModel):
 
         return posts
 
-    @models.permalink
     def get_absolute_url(self):
         return ('parliament.views.show_member', (), {'member': self.url_name})
 
@@ -216,7 +215,7 @@ class MemberStatsManager(models.Manager):
         return self.filter(begin=date_begin, end=date_end)
 
 class MemberStats(models.Model):
-    member = models.ForeignKey(Member)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE)
     begin = models.DateField()
     end = models.DateField(blank = True, null = True)
 
@@ -260,8 +259,8 @@ class MemberStats(models.Model):
         app_label = 'parliament'
 
 class TermMember(models.Model):
-    term = models.ForeignKey(Term)
-    member = models.ForeignKey(Member)
+    term = models.ForeignKey(Term, on_delete=models.CASCADE)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE)
     election_budget = models.DecimalField(max_digits=10, decimal_places=2,
                                           blank=True, null=True)
     class Meta:
@@ -287,8 +286,8 @@ class MemberSeatManager(models.Manager):
         return self.filter(query)
 
 class MemberSeat(models.Model):
-    seat = models.ForeignKey(Seat)
-    member = models.ForeignKey(Member, db_index=True)
+    seat = models.ForeignKey(Seat, on_delete=models.CASCADE)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, db_index=True)
     begin = models.DateField()
     end = models.DateField(blank=True, null=True)
 
@@ -322,9 +321,9 @@ class DistrictAssociationManager(models.Manager):
         return self.between(date_begin, date_end).order_by('name').values_list('name', flat=True).distinct()
 
 class DistrictAssociation(models.Model):
-    member = models.ForeignKey(Member, db_index=True)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, db_index=True)
     # either district or name must be defined
-    district = models.ForeignKey(District, null=True)
+    district = models.ForeignKey(District, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50, blank=True, null=True)
     begin = models.DateField()
     end = models.DateField(blank=True, null=True)
@@ -343,9 +342,9 @@ class DistrictAssociation(models.Model):
         unique_together = (('member', 'begin'),)
 
 class PartyAssociation(models.Model):
-    member = models.ForeignKey(Member, db_index=True)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, db_index=True)
     # either party or name must be defined
-    party = models.ForeignKey(Party, null=True)
+    party = models.ForeignKey(Party, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50, blank=True, null=True)
     begin = models.DateField()
     end = models.DateField(blank=True, null=True)
@@ -377,8 +376,8 @@ class CommitteeAssociation(models.Model):
         ('member', pgettext('organisation', 'Member')),
         ('deputy-m', _('Deputy Member')),
     )
-    member = models.ForeignKey(Member, db_index=True)
-    committee = models.ForeignKey(Committee)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, db_index=True)
+    committee = models.ForeignKey(Committee, on_delete=models.CASCADE)
     begin = models.DateField()
     end = models.DateField(db_index=True, blank=True, null=True)
     role = models.CharField(max_length=15, choices=ROLE_CHOICES, null=True)
@@ -401,7 +400,7 @@ class SpeakerAssociation(models.Model):
         ('1st-deputy-speaker', _('1st Deputy Speaker')),
         ('2nd-deputy-speaker', _('2st Deputy Speaker')),
     )
-    member = models.ForeignKey(Member, db_index=True)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, db_index=True)
     begin = models.DateField()
     end = models.DateField(db_index=True, blank=True, null=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, help_text='Speaker position')
@@ -419,7 +418,7 @@ class MinistryAssociation(models.Model):
     ROLE_CHOICES = (
         ('minister', _('Minister')),
     )
-    member = models.ForeignKey(Member, db_index=True)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, db_index=True)
     begin = models.DateField()
     end = models.DateField(db_index=True, blank=True, null=True)
     label = models.CharField(max_length=50, help_text='Official descriptive name of the position. eg. minister of of International Development')
@@ -514,9 +513,9 @@ class MemberActivityType(models.Model):
 
 class MemberActivity(models.Model):
     # If member is None, it is activity related to a government bill.
-    member = models.ForeignKey(Member, db_index=True, null=True)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, db_index=True, null=True)
     time = models.DateTimeField(db_index=True)
-    type = models.ForeignKey(MemberActivityType, db_index=True)
+    type = models.ForeignKey(MemberActivityType, on_delete=models.CASCADE, db_index=True)
     last_modified_time = models.DateTimeField(null=True)
 
     objects = MemberActivityManager()
@@ -626,8 +625,8 @@ class MemberActivity(models.Model):
         index_together = ('member', 'time')
 
 class KeywordActivity(models.Model):
-    activity = models.ForeignKey(MemberActivity, db_index=True)
-    keyword = models.ForeignKey(Keyword, db_index=True)
+    activity = models.ForeignKey(MemberActivity, on_delete=models.CASCADE, db_index=True)
+    keyword = models.ForeignKey(Keyword, on_delete=models.CASCADE, db_index=True)
 
     def __unicode__(self):
         kw = str(self.keyword)
@@ -642,7 +641,7 @@ class KeywordActivity(models.Model):
 class InitiativeActivity(MemberActivity):
     # This is both for written questions and law proposals.
 
-    doc = models.ForeignKey(Document, db_index=True)
+    doc = models.ForeignKey(Document, on_delete=models.CASCADE, db_index=True)
 
     objects = MemberActivityManager()
 
@@ -677,7 +676,7 @@ class InitiativeActivity(MemberActivity):
 
 class RebelVoteActivity(MemberActivity):
     TYPE = 'RV'
-    vote = models.ForeignKey(Vote, unique=True)
+    vote = models.ForeignKey(Vote, on_delete=models.CASCADE, unique=True)
 
     objects = MemberActivityManager()
 
@@ -691,7 +690,7 @@ class RebelVoteActivity(MemberActivity):
 
 class CommitteeDissentActivity(MemberActivity):
     TYPE = 'CD'
-    doc = models.ForeignKey(Document, db_index=True)
+    doc = models.ForeignKey(Document, on_delete=models.CASCADE, db_index=True)
 
     objects = MemberActivityManager()
 
@@ -710,14 +709,14 @@ from social.models import Feed, Update
 
 
 class MemberSocialFeed(Feed):
-    member = models.ForeignKey(Member, db_index=True)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, db_index=True)
 
     class Meta:
         app_label = 'parliament'
 
 
 class SocialUpdateActivity(MemberActivity):
-    update = models.ForeignKey(Update, unique=True)
+    update = models.ForeignKey(Update, on_delete=models.CASCADE, unique=True)
 
     objects = MemberActivityManager()
 
@@ -734,7 +733,7 @@ class SocialUpdateActivity(MemberActivity):
 
 class StatementActivity(MemberActivity):
     TYPE = 'ST'
-    statement = models.ForeignKey(Statement, unique=True)
+    statement = models.ForeignKey(Statement, on_delete=models.CASCADE, unique=True)
 
     objects = MemberActivityManager()
 
@@ -758,7 +757,7 @@ class StatementActivity(MemberActivity):
 
 class SignatureActivity(MemberActivity):
     TYPE = 'SI'
-    signature = models.ForeignKey(DocumentSignature, unique=True)
+    signature = models.ForeignKey(DocumentSignature, on_delete=models.CASCADE, unique=True)
 
     objects = MemberActivityManager()
 

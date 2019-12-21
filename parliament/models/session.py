@@ -5,7 +5,7 @@ from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import linebreaks
 from django.utils.safestring import mark_safe
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.encoding import python_2_unicode_compatible
 
 from parliament.models.document import *
@@ -55,7 +55,7 @@ class PlenarySessionManager(models.Manager):
 @python_2_unicode_compatible
 class PlenarySession(UpdatableModel):
     name = models.CharField(max_length=20)
-    term = models.ForeignKey(Term, db_index=True)
+    term = models.ForeignKey(Term, on_delete=models.CASCADE, db_index=True)
     date = models.DateField(db_index=True)
     info_link = models.URLField()
     url_name = models.SlugField(max_length=20, unique=True, db_index=True)
@@ -78,7 +78,7 @@ class PlenarySessionItem(models.Model):
              ('question', _('Question time')),
              ('budget', _('Budget proposal')),)
 
-    plsess = models.ForeignKey(PlenarySession)
+    plsess = models.ForeignKey(PlenarySession, on_delete=models.CASCADE)
     number = models.PositiveIntegerField()
     sub_number = models.PositiveIntegerField(null=True, blank=True)
     type = models.CharField(max_length=15, choices=TYPES)
@@ -145,8 +145,8 @@ class PlenarySessionItem(models.Model):
 
 @python_2_unicode_compatible
 class PlenarySessionItemDocument(models.Model):
-    item = models.ForeignKey(PlenarySessionItem, db_index=True)
-    doc = models.ForeignKey(Document, db_index=True)
+    item = models.ForeignKey(PlenarySessionItem, on_delete=models.CASCADE, db_index=True)
+    doc = models.ForeignKey(Document, on_delete=models.CASCADE, db_index=True)
     order = models.PositiveIntegerField()
     stage = models.CharField(max_length=50, null=True, blank=True)
 
@@ -161,9 +161,9 @@ class Statement(models.Model):
     TYPES = (('normal', 'Statement'),
              ('speaker', 'Speaker statement'),)
 
-    item = models.ForeignKey(PlenarySessionItem, db_index=True)
+    item = models.ForeignKey(PlenarySessionItem, on_delete=models.CASCADE, db_index=True)
     index = models.PositiveIntegerField(db_index=True)
-    member = models.ForeignKey('Member', db_index=True, null=True)
+    member = models.ForeignKey('Member', db_index=True, null=True, on_delete=models.CASCADE)
     speaker_name = models.CharField(max_length=40, null=True, blank=True)
     speaker_role = models.CharField(max_length=40, null=True, blank=True)
     # Currently used to differentiate between the speakers and plain MPs
@@ -215,8 +215,8 @@ class PlenaryVoteManager(models.Manager):
 
 @python_2_unicode_compatible
 class PlenaryVote(UpdatableModel):
-    plsess = models.ForeignKey(PlenarySession, db_index=True)
-    plsess_item = models.ForeignKey(PlenarySessionItem, db_index=True, null=True, blank=True,
+    plsess = models.ForeignKey(PlenarySession, on_delete=models.CASCADE, db_index=True)
+    plsess_item = models.ForeignKey(PlenarySessionItem, on_delete=models.CASCADE, db_index=True, null=True, blank=True,
                                     related_name='plenary_votes')
     number = models.IntegerField()
     time = models.DateTimeField()
@@ -273,7 +273,6 @@ class PlenaryVote(UpdatableModel):
         else:
             return 'N'
 
-    @models.permalink
     def get_absolute_url(self):
         args = {'plsess': self.plenary_session.url_name, 'sess': self.number}
         return ('votes.views.show_session', (), args)
@@ -303,8 +302,8 @@ class PlenaryVote(UpdatableModel):
 
 @python_2_unicode_compatible
 class PlenaryVoteDocument(models.Model):
-    session = models.ForeignKey(PlenaryVote)
-    doc = models.ForeignKey(Document)
+    session = models.ForeignKey(PlenaryVote, on_delete=models.CASCADE)
+    doc = models.ForeignKey(Document, on_delete=models.CASCADE)
     order = models.PositiveIntegerField()
 
     class Meta:
@@ -341,9 +340,9 @@ class Vote(models.Model):
         ('E', 'Empty'),
         ('S', 'Speaker')
     ]
-    session = models.ForeignKey(PlenaryVote, db_index=True)
+    session = models.ForeignKey(PlenaryVote, on_delete=models.CASCADE, db_index=True)
     vote = models.CharField(max_length=1, choices=VOTE_CHOICES)
-    member = models.ForeignKey('Member', db_index=True)
+    member = models.ForeignKey('Member', db_index=True, on_delete=models.CASCADE)
     party = models.CharField(max_length=10)
 
     objects = VoteManager()

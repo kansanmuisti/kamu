@@ -26,7 +26,7 @@ class ItemManager(models.Manager):
         return latest
 
 class Item(models.Model):
-    category = models.ForeignKey(Category)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     objects = ItemManager()
 
@@ -95,7 +95,7 @@ class Newsitem(Item):
         ordering = ['-date']
 
 class Content(models.Model):
-    item = models.ForeignKey(Item)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
     language = models.CharField(max_length=10)
 
     # FIXME: Sanity check language
@@ -116,9 +116,9 @@ class Content(models.Model):
 class Revision(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     summary = MarkupField(blank=True)
-    content = models.ForeignKey(Content)
+    content = models.ForeignKey(Content, on_delete=models.CASCADE)
     subject = models.CharField(max_length=200, null=True, blank=True)
-    user = models.ForeignKey(User, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     data = MarkupField(blank=True)
 
     class Meta:
@@ -136,10 +136,10 @@ class Revision(models.Model):
 
 # This exists to make things just a bit snappier (not used for now)
 class Cache(models.Model):
-    item = models.ForeignKey(Item)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
     language = models.CharField(max_length=10)
-    content = models.ForeignKey(Content)
-    revision = models.ForeignKey(Revision)
+    content = models.ForeignKey(Content, on_delete=models.CASCADE)
+    revision = models.ForeignKey(Revision, on_delete=models.CASCADE)
 
 
 class NewRevisionForm(ModelForm):

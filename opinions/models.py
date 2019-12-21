@@ -30,7 +30,7 @@ class QuestionManager(models.Manager):
 
 class Question(models.Model):
     text = models.TextField()
-    source = models.ForeignKey(QuestionSource)
+    source = models.ForeignKey(QuestionSource, on_delete=models.CASCADE)
     order = models.IntegerField()
 
     objects = QuestionManager()
@@ -62,7 +62,7 @@ class Question(models.Model):
         return "%s/%d" % (self.source, self.order)
 
 class Option(models.Model):
-    question = models.ForeignKey(Question)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     order = models.IntegerField()
 
@@ -108,9 +108,9 @@ class Option(models.Model):
         return '%s: %s' % (self.question, self.name)
 
 class Answer(models.Model):
-    member = models.ForeignKey(Member)
-    option = models.ForeignKey(Option, null=True)
-    question = models.ForeignKey(Question)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+    option = models.ForeignKey(Option, on_delete=models.CASCADE, null=True)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
     explanation = models.TextField(null=True)
 
     class Meta:
@@ -354,12 +354,12 @@ class VoteOptionCongruenceManager(models.Manager):
 
 
 class VoteOptionCongruence(models.Model):
-    option = models.ForeignKey(Option)
-    session = models.ForeignKey(Session)
+    option = models.ForeignKey(Option, on_delete=models.CASCADE)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
     vote = models.CharField(max_length=1, choices=Vote.VOTE_CHOICES,
                             db_index=True)
     congruence = models.FloatField()
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     objects = VoteOptionCongruenceManager()
     
@@ -387,10 +387,10 @@ class VoteOptionCongruence(models.Model):
         unique_together = (('user', 'option', 'session', 'vote'), )
 
 class QuestionSessionRelevance(models.Model):
-    question = models.ForeignKey(Question)
-    session = models.ForeignKey(Session)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
     relevance = models.FloatField()
-    user = models.ForeignKey(User, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
 
     @classmethod
     def get_relevant_sessions(cls, question):

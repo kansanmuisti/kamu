@@ -3,7 +3,7 @@ View which can render and send email from a contact form.
 
 """
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext

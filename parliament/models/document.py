@@ -6,6 +6,7 @@ from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 from parliament.models.base import UpdatableModel
 
+
 class Keyword(models.Model):
     name = models.CharField(max_length=128, db_index=True, unique=True)
 
@@ -54,9 +55,10 @@ class Keyword(models.Model):
     class Meta:
         app_label = 'parliament'
 
+
 class KeywordActivityScore(models.Model):
-    keyword = models.ForeignKey(Keyword, db_index=True)
-    term = models.ForeignKey('parliament.Term', db_index=True, null=True)
+    keyword = models.ForeignKey(Keyword, on_delete=models.CASCADE, db_index=True)
+    term = models.ForeignKey('parliament.Term', on_delete=models.CASCADE, db_index=True, null=True)
     score = models.PositiveIntegerField()
     calc_time = models.DateTimeField(auto_now=True)
 
@@ -66,6 +68,7 @@ class KeywordActivityScore(models.Model):
     class Meta:
         app_label = 'parliament'
         unique_together = (('keyword', 'term'),)
+
 
 class Document(UpdatableModel):
     TYPES = (
@@ -89,8 +92,10 @@ class Document(UpdatableModel):
     sgml_link = models.URLField(blank=True, null=True)
     subject = models.TextField()
     summary = models.TextField(blank=True, null=True)
-    author = models.ForeignKey('parliament.Member', null=True, db_index=True,
-        help_text="Set if the document is authored by an MP")
+    author = models.ForeignKey(
+        'parliament.Member', null=True, db_index=True, on_delete=models.CASCADE,
+        help_text="Set if the document is authored by an MP"
+    )
 
     question = models.TextField(blank=True, null=True)
     answer = models.TextField(blank=True, null=True)
@@ -111,7 +116,7 @@ class Document(UpdatableModel):
             self.url_name = slugify(s)
         super(Document, self).save(*args, **kwargs)
 
-    @models.permalink
+    # @models.permalink
     def get_absolute_url(self):
         return ('parliament.views.show_document', (), {'slug': self.url_name})
 
@@ -132,6 +137,7 @@ class Document(UpdatableModel):
         unique_together = (('type', 'name'),)
         ordering = ('date',)
 
+
 class DocumentProcessingStage(models.Model):
     STAGE_CHOICES = (
         ('intro', _('Introduced')),
@@ -151,7 +157,7 @@ class DocumentProcessingStage(models.Model):
         ('ministry', _('In ministry')),
     )
 
-    doc = models.ForeignKey(Document, db_index=True)
+    doc = models.ForeignKey(Document, on_delete=models.CASCADE, db_index=True)
     index = models.PositiveSmallIntegerField()
     stage = models.CharField(max_length=15, choices=STAGE_CHOICES, db_index=True)
     date = models.DateField()
@@ -161,9 +167,10 @@ class DocumentProcessingStage(models.Model):
         unique_together = (('doc', 'stage'), ('doc', 'index'))
         ordering = ('doc', 'index')
 
+
 class DocumentSignature(models.Model):
-    doc = models.ForeignKey('Document', db_index=True)
-    member = models.ForeignKey('Member', db_index=True)
+    doc = models.ForeignKey('Document', db_index=True, on_delete=models.CASCADE)
+    member = models.ForeignKey('Member', db_index=True, on_delete=models.CASCADE)
     date = models.DateField()
 
     class Meta:

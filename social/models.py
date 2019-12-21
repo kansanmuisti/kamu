@@ -41,6 +41,7 @@ class Feed(models.Model):
             acc_str = ""
         return "%s / id %s%s" % (self.type, self.origin_id, acc_str)
 
+
 class BrokenFeed(models.Model):
     type = models.CharField(max_length=2, choices=Feed.TYPE_CHOICES)
     origin_id = models.CharField(max_length=100, db_index=True)
@@ -53,7 +54,7 @@ class BrokenFeed(models.Model):
 
 
 class Update(models.Model):
-    feed = models.ForeignKey(Feed, db_index=True)
+    feed = models.ForeignKey(Feed, on_delete=models.CASCADE, db_index=True)
     text = models.TextField(null=True)
     type = models.CharField(max_length=30)
     sub_type = models.CharField(max_length=30, null=True)

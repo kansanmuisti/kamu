@@ -11,7 +11,7 @@ from django.utils.translation import ugettext as _
 from django.template import RequestContext
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.contrib import messages
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.cache import cache
 from django.utils.functional import SimpleLazyObject
 from django.contrib.auth.models import AnonymousUser

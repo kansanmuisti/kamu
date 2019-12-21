@@ -16,7 +16,7 @@ http://stackoverflow.com/questions/100003/what-is-a-metaclass-in-python
 
 import operator
 
-from django.core.urlresolvers import NoReverseMatch
+from django.urls import NoReverseMatch
 
 from haystack.query import SearchQuerySet, SQ
 
