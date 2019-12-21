@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from parliament.models.member import Member
 from parliament.models.session import Term
 
+
 class FundingSource(models.Model):
     TYPES = (
         ('co', _('Corporation')),
@@ -15,6 +16,7 @@ class FundingSource(models.Model):
 
     class Meta:
         app_label = 'parliament'
+
 
 class Funding(models.Model):
     TYPES = (

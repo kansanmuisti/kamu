@@ -1,3 +1,4 @@
+from social.models import Feed, Update
 from django.db import models, connection
 from django.db.models import Q
 from django.template.defaultfilters import slugify
@@ -20,13 +21,17 @@ if DJANGO_VERSION[0:2] < (1, 7):
         model_cache._populate()
 
 # Helper to filter Association objects
+
+
 class AssociationQuerySet(models.query.QuerySet):
     def current(self):
         return self.filter(end__isnull=True)
 
+
 class AssociationManager(models.Manager):
     def current(self):
         return self.get_queryset().current()
+
     def get_queryset(self):
         return AssociationQuerySet(self.model, using=self._db)
 
@@ -45,22 +50,26 @@ class MemberManager(models.Manager):
         query &= Q(end__isnull=True) | Q(end__gte=date_begin)
         mem_list = PartyAssociation.objects.filter(query).distinct().values_list('member', flat=True)
         return self.filter(id__in=mem_list)
+
     def active_in_term(self, term):
         """MPs that have served during given parliamentary Term"""
         return self.active_in(term.begin, term.end)
+
     def in_district(self, district, date_begin, date_end):
         """MPs from given District that have served between date_begin and date_end"""
-        query = Q(name = district)
+        query = Q(name=district)
         if date_end:
             query &= Q(begin__lte=date_end)
         query &= Q(end__isnull=True) | Q(end__gte=date_begin)
         mem_list = DistrictAssociation.objects.filter(query).distinct().values_list('member', flat=True)
         return self.filter(id__in=mem_list)
+
     def get_with_print_name(self, name):
         names = name.split()
         names = list((names[-1],)) + names[0:-1]
         name = ' '.join(names)
         return self.get(name=name)
+
 
 class Member(UpdatableModel):
     """
@@ -96,6 +105,7 @@ class Member(UpdatableModel):
         return ms
 
     __export_stats_fields = ('attendance', 'party_agree', 'session_agree')
+
     def get_latest_stats(self):
         try:
             latest = self.memberstats_set.order_by('-begin')[0]
@@ -108,11 +118,14 @@ class Member(UpdatableModel):
 
     def get_activity_score(self, begin=None, end=None):
         activities = self.memberactivity_set
-        if begin: activities = activities.filter(time__gte=begin)
-        if end: activities = activities.filter(time__lte=end)
+        if begin:
+            activities = activities.filter(time__gte=begin)
+        if end:
+            activities = activities.filter(time__lte=end)
 
         act = activities.aggregate(act=models.Sum('type__weight'))['act']
-        if not act: act = 0.0
+        if not act:
+            act = 0.0
         return act
 
     def get_activity_count_set(self, **kwargs):
@@ -148,9 +161,9 @@ class Member(UpdatableModel):
     def get_age(self):
         born = self.birth_date
         today = datetime.date.today()
-        try: 
+        try:
             birthday = born.replace(year=today.year)
-        except ValueError: # raised when birth date is February 29 and the current year is not a leap year
+        except ValueError:  # raised when birth date is February 29 and the current year is not a leap year
             birthday = born.replace(year=today.year, day=born.day-1)
         if birthday > today:
             return today.year - born.year - 1
@@ -211,22 +224,24 @@ class MemberStatsManager(models.Manager):
         if date_begin:
             query &= Q(end__isnull=True) | Q(end__gte=date_begin)
         return self.filter(query)
+
     def for_period(self, date_begin, date_end):
         return self.filter(begin=date_begin, end=date_end)
+
 
 class MemberStats(models.Model):
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
     begin = models.DateField()
-    end = models.DateField(blank = True, null = True)
+    end = models.DateField(blank=True, null=True)
 
     attendance = None
     party_agree = None
     session_agree = None
 
     # <agree>,<disagree>
-    party_agreement = models.CharField(max_length = 20)
-    session_agreement = models.CharField(max_length = 20)
-    vote_counts = models.CharField(max_length = 30)
+    party_agreement = models.CharField(max_length=20)
+    session_agreement = models.CharField(max_length=20)
+    vote_counts = models.CharField(max_length=30)
     statement_count = models.IntegerField()
     election_budget = models.DecimalField(max_digits=10, decimal_places=2,
                                           blank=True, null=True)
@@ -258,17 +273,20 @@ class MemberStats(models.Model):
     class Meta:
         app_label = 'parliament'
 
+
 class TermMember(models.Model):
     term = models.ForeignKey(Term, on_delete=models.CASCADE)
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
     election_budget = models.DecimalField(max_digits=10, decimal_places=2,
                                           blank=True, null=True)
+
     class Meta:
         app_label = 'parliament'
 
+
 class Seat(models.Model):
     row = models.IntegerField()
-    seat = models.IntegerField() # "column"
+    seat = models.IntegerField()  # "column"
     x = models.FloatField()
     y = models.FloatField()
 
@@ -279,11 +297,13 @@ class Seat(models.Model):
         unique_together = (('row', 'seat'),)
         app_label = 'parliament'
 
+
 class MemberSeatManager(models.Manager):
     def for_date(self, date):
         query = Q(begin__lte=date)
         query &= Q(end__isnull=True) | Q(end__gte=date)
         return self.filter(query)
+
 
 class MemberSeat(models.Model):
     seat = models.ForeignKey(Seat, on_delete=models.CASCADE)
@@ -296,9 +316,11 @@ class MemberSeat(models.Model):
     def __unicode__(self):
         args = (str(self.seat), self.begin, self.end, str(self.member))
         return "%s (%s..%s): %s" % args
+
     class Meta:
         unique_together = (('member', 'begin', 'end'), ('seat', 'begin', 'end'))
         app_label = 'parliament'
+
 
 class District(models.Model):
     name = models.CharField(max_length=50, db_index=True)
@@ -306,6 +328,7 @@ class District(models.Model):
 
     class Meta:
         app_label = 'parliament'
+
 
 class DistrictAssociationManager(models.Manager):
     def between(self, date_begin, date_end):
@@ -315,10 +338,13 @@ class DistrictAssociationManager(models.Manager):
         if date_begin:
             query &= Q(end__isnull=True) | Q(end__gte=date_begin)
         return self.filter(query)
+
     def for_member_in_term(self, mp, term):
         return self.between(term.begin, term.end).filter(member=mp)
+
     def list_between(self, date_begin, date_end):
         return self.between(date_begin, date_end).order_by('name').values_list('name', flat=True).distinct()
+
 
 class DistrictAssociation(models.Model):
     member = models.ForeignKey(Member, on_delete=models.CASCADE, db_index=True)
@@ -341,6 +367,7 @@ class DistrictAssociation(models.Model):
         app_label = 'parliament'
         unique_together = (('member', 'begin'),)
 
+
 class PartyAssociation(models.Model):
     member = models.ForeignKey(Member, on_delete=models.CASCADE, db_index=True)
     # either party or name must be defined
@@ -351,6 +378,7 @@ class PartyAssociation(models.Model):
 
     class Meta:
         app_label = 'parliament'
+
 
 class CommitteeAssociationManager(AssociationManager):
     class QuerySet(AssociationQuerySet):
@@ -368,6 +396,7 @@ class CommitteeAssociationManager(AssociationManager):
 
     def get_queryset(self):
         return CommitteeAssociationManager.QuerySet(self.model, using=self._db)
+
 
 class CommitteeAssociation(models.Model):
     ROLE_CHOICES = (
@@ -393,6 +422,7 @@ class CommitteeAssociation(models.Model):
         else:
             role = self.role
         return "%s %s in %s from %s to %s" % (self.member, role, self.committee, self.begin, self.end)
+
 
 class SpeakerAssociation(models.Model):
     ROLE_CHOICES = (
@@ -421,7 +451,8 @@ class MinistryAssociation(models.Model):
     member = models.ForeignKey(Member, on_delete=models.CASCADE, db_index=True)
     begin = models.DateField()
     end = models.DateField(db_index=True, blank=True, null=True)
-    label = models.CharField(max_length=50, help_text='Official descriptive name of the position. eg. minister of of International Development')
+    label = models.CharField(
+        max_length=50, help_text='Official descriptive name of the position. eg. minister of of International Development')
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, help_text='Position of the official. eg. minister.')
 
     objects = AssociationManager()
@@ -624,6 +655,7 @@ class MemberActivity(models.Model):
         ordering = ('time', 'member__name')
         index_together = ('member', 'time')
 
+
 class KeywordActivity(models.Model):
     activity = models.ForeignKey(MemberActivity, on_delete=models.CASCADE, db_index=True)
     keyword = models.ForeignKey(Keyword, on_delete=models.CASCADE, db_index=True)
@@ -704,8 +736,6 @@ class CommitteeDissentActivity(MemberActivity):
 
     class Meta:
         app_label = 'parliament'
-
-from social.models import Feed, Update
 
 
 class MemberSocialFeed(Feed):

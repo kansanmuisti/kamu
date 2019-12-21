@@ -5,6 +5,7 @@ from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
 from parliament.models.base import UpdatableModel
 
+
 class Party(UpdatableModel):
     abbreviation = models.CharField(max_length=10, unique=True, db_index=True)
     name = models.CharField(max_length=50)
@@ -98,7 +99,8 @@ class GoverningParty(models.Model):
     party = models.ForeignKey(Party, on_delete=models.CASCADE, db_index=True)
     begin = models.DateField(help_text="Beginning of government participation")
     end = models.DateField(null=True, help_text="End of government participation")
-    government = models.ForeignKey("Government", on_delete=models.CASCADE, help_text="Government wherein the party participated")
+    government = models.ForeignKey("Government", on_delete=models.CASCADE,
+                                   help_text="Government wherein the party participated")
 
     class Meta:
         app_label = 'parliament'

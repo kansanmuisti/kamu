@@ -18,8 +18,10 @@ class TermManager(models.Manager):
         query = Q(begin__lte=date)
         query &= Q(end__isnull=True) | Q(end__gte=date)
         return self.get(query)
+
     def latest(self):
         return self.order_by('-begin')[0]
+
     def visible(self):
         return self.filter(visible=True)
 
@@ -43,7 +45,7 @@ class Term(models.Model):
 
 
 class PlenarySessionManager(models.Manager):
-    def between(self, begin = None, end = None):
+    def between(self, begin=None, end=None):
         query = Q()
         if begin:
             query &= Q(date__gte=begin)
@@ -249,9 +251,9 @@ class PlenaryVote(UpdatableModel):
         return vdict
 
     def save(self, *args, **kwargs):
-#        query = Q(begin__lte=self.plenary_session.date)
-#        query &= Q(end__isnull=True) | Q(end__gte=self.plenary_session.date)
-#        MemberStats.objects.filter(query).delete()
+        #        query = Q(begin__lte=self.plenary_session.date)
+        #        query &= Q(end__isnull=True) | Q(end__gte=self.plenary_session.date)
+        #        MemberStats.objects.filter(query).delete()
         super(PlenaryVote, self).save(args, kwargs)
 
     def get_short_summary(self):
