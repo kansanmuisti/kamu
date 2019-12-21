@@ -1,8 +1,9 @@
-from django.db import models
 from django.apps import apps
+from django.db import models
 from django.db.models import Q
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
+
 from parliament.models.base import UpdatableModel
 
 

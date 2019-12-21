@@ -1,9 +1,10 @@
-from django.db import models
 from django.apps import apps
-from sortedm2m.fields import SortedManyToManyField
 from django.conf import settings
+from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
+from sortedm2m.fields import SortedManyToManyField
+
 from parliament.models.base import UpdatableModel
 
 

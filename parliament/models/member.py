@@ -1,17 +1,18 @@
-from social.models import Feed, Update
-from django.db import models, connection
+import datetime
+
+from django import VERSION as DJANGO_VERSION
+from django.db import connection, models
 from django.db.models import Q
 from django.template.defaultfilters import slugify
-from django.utils.translation import pgettext_lazy as pgettext, ugettext_lazy as _
-from django import VERSION as DJANGO_VERSION
+from django.utils.translation import pgettext_lazy as pgettext
+from django.utils.translation import ugettext_lazy as _
 
+from parliament.models.base import UpdatableModel
 from parliament.models.committee import *
+from parliament.models.document import Keyword
 from parliament.models.party import *
 from parliament.models.session import *
-from parliament.models.document import Keyword
-from parliament.models.base import UpdatableModel
-
-import datetime
+from social.models import Feed, Update
 
 # Django bug workaround (only in version < 1.7)
 if DJANGO_VERSION[0:2] < (1, 7):

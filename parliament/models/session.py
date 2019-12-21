@@ -1,16 +1,17 @@
 from __future__ import unicode_literals
+
 from django.db import models
 from django.db.models import Q
 from django.template.defaultfilters import slugify
-from django.utils.translation import ugettext_lazy as _
-from django.utils.html import linebreaks
-from django.utils.safestring import mark_safe
 from django.urls import reverse
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.html import linebreaks
+from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _
 
+from parliament.models.base import UpdatableModel
 from parliament.models.document import *
 from parliament.models.member import *
-from parliament.models.base import UpdatableModel
 
 
 class TermManager(models.Manager):
