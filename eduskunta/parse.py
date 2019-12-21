@@ -5,6 +5,7 @@ import re
 import pytz
 import dateutil.parser
 from lxml import objectify, etree
+import sys
 
 
 LOCAL_TZ = pytz.timezone('Europe/Helsinki')
@@ -114,14 +115,24 @@ class SaneElement:
         ret = self.el.getchildren()
         return [SaneElement(x) for x in list(ret)]
 
-    def print(self):
-        print(self)
-        print('    Attribs:')
+    def print(self, out=sys.stdout, levels=0, _level=0):
+        ind = '      '*_level
+        line = lambda v: out.write(f"{ind}{v}\n")
+
+        line(self)
+        line('  Attribs:')
         for key, val in self.attrib.items():
-            print('        %s -> %s' % (key, val))
-        print('    Children:')
-        for child in self.getchildren():
-            print('        %s' % child)
+            line(f'    {key} -> {val}')
+
+        line('  Children:')
+        if _level >= levels:
+            for child in self.getchildren():
+                line(f'    {child}')
+        else:
+            for child in self.getchildren():
+                child.print(out, levels=levels, _level=_level+1)
+
+            
 
     @property
     def text(self):
