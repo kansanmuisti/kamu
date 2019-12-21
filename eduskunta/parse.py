@@ -1,4 +1,5 @@
 from pprint import pprint
+from datetime import datetime, date
 import glob
 import re
 import pytz
@@ -113,6 +114,15 @@ class SaneElement:
         ret = self.el.getchildren()
         return [SaneElement(x) for x in list(ret)]
 
+    def print(self):
+        print(self)
+        print('    Attribs:')
+        for key, val in self.attrib.items():
+            print('        %s -> %s' % (key, val))
+        print('    Children:')
+        for child in self.getchildren():
+            print('        %s' % child)
+
     @property
     def text(self):
         return self.el.text
@@ -123,11 +133,15 @@ class SaneElement:
 
 
 class EduskuntaDoc:
-    def parse_date(self, s):
+    def parse_date(self, s) -> date:
         return dateutil.parser.parse(s).date()
 
-    def parse_datetime(self, s):
-        return dateutil.parser.parse(s, tzinfo=LOCAL_TZ)
+    def parse_dt(self, s) -> datetime:
+        """Parse a datetime."""
+        dt = dateutil.parser.parse(s)
+        if dt.tzinfo is None:
+            dt = LOCAL_TZ.localize(dt)
+        return dt
 
     def parse_common(self):
         obj = self.doc.xpath('//jme:JulkaisuMetatieto')[0]
@@ -141,9 +155,13 @@ class EduskuntaDoc:
 
 class PlenarySessionDoc(EduskuntaDoc):
     def parse(self):
-        self.root = self.doc.xpathone('//ptk:Poytakirja')
-        pprint(self.root)
-        pprint(self.root.attrib)
+        self.root = root = self.doc.xpathone('//ptk:Poytakirja')
+        begins_at = self.parse_dt(root.attrib['vsk1:kokousAloitusHetki'])
+        ends_at = self.parse_dt(root.attrib['vsk1:kokousLopetusHetki'])
+        root.print()
+        print(begins_at, ends_at)
+        #pprint(self.root)
+        #pprint(self.root.attrib)
 
 
 if __name__ == '__main__':
