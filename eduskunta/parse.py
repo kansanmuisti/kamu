@@ -115,23 +115,21 @@ class SaneElement:
         ret = self.el.getchildren()
         return [SaneElement(x) for x in list(ret)]
 
-    def print(self, out=sys.stdout, levels=0, _level=0):
-        ind = '      '*_level
+    def print(self, levels=1, out=sys.stdout, _level=0):
+        ind = '  '*_level
         line = lambda v: out.write(f"{ind}{v}\n")
 
-        line(self)
-        line('  Attribs:')
+        line(f"-{self}")
         for key, val in self.attrib.items():
-            line(f'    {key} -> {val}')
-
-        line('  Children:')
-        if _level >= levels:
-            for child in self.getchildren():
-                line(f'    {child}')
-        else:
-            for child in self.getchildren():
-                child.print(out, levels=levels, _level=_level+1)
-
+            line(f'  @{key} = {val}')
+        
+        text = self.text.strip()
+        if text:
+            line(f"  *{text.strip()}")
+        
+        if _level >= levels: return
+        for child in self.getchildren():
+            child.print(levels, out, _level+1)
             
 
     @property
