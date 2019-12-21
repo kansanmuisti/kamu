@@ -38,7 +38,7 @@ urlpatterns = [
 # A hack to automatically take name of the callback function as the
 # url name. Seems to be compatible with the older stuff.
 def hackpattern(pattern):
-    return url(pattern.regex.pattern, pattern.callback, name=pattern.lookup_str)
+    return url(pattern.pattern, pattern.callback, name=pattern.lookup_str)
 urlpatterns = list(map(hackpattern, urlpatterns))
 
 

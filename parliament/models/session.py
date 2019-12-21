@@ -223,8 +223,7 @@ class PlenaryVote(UpdatableModel):
     subject = models.TextField()
     setting = models.CharField(max_length=200)
     info_link = models.URLField(blank=True, null=True)
-    vote_counts = models.CommaSeparatedIntegerField(max_length=20, blank=True,
-                                                    null=True)
+    vote_counts = models.CharField(max_length=20, blank=True, null=True)
     docs = models.ManyToManyField(Document, through='PlenaryVoteDocument')
     keywords = models.ManyToManyField(Keyword)
 

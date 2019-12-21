@@ -89,7 +89,7 @@ class Member(UpdatableModel):
 
     def get_stats(self, begin, end):
         try:
-            ms = MemberStats.objects.for_period(begin, end).get(member = self)
+            ms = MemberStats.objects.for_period(begin, end).get(member=self)
         except MemberStats.DoesNotExist:
             return None
         ms.calc()
@@ -224,9 +224,9 @@ class MemberStats(models.Model):
     session_agree = None
 
     # <agree>,<disagree>
-    party_agreement = models.CommaSeparatedIntegerField(max_length = 20)
-    session_agreement = models.CommaSeparatedIntegerField(max_length = 20)
-    vote_counts = models.CommaSeparatedIntegerField(max_length = 30)
+    party_agreement = models.CharField(max_length = 20)
+    session_agreement = models.CharField(max_length = 20)
+    vote_counts = models.CharField(max_length = 30)
     statement_count = models.IntegerField()
     election_budget = models.DecimalField(max_digits=10, decimal_places=2,
                                           blank=True, null=True)
