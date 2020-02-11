@@ -15,7 +15,7 @@ django-extensions==2.2.5
 django-haystack==2.8.1
 django-sortedm2m==3.0.0
 django-tastypie==0.14.2
-django==2.2.9
+django==2.2.10
 elasticsearch==7.1.0
 idna==2.8                 # via requests
 lxml==4.4.2
