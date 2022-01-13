@@ -5,42 +5,97 @@
 #    pip-compile
 #
 beautifulsoup4==4.8.1
-certifi==2019.11.28       # via requests
-chardet==3.0.4            # via requests
-django-appconf==1.0.3
-django-compressor==2.3
-django-cors-headers==3.2.0
-django-envelope==1.3
-django-extensions==2.2.5
-django-haystack==2.8.1
-django-sortedm2m==3.0.0
-django-tastypie==0.14.2
+    # via -r requirements.in
+certifi==2019.11.28
+    # via requests
+chardet==3.0.4
+    # via requests
 django==2.2.9
+    # via
+    #   -r requirements.in
+    #   django-appconf
+    #   django-cors-headers
+    #   django-envelope
+    #   django-haystack
+django-appconf==1.0.3
+    # via
+    #   -r requirements.in
+    #   django-compressor
+django-compressor==2.3
+    # via -r requirements.in
+django-cors-headers==3.2.0
+    # via -r requirements.in
+django-envelope==1.3
+    # via -r requirements.in
+django-extensions==2.2.5
+    # via -r requirements.in
+django-haystack==2.8.1
+    # via -r requirements.in
+django-sortedm2m==3.0.0
+    # via -r requirements.in
+django-tastypie==0.14.2
+    # via -r requirements.in
 elasticsearch==7.1.0
-idna==2.8                 # via requests
+    # via -r requirements.in
+idna==2.8
+    # via requests
 lxml==4.4.2
+    # via -r requirements.in
 markdown==3.1.1
+    # via -r requirements.in
 mimeparse==0.1.3
-oauthlib==3.1.0           # via requests-oauthlib
-pillow==6.2.1
+    # via -r requirements.in
+oauthlib==3.1.0
+    # via requests-oauthlib
+pillow==9.0.0
+    # via -r requirements.in
 psycopg2-binary==2.8.4
+    # via -r requirements.in
 pygments==2.5.2
+    # via -r requirements.in
 python-dateutil==2.8.1
-python-mimeparse==1.6.0   # via django-tastypie
-pytz==2019.3              # via django
-rcssmin==1.0.6            # via django-compressor
-requests-cache==0.5.2
-requests-oauthlib==1.3.0  # via twython
+    # via
+    #   -r requirements.in
+    #   django-tastypie
+python-mimeparse==1.6.0
+    # via django-tastypie
+pytz==2019.3
+    # via django
+rcssmin==1.0.6
+    # via django-compressor
 requests==2.22.0
-rjsmin==1.1.0             # via django-compressor
+    # via
+    #   -r requirements.in
+    #   requests-cache
+    #   requests-oauthlib
+    #   twython
+requests-cache==0.5.2
+    # via -r requirements.in
+requests-oauthlib==1.3.0
+    # via twython
+rjsmin==1.1.0
+    # via django-compressor
 simplejson==3.17.0
-six==1.13.0               # via django-appconf, django-extensions, python-dateutil
+    # via -r requirements.in
+six==1.13.0
+    # via
+    #   django-appconf
+    #   django-extensions
+    #   python-dateutil
 sorl-thumbnail==12.5.0
-soupsieve==1.9.5          # via beautifulsoup4
-sqlparse==0.3.0           # via django
+    # via -r requirements.in
+soupsieve==1.9.5
+    # via beautifulsoup4
+sqlparse==0.3.0
+    # via django
 twitter-text-python==1.1.1
+    # via -r requirements.in
 twython==3.7.0
-urllib3==1.25.7           # via elasticsearch, requests
+    # via -r requirements.in
+urllib3==1.25.7
+    # via
+    #   elasticsearch
+    #   requests
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
